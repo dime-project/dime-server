@@ -8,3 +8,4 @@ dime-personalserver/dime-gateway/src/main/resources/services.properties
 *.war
 *.ear
 *.*~
+dime-personalserver/logs/
