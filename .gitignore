@@ -5,7 +5,6 @@ dime-personalserver/dime-gateway/src/main/resources/services.properties
 *.class
 
 # Package Files #
-*.jar
 *.war
 *.ear
 *.*~
