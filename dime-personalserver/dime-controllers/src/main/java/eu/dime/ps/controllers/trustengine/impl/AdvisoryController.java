@@ -1,6 +1,9 @@
 package eu.dime.ps.controllers.trustengine.impl;
 
+import ie.deri.smile.vocabulary.DLPO;
+import ie.deri.smile.vocabulary.NIE;
 import ie.deri.smile.vocabulary.PIMO;
+import ie.deri.smile.vocabulary.PPO;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -15,7 +18,6 @@ import org.ontoware.rdf2go.model.node.impl.URIImpl;
 import org.ontoware.rdfreactor.runtime.RDFDataException;
 import org.ontoware.rdfreactor.schema.rdfs.Resource;
 import org.openrdf.repository.RepositoryException;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import eu.dime.commons.dto.GroupDistanceWarning;
 import eu.dime.commons.dto.ProfileWarning;
@@ -29,15 +31,16 @@ import eu.dime.ps.controllers.infosphere.manager.PersonGroupManager;
 import eu.dime.ps.controllers.infosphere.manager.PersonManager;
 import eu.dime.ps.controllers.infosphere.manager.ShareableProfileManager;
 import eu.dime.ps.controllers.trustengine.TrustEngine;
-import eu.dime.ps.dto.Profile;
 import eu.dime.ps.semantic.connection.ConnectionProvider;
 import eu.dime.ps.semantic.exception.NotFoundException;
+import eu.dime.ps.semantic.model.RDFReactorThing;
 import eu.dime.ps.semantic.model.dao.Account;
+import eu.dime.ps.semantic.model.dlpo.LivePost;
 import eu.dime.ps.semantic.model.nco.PersonContact;
+import eu.dime.ps.semantic.model.nie.DataObject;
 import eu.dime.ps.semantic.model.pimo.Agent;
 import eu.dime.ps.semantic.model.pimo.Person;
 import eu.dime.ps.semantic.model.pimo.PersonGroup;
-import eu.dime.ps.semantic.model.pimo.Thing;
 import eu.dime.ps.semantic.rdf.ResourceStore;
 
 /**
@@ -109,12 +112,9 @@ public class AdvisoryController {
 		double warning_level = 0;
 
 		for (String thingID : sharedThingIDs){
-			Thing sharedThing;
+			RDFReactorThing sharedThing;
 			try {
-				sharedThing = this.getResourceStore().get(new URIImpl(thingID), Thing.class);
-			} catch (RepositoryException e) {
-				logger.warn("Could not retrieve resource for URI: "+thingID, e);
-				continue;
+				sharedThing = getResource(new URIImpl(thingID));
 			} catch (NotFoundException e) {
 				logger.warn("Could not retrieve resource for URI: "+thingID, e);
 				continue;
@@ -144,6 +144,20 @@ public class AdvisoryController {
 		return warnings;
 	}
 	
+	private RDFReactorThing getResource(URI resUri) throws NotFoundException {
+		RDFReactorThing resource = null;
+		if (resourceStore.isTypedAs(resUri, NIE.DataObject)){
+			resource = resourceStore.get(resUri, DataObject.class);
+		} else if (resourceStore.isTypedAs(resUri, DLPO.LivePost)){
+			resource = resourceStore.get(resUri, LivePost.class);
+		} else if (resourceStore.isTypedAs(resUri, PPO.PrivacyPreference)){
+			//Error. Databox should already be resolved here...
+		} else {
+			resource = resourceStore.get(resUri, RDFReactorThing.class);
+		}		
+		return resource;
+	}
+
 	private Collection<ResourcesWarning> getResourceWarnings(List<String> sharedThingIDs) {
 		List <ResourcesWarning> warnings = new ArrayList<ResourcesWarning>();
 		ResourcesWarning resourceWarning = new ResourcesWarning();
@@ -183,6 +197,7 @@ public class AdvisoryController {
 			logger.warn("Uri is not a PersonContact)",e);
 
 		}
+		
 		if (!newPersons.isEmpty()){
 			ProfileWarning profileWarning = new ProfileWarning();
 			profileWarning.addProfile(profile);
@@ -203,7 +218,7 @@ public class AdvisoryController {
 		
 		List <GroupDistanceWarning> warnings = new ArrayList<GroupDistanceWarning>();
 		for (String res_uri : sharedThingIDs) {
-			Thing thing = getResourceStore().get(new URIImpl(res_uri), Thing.class);
+			RDFReactorThing thing = getResource(new URIImpl(res_uri));
 			List<Resource> related_elements = thing.getAllIsRelated_as().asList();
 			if ((related_elements == null) || (related_elements.isEmpty())){
 				// nothing is related

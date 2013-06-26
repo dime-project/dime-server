@@ -1,22 +1,22 @@
 package eu.dime.ps.controllers.trustengine.impl;
 
 import ie.deri.smile.vocabulary.DLPO;
+import ie.deri.smile.vocabulary.DPO;
 import ie.deri.smile.vocabulary.NAO;
-import ie.deri.smile.vocabulary.NCO;
-import ie.deri.smile.vocabulary.NFO;
+import ie.deri.smile.vocabulary.NDO;
+import ie.deri.smile.vocabulary.NIE;
 import ie.deri.smile.vocabulary.PIMO;
+import ie.deri.smile.vocabulary.PPO;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
+import org.h2.server.web.DbTableOrView;
 import org.ontoware.aifbcommons.collection.ClosableIterator;
 import org.ontoware.rdf2go.model.Statement;
 import org.ontoware.rdf2go.model.node.URI;
@@ -25,32 +25,27 @@ import org.ontoware.rdf2go.model.node.impl.URIImpl;
 import org.ontoware.rdfreactor.runtime.RDFDataException;
 import org.ontoware.rdfreactor.schema.rdfs.Resource;
 import org.openrdf.repository.RepositoryException;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import eu.dime.commons.dto.TrustWarning;
-import eu.dime.commons.dto.Warning;
 import eu.dime.ps.controllers.TenantContextHolder;
 import eu.dime.ps.controllers.exception.InfosphereException;
 import eu.dime.ps.controllers.infosphere.manager.LivePostManager;
 import eu.dime.ps.controllers.infosphere.manager.PersonManager;
 import eu.dime.ps.controllers.infosphere.manager.ProfileAttributeManager;
 import eu.dime.ps.controllers.trustengine.PrivacyLevel;
-import eu.dime.ps.controllers.trustengine.TrustConflict;
 import eu.dime.ps.controllers.trustengine.TrustEngine;
 import eu.dime.ps.controllers.trustengine.TrustRecommendation;
 import eu.dime.ps.controllers.trustengine.exception.PrivacyValueNotValidException;
 import eu.dime.ps.controllers.trustengine.exception.TrustValueNotValidException;
 import eu.dime.ps.controllers.trustengine.utils.AdvisoryConstants;
-import eu.dime.ps.semantic.connection.Connection;
 import eu.dime.ps.semantic.connection.ConnectionProvider;
 import eu.dime.ps.semantic.exception.NotFoundException;
+import eu.dime.ps.semantic.model.RDFReactorThing;
 import eu.dime.ps.semantic.model.dcon.Context;
 import eu.dime.ps.semantic.model.dlpo.LivePost;
 import eu.dime.ps.semantic.model.nie.DataObject;
 import eu.dime.ps.semantic.model.pimo.Agent;
 import eu.dime.ps.semantic.model.pimo.Person;
 import eu.dime.ps.semantic.model.pimo.PersonGroup;
-import eu.dime.ps.semantic.model.pimo.Thing;
 import eu.dime.ps.semantic.model.ppo.PrivacyPreference;
 import eu.dime.ps.semantic.privacy.PrivacyPreferenceService;
 import eu.dime.ps.semantic.rdf.ResourceStore;
@@ -95,7 +90,7 @@ public class TrustEngineImpl implements TrustEngine {
 	 * @param privacy_level
 	 * @return true if trust level is high enough for privacy level
 	 */
-	private boolean isTrusted(Agent agent, Thing thing) {
+	private boolean isTrusted(Agent agent, RDFReactorThing thing) {
 		double privacyValue = thing.getAllPrivacyLevel().next().doubleValue();
 		double trustValue = agent.getAllTrustLevel().next().doubleValue();
 		PrivacyLevel pl = PrivacyLevel.getLevelForValue(privacyValue);		
@@ -130,11 +125,11 @@ public class TrustEngineImpl implements TrustEngine {
 	 */
 	@Override
 	public TrustWarning getTrustRecommendation (List <String> contacts_URIs, URI sharedThing_URI) throws PrivacyValueNotValidException, TrustValueNotValidException, ClassCastException, NotFoundException {
-		Thing sharedThing = null;
+		RDFReactorThing sharedThing = null;
 		logger.info("GET TrustRecommendation: sharedThing:"+sharedThing_URI);
 		
 		try {
-			sharedThing = this.getResourceStore().get(sharedThing_URI, Thing.class);
+			sharedThing = this.getResourceStore().get(sharedThing_URI, RDFReactorThing.class);
 		} catch (NotFoundException e) {
 			logger.error("Could not find shared resource in ResourceStore.", e);
 			return null;
@@ -233,12 +228,12 @@ public class TrustEngineImpl implements TrustEngine {
 	 * @throws PrivacyValueNotValidException 
 	 */
 	public TrustWarning getSimpleRecommendation(URI agentUri, URI thingUri) throws PrivacyValueNotValidException, TrustValueNotValidException, ClassCastException{
-		Thing sharedThing = null;
+		RDFReactorThing sharedThing = null;
 		Agent recipient_agent = null;
 		logger.info("GET TrustRecommendation: sharedThing:"+thingUri);
 		
 		try {
-			sharedThing = this.getResourceStore().get(thingUri, Thing.class);
+			sharedThing = getSharedResource(thingUri);
 			recipient_agent = this.getResourceStore().get(agentUri, Agent.class);
 		} catch (NotFoundException e) {
 			logger.error("Could not find shared resource in ResourceStore.", e);
@@ -299,6 +294,20 @@ public class TrustEngineImpl implements TrustEngine {
 		return tw;
 	}
 
+	private RDFReactorThing getSharedResource(URI resUri) throws NotFoundException {
+		RDFReactorThing resource = null;
+		if (getResourceStore().isTypedAs(resUri, NIE.DataObject)){
+			resource = this.getResourceStore().get(resUri, DataObject.class);
+		} else if (getResourceStore().isTypedAs(resUri, DLPO.LivePost)){
+			resource = this.getResourceStore().get(resUri, LivePost.class);
+		} else if (getResourceStore().isTypedAs(resUri, PPO.PrivacyPreference)){
+			//Error. Databox should already be resolved here...
+		} else {
+			resource = this.getResourceStore().get(resUri, RDFReactorThing.class);
+		}		
+		return resource;
+	}
+
 	/**
 	 * calculates the resulting trust level when sharing a thing to a person and
 	 * sets the trust level of the person to the new value
@@ -310,10 +319,10 @@ public class TrustEngineImpl implements TrustEngine {
 		logger.info("ADOPT Trust: p"+personUri+" t"+thingUri);
 		Collection <Agent> contacts = this.getPrivacyPreferenceService().getAgentsWithAccessTo(thingUri);
 		Agent recipient = null;
-		Thing thing = null;
+		RDFReactorThing thing = null;
 		try {
 			recipient = this.getResourceStore().get(personUri, Agent.class);
-			thing = this.getResourceStore().get(thingUri, Thing.class);
+			thing = getSharedResource(thingUri);
 		} catch (NotFoundException e1) {
 			e1.printStackTrace();
 		}
@@ -345,9 +354,9 @@ public class TrustEngineImpl implements TrustEngine {
 //			//TODO: refactor
 //		}
 	
-		Thing thing = null;
+		RDFReactorThing thing = null;
 
-		thing = this.getResourceStore().get(thingUri, Thing.class);
+		thing = getSharedResource(thingUri);
 
 		if (!thing.hasPrivacyLevel()){
 			throw new PrivacyValueNotValidException(-1.0);
@@ -369,8 +378,8 @@ public class TrustEngineImpl implements TrustEngine {
 	
 	private double adoptPrivacyLevelforSharing(URI personUri, URI thingUri) throws NotFoundException {
 		Collection <Agent> agentsWithAccess = this.getPrivacyPreferenceService().getAgentsWithAccessTo(thingUri);
-		Thing thing = null;
-		thing = this.getResourceStore().get(thingUri, Thing.class);
+		RDFReactorThing thing = null;
+		thing = getSharedResource(thingUri);
 
 		double privacyLevel = thing.getAllPrivacyLevel().next().doubleValue();
 		double tempTrustValue = privacyLevel / ((1-privacyLevel) * ((agentsWithAccess.size()+2) +1) ); 
@@ -387,9 +396,9 @@ public class TrustEngineImpl implements TrustEngine {
 	
 	private double adoptPrivacyLevelforSharing(Person person, URI thingUri) throws PrivacyValueNotValidException, TrustValueNotValidException, NotFoundException {
 		Collection <Agent> agentsWithAccess = this.getPrivacyPreferenceService().getAgentsWithAccessTo(thingUri);
-		Thing thing = null;
+		RDFReactorThing thing = null;
 		try {
-			thing = this.getResourceStore().get(thingUri, Thing.class);
+			thing = getSharedResource(thingUri);
 		} catch (NotFoundException e) {
 			e.printStackTrace();
 		}
@@ -424,9 +433,9 @@ public class TrustEngineImpl implements TrustEngine {
 	public TrustRecommendation getTrustRecommendationForUpdateDatabox(URI dbUri, URI thingUri) throws PrivacyValueNotValidException, TrustValueNotValidException, ClassCastException {
 		// TODO: get all agents with access, get pl of thing to add, check for conflicts
 		TrustRecommendation recommendation = new TrustRecommendation("Everything ok, no conflict");
-		Thing sharedThing = null;
+		RDFReactorThing sharedThing = null;
 		try {
-			sharedThing = this.getResourceStore().get(thingUri, Thing.class);
+			sharedThing = getSharedResource(thingUri);
 		} catch (NotFoundException e) {
 			e.printStackTrace();
 		}
@@ -680,8 +689,8 @@ public class TrustEngineImpl implements TrustEngine {
 		//TODO: how does the update work?
 		// update could be add file, remove file, also update file?
 		// atm here we build add file to databox
-		Thing sharedThing = null;
-		sharedThing = this.getResourceStore().get(thingUri, Thing.class);
+		RDFReactorThing sharedThing = null;
+		sharedThing = getSharedResource(thingUri);
 		Collection <Agent> agentsWithAccess = this.getPrivacyPreferenceService().getAgentsWithAccessTo(dbUri);
 		for (Iterator <Agent> agentIterator = agentsWithAccess.iterator(); agentIterator.hasNext();) {
 			Agent agent = agentIterator.next();
@@ -871,14 +880,14 @@ public class TrustEngineImpl implements TrustEngine {
 		return list;
 	}
 
-	public boolean setPrivacyLevelForThing(double privacyValue, Thing thing) throws NotFoundException{
+	public boolean setPrivacyLevelForThing(double privacyValue, RDFReactorThing thing) throws NotFoundException{
 		thing.setPrivacyLevel(privacyValue);
 		this.getResourceStore().update(thing, true);
 		return false;
 	}
 	
 	private boolean setPrivacyLevelForThing(double privacyValue, URI thingUri) throws NotFoundException {
-		Thing thing = this.getResourceStore().get(thingUri, Thing.class);
+		RDFReactorThing thing = getSharedResource(thingUri);
 		return setPrivacyLevelForThing(privacyValue, thing);
 	}
 	
