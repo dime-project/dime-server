@@ -113,8 +113,7 @@ public class ServiceGatewayTestIt {
 		this.serviceGateway = new ServiceGatewayImpl();
 		Map<String, ServiceMetadata> supportedAdapters = this.serviceGateway
 				.listSupportedAdapters("juan");
-		assert (supportedAdapters.size() > 0);
-		
+		assert (supportedAdapters.size() > 0);		
 		assert (supportedAdapters.containsKey("di.me"));
 	}
 
