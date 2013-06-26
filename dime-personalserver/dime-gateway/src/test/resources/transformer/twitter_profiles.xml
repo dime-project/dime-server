@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<user>
+  <id>102624652</id>
+  <name>Keith Cortis</name>
+  <screen_name>kcortis</screen_name>
+  <location>Galway, Ireland</location>
+  <description>MSc Student at Digital Enterprise Research Institute (DERI) Galway. Sports enthusiast &amp; an avid Liverpool FC supporter. </description>
+  <profile_image_url>http://a0.twimg.com/profile_images/1470511462/keith_cortis_normal.jpg</profile_image_url>
+  <profile_image_url_https>https://si0.twimg.com/profile_images/1470511462/keith_cortis_normal.jpg</profile_image_url_https>
+  <url></url>
+  <protected>true</protected>
+  <followers_count>34</followers_count>
+  <profile_background_color>C0DEED</profile_background_color>
+  <profile_text_color>333333</profile_text_color>
+  <profile_link_color>0084B4</profile_link_color>
+  <profile_sidebar_fill_color>DDEEF6</profile_sidebar_fill_color>
+  <profile_sidebar_border_color>C0DEED</profile_sidebar_border_color>
+  <friends_count>120</friends_count>
+  <created_at>Thu Jan 07 09:06:19 +0000 2010</created_at>
+  <favourites_count>0</favourites_count>
+  <utc_offset>3600</utc_offset>
+  <time_zone>Rome</time_zone>
+  <profile_background_image_url>http://a0.twimg.com/images/themes/theme1/bg.png</profile_background_image_url>
+  <profile_background_image_url_https>https://si0.twimg.com/images/themes/theme1/bg.png</profile_background_image_url_https>
+  <profile_background_tile>false</profile_background_tile>
+  <profile_use_background_image>true</profile_use_background_image>
+  <notifications>false</notifications>
+  <geo_enabled>true</geo_enabled>
+  <verified>false</verified>
+  <following>false</following>
+  <statuses_count>255</statuses_count>
+  <lang>en</lang>
+  <contributors_enabled>false</contributors_enabled>
+  <follow_request_sent>false</follow_request_sent>
+  <listed_count>0</listed_count>
+  <show_all_inline_media>false</show_all_inline_media>
+  <default_profile>true</default_profile>
+  <default_profile_image>false</default_profile_image>
+  <is_translator>false</is_translator>
+  <status>
+    <created_at>Wed Apr 11 01:14:42 +0000 2012</created_at>
+    <id>189884144489209856</id>
+    <text>@zammitryan @markpace501 namel effort li niftakarom ghada mfw</text>
+    <source>&lt;a href=&quot;http://twitter.com/download/android&quot; rel=&quot;nofollow&quot;&gt;Twitter for Android&lt;/a&gt;</source>
+    <truncated>false</truncated>
+    <favorited>false</favorited>
+    <in_reply_to_status_id>189111946283462657</in_reply_to_status_id>
+    <in_reply_to_user_id>236867588</in_reply_to_user_id>
+    <in_reply_to_screen_name>zammitryan</in_reply_to_screen_name>
+    <retweet_count>0</retweet_count>
+    <retweeted>false</retweeted>
+    <geo xmlns:georss="http://www.georss.org/georss">
+      <georss:point>53.2894593 -9.0777218</georss:point>
+    </geo>
+    <coordinates xmlns:georss="http://www.georss.org/georss">
+      <georss:point>53.2894593 -9.0777218</georss:point>
+    </coordinates>
+    <place xmlns:georss="http://www.georss.org/georss">
+      <id>3cdad59a91d99400</id>
+      <name>Galway</name>
+      <full_name>Galway, Galway</full_name>
+      <place_type>city</place_type>
+      <url>http://api.twitter.com/1/geo/id/3cdad59a91d99400.json</url>
+      <attributes/>
+      <bounding_box>
+        <georss:polygon>52.9675677 -10.2442971 52.9675677 -7.9684842 53.7190576 -7.9684842 53.7190576 -10.2442971</georss:polygon>
+      </bounding_box>
+      <country code="IE">Ireland</country>
+    </place>
+    <contributors/>
+  </status>
+  <suggestions type="array">
+<category>
+  <name>Music</name>
+  <slug>music</slug>
+  <size>107</size>
+</category>
+<category>
+  <name>Sports</name>
+  <slug>sports</slug>
+  <size>78</size>
+</category>
+<category>
+  <name>Entertainment</name>
+  <slug>entertainment</slug>
+  <size>79</size>
+</category>
+<category>
+  <name>Twitter</name>
+  <slug>twitter</slug>
+  <size>51</size>
+</category>
+<category>
+  <name>Funny</name>
+  <slug>funny</slug>
+  <size>64</size>
+</category>
+<category>
+  <name>Fashion</name>
+  <slug>fashion</slug>
+  <size>61</size>
+</category>
+<category>
+  <name>Family</name>
+  <slug>family</slug>
+  <size>41</size>
+</category>
+<category>
+  <name>Technology</name>
+  <slug>technology</slug>
+  <size>56</size>
+</category>
+<category>
+  <name>Food &amp; Drink</name>
+  <slug>food-drink</slug>
+  <size>67</size>
+</category>
+<category>
+  <name>News</name>
+  <slug>news</slug>
+  <size>56</size>
+</category>
+<category>
+  <name>Art &amp; Design</name>
+  <slug>art-design</slug>
+  <size>71</size>
+</category>
+<category>
+  <name>MTV Movie Awards</name>
+  <slug>mtv-movie-awards</slug>
+  <size>20</size>
+</category>
+<category>
+  <name>US Election 2012</name>
+  <slug>us-election-2012</slug>
+  <size>60</size>
+</category>
+<category>
+  <name>Billboard Music Awards</name>
+  <slug>billboard-music-awards</slug>
+  <size>102</size>
+</category>
+<category>
+  <name>MLB</name>
+  <slug>mlb</slug>
+  <size>104</size>
+</category>
+<category>
+  <name>Faith and Religion</name>
+  <slug>faith-and-religion</slug>
+  <size>74</size>
+</category>
+<category>
+  <name>Television</name>
+  <slug>television</slug>
+  <size>202</size>
+</category>
+<category>
+  <name>NASCAR</name>
+  <slug>nascar</slug>
+  <size>98</size>
+</category>
+<category>
+  <name>NBA</name>
+  <slug>nba</slug>
+  <size>133</size>
+</category>
+<category>
+  <name>NHL</name>
+  <slug>nhl</slug>
+  <size>62</size>
+</category>
+<category>
+  <name>CMT Awards</name>
+  <slug>cmt-awards</slug>
+  <size>68</size>
+</category>
+<category>
+  <name>Books</name>
+  <slug>books</slug>
+  <size>63</size>
+</category>
+<category>
+  <name>PGA</name>
+  <slug>pga</slug>
+  <size>130</size>
+</category>
+<category>
+  <name>Business</name>
+  <slug>business</slug>
+  <size>49</size>
+</category>
+<category>
+  <name>Science</name>
+  <slug>science</slug>
+  <size>51</size>
+</category>
+<category>
+  <name>Health</name>
+  <slug>health</slug>
+  <size>48</size>
+</category>
+<category>
+  <name>Travel</name>
+  <slug>travel</slug>
+  <size>47</size>
+</category>
+<category>
+  <name>Government</name>
+  <slug>government</slug>
+  <size>30</size>
+</category>
+<category>
+  <name>Staff Picks</name>
+  <slug>staff-picks</slug>
+  <size>94</size>
+</category>
+<category>
+  <name>Charity</name>
+  <slug>charity</slug>
+  <size>60</size>
+</category>
+</suggestions>
+</user>
+

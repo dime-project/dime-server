@@ -1,0 +1,36 @@
+ -----
+ GATE Gazetteer Feature Comparison
+ -----
+ Marin Nozhchev
+ -----
+ 2010-11-02
+ -----
+ 
+ There is already a variety of gazetteer implementations in GATE. This page will contain details feature and / or performance comparison
+ will all that implementations. This is a work in progress. Contact {{{./team-list.html}the team}} if you need more information on that topic.
+ 
+%{toc|toDepth=3}
+
+Feature comparison
+
+Memory-consumption comparison
+
+ The primary advantage of the Large KB gazetteer is loading big dictionaries without requiring too much memory. In the table below, we have compared several GATE-compatible gazetteers by the memory taken by GATE Embedded after the gazetteer have been loaded. The experiments are made with 3 standard dictionaries.
+ 
+  * LKB Gazetteer v1.1
+    * DBPedia 3.6.1 - xx MB
+	* Biomedical terms - xx MB
+	  
+ About the dictionaries:
+   * DBPedia 3.6.1 - The DBPedia Ontology extracted from Infoboxes was loaded in a BigOWLIM 3.3 database with no inference. You can download the LKB Gazetteer configuration here and the OntoRootGazetteer here.
+   
+Performance comparison
+ 
+  Loading performance
+  
+  * LKB Gazetteer v1.1
+    * DBPedia 3.6.1 - xx sec
+	* Biomedical terms - xx sec
+	
+  Annotation performance 
+

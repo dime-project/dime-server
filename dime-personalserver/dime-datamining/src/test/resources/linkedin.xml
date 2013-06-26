@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<person>
+  <id>3-RR6kkCo6</id>
+  <first-name>Keith</first-name>
+  <last-name>Cortis</last-name>
+  <location>
+    <name>Ireland</name>
+  </location>
+  <connections total="10">
+    <person>
+      <id>7N49Odr3Dk</id>
+      <first-name>Charlie</first-name>
+      <last-name>Abela</last-name>
+      <picture-url>http://media.linkedin.com/mpr/mprx/0_izp7YxT1BvTqPC_3it0yYjAlB1cnACP3T-HrYjtTe9iQa6kT712_rg67MgBWt5tDG9OllshuOmP-</picture-url>
+    </person>
+    <person>
+      <id>VF7uOlrmja</id>
+      <first-name>Erika L.</first-name>
+      <last-name>Borg</last-name>
+      <picture-url>http://media.linkedin.com/mpr/mprx/0_Vu55r8uITNDCdR1PsInsrGebTqxSwZiPZwlVriEVYAwgNpq1nEvWY_Oq7s0tHxGxR7bU0kZqVAu9</picture-url>
+    </person>
+    <person>
+      <id>j8aKQtXria</id>
+      <first-name>John J.</first-name>
+      <last-name>Camilleri</last-name>
+      <picture-url>http://media.linkedin.com/mpr/mprx/0_FEYCE70cnWxML8jkb27AE2uQNwUvb8Dk5HEjE20Qwm75ZXVXwummXuwesLREXb2e6Wyy5w3hCQsG</picture-url>
+    </person>
+      <person>
+      <id>Br52FcLWmK</id>
+      <first-name>Kenneth</first-name>
+      <last-name>Chircop</last-name>
+      <picture-url>http://media.linkedin.com/mpr/mprx/0_FIUn3egQHyRnkaNRLfjL3o2EoRSveSkR527d3oxczOM5BdPUwDws7EIJXvDEIE5c6HMeaSS_FeA9</picture-url>
+    </person>
+    <person>
+      <id>EZVRM-m0N6</id>
+      <first-name>Jeremy</first-name>
+      <last-name>Debattista</last-name>
+      <picture-url>http://media.linkedin.com/mpr/mprx/0_M5umgFJOq-jSqL32cipjg5MpNAd3nLA2RFZAgkRawqjAWT6uz_yC1X7hsxWOzGrhZQmKtiWBSJsJ</picture-url>
+    </person>
+    <person>
+      <id>pZziEnOkYZ</id>
+      <first-name>Mark</first-name>
+      <last-name>Pace</last-name>
+      <picture-url>http://media.linkedin.com/mpr/mprx/0_W1fpi2kpUJRUg5vqwNa_imLuMxyIl5vqIqR_imF2QseRm3CNLz0rSaPGBApq-CN4erDG2dv2p402</picture-url>
+    </person>
+    <person>
+      <id>czWR9bvFhQ</id>
+      <first-name>Simon</first-name>
+      <last-name>Scerri</last-name>
+      <picture-url>http://media.linkedin.com/mpr/mprx/0_UciCehF0t7Smr12bUz-AeC6AtEVG-zSbJvcje_92S7a-DlsFcA1m6iCGyXsjl-uwsq3ybXHKVinL</picture-url>
+    </person>
+    <person>
+      <id>ZsfOOG1DJe</id>
+      <first-name>James</first-name>
+      <last-name>Scicluna</last-name>
+      <picture-url>http://media.linkedin.com/mpr/mprx/0_oFea4wWynhyHZi22HLUg4HEiNiWb4Qp2e5yl4dVyw6gBFGIuQ3ZGnWmtsSdZUTjhIXErcmkz40wX</picture-url>
+    </person>
+    <person>
+      <id>DL5RVbjUKz</id>
+      <first-name>Jakob</first-name>
+      <last-name>Vestergaard-Laustsen</last-name>
+      <picture-url>http://media.linkedin.com/mpr/mprx/0_gxkFOr9FTNhYuMThxO54OtNWinvm2VTh0YKZOPFJpPTY1Yn8AMNIK1PcD4zl7j82yyQJAqzGRuoU</picture-url>
+    </person>
+    <person>
+      <id>ZjKGVCEqfw</id>
+      <first-name>Ryan</first-name>
+      <last-name>Zammit</last-name>
+      <picture-url>http://media.linkedin.com/mpr/mprx/0__NWrbZ_SZHlqpbds31JfbRTyVeCcOXds3Pg7bRlpLSnF38OVftMpdUL-q6GHgiHnCBwaey7N6Gt0</picture-url>
+    </person>
+  </connections>
+  <summary>Responsible for some research and development tasks in the Digital.Me (http://www.dime-project.eu/).  Particularly interested in open source and semantic web technologies.  Interested in the Semantic Web, Social Web, Social Networks and Linked Data.</summary>
+  <positions total="3">
+    <position>
+      <id>202412794</id>
+      <title>MAppSc (DERI) full-time</title>
+      <start-date>
+        <year>2011</year>
+        <month>7</month>
+      </start-date>
+      <end-date>
+        <year></year>
+        <month></month>
+      </end-date>
+      <company>
+        <name>Digital Enterprise Research Institute Galway, National University of Ireland Galway</name>
+      </company>
+    </position>
+    <position>
+      <id>164664119</id>
+      <title>Junior Trader</title>
+      <start-date>
+        <year>2010</year>
+        <month>4</month>
+      </start-date>
+      <end-date>
+        <year>2011</year>
+        <month>7</month>
+      </end-date>
+      <company>
+        <name>mybet.com</name>
+      </company>
+    </position>
+    <position>
+      <id>164682097</id>
+      <title>Software Developer</title>
+      <start-date>
+        <year>2009</year>
+        <month>6</month>
+      </start-date>
+      <end-date>
+        <year>2009</year>
+        <month>9</month>
+      </end-date>
+      <company>
+        <name>ADesign - Global IT Solutions Ltd (Malta)</name>
+      </company>
+    </position>
+  </positions>
+  <phone-numbers total="1">
+    <phone-number>
+      <phone-type>mobile</phone-type>
+      <phone-number>+353 852365878</phone-number>
+    </phone-number>
+  </phone-numbers>
+  <im-accounts total="1">
+    <im-account>
+      <im-account-type>skype</im-account-type>
+      <im-account-name>keith.cortis</im-account-name>
+    </im-account>
+  </im-accounts>
+  <date-of-birth>
+    <year>1988</year>
+    <month>1</month>
+    <day>4</day>
+  </date-of-birth>
+  <main-address>113, Dangan Heights,
+Galway, 
+Ireland</main-address>
+  <picture-url>http://media.linkedin.com/mpr/mprx/0_H1YHLf6xkwZePfgNoAxRLShtk7jelupNElEBLSF8UEdZmHIqkzmXwDPmE3gB-wjZdry9ooMPPIKk</picture-url>
+</person>

@@ -1,0 +1,510 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<statuses type="array">
+<status>
+  <created_at>Thu Apr 05 17:53:41 +0000 2012</created_at>
+  <id>187961219284611072</id>
+  <text>paper accepted at #RED2012 Workshop #eswc2012</text>
+  <source>web</source>
+  <truncated>false</truncated>
+  <favorited>false</favorited>
+  <in_reply_to_status_id></in_reply_to_status_id>
+  <in_reply_to_user_id></in_reply_to_user_id>
+  <in_reply_to_screen_name></in_reply_to_screen_name>
+  <retweet_count>0</retweet_count>
+  <retweeted>false</retweeted>
+  <user>
+    <id>102624652</id>
+    <name>Keith Cortis</name>
+    <screen_name>kcortis</screen_name>
+    <location>Galway, Ireland</location>
+    <description>MSc Student at Digital Enterprise Research Institute (DERI) Galway. Sports enthusiast &amp; an avid Liverpool FC supporter. </description>
+    <profile_image_url>http://a0.twimg.com/profile_images/1470511462/keith_cortis_normal.jpg</profile_image_url>
+    <profile_image_url_https>https://si0.twimg.com/profile_images/1470511462/keith_cortis_normal.jpg</profile_image_url_https>
+    <url></url>
+    <protected>true</protected>
+    <followers_count>34</followers_count>
+    <profile_background_color>C0DEED</profile_background_color>
+    <profile_text_color>333333</profile_text_color>
+    <profile_link_color>0084B4</profile_link_color>
+    <profile_sidebar_fill_color>DDEEF6</profile_sidebar_fill_color>
+    <profile_sidebar_border_color>C0DEED</profile_sidebar_border_color>
+    <friends_count>120</friends_count>
+    <created_at>Thu Jan 07 09:06:19 +0000 2010</created_at>
+    <favourites_count>0</favourites_count>
+    <utc_offset>3600</utc_offset>
+    <time_zone>Rome</time_zone>
+    <profile_background_image_url>http://a0.twimg.com/images/themes/theme1/bg.png</profile_background_image_url>
+    <profile_background_image_url_https>https://si0.twimg.com/images/themes/theme1/bg.png</profile_background_image_url_https>
+    <profile_background_tile>false</profile_background_tile>
+    <profile_use_background_image>true</profile_use_background_image>
+    <notifications>false</notifications>
+    <geo_enabled>true</geo_enabled>
+    <verified>false</verified>
+    <following>false</following>
+    <statuses_count>255</statuses_count>
+    <lang>en</lang>
+    <contributors_enabled>false</contributors_enabled>
+    <follow_request_sent>false</follow_request_sent>
+    <listed_count>0</listed_count>
+    <show_all_inline_media>false</show_all_inline_media>
+    <default_profile>true</default_profile>
+    <default_profile_image>false</default_profile_image>
+    <is_translator>false</is_translator>
+  </user>
+  <geo/>
+  <coordinates/>
+  <place/>
+  <contributors/>
+</status>
+<status>
+  <created_at>Sat Mar 17 21:44:20 +0000 2012</created_at>
+  <id>181133893221629952</id>
+  <text>@zammitryan enjoy it guys :) parade in dublin was gr8. You should all have been here #stpatricks #dublin</text>
+  <source>&lt;a href=&quot;http://www.htc.com&quot; rel=&quot;nofollow&quot;&gt;  HTC Peep&lt;/a&gt;</source>
+  <truncated>false</truncated>
+  <favorited>false</favorited>
+  <in_reply_to_status_id>180991806190788608</in_reply_to_status_id>
+  <in_reply_to_user_id>236867588</in_reply_to_user_id>
+  <in_reply_to_screen_name>zammitryan</in_reply_to_screen_name>
+  <retweet_count>0</retweet_count>
+  <retweeted>false</retweeted>
+  <user>
+    <id>102624652</id>
+    <name>Keith Cortis</name>
+    <screen_name>kcortis</screen_name>
+    <location>Galway, Ireland</location>
+    <description>MSc Student at Digital Enterprise Research Institute (DERI) Galway. Sports enthusiast &amp; an avid Liverpool FC supporter. </description>
+    <profile_image_url>http://a0.twimg.com/profile_images/1470511462/keith_cortis_normal.jpg</profile_image_url>
+    <profile_image_url_https>https://si0.twimg.com/profile_images/1470511462/keith_cortis_normal.jpg</profile_image_url_https>
+    <url></url>
+    <protected>true</protected>
+    <followers_count>34</followers_count>
+    <profile_background_color>C0DEED</profile_background_color>
+    <profile_text_color>333333</profile_text_color>
+    <profile_link_color>0084B4</profile_link_color>
+    <profile_sidebar_fill_color>DDEEF6</profile_sidebar_fill_color>
+    <profile_sidebar_border_color>C0DEED</profile_sidebar_border_color>
+    <friends_count>120</friends_count>
+    <created_at>Thu Jan 07 09:06:19 +0000 2010</created_at>
+    <favourites_count>0</favourites_count>
+    <utc_offset>3600</utc_offset>
+    <time_zone>Rome</time_zone>
+    <profile_background_image_url>http://a0.twimg.com/images/themes/theme1/bg.png</profile_background_image_url>
+    <profile_background_image_url_https>https://si0.twimg.com/images/themes/theme1/bg.png</profile_background_image_url_https>
+    <profile_background_tile>false</profile_background_tile>
+    <profile_use_background_image>true</profile_use_background_image>
+    <notifications>false</notifications>
+    <geo_enabled>true</geo_enabled>
+    <verified>false</verified>
+    <following>false</following>
+    <statuses_count>255</statuses_count>
+    <lang>en</lang>
+    <contributors_enabled>false</contributors_enabled>
+    <follow_request_sent>false</follow_request_sent>
+    <listed_count>0</listed_count>
+    <show_all_inline_media>false</show_all_inline_media>
+    <default_profile>true</default_profile>
+    <default_profile_image>false</default_profile_image>
+    <is_translator>false</is_translator>
+  </user>
+  <geo/>
+  <coordinates/>
+  <place/>
+  <contributors/>
+</status>
+<status>
+  <created_at>Wed Mar 14 16:21:31 +0000 2012</created_at>
+  <id>179965489995456512</id>
+  <text>pls help us with some research that we're conducting about #OnlineProfileManagement by filling out this survey http://t.co/IKIPjC4 thanks!</text>
+  <source>&lt;a href=&quot;http://twitter.com/tweetbutton&quot; rel=&quot;nofollow&quot;&gt;Tweet Button&lt;/a&gt;</source>
+  <truncated>false</truncated>
+  <favorited>false</favorited>
+  <in_reply_to_status_id></in_reply_to_status_id>
+  <in_reply_to_user_id></in_reply_to_user_id>
+  <in_reply_to_screen_name></in_reply_to_screen_name>
+  <retweet_count>0</retweet_count>
+  <retweeted>false</retweeted>
+  <user>
+    <id>102624652</id>
+    <name>Keith Cortis</name>
+    <screen_name>kcortis</screen_name>
+    <location>Galway, Ireland</location>
+    <description>MSc Student at Digital Enterprise Research Institute (DERI) Galway. Sports enthusiast &amp; an avid Liverpool FC supporter. </description>
+    <profile_image_url>http://a0.twimg.com/profile_images/1470511462/keith_cortis_normal.jpg</profile_image_url>
+    <profile_image_url_https>https://si0.twimg.com/profile_images/1470511462/keith_cortis_normal.jpg</profile_image_url_https>
+    <url></url>
+    <protected>true</protected>
+    <followers_count>34</followers_count>
+    <profile_background_color>C0DEED</profile_background_color>
+    <profile_text_color>333333</profile_text_color>
+    <profile_link_color>0084B4</profile_link_color>
+    <profile_sidebar_fill_color>DDEEF6</profile_sidebar_fill_color>
+    <profile_sidebar_border_color>C0DEED</profile_sidebar_border_color>
+    <friends_count>120</friends_count>
+    <created_at>Thu Jan 07 09:06:19 +0000 2010</created_at>
+    <favourites_count>0</favourites_count>
+    <utc_offset>3600</utc_offset>
+    <time_zone>Rome</time_zone>
+    <profile_background_image_url>http://a0.twimg.com/images/themes/theme1/bg.png</profile_background_image_url>
+    <profile_background_image_url_https>https://si0.twimg.com/images/themes/theme1/bg.png</profile_background_image_url_https>
+    <profile_background_tile>false</profile_background_tile>
+    <profile_use_background_image>true</profile_use_background_image>
+    <notifications>false</notifications>
+    <geo_enabled>true</geo_enabled>
+    <verified>false</verified>
+    <following>false</following>
+    <statuses_count>255</statuses_count>
+    <lang>en</lang>
+    <contributors_enabled>false</contributors_enabled>
+    <follow_request_sent>false</follow_request_sent>
+    <listed_count>0</listed_count>
+    <show_all_inline_media>false</show_all_inline_media>
+    <default_profile>true</default_profile>
+    <default_profile_image>false</default_profile_image>
+    <is_translator>false</is_translator>
+  </user>
+  <geo/>
+  <coordinates/>
+  <place/>
+  <possibly_sensitive>false</possibly_sensitive>
+  <contributors/>
+</status>
+<status>
+  <created_at>Wed Mar 07 22:53:18 +0000 2012</created_at>
+  <id>177527373380583424</id>
+  <text>@zammitryan how can't you like mushrooms? #mushroomlovers :p</text>
+  <source>web</source>
+  <truncated>false</truncated>
+  <favorited>false</favorited>
+  <in_reply_to_status_id></in_reply_to_status_id>
+  <in_reply_to_user_id>236867588</in_reply_to_user_id>
+  <in_reply_to_screen_name>zammitryan</in_reply_to_screen_name>
+  <retweet_count>0</retweet_count>
+  <retweeted>false</retweeted>
+  <user>
+    <id>102624652</id>
+    <name>Keith Cortis</name>
+    <screen_name>kcortis</screen_name>
+    <location>Galway, Ireland</location>
+    <description>MSc Student at Digital Enterprise Research Institute (DERI) Galway. Sports enthusiast &amp; an avid Liverpool FC supporter. </description>
+    <profile_image_url>http://a0.twimg.com/profile_images/1470511462/keith_cortis_normal.jpg</profile_image_url>
+    <profile_image_url_https>https://si0.twimg.com/profile_images/1470511462/keith_cortis_normal.jpg</profile_image_url_https>
+    <url></url>
+    <protected>true</protected>
+    <followers_count>34</followers_count>
+    <profile_background_color>C0DEED</profile_background_color>
+    <profile_text_color>333333</profile_text_color>
+    <profile_link_color>0084B4</profile_link_color>
+    <profile_sidebar_fill_color>DDEEF6</profile_sidebar_fill_color>
+    <profile_sidebar_border_color>C0DEED</profile_sidebar_border_color>
+    <friends_count>120</friends_count>
+    <created_at>Thu Jan 07 09:06:19 +0000 2010</created_at>
+    <favourites_count>0</favourites_count>
+    <utc_offset>3600</utc_offset>
+    <time_zone>Rome</time_zone>
+    <profile_background_image_url>http://a0.twimg.com/images/themes/theme1/bg.png</profile_background_image_url>
+    <profile_background_image_url_https>https://si0.twimg.com/images/themes/theme1/bg.png</profile_background_image_url_https>
+    <profile_background_tile>false</profile_background_tile>
+    <profile_use_background_image>true</profile_use_background_image>
+    <notifications>false</notifications>
+    <geo_enabled>true</geo_enabled>
+    <verified>false</verified>
+    <following>false</following>
+    <statuses_count>255</statuses_count>
+    <lang>en</lang>
+    <contributors_enabled>false</contributors_enabled>
+    <follow_request_sent>false</follow_request_sent>
+    <listed_count>0</listed_count>
+    <show_all_inline_media>false</show_all_inline_media>
+    <default_profile>true</default_profile>
+    <default_profile_image>false</default_profile_image>
+    <is_translator>false</is_translator>
+  </user>
+  <geo/>
+  <coordinates/>
+  <place/>
+  <contributors/>
+</status>
+<status>
+  <created_at>Tue Mar 06 22:27:25 +0000 2012</created_at>
+  <id>177158469940543488</id>
+  <text>@zammitryan good to hear that! i'm not bad my self, was quite busy the last couple of weeks but can't complain :)</text>
+  <source>web</source>
+  <truncated>false</truncated>
+  <favorited>false</favorited>
+  <in_reply_to_status_id>177153554568581120</in_reply_to_status_id>
+  <in_reply_to_user_id>236867588</in_reply_to_user_id>
+  <in_reply_to_screen_name>zammitryan</in_reply_to_screen_name>
+  <retweet_count>0</retweet_count>
+  <retweeted>false</retweeted>
+  <user>
+    <id>102624652</id>
+    <name>Keith Cortis</name>
+    <screen_name>kcortis</screen_name>
+    <location>Galway, Ireland</location>
+    <description>MSc Student at Digital Enterprise Research Institute (DERI) Galway. Sports enthusiast &amp; an avid Liverpool FC supporter. </description>
+    <profile_image_url>http://a0.twimg.com/profile_images/1470511462/keith_cortis_normal.jpg</profile_image_url>
+    <profile_image_url_https>https://si0.twimg.com/profile_images/1470511462/keith_cortis_normal.jpg</profile_image_url_https>
+    <url></url>
+    <protected>true</protected>
+    <followers_count>34</followers_count>
+    <profile_background_color>C0DEED</profile_background_color>
+    <profile_text_color>333333</profile_text_color>
+    <profile_link_color>0084B4</profile_link_color>
+    <profile_sidebar_fill_color>DDEEF6</profile_sidebar_fill_color>
+    <profile_sidebar_border_color>C0DEED</profile_sidebar_border_color>
+    <friends_count>120</friends_count>
+    <created_at>Thu Jan 07 09:06:19 +0000 2010</created_at>
+    <favourites_count>0</favourites_count>
+    <utc_offset>3600</utc_offset>
+    <time_zone>Rome</time_zone>
+    <profile_background_image_url>http://a0.twimg.com/images/themes/theme1/bg.png</profile_background_image_url>
+    <profile_background_image_url_https>https://si0.twimg.com/images/themes/theme1/bg.png</profile_background_image_url_https>
+    <profile_background_tile>false</profile_background_tile>
+    <profile_use_background_image>true</profile_use_background_image>
+    <notifications>false</notifications>
+    <geo_enabled>true</geo_enabled>
+    <verified>false</verified>
+    <following>false</following>
+    <statuses_count>255</statuses_count>
+    <lang>en</lang>
+    <contributors_enabled>false</contributors_enabled>
+    <follow_request_sent>false</follow_request_sent>
+    <listed_count>0</listed_count>
+    <show_all_inline_media>false</show_all_inline_media>
+    <default_profile>true</default_profile>
+    <default_profile_image>false</default_profile_image>
+    <is_translator>false</is_translator>
+  </user>
+  <geo/>
+  <coordinates/>
+  <place/>
+  <contributors/>
+</status>
+<status>
+  <created_at>Tue Mar 06 19:50:04 +0000 2012</created_at>
+  <id>177118872674111488</id>
+  <text>@zammitryan how r u mate? :) phd going well?</text>
+  <source>web</source>
+  <truncated>false</truncated>
+  <favorited>false</favorited>
+  <in_reply_to_status_id>177087714246656000</in_reply_to_status_id>
+  <in_reply_to_user_id>236867588</in_reply_to_user_id>
+  <in_reply_to_screen_name>zammitryan</in_reply_to_screen_name>
+  <retweet_count>0</retweet_count>
+  <retweeted>false</retweeted>
+  <user>
+    <id>102624652</id>
+    <name>Keith Cortis</name>
+    <screen_name>kcortis</screen_name>
+    <location>Galway, Ireland</location>
+    <description>MSc Student at Digital Enterprise Research Institute (DERI) Galway. Sports enthusiast &amp; an avid Liverpool FC supporter. </description>
+    <profile_image_url>http://a0.twimg.com/profile_images/1470511462/keith_cortis_normal.jpg</profile_image_url>
+    <profile_image_url_https>https://si0.twimg.com/profile_images/1470511462/keith_cortis_normal.jpg</profile_image_url_https>
+    <url></url>
+    <protected>true</protected>
+    <followers_count>34</followers_count>
+    <profile_background_color>C0DEED</profile_background_color>
+    <profile_text_color>333333</profile_text_color>
+    <profile_link_color>0084B4</profile_link_color>
+    <profile_sidebar_fill_color>DDEEF6</profile_sidebar_fill_color>
+    <profile_sidebar_border_color>C0DEED</profile_sidebar_border_color>
+    <friends_count>120</friends_count>
+    <created_at>Thu Jan 07 09:06:19 +0000 2010</created_at>
+    <favourites_count>0</favourites_count>
+    <utc_offset>3600</utc_offset>
+    <time_zone>Rome</time_zone>
+    <profile_background_image_url>http://a0.twimg.com/images/themes/theme1/bg.png</profile_background_image_url>
+    <profile_background_image_url_https>https://si0.twimg.com/images/themes/theme1/bg.png</profile_background_image_url_https>
+    <profile_background_tile>false</profile_background_tile>
+    <profile_use_background_image>true</profile_use_background_image>
+    <notifications>false</notifications>
+    <geo_enabled>true</geo_enabled>
+    <verified>false</verified>
+    <following>false</following>
+    <statuses_count>255</statuses_count>
+    <lang>en</lang>
+    <contributors_enabled>false</contributors_enabled>
+    <follow_request_sent>false</follow_request_sent>
+    <listed_count>0</listed_count>
+    <show_all_inline_media>false</show_all_inline_media>
+    <default_profile>true</default_profile>
+    <default_profile_image>false</default_profile_image>
+    <is_translator>false</is_translator>
+  </user>
+  <geo/>
+  <coordinates/>
+  <place/>
+  <contributors/>
+</status>
+<status>
+  <created_at>Sun Feb 26 23:00:31 +0000 2012</created_at>
+  <id>173905311378321409</id>
+  <text>@zammitryan yeah @markpace501 told me about it :) cheers mate, just got back at home right now. really appreciate it :)</text>
+  <source>web</source>
+  <truncated>false</truncated>
+  <favorited>false</favorited>
+  <in_reply_to_status_id>173740146527711236</in_reply_to_status_id>
+  <in_reply_to_user_id>236867588</in_reply_to_user_id>
+  <in_reply_to_screen_name>zammitryan</in_reply_to_screen_name>
+  <retweet_count>0</retweet_count>
+  <retweeted>false</retweeted>
+  <user>
+    <id>102624652</id>
+    <name>Keith Cortis</name>
+    <screen_name>kcortis</screen_name>
+    <location>Galway, Ireland</location>
+    <description>MSc Student at Digital Enterprise Research Institute (DERI) Galway. Sports enthusiast &amp; an avid Liverpool FC supporter. </description>
+    <profile_image_url>http://a0.twimg.com/profile_images/1470511462/keith_cortis_normal.jpg</profile_image_url>
+    <profile_image_url_https>https://si0.twimg.com/profile_images/1470511462/keith_cortis_normal.jpg</profile_image_url_https>
+    <url></url>
+    <protected>true</protected>
+    <followers_count>34</followers_count>
+    <profile_background_color>C0DEED</profile_background_color>
+    <profile_text_color>333333</profile_text_color>
+    <profile_link_color>0084B4</profile_link_color>
+    <profile_sidebar_fill_color>DDEEF6</profile_sidebar_fill_color>
+    <profile_sidebar_border_color>C0DEED</profile_sidebar_border_color>
+    <friends_count>120</friends_count>
+    <created_at>Thu Jan 07 09:06:19 +0000 2010</created_at>
+    <favourites_count>0</favourites_count>
+    <utc_offset>3600</utc_offset>
+    <time_zone>Rome</time_zone>
+    <profile_background_image_url>http://a0.twimg.com/images/themes/theme1/bg.png</profile_background_image_url>
+    <profile_background_image_url_https>https://si0.twimg.com/images/themes/theme1/bg.png</profile_background_image_url_https>
+    <profile_background_tile>false</profile_background_tile>
+    <profile_use_background_image>true</profile_use_background_image>
+    <notifications>false</notifications>
+    <geo_enabled>true</geo_enabled>
+    <verified>false</verified>
+    <following>false</following>
+    <statuses_count>255</statuses_count>
+    <lang>en</lang>
+    <contributors_enabled>false</contributors_enabled>
+    <follow_request_sent>false</follow_request_sent>
+    <listed_count>0</listed_count>
+    <show_all_inline_media>false</show_all_inline_media>
+    <default_profile>true</default_profile>
+    <default_profile_image>false</default_profile_image>
+    <is_translator>false</is_translator>
+  </user>
+  <geo/>
+  <coordinates/>
+  <place/>
+  <contributors/>
+</status>
+<status>
+  <created_at>Thu Feb 09 17:02:32 +0000 2012</created_at>
+  <id>167654625502179328</id>
+  <text>little things that make you happy #nothingbeatsit</text>
+  <source>web</source>
+  <truncated>false</truncated>
+  <favorited>false</favorited>
+  <in_reply_to_status_id></in_reply_to_status_id>
+  <in_reply_to_user_id></in_reply_to_user_id>
+  <in_reply_to_screen_name></in_reply_to_screen_name>
+  <retweet_count>0</retweet_count>
+  <retweeted>false</retweeted>
+  <user>
+    <id>102624652</id>
+    <name>Keith Cortis</name>
+    <screen_name>kcortis</screen_name>
+    <location>Galway, Ireland</location>
+    <description>MSc Student at Digital Enterprise Research Institute (DERI) Galway. Sports enthusiast &amp; an avid Liverpool FC supporter. </description>
+    <profile_image_url>http://a0.twimg.com/profile_images/1470511462/keith_cortis_normal.jpg</profile_image_url>
+    <profile_image_url_https>https://si0.twimg.com/profile_images/1470511462/keith_cortis_normal.jpg</profile_image_url_https>
+    <url></url>
+    <protected>true</protected>
+    <followers_count>34</followers_count>
+    <profile_background_color>C0DEED</profile_background_color>
+    <profile_text_color>333333</profile_text_color>
+    <profile_link_color>0084B4</profile_link_color>
+    <profile_sidebar_fill_color>DDEEF6</profile_sidebar_fill_color>
+    <profile_sidebar_border_color>C0DEED</profile_sidebar_border_color>
+    <friends_count>120</friends_count>
+    <created_at>Thu Jan 07 09:06:19 +0000 2010</created_at>
+    <favourites_count>0</favourites_count>
+    <utc_offset>3600</utc_offset>
+    <time_zone>Rome</time_zone>
+    <profile_background_image_url>http://a0.twimg.com/images/themes/theme1/bg.png</profile_background_image_url>
+    <profile_background_image_url_https>https://si0.twimg.com/images/themes/theme1/bg.png</profile_background_image_url_https>
+    <profile_background_tile>false</profile_background_tile>
+    <profile_use_background_image>true</profile_use_background_image>
+    <notifications>false</notifications>
+    <geo_enabled>true</geo_enabled>
+    <verified>false</verified>
+    <following>false</following>
+    <statuses_count>255</statuses_count>
+    <lang>en</lang>
+    <contributors_enabled>false</contributors_enabled>
+    <follow_request_sent>false</follow_request_sent>
+    <listed_count>0</listed_count>
+    <show_all_inline_media>false</show_all_inline_media>
+    <default_profile>true</default_profile>
+    <default_profile_image>false</default_profile_image>
+    <is_translator>false</is_translator>
+  </user>
+  <geo/>
+  <coordinates/>
+  <place/>
+  <contributors/>
+</status>
+<status>
+  <created_at>Sun Feb 05 21:22:23 +0000 2012</created_at>
+  <id>166270470138773505</id>
+  <text>@DebattistaDavid welcome to twitter great great buddy :)</text>
+  <source>web</source>
+  <truncated>false</truncated>
+  <favorited>false</favorited>
+  <in_reply_to_status_id></in_reply_to_status_id>
+  <in_reply_to_user_id>467278271</in_reply_to_user_id>
+  <in_reply_to_screen_name>DebattistaDavid</in_reply_to_screen_name>
+  <retweet_count>0</retweet_count>
+  <retweeted>false</retweeted>
+  <user>
+    <id>102624652</id>
+    <name>Keith Cortis</name>
+    <screen_name>kcortis</screen_name>
+    <location>Galway, Ireland</location>
+    <description>MSc Student at Digital Enterprise Research Institute (DERI) Galway. Sports enthusiast &amp; an avid Liverpool FC supporter. </description>
+    <profile_image_url>http://a0.twimg.com/profile_images/1470511462/keith_cortis_normal.jpg</profile_image_url>
+    <profile_image_url_https>https://si0.twimg.com/profile_images/1470511462/keith_cortis_normal.jpg</profile_image_url_https>
+    <url></url>
+    <protected>true</protected>
+    <followers_count>34</followers_count>
+    <profile_background_color>C0DEED</profile_background_color>
+    <profile_text_color>333333</profile_text_color>
+    <profile_link_color>0084B4</profile_link_color>
+    <profile_sidebar_fill_color>DDEEF6</profile_sidebar_fill_color>
+    <profile_sidebar_border_color>C0DEED</profile_sidebar_border_color>
+    <friends_count>120</friends_count>
+    <created_at>Thu Jan 07 09:06:19 +0000 2010</created_at>
+    <favourites_count>0</favourites_count>
+    <utc_offset>3600</utc_offset>
+    <time_zone>Rome</time_zone>
+    <profile_background_image_url>http://a0.twimg.com/images/themes/theme1/bg.png</profile_background_image_url>
+    <profile_background_image_url_https>https://si0.twimg.com/images/themes/theme1/bg.png</profile_background_image_url_https>
+    <profile_background_tile>false</profile_background_tile>
+    <profile_use_background_image>true</profile_use_background_image>
+    <notifications>false</notifications>
+    <geo_enabled>true</geo_enabled>
+    <verified>false</verified>
+    <following>false</following>
+    <statuses_count>255</statuses_count>
+    <lang>en</lang>
+    <contributors_enabled>false</contributors_enabled>
+    <follow_request_sent>false</follow_request_sent>
+    <listed_count>0</listed_count>
+    <show_all_inline_media>false</show_all_inline_media>
+    <default_profile>true</default_profile>
+    <default_profile_image>false</default_profile_image>
+    <is_translator>false</is_translator>
+  </user>
+  <geo/>
+  <coordinates/>
+  <place/>
+  <contributors/>
+</status>
+</statuses>
+
+

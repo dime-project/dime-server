@@ -1,0 +1,38 @@
+declare namespace nco = "http://www.semanticdesktop.org/ontologies/2007/03/22/nco#";
+declare namespace nao = "http://www.semanticdesktop.org/ontologies/2007/08/15/nao#";
+declare namespace pimo = "http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#";
+declare namespace nfo = "http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#";
+declare namespace xsd = "http://www.w3.org/2001/XMLSchema#";
+declare namespace geo = "http://www.w3.org/2003/01/geo/wgs84_pos#";
+declare namespace kml = "http://earth.google.com/kml/2.2";
+  
+let $doc := doc("%doc%")
+
+let $placemarks := $doc//kml:Placemark
+
+return 
+  for $placemark in $placemarks
+    let $name := $placemark/kml:name
+    let $description := fn:replace($placemark/kml:description,"<().*?>","")
+	let $placemarkId := count($name/preceding::*) + count($name/ancestor::*)
+	
+	#Construct for the placemarks	 			  
+	construct
+	{		   	
+		_:plm{data($placemarkId)} a nfo:Placemark;
+		nao:externalIdentifier {data($placemarkId)};
+		nao:prefLabel {data($name)};
+		nao:description {data($description)}.
+		
+		#Construct for the geo:Point of a placemark
+		{
+			let $geoPoints := $placemark/kml:Point/kml:coordinates
+    		let $points := fn:tokenize($geoPoints,",")
+			construct 
+			{
+				_:plm{data($placemarkId)} a geo:Point;
+			    geo:lat {data($points[2])};
+			    geo:long {data($points[1])}.
+		    }			     
+	     }	
+     } 

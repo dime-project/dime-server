@@ -1,0 +1,107 @@
+declare namespace nco = "http://www.semanticdesktop.org/ontologies/2007/03/22/nco#";
+declare namespace nao = "http://www.semanticdesktop.org/ontologies/2007/08/15/nao#";
+declare namespace pimo = "http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#";
+declare namespace dlpo = "http://www.semanticdesktop.org/ontologies/2011/10/05/dlpo#";
+declare namespace geo = "http://www.w3.org/2003/01/geo/wgs84_pos#";
+declare namespace xsd = "http://www.w3.org/2001/XMLSchema#";
+
+let $doc := doc("%doc%")
+
+let $statuses := $doc/o/data/e
+
+return 
+	
+	for $status in $statuses
+	    let $statusId := fn:replace($status/id, '-', '')
+		let $timestamp := $status/updated_time
+		let $statusMessage := $status/message
+										 		
+		#Construct for the Status Message  			  
+	    construct
+		{		   	
+			_:stm{data($statusId)} a dlpo:LivePost , dlpo:Status ;
+			nao:externalIdentifier {data($statusId)};
+			dlpo:timestamp {data($timestamp)}^^xsd:dateTime;
+			dlpo:textualContent {data($statusMessage)}.			
+			
+			#Construct for the user of a Status Message   		
+			{ 
+			   		let $userId := $status/user/id   #changed xml 'from' element to 'user'
+			   		let $userFullname := $status/user/name   #changed xml 'from' element to 'user'			   		
+			   					   		      
+				    #Construct for the user's information 	          
+				    construct
+					{
+						_:c{data($userId)} a nco:PersonContact;   
+				        nco:contactUID {data($userId)};
+				        nco:hasName _:name{data($userId)} .
+				        	_:name{data($userId)} a nco:Name ;
+				            nco:fullname {data($userFullname)}.
+				        _:stm{data($statusId)} nao:creator _:c{data($userId)}.				        
+					   
+				    }
+		    }.
+		    
+		    #Construct for the likes of a Status Message   		
+			{ 
+			   		let $likes := $status/likes/data/e
+			   					   		
+			   		for $like in $likes
+			   			let $userId := $like/id	 	
+			   			let $userFullname := $like/name	   						 		   		     
+			   		    	
+					    #Construct for the user's information 	          
+					    construct
+						{						   
+							_:c{data($userId)} a nco:PersonContact;   
+					        nco:contactUID {data($userId)};
+					        nco:hasName _:name{data($userId)} .
+				        		_:name{data($userId)} a nco:Name ;
+				            	nco:fullname {data($userFullname)}.
+					        _:stm{data($statusId)} nao:favouritedBy _:c{data($userId)}.					        
+					        
+					    }					    
+		    }.
+		    
+		    #Construct for the replies (comments) of a Status Message   		
+			{ 
+			   		let $comments := $status/comments/data/e
+			   					   		
+			   		for $comment in $comments
+			   			let $commentId := $comment/id	
+			   			let $commentTimestamp := $comment/created_time
+			   			let $commentMessage := $comment/message 			 		   		     
+			   		    	
+					    #Construct for the comments of the status message 	          
+					    construct
+						{						   
+							_:com{data($commentId)} a dlpo:LivePost ,dlpo:Comment;   
+					        nao:externalIdentifier {data($commentId)};
+					        dlpo:timestamp {data($commentTimestamp)}^^xsd:dateTime;
+							dlpo:textualContent {data($commentMessage)}.
+					        _:stm{data($statusId)} dlpo:hasReply _:com{data($commentId)}.					        
+					        
+					        #Construct for the user of a Comment   		
+							{ 
+							   		let $userId := $comment/user/id  #changed xml 'from' element to 'user'	
+							   		let $userFullname := $comment/user/name  #changed xml 'from' element to 'user'						   		
+							   					   		      
+								    #Construct for the user's information 	          
+								    construct
+									{
+										_:c{data($userId)} a nco:PersonContact;   
+								        nco:contactUID {data($userId)};
+								        nco:hasName _:name{data($userId)} .
+				        					_:name{data($userId)} a nco:Name ;
+				            				nco:fullname {data($userFullname)}.						        
+								        _:com{data($commentId)} nao:creator _:c{data($userId)}.								        
+								        
+								    }
+						    }						   
+					    }					    
+		    }			
+		    
+		   	    	   
+		}
+	 
+		 

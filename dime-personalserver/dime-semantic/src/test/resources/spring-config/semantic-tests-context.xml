@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd">
+	
+	<context:annotation-config/>
+	
+	<bean id="repositoryFactory"
+		class="eu.dime.ps.semantic.rdf.impl.SesameMemoryRepositoryFactory"/>
+
+ 	<bean id="repository"
+ 		factory-bean="repositoryFactory"
+ 		factory-method="get">
+ 		<constructor-arg value="12345"/>
+ 	</bean>
+ 	
+	<bean id="modelFactory"
+		class="eu.dime.ps.semantic.model.ModelFactory">
+	</bean>
+
+	<bean id="tripleStore"
+		class="ie.deri.smile.rdf.impl.TripleStoreImpl">
+ 		<constructor-arg value="12345"/>
+		<constructor-arg><ref bean="repository"/></constructor-arg>
+	</bean>
+
+	<bean id="resourceStore"
+		class="eu.dime.ps.semantic.rdf.impl.ResourceStoreImpl">
+		<constructor-arg><ref bean="tripleStore"/></constructor-arg>
+	</bean>
+
+	<bean id="pimoService"
+		class="eu.dime.ps.semantic.service.impl.PimoService">
+		<constructor-arg><value>default-config.trig</value></constructor-arg>
+		<constructor-arg><ref bean="tripleStore"/></constructor-arg>
+	</bean>
+
+	<bean id="resourceMatchingService"
+		class="eu.dime.ps.semantic.service.impl.ResourceMatchingServiceImpl">
+		<property name="tripleStore" ref="tripleStore"/>
+	</bean>
+
+	<bean id="privacyPreferenceService"
+		class="eu.dime.ps.semantic.privacy.impl.PrivacyPreferenceServiceImpl">
+		<property name="pimoService" ref="pimoService"/>
+	</bean>
+
+	<bean id="liveContextService"
+		class="eu.dime.ps.semantic.service.context.LiveContextServiceImpl">
+		<constructor-arg><ref bean="pimoService"/></constructor-arg>
+		<constructor-arg type="java.lang.Class">
+			<value>eu.dime.ps.semantic.service.context.SnapshotBasedStrategy</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="historyLogService"
+		class="eu.dime.ps.semantic.service.logging.HistoryLogService">
+		<constructor-arg><ref bean="resourceStore"/></constructor-arg>
+	</bean>
+
+</beans>

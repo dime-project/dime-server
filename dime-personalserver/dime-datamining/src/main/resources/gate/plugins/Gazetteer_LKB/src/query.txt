@@ -1,0 +1,6 @@
+select ?LA ?I ?DC
+where {
+ ?I <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ?DC ;
+  <http://www.w3.org/2008/05/skos-xl#prefLabel> ?label .
+ ?label <http://www.w3.org/2008/05/skos-xl#literalForm> ?LA
+} limit 100

@@ -1,0 +1,159 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+
+
+
+
+
+
+
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>The Large KB gazetteer - Samples</title>
+    <style type="text/css" media="all">
+      @import url("./css/maven-base.css");
+      @import url("./css/maven-theme.css");
+      @import url("./css/site.css");
+    </style>
+    <link rel="stylesheet" href="./css/print.css" type="text/css" media="print" />
+          <meta name="author" content="Marin Nozhchev" />
+        <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+      </head>
+  <body class="composite">
+    <div id="banner">
+                  <a href="http://www.ontotext.com" id="bannerLeft">
+    
+                                    <img src="http://ontotext.com/images/ontotext_logo.jpg" alt="" />
+    
+            </a>
+                    <div class="clear">
+        <hr/>
+      </div>
+    </div>
+    <div id="breadcrumbs">
+          
+  
+
+  
+    
+  
+  
+    
+            <div class="xleft">
+        Last Published: 2009-10-17
+                      </div>
+            <div class="xright">      
+  
+
+  
+    
+  
+  
+    
+  </div>
+      <div class="clear">
+        <hr/>
+      </div>
+    </div>
+    <div id="leftColumn">
+      <div id="navcolumn">
+           
+  
+
+  
+    
+  
+  
+    
+                   <h5>Large KB Gazetteer</h5>
+            <ul>
+              
+    <li class="none">
+                    <a href="index.html">Overview</a>
+          </li>
+              
+    <li class="none">
+                    <a href="usage.html">Usage</a>
+          </li>
+              
+    <li class="none">
+                    <a href="general.html">Q & A</a>
+          </li>
+              
+    <li class="none">
+                    <a href="gate_compatibility.html">GATE Compatibility</a>
+          </li>
+              
+    <li class="none">
+                    <a href="comparison.html">GATE Gazetteer Feature Comparison</a>
+          </li>
+              
+    <li class="none">
+                    <a href="semantic_encrichment_pr.html">Semantic Enrichment PR</a>
+          </li>
+              
+    <li class="none">
+              <strong>Samples</strong>
+        </li>
+          </ul>
+              <h5>Developer Documentation</h5>
+            <ul>
+              
+    <li class="none">
+                    <a href="dictionary_lifecycle.html">Dictionary Lifecycle</a>
+          </li>
+          </ul>
+                                           <a href="http://maven.apache.org/" title="Built by Maven" class="poweredBy">
+            <img alt="Built by Maven" src="./images/logos/maven-feather.png"></img>
+          </a>
+                       
+  
+
+  
+    
+  
+  
+    
+        </div>
+    </div>
+    <div id="bodyColumn">
+      <div id="contentBox">
+        <p>The large gazetteer KB comes with a few samples and the <a href="./sesame_enrichment_pr.html">a companion PR</a> that showcases the usefulness of using Linked Data URI as identifiers in the gazetteer. All samples are in the <i>samples</i> sub-directory of the plugin.</p>
+<div class="section"><h2>Samples</h2>
+<ul><li>dictionary_from_local_ontology - A sample of the primary use-case of the gazetteer - dictionary, loaded from local RDF files. In this sample, the RDF files contain a taxonomy. The query that loads all classes with their names is in <i>dictionary_from_local_ontology/query.txt</i>.</li>
+<li>dictionary_from_remote_ontology - A sample of loading a dictionary from a public Linked Data server - in this case the LDSR. Loads 10000 names of entertainers. </li>
+<li>sample_pipelines<ul><li>pipeline.gapp - Very small pipelines that initializes a gazetteer with the dictionary from <i>dictionary_from_local_ontology</i>. Sample documents are included.</li>
+<li>sample_linked_data_mashup.gapp - Loads a gazetteer with the entertainers from <i>dictionary_from_remote_ontology</i>, finds entertainers in the sample documents, and then runs the Semantic Enrichment PR. It adds the birthplace of every looked up entertainer. </li>
+</ul>
+</li>
+</ul>
+</div>
+
+      </div>
+    </div>
+    <div class="clear">
+      <hr/>
+    </div>
+    <div id="footer">
+      <div class="xright">&#169;  
+          2009
+    
+          Ontotext AD
+          
+  
+
+  
+    
+  
+  
+    
+  </div>
+      <div class="clear">
+        <hr/>
+      </div>
+    </div>
+  </body>
+</html>

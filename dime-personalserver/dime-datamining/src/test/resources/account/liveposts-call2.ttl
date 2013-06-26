@@ -1,0 +1,78 @@
+@prefix nao: <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#> . 
+@prefix pimo: <http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#> . 
+@prefix nco: <http://www.semanticdesktop.org/ontologies/2007/03/22/nco#> . 
+@prefix dlpo: <http://www.semanticdesktop.org/ontologies/2011/10/05/dlpo#> . 
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> . 
+
+_:stm82 a dlpo:Status .
+_:stm82 nao:externalIdentifier "UNIU-66157577-5527246190187393024-SHARE" .
+_:stm82 dlpo:timestamp "1317798183010"^^xsd:dateTime .
+_:stm82 dlpo:textualContent "now has the need to recruit a Project Manager for a leading #igaming company based in #Malta http://bull.hn/l/4NI7/1" .
+_:stm82 nao:creator _:c82 .
+_:c82 a nco:PersonContact .
+_:c82 nao:externalIdentifier "RYWVyGcfzR" .
+_:stm107 a dlpo:Status .
+_:stm107 nao:externalIdentifier "UNIU-49128434-5527087121082363905-SHARE" .
+_:stm107 dlpo:timestamp "1317760257980"^^xsd:dateTime .
+_:stm107 dlpo:textualContent "#Apple brings #Siri voice control to the #iPhone - http://t.co/LFdVxjTs" .
+_:stm107 nao:creator _:c107 .
+_:c107 a nco:PersonContact .
+_:c107 nao:externalIdentifier "9V7WOs5KHr" .
+_:stm131 a dlpo:Status .
+_:stm131 nao:externalIdentifier "UNIU-66157577-5527025216070365184-SHARE" .
+_:stm131 dlpo:timestamp "1317745498675"^^xsd:dateTime .
+_:stm131 dlpo:textualContent "has the requirement to recruit a #Graphical User Interface Developer #GUI for an #igaming company, based #Malta http://bull.hn/l/3UEP/3" .
+_:stm131 nao:creator _:c131 .
+_:c131 a nco:PersonContact .
+_:c131 nao:externalIdentifier "RYWVyGcfzR" .
+_:stm156 a dlpo:Status .
+_:stm156 nao:externalIdentifier "UNIU-24610677-5527010822250831872-SHARE" .
+_:stm156 dlpo:timestamp "1317742066923"^^xsd:dateTime .
+_:stm156 dlpo:textualContent """Last few places for the Android Mobile Application Development course (Beginners to Intermediate) starting tomorrow! 
+…http://lnkd.in/yNNa6U""" .
+_:stm156 nao:creator _:c156 .
+_:c156 a nco:PersonContact .
+_:c156 nao:externalIdentifier "9V7WOs5KHr" .
+_:stm181 a dlpo:Status .
+_:stm181 nao:externalIdentifier "UNIU-7081570-5526990485433884672-SHARE" .
+_:stm181 dlpo:timestamp "1317737218247"^^xsd:dateTime .
+_:stm181 dlpo:textualContent "RT @BBCClick: Just come across scam site buyitplay dot eu. Offers seductively low prices on good which never arrive -- and try to steal ID …" .
+_:stm181 nao:creator _:c181 .
+_:c181 a nco:PersonContact .
+_:c181 nao:externalIdentifier "9V7WOs5KHr" .
+_:stm206 a dlpo:Status .
+_:stm206 nao:externalIdentifier "UNIU-66157577-5526950762287988736-SHARE" .
+_:stm206 dlpo:timestamp "1317727747510"^^xsd:dateTime .
+_:stm206 dlpo:textualContent "now has the need to recruit a Director of Legal Affairs for a leading igaming company, based Malta. http://bull.hn/l/4026/5" .
+_:stm206 nao:creator _:c206 .
+_:c206 a nco:PersonContact .
+_:c206 nao:externalIdentifier "RYWVyGcfzR" .
+_:stm231 a dlpo:Status .
+_:stm231 nao:externalIdentifier "UNIU-24774657-5526889791490109440-SHARE" .
+_:stm231 dlpo:timestamp "1317713210939"^^xsd:dateTime .
+_:stm231 dlpo:textualContent "RT @DrJimHamill: Companies Cannot Live on Websites Alone http://t.co/aNBZMy52 #socialmedia" .
+_:stm231 nao:creator _:c231 .
+_:c231 a nco:PersonContact .
+_:c231 nao:externalIdentifier "9V7WOs5KHr" .
+
+_:newstm181 a dlpo:Status .
+_:newstm181 nao:externalIdentifier "00181" .
+_:newstm181 dlpo:timestamp "1417737218247"^^xsd:dateTime .
+_:newstm181 dlpo:textualContent "Here it comes another post..." .
+_:newstm181 nao:creator _:newc181 .
+_:newc181 a nco:PersonContact .
+_:newc181 nao:externalIdentifier "9V7WOs5KHr" .
+_:newstm206 a dlpo:Status .
+_:newstm206 nao:externalIdentifier "00206" .
+_:newstm206 dlpo:timestamp "1417727747510"^^xsd:dateTime .
+_:newstm206 dlpo:textualContent "thank you sir" .
+_:newstm206 nao:creator _:newc206 .
+_:newc206 a nco:PersonContact .
+_:newc206 nao:externalIdentifier "RYWVyGcfzR" .
+_:newstm231 a dlpo:Status .
+_:newstm231 nao:externalIdentifier "00231" .
+_:newstm231 dlpo:timestamp "1417713210939"^^xsd:dateTime .
+_:newstm231 dlpo:textualContent "I'm so bored..." .
+_:newstm231 nao:creator _:newc231 .
+_:newc231 a nco:PersonContact .
+_:newc231 nao:externalIdentifier "9V7WOs5KHr" .

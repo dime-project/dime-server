@@ -1,0 +1,86 @@
+declare namespace nco = "http://www.semanticdesktop.org/ontologies/2007/03/22/nco#";
+declare namespace pimo = "http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#";
+declare namespace nao = "http://www.semanticdesktop.org/ontologies/2007/08/15/nao#";
+declare namespace nie = "http://www.semanticdesktop.org/ontologies/2007/01/19/nie#";
+declare namespace xsd = "http://www.w3.org/2001/XMLSchema#";
+declare namespace geo = "http://www.w3.org/2003/01/geo/wgs84_pos#";
+
+let $doc := doc("%doc%")
+
+
+let $results := $doc/result
+
+return 
+
+ if (fn:exists($results))	
+ then ({
+     #let $friends := $doc/result/friends/friend/user
+     let $friends := $results/friends/friend/user
+	 for $friend in $friends
+	     let $friendId := $friend/encodedId
+	     let $summary := if ((fn:string-length($friend/aboutMe)) > 0) then $friend/aboutMe else ()
+	     let $thumbnailUrl :=  if ((fn:string-length($friend/avatar)) > 0) then $friend/avatar else ()     
+	     let $birthdate := if ((fn:string-length($friend/dateOfBirth)) > 0) then $friend/dateOfBirth else ()
+	     let $displayName := if ((fn:string-length($friend/displayName)) > 0) then $friend/displayName else ()
+	     let $fullname := if ((fn:string-length($friend/fullName)) > 0) then $friend/fullName else ()
+	     let $gender := if ((fn:contains($friend/gender,"FEMALE"))) then "female"
+		  				else if ((fn:contains($friend/gender,"MALE"))) then "male"
+		  				else if ((fn:contains($friend/gender,"NA"))) then "NA"
+		  				else ()    
+		 let $nickname := if ((fn:string-length($friend/nickname)) > 0) then $friend/nickname else ()	 
+		 let $city := if ((fn:string-length($friend/city)) > 0) then $friend/city else ()
+		 let $country := if ((fn:string-length($friend/country)) > 0) then $friend/country else ()
+		 let $state := if ((fn:string-length($friend/state)) > 0) then $friend/state else ()
+		               
+	    #Construct for the user     	
+		construct
+		{  	
+		  _:c{data($friendId)} a nco:PersonContact;
+		  nco:contactUID {data($friendId)};
+		  nao:description {data($summary)};
+		  nao:prefSymbol {data($thumbnailUrl)};
+		  nco:gender nco:{data(if (fn:not(($gender)="NA")) then $gender else ())};
+		  nco:hasPersonName _:pn{data($friendId)}.
+		  _:pn{data($friendId)} a nco:PersonName;
+	       	 nao:prefLabel {data($displayName)};
+		     nco:fullname {data($fullname)};
+		     nco:nickname {data($nickname)}.     
+	     
+	      #Construct for the birth date of the user  
+	      {	 	
+	    	 if ((fn:string-length($birthdate))>0)				    	
+			 then ({     
+		        let $counter := count($birthdate/preceding::*) + count($birthdate/ancestor::*)
+		        let $dob := fn:concat(data($birthdate),"T","00:00:00Z")
+		           
+		        construct
+		        {
+		       		_:bd{data($counter)} a nco:BirthDate;
+			  		nco:birthDate {data($dob)}^^xsd:date.  
+		       		_:c{data($friendId)} nco:hasBirthDate _:bd{data($counter)}.          
+		        }    
+		     })
+		     else () 
+	      }.
+	      
+	      #Construct for the address of the user
+	      {   
+	         #if ((fn:string-length($friend/city) > 0) or (fn:string-length($friend/country) > 0) or (fn:string-length($friend/state) > 0))
+	         if (($city) or ($country) or ($state))
+	         then ({	      	
+			     let $counter := count($friend/preceding::*) + count($friend/ancestor::*)       
+			     construct
+			     {
+			         _:addr{data($counter)} a nco:PostalAddress;
+			       	 nco:locality {data($city)};
+			       	 nco:country {data($country)};
+			       	 nco:region {data($state)}.	      
+			       	 _:c{data($friendId)} nco:hasPostalAddress _:addr{data($counter)}.       		      	        		              
+			     } 
+			})
+		    else ()   
+	       }	        
+	    }
+  })
+  else ()
+    

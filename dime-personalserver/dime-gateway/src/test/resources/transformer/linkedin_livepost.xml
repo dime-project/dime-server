@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<person>
+  <current-share>
+    <id>s644819790</id>
+    <timestamp>1318850518000</timestamp>
+    <visibility>
+      <code>anyone</code>
+    </visibility>
+    <comment>just joined LinkedIn!</comment>
+    <source>
+      <service-provider>
+        <name>LINKEDIN</name>
+      </service-provider>
+    </source>
+    <author>
+      <id>_Df1MJUT-B</id>
+      <first-name>Juan</first-name>
+      <last-name>Martinez</last-name>
+    </author>
+  </current-share>
+</person>

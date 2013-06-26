@@ -1,0 +1,80 @@
+<urn:uuid:f47ac10b-58cc-johndoe> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#Person> .
+<urn:uuid:f47ac10b-58cc-johndoe> <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#prefLabel> "John Doe".
+<urn:uuid:f47ac10b-58cc-johndoe> <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#altLabel> "John D.".
+<urn:uuid:f47ac10b-58cc-johndoe> <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#altLabel> "JohnnyD".
+<urn:uuid:f47ac10b-58cc-johndoe> <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#prefSymbol> <http://localhost:8080/johndoeprofile.jpg>.
+<urn:uuid:f47ac10b-58cc-johndoe> <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#altSymbol> <http://localhost:8080/johndoeprofile2.jpg>.
+<urn:uuid:f47ac10b-58cc-johndoe> <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#altSymbol> <http://localhost:8080/johndoeprofile3.jpg>.
+<urn:uuid:f47ac10b-58cc-johndoe> <http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#memberOf> <urn:uuid:f47ac10b-58cc-johndoegroup2> .
+<urn:uuid:f47ac10b-58cc-johndoe> <http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#memberOf> <urn:uuid:f47ac10b-58cc-johndoegroup1> .
+<urn:uuid:f47ac10b-58cc-johndoe> <http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#hasProfile> <urn:uuid:f47ac10b-58cc-johndoelinkedin> .
+<urn:uuid:f47ac10b-58cc-johndoe> <http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#hasProfile> <urn:uuid:f47ac10b-58cc-johndoedime> .
+<urn:uuid:f47ac10b-58cc-johndoe> <http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#hasProfile> <urn:uuid:f47ac10b-58cc-johndoetwitter> .
+
+
+
+<urn:uuid:f47ac10b-58cc-johndoelinkedin> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.semanticdesktop.org/ontologies/2007/03/22/nco#Contact> .
+<urn:uuid:f47ac10b-58cc-johndoelinkedin>  <http://www.semanticdesktop.org/ontologies/2007/03/22/nco#fullname> "John Doe".
+<urn:uuid:f47ac10b-58cc-johndoelinkedin>  <http://www.semanticdesktop.org/ontologies/2007/03/22/nco#nameGiven> "John".
+<urn:uuid:f47ac10b-58cc-johndoelinkedin>  <http://www.semanticdesktop.org/ontologies/2007/03/22/nco#nameFamily> "Doe".
+<urn:uuid:f47ac10b-58cc-johndoelinkedin>  <http://www.semanticdesktop.org/ontologies/2007/03/22/nco#nickname> "JD".
+<urn:uuid:f47ac10b-58cc-johndoelinkedin>  <http://www.semanticdesktop.org/ontologies/2007/03/22/nco#Photo> <urn:uuid:f47ac10b-58cc-johndoelinkedinphoto> .
+<urn:uuid:f47ac10b-58cc-johndoelinkedinphoto> <http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#fileURL> <http://localhost:8080/johndoeprofile.jpg> . 
+
+<urn:uuid:f47ac10b-58cc-johndoedime> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.semanticdesktop.org/ontologies/2007/03/22/nco#Contact> .
+<urn:uuid:f47ac10b-58cc-johndoedime>  <http://www.semanticdesktop.org/ontologies/2007/03/22/nco#fullname> "John D".
+<urn:uuid:f47ac10b-58cc-johndoedime>  <http://www.semanticdesktop.org/ontologies/2007/03/22/nco#Photo> <urn:uuid:f47ac10b-58cc-johndoedimephoto> .
+<urn:uuid:f47ac10b-58cc-johndoedimephoto> <http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#fileURL> <http://localhost:8080/johndoeprofile2.jpg> . 
+
+<urn:uuid:f47ac10b-58cc-johndoetwitter> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.semanticdesktop.org/ontologies/2007/03/22/nco#Contact> .
+<urn:uuid:f47ac10b-58cc-johndoetwitter>  <http://www.semanticdesktop.org/ontologies/2007/03/22/nco#fullname> "JohnnyD".
+<urn:uuid:f47ac10b-58cc-johndoetwitter>  <http://www.semanticdesktop.org/ontologies/2007/03/22/nco#Photo> <urn:uuid:f47ac10b-58cc-johndoetwitterphoto> .
+<urn:uuid:f47ac10b-58cc-johndoetwitterphoto> <http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#fileURL> <http://localhost:8080/johndoeprofile3.jpg> . 
+
+<urn:uuid:f47ac10b-58cc-achillejones> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#Person> .
+<urn:uuid:f47ac10b-58cc-achillejones> <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#prefLabel> "Adelheid Muller".
+<urn:uuid:f47ac10b-58cc-achillejones> <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#prefSymbol> <http://localhost:8080/achilleprofile.jpg>.
+<urn:uuid:f47ac10b-58cc-achillejones> <http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#memberOf> <urn:uuid:f47ac10b-58cc-johndoegroup1> .
+<urn:uuid:f47ac10b-58cc-achillejones> <http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#hasProfile> <urn:uuid:f47ac10b-58cc-achillejoneslinkedin> .
+
+<urn:uuid:f47ac10b-58cc-achillejoneslinkedin> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.semanticdesktop.org/ontologies/2007/03/22/nco#Contact> .
+<urn:uuid:f47ac10b-58cc-achillejoneslinkedin>  <http://www.semanticdesktop.org/ontologies/2007/03/22/nco#fullname> "Achille Jones".
+<urn:uuid:f47ac10b-58cc-achillejoneslinkedin>  <http://www.semanticdesktop.org/ontologies/2007/03/22/nco#nickname> "AJ".
+<urn:uuid:f47ac10b-58cc-achillejoneslinkedin>  <http://www.semanticdesktop.org/ontologies/2007/03/22/nco#Photo> <urn:uuid:f47ac10b-58cc-achillejoneslinkedinphoto> .
+<urn:uuid:f47ac10b-58cc-achillejoneslinkedinphoto> <http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#fileURL> <http://localhost:8080/achilleprofile.jpg> . 
+
+
+<urn:uuid:f47ac10b-58cc-adelheidmuller> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#Person> .
+<urn:uuid:f47ac10b-58cc-adelheidmuller> <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#prefLabel> "Adelheid Muller".
+<urn:uuid:f47ac10b-58cc-adelheidmuller> <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#prefSymbol> <http://localhost:8080/adelheidmuller.jpg>.
+<urn:uuid:f47ac10b-58cc-adelheidmuller> <http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#memberOf> <urn:uuid:f47ac10b-58cc-johndoegroup2> .
+<urn:uuid:f47ac10b-58cc-adelheidmuller> <http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#hasProfile> <urn:uuid:f47ac10b-58cc-adelheidmullerlinkedin> .
+
+<urn:uuid:f47ac10b-58cc-adelheidmullerlinkedin> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.semanticdesktop.org/ontologies/2007/03/22/nco#Contact> .
+<urn:uuid:f47ac10b-58cc-adelheidmullerlinkedin>  <http://www.semanticdesktop.org/ontologies/2007/03/22/nco#fullname> "Adelheid Muller".
+<urn:uuid:f47ac10b-58cc-adelheidmullerlinkedin>  <http://www.semanticdesktop.org/ontologies/2007/03/22/nco#nickname> "AM".
+<urn:uuid:f47ac10b-58cc-adelheidmullerlinkedin>  <http://www.semanticdesktop.org/ontologies/2007/03/22/nco#Photo> <urn:uuid:f47ac10b-58cc-adelheidmullerlinkedinphoto> .
+<urn:uuid:f47ac10b-58cc-adelheidmullerlinkedinphoto> <http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#fileURL> <http://localhost:8080/adelheidmuller.jpg> . 
+
+<urn:uuid:f47ac10b-58cc-vanessaschmitz> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#Person> .
+<urn:uuid:f47ac10b-58cc-vanessaschmitz> <http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#memberOf> <urn:uuid:f47ac10b-58cc-johndoegroup1> .
+<urn:uuid:f47ac10b-58cc-vanessaschmitz> <http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#memberOf> <urn:uuid:f47ac10b-58cc-johndoegroup2> .
+<urn:uuid:f47ac10b-58cc-trudesmith> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#Person> .
+<urn:uuid:f47ac10b-58cc-trudesmith> <http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#memberOf> <urn:uuid:f47ac10b-58cc-johndoegroup1> .
+<urn:uuid:f47ac10b-58cc-borisblack> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#Person> .
+<urn:uuid:f47ac10b-58cc-borisblack> <http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#memberOf> <urn:uuid:f47ac10b-58cc-johndoegroup2> .
+
+<urn:uuid:f47ac10b-58cc-johndoegroup1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#PersonGroup> .
+<urn:uuid:f47ac10b-58cc-johndoegroup1> <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#prefLabel> "Colleagues".
+<urn:uuid:f47ac10b-58cc-johndoegroup1> <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#prefSymbol> <file:/home/ismriv/example/dir1/screenshot-GVS.png>.
+<file:/home/ismriv/example/dir1/screenshot-GVS.png> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#Symbol> .
+<file:/home/ismriv/example/dir1/screenshot-GVS.png> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#Image> .
+
+
+<urn:uuid:f47ac10b-58cc-johndoegroup2> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#PersonGroup> .
+<urn:uuid:f47ac10b-58cc-johndoegroup2> <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#prefLabel> "Friends".
+<urn:uuid:f47ac10b-58cc-johndoegroup2> <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#prefSymbol> <file:/home/ismriv/example/dir2/lego.png>.
+<file:/home/ismriv/example/dir2/lego.png> <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#Symbol> .
+<file:/home/ismriv/example/dir2/lego.png> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#Image> .
+
+

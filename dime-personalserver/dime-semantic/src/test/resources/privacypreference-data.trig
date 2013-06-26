@@ -1,0 +1,72 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix nie: <http://www.semanticdesktop.org/ontologies/2007/01/19/nie#> .
+@prefix nao: <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#> .
+@prefix pimo: <http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#> .
+@prefix nco: <http://www.semanticdesktop.org/ontologies/2007/03/22/nco#> .
+@prefix nfo: <http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#> .
+@prefix ppo: <http://vocab.deri.ie/ppo#> .
+@prefix nso: <http://www.semanticdesktop.org/ontologies/2009/11/08/nso#> .
+
+{
+	<file:/home/ismriv/example/dir2/lego.png> a nfo:FileDataObject ;
+		nfo:fileLastModified "2010-12-12T22:24:25.000Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
+		nfo:fileName "lego.png" ;
+		nfo:belongsToContainer <file:/home/ismriv/example/dir1/> ;
+		nfo:fileSize "164558"^^<http://www.w3.org/2001/XMLSchema#long> ;
+		rdf:type nie:DataObject .	
+	
+	<file:/home/ismriv/example/dir1/different-levels-of-composition.png> a nfo:FileDataObject ;
+		nfo:fileLastModified "2010-12-12T22:25:16.000Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
+		nfo:fileName "different-levels-of-composition.png" ;
+		nfo:belongsToContainer <file:/home/ismriv/example/dir1/> ;
+		rdf:type nfo:Image ;
+		nfo:fileSize "593841"^^<http://www.w3.org/2001/XMLSchema#long> ;
+		rdf:type nie:DataObject .
+	
+	<urn:johndoe> a pimo:Person ;
+		pimo:hasProfile <urn:johndoe-linkedin> .
+	
+	<urn:johndoe-linkedin> a nco:Contact ;
+		nco:fullname "John Doe" ;
+		nco:nickname "JD" ;
+		nco:hasEmailAddress <urn:johndoe-linkedin-email> .
+	
+	<urn:johndoe-linkedin-email> a nco:EmailAddress ;
+		nco:emailAddress "john.doe@example.com" .
+
+}
+
+{
+	<urn:marksmith> a pimo:Person .
+	<urn:tomscerri> a pimo:Person .
+	<urn:marialee> a pimo:Person .
+	
+	<urn:pp:1> a ppo:PrivacyPreference ;
+		rdfs:label "DATABOX" ;
+		nao:prefLabel "my databox" ;
+		ppo:hasAccessSpace <urn:space:1> ;
+		ppo:appliesToResource <file:/home/ismriv/example/dir1/different-levels-of-composition.png> .
+	
+	<urn:space:1> a ppo:AccessSpace ;
+		nso:includes <urn:marksmith> .
+		
+	<urn:pp:2> a ppo:PrivacyPreference ;
+		rdfs:label "PROFILECARD" ;
+		nao:prefLabel "business" ;
+		ppo:hasAccessSpace <urn:space:2> ;
+		ppo:appliesToNamedGraph <urn:graph:2> .
+	
+	<urn:space:2> a ppo:AccessSpace ;
+		nso:includes <urn:marksmith> ;
+		nso:includes <urn:marialee> .
+	
+	<urn:graph:2> a <http://www.w3.org/2004/03/trix/rdfg-1/Graph> .
+	
+}
+
+<urn:graph:2> {
+	<urn:johndoe-linkedin> a nco:Contact ;
+		nco:fullname "John Doe" ;
+		nco:hasEmailAddress <urn:johndoe-linkedin-email> .
+}

@@ -1,0 +1,24 @@
+ -----
+ GATE Compatibility
+ -----
+ Marin Nozhchev
+ -----
+ 2009-09-16
+ -----
+
+~~ http://maven.apache.org/doxia/references/apt-format.html
+
+GATE 5.0 Compatibility
+
+  You can modify a GATE 5.0 installation to make it compatible with the large KB gazetteer. 
+  Delete the following libraries from the <lib> folder of GATE - openrdf-util.jar, openrdf-model.jar, sesame.jar and owlim.jar.
+  Note that that will disable the Ontology plugin, all plugins that depend on it and all plugins that use the 
+  Sesame 1 API.
+  
+Compatibility with other CREOLE plugins
+
+  From GATE 5.1 onwards, the plugins can load any RDF API. The large KB gazetteer uses the Sesame 2 API and may not work correctly
+  if plugins that use the Sesame 1 API are loaded.
+
+
+

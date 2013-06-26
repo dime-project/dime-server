@@ -1,0 +1,387 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix ppo: <http://vocab.deri.ie/ppo#> .
+@prefix nrl: <http://www.semanticdesktop.org/ontologies/2007/08/15/nrl#> .
+@prefix pimo: <http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#> .
+@prefix nao: <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#> .
+@prefix nie: <http://www.semanticdesktop.org/ontologies/2007/01/19/nie#> .
+@prefix ncal: <http://www.semanticdesktop.org/ontologies/2007/04/02/ncal#> . 
+@prefix nco: <http://www.semanticdesktop.org/ontologies/2007/03/22/nco#> .
+@prefix nso: <http://www.semanticdesktop.org/ontologies/2009/11/08/nso#> .
+@prefix nfo: <http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#> .
+@prefix dao: <http://www.semanticdesktop.org/ontologies/2011/10/05/dao#> .
+@prefix dlpo: <http://www.semanticdesktop.org/ontologies/2011/10/05/dlpo#> .
+@prefix dcon: <http://www.semanticdesktop.org/ontologies/2011/10/05/dcon#> .
+@prefix ddo: <http://www.semanticdesktop.org/2011/10/05/ontologies/ddo#> .
+
+@prefix urn: <urn:uuid:> .
+
+<urn:uuid:a000026> {
+	urn:a000026 
+		a	<http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#PersonalInformationModel> ;
+		pimo:creator	urn:a000001 .
+	
+	urn:a000001
+		a pimo:Person , foaf:Agent ;
+		pimo:groundingOccurrence	urn:a000027 ;
+		nao:prefSymbol	<http://lorempixel.com/200/200/people/2/> ;	
+		foaf:knows	urn:a000010 ,
+					urn:a000024 ,
+					urn:a000009 ,
+					urn:a000028 ,
+					urn:a000029 ,
+					urn:a000030 ,
+					urn:a000031 ,
+					urn:a000032 ,
+					urn:a000033 ,
+					urn:a000034 .
+					
+	urn:a000505 
+		a	nao:Symbol .
+	
+	urn:a000018 
+		a	dao:Account ;
+		pimo:isDefinedBy urn:a000026 ;
+		nao:prefLabel "anna@di.me" ;
+		dao:accountType	"di.me" ;
+		nao:creator urn:a000001 ;
+		dao:hasCredentials	urn:a000035 .
+	urn:a000035
+		a	dao:Credentials ;
+		rdfs:label	"BasicAuthentication" ;
+		dao:userID	"annalogin1" ;
+		dao:password "annaloginpass1" .
+	
+	urn:a000027 
+		a	nco:PersonContact ;
+		dao:source	urn:a000018 ;
+		nco:hasPersonName	urn:a000016 ;
+		nco:hasEmailAddress	urn:a000506 ;
+		nco:hasBirthDate	urn:a000020 ;
+		nco:photo	urn:a000505 ;
+		nco:hasLocation	urn:a000021 ;
+		nco:hasAffiliation	urn:a000022 .
+	
+	urn:a000016 
+		a	nco:PersonName ;
+		nco:nameGiven	"Anna" ;
+		nco:nameFamily	"Alford" ;
+		nco:fullname "Anna Alford" ;
+		nco:nickname	"Anni" ; 
+		nco:nameHonorificPrefix	"phD" .
+	 
+	urn:a000506 
+		a	nco:EmailAddress ;
+		nco:EmailAddress	"aalford@gmail.com" .
+	
+	urn:a000020 
+		a	nco:BirthDate ;
+		nco:birthdate	"1972-11-24" .
+	
+	urn:a000505 
+		a 	nfo:Image ,
+			nie:DataObject ;
+		nfo:fileName	"Anna_Alford" .
+	
+	urn:a000021 
+		a	geo:Point ;
+		rdfs:label	"Ballachulish" ;
+		geo:lat	"56.675287" ;
+		geo:long	"-5.13908" .
+	
+	urn:a000022 
+		a	nco:Affiliation ;
+		nco:title	"Marketing Specialist" .
+	
+	urn:a000010 
+		a	pimo:Person ,
+			foaf:Agent ;
+		nao:prefLabel	"Juan Martinez" ;
+		pimo:isDefinedBy urn:a000026 ;
+		pimo:groundingOccurrence 	urn:a000036 ;
+		pimo:memberOf urn:a000041 ;
+		pimo:memberOf urn:a000017 .
+		
+	urn:a000036
+		a	nco:PersonContact ;
+		dao:source 	urn:a000018 ;
+		nco:hasPersonName 	urn:a000037 ;
+		nco:hasBirthDate	urn:a000038 ;
+		nco:hasEmailAddress	urn:a000507 ;
+		nao:trustLevel	"0.7"^^xsd:double .
+		
+	urn:a000037 
+		a	nco:PersonName ;
+		nco:nameGiven	"Juan" ;
+		nco:nameFamily	"Martinez" ;
+		nco:fullname "Juan Martinez" .
+	
+	urn:a000038 
+		a	nco:BirthDate ;
+		nco:birthdate	"1966-08-05" .
+	
+	urn:a000507
+		a	nco:EmailAddress ;
+		nco:EmailAddress	"jmartinez@gmail.com" .
+	
+	urn:a000039
+		a dao:Account ;
+		pimo:isDefinedBy urn:a000026 ;
+		dao:accountType "di.me" ;
+		nao:creator urn:a000010 ;
+		dao:hasCredentials urn:a000040 .
+		
+	urn:a000040
+		a dao:Credentials ;
+		rdfs:label "BasicAuthentication" ;
+		dao:userID "xyz" ;
+		nao:privacyLevel "0"^^xsd:double ;
+		dao:password "123" .
+	
+	
+	urn:a000024 
+		a	pimo:Person ,
+			foaf:Agent ;
+		pimo:isDefinedBy urn:a000026 ;
+		nao:prefLabel	"Natalia Cole" ;
+		pimo:groundingOccurrence	urn:a000043 ;
+		pimo:memberOf	urn:a000041 ,
+						urn:a000012 ,
+						urn:a000042 .
+		
+	urn:a000043 
+		a	nco:PersonContact ;
+		dao:source	urn:a000018 ;
+		nco:hasPersonName	urn:a000044 ;
+		nco:hasBirthDate	urn:a000045 ;
+		nao:trustLevel	"0.9"^^xsd:double .
+		
+	urn:a000044 
+		a	nco:PersonName ;
+		nco:nameGiven	"Natalia" ;
+		nco:nameFamily	"Cole" ;
+		nco:fullname "Natalia Cole" ;
+		nco:hasEmailAddress	urn:a000508 .
+	
+	urn:a000045
+		a	nco:BirthDate ;
+		nco:birthdate	"1976-09-14" .
+		
+	
+	urn:a000508
+		a	nco:EmailAddress ;
+		nco:EmailAddress	"cole@dataplanning.es" .
+		
+	urn:a000009 
+		a 	pimo:Person ,
+			foaf:Agent ;
+		pimo:isDefinedBy urn:a000026 ;
+		nao:prefLabel	"Davis Mitchell" ;
+		pimo:groundingOccurrence	urn:a000046 ;
+		pimo:memberOf urn:a000023 .
+		
+	urn:a000046 
+		a	nco:PersonContact ;
+		dao:source	urn:a000018 ;
+		nco:hasPersonName	urn:a000047 ;
+		nco:hasBirthDate	urn:a000048 ;
+		nco:hasEmailAddress	urn:a000509 ;
+		nao:trustLevel	"0.4"^^xsd:double .
+		
+	urn:a000047
+		a	nco:PersonName ;
+		nco:nameGiven	"Davis" ;
+		nco:nameFamily	"Mitchell" ;
+		nco:fullname "Davis Mitchell" .
+		
+	urn:a000048 
+		a	nco:BirthDate ;
+		nco:birthdate "1981-04-03" .
+	
+	urn:a000509 
+		a	nco:EmailAddress ;
+		nco:EmailAddress	"dm@brussel-software.com" .
+		
+	
+	urn:a000028 
+		a	pimo:Person ,
+			foaf:Agent ;
+		pimo:isDefinedBy urn:a000026 ;
+		nao:prefLabel	"Nicole Elia" ;
+		pimo:groundingOccurrence	urn:a000049 ;
+		pimo:memberOf 	urn:a000017 ,
+						urn:a000012 .
+		
+	urn:a000049 
+		a	nco:PersonContact ;
+		dao:source	urn:a000018 ;
+		nco:hasPersonName	urn:a000050 ;
+		nco:hasBirthDate	urn:a000048 ;
+		nco:hasEmailAddress urn:a000510 ;
+		nao:trustLevel	"0.73"^^xsd:double .
+		
+	urn:a000050 
+		a	nco:PersonName ;
+		nco:nameGiven	"Nicole" ;
+		nco:nameFamily	"Elia" ;
+		nco:fullname "Nicole Elia" .
+		
+	urn:a000051
+		a	nco:BirthDate ;
+		nco:birthdate	"1986-09-02" .
+		
+	urn:a000510
+		a	nco:EmailAddress ;
+		nco:EmailAddress	"elianicole@gmail.com" .
+		
+	
+	urn:a000029 
+		a	pimo:Person ,
+			foaf:Agent ;
+		pimo:isDefinedBy urn:a000026 ;
+		nao:prefLabel	"Andre Beene" ;
+		pimo:groundingOccurrence	urn:a000052 ;
+		nco:hasBirthDate	urn:a000048 ;
+		nco:hasEmailAddress	urn:a000511 ;
+		nao:trustLevel	"0.36"^^xsd:double ;
+		pimo:memberOf urn:a000023 .
+		
+	urn:a000052 
+		a	nco:PersonContact ;
+		dao:source	urn:a000018 ;
+		nco:hasPersonName	urn:a000053 .
+	
+	urn:a000053
+		a	nco:PersonName ;
+		nco:nameGiven	"Andre" ;
+		nco:nameFamily	"Beene" ;
+		nco:fullname "Andre Beene" .
+	
+	urn:a000055
+		a	nco:BirthDate ;
+		nco:birthdate	"1971-07-08" .
+	
+	urn:a000511 
+		a	nco:EmailAddress ;
+		nco:EmailAddress	"beenea@yahoo.com" .
+	
+	urn:a000030 
+		a	pimo:Person ,
+			foaf:Agent ;
+		pimo:isDefinedBy urn:a000026 ;
+		nao:prefLabel	"Pia Kaufman" .
+	
+	
+	urn:a000031 
+		a 	pimo:Person ,
+			foaf:Agent ;
+		pimo:isDefinedBy urn:a000026 ;
+		nao:prefLabel	"Patrick Cyphers" .
+	
+	urn:a000032 
+		a 	pimo:Person ,
+			foaf:Agent ;
+		pimo:isDefinedBy urn:a000026 ;
+		nao:prefLabel 	"Norbert Drancourt" .
+	
+	urn:a000054
+		a dao:Account ;
+		pimo:isDefinedBy urn:a000026 ;
+		dao:accountType "di.me" ;
+		nao:creator urn:a000032 ;
+		dao:hasCredentials urn:a000056 .
+		
+	urn:a000056
+		a dao:Credentials ;
+		rdfs:label "BasicAuthentication" ;
+		dao:userID "xyz" ;
+		nao:privacyLevel "0"^^xsd:double ;
+		dao:password "123" .
+	
+	urn:a000033 
+		a 	pimo:Person ,
+			foaf:Agent ;
+		pimo:isDefinedBy urn:a000026 ;
+		nao:prefLabel	"Daniela Gregory" .
+	
+	urn:a000034 
+		a	pimo:Person ,
+			foaf:Agent ;
+		pimo:isDefinedBy urn:a000026 ;
+		nao:prefLabel 	"Maria Lee" .
+	
+	
+	urn:a000041 
+		a	pimo:PersonGroup ;
+		nao:prefLabel	"Friends" ;
+		nao:trustLevel	"0.7"^^xsd:double ;
+		nao:creator	urn:a000001 ;
+		pimo:hasMember 	urn:a000024 , 
+						urn:a000010 .
+	
+	urn:a000017 
+		a	pimo:PersonGroup ;
+		nao:prefLabel	"Cooking course people" ;
+		nao:trustLevel	"0.7"^^xsd:double ;
+		nao:creator	urn:a000001 ;
+		pimo:hasMember	urn:a000010 , 
+						urn:a000028 .
+	
+	
+	urn:a000023 
+		a 	pimo:PersonGroup ;
+		nao:prefLabel	"Holidays in Brussel 08" ;
+		nao:trustLevel	"0.4"^^xsd:double ;
+		nao:creator		urn:a000001 ;
+		pimo:hasMember	urn:a000009 , 
+						urn:a000029 .
+	
+	urn:a000012 
+		a	pimo:PersonGroup ;
+		nao:prefLabel	"AdHoc Group 4" ;
+		nao:trustLevel	"0.9"^^xsd:double ;
+		pimo:hasMember	urn:a000024 , 
+						urn:a000028 .
+	
+	
+	urn:a000042
+		a	pimo:PersonGroup ;
+		nao:prefLabel	"Work" ;
+		nao:trustLevel	"0.9"^^xsd:double ;
+		nao:creator	urn:a000001 ;
+		pimo:hasMember	urn:a000024 .
+	
+	urn:a000057 
+		a	pimo:Tag ;
+		nao:prefLabel	"loves Pizza" ;
+		nao:prefLabel	urn:a000001 ;
+		nao:creator	urn:a000001 .
+	
+	urn:a000058 
+		a	pimo:Tag ;
+		nao:prefLabel	"Best friend" ;
+		nao:prefLabel	urn:a000001 ;
+		nao:creator	urn:a000001 .
+	
+	urn:a000058 
+		a	pimo:Tag ;
+		nao:prefLabel	"Nice guy" ;
+		nao:prefLabel	urn:a000001 ;
+		nao:creator	urn:a000001 .
+	
+	urn:a000059
+		a	pimo:Project ;
+		nao:prefLabel	"Cooking Contest Organization" ;
+		nao:prefLabel	urn:a000001 ;
+		nao:creator	urn:a000001 .
+	
+	urn:a000060
+		a	pimo:Project ;
+		nao:prefLabel	"Privacy enhancing project" ;
+		nao:prefLabel	urn:a000001 ;
+		nao:creator	urn:a000001 .
+
+}

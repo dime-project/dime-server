@@ -1,0 +1,13 @@
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX dcterms: <http://purl.org/dc/terms/> 
+PREFIX dbpedia-owl: <http://dbpedia.org/ontology/>
+
+SELECT DISTINCT ?Name ?City ?Cls
+WHERE {
+	?City a ?Cls;  rdfs:label ?Name ;       
+        dbpedia-owl:populationTotal ?Number .
+        FILTER ( ?Cls = dbpedia-owl:Settlement  )   
+        FILTER ( ?Number>5599 )       
+        FILTER ( langMatches( lang(?Name), "en") )        
+}
+order by(?City)

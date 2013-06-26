@@ -1,0 +1,1 @@
+mvn exec:java -Dexec.mainClass="eu.dime.ps.communications.api.restapitest.RestApiTest" -Dexec.classpathScope=test -Dexec.args="$*"

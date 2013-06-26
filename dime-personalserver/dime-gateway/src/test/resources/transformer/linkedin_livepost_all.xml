@@ -1,0 +1,331 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<network>
+  <network-stats total="2">
+    <property key="degree-1-count">74</property>
+    <property key="degree-2-count">17228</property>
+  </network-stats>
+  <updates total="102" count="10" start="0">
+    <update>
+      <timestamp>1317905036144</timestamp>
+      <update-key>UNIU-66157577-5527694364714733568-SHARE</update-key>
+      <update-type>STAT</update-type>
+      <update-content>
+        <person>
+          <id>R5O2ObhksA</id>
+          <first-name>Jamie</first-name>
+          <last-name>Walsh</last-name>
+          <headline>Head of idemandHR (Recruitment Malta &amp; Gibraltar)</headline>
+          <current-status>Now has the need to recruit a #Casino #Affiliate manager for leading #igaming company, based #Malta http://bull.hn/l/3UC3/</current-status>
+          <picture-url>http://media.linkedin.com/mpr/mprx/0_U-ft05b1VKJTAibmMP2T0F9OZ9wmPLbmJzRD06b7b1xYuTKacq0YlQ1TnZIlrGQCsADurTzfCxQ6</picture-url>
+          <api-standard-profile-request>
+            <url>http://api.linkedin.com/v1/people/R5O2ObhksA</url>
+            <headers total="1">
+              <http-header>
+                <name>x-li-auth-token</name>
+                <value>name:pvgY</value>
+              </http-header>
+            </headers>
+          </api-standard-profile-request>
+          <site-standard-profile-request>
+            <url>http://www.linkedin.com/profile?viewProfile=&amp;key=66157577&amp;authToken=pvgY&amp;authType=name&amp;trk=api*a144344*s152685*</url>
+          </site-standard-profile-request>
+        </person>
+      </update-content>
+      <is-commentable>true</is-commentable>
+      <update-comments total="0" />
+      <is-likable>true</is-likable>
+      <is-liked>false</is-liked>
+      <num-likes>0</num-likes>
+    </update>
+    <update>
+      <timestamp>1317834468828</timestamp>
+      <update-key>UNIU-66157577-5527398383943155712-SHARE</update-key>
+      <update-type>STAT</update-type>
+      <update-content>
+        <person>
+          <id>R5O2ObhksA</id>
+          <first-name>Jamie</first-name>
+          <last-name>Walsh</last-name>
+          <headline>Head of idemandHR (Recruitment Malta &amp; Gibraltar)</headline>
+          <current-status>Now has the need to recruit a Poker Software Developer #C++ for a leading #igaming company based #Malta http://bull.hn/l/44O0/5</current-status>
+          <picture-url>http://media.linkedin.com/mpr/mprx/0_U-ft05b1VKJTAibmMP2T0F9OZ9wmPLbmJzRD06b7b1xYuTKacq0YlQ1TnZIlrGQCsADurTzfCxQ6</picture-url>
+          <api-standard-profile-request>
+            <url>http://api.linkedin.com/v1/people/R5O2ObhksA</url>
+            <headers total="1">
+              <http-header>
+                <name>x-li-auth-token</name>
+                <value>name:pvgY</value>
+              </http-header>
+            </headers>
+          </api-standard-profile-request>
+          <site-standard-profile-request>
+            <url>http://www.linkedin.com/profile?viewProfile=&amp;key=66157577&amp;authToken=pvgY&amp;authType=name&amp;trk=api*a144344*s152685*</url>
+          </site-standard-profile-request>
+        </person>
+      </update-content>
+      <is-commentable>true</is-commentable>
+      <update-comments total="0" />
+      <is-likable>true</is-likable>
+      <is-liked>false</is-liked>
+      <num-likes>0</num-likes>
+    </update>
+    <update>
+      <timestamp>1317814207359</timestamp>
+      <update-key>UNIU-66157577-5527313401178501120-SHARE</update-key>
+      <update-type>STAT</update-type>
+      <update-content>
+        <person>
+          <id>R5O2ObhksA</id>
+          <first-name>Jamie</first-name>
+          <last-name>Walsh</last-name>
+          <headline>Head of idemandHR (Recruitment Malta &amp; Gibraltar)</headline>
+          <current-status>Now has the need to recruit a #Casino Operations Manager based Malta, for a leading #igaming company http://bull.hn/l/3U3U/6</current-status>
+          <picture-url>http://media.linkedin.com/mpr/mprx/0_U-ft05b1VKJTAibmMP2T0F9OZ9wmPLbmJzRD06b7b1xYuTKacq0YlQ1TnZIlrGQCsADurTzfCxQ6</picture-url>
+          <api-standard-profile-request>
+            <url>http://api.linkedin.com/v1/people/R5O2ObhksA</url>
+            <headers total="1">
+              <http-header>
+                <name>x-li-auth-token</name>
+                <value>name:pvgY</value>
+              </http-header>
+            </headers>
+          </api-standard-profile-request>
+          <site-standard-profile-request>
+            <url>http://www.linkedin.com/profile?viewProfile=&amp;key=66157577&amp;authToken=pvgY&amp;authType=name&amp;trk=api*a144344*s152685*</url>
+          </site-standard-profile-request>
+        </person>
+      </update-content>
+      <is-commentable>true</is-commentable>
+      <update-comments total="0" />
+      <is-likable>true</is-likable>
+      <is-liked>false</is-liked>
+      <num-likes>0</num-likes>
+    </update>
+    <update>
+      <timestamp>1317798183010</timestamp>
+      <update-key>UNIU-66157577-5527246190187393024-SHARE</update-key>
+      <update-type>STAT</update-type>
+      <update-content>
+        <person>
+          <id>R5O2ObhksA</id>
+          <first-name>Jamie</first-name>
+          <last-name>Walsh</last-name>
+          <headline>Head of idemandHR (Recruitment Malta &amp; Gibraltar)</headline>
+          <current-status>now has the need to recruit a Project Manager for a leading #igaming company based in #Malta http://bull.hn/l/4NI7/1</current-status>
+          <picture-url>http://media.linkedin.com/mpr/mprx/0_U-ft05b1VKJTAibmMP2T0F9OZ9wmPLbmJzRD06b7b1xYuTKacq0YlQ1TnZIlrGQCsADurTzfCxQ6</picture-url>
+          <api-standard-profile-request>
+            <url>http://api.linkedin.com/v1/people/R5O2ObhksA</url>
+            <headers total="1">
+              <http-header>
+                <name>x-li-auth-token</name>
+                <value>name:pvgY</value>
+              </http-header>
+            </headers>
+          </api-standard-profile-request>
+          <site-standard-profile-request>
+            <url>http://www.linkedin.com/profile?viewProfile=&amp;key=66157577&amp;authToken=pvgY&amp;authType=name&amp;trk=api*a144344*s152685*</url>
+          </site-standard-profile-request>
+        </person>
+      </update-content>
+      <is-commentable>true</is-commentable>
+      <update-comments total="0" />
+      <is-likable>true</is-likable>
+      <is-liked>false</is-liked>
+      <num-likes>0</num-likes>
+    </update>
+    <update>
+      <timestamp>1317760257980</timestamp>
+      <update-key>UNIU-49128434-5527087121082363905-SHARE</update-key>
+      <update-type>STAT</update-type>
+      <update-content>
+        <person>
+          <id>BVglI6XUer</id>
+          <first-name>Simon</first-name>
+          <last-name>Facciol</last-name>
+          <headline>Senior Frontend Developer at Faktum Software International Ltd.</headline>
+          <current-status>#Apple brings #Siri voice control to the #iPhone - http://t.co/LFdVxjTs</current-status>
+          <api-standard-profile-request>
+            <url>http://api.linkedin.com/v1/people/BVglI6XUer</url>
+            <headers total="1">
+              <http-header>
+                <name>x-li-auth-token</name>
+                <value>name:xo4U</value>
+              </http-header>
+            </headers>
+          </api-standard-profile-request>
+          <site-standard-profile-request>
+            <url>http://www.linkedin.com/profile?viewProfile=&amp;key=49128434&amp;authToken=xo4U&amp;authType=name&amp;trk=api*a144344*s152685*</url>
+          </site-standard-profile-request>
+        </person>
+      </update-content>
+      <is-commentable>true</is-commentable>
+      <update-comments total="0" />
+      <is-likable>true</is-likable>
+      <is-liked>false</is-liked>
+      <num-likes>0</num-likes>
+    </update>
+    <update>
+      <timestamp>1317745498675</timestamp>
+      <update-key>UNIU-66157577-5527025216070365184-SHARE</update-key>
+      <update-type>STAT</update-type>
+      <update-content>
+        <person>
+          <id>R5O2ObhksA</id>
+          <first-name>Jamie</first-name>
+          <last-name>Walsh</last-name>
+          <headline>Head of idemandHR (Recruitment Malta &amp; Gibraltar)</headline>
+          <current-status>has the requirement to recruit a #Graphical User Interface Developer #GUI for an #igaming company, based #Malta http://bull.hn/l/3UEP/3</current-status>
+          <picture-url>http://media.linkedin.com/mpr/mprx/0_U-ft05b1VKJTAibmMP2T0F9OZ9wmPLbmJzRD06b7b1xYuTKacq0YlQ1TnZIlrGQCsADurTzfCxQ6</picture-url>
+          <api-standard-profile-request>
+            <url>http://api.linkedin.com/v1/people/R5O2ObhksA</url>
+            <headers total="1">
+              <http-header>
+                <name>x-li-auth-token</name>
+                <value>name:pvgY</value>
+              </http-header>
+            </headers>
+          </api-standard-profile-request>
+          <site-standard-profile-request>
+            <url>http://www.linkedin.com/profile?viewProfile=&amp;key=66157577&amp;authToken=pvgY&amp;authType=name&amp;trk=api*a144344*s152685*</url>
+          </site-standard-profile-request>
+        </person>
+      </update-content>
+      <is-commentable>true</is-commentable>
+      <update-comments total="0" />
+      <is-likable>true</is-likable>
+      <is-liked>false</is-liked>
+      <num-likes>0</num-likes>
+    </update>
+    <update>
+      <timestamp>1317742066923</timestamp>
+      <update-key>UNIU-24610677-5527010822250831872-SHARE</update-key>
+      <update-type>STAT</update-type>
+      <update-content>
+        <person>
+          <id>kChNEInXd0</id>
+          <first-name>James</first-name>
+          <last-name>Abela</last-name>
+          <headline>Director (Business Development)</headline>
+          <current-status>Last few places for the Android Mobile Application Development course (Beginners to Intermediate) starting tomorrow! 
+…http://lnkd.in/yNNa6U</current-status>
+          <picture-url>http://media.linkedin.com/mpr/mprx/0_EBP1XfLAjWekAA4ne9i2XuqYgEO6PtHnHnbuXuv_C7o9u9096l_0E23SPXYJrvdswNlDIIbl-3vj</picture-url>
+          <api-standard-profile-request>
+            <url>http://api.linkedin.com/v1/people/kChNEInXd0</url>
+            <headers total="1">
+              <http-header>
+                <name>x-li-auth-token</name>
+                <value>name:t2Bp</value>
+              </http-header>
+            </headers>
+          </api-standard-profile-request>
+          <site-standard-profile-request>
+            <url>http://www.linkedin.com/profile?viewProfile=&amp;key=24610677&amp;authToken=t2Bp&amp;authType=name&amp;trk=api*a144344*s152685*</url>
+          </site-standard-profile-request>
+        </person>
+      </update-content>
+      <is-commentable>true</is-commentable>
+      <update-comments total="0" />
+      <is-likable>true</is-likable>
+      <is-liked>false</is-liked>
+      <num-likes>0</num-likes>
+    </update>
+    <update>
+      <timestamp>1317737218247</timestamp>
+      <update-key>UNIU-7081570-5526990485433884672-SHARE</update-key>
+      <update-type>STAT</update-type>
+      <update-content>
+        <person>
+          <id>4w9SjgB7jV</id>
+          <first-name>Anson D.</first-name>
+          <last-name>Aquilina</last-name>
+          <headline>Director at Booking and Company Limited</headline>
+          <current-status>RT @BBCClick: Just come across scam site buyitplay dot eu. Offers seductively low prices on good which never arrive -- and try to steal ID …</current-status>
+          <picture-url>http://media.linkedin.com/mpr/mprx/0_upscW4QdduKLaWodGUVkWUnHdoXou7wdaYmeWsLq9frVPIyWhVERFVlVFkkzfeELS0ZdQjBJSK2k</picture-url>
+          <api-standard-profile-request>
+            <url>http://api.linkedin.com/v1/people/4w9SjgB7jV</url>
+            <headers total="1">
+              <http-header>
+                <name>x-li-auth-token</name>
+                <value>name:8UbJ</value>
+              </http-header>
+            </headers>
+          </api-standard-profile-request>
+          <site-standard-profile-request>
+            <url>http://www.linkedin.com/profile?viewProfile=&amp;key=7081570&amp;authToken=8UbJ&amp;authType=name&amp;trk=api*a144344*s152685*</url>
+          </site-standard-profile-request>
+        </person>
+      </update-content>
+      <is-commentable>true</is-commentable>
+      <update-comments total="0" />
+      <is-likable>true</is-likable>
+      <is-liked>false</is-liked>
+      <num-likes>0</num-likes>
+    </update>
+    <update>
+      <timestamp>1317727747510</timestamp>
+      <update-key>UNIU-66157577-5526950762287988736-SHARE</update-key>
+      <update-type>STAT</update-type>
+      <update-content>
+        <person>
+          <id>R5O2ObhksA</id>
+          <first-name>Jamie</first-name>
+          <last-name>Walsh</last-name>
+          <headline>Head of idemandHR (Recruitment Malta &amp; Gibraltar)</headline>
+          <current-status>now has the need to recruit a Director of Legal Affairs for a leading igaming company, based Malta. http://bull.hn/l/4026/5</current-status>
+          <picture-url>http://media.linkedin.com/mpr/mprx/0_U-ft05b1VKJTAibmMP2T0F9OZ9wmPLbmJzRD06b7b1xYuTKacq0YlQ1TnZIlrGQCsADurTzfCxQ6</picture-url>
+          <api-standard-profile-request>
+            <url>http://api.linkedin.com/v1/people/R5O2ObhksA</url>
+            <headers total="1">
+              <http-header>
+                <name>x-li-auth-token</name>
+                <value>name:pvgY</value>
+              </http-header>
+            </headers>
+          </api-standard-profile-request>
+          <site-standard-profile-request>
+            <url>http://www.linkedin.com/profile?viewProfile=&amp;key=66157577&amp;authToken=pvgY&amp;authType=name&amp;trk=api*a144344*s152685*</url>
+          </site-standard-profile-request>
+        </person>
+      </update-content>
+      <is-commentable>true</is-commentable>
+      <update-comments total="0" />
+      <is-likable>true</is-likable>
+      <is-liked>false</is-liked>
+      <num-likes>0</num-likes>
+    </update>
+    <update>
+      <timestamp>1317713210939</timestamp>
+      <update-key>UNIU-24774657-5526889791490109440-SHARE</update-key>
+      <update-type>STAT</update-type>
+      <update-content>
+        <person>
+          <id>JJCGZqW-jm</id>
+          <first-name>Matthew</first-name>
+          <last-name>Sammut</last-name>
+          <headline>Director at Institute of Computer Education Ltd.</headline>
+          <current-status>RT @DrJimHamill: Companies Cannot Live on Websites Alone http://t.co/aNBZMy52 #socialmedia</current-status>
+          <picture-url>http://media.linkedin.com/mpr/mprx/0_mv6Vd4BT2dCzyOMemlkddskO27FLy4Me2t-5dUNO1E1z_ymHGP99bRhrG3bV00Zk7nXX6pQCM3G1</picture-url>
+          <api-standard-profile-request>
+            <url>http://api.linkedin.com/v1/people/JJCGZqW-jm</url>
+            <headers total="1">
+              <http-header>
+                <name>x-li-auth-token</name>
+                <value>name:Ly9d</value>
+              </http-header>
+            </headers>
+          </api-standard-profile-request>
+          <site-standard-profile-request>
+            <url>http://www.linkedin.com/profile?viewProfile=&amp;key=24774657&amp;authToken=Ly9d&amp;authType=name&amp;trk=api*a144344*s152685*</url>
+          </site-standard-profile-request>
+        </person>
+      </update-content>
+      <is-commentable>true</is-commentable>
+      <update-comments total="0" />
+      <is-likable>true</is-likable>
+      <is-liked>false</is-liked>
+      <num-likes>0</num-likes>
+    </update>
+  </updates>
+</network>
+
+

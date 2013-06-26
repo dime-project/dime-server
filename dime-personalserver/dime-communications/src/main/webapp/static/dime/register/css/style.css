@@ -1,0 +1,478 @@
+.clearfix {
+    *zoom: 0;
+}
+
+body{
+    /* IE9 SVG, needs conditional override of 'filter' to 'none' */
+    background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2FkYWRhZCIgc3RvcC1vcGFjaXR5PSIwLjY1Ii8+CiAgICA8c3RvcCBvZmZzZXQ9IjI2JSIgc3RvcC1jb2xvcj0iIzgwODA4MCIgc3RvcC1vcGFjaXR5PSIwLjY1Ii8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiMwMDAwMDAiIHN0b3Atb3BhY2l0eT0iMCIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
+    background: -moz-linear-gradient(top,  rgba(173,173,173,0.65) 0%, rgba(128,128,128,0.65) 26%, rgba(0,0,0,0) 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(173,173,173,0.65)), color-stop(26%,rgba(128,128,128,0.65)), color-stop(100%,rgba(0,0,0,0))); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top,  rgba(173,173,173,0.65) 0%,rgba(128,128,128,0.65) 26%,rgba(0,0,0,0) 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top,  rgba(173,173,173,0.65) 0%,rgba(128,128,128,0.65) 26%,rgba(0,0,0,0) 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top,  rgba(173,173,173,0.65) 0%,rgba(128,128,128,0.65) 26%,rgba(0,0,0,0) 100%); /* IE10+ */
+    background: linear-gradient(to bottom,  rgba(173,173,173,0.65) 0%,rgba(128,128,128,0.65) 26%,rgba(0,0,0,0) 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a6adadad', endColorstr='#00000000',GradientType=0 ); /* IE6-8 */
+
+
+
+
+    height: 100%;
+    margin: 0;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+
+
+
+}
+
+.intro{
+
+    float: left;
+}
+
+
+
+.logo{
+    position: fixed;
+    width: 120px;
+    margin-top: -9px;
+    margin-left: -10px;
+    z-index: 99999;
+
+}
+
+#sponsors{
+    position: absolute;
+    right: 25px;
+    margin-top: -50px;
+
+}
+
+.sponsor{
+    height: 50px;
+
+
+    float: left;
+    margin-right: 10px;
+    margin-bottom: 50px;
+    margin-top: 20px;
+
+    margin-left: 25px;
+
+}
+
+
+#video{
+
+    width:800px;
+
+    height: 450px;
+
+    background: black;
+    margin-left: 0px;
+    margin-top: 25px;
+    margin-bottom: 25px;
+    z-index: -99999;
+
+}
+
+
+hr{
+    background-color:black;
+    color: black;
+    border:0;
+    height: 3px;
+
+}
+
+
+.span1{
+    background: black;
+}
+
+.span3{
+    font-size: 11px;
+    position:relative;
+    background: #D1D1D1;
+    margin-top: 20px;
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    border-radius: 8px;
+    height: 225px;
+    border: 8px solid #D1D1D1;
+
+
+
+}
+
+
+.span4{
+    position:relative;
+    background: grey;
+    margin-top: 20px;
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    border-radius: 8px;
+
+    border: 8px solid grey;
+
+
+
+}
+
+
+
+.span6{
+    position:relative;
+    background: #D1D1D1;
+    margin-top: 20px;
+    height:300px;
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    border-radius: 8px;
+
+    border: 8px solid #D1D1D1;
+
+
+
+}
+
+.span12{
+    position:relative;
+    background: #D1D1D1;
+    margin-top: 20px;
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    border-radius: 8px;
+
+    border: 8px solid #D1D1D1;
+
+
+
+}
+
+
+
+
+
+#testserver{
+
+    left:0px;
+}
+
+
+.regist{
+    margin-top: 30px;
+}
+
+[data-selected="butten"]{
+    position: absolute;
+    bottom: 0px;
+
+}
+
+.Servername{
+
+}
+
+.androiddownload{
+    position: relative;
+    background: #D1D1D1;
+    margin-top: 20px;
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    border-radius: 8px;
+    border: 8px solid #D1D1D1;
+
+}
+
+#qr{
+    width: 200px;
+    height:200px;
+
+    margin-top:20px;
+    margin-bottom:5px;
+}
+
+#download{
+    right: 0px;
+    width:200px;
+}
+
+.name{
+    visibility: hidden;
+}
+
+
+.language{
+
+ 
+    position: absolute;
+    right: -10px;
+
+
+}
+
+.buttonleiste{
+    position: absolute;
+    right: 340px;
+    text-align: right;
+}
+
+
+
+
+
+.language{
+    z-index:999;
+    color: grey;
+}
+
+#EN{
+    margin-top:20px;
+    color: lightgray;
+}
+
+#DE{
+    color: gray;
+}
+
+
+
+.term1, .term2, .term3, .term4, .term5, .term6{
+    position: absolute;
+    height:20px;
+    top: 0px;
+    color: #0088CC;
+    width: 40px;
+    margin-left: 55px;
+
+}
+
+.term1:hover, .term2:hover, .term3:hover, .term4:hover, .term5:hover, .term6:hover{
+color: #005580;
+text-decoration: underline;
+}
+
+
+.term1, .term4{
+    left: 60px;
+    width:100px;
+}
+.term2, .term5{
+    left: 160px;
+    width: 100px;
+}
+.term3, .term6{
+    top: 20px;
+    width: 200px;
+    left: 60px;
+}
+
+.term4{
+    visibility: hidden;
+}
+
+.term5{
+    visibility: hidden;
+}
+
+.term6{
+    visibility: hidden;
+}
+
+.language-push{
+    position: absolute;
+    right:75px;
+
+}
+
+.terms{
+    width:90px;
+    height:90px;
+}
+
+h1{
+
+}
+
+h5{
+    font-size: 17.5px;
+}
+
+.institutionLogo{
+    position: relative;
+    width: 400px;
+
+
+}
+
+
+
+.ende{
+    margin-left: 100px;
+}
+
+.float_this{
+	
+    float: left;
+    margin-right: 85px;
+
+}
+
+[data-role="DE"] {
+    display: none;
+
+
+}	[data-role="signin"] {
+    height: 270px;
+}
+
+#start_server{
+    position: absolute;
+    right: 0px;
+    margin-bottom: 55px;
+    margin-top: 100px;
+    width: 200px;
+}
+
+.radio_1{
+    margin-top:-40px;
+}
+
+
+.registButton{
+    margin-top: 154px;
+}
+
+#loginButton{
+    margin-top:23px;
+}
+
+.nav > li{
+margin-top: 10px;
+}
+
+.nav > li > .linkToLogin{
+    margin-left: 95px;
+}
+.linkToAbout_DE:hover,
+.linkToUsageTerms_DE:hover,
+.linkToPrivacyPolicy_DE:hover,
+.linkToRegister:hover,
+.linkToLogin:hover,
+.linkToHowto:hover,
+.linkToFeedback:hover,
+.linkToAbout:hover,
+.linkToUsageTerms:hover,
+.linkToPrivacyPolicy:hover{
+    cursor: pointer;
+}
+
+
+.nav > li > .linkToAbout_DE:hover,
+.nav > li > .linkToUsageTerms_DE:hover,
+.nav > li > .linkToPrivacyPolicy_DE:hover,
+.nav > li > .linkToRegister:hover,
+.nav > li > .linkToLogin:hover,
+.nav > li > .linkToHowto:hover,
+.nav > li > .linkToFeedback:hover,
+.nav > li > .linkToAbout:hover,
+.nav > li > .linkToUsageTerms:hover,
+.nav > li > .linkToPrivacyPolicy:hover{
+	color: #0088CC;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+}
+
+.nav > li > .linkToAbout_DE,
+.nav > li > .linkToUsageTerms_DE,
+.nav > li > .linkToPrivacyPolicy_DE,
+.nav > li > .linkToRegister, 
+.nav > li > .linkToLogin,
+.nav > li > .linkToHowto,
+.nav > li > .linkToFeedback,
+.nav > li > .linkToAbout,
+.nav > li > .linkToUsageTerms,
+.nav > li > .linkToPrivacyPolicy{
+
+   
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+
+}
+
+.navbar-inverse .brand{
+    margin-top: 10px;
+}
+
+
+#dimeLogo{
+
+}
+
+.bumper{
+height:130px;
+}
+
+.dime_logo_small{
+display: none;
+}
+
+
+#Dime_register_modalWaitDlg{
+    
+    top: 50%;
+}
+
+#registerErrorMessage{
+
+    margin-top: 20px;
+    margin-bottom: 20px;
+    color: red;
+    font-weight: bold;
+}
+
+.loginGroup{
+    float: left;
+}
+#loginMessage{
+    width: 41%;
+    margin-left: 6%;
+}
+
+#loginRememberAndSubmitButton{
+    clear:both;
+    width: 100%;
+    margin-top: 34px;
+}
+
+#push{
+
+margin-left: 97px;
+}
+
+.active{
+color: white;
+
+}
+
+.nav li{
+color: gray;
+}
+
+.text_wrapper{
+    position:relative;
+    background: #D1D1D1;
+    margin-top: 20px;
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    border-radius: 8px;
+
+    border: 8px solid #D1D1D1;
+}
+
+

@@ -1,0 +1,14 @@
+@prefix nao: <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#> . 
+@prefix pimo: <http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#> . 
+@prefix nfo: <http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> . 
+
+_:f1 a nfo:FileDataObject .
+_:f1 nao:externalIdentifier "12345"^^xsd:string .
+_:f1 nfo:fileName "UpdatedFile1.txt" .
+_:f1 nfo:fileOwner "Charlie Abela" .
+
+_:f2 a nfo:FileDataObject .
+_:f2 nao:externalIdentifier "67890"^^xsd:string .
+_:f2 nfo:fileName "UpdatedFile2.txt" .
+_:f2 nfo:fileOwner "Erika L. Borg" .

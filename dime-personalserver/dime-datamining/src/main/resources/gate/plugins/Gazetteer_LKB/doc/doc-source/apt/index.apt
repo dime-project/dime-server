@@ -1,0 +1,42 @@
+ -----
+ Welcome
+ -----
+ Marin Nozhchev
+ -----
+ 2009-09-16
+ -----
+
+  Welcome to the the large knowledge base (KB) gazetteer project's site.  
+
+The project
+
+  The large KB gazetteer is a new gazetteer processing resource for 
+  the popular natural language processing platform GATE. 
+  
+  The large KB gazetteer allows:
+  
+  * efficiently loading huge vocabularies for gazetteer lookup in GATE
+  
+  * loading vocabularies from RDF files
+  
+  * loading vocabularies from popular RDF databases
+
+  
+ There is already a variety of gazetteer implementations in GATE. Some of the them have some of the above features, but 
+ none provide all of them. The large KB gazetteer also provides the most scalable implementation of vocabulary storage and 
+ fast gazetteer lookup. See {{{./comparison.html}the feature comparison}} for more details. 
+  
+ The large KB gazetteer provides support for {{{http://gate.ac.uk/documentation}ontology aware NLP}}. You can load any
+ ontology from RDF and then use the gazeetter to obtain lookup annotations have both instance and class URI. 
+  
+About us
+
+  The Large KB gazetteer grew from a component in the semantic search platform
+  {{{http://ontotext.com/kim}Ontotext KIM}}. The gazetteer is developed by people from the KIM team.
+  The current team members that actively develop are present in the {{{./team-list.html}team list}}.
+  You may find the name <kim> left in several places in the source code, documentation or source files. 
+
+ [[1]] GATE (General Architecture for Text Engineering) - an open source solution for full lifecycle text analytics, developed by the {{{http://nlp.shef.ac.uk/}NLP Group of Sheffield University}}
+
+ [[2]] The KIM (Knowledge & Information Management) Platform is software for semantic annotation, indexing, and retrieval, developed by {{{http://ontotext.com}Ontotext AD}}. 
+

@@ -1,0 +1,488 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix ppo: <http://vocab.deri.ie/ppo#> .
+@prefix nrl: <http://www.semanticdesktop.org/ontologies/2007/08/15/nrl#> .
+@prefix pimo: <http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#> .
+@prefix nao: <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#> .
+@prefix nie: <http://www.semanticdesktop.org/ontologies/2007/01/19/nie#> .
+@prefix ncal: <http://www.semanticdesktop.org/ontologies/2007/04/02/ncal#> . 
+@prefix nco: <http://www.semanticdesktop.org/ontologies/2007/03/22/nco#> .
+@prefix nso: <http://www.semanticdesktop.org/ontologies/2009/11/08/nso#> .
+@prefix nfo: <http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#> .
+@prefix dao: <http://www.semanticdesktop.org/ontologies/2011/10/05/dao#> .
+@prefix dlpo: <http://www.semanticdesktop.org/ontologies/2011/10/05/dlpo#> .
+@prefix dcon: <http://www.semanticdesktop.org/ontologies/2011/10/05/dcon#> .
+@prefix ddo: <http://www.semanticdesktop.org/ontologies/2011/10/05/ddo#> .
+
+@prefix urn: <urn:uuid:> .
+
+
+####################
+### SHARED FILES ###
+####################
+
+urn:j000409 
+	a ppo:PrivacyPreference ;
+	nao:creator urn:j000061 ;
+	rdfs:label "FILE" ;
+	ppo:hasAccessSpace urn:j000410 ;
+	ppo:appliesToResource
+		urn:j000526 . 
+			
+urn:j000410
+	a ppo:AccessSpace ;
+	nso:includes urn:j000073 , 
+		urn:j000070 ,
+		urn:j000071 . 
+
+
+##################################
+### Data from the file crawler ###
+##################################
+
+urn:j000548 a nfo:FileDataObject ;
+	nfo:fileLastModified "2011-10-09T13:57:23.000+01:00"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
+	nfo:fileName "Documents" ;
+	nfo:belongsToContainer urn:j000549 .
+
+urn:j000549 a nfo:Folder .
+
+urn:j000548 nie:hasPart urn:j000550 .
+
+urn:j000550 a nfo:FileDataObject .
+
+urn:j000548 nie:hasPart urn:j000551 .
+
+urn:j000551 a nfo:FileDataObject .
+
+urn:j000548 a nie:DataObject , nfo:Folder ;
+	nie:rootElementOf urn:j000516 .
+
+urn:j000550 nfo:fileLastModified "2011-09-15T18:26:22.000+01:00"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
+	nfo:fileName "Construction plans" ;
+	nfo:belongsToContainer urn:j000548 ;
+	nie:hasPart urn:j000552 .
+
+urn:j000552 a nfo:FileDataObject .
+
+urn:j000550 nie:hasPart urn:j000553 .
+
+urn:j000553 a nfo:FileDataObject .
+
+urn:j000550 a nie:DataObject , nfo:Folder .
+
+urn:j000552 nfo:fileLastModified "2011-10-09T13:56:53.000+01:00"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
+	nfo:fileName "MediaTIC Barcelona" ;
+	nfo:belongsToContainer urn:j000550 ;
+	nie:hasPart urn:j000554 .
+
+urn:j000554 a nfo:FileDataObject .
+
+urn:j000552 nie:hasPart urn:j000526 .
+
+urn:j000526 a nfo:FileDataObject .
+
+urn:j000552 nie:hasPart urn:j000527 .
+
+urn:j000527 a nfo:FileDataObject .
+
+urn:j000552 a nie:DataObject , nfo:Folder .
+
+urn:j000526 nfo:fileLastModified "2011-09-16T13:38:32.000+01:00"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
+	nfo:fileName "construction_plan_bridge_Brown.jpg" ;
+	nfo:belongsToContainer urn:j000552 ;
+	nfo:fileSize "128547"^^<http://www.w3.org/2001/XMLSchema#long> ;
+	a nie:DataObject ;
+	nie:mimeType "image/jpeg" ;
+	a <http://www.semanticdesktop.org/ontologies/2007/05/10/nexif#Photo> .
+
+urn:j000527 nfo:fileLastModified "2011-09-16T12:13:22.000+01:00"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
+	nfo:fileName "project_offer_2006.xml" ;
+	nfo:belongsToContainer urn:j000552 ;
+	nfo:fileSize "872"^^<http://www.w3.org/2001/XMLSchema#long> ;
+	a nie:DataObject ;
+	nie:mimeType "text/xml" ;
+	nie:plainTextContent """34511 
+     20110109 
+     
+         23 
+         Ajuntament de Barcelona 
+     
+     Media TIC building, 22 district 
+     
+         
+            Office floor 
+            Office floor for Media TIC building 
+            350.000 
+         
+         
+             Meeting rooms 
+            Meeting rooms for Media TIC building 
+            250.000 
+         
+             
+             Social space 
+            Social space for Media TIC building 
+            150.000""" ;
+	a nfo:PlainTextDocument .
+
+urn:j000553 nfo:fileLastModified "2011-10-09T13:59:13.000+01:00"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
+	nfo:fileName "Tour First Paris" ;
+	nfo:belongsToContainer urn:j000550 ;
+	nie:hasPart urn:j000555 .
+
+urn:j000555 a nfo:FileDataObject .
+
+urn:j000553 nie:hasPart urn:j000529 .
+
+urn:j000529 a nfo:FileDataObject .
+
+urn:j000553 nie:hasPart urn:j000525 .
+
+urn:j000525 a nfo:FileDataObject .
+
+urn:j000553 a nie:DataObject , nfo:Folder .
+
+urn:j000529 nfo:fileLastModified "2011-09-16T13:54:54.000+01:00"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
+	nfo:fileName "Construction_plan_presentation.ppt" ;
+	nfo:belongsToContainer urn:j000553 ;
+	nfo:fileSize "483840"^^<http://www.w3.org/2001/XMLSchema#long> ;
+	a nie:DataObject ;
+	nie:mimeType "application/vnd.ms-powerpoint" ;
+	nie:generator "Microsoft Office PowerPoint" ;
+	nco:creator urn:j000556 .
+
+urn:j000556 a nco:Contact ;
+	nco:fullname "\"KLIMALA programmierung\"" .
+
+urn:j000529 nco:contributor urn:j000557 .
+
+urn:j000557 a nco:Contact ;
+	nco:fullname "Emanuele Carisio" .
+
+urn:j000529 nie:contentCreated "2009-05-22T07:46:16.000+01:00"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
+	nie:contentLastModified "2011-02-10T12:48:02.000Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
+	nie:version "184" ;
+	nfo:wordCount "237"^^<http://www.w3.org/2001/XMLSchema#integer> ;
+	<http://www.semanticdesktop.org/ontologies/2009/10/06/aperture_nie_extensions#editTime> "166571"^^<http://www.w3.org/2001/XMLSchema#long> ;
+	nie:plainTextContent """di.me   
+<Presentation Title>
+<event>
+
+<presenter>
+<institution>
+
+
+
+
+	di.me European Project, STREP, ID 257787
+	Integrated digital.me Userware for the Intelligent, Intuitive, and 	Trust-Enhancing Management of the User's Personal Information 	Sphere in Digital and Social Environments 
+	
+di.me Consortium Partners
+personal information & communication
+di.me peers - in context
+- in digital    environments
+digital
+face
+userware
+digital services, external ressources
+digital
+face
+digital
+face
+Some graphical Elements 
+digital.me Objectives
+Workpackages
+Consortium Partners (only main WP responsibilities)
+WP1
+Project Management
+Fraunhofer
+Objective 1: Develop an Integrated Personal Information Sphere Management Tool under Full User-Control: the digital.me userware
+WP7
+Dissemination and Exploitation
+asimelec
+CAS
+YM
+TI
+Objective 4: Develop Intelligent, Reliable, Intuitive  User Interfaces for Personal Sphere Management. 
+WP5
+Intelligent User Interfaces 
+YM
+NUIG
+Fraunhofer
+Objective 2: Develop a Semantic Core for Processing the Personal Information Sphere
+WP3
+Semantic Processing of Personal Data
+TI
+USiegen
+NUIG
+Objective 3: Develop an Open and Accessible Infrastructure for a Secure, Privacy-preserving,  and Trust-enhancing Use of Personal Data. 
+WP4
+Trust, Privacy and Security
+CAS
+BDCT
+USiegen
+WP6
+digital.me Userware
+TI
+CAS
+BDCT
+asimelec
+YM
+Fraunhofer
+WP2
+User Driven Design, Quantit. Validation
+Objective 5: Develop and Apply Large-Scale Quantitative Metrics for Monitoring the Usability and User Acceptance of Personal Sphere Management
+Some Graphical Elements 
+domain models
+trust centres
+computation ressources
+p2p network directories
+Gateways
+face
+Semantic Mapping  Engine
+Data  Mining Engine
+di.me Intelligent  User Interface
+Personal Sphere  Manager
+Digital Face  Generator
+digital.me  Ontology Framework
+Multi-Engine  Recommender
+User Devices  Synch Engine
+Anonymous  Credential Systems
+Trust Engine 
+Privacy Advisor
+external resources
+di.me userware
+di.me
+Personal Sphere
+User Contexts
+di.me History
+Social Data, other�sDigital Faces
+Automation
+User Rules
+di.me RDF based data store
+di.me
+Semantic Core
+di.me Trust, Privacy, Security Infrastructure
+peers & services
+digital
+face
+digital
+face
+Some Graphical Elements """ ;
+	a nfo:Presentation .
+
+urn:j000525 nfo:fileLastModified "2011-09-16T13:55:48.000+01:00"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
+	nfo:fileName "Tour_First_detailed_planning.dot" ;
+	nfo:belongsToContainer urn:j000553 ;
+	nfo:fileSize "183808"^^<http://www.w3.org/2001/XMLSchema#long> ;
+	a nie:DataObject ;
+	nie:mimeType "application/vnd.ms-word" ;
+	nie:generator "Microsoft Office Word" ;
+	nco:creator urn:j000558 .
+
+urn:j000558 a nco:Contact ;
+	nco:fullname "Fabian Hermann" .
+
+urn:j000525 nco:contributor urn:j000559 .
+
+urn:j000559 a nco:Contact ;
+	nco:fullname "fhermann" .
+
+urn:j000525 nie:contentCreated "2011-01-27T16:51:00.000Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
+	nie:contentLastModified "2011-01-27T16:58:00.000Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
+	<http://www.semanticdesktop.org/ontologies/2009/10/06/aperture_nie_extensions#contentLastPrinted> "2011-01-27T16:41:00.000Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
+	nie:version "6" ;
+	nfo:characterCount "2303"^^<http://www.w3.org/2001/XMLSchema#integer> ;
+	nfo:wordCount "365"^^<http://www.w3.org/2001/XMLSchema#integer> ;
+	<http://www.semanticdesktop.org/ontologies/2009/10/06/aperture_nie_extensions#template> "dime D00.00 --TEMPLATE.dot" ;
+	nfo:lineCount "19"^^<http://www.w3.org/2001/XMLSchema#integer> ;
+	nie:plainTextContent """digital.meIntegrated digital.me Userware for the Intelligent, Intuitive, and Trust-Enhancing Management of the User�s Personal Information Sphere in Digital and Social EnvironmentsProject ID: 257787Accompanying Report to Deliverable D0x.xx <title>
+<subtilte>
+keywords: <keywords>;
+Date:DD/MM/YYYYAuthors:<author> (<partner>);  Contributors:Status:<internal deliverable draft / internal deliverable / draft / revised draft / final>Dissemination level:<...>Nature:<...>Workpackage:WP # <title>Related Tasks: Task # <title>Task # <title>Task # <title>
+
+
+Version History
+VersionDateEditorChange descriptionDraftDD/MM/YYYYxxxdraft version, xxx
+
+
+
+
+Table of Contents 
+Table of Contents	2
+1	Introduction	3
+2	Section title	4
+3	heading 1	5
+3.1	heading 2	5
+3.1.1	heading 3	5
+3.1.1.1	heading 4	5
+3.1.1.1.1	heading 5	5
+heading 6	5
+heading 7	5
+4	References	6
+5	Appendix	7
+ Introduction
+<a brief introduction shall guide the reader to the topic of the report. This may include
+brief WP or task description, 
+goals and purpose of the deliverable and the described work
+scientific state-of-the-art>
+
+Section title
+Please check on the Wiki the quality guidelines for writing deliverables
+heading 1
+heading 2
+heading 3
+heading 4
+heading 5
+heading 6�
+heading 7
+for text paragraph format dimetext 
+for lists use paragraph format dimelist 
+for lists use paragraph format dimelist 
+for lists use paragraph format dimelist 
+
+for indented text use dime-indented
+
+for figure titles use pagraph format dime-figure-titlea asdfasdf asdfasdf asdfasdfasdf
+for table titles use pagraph format dime-table-title asdfasdf asdf asdf asdf asdfasdf asdfasdf 
+headingheadingtexttexttextReferences
+For References use pagraph dime-reference
+Palmer, N., Kemp, R., Kielmann, T., and Bal, H. 2009. Ibis for mobility: solving challenges of mobile computing using grid techniques. In Proceedings of the 10th Workshop on Mobile Computing Systems and Applications (Santa Cruz, California, February 23 - 24, 2009). HotMobile '09. ACM, New York, NY, 1-6
+Appendix
+<used materials shall be included in the appendix; this may cover e.g. 
+scientific publications
+dissemination materials
+used evaluation materials (e.g.questionnaires)>
+
+
+
+
+
+
+
+
+
+digital.me Collaborative Project (STREP) 257787	Deliverable D00.00
+
+
+Page   of 8
+
+
+digital.me Collaborative Project (STREP) 257787	Accompanying Report to Deliverable D01.01 and D01.02""" ;
+	a nfo:PaginatedTextDocument .
+
+urn:j000551 nfo:fileLastModified "2011-10-09T13:57:41.000+01:00"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
+	nfo:fileName "Project portfolio" ;
+	nfo:belongsToContainer urn:j000548 ;
+	nie:hasPart urn:j000560 .
+
+urn:j000560 a nfo:FileDataObject .
+
+urn:j000551 nie:hasPart urn:j000561 .
+
+urn:j000561 a nfo:FileDataObject .
+
+urn:j000551 a nie:DataObject , nfo:Folder .
+
+urn:j000561 nfo:fileLastModified "2011-10-09T13:57:57.000+01:00"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
+	nfo:fileName "Phoenix Park Dublin" ;
+	nfo:belongsToContainer urn:j000551 ;
+	nie:hasPart urn:j000562 .
+
+urn:j000562 a nfo:FileDataObject .
+
+urn:j000561 nie:hasPart urn:j000528 .
+
+urn:j000528 a nfo:FileDataObject .
+
+urn:j000561 a nie:DataObject , nfo:Folder .
+
+urn:j000528 nfo:fileLastModified "2011-09-16T13:32:54.000+01:00"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
+	nfo:fileName "Phoenix_Park_CorporateOffices.jpg" ;
+	nfo:belongsToContainer urn:j000561 ;
+	nfo:fileSize "140582"^^<http://www.w3.org/2001/XMLSchema#long> ;
+	a nie:DataObject ;
+	nie:mimeType "image/jpeg" ;
+	a <http://www.semanticdesktop.org/ontologies/2007/05/10/nexif#Photo> .
+
+
+################################################
+### PIMO resources for the file crawler data ###
+################################################
+
+# for now, we don't create pimo:Things for FileDataObjects, and we don't need to
+# put Things in the databoxes, but instead DataObjects
+
+#juan:juanThing001
+#	pimo:groundingOccurrence urn:j000525 ;
+#	pimo:isDefinedBy urn:j000096  ;
+#	a pimo:Thing ;
+#	nao:prefLabel "Tour_First_detailed_planning" ;
+urn:j000525
+	nao:privacyLevel "0.1"^^xsd:double ;
+	nso:sharedWith urn:j000103 ;
+	nso:sharedWith urn:j000104 ;
+	nso:sharedWith urn:j000082 .
+	
+#juan:juanThing002
+#	pimo:groundingOccurrence urn:j000529 ;
+#	pimo:isDefinedBy urn:j000096 ;
+#	a pimo:Thing ;
+#	nao:prefLabel "Construction_plan_presentation" ;
+urn:j000529
+	nao:privacyLevel "0.5"^^xsd:double ;
+	nso:sharedWith urn:j000070 , urn:j000105 , urn:j000106 .
+
+#juan:juanThing003
+#	pimo:groundingOccurrence urn:j000526 ;
+#	pimo:isDefinedBy urn:j000096 ;
+#	a pimo:Thing ;
+#	nao:prefLabel "Construction_plan_bridge_Brown" ;
+urn:j000526
+	nao:privacyLevel "0.9"^^xsd:double ;
+	nso:sharedWith urn:j000070 ;
+	nso:sharedWith urn:j000107 ;
+	nso:sharedWith urn:j000108 .
+
+#juan:juanThing004
+#	pimo:groundingOccurrence urn:j000527 ;
+#	pimo:isDefinedBy urn:j000096 ;
+#	a pimo:Thing ;
+#	nao:prefLabel "Project_offer_2006" ;
+urn:j000527
+	nao:privacyLevel "0.3"^^xsd:double ;
+	nso:sharedWith urn:j000082 ;
+	nso:sharedWith urn:j000109 ;
+	nso:sharedWith urn:j000110 .
+
+#juan:juanThing005
+#	pimo:groundingOccurrence urn:j000528 ;
+#	pimo:isDefinedBy urn:j000096 ;
+#	a pimo:Thing ;
+#	nao:prefLabel "Phoenix_Park_CorporateOffices" ;
+urn:j000528
+	nao:privacyLevel "0.7"^^xsd:double ;
+	nso:sharedWith urn:j000082 ;
+	nso:sharedWith urn:j000109 ;
+	nso:sharedWith urn:j000102 .
+	
+urn:j000531 a nfo:FileDataObject ;
+	nfo:fileLastModified "2012-06-15T13:38:32.000+01:00"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
+	nfo:fileName "file1.txt" ;
+	nie:mimeType "text/plain" ;
+	nfo:fileSize "4581"^^<http://www.w3.org/2001/XMLSchema#long> ;
+	nie:dataSource urn:j000408 ;
+	nso:sharedBy urn:j000070 .
+	
+urn:j000532 a nfo:FileDataObject ;
+	nfo:fileLastModified "2012-06-15T13:38:32.000+01:00"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
+	nfo:fileName "file2.txt" ;
+	nie:mimeType "text/plain" ;
+	nfo:fileSize "230"^^<http://www.w3.org/2001/XMLSchema#long> ;
+	nie:dataSource urn:j000408 ;
+	nso:sharedBy urn:j000070 .
+	

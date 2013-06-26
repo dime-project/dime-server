@@ -1,0 +1,161 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+
+
+
+
+
+
+
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>The Large KB gazetteer - Semantic Enrichment PR</title>
+    <style type="text/css" media="all">
+      @import url("./css/maven-base.css");
+      @import url("./css/maven-theme.css");
+      @import url("./css/site.css");
+    </style>
+    <link rel="stylesheet" href="./css/print.css" type="text/css" media="print" />
+          <meta name="author" content="Marin Nozhchev" />
+        <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+      </head>
+  <body class="composite">
+    <div id="banner">
+                  <a href="http://www.ontotext.com" id="bannerLeft">
+    
+                                    <img src="http://ontotext.com/images/ontotext_logo.jpg" alt="" />
+    
+            </a>
+                    <div class="clear">
+        <hr/>
+      </div>
+    </div>
+    <div id="breadcrumbs">
+          
+  
+
+  
+    
+  
+  
+    
+            <div class="xleft">
+        Last Published: 2009-10-17
+                      </div>
+            <div class="xright">      
+  
+
+  
+    
+  
+  
+    
+  </div>
+      <div class="clear">
+        <hr/>
+      </div>
+    </div>
+    <div id="leftColumn">
+      <div id="navcolumn">
+           
+  
+
+  
+    
+  
+  
+    
+                   <h5>Large KB Gazetteer</h5>
+            <ul>
+              
+    <li class="none">
+                    <a href="index.html">Overview</a>
+          </li>
+              
+    <li class="none">
+                    <a href="usage.html">Usage</a>
+          </li>
+              
+    <li class="none">
+                    <a href="general.html">Q & A</a>
+          </li>
+              
+    <li class="none">
+                    <a href="gate_compatibility.html">GATE Compatibility</a>
+          </li>
+              
+    <li class="none">
+                    <a href="comparison.html">GATE Gazetteer Feature Comparison</a>
+          </li>
+              
+    <li class="none">
+              <strong>Semantic Enrichment PR</strong>
+        </li>
+              
+    <li class="none">
+                    <a href="samples.html">Samples</a>
+          </li>
+          </ul>
+              <h5>Developer Documentation</h5>
+            <ul>
+              
+    <li class="none">
+                    <a href="dictionary_lifecycle.html">Dictionary Lifecycle</a>
+          </li>
+          </ul>
+                                           <a href="http://maven.apache.org/" title="Built by Maven" class="poweredBy">
+            <img alt="Built by Maven" src="./images/logos/maven-feather.png"></img>
+          </a>
+                       
+  
+
+  
+    
+  
+  
+    
+        </div>
+    </div>
+    <div id="bodyColumn">
+      <div id="contentBox">
+        <p>The Semantic Enrichment PR allows adding new data to semantic annotations by querying external RDF (Linked Data) repositories. It is a companion to the large KB gazetteer that showcases the usefulness of using Linked Data URI as identifiers.</p>
+<p>Here a semantic annotation is an annotation that is linked to an RDF entity by having the URI of the entity in the &quot;inst&quot; feature of the annotation. For all such annotation of a given type, this PR runs a SPARQL query against the defined repository and puts a comma-separated list of the values mentioned in the query output in the &quot;connections&quot; feature of the same annotation.</p>
+<p>There is <a href="./samples.html">a sample pipeline</a> that features the Semantic Enrichment PR.</p>
+<div class="section"><h2>Parameters</h2>
+<ul><li>inputASName - The annotation set, which annotation will be processed. </li>
+<li>server - The URL of the Sesame 2 HTTP repository. Support for generic SPARQL endpoints can be implemented if required.</li>
+<li>repositoryId - The ID of the Sesame repository.</li>
+<li>annotationTypes - A list of types of annotation tha twill be processed.</li>
+<li>query - A SPARQL query pattern. The query will be processed like this - String.format(query, uriFromAnnotation), so you can use parameters like %s or %1$s.</li>
+<li>deleteOnNoRelations - Whether we want to delete the annotation that weren't encriched. Helps to clean up the input annotations.</li>
+</ul>
+</div>
+
+      </div>
+    </div>
+    <div class="clear">
+      <hr/>
+    </div>
+    <div id="footer">
+      <div class="xright">&#169;  
+          2009
+    
+          Ontotext AD
+          
+  
+
+  
+    
+  
+  
+    
+  </div>
+      <div class="clear">
+        <hr/>
+      </div>
+    </div>
+  </body>
+</html>

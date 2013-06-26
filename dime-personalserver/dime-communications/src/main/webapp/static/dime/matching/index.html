@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Person Matching Suggestions</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Le styles -->
+    <link href="assets/css/bootstrap.css" rel="stylesheet">
+    <link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="assets/css/docs.css" rel="stylesheet">
+    <link href="assets/js/google-code-prettify/prettify.css" rel="stylesheet">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="assets/js/html5shiv.js"></script>
+    <![endif]-->
+	
+    <script src="assets/js/jquery-1.9.1.js"></script>
+   
+		<script type="text/javascript">
+		
+		var personUsername = getUrlVars()["username"];
+		var threshold = getUrlVars()["threshold"];
+		
+		function getUrlVars() {
+			var vars = {};
+			var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+				vars[key] = value;
+			});
+			return vars;
+		}
+						
+		function findPerson(array, target) {
+		    var person = {};
+			$.each(array, function(key, value) {
+			   if ((value.guid) == target) {
+				    person = value;
+					//console.log("Person Found "+value.guid);	
+				}
+			});
+			return person;
+		}
+		
+		function findProfile(array, target) {
+		    var profile = {};
+			$.each(array, function(key, value) { //if values in 'items' - array.items, if (value == target) return value.name
+			 	if ((value.said) == target) {
+				    profile = value;
+					//console.log("Profile Found "+value.said);	
+				}
+			});
+			return profile;
+		}
+		
+		function findAttribute(array, attribute) {
+		    var i = 0;
+		    var attributeValue = {};
+			$.each(array, function(key, value) {
+			 	if (((value.predicate) == attribute) && (i == 0)) {
+				    attributeValue = value.value;
+					i++;
+				}
+			});
+			return attributeValue;
+		}
+		
+		//check if attribute is undefined
+		function checkAttribute(attribute) {
+			var attributeValue = "";
+			if (attribute === undefined) {
+				attributeValue = "n/a";
+			} else {
+				attributeValue = attribute;
+			}
+			return attributeValue;
+		}		
+
+		//call to retrieve all person matches
+		function getPersonMatches(personUsername, callback) {
+			return $.ajax({
+			  //url: 'https://localhost:8443/dime-communications/api/dime/rest/'+personUsername+'/personmatch/@me/@all?threshold='+threshold,
+			  url: '/dime-communications/api/dime/rest/'+personUsername+'/personmatch/@me/@all?threshold='+threshold,
+			  dataType: 'json',
+			  async: false,
+			  success: function(data) {
+					var personList = [];					
+					if (data.response.data !== undefined) {					    
+						personList = data.response.data.entry[0];					
+					}
+					callback(personList);
+			  }
+			});		
+		}	
+		
+		//call to retrieve all persons linked to person i
+		function getPersons(personUsername, callback) {
+			return $.ajax({
+			  //url: 'https://localhost:8443/dime-communications/api/dime/rest/'+personUsername+'/person/@me/@all',
+			  url: '/dime-communications/api/dime/rest/'+personUsername+'/person/@me/@all',
+			  dataType: 'json',
+			  async: false,
+			  success: function(data) {
+					var personsArray  = [];
+					if (data.response.data !== undefined) {
+						personsArray = data.response.data.entry;
+					}
+					callback(personsArray);
+			  }
+			});		
+		}	
+		
+		//call to retrieve all person profiles linked to person i		
+		function getPersonProfiles(personUsername, callback) {
+			return $.ajax({
+			  //url: 'https://localhost:8443/dime-communications/api/dime/rest/'+personUsername+'/profile/@all',
+			  url: '/dime-communications/api/dime/rest/'+personUsername+'/profile/@all',
+			  dataType: 'json',
+			  async: false,
+			  success: function(data) {
+					var profilesArray  = [];					
+					if (data.response.data !== undefined) {
+						profilesArray = data.response.data.entry; 						
+					}
+					callback(profilesArray);
+			  }
+			});		
+		}	
+		
+		//call to retrieve all attributes from a person's profile
+		function getProfileAttributes(personUsername, personUrn, service, callback) {
+			return $.ajax({
+			  //url: 'https://localhost:8443/dime-communications/api/dime/rest/'+personUsername+'/profileattribute/'+personUrn+'/@all',
+			  url: '/dime-communications/api/dime/rest/'+personUsername+'/profileattribute/'+personUrn+'/@all',
+			  dataType: 'json',
+			  async: true,
+			  success: function(data) {
+					var profileAttributes = [];
+					if (data.response.data !== undefined) {
+						profileAttributes = data.response.data.entry;	
+					}	
+					callback(profileAttributes, personUrn, service);
+			  }
+			});		
+		}
+		
+		//calculates number of correct and incorrect matches
+		function calculateMatchingResults() {			
+			$("#totalMerge").html($("[data-type=merge][class='btn active']").length);
+			$("#totalUnmerge").html($("[data-type=unmerge][class='btn active']").length);			
+		}
+
+		//submit total comparisons, total, correct and incorrect matches to survey
+		function postData(total, correct, incorrect) {	
+				window.location.href = "http://edu.surveygizmo.com/s3/1202125/Person-Matching-Survey?total="+total+"&correct="+correct+"&incorrect="+incorrect;
+		}	
+		
+		//submit total comparisons, total, correct and incorrect matches to survey
+		//function postData(comparisons, total, correct, incorrect) {	
+		//		window.location.href = "http://edu.surveygizmo.com/s3/1202125/Person-Matching-Survey?comparisons="+comparisons+"&total="+total+"&correct="+correct+"&incorrect="+incorrect;
+		//}		
+		
+		$(document).ready(function(){	
+           	//$('#loading-indicator').show();
+			getPersonMatches(personUsername, function(personList){ 	
+			    var $table = $("#tableBody");
+                if (personList.length > 0) {			
+				getPersons(personUsername, function(personsArray){			
+					getPersonProfiles(personUsername, function(profilesArray){                     
+					  
+						var personNo = 0;
+						var totalMerge = 0;
+						var totalUnmerge = 0;
+						//var totalComparisons = totalResults;
+							
+						for (var i in personList) { //retrieve list of all persons having matching results
+							var person = personList[i];
+							//console.log("Person URI: "+person.sourceGUID);  //retrieve URI of person i	
+							var sourcePerson = findPerson(personsArray, person.sourceGUID);  //person source i details						
+							var sourceProfile = findProfile(profilesArray, person.sourceGUID); //profile source i details  //if .entry is removed from method include it here
+							
+							var sourceName = "";
+							if (sourcePerson.name !== undefined) {
+								sourceName = sourcePerson.name;
+							} else {									
+								var sname = profilesArray[profilesArray.length-1].name;
+								sourceName = sname.substr(0,sname.indexOf('@'));
+							} 								
+							
+							var sourceImageUrl = "";
+							if (sourcePerson.imageUrl !== undefined) {
+							    sourceImageUrl = sourcePerson.imageUrl; 
+								if ((sourceImageUrl === "") || (sourceImageUrl === null)) {
+									sourceImageUrl = "assets/img/person-img.jpg";
+								} 							
+							} else {
+								sourceImageUrl = profilesArray[profilesArray.length-1].imageUrl;
+							}			
+								
+							var sourceService = "";
+							if (sourcePerson.name !== undefined) {
+								sourceService = sourceService.split("@"); //check this
+							} else {									
+								var sname = profilesArray[profilesArray.length-1].name;
+								sourceService = sname.substr(sname.indexOf("@") + 1);
+							}						
+								
+							for (var j in person.matches) { //retrieve list of all matches for person i
+								var match = person.matches[j];
+								//console.log("Match Person URI: "+match.target);  //retrieve URI of match j	
+								var targetPerson = findPerson(personsArray, match.target); //person target i details
+								var targetProfile = findProfile(profilesArray, match.target); //profile target i details
+								
+								
+								var targetName = "";
+								if (targetPerson.name !== undefined) {
+									targetName = targetPerson.name;
+								} else {									
+									var tname = profilesArray[profilesArray.length-1].name;
+									targetName = tname.substr(0,tname.indexOf('@'));
+								} 								
+								
+								var targetImageUrl = "";
+								if (targetPerson.imageUrl !== undefined) {
+									targetImageUrl = targetPerson.imageUrl; 
+									if ((targetImageUrl === "") || (targetImageUrl === null)) {
+										targetImageUrl = "assets/img/person-img.jpg";
+									} 							
+								} else {
+									targetImageUrl = profilesArray[profilesArray.length-1].imageUrl;
+								}			
+									
+								var targetService = "";
+								if (targetPerson.name !== undefined) {
+									targetService = targetService.split("@"); //check this
+								} else {									
+									var tname = profilesArray[profilesArray.length-1].name;
+									targetService = tname.substr(tname.indexOf("@") + 1);
+								}						
+										
+										  
+								personNo++;	
+								
+								$table.append("<tr id='person"+personNo+"'>"+
+													 "<td>"+personNo+"</td>"+
+													 "<td><img src='"+sourceImageUrl+"' style='max-width:50%;' alt='person'></td>"+ //person source image
+													 "<td>"+			 
+													 "<a id='sourceAttributes"+personNo+"' data-toggle='popover' data-trigger='hover' data-html='true' data-guid='"+person.sourceGUID+"'>"+	
+													 "<h4>"+sourceName+"</h4><p>"+sourceService+"</p>"+
+													 "</a>"+
+													 "</td>"+ //person source name
+													 "<td></td>"+
+													 "<td><img src='"+targetImageUrl+"' style='max-width:50%;' alt='person'></td>"+ //person target image
+													 "<td>"+
+													 "<a id='targetAttributes"+personNo+"' data-toggle='popover' data-trigger='hover' data-html='true' data-guid='"+match.target+"'>"+	
+													 "<h4>"+targetName+"</h4><p>"+targetService+"</p>"+
+													 "</a>"+
+													 "</td>"+ //person target name
+													 "<td></td>"+
+													 "<td>"+
+													 "	<div id='mergeButtons"+personNo+"' class='btn-group' data-toggle='buttons-radio'>"+
+													 "		<button type='button' class='btn' data-id='merge"+personNo+ "' data-type='merge'><img src='assets/img/findicons/link.png' style='height:60%' alt='merge_person' ></button>"+
+													 "		<button type='button' class='btn' data-id='unmerge"+personNo+ "' data-type='unmerge'><img src='assets/img/findicons/link_broken.png' style='height:60%' alt='remove_person'></button>"+
+													 "	</div>"+
+													 "</td>"+
+													 "</tr>");
+									
+								getProfileAttributes(personUsername, match.target, targetService, function(profileAttributes, personURI, service){ //retrieve profile attributes for matching person j
+								   	var name = findAttribute(profileAttributes,"nco:hasPersonName");							
+									var affiliation = findAttribute(profileAttributes,"nco:hasAffiliation"); 
+									var bday = findAttribute(profileAttributes,"nco:hasBirthDate");		
+									var email = findAttribute(profileAttributes,"nco:hasEmailAddress");	
+									var phone = findAttribute(profileAttributes,"nco:hasPhoneNumber");
+														
+									var firstname = checkAttribute(name.nameGiven);
+									var surname = checkAttribute(name.nameFamily);
+									var username = checkAttribute(name.nickname);									
+									var dob = new Date(checkAttribute(bday.birthDate)).toDateString();										
+									var role = checkAttribute(affiliation.role);
+									var emailAddress = checkAttribute(email.emailAddress);
+									var phoneNo = checkAttribute(phone.phoneNumber);
+									
+									var profileInfo = "";
+									
+									if (firstname !== "n/a") { profileInfo = firstname +"<br />"; }
+									if (surname !== "n/a") { profileInfo += surname +"<br />"; }
+									if (username !== "n/a") { profileInfo += username +"<br />"; }
+									if (!(isNaN(dob))) { profileInfo += dob +"<br />"; }
+									if (role !== "n/a") { profileInfo += role +"<br />"; }
+									if (emailAddress !== "n/a") { profileInfo += emailAddress +"<br />"; }
+									if (phoneNo !== "n/a") { profileInfo += phoneNo +"<br />"; }							
+																	
+									$table.find("a[data-guid='" + personURI + "']").attr("data-content",profileInfo);
+								 });
+									 
+								 							 
+							}							
+								
+							getProfileAttributes(personUsername, person.sourceGUID, sourceService, function(profileAttributes, personURI, service){ //retrieve profile attributes for person i									
+									var name = findAttribute(profileAttributes,"nco:hasPersonName");							
+									var affiliation = findAttribute(profileAttributes,"nco:hasAffiliation"); 
+									var bday = findAttribute(profileAttributes,"nco:hasBirthDate");		
+									var email = findAttribute(profileAttributes,"nco:hasEmailAddress");	
+									var phone = findAttribute(profileAttributes,"nco:hasPhoneNumber");
+														
+									var firstname = checkAttribute(name.nameGiven);
+									var surname = checkAttribute(name.nameFamily);
+									var username = checkAttribute(name.nickname);									
+									var dob = new Date(checkAttribute(bday.birthDate)).toDateString();										
+									var role = checkAttribute(affiliation.role);
+									var emailAddress = checkAttribute(email.emailAddress);
+									var phoneNo = checkAttribute(phone.phoneNumber);
+									
+									var profileInfo = "";
+									
+									if (firstname !== "n/a") { profileInfo = firstname +"<br />"; }
+									if (surname !== "n/a") { profileInfo += surname +"<br />"; }
+									if (username !== "n/a") { profileInfo += username +"<br />"; }
+									if (!(isNaN(dob))) { profileInfo += dob +"<br />"; }
+									if (role !== "n/a") { profileInfo += role +"<br />"; }
+									if (emailAddress !== "n/a") { profileInfo += emailAddress +"<br />"; }
+									if (phoneNo !== "n/a") { profileInfo += phoneNo +"<br />"; }							
+																	
+									$table.find("a[data-guid='" + personURI + "']").attr("data-content",profileInfo);
+							});	
+												 
+								 
+						}	
+						$table.append("<tr id='results'>"+
+									  "<td><h4>#Matches</h4></td><td><h4 id='totalMatches'>"+personNo+"</h4></td><td><h4>#Correct Matches</h4></td><td><h4 id='totalMerge'></h4></td><td></td><td><h4>#Incorrect Matches</h4></td><td><h4 id='totalUnmerge'></h4></td>"+
+									  "<td><button id='matchingResults' class='btn btn-info' type='button'>Calculate Results</button></td>"+
+									  "</tr>"+	 
+									  "<tr>"+
+									  "<td></td><td></td><td colspan='2'><span id='warningMsg' class='text-info'></span></td><td></td><td></td><td></td>"+
+									  "<td><button id='overallResults' class='btn btn-primary' type='submit'>Submit Results</button></td>"+
+									  "</tr>");	 
+															  						
+						$("#results").hide();
+						
+						$("form").submit(function(){
+							calculateMatchingResults();	
+						    var unmarked = false;
+						    for (var i=1; i<=personNo; i++) {	
+								$table.find("#person"+i).removeAttr("class");
+								$("#warningMsg").html("");
+								var mergeButtons = $("div[id='mergeButtons"+i+"'] button[class='btn']");								
+								if (mergeButtons.length == 2) {	
+									unmarked = true;
+									$table.find("#person"+i).attr("class","info");
+								}							
+							}
+							if (unmarked === true) {
+								$("#warningMsg").html("*The marked matches are still unanswered");
+								return false;
+							} 
+							//var comparisons = totalComparisons;
+							var total = $("#totalMatches").text();
+							var correct = $("#totalMerge").text();							
+							var incorrect = $("#totalUnmerge").text();
+							$("#matchingForm").attr("action", "javascript:postData("+total+","+correct+","+incorrect+");");
+							//$("#matchingForm").attr("action", "javascript:postData("+comparisons+","+total+","+correct+","+incorrect+");");
+						});								
+				    });						
+				});
+			} else { 
+					$table.append("<tr id='results'>"+
+								  "<td></td><td colspan='2'><h4><span class='text-info'>No Matches Found</span></h4></td><td></td><td></td><td></td><td></td>"+
+								  "</tr>");	
+			}
+			});
+		    //$('#loading-indicator').hide();
+		});
+		
+				
+		</script>
+
+  </head>
+
+  <body data-spy="scroll" data-target=".bs-docs-sidebar">  
+  
+	  <div class="matching-unit">
+		<h1>Person Matching Suggestions</h1>
+	  </div>    
+	  <!-- <p id="loading-indicator">Loading....</p> -->
+	  <!-- <img src="assets/img/loader.gif" id="loading-indicator" /> -->
+	
+        <form id="matchingForm"> 
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th style="width: 2%">#</th>
+                  <th style="width: 8%">Contact 1</th>
+				  <th style="width: 14%"></th>
+				  <th style="width: 20%"></th>
+                  <th style="width: 8%">Contact 2</th>
+				  <th style="width: 14%"></th>
+				  <th style="width: 20%"></th>
+				  <th style="width: 10%">Merge</th>
+                </tr>
+              </thead>
+              <tbody id="tableBody"></tbody>
+            </table>
+		</form>	
+
+    <!-- Footer
+    ================================================== -->
+    <footer class="footer">
+      <div class="container">
+		<p>Copyright (c) 2013 <a href="http://deri.ie/users/keith-cortis" target="_blank">Keith Cortis</a>. Powered by <a href="http://www.dime-project.eu/" target="_blank">di.me</a>. All rights reserved.</p>
+        <p>Designed and built with <a href="http://twitter.github.com/bootstrap/" target="_blank">Bootstrap</a> and <a href="http://findicons.com/" target="_blank">FindIcons</a>.</p>
+      </div>
+    </footer>
+
+
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+    <script src="assets/js/jquery.js"></script>
+    <script src="assets/js/bootstrap-transition.js"></script>
+    <script src="assets/js/bootstrap-alert.js"></script>
+    <script src="assets/js/bootstrap-modal.js"></script>
+    <script src="assets/js/bootstrap-dropdown.js"></script>
+    <script src="assets/js/bootstrap-scrollspy.js"></script>
+    <script src="assets/js/bootstrap-tab.js"></script>
+    <script src="assets/js/bootstrap-tooltip.js"></script>
+    <script src="assets/js/bootstrap-popover.js"></script>
+    <script src="assets/js/bootstrap-button.js"></script>
+    <script src="assets/js/bootstrap-collapse.js"></script>
+    <script src="assets/js/bootstrap-carousel.js"></script>
+    <script src="assets/js/bootstrap-typeahead.js"></script>
+    <script src="assets/js/bootstrap-affix.js"></script>
+
+    <script src="assets/js/holder/holder.js"></script>
+    <script src="assets/js/google-code-prettify/prettify.js"></script>
+
+    <script src="assets/js/application.js"></script>
+
+
+
+  </body>
+</html>

@@ -1,0 +1,11 @@
+<urn:uuid:7c0dfda1-096f-4f2d-8403-6813e40e38b6> a <http://www.semanticdesktop.org/ontologies/2011/10/05/dlpo#LivePost> .
+<urn:juan:juanPerson02> a <http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#Person> .
+
+<urn:uuid:708dbbce-db3b-46ac-9925-3411bd5459b4> a <http://vocab.deri.ie/ppo#PrivacyPreference> ;
+	<http://www.w3.org/2000/01/rdf-schema#label> "LIVEPOST" ;
+	<http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#isDefinedBy> <user:juan:PIM> ;
+	<http://vocab.deri.ie/ppo#hasAccessSpace> <urn:uuid:aff570c1-dc25-479b-850e-4b3d75b291f5> ;
+	<http://vocab.deri.ie/ppo#appliesToResource> <urn:uuid:7c0dfda1-096f-4f2d-8403-6813e40e38b6> .
+
+<urn:uuid:aff570c1-dc25-479b-850e-4b3d75b291f5> a <http://www.semanticdesktop.org/ontologies/2009/11/08/nso#AccessSpace> ;
+	<http://www.semanticdesktop.org/ontologies/2009/11/08/nso#includes> <urn:account:juan> , <urn:juan:juanPerson02> .

@@ -1,0 +1,504 @@
+package eu.dime.ps.controllers;
+
+import ie.deri.smile.vocabulary.NIE;
+import ie.deri.smile.vocabulary.NSO;
+import ie.deri.smile.vocabulary.PIMO;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
+import org.ontoware.aifbcommons.collection.ClosableIterator;
+import org.ontoware.rdf2go.model.node.URI;
+import org.ontoware.rdf2go.model.node.impl.URIImpl;
+import org.ontoware.rdfreactor.schema.rdfs.Resource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import eu.dime.ps.controllers.exception.InfosphereException;
+import eu.dime.ps.controllers.infosphere.manager.AccountManager;
+import eu.dime.ps.controllers.infosphere.manager.DataboxManager;
+import eu.dime.ps.controllers.infosphere.manager.DeviceManager;
+import eu.dime.ps.controllers.infosphere.manager.FileManager;
+import eu.dime.ps.controllers.infosphere.manager.LivePostManager;
+import eu.dime.ps.controllers.infosphere.manager.PersonGroupManager;
+import eu.dime.ps.controllers.infosphere.manager.PersonManager;
+import eu.dime.ps.controllers.infosphere.manager.ProfileCardManager;
+import eu.dime.ps.controllers.infosphere.manager.ProfileManager;
+import eu.dime.ps.controllers.infosphere.manager.SituationManager;
+import eu.dime.ps.gateway.service.internal.DimeServiceAdapter;
+import eu.dime.ps.semantic.BroadcastManager;
+import eu.dime.ps.semantic.BroadcastReceiver;
+import eu.dime.ps.semantic.Event;
+import eu.dime.ps.semantic.model.ModelFactory;
+import eu.dime.ps.semantic.model.dao.Account;
+import eu.dime.ps.semantic.model.dcon.Situation;
+import eu.dime.ps.semantic.model.ddo.Device;
+import eu.dime.ps.semantic.model.dlpo.LivePost;
+import eu.dime.ps.semantic.model.nco.EmailAddress;
+import eu.dime.ps.semantic.model.nco.PersonContact;
+import eu.dime.ps.semantic.model.nco.PersonName;
+import eu.dime.ps.semantic.model.nfo.DataContainer;
+import eu.dime.ps.semantic.model.nfo.FileDataObject;
+import eu.dime.ps.semantic.model.pimo.Person;
+import eu.dime.ps.semantic.model.pimo.PersonGroup;
+import eu.dime.ps.semantic.model.ppo.AccessSpace;
+import eu.dime.ps.semantic.model.ppo.PrivacyPreference;
+import eu.dime.ps.semantic.privacy.PrivacyPreferenceType;
+
+/**
+ * This creates and configures, by default, tenants for a pre-defined list of
+ * personas, loading pre-defined data for each of them.
+ * 
+ * @author Ismael Rivera
+ */
+public class DefaultDataSetup implements BroadcastReceiver {
+	
+	public static final String DEFAULT_PUBLIC_PROFILE_CARD_NAME = "MyPublicCard";
+	
+	private static final Map<String, String[]> CONTACTS = new HashMap<String, String[]>();
+	static {
+		CONTACTS.put("todo", new String[] { "Christian Knecht ", "christian.knecht@email.com", "ismriv" });
+		CONTACTS.put("todo", new String[] { "Cristina Fra ", "cristina.fra@email.com", "cfra" });
+		CONTACTS.put("todo", new String[] { "Fabian Hermann ", "fabian.hermann@email.com", "fabian" });
+		CONTACTS.put("3f57e7e5-6cdc-4488-bfcb-d41de0b98a89", new String[] { "Ismael Rivera", "ismael.rivera@email.com", "ismriv" });
+		CONTACTS.put("todo", new String[] { "Marc Planaguma", "marc.planaguma@email.com", "marc" });
+		CONTACTS.put("todo", new String[] { "Marcel Heupel", "marcel.heupel@email.com", "mheupel" });
+		CONTACTS.put("todo", new String[] { "Massimo Valla ", "massimo.valla@email.com", "mvalla" });
+		CONTACTS.put("todo", new String[] { "Rafael Gimenez", "rafael.gimenez@email.com", "rgimenez" });
+		CONTACTS.put("todo", new String[] { "Simon Scerri", "simon.scerri@email.com", "simsce" });
+		CONTACTS.put("todo", new String[] { "Simon Thiel", "simon.thiel@email.com", "sthiel" });
+		CONTACTS.put("todo", new String[] { "Sophie Wrobel", "sophie.wrobel@email.com", "wrobel" });
+	}
+
+	private static final Logger logger = LoggerFactory.getLogger(DefaultDataSetup.class);
+
+	private final ModelFactory modelFactory = new ModelFactory();
+
+	private AccountManager accountManager;
+	private PersonManager personManager;
+	private ProfileManager profileManager;
+	private PersonGroupManager personGroupManager;
+	private ProfileCardManager profileCardManager;
+	private DataboxManager databoxManager;
+	private DeviceManager deviceManager;
+	private SituationManager situationManager;
+	private LivePostManager livePostManager;
+	private FileManager fileManager;
+	private UserManager userManager;
+
+	@Autowired
+	public void setAccountManager(AccountManager accountManager) {
+		this.accountManager = accountManager;
+	}
+
+	@Autowired
+	public void setPersonManager(PersonManager personManager) {
+		this.personManager = personManager;
+	}
+
+	@Autowired
+	public void setProfileManager(ProfileManager profileManager) {
+		this.profileManager = profileManager;
+	}
+
+	@Autowired
+	public void setPersonGroupManager(PersonGroupManager personGroupManager) {
+		this.personGroupManager = personGroupManager;
+	}
+
+	@Autowired
+	public void setProfileCardManager(ProfileCardManager profileCardManager) {
+		this.profileCardManager = profileCardManager;
+	}
+
+	@Autowired
+	public void setDataboxManager(DataboxManager databoxManager) {
+		this.databoxManager = databoxManager;
+	}
+
+	@Autowired
+	public void setDeviceManager(DeviceManager deviceManager) {
+		this.deviceManager = deviceManager;
+	}
+
+	@Autowired
+	public void setSituationManager(SituationManager situationManager) {
+		this.situationManager = situationManager;
+	}
+
+	@Autowired
+	public void setLivePostManager(LivePostManager livePostManager) {
+		this.livePostManager = livePostManager;
+	}
+
+	@Autowired
+	public void setFileManager(FileManager fileManager) {
+		this.fileManager = fileManager;
+	}
+	
+	@Autowired
+	public void setUserManager(UserManager userManager) {
+		this.userManager = userManager;
+	}
+
+	public DefaultDataSetup() {
+		BroadcastManager.getInstance().registerReceiver(this);
+	}
+	
+	@Override
+	public void onReceive(Event event) {
+		
+		// only interested in 'user registered' events
+		if (!UserManager.ACTION_USER_REGISTERED.equals(event.getAction())) {
+			return;
+		}
+
+		Long tenant = Long.parseLong(event.getTenant());
+		TenantContextHolder.setTenant(tenant);
+		logger.info("Creating default (dummy) data for new PIM/user [tenant = " + tenant + "]");
+		
+		// fetch owner of the PIM
+		Person me;
+		try {
+			me = personManager.getMe();
+		} catch (InfosphereException e) {
+			logger.error("Can't find PIM's owner: default data won't be generated for " + event.getIdentifier(), e);
+			return;
+		}
+		
+		// creating pre-defined devices (ddo:Laptop and ddo:Mobile)
+		Device laptop = modelFactory.getDDOFactory().createDevice("http://www.semanticdesktop.org/ontologies/2011/10/05/ddo#Laptop");
+		laptop.setPrefLabel("My laptop");
+		laptop.setCreator(me);
+		Device mobile = modelFactory.getDDOFactory().createDevice("http://www.semanticdesktop.org/ontologies/2011/10/05/ddo#Mobile");
+		mobile.setPrefLabel("My mobile phone");
+		mobile.setCreator(me);
+		try {
+			deviceManager.add(laptop);
+			deviceManager.add(mobile);
+		} catch (InfosphereException e) {
+			logger.error("An error ocurred when creating pre-defined devices: " + e.getMessage(), e);
+		}
+
+		// creating pre-defined contacts
+		Person testuser1 = createPerson("Test", "User1", "testuser1", 0.5);
+		Person testuser2 = createPerson("Test", "User2", "testuser2", 0);
+		Person testuser3 = createPerson("Test", "User3", "testuser3", 1);
+
+		// creating pre-defined groups
+		PersonGroup businessGroup = createPersonGroup("Business Contacts", me, testuser1, testuser2);
+		PersonGroup colleaguesGroup = createPersonGroup("Colleagues", me, testuser1);
+		PersonGroup familyGroup = createPersonGroup("Family", me);
+		PersonGroup friendsGroup = createPersonGroup("Friends", me, testuser1, testuser3);
+		PersonGroup acquaintancesGroup = createPersonGroup("Acquaintances", me);
+
+		// creating pre-defined profile cards
+		PrivacyPreference publicCard = null, anonymousCard = null, businessCard = null, privateCard = null;
+		Resource[] attributes = null;
+		try {
+			publicCard = profileCardManager.getByLabel(DEFAULT_PUBLIC_PROFILE_CARD_NAME);
+
+			attributes = publicCard.getAllAppliesToResource_as().asArray();
+			
+			shareProfileCard(publicCard, businessGroup, colleaguesGroup, familyGroup, friendsGroup, acquaintancesGroup, testuser1);
+		} catch (InfosphereException e) {
+			logger.error("An error ocurred when creating the pre-defined profile cards.", e);
+		}
+		
+		PersonName anonymousName = modelFactory.getNCOFactory().createPersonName();
+		anonymousName.setNickname("dimeUser");
+		anonymousCard = createProfileCard("MyAnonymousCard");
+		
+		businessCard = createProfileCard("MyBusinessCard", attributes);
+		shareProfileCard(businessCard, businessGroup, colleaguesGroup);
+		
+		privateCard = createProfileCard("MyPrivateCard", attributes);
+		
+		// creating welcome livepost
+		AccessSpace accessSpace = publicCard.getAllAccessSpace().next();
+		Account publicAccount = null, testuser3Account = null;
+		try {
+			publicAccount = accessSpace.getSharedThrough();
+			testuser3Account = accountManager.getAllByCreator(testuser3).iterator().next();
+			
+			String text = "Welcome to the di.me Test Trial 2013! Please try out the prototype and give us feedback! Visit the trial page: http://dimetrials.bdigital.org:8080/dime or our project page: http://www.di.me-project.eu";
+			createLivePost(text, testuser3, testuser3Account.asURI(), publicAccount.asURI());
+		} catch (Exception e) {
+			logger.error("An error ocurred when creating the pre-defined profile cards.", e);
+		}
+		
+		// creating pre-defined files
+		FileDataObject flyer = createFile("digital.me_project_flyer.pdf", DefaultDataSetup.class.getClassLoader().getResourceAsStream("default/digital.me_project_flyer.pdf"), 0.5);
+		FileDataObject logo = createFile("digital.me_logo.jpg", DefaultDataSetup.class.getClassLoader().getResourceAsStream("default/digital.me_logo.jpg"), 0);
+		FileDataObject trial = createFile("welcome_to_di.me_test.txt", DefaultDataSetup.class.getClassLoader().getResourceAsStream("default/welcome_to_di.me_test.txt"), 0);
+		FileDataObject photo = createFile("hiking.jpg", DefaultDataSetup.class.getClassLoader().getResourceAsStream("default/hiking.jpg"), 1);
+
+		DataContainer databoxDime = createDatabox("di.me info", flyer, logo, trial);
+		DataContainer databoxFriends = createDatabox("FriendsBox", photo);
+		shareDatabox(databoxDime, publicAccount, testuser1);
+
+		// creating pre-defined situations
+		createSituation("Working@Office", me);
+		createSituation("Working@Home", me);
+		createSituation("@Conference", me);
+		createSituation("Relaxing@Home", me);
+		createSituation("Social Event", me);
+		createSituation("Travelling", me);
+		
+		// adding contacts of the di.me consortium
+		List<Person> dimePeople = new ArrayList<Person>();
+		for (String said : CONTACTS.keySet()) {
+			
+			// skip contacts which do not have a real said
+			if (said == null || said.equals("") || said.equals("todo")) {
+				continue;
+			}
+			
+			String[] data = CONTACTS.get(said);
+			logger.info("Adding '" + data[0] + "' as a contact [said=" + said + "]");
+			
+			PersonContact profile = modelFactory.getNCOFactory().createPersonContact();
+			profile.setPrefLabel(data[0]);
+			
+			PersonName name = modelFactory.getNCOFactory().createPersonName();
+			name.setFullname(data[0]);
+			name.setNickname(data[2]);
+			profile.setPersonName(name);
+			profile.getModel().addAll(name.getModel().iterator());
+			
+			EmailAddress email = modelFactory.getNCOFactory().createEmailAddress();
+			email.setEmailAddress(data[1]);
+			profile.setEmailAddress(email);
+			profile.getModel().addAll(email.getModel().iterator());
+			
+			URI accountUri = new URIImpl("urn:uuid:" + UUID.randomUUID());
+			try {
+				userManager.add(said, accountUri);
+				userManager.addProfile(accountUri, profile);
+				
+				Account account = accountManager.get(accountUri.toString());
+				if (account.hasCreator()) {
+					dimePeople.add(personManager.get(account.getCreator().toString()));
+				} else {
+					logger.error("Contact account " + accountUri + " does not have a pimo:Person as creator.");
+				}
+			} catch (InfosphereException e) {
+				logger.error("Contact '" + data[0] + "' couldn't be added as a contact: " + e.getMessage(), e);
+			}
+		}
+		
+		// add all dime people in a group
+		createPersonGroup("di.me Project", me, dimePeople.toArray(new Person[dimePeople.size()]));
+
+		TenantContextHolder.clear();
+	}
+
+	private Person createPerson(String givenName, String familyName, String nickname, double trustLevel) {
+		String fullname = givenName + " " + familyName;
+		
+		Person person = modelFactory.getPIMOFactory().createPerson();
+		person.setPrefLabel(fullname);
+		person.setTrustLevel(trustLevel);
+		
+		PersonName name = modelFactory.getNCOFactory().createPersonName();
+		name.setNickname(nickname);
+		name.setFullname(fullname);
+		name.setNameGiven(givenName);
+		name.setNameFamily(familyName);
+		PersonContact profile = modelFactory.getNCOFactory().createPersonContact();
+		profile.setCreator(person);
+		profile.setPersonName(name);
+		profile.setPrefLabel(fullname + "@di.me");
+		
+		Account account = modelFactory.getDAOFactory().createAccount();
+		account.setCreator(person);
+		account.setAccountType("di.me");
+
+		try {
+			personManager.add(person);
+			profileManager.add(person, profile);
+			accountManager.add(account);
+		} catch (InfosphereException e) {
+			logger.error("An error ocurred ...", e);
+		}
+
+		return person;
+	}
+	
+	private PersonGroup createPersonGroup(String label, Person creator, Person... members) {
+		PersonGroup group = modelFactory.getPIMOFactory().createPersonGroup();
+		group.setPrefLabel(label);
+		for (Person member : members) {
+			group.getModel().addStatement(group, PIMO.hasMember, member);
+		}
+		
+		try {
+			personGroupManager.add(group);
+		} catch (InfosphereException e) {
+			logger.error("An error ocurred when creating pre-defined situation '" + label + "'", e);
+		}
+
+		return group;
+	}
+
+	private LivePost createLivePost(String text, Person creator, URI sharedBy, URI sharedWith) {
+		LivePost livePost = modelFactory.getDLPOFactory().createLivePost();
+		livePost.setTextualContent(text);
+		livePost.setCreator(creator);
+		livePost.getModel().addStatement(livePost, NIE.dataSource, sharedBy);
+		livePost.setSharedBy(sharedBy);
+		livePost.setSharedWith(sharedWith);
+
+		try {
+			livePostManager.add(livePost);
+		} catch (InfosphereException e) {
+			logger.error("An error ocurred when creating pre-defined livepost '" + text + "'", e);
+		}
+
+		return livePost;
+	}
+
+	private Situation createSituation(String label, Person creator) {
+		Situation situation = modelFactory.getDCONFactory().createSituation();
+		situation.setPrefLabel(label);
+		situation.setCreator(creator);
+		
+		try {
+			situationManager.add(situation);
+		} catch (InfosphereException e) {
+			logger.error("An error ocurred when creating pre-defined situation '" + label + "'", e);
+		}
+
+		return situation;
+	}
+	
+	private PrivacyPreference createProfileCard(String label, Resource... attributes) {
+		// create the di.me account
+		Account account = modelFactory.getDAOFactory().createAccount();
+		account.setAccountType(DimeServiceAdapter.NAME);
+		account.setPrefLabel(label);
+		
+		// create the profile card for the di.me account
+		PrivacyPreference profileCard = modelFactory.getPPOFactory().createPrivacyPreference();
+		profileCard.setLabel(PrivacyPreferenceType.PROFILECARD.name());
+		profileCard.setPrefLabel(label);
+		
+		// set di.me account as sharedThrough in the profile card's access space
+		AccessSpace accessSpace = modelFactory.getNSOFactory().createAccessSpace();
+		accessSpace.setSharedThrough(account);
+		profileCard.getModel().addAll(accessSpace.getModel().iterator());
+		profileCard.setAccessSpace(accessSpace);
+	
+		// add profile attributes to profile card
+		for (Resource attribute : attributes) {
+			profileCard.addAppliesToResource(attribute);
+		}
+	
+		try {
+			accountManager.add(account);
+			profileCardManager.add(profileCard);
+		} catch (InfosphereException e) {
+			logger.error("An error ocurred when creating pre-defined profile card '" + 
+					label + "': "+ e.getMessage(), e);
+		}
+		
+		return profileCard;
+	}
+
+	public DataContainer createDatabox(String label, FileDataObject... files) {
+		// create the databox
+		DataContainer databox = modelFactory.getNFOFactory().createDataContainer();
+		databox.setPrefLabel(label);
+		
+		// add files to databox
+		for (FileDataObject file : files) {
+			databox.addPart(file);
+		}
+		
+		try {
+			databoxManager.add(databox);
+		} catch (InfosphereException e) {
+			logger.error("An error ocurred when creating pre-defined databox '" + 
+					label + "': "+ e.getMessage(), e);
+		}
+
+		return databox;
+	}
+	
+	private void shareProfileCard(PrivacyPreference profileCard, Resource... agents) {
+		// find first access space
+		AccessSpace accessSpace = profileCard.getAllAccessSpace().next();
+		
+		// include agents in access space
+		for (Resource agent : agents) {
+			accessSpace.getModel().addStatement(accessSpace, NSO.includes, agent);
+		}
+		
+		try {
+			profileCardManager.update(profileCard);
+		} catch (InfosphereException e) {
+			logger.error("An error ocurred when adding agents to pre-defined profile card '" +
+					profileCard.getPrefLabel() + "': " + e.getMessage(), e);
+		}
+	}
+	
+	private void shareDatabox(DataContainer databox, Account sharedThrough, Resource... agents) {
+		PrivacyPreference ppDatabox = (PrivacyPreference) databox.castTo(PrivacyPreference.class);
+		
+		// find access space sharedThrough given account
+		AccessSpace accessSpace = null;
+		ClosableIterator<AccessSpace> asIt = ppDatabox.getAllAccessSpace();
+		while (asIt.hasNext()) {
+			accessSpace = asIt.next();
+			if (!sharedThrough.equals(accessSpace.getSharedThrough())) {
+				accessSpace = null;
+			}
+		}
+		asIt.close();
+		
+		// create a new access space if it didn't exist yet for given sharedThrough
+		if (accessSpace == null) {
+			accessSpace = modelFactory.getNSOFactory().createAccessSpace();
+			accessSpace.setSharedThrough(sharedThrough);
+			ppDatabox.addAccessSpace(accessSpace);
+		}
+		
+		// include agents in access space
+		for (Resource agent : agents) {
+			accessSpace.getModel().addStatement(accessSpace, NSO.includes, agent);
+		}
+
+		// add access space metadata to databox
+		databox.getModel().addAll(accessSpace.getModel().iterator());
+
+		try {
+			databoxManager.update(databox);
+		} catch (InfosphereException e) {
+			logger.error("An error ocurred when adding agents to pre-defined databox '" +
+					databox.getPrefLabel() + "': " + e.getMessage(), e);
+		}
+	}
+
+	private FileDataObject createFile(String fileName, InputStream inputStream, double privacyLevel) {
+		FileDataObject file = modelFactory.getNFOFactory().createFileDataObject();
+		file.setFileName(fileName);
+		file.setPrivacyLevel(privacyLevel);
+		
+		try {
+			fileManager.add(file, inputStream);
+		} catch (IOException e) {
+			logger.error("An error ocurred when creating pre-defined file '" + fileName + "': " + e.getMessage(), e);
+		} catch (InfosphereException e) {
+			logger.error("An error ocurred when creating pre-defined file '" + fileName + "': " + e.getMessage(), e);
+		}
+		
+		return file;
+	}
+
+}

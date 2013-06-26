@@ -1,0 +1,1198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<statuses type="array">
+<status>
+  <created_at>Mon Dec 05 17:33:40 +0000 2011</created_at>
+  <id>143744863047917569</id>
+  <text>Having trouble opting out of emails? See what author @DMScott has to say about BMW. http://t.co/kBpk0QAs</text>
+  <source>&lt;a href=&quot;http://su.pr/&quot; rel=&quot;nofollow&quot;&gt;Su.pr&lt;/a&gt;</source>
+  <truncated>false</truncated>
+  <favorited>false</favorited>
+  <in_reply_to_status_id></in_reply_to_status_id>
+  <in_reply_to_user_id></in_reply_to_user_id>
+  <in_reply_to_screen_name></in_reply_to_screen_name>
+  <retweet_count>0</retweet_count>
+  <retweeted>false</retweeted>
+  <user>
+    <id>15441074</id>
+    <name>Social Media Today</name>
+    <screen_name>socialmedia2day</screen_name>
+    <location>New York</location>
+    <description>#Publishing and #distribution of great posts by the world's best thinkers on #SocialMedia best practices, tools and #socialmarketing</description>
+    <profile_image_url>http://a3.twimg.com/profile_images/82349548/SMT_profile_normal.png</profile_image_url>
+    <profile_image_url_https>https://si0.twimg.com/profile_images/82349548/SMT_profile_normal.png</profile_image_url_https>
+    <url>http://www.socialmediatoday.com</url>
+    <protected>false</protected>
+    <followers_count>80517</followers_count>
+    <profile_background_color>0099B9</profile_background_color>
+    <profile_text_color>3C3940</profile_text_color>
+    <profile_link_color>0099B9</profile_link_color>
+    <profile_sidebar_fill_color>95E8EC</profile_sidebar_fill_color>
+    <profile_sidebar_border_color>5ED4DC</profile_sidebar_border_color>
+    <friends_count>2621</friends_count>
+    <created_at>Tue Jul 15 14:53:02 +0000 2008</created_at>
+    <favourites_count>3</favourites_count>
+    <utc_offset>-18000</utc_offset>
+    <time_zone>Eastern Time (US &amp; Canada)</time_zone>
+    <profile_background_image_url>http://a1.twimg.com/images/themes/theme4/bg.gif</profile_background_image_url>
+    <profile_background_image_url_https>https://si0.twimg.com/images/themes/theme4/bg.gif</profile_background_image_url_https>
+    <profile_background_tile>false</profile_background_tile>
+    <profile_use_background_image>true</profile_use_background_image>
+    <notifications>false</notifications>
+    <geo_enabled>false</geo_enabled>
+    <verified>false</verified>
+    <following>true</following>
+    <statuses_count>14973</statuses_count>
+    <lang>en</lang>
+    <contributors_enabled>false</contributors_enabled>
+    <follow_request_sent>false</follow_request_sent>
+    <listed_count>10305</listed_count>
+    <show_all_inline_media>false</show_all_inline_media>
+    <default_profile>false</default_profile>
+    <default_profile_image>false</default_profile_image>
+    <is_translator>false</is_translator>
+  </user>
+  <geo/>
+  <coordinates/>
+  <place/>
+  <possibly_sensitive>false</possibly_sensitive>
+  <contributors/>
+</status>
+<status>
+  <created_at>Mon Dec 05 17:32:45 +0000 2011</created_at>
+  <id>143744633044873216</id>
+  <text>E-Mail, Social Media Make Christmas Greeting Cards Unique? - Fox Business http://t.co/4JENqysA #socialmedia</text>
+  <source>&lt;a href=&quot;http://twitterfeed.com&quot; rel=&quot;nofollow&quot;&gt;twitterfeed&lt;/a&gt;</source>
+  <truncated>false</truncated>
+  <favorited>false</favorited>
+  <in_reply_to_status_id></in_reply_to_status_id>
+  <in_reply_to_user_id></in_reply_to_user_id>
+  <in_reply_to_screen_name></in_reply_to_screen_name>
+  <retweet_count>0</retweet_count>
+  <retweeted>false</retweeted>
+  <user>
+    <id>147727812</id>
+    <name>Steve Momorella</name>
+    <screen_name>socialnewsrooms</screen_name>
+    <location>Charlottesville, VA</location>
+    <description>Steve Momorella is one of the founders of TEKGROUP International, an award-winning social media Online Newsroom provider.</description>
+    <profile_image_url>http://a3.twimg.com/profile_images/927869741/social-media_normal.jpg</profile_image_url>
+    <profile_image_url_https>https://si0.twimg.com/profile_images/927869741/social-media_normal.jpg</profile_image_url_https>
+    <url>http://www.tekgroup.com</url>
+    <protected>false</protected>
+    <followers_count>4545</followers_count>
+    <profile_background_color>C0DEED</profile_background_color>
+    <profile_text_color>333333</profile_text_color>
+    <profile_link_color>0084B4</profile_link_color>
+    <profile_sidebar_fill_color>DDEEF6</profile_sidebar_fill_color>
+    <profile_sidebar_border_color>C0DEED</profile_sidebar_border_color>
+    <friends_count>4301</friends_count>
+    <created_at>Mon May 24 22:19:53 +0000 2010</created_at>
+    <favourites_count>0</favourites_count>
+    <utc_offset>-21600</utc_offset>
+    <time_zone>Central Time (US &amp; Canada)</time_zone>
+    <profile_background_image_url>http://a0.twimg.com/images/themes/theme1/bg.png</profile_background_image_url>
+    <profile_background_image_url_https>https://si0.twimg.com/images/themes/theme1/bg.png</profile_background_image_url_https>
+    <profile_background_tile>false</profile_background_tile>
+    <profile_use_background_image>true</profile_use_background_image>
+    <notifications>false</notifications>
+    <geo_enabled>false</geo_enabled>
+    <verified>false</verified>
+    <following>true</following>
+    <statuses_count>42091</statuses_count>
+    <lang>en</lang>
+    <contributors_enabled>false</contributors_enabled>
+    <follow_request_sent>false</follow_request_sent>
+    <listed_count>260</listed_count>
+    <show_all_inline_media>false</show_all_inline_media>
+    <default_profile>true</default_profile>
+    <default_profile_image>false</default_profile_image>
+    <is_translator>false</is_translator>
+  </user>
+  <geo/>
+  <coordinates/>
+  <place/>
+  <possibly_sensitive>false</possibly_sensitive>
+  <contributors/>
+</status>
+<status>
+  <created_at>Mon Dec 05 17:32:45 +0000 2011</created_at>
+  <id>143744631664947200</id>
+  <text>Optify Releases Marketing and Social Media Forecasts for 2012 - WebProNews http://t.co/TjU4TkPv #socialmedia</text>
+  <source>&lt;a href=&quot;http://twitterfeed.com&quot; rel=&quot;nofollow&quot;&gt;twitterfeed&lt;/a&gt;</source>
+  <truncated>false</truncated>
+  <favorited>false</favorited>
+  <in_reply_to_status_id></in_reply_to_status_id>
+  <in_reply_to_user_id></in_reply_to_user_id>
+  <in_reply_to_screen_name></in_reply_to_screen_name>
+  <retweet_count>0</retweet_count>
+  <retweeted>false</retweeted>
+  <user>
+    <id>147727812</id>
+    <name>Steve Momorella</name>
+    <screen_name>socialnewsrooms</screen_name>
+    <location>Charlottesville, VA</location>
+    <description>Steve Momorella is one of the founders of TEKGROUP International, an award-winning social media Online Newsroom provider.</description>
+    <profile_image_url>http://a3.twimg.com/profile_images/927869741/social-media_normal.jpg</profile_image_url>
+    <profile_image_url_https>https://si0.twimg.com/profile_images/927869741/social-media_normal.jpg</profile_image_url_https>
+    <url>http://www.tekgroup.com</url>
+    <protected>false</protected>
+    <followers_count>4545</followers_count>
+    <profile_background_color>C0DEED</profile_background_color>
+    <profile_text_color>333333</profile_text_color>
+    <profile_link_color>0084B4</profile_link_color>
+    <profile_sidebar_fill_color>DDEEF6</profile_sidebar_fill_color>
+    <profile_sidebar_border_color>C0DEED</profile_sidebar_border_color>
+    <friends_count>4301</friends_count>
+    <created_at>Mon May 24 22:19:53 +0000 2010</created_at>
+    <favourites_count>0</favourites_count>
+    <utc_offset>-21600</utc_offset>
+    <time_zone>Central Time (US &amp; Canada)</time_zone>
+    <profile_background_image_url>http://a0.twimg.com/images/themes/theme1/bg.png</profile_background_image_url>
+    <profile_background_image_url_https>https://si0.twimg.com/images/themes/theme1/bg.png</profile_background_image_url_https>
+    <profile_background_tile>false</profile_background_tile>
+    <profile_use_background_image>true</profile_use_background_image>
+    <notifications>false</notifications>
+    <geo_enabled>false</geo_enabled>
+    <verified>false</verified>
+    <following>true</following>
+    <statuses_count>42091</statuses_count>
+    <lang>en</lang>
+    <contributors_enabled>false</contributors_enabled>
+    <follow_request_sent>false</follow_request_sent>
+    <listed_count>260</listed_count>
+    <show_all_inline_media>false</show_all_inline_media>
+    <default_profile>true</default_profile>
+    <default_profile_image>false</default_profile_image>
+    <is_translator>false</is_translator>
+  </user>
+  <geo/>
+  <coordinates/>
+  <place/>
+  <possibly_sensitive>false</possibly_sensitive>
+  <contributors/>
+</status>
+<status>
+  <created_at>Mon Dec 05 17:32:45 +0000 2011</created_at>
+  <id>143744630117236736</id>
+  <text>Barron's buzz aside, GSVC is still a viable social media short (GRPN, P, LNKD) - NASDAQ http://t.co/vB6NtWZL #socialmedia</text>
+  <source>&lt;a href=&quot;http://twitterfeed.com&quot; rel=&quot;nofollow&quot;&gt;twitterfeed&lt;/a&gt;</source>
+  <truncated>false</truncated>
+  <favorited>false</favorited>
+  <in_reply_to_status_id></in_reply_to_status_id>
+  <in_reply_to_user_id></in_reply_to_user_id>
+  <in_reply_to_screen_name></in_reply_to_screen_name>
+  <retweet_count>0</retweet_count>
+  <retweeted>false</retweeted>
+  <user>
+    <id>147727812</id>
+    <name>Steve Momorella</name>
+    <screen_name>socialnewsrooms</screen_name>
+    <location>Charlottesville, VA</location>
+    <description>Steve Momorella is one of the founders of TEKGROUP International, an award-winning social media Online Newsroom provider.</description>
+    <profile_image_url>http://a3.twimg.com/profile_images/927869741/social-media_normal.jpg</profile_image_url>
+    <profile_image_url_https>https://si0.twimg.com/profile_images/927869741/social-media_normal.jpg</profile_image_url_https>
+    <url>http://www.tekgroup.com</url>
+    <protected>false</protected>
+    <followers_count>4545</followers_count>
+    <profile_background_color>C0DEED</profile_background_color>
+    <profile_text_color>333333</profile_text_color>
+    <profile_link_color>0084B4</profile_link_color>
+    <profile_sidebar_fill_color>DDEEF6</profile_sidebar_fill_color>
+    <profile_sidebar_border_color>C0DEED</profile_sidebar_border_color>
+    <friends_count>4301</friends_count>
+    <created_at>Mon May 24 22:19:53 +0000 2010</created_at>
+    <favourites_count>0</favourites_count>
+    <utc_offset>-21600</utc_offset>
+    <time_zone>Central Time (US &amp; Canada)</time_zone>
+    <profile_background_image_url>http://a0.twimg.com/images/themes/theme1/bg.png</profile_background_image_url>
+    <profile_background_image_url_https>https://si0.twimg.com/images/themes/theme1/bg.png</profile_background_image_url_https>
+    <profile_background_tile>false</profile_background_tile>
+    <profile_use_background_image>true</profile_use_background_image>
+    <notifications>false</notifications>
+    <geo_enabled>false</geo_enabled>
+    <verified>false</verified>
+    <following>true</following>
+    <statuses_count>42091</statuses_count>
+    <lang>en</lang>
+    <contributors_enabled>false</contributors_enabled>
+    <follow_request_sent>false</follow_request_sent>
+    <listed_count>260</listed_count>
+    <show_all_inline_media>false</show_all_inline_media>
+    <default_profile>true</default_profile>
+    <default_profile_image>false</default_profile_image>
+    <is_translator>false</is_translator>
+  </user>
+  <geo/>
+  <coordinates/>
+  <place/>
+  <possibly_sensitive>false</possibly_sensitive>
+  <contributors/>
+</status>
+<status>
+  <created_at>Mon Dec 05 17:27:42 +0000 2011</created_at>
+  <id>143743360849551361</id>
+  <text>Who Actually Influences You? by @cfigallo http://t.co/hWZz3xyD</text>
+  <source>&lt;a href=&quot;http://www.hootsuite.com&quot; rel=&quot;nofollow&quot;&gt;HootSuite&lt;/a&gt;</source>
+  <truncated>false</truncated>
+  <favorited>false</favorited>
+  <in_reply_to_status_id></in_reply_to_status_id>
+  <in_reply_to_user_id></in_reply_to_user_id>
+  <in_reply_to_screen_name></in_reply_to_screen_name>
+  <retweet_count>1</retweet_count>
+  <retweeted>false</retweeted>
+  <user>
+    <id>15441074</id>
+    <name>Social Media Today</name>
+    <screen_name>socialmedia2day</screen_name>
+    <location>New York</location>
+    <description>#Publishing and #distribution of great posts by the world's best thinkers on #SocialMedia best practices, tools and #socialmarketing</description>
+    <profile_image_url>http://a3.twimg.com/profile_images/82349548/SMT_profile_normal.png</profile_image_url>
+    <profile_image_url_https>https://si0.twimg.com/profile_images/82349548/SMT_profile_normal.png</profile_image_url_https>
+    <url>http://www.socialmediatoday.com</url>
+    <protected>false</protected>
+    <followers_count>80517</followers_count>
+    <profile_background_color>0099B9</profile_background_color>
+    <profile_text_color>3C3940</profile_text_color>
+    <profile_link_color>0099B9</profile_link_color>
+    <profile_sidebar_fill_color>95E8EC</profile_sidebar_fill_color>
+    <profile_sidebar_border_color>5ED4DC</profile_sidebar_border_color>
+    <friends_count>2621</friends_count>
+    <created_at>Tue Jul 15 14:53:02 +0000 2008</created_at>
+    <favourites_count>3</favourites_count>
+    <utc_offset>-18000</utc_offset>
+    <time_zone>Eastern Time (US &amp; Canada)</time_zone>
+    <profile_background_image_url>http://a1.twimg.com/images/themes/theme4/bg.gif</profile_background_image_url>
+    <profile_background_image_url_https>https://si0.twimg.com/images/themes/theme4/bg.gif</profile_background_image_url_https>
+    <profile_background_tile>false</profile_background_tile>
+    <profile_use_background_image>true</profile_use_background_image>
+    <notifications>false</notifications>
+    <geo_enabled>false</geo_enabled>
+    <verified>false</verified>
+    <following>true</following>
+    <statuses_count>14973</statuses_count>
+    <lang>en</lang>
+    <contributors_enabled>false</contributors_enabled>
+    <follow_request_sent>false</follow_request_sent>
+    <listed_count>10305</listed_count>
+    <show_all_inline_media>false</show_all_inline_media>
+    <default_profile>false</default_profile>
+    <default_profile_image>false</default_profile_image>
+    <is_translator>false</is_translator>
+  </user>
+  <geo/>
+  <coordinates/>
+  <place/>
+  <possibly_sensitive>false</possibly_sensitive>
+  <contributors/>
+</status>
+<status>
+  <created_at>Mon Dec 05 17:27:42 +0000 2011</created_at>
+  <id>143743360732106752</id>
+  <text>Klout: 2.5 Million Profiles Deleted? Or 5,000? Or What? by @rohnjaymiller http://t.co/IgY5Hykt</text>
+  <source>&lt;a href=&quot;http://www.hootsuite.com&quot; rel=&quot;nofollow&quot;&gt;HootSuite&lt;/a&gt;</source>
+  <truncated>false</truncated>
+  <favorited>false</favorited>
+  <in_reply_to_status_id></in_reply_to_status_id>
+  <in_reply_to_user_id></in_reply_to_user_id>
+  <in_reply_to_screen_name></in_reply_to_screen_name>
+  <retweet_count>3</retweet_count>
+  <retweeted>false</retweeted>
+  <user>
+    <id>15441074</id>
+    <name>Social Media Today</name>
+    <screen_name>socialmedia2day</screen_name>
+    <location>New York</location>
+    <description>#Publishing and #distribution of great posts by the world's best thinkers on #SocialMedia best practices, tools and #socialmarketing</description>
+    <profile_image_url>http://a3.twimg.com/profile_images/82349548/SMT_profile_normal.png</profile_image_url>
+    <profile_image_url_https>https://si0.twimg.com/profile_images/82349548/SMT_profile_normal.png</profile_image_url_https>
+    <url>http://www.socialmediatoday.com</url>
+    <protected>false</protected>
+    <followers_count>80516</followers_count>
+    <profile_background_color>0099B9</profile_background_color>
+    <profile_text_color>3C3940</profile_text_color>
+    <profile_link_color>0099B9</profile_link_color>
+    <profile_sidebar_fill_color>95E8EC</profile_sidebar_fill_color>
+    <profile_sidebar_border_color>5ED4DC</profile_sidebar_border_color>
+    <friends_count>2621</friends_count>
+    <created_at>Tue Jul 15 14:53:02 +0000 2008</created_at>
+    <favourites_count>3</favourites_count>
+    <utc_offset>-18000</utc_offset>
+    <time_zone>Eastern Time (US &amp; Canada)</time_zone>
+    <profile_background_image_url>http://a1.twimg.com/images/themes/theme4/bg.gif</profile_background_image_url>
+    <profile_background_image_url_https>https://si0.twimg.com/images/themes/theme4/bg.gif</profile_background_image_url_https>
+    <profile_background_tile>false</profile_background_tile>
+    <profile_use_background_image>true</profile_use_background_image>
+    <notifications>false</notifications>
+    <geo_enabled>false</geo_enabled>
+    <verified>false</verified>
+    <following>true</following>
+    <statuses_count>14972</statuses_count>
+    <lang>en</lang>
+    <contributors_enabled>false</contributors_enabled>
+    <follow_request_sent>false</follow_request_sent>
+    <listed_count>10305</listed_count>
+    <show_all_inline_media>false</show_all_inline_media>
+    <default_profile>false</default_profile>
+    <default_profile_image>false</default_profile_image>
+    <is_translator>false</is_translator>
+  </user>
+  <geo/>
+  <coordinates/>
+  <place/>
+  <possibly_sensitive>false</possibly_sensitive>
+  <contributors/>
+</status>
+<status>
+  <created_at>Mon Dec 05 17:26:59 +0000 2011</created_at>
+  <id>143743182386106368</id>
+  <text>What's your #LFCpred for tonight's game at Craven Cottage? Tweet your HT &amp; FT score(rs) now &amp; lets see who gets it right! (MO)</text>
+  <source>web</source>
+  <truncated>false</truncated>
+  <favorited>false</favorited>
+  <in_reply_to_status_id></in_reply_to_status_id>
+  <in_reply_to_user_id></in_reply_to_user_id>
+  <in_reply_to_screen_name></in_reply_to_screen_name>
+  <retweet_count>11</retweet_count>
+  <retweeted>false</retweeted>
+  <user>
+    <id>19583545</id>
+    <name>Liverpool FC </name>
+    <screen_name>LFC</screen_name>
+    <location>Anfield, Liverpool</location>
+    <description>Official Twitter account of Liverpool Football Club. Follow us also on www.facebook/LiverpoolFC</description>
+    <profile_image_url>http://a3.twimg.com/profile_images/1551576500/crest3_normal.png</profile_image_url>
+    <profile_image_url_https>https://si0.twimg.com/profile_images/1551576500/crest3_normal.png</profile_image_url_https>
+    <url>http://www.liverpoolfc.tv/</url>
+    <protected>false</protected>
+    <followers_count>572718</followers_count>
+    <profile_background_color>cc0000</profile_background_color>
+    <profile_text_color>cc0000</profile_text_color>
+    <profile_link_color>050500</profile_link_color>
+    <profile_sidebar_fill_color>fafafa</profile_sidebar_fill_color>
+    <profile_sidebar_border_color>000000</profile_sidebar_border_color>
+    <friends_count>228734</friends_count>
+    <created_at>Tue Jan 27 09:05:21 +0000 2009</created_at>
+    <favourites_count>1906</favourites_count>
+    <utc_offset></utc_offset>
+    <time_zone></time_zone>
+    <profile_background_image_url>http://a3.twimg.com/profile_background_images/373670589/the_kop2.jpg</profile_background_image_url>
+    <profile_background_image_url_https>https://si0.twimg.com/profile_background_images/373670589/the_kop2.jpg</profile_background_image_url_https>
+    <profile_background_tile>false</profile_background_tile>
+    <profile_use_background_image>true</profile_use_background_image>
+    <notifications>false</notifications>
+    <geo_enabled>false</geo_enabled>
+    <verified>true</verified>
+    <following>true</following>
+    <statuses_count>13893</statuses_count>
+    <lang>en</lang>
+    <contributors_enabled>true</contributors_enabled>
+    <follow_request_sent>false</follow_request_sent>
+    <listed_count>7972</listed_count>
+    <show_all_inline_media>false</show_all_inline_media>
+    <default_profile>false</default_profile>
+    <default_profile_image>false</default_profile_image>
+    <is_translator>false</is_translator>
+  </user>
+  <geo/>
+  <coordinates/>
+  <place/>
+  <contributors/>
+</status>
+<status>
+  <created_at>Mon Dec 05 17:10:29 +0000 2011</created_at>
+  <id>143739026371911680</id>
+  <text>New York's Newest Tenant: Facebook - http://t.co/eqTbnHMG http://t.co/HvDcVz5x #socialmedia</text>
+  <source>&lt;a href=&quot;http://twitterfeed.com&quot; rel=&quot;nofollow&quot;&gt;twitterfeed&lt;/a&gt;</source>
+  <truncated>false</truncated>
+  <favorited>false</favorited>
+  <in_reply_to_status_id></in_reply_to_status_id>
+  <in_reply_to_user_id></in_reply_to_user_id>
+  <in_reply_to_screen_name></in_reply_to_screen_name>
+  <retweet_count>0</retweet_count>
+  <retweeted>false</retweeted>
+  <user>
+    <id>147727812</id>
+    <name>Steve Momorella</name>
+    <screen_name>socialnewsrooms</screen_name>
+    <location>Charlottesville, VA</location>
+    <description>Steve Momorella is one of the founders of TEKGROUP International, an award-winning social media Online Newsroom provider.</description>
+    <profile_image_url>http://a3.twimg.com/profile_images/927869741/social-media_normal.jpg</profile_image_url>
+    <profile_image_url_https>https://si0.twimg.com/profile_images/927869741/social-media_normal.jpg</profile_image_url_https>
+    <url>http://www.tekgroup.com</url>
+    <protected>false</protected>
+    <followers_count>4546</followers_count>
+    <profile_background_color>C0DEED</profile_background_color>
+    <profile_text_color>333333</profile_text_color>
+    <profile_link_color>0084B4</profile_link_color>
+    <profile_sidebar_fill_color>DDEEF6</profile_sidebar_fill_color>
+    <profile_sidebar_border_color>C0DEED</profile_sidebar_border_color>
+    <friends_count>4301</friends_count>
+    <created_at>Mon May 24 22:19:53 +0000 2010</created_at>
+    <favourites_count>0</favourites_count>
+    <utc_offset>-21600</utc_offset>
+    <time_zone>Central Time (US &amp; Canada)</time_zone>
+    <profile_background_image_url>http://a0.twimg.com/images/themes/theme1/bg.png</profile_background_image_url>
+    <profile_background_image_url_https>https://si0.twimg.com/images/themes/theme1/bg.png</profile_background_image_url_https>
+    <profile_background_tile>false</profile_background_tile>
+    <profile_use_background_image>true</profile_use_background_image>
+    <notifications>false</notifications>
+    <geo_enabled>false</geo_enabled>
+    <verified>false</verified>
+    <following>true</following>
+    <statuses_count>42088</statuses_count>
+    <lang>en</lang>
+    <contributors_enabled>false</contributors_enabled>
+    <follow_request_sent>false</follow_request_sent>
+    <listed_count>260</listed_count>
+    <show_all_inline_media>false</show_all_inline_media>
+    <default_profile>true</default_profile>
+    <default_profile_image>false</default_profile_image>
+    <is_translator>false</is_translator>
+  </user>
+  <geo/>
+  <coordinates/>
+  <place/>
+  <possibly_sensitive>false</possibly_sensitive>
+  <contributors/>
+</status>
+<status>
+  <created_at>Mon Dec 05 17:10:28 +0000 2011</created_at>
+  <id>143739024727744513</id>
+  <text>Survey Gives Mixed Reviews for Agencies on Twitter Use - ExecutiveGov http://t.co/8lyqPy2p #socialmedia</text>
+  <source>&lt;a href=&quot;http://twitterfeed.com&quot; rel=&quot;nofollow&quot;&gt;twitterfeed&lt;/a&gt;</source>
+  <truncated>false</truncated>
+  <favorited>false</favorited>
+  <in_reply_to_status_id></in_reply_to_status_id>
+  <in_reply_to_user_id></in_reply_to_user_id>
+  <in_reply_to_screen_name></in_reply_to_screen_name>
+  <retweet_count>0</retweet_count>
+  <retweeted>false</retweeted>
+  <user>
+    <id>147727812</id>
+    <name>Steve Momorella</name>
+    <screen_name>socialnewsrooms</screen_name>
+    <location>Charlottesville, VA</location>
+    <description>Steve Momorella is one of the founders of TEKGROUP International, an award-winning social media Online Newsroom provider.</description>
+    <profile_image_url>http://a3.twimg.com/profile_images/927869741/social-media_normal.jpg</profile_image_url>
+    <profile_image_url_https>https://si0.twimg.com/profile_images/927869741/social-media_normal.jpg</profile_image_url_https>
+    <url>http://www.tekgroup.com</url>
+    <protected>false</protected>
+    <followers_count>4546</followers_count>
+    <profile_background_color>C0DEED</profile_background_color>
+    <profile_text_color>333333</profile_text_color>
+    <profile_link_color>0084B4</profile_link_color>
+    <profile_sidebar_fill_color>DDEEF6</profile_sidebar_fill_color>
+    <profile_sidebar_border_color>C0DEED</profile_sidebar_border_color>
+    <friends_count>4301</friends_count>
+    <created_at>Mon May 24 22:19:53 +0000 2010</created_at>
+    <favourites_count>0</favourites_count>
+    <utc_offset>-21600</utc_offset>
+    <time_zone>Central Time (US &amp; Canada)</time_zone>
+    <profile_background_image_url>http://a0.twimg.com/images/themes/theme1/bg.png</profile_background_image_url>
+    <profile_background_image_url_https>https://si0.twimg.com/images/themes/theme1/bg.png</profile_background_image_url_https>
+    <profile_background_tile>false</profile_background_tile>
+    <profile_use_background_image>true</profile_use_background_image>
+    <notifications>false</notifications>
+    <geo_enabled>false</geo_enabled>
+    <verified>false</verified>
+    <following>true</following>
+    <statuses_count>42088</statuses_count>
+    <lang>en</lang>
+    <contributors_enabled>false</contributors_enabled>
+    <follow_request_sent>false</follow_request_sent>
+    <listed_count>260</listed_count>
+    <show_all_inline_media>false</show_all_inline_media>
+    <default_profile>true</default_profile>
+    <default_profile_image>false</default_profile_image>
+    <is_translator>false</is_translator>
+  </user>
+  <geo/>
+  <coordinates/>
+  <place/>
+  <possibly_sensitive>false</possibly_sensitive>
+  <contributors/>
+</status>
+<status>
+  <created_at>Mon Dec 05 17:06:47 +0000 2011</created_at>
+  <id>143738098948378624</id>
+  <text>Hi Guys, offline for the night but check out our forums @ http://t.co/dNdlSYZZ.. :-)</text>
+  <source>web</source>
+  <truncated>false</truncated>
+  <favorited>false</favorited>
+  <in_reply_to_status_id></in_reply_to_status_id>
+  <in_reply_to_user_id></in_reply_to_user_id>
+  <in_reply_to_screen_name></in_reply_to_screen_name>
+  <retweet_count>0</retweet_count>
+  <retweeted>false</retweeted>
+  <user>
+    <id>34605338</id>
+    <name>Meteor Mobile </name>
+    <screen_name>Meteor_Mobile</screen_name>
+    <location>Dublin, Ireland</location>
+    <description>We're here to keep you up to date on all that is Meteor and we're online from 9am-5pm Monday to Friday.</description>
+    <profile_image_url>http://a3.twimg.com/profile_images/334093183/meteor_spark_normal.png</profile_image_url>
+    <profile_image_url_https>https://si0.twimg.com/profile_images/334093183/meteor_spark_normal.png</profile_image_url_https>
+    <url>http://www.meteor.ie</url>
+    <protected>false</protected>
+    <followers_count>6444</followers_count>
+    <profile_background_color>f36012</profile_background_color>
+    <profile_text_color>514d4d</profile_text_color>
+    <profile_link_color>f36012</profile_link_color>
+    <profile_sidebar_fill_color>d1ccc7</profile_sidebar_fill_color>
+    <profile_sidebar_border_color>fcf7f9</profile_sidebar_border_color>
+    <friends_count>1398</friends_count>
+    <created_at>Thu Apr 23 13:03:23 +0000 2009</created_at>
+    <favourites_count>65</favourites_count>
+    <utc_offset>0</utc_offset>
+    <time_zone>Dublin</time_zone>
+    <profile_background_image_url>http://a2.twimg.com/profile_background_images/368902388/TwitterskinC.JPG</profile_background_image_url>
+    <profile_background_image_url_https>https://si0.twimg.com/profile_background_images/368902388/TwitterskinC.JPG</profile_background_image_url_https>
+    <profile_background_tile>false</profile_background_tile>
+    <profile_use_background_image>true</profile_use_background_image>
+    <notifications>false</notifications>
+    <geo_enabled>false</geo_enabled>
+    <verified>false</verified>
+    <following>true</following>
+    <statuses_count>12996</statuses_count>
+    <lang>en</lang>
+    <contributors_enabled>false</contributors_enabled>
+    <follow_request_sent>false</follow_request_sent>
+    <listed_count>86</listed_count>
+    <show_all_inline_media>false</show_all_inline_media>
+    <default_profile>false</default_profile>
+    <default_profile_image>false</default_profile_image>
+    <is_translator>false</is_translator>
+  </user>
+  <geo/>
+  <coordinates/>
+  <place/>
+  <possibly_sensitive>false</possibly_sensitive>
+  <contributors/>
+</status>
+<status>
+  <created_at>Mon Dec 05 17:05:24 +0000 2011</created_at>
+  <id>143737748652699648</id>
+  <text>RT @OptaPaolo: 6 - Inter have lost six games after their first 12 Serie A fixtures for the first time in their history. Darkness</text>
+  <source>web</source>
+  <truncated>false</truncated>
+  <favorited>false</favorited>
+  <in_reply_to_status_id></in_reply_to_status_id>
+  <in_reply_to_user_id></in_reply_to_user_id>
+  <in_reply_to_screen_name></in_reply_to_screen_name>
+  <retweet_count>66</retweet_count>
+  <retweeted>false</retweeted>
+  <retweeted_status>
+    <created_at>Mon Dec 05 17:01:01 +0000 2011</created_at>
+    <id>143736645282312192</id>
+    <text>6 - Inter have lost six games after their first 12 Serie A fixtures for the first time in their history. Darkness</text>
+    <source>web</source>
+    <truncated>false</truncated>
+    <favorited>false</favorited>
+    <in_reply_to_status_id></in_reply_to_status_id>
+    <in_reply_to_user_id></in_reply_to_user_id>
+    <in_reply_to_screen_name></in_reply_to_screen_name>
+    <retweet_count>66</retweet_count>
+    <retweeted>false</retweeted>
+    <user>
+      <id>57601680</id>
+      <name>Opta Sports</name>
+      <screen_name>OptaPaolo</screen_name>
+      <location>Opta Italia</location>
+      <description>1 - la pagina ufficiale di Opta sul calcio italiano. Illuminante.
+Ora anche su Facebook http://fb.me/optapaolo</description>
+      <profile_image_url>http://a3.twimg.com/profile_images/552831360/Twitter_Icon_Final_normal.png</profile_image_url>
+      <profile_image_url_https>https://si0.twimg.com/profile_images/552831360/Twitter_Icon_Final_normal.png</profile_image_url_https>
+      <url>http://www.optasports.com</url>
+      <protected>false</protected>
+      <followers_count>10457</followers_count>
+      <profile_background_color>c7eafb</profile_background_color>
+      <profile_text_color>000000</profile_text_color>
+      <profile_link_color>00aeff</profile_link_color>
+      <profile_sidebar_fill_color>ebebeb</profile_sidebar_fill_color>
+      <profile_sidebar_border_color>c7eafb</profile_sidebar_border_color>
+      <friends_count>618</friends_count>
+      <created_at>Fri Jul 17 09:40:48 +0000 2009</created_at>
+      <favourites_count>0</favourites_count>
+      <utc_offset>0</utc_offset>
+      <time_zone>London</time_zone>
+      <profile_background_image_url>http://a1.twimg.com/profile_background_images/309280246/Opta-T-BG-2.jpg</profile_background_image_url>
+      <profile_background_image_url_https>https://si0.twimg.com/profile_background_images/309280246/Opta-T-BG-2.jpg</profile_background_image_url_https>
+      <profile_background_tile>false</profile_background_tile>
+      <profile_use_background_image>true</profile_use_background_image>
+      <notifications>false</notifications>
+      <geo_enabled>true</geo_enabled>
+      <verified>false</verified>
+      <following>false</following>
+      <statuses_count>6523</statuses_count>
+      <lang>en</lang>
+      <contributors_enabled>false</contributors_enabled>
+      <follow_request_sent>false</follow_request_sent>
+      <listed_count>488</listed_count>
+      <show_all_inline_media>false</show_all_inline_media>
+      <default_profile>false</default_profile>
+      <default_profile_image>false</default_profile_image>
+      <is_translator>false</is_translator>
+    </user>
+    <geo/>
+    <coordinates/>
+    <place/>
+    <contributors/>
+  </retweeted_status>
+  <user>
+    <id>44606764</id>
+    <name>Opta Sports</name>
+    <screen_name>OptaJoe</screen_name>
+    <location>London</location>
+    <description>1 - The official Twitter page for Opta Sports' football coverage. Illuminating.</description>
+    <profile_image_url>http://a3.twimg.com/profile_images/552822158/Twitter_Icon_Final_normal.png</profile_image_url>
+    <profile_image_url_https>https://si0.twimg.com/profile_images/552822158/Twitter_Icon_Final_normal.png</profile_image_url_https>
+    <url>http://www.optasports.com</url>
+    <protected>false</protected>
+    <followers_count>152811</followers_count>
+    <profile_background_color>c7eafb</profile_background_color>
+    <profile_text_color>000000</profile_text_color>
+    <profile_link_color>00aeff</profile_link_color>
+    <profile_sidebar_fill_color>ebebeb</profile_sidebar_fill_color>
+    <profile_sidebar_border_color>c7eafb</profile_sidebar_border_color>
+    <friends_count>10</friends_count>
+    <created_at>Thu Jun 04 12:43:23 +0000 2009</created_at>
+    <favourites_count>21</favourites_count>
+    <utc_offset>0</utc_offset>
+    <time_zone>London</time_zone>
+    <profile_background_image_url>http://a1.twimg.com/profile_background_images/309279574/Opta-T-BG-2.jpg</profile_background_image_url>
+    <profile_background_image_url_https>https://si0.twimg.com/profile_background_images/309279574/Opta-T-BG-2.jpg</profile_background_image_url_https>
+    <profile_background_tile>false</profile_background_tile>
+    <profile_use_background_image>true</profile_use_background_image>
+    <notifications>false</notifications>
+    <geo_enabled>false</geo_enabled>
+    <verified>false</verified>
+    <following>true</following>
+    <statuses_count>11705</statuses_count>
+    <lang>en</lang>
+    <contributors_enabled>false</contributors_enabled>
+    <follow_request_sent>false</follow_request_sent>
+    <listed_count>3490</listed_count>
+    <show_all_inline_media>false</show_all_inline_media>
+    <default_profile>false</default_profile>
+    <default_profile_image>false</default_profile_image>
+    <is_translator>false</is_translator>
+  </user>
+  <geo/>
+  <coordinates/>
+  <place/>
+  <contributors/>
+</status>
+<status>
+  <created_at>Mon Dec 05 17:00:33 +0000 2011</created_at>
+  <id>143736528676454400</id>
+  <text>Geek Guide: Humber social media prof Jonathan Laba's holiday gift picks - Montreal Gazette http://t.co/2NDfUZGo #socialmedia</text>
+  <source>&lt;a href=&quot;http://twitterfeed.com&quot; rel=&quot;nofollow&quot;&gt;twitterfeed&lt;/a&gt;</source>
+  <truncated>false</truncated>
+  <favorited>false</favorited>
+  <in_reply_to_status_id></in_reply_to_status_id>
+  <in_reply_to_user_id></in_reply_to_user_id>
+  <in_reply_to_screen_name></in_reply_to_screen_name>
+  <retweet_count>0</retweet_count>
+  <retweeted>false</retweeted>
+  <user>
+    <id>147727812</id>
+    <name>Steve Momorella</name>
+    <screen_name>socialnewsrooms</screen_name>
+    <location>Charlottesville, VA</location>
+    <description>Steve Momorella is one of the founders of TEKGROUP International, an award-winning social media Online Newsroom provider.</description>
+    <profile_image_url>http://a3.twimg.com/profile_images/927869741/social-media_normal.jpg</profile_image_url>
+    <profile_image_url_https>https://si0.twimg.com/profile_images/927869741/social-media_normal.jpg</profile_image_url_https>
+    <url>http://www.tekgroup.com</url>
+    <protected>false</protected>
+    <followers_count>4546</followers_count>
+    <profile_background_color>C0DEED</profile_background_color>
+    <profile_text_color>333333</profile_text_color>
+    <profile_link_color>0084B4</profile_link_color>
+    <profile_sidebar_fill_color>DDEEF6</profile_sidebar_fill_color>
+    <profile_sidebar_border_color>C0DEED</profile_sidebar_border_color>
+    <friends_count>4301</friends_count>
+    <created_at>Mon May 24 22:19:53 +0000 2010</created_at>
+    <favourites_count>0</favourites_count>
+    <utc_offset>-21600</utc_offset>
+    <time_zone>Central Time (US &amp; Canada)</time_zone>
+    <profile_background_image_url>http://a0.twimg.com/images/themes/theme1/bg.png</profile_background_image_url>
+    <profile_background_image_url_https>https://si0.twimg.com/images/themes/theme1/bg.png</profile_background_image_url_https>
+    <profile_background_tile>false</profile_background_tile>
+    <profile_use_background_image>true</profile_use_background_image>
+    <notifications>false</notifications>
+    <geo_enabled>false</geo_enabled>
+    <verified>false</verified>
+    <following>true</following>
+    <statuses_count>42088</statuses_count>
+    <lang>en</lang>
+    <contributors_enabled>false</contributors_enabled>
+    <follow_request_sent>false</follow_request_sent>
+    <listed_count>260</listed_count>
+    <show_all_inline_media>false</show_all_inline_media>
+    <default_profile>true</default_profile>
+    <default_profile_image>false</default_profile_image>
+    <is_translator>false</is_translator>
+  </user>
+  <geo/>
+  <coordinates/>
+  <place/>
+  <possibly_sensitive>false</possibly_sensitive>
+  <contributors/>
+</status>
+<status>
+  <created_at>Mon Dec 05 17:00:33 +0000 2011</created_at>
+  <id>143736527518834690</id>
+  <text>Social Media Strategist behind National Bank Transfer Day Kristen Christian to ... - CUinsigh... http://t.co/1I5H1FS7 #socialmedia</text>
+  <source>&lt;a href=&quot;http://twitterfeed.com&quot; rel=&quot;nofollow&quot;&gt;twitterfeed&lt;/a&gt;</source>
+  <truncated>false</truncated>
+  <favorited>false</favorited>
+  <in_reply_to_status_id></in_reply_to_status_id>
+  <in_reply_to_user_id></in_reply_to_user_id>
+  <in_reply_to_screen_name></in_reply_to_screen_name>
+  <retweet_count>0</retweet_count>
+  <retweeted>false</retweeted>
+  <user>
+    <id>147727812</id>
+    <name>Steve Momorella</name>
+    <screen_name>socialnewsrooms</screen_name>
+    <location>Charlottesville, VA</location>
+    <description>Steve Momorella is one of the founders of TEKGROUP International, an award-winning social media Online Newsroom provider.</description>
+    <profile_image_url>http://a3.twimg.com/profile_images/927869741/social-media_normal.jpg</profile_image_url>
+    <profile_image_url_https>https://si0.twimg.com/profile_images/927869741/social-media_normal.jpg</profile_image_url_https>
+    <url>http://www.tekgroup.com</url>
+    <protected>false</protected>
+    <followers_count>4546</followers_count>
+    <profile_background_color>C0DEED</profile_background_color>
+    <profile_text_color>333333</profile_text_color>
+    <profile_link_color>0084B4</profile_link_color>
+    <profile_sidebar_fill_color>DDEEF6</profile_sidebar_fill_color>
+    <profile_sidebar_border_color>C0DEED</profile_sidebar_border_color>
+    <friends_count>4301</friends_count>
+    <created_at>Mon May 24 22:19:53 +0000 2010</created_at>
+    <favourites_count>0</favourites_count>
+    <utc_offset>-21600</utc_offset>
+    <time_zone>Central Time (US &amp; Canada)</time_zone>
+    <profile_background_image_url>http://a0.twimg.com/images/themes/theme1/bg.png</profile_background_image_url>
+    <profile_background_image_url_https>https://si0.twimg.com/images/themes/theme1/bg.png</profile_background_image_url_https>
+    <profile_background_tile>false</profile_background_tile>
+    <profile_use_background_image>true</profile_use_background_image>
+    <notifications>false</notifications>
+    <geo_enabled>false</geo_enabled>
+    <verified>false</verified>
+    <following>true</following>
+    <statuses_count>42086</statuses_count>
+    <lang>en</lang>
+    <contributors_enabled>false</contributors_enabled>
+    <follow_request_sent>false</follow_request_sent>
+    <listed_count>260</listed_count>
+    <show_all_inline_media>false</show_all_inline_media>
+    <default_profile>true</default_profile>
+    <default_profile_image>false</default_profile_image>
+    <is_translator>false</is_translator>
+  </user>
+  <geo/>
+  <coordinates/>
+  <place/>
+  <possibly_sensitive>false</possibly_sensitive>
+  <contributors/>
+</status>
+<status>
+  <created_at>Mon Dec 05 17:00:32 +0000 2011</created_at>
+  <id>143736526155694080</id>
+  <text>Use Social Media to Build Customer Relationships - Purecontent (blog) http://t.co/IY1iUXkn #socialmedia</text>
+  <source>&lt;a href=&quot;http://twitterfeed.com&quot; rel=&quot;nofollow&quot;&gt;twitterfeed&lt;/a&gt;</source>
+  <truncated>false</truncated>
+  <favorited>false</favorited>
+  <in_reply_to_status_id></in_reply_to_status_id>
+  <in_reply_to_user_id></in_reply_to_user_id>
+  <in_reply_to_screen_name></in_reply_to_screen_name>
+  <retweet_count>0</retweet_count>
+  <retweeted>false</retweeted>
+  <user>
+    <id>147727812</id>
+    <name>Steve Momorella</name>
+    <screen_name>socialnewsrooms</screen_name>
+    <location>Charlottesville, VA</location>
+    <description>Steve Momorella is one of the founders of TEKGROUP International, an award-winning social media Online Newsroom provider.</description>
+    <profile_image_url>http://a3.twimg.com/profile_images/927869741/social-media_normal.jpg</profile_image_url>
+    <profile_image_url_https>https://si0.twimg.com/profile_images/927869741/social-media_normal.jpg</profile_image_url_https>
+    <url>http://www.tekgroup.com</url>
+    <protected>false</protected>
+    <followers_count>4546</followers_count>
+    <profile_background_color>C0DEED</profile_background_color>
+    <profile_text_color>333333</profile_text_color>
+    <profile_link_color>0084B4</profile_link_color>
+    <profile_sidebar_fill_color>DDEEF6</profile_sidebar_fill_color>
+    <profile_sidebar_border_color>C0DEED</profile_sidebar_border_color>
+    <friends_count>4301</friends_count>
+    <created_at>Mon May 24 22:19:53 +0000 2010</created_at>
+    <favourites_count>0</favourites_count>
+    <utc_offset>-21600</utc_offset>
+    <time_zone>Central Time (US &amp; Canada)</time_zone>
+    <profile_background_image_url>http://a0.twimg.com/images/themes/theme1/bg.png</profile_background_image_url>
+    <profile_background_image_url_https>https://si0.twimg.com/images/themes/theme1/bg.png</profile_background_image_url_https>
+    <profile_background_tile>false</profile_background_tile>
+    <profile_use_background_image>true</profile_use_background_image>
+    <notifications>false</notifications>
+    <geo_enabled>false</geo_enabled>
+    <verified>false</verified>
+    <following>true</following>
+    <statuses_count>42086</statuses_count>
+    <lang>en</lang>
+    <contributors_enabled>false</contributors_enabled>
+    <follow_request_sent>false</follow_request_sent>
+    <listed_count>260</listed_count>
+    <show_all_inline_media>false</show_all_inline_media>
+    <default_profile>true</default_profile>
+    <default_profile_image>false</default_profile_image>
+    <is_translator>false</is_translator>
+  </user>
+  <geo/>
+  <coordinates/>
+  <place/>
+  <possibly_sensitive>false</possibly_sensitive>
+  <contributors/>
+</status>
+<status>
+  <created_at>Mon Dec 05 16:56:01 +0000 2011</created_at>
+  <id>143735388127756288</id>
+  <text>Who Actually Influences You? by @cfigallo / http://t.co/G4OQ9DaM</text>
+  <source>&lt;a href=&quot;http://www.hootsuite.com&quot; rel=&quot;nofollow&quot;&gt;HootSuite&lt;/a&gt;</source>
+  <truncated>false</truncated>
+  <favorited>false</favorited>
+  <in_reply_to_status_id></in_reply_to_status_id>
+  <in_reply_to_user_id></in_reply_to_user_id>
+  <in_reply_to_screen_name></in_reply_to_screen_name>
+  <retweet_count>3</retweet_count>
+  <retweeted>false</retweeted>
+  <user>
+    <id>15441074</id>
+    <name>Social Media Today</name>
+    <screen_name>socialmedia2day</screen_name>
+    <location>New York</location>
+    <description>#Publishing and #distribution of great posts by the world's best thinkers on #SocialMedia best practices, tools and #socialmarketing</description>
+    <profile_image_url>http://a3.twimg.com/profile_images/82349548/SMT_profile_normal.png</profile_image_url>
+    <profile_image_url_https>https://si0.twimg.com/profile_images/82349548/SMT_profile_normal.png</profile_image_url_https>
+    <url>http://www.socialmediatoday.com</url>
+    <protected>false</protected>
+    <followers_count>80515</followers_count>
+    <profile_background_color>0099B9</profile_background_color>
+    <profile_text_color>3C3940</profile_text_color>
+    <profile_link_color>0099B9</profile_link_color>
+    <profile_sidebar_fill_color>95E8EC</profile_sidebar_fill_color>
+    <profile_sidebar_border_color>5ED4DC</profile_sidebar_border_color>
+    <friends_count>2621</friends_count>
+    <created_at>Tue Jul 15 14:53:02 +0000 2008</created_at>
+    <favourites_count>3</favourites_count>
+    <utc_offset>-18000</utc_offset>
+    <time_zone>Eastern Time (US &amp; Canada)</time_zone>
+    <profile_background_image_url>http://a1.twimg.com/images/themes/theme4/bg.gif</profile_background_image_url>
+    <profile_background_image_url_https>https://si0.twimg.com/images/themes/theme4/bg.gif</profile_background_image_url_https>
+    <profile_background_tile>false</profile_background_tile>
+    <profile_use_background_image>true</profile_use_background_image>
+    <notifications>false</notifications>
+    <geo_enabled>false</geo_enabled>
+    <verified>false</verified>
+    <following>true</following>
+    <statuses_count>14970</statuses_count>
+    <lang>en</lang>
+    <contributors_enabled>false</contributors_enabled>
+    <follow_request_sent>false</follow_request_sent>
+    <listed_count>10305</listed_count>
+    <show_all_inline_media>false</show_all_inline_media>
+    <default_profile>false</default_profile>
+    <default_profile_image>false</default_profile_image>
+    <is_translator>false</is_translator>
+  </user>
+  <geo/>
+  <coordinates/>
+  <place/>
+  <possibly_sensitive>false</possibly_sensitive>
+  <contributors/>
+</status>
+<status>
+  <created_at>Mon Dec 05 16:50:56 +0000 2011</created_at>
+  <id>143734108676300802</id>
+  <text>Apologies for the delay on sending the notifications. We hope to be able to send them out within the next 1-2 days.  #desweb2012</text>
+  <source>web</source>
+  <truncated>false</truncated>
+  <favorited>false</favorited>
+  <in_reply_to_status_id></in_reply_to_status_id>
+  <in_reply_to_user_id></in_reply_to_user_id>
+  <in_reply_to_screen_name></in_reply_to_screen_name>
+  <retweet_count>0</retweet_count>
+  <retweeted>false</retweeted>
+  <user>
+    <id>360184862</id>
+    <name>desweb2012</name>
+    <screen_name>desweb2012</screen_name>
+    <location>Washington, DC</location>
+    <description>3rd International Workshop on Data Engineering Meets the Semantic Web (DESWEB), co-located with the the IEEE International Conference on Data Engineering (ICDE)</description>
+    <profile_image_url>http://a3.twimg.com/profile_images/1509719419/desweb2012logo_normal.jpg</profile_image_url>
+    <profile_image_url_https>https://si0.twimg.com/profile_images/1509719419/desweb2012logo_normal.jpg</profile_image_url_https>
+    <url>https://sites.google.com/site/desweb2012/</url>
+    <protected>false</protected>
+    <followers_count>3</followers_count>
+    <profile_background_color>C0DEED</profile_background_color>
+    <profile_text_color>333333</profile_text_color>
+    <profile_link_color>0084B4</profile_link_color>
+    <profile_sidebar_fill_color>DDEEF6</profile_sidebar_fill_color>
+    <profile_sidebar_border_color>C0DEED</profile_sidebar_border_color>
+    <friends_count>3</friends_count>
+    <created_at>Mon Aug 22 20:36:15 +0000 2011</created_at>
+    <favourites_count>0</favourites_count>
+    <utc_offset></utc_offset>
+    <time_zone></time_zone>
+    <profile_background_image_url>http://a0.twimg.com/images/themes/theme1/bg.png</profile_background_image_url>
+    <profile_background_image_url_https>https://si0.twimg.com/images/themes/theme1/bg.png</profile_background_image_url_https>
+    <profile_background_tile>false</profile_background_tile>
+    <profile_use_background_image>true</profile_use_background_image>
+    <notifications>false</notifications>
+    <geo_enabled>false</geo_enabled>
+    <verified>false</verified>
+    <following>true</following>
+    <statuses_count>9</statuses_count>
+    <lang>en</lang>
+    <contributors_enabled>false</contributors_enabled>
+    <follow_request_sent>false</follow_request_sent>
+    <listed_count>0</listed_count>
+    <show_all_inline_media>false</show_all_inline_media>
+    <default_profile>true</default_profile>
+    <default_profile_image>false</default_profile_image>
+    <is_translator>false</is_translator>
+  </user>
+  <geo/>
+  <coordinates/>
+  <place/>
+  <contributors/>
+</status>
+<status>
+  <created_at>Mon Dec 05 16:50:22 +0000 2011</created_at>
+  <id>143733964023152640</id>
+  <text>RT @nadimrmeity: @rioferdy5 Do you actually read all your Mentions??? &#187;&#187; Most of the time, when I'm not busy....</text>
+  <source>&lt;a href=&quot;http://ubersocial.com&quot; rel=&quot;nofollow&quot;&gt;UberSocial for BlackBerry&lt;/a&gt;</source>
+  <truncated>false</truncated>
+  <favorited>false</favorited>
+  <in_reply_to_status_id></in_reply_to_status_id>
+  <in_reply_to_user_id></in_reply_to_user_id>
+  <in_reply_to_screen_name></in_reply_to_screen_name>
+  <retweet_count>14</retweet_count>
+  <retweeted>false</retweeted>
+  <user>
+    <id>155927976</id>
+    <name>Rio Ferdinand</name>
+    <screen_name>rioferdy5</screen_name>
+    <location>Manchester, UK</location>
+    <description>Official Twitter account of Rio Ferdinand</description>
+    <profile_image_url>http://a3.twimg.com/profile_images/1660370053/330493266_normal.jpg</profile_image_url>
+    <profile_image_url_https>https://si0.twimg.com/profile_images/1660370053/330493266_normal.jpg</profile_image_url_https>
+    <url>http://www.rioferdinand.com</url>
+    <protected>false</protected>
+    <followers_count>1705429</followers_count>
+    <profile_background_color>271e16</profile_background_color>
+    <profile_text_color>333333</profile_text_color>
+    <profile_link_color>990000</profile_link_color>
+    <profile_sidebar_fill_color>F3F3F3</profile_sidebar_fill_color>
+    <profile_sidebar_border_color>DFDFDF</profile_sidebar_border_color>
+    <friends_count>302</friends_count>
+    <created_at>Tue Jun 15 14:47:40 +0000 2010</created_at>
+    <favourites_count>298</favourites_count>
+    <utc_offset></utc_offset>
+    <time_zone></time_zone>
+    <profile_background_image_url>http://a3.twimg.com/profile_background_images/139658659/TwitterRioFerdy5.jpg</profile_background_image_url>
+    <profile_background_image_url_https>https://si0.twimg.com/profile_background_images/139658659/TwitterRioFerdy5.jpg</profile_background_image_url_https>
+    <profile_background_tile>false</profile_background_tile>
+    <profile_use_background_image>true</profile_use_background_image>
+    <notifications>false</notifications>
+    <geo_enabled>false</geo_enabled>
+    <verified>true</verified>
+    <following>true</following>
+    <statuses_count>7956</statuses_count>
+    <lang>en</lang>
+    <contributors_enabled>false</contributors_enabled>
+    <follow_request_sent>false</follow_request_sent>
+    <listed_count>14144</listed_count>
+    <show_all_inline_media>false</show_all_inline_media>
+    <default_profile>false</default_profile>
+    <default_profile_image>false</default_profile_image>
+    <is_translator>false</is_translator>
+  </user>
+  <geo/>
+  <coordinates/>
+  <place/>
+  <contributors/>
+</status>
+<status>
+  <created_at>Mon Dec 05 16:48:00 +0000 2011</created_at>
+  <id>143733369719623680</id>
+  <text>RT @fisher1000: Love this Livebinder! - 12 Ways to eLearning http://t.co/DNYpFKcG</text>
+  <source>&lt;a href=&quot;http://www.tweetdeck.com&quot; rel=&quot;nofollow&quot;&gt;TweetDeck&lt;/a&gt;</source>
+  <truncated>false</truncated>
+  <favorited>false</favorited>
+  <in_reply_to_status_id></in_reply_to_status_id>
+  <in_reply_to_user_id></in_reply_to_user_id>
+  <in_reply_to_screen_name></in_reply_to_screen_name>
+  <retweet_count>2</retweet_count>
+  <retweeted>false</retweeted>
+  <user>
+    <id>21827584</id>
+    <name>Steven W. Anderson</name>
+    <screen_name>web20classroom</screen_name>
+    <location>Winston-Salem, NC</location>
+    <description>Educator, Speaker, Blogger, #Edchat Co-Creator, #140Conf Character, NOW Award Winner, ASCD Conference Scholar. Do You Use Social Media In Education?</description>
+    <profile_image_url>http://a1.twimg.com/profile_images/1488940482/Steven_Anderson_ISTE_Pro_Shot_Crop_normal.png</profile_image_url>
+    <profile_image_url_https>https://si0.twimg.com/profile_images/1488940482/Steven_Anderson_ISTE_Pro_Shot_Crop_normal.png</profile_image_url_https>
+    <url>http://web20classroom.blogspot.com</url>
+    <protected>false</protected>
+    <followers_count>36164</followers_count>
+    <profile_background_color>C6E2EE</profile_background_color>
+    <profile_text_color>663B12</profile_text_color>
+    <profile_link_color>1F98C7</profile_link_color>
+    <profile_sidebar_fill_color>DAECF4</profile_sidebar_fill_color>
+    <profile_sidebar_border_color>C6E2EE</profile_sidebar_border_color>
+    <friends_count>1391</friends_count>
+    <created_at>Wed Feb 25 02:46:24 +0000 2009</created_at>
+    <favourites_count>80</favourites_count>
+    <utc_offset>-18000</utc_offset>
+    <time_zone>Eastern Time (US &amp; Canada)</time_zone>
+    <profile_background_image_url>http://a1.twimg.com/profile_background_images/63655635/twilk_background.jpg</profile_background_image_url>
+    <profile_background_image_url_https>https://si0.twimg.com/profile_background_images/63655635/twilk_background.jpg</profile_background_image_url_https>
+    <profile_background_tile>true</profile_background_tile>
+    <profile_use_background_image>true</profile_use_background_image>
+    <notifications>false</notifications>
+    <geo_enabled>true</geo_enabled>
+    <verified>false</verified>
+    <following>true</following>
+    <statuses_count>52218</statuses_count>
+    <lang>en</lang>
+    <contributors_enabled>false</contributors_enabled>
+    <follow_request_sent>false</follow_request_sent>
+    <listed_count>3119</listed_count>
+    <show_all_inline_media>true</show_all_inline_media>
+    <default_profile>false</default_profile>
+    <default_profile_image>false</default_profile_image>
+    <is_translator>false</is_translator>
+  </user>
+  <geo/>
+  <coordinates/>
+  <place/>
+  <possibly_sensitive>false</possibly_sensitive>
+  <contributors/>
+</status>
+<status>
+  <created_at>Mon Dec 05 16:39:08 +0000 2011</created_at>
+  <id>143731139255877633</id>
+  <text>Emily Maitlis interview with Facebook founder branded 'one long advert' - http://t.co/IELohIuN http://t.co/odFxojG6 #socialmedia</text>
+  <source>&lt;a href=&quot;http://twitterfeed.com&quot; rel=&quot;nofollow&quot;&gt;twitterfeed&lt;/a&gt;</source>
+  <truncated>false</truncated>
+  <favorited>false</favorited>
+  <in_reply_to_status_id></in_reply_to_status_id>
+  <in_reply_to_user_id></in_reply_to_user_id>
+  <in_reply_to_screen_name></in_reply_to_screen_name>
+  <retweet_count>0</retweet_count>
+  <retweeted>false</retweeted>
+  <user>
+    <id>147727812</id>
+    <name>Steve Momorella</name>
+    <screen_name>socialnewsrooms</screen_name>
+    <location>Charlottesville, VA</location>
+    <description>Steve Momorella is one of the founders of TEKGROUP International, an award-winning social media Online Newsroom provider.</description>
+    <profile_image_url>http://a3.twimg.com/profile_images/927869741/social-media_normal.jpg</profile_image_url>
+    <profile_image_url_https>https://si0.twimg.com/profile_images/927869741/social-media_normal.jpg</profile_image_url_https>
+    <url>http://www.tekgroup.com</url>
+    <protected>false</protected>
+    <followers_count>4547</followers_count>
+    <profile_background_color>C0DEED</profile_background_color>
+    <profile_text_color>333333</profile_text_color>
+    <profile_link_color>0084B4</profile_link_color>
+    <profile_sidebar_fill_color>DDEEF6</profile_sidebar_fill_color>
+    <profile_sidebar_border_color>C0DEED</profile_sidebar_border_color>
+    <friends_count>4301</friends_count>
+    <created_at>Mon May 24 22:19:53 +0000 2010</created_at>
+    <favourites_count>0</favourites_count>
+    <utc_offset>-21600</utc_offset>
+    <time_zone>Central Time (US &amp; Canada)</time_zone>
+    <profile_background_image_url>http://a0.twimg.com/images/themes/theme1/bg.png</profile_background_image_url>
+    <profile_background_image_url_https>https://si0.twimg.com/images/themes/theme1/bg.png</profile_background_image_url_https>
+    <profile_background_tile>false</profile_background_tile>
+    <profile_use_background_image>true</profile_use_background_image>
+    <notifications>false</notifications>
+    <geo_enabled>false</geo_enabled>
+    <verified>false</verified>
+    <following>true</following>
+    <statuses_count>42083</statuses_count>
+    <lang>en</lang>
+    <contributors_enabled>false</contributors_enabled>
+    <follow_request_sent>false</follow_request_sent>
+    <listed_count>260</listed_count>
+    <show_all_inline_media>false</show_all_inline_media>
+    <default_profile>true</default_profile>
+    <default_profile_image>false</default_profile_image>
+    <is_translator>false</is_translator>
+  </user>
+  <geo/>
+  <coordinates/>
+  <place/>
+  <possibly_sensitive>false</possibly_sensitive>
+  <contributors/>
+</status>
+<status>
+  <created_at>Mon Dec 05 16:39:08 +0000 2011</created_at>
+  <id>143731137498456065</id>
+  <text>Twitter Xmas Single Tops iTunes Chart - http://t.co/y67163NE (subscription) http://t.co/grrQruYi #socialmedia</text>
+  <source>&lt;a href=&quot;http://twitterfeed.com&quot; rel=&quot;nofollow&quot;&gt;twitterfeed&lt;/a&gt;</source>
+  <truncated>false</truncated>
+  <favorited>false</favorited>
+  <in_reply_to_status_id></in_reply_to_status_id>
+  <in_reply_to_user_id></in_reply_to_user_id>
+  <in_reply_to_screen_name></in_reply_to_screen_name>
+  <retweet_count>0</retweet_count>
+  <retweeted>false</retweeted>
+  <user>
+    <id>147727812</id>
+    <name>Steve Momorella</name>
+    <screen_name>socialnewsrooms</screen_name>
+    <location>Charlottesville, VA</location>
+    <description>Steve Momorella is one of the founders of TEKGROUP International, an award-winning social media Online Newsroom provider.</description>
+    <profile_image_url>http://a3.twimg.com/profile_images/927869741/social-media_normal.jpg</profile_image_url>
+    <profile_image_url_https>https://si0.twimg.com/profile_images/927869741/social-media_normal.jpg</profile_image_url_https>
+    <url>http://www.tekgroup.com</url>
+    <protected>false</protected>
+    <followers_count>4547</followers_count>
+    <profile_background_color>C0DEED</profile_background_color>
+    <profile_text_color>333333</profile_text_color>
+    <profile_link_color>0084B4</profile_link_color>
+    <profile_sidebar_fill_color>DDEEF6</profile_sidebar_fill_color>
+    <profile_sidebar_border_color>C0DEED</profile_sidebar_border_color>
+    <friends_count>4301</friends_count>
+    <created_at>Mon May 24 22:19:53 +0000 2010</created_at>
+    <favourites_count>0</favourites_count>
+    <utc_offset>-21600</utc_offset>
+    <time_zone>Central Time (US &amp; Canada)</time_zone>
+    <profile_background_image_url>http://a0.twimg.com/images/themes/theme1/bg.png</profile_background_image_url>
+    <profile_background_image_url_https>https://si0.twimg.com/images/themes/theme1/bg.png</profile_background_image_url_https>
+    <profile_background_tile>false</profile_background_tile>
+    <profile_use_background_image>true</profile_use_background_image>
+    <notifications>false</notifications>
+    <geo_enabled>false</geo_enabled>
+    <verified>false</verified>
+    <following>true</following>
+    <statuses_count>42083</statuses_count>
+    <lang>en</lang>
+    <contributors_enabled>false</contributors_enabled>
+    <follow_request_sent>false</follow_request_sent>
+    <listed_count>260</listed_count>
+    <show_all_inline_media>false</show_all_inline_media>
+    <default_profile>true</default_profile>
+    <default_profile_image>false</default_profile_image>
+    <is_translator>false</is_translator>
+  </user>
+  <geo/>
+  <coordinates/>
+  <place/>
+  <possibly_sensitive>false</possibly_sensitive>
+  <contributors/>
+</status>
+</statuses>
+
+

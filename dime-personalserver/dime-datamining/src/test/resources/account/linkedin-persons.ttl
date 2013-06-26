@@ -1,0 +1,49 @@
+@prefix nao: <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#> . 
+@prefix nie: <http://www.semanticdesktop.org/ontologies/2007/01/19/nie#> . 
+@prefix pimo: <http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#> . 
+@prefix nco: <http://www.semanticdesktop.org/ontologies/2007/03/22/nco#> . 
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> . 
+
+ _:c9V7WOs5KHr a nco:PersonContact .
+_:c9V7WOs5KHr nao:externalIdentifier "9V7WOs5KHr" .
+_:c9V7WOs5KHr nco:photo <http://media.linkedin.com/mpr/mprx/0_vIGEzkgBGie364xYvH8Mz6fNhhDlXUOYc29zzFpE0LJTR0dOJD-QUbekamSmby0tNHhNV8GfN_bI> .
+_:pn3 a nco:PersonName .
+_:pn3 nco:nameGiven "Anna" .
+_:pn3 nco:nameFamily "Alford" .
+_:pn3 nco:fullname "Anna Alford" .
+_:c9V7WOs5KHr nco:hasPersonName _:pn3 .
+_:bd21 a nco:BirthDate .
+_:bd21 nco:birthdate "1977-5-12Z"^^xsd:date .
+_:c9V7WOs5KHr nco:hasBirthDate _:bd21 .
+_:pos9 a nco:Affiliation .
+_:pos9 nao:externalIdentifier "224755162"^^xsd:string .
+_:pos9 nco:role "Marketing Specialist" .
+_:pos9 nco:org _:org13 .
+_:c9V7WOs5KHr nco:hasAffiliation _:pos9 .
+_:org13 a nco:OrganizationContact .
+_:org13 nie:title "Karlsruhe Bau & Co." .
+_:ph17 a nco:PhoneNumber .
+_:ph17 nco:phoneNumber "+49 721 6776" .
+_:c9V7WOs5KHr nco:hasPhoneNumber _:ph17 .
+ _:cRYWVyGcfzR a nco:PersonContact .
+_:cRYWVyGcfzR nao:externalIdentifier "RYWVyGcfzR" .
+_:cRYWVyGcfzR nco:photo <http://media.linkedin.com/mpr/mprx/0_Dr__gVzf1B_Lrti2fn1KgMLxlc5WrNi27cBpgML7mllMfrquT9P71JlTxVLnPPGh21TgtOUPN2-6> .
+_:pn27 a nco:PersonName .
+_:pn27 nco:nameGiven "Norbert" .
+_:pn27 nco:nameFamily "Drancourt" .
+_:pn27 nco:fullname "Norbert Drancourt" .
+_:cRYWVyGcfzR nco:hasPersonName _:pn27 .
+_:bd49 a nco:BirthDate .
+_:bd49 nco:birthdate "1956-6-29Z"^^xsd:date .
+_:cRYWVyGcfzR nco:hasBirthDate _:bd49 .
+_:pos33 a nco:Affiliation .
+_:pos33 nao:externalIdentifier "225256600"^^xsd:string .
+_:pos33 nco:role "Customer Support Team Leader" .
+_:pos33 nco:start "1980-5-1T00:00:00Z"^^xsd:dateTime .
+_:pos33 nco:org _:org41 .
+_:cRYWVyGcfzR nco:hasAffiliation _:pos33 .
+_:org41 a nco:OrganizationContact .
+_:org41 nie:title "Stirling Construction Group Limited" .
+_:ph45 a nco:PhoneNumber .
+_:ph45 nco:phoneNumber "0844 857 6373" .
+_:cRYWVyGcfzR nco:hasPhoneNumber _:ph45 .

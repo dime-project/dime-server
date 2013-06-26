@@ -1,0 +1,30 @@
+ -----
+ Samples
+ -----
+ Marin Nozhchev
+ -----
+ 2009-10-17
+ -----
+
+~~ http://maven.apache.org/doxia/references/apt-format.html
+
+ The large gazetteer KB comes with a few samples and the {{{./sesame_enrichment_pr.html}a companion PR}} that showcases the usefulness of
+ using Linked Data URI as identifiers in the gazetteer. All samples are in the <samples> sub-directory of the plugin.
+ 
+Samples
+
+  * dictionary_from_local_ontology - A sample of the primary use-case of the gazetteer - dictionary, loaded from local RDF files.
+  In this sample, the RDF files contain a taxonomy. The query that loads all classes with their names is in <dictionary_from_local_ontology/query.txt>.
+
+  * dictionary_from_remote_ontology - A sample of loading a dictionary from a public Linked Data server - in this case the LDSR. 
+  Loads 10000 names of entertainers. 
+
+  * sample_pipelines
+  	 
+  	 * pipeline.gapp - Very small pipelines that initializes a gazetteer with the dictionary from <dictionary_from_local_ontology>. 
+  	 Sample documents are included.
+  	 
+  	 * sample_linked_data_mashup.gapp - Loads a gazetteer with the entertainers from <dictionary_from_remote_ontology>, 
+  	 finds entertainers in the sample documents, and then runs the Semantic Enrichment PR. It adds the birthplace of every looked up entertainer. 
+  	 
+

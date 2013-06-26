@@ -1,0 +1,12 @@
+@prefix nao: <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#> . 
+@prefix pimo: <http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#> . 
+@prefix nco: <http://www.semanticdesktop.org/ontologies/2007/03/22/nco#> . 
+@prefix dlpo: <http://www.semanticdesktop.org/ontologies/2011/10/05/dlpo#> . 
+
+_:stms644819790 a dlpo:Status .
+_:stms644819790 nao:externalIdentifier "s644819790" .
+_:stms644819790 dlpo:timestamp 1318850518000 .
+_:stms644819790 dlpo:textualContent "just joined LinkedIn!" .
+_:stms644819790 nao:creator _:cs644819790 .
+_:cs644819790 a nco:PersonContact .
+_:cs644819790 nao:externalIdentifier "J7qb-67bTP" .

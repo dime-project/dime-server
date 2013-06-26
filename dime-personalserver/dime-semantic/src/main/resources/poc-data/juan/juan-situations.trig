@@ -1,0 +1,1131 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix ppo: <http://vocab.deri.ie/ppo#> .
+@prefix nrl: <http://www.semanticdesktop.org/ontologies/2007/08/15/nrl#> .
+@prefix pimo: <http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#> .
+@prefix nao: <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#> .
+@prefix nie: <http://www.semanticdesktop.org/ontologies/2007/01/19/nie#> .
+@prefix ncal: <http://www.semanticdesktop.org/ontologies/2007/04/02/ncal#> . 
+@prefix nco: <http://www.semanticdesktop.org/ontologies/2007/03/22/nco#> .
+@prefix nso: <http://www.semanticdesktop.org/ontologies/2009/11/08/nso#> .
+@prefix nfo: <http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#> .
+@prefix dao: <http://www.semanticdesktop.org/ontologies/2011/10/05/dao#> .
+@prefix dlpo: <http://www.semanticdesktop.org/ontologies/2011/10/05/dlpo#> .
+@prefix dcon: <http://www.semanticdesktop.org/ontologies/2011/10/05/dcon#> .
+@prefix ddo: <http://www.semanticdesktop.org/ontologies/2011/10/05/ddo#> .
+@prefix duho: <http://www.semanticdesktop.org/ontologies/2011/10/05/duho#> .
+
+@prefix urn: <urn:uuid:> .
+
+<urn:uuid:j000570> {
+    
+urn:j000167
+	a dcon:Schedule ;
+	dcon:currentEvent urn:j000140 . 
+
+urn:j000140 
+	a dcon:Element ; 
+	dcon:recordedBy urn:j000151 .
+	
+urn:j000168 
+	a dcon:SpaTem  ; 
+	dcon:position urn:j000138 .
+
+urn:j000138
+	dcon:recordedBy  urn:j000151 ;
+	a dcon:Element; 
+	dcon:recordedAt  "2011-11-20T13:38:00Z" .
+
+urn:j000169 
+	a dcon:Connectivity ;
+	dcon:connection urn:j000170 ,
+		urn:j000171 .
+
+urn:j000170
+	a dcon:Element ; 
+	dcon:speedSignal "4.00"^^xsd:float ;
+	dcon:connected "true" ;
+	dcon:recordedBy  urn:j000151 ;
+	dcon:recordedAt  "2011-11-20T13:40:00Z" .
+
+urn:j000171
+	a dcon:Element ; 
+	dcon:connected "true" ;
+	dcon:recordedBy  urn:j000151 ;
+	dcon:recordedAt  "2011-11-20T13:36:00Z" .
+
+urn:j000172
+	a dcon:State ;
+	dcon:currentAvailability urn:j000149 ;
+	dcon:currentMode urn:j000152 .
+# must refer to the Presence instance, not at the dlpo namespace
+# urn:j000172 dcon:currentActivity juan:BusinessMeeting .
+# juan:BusinessMeeting a dcon:Element. 
+
+urn:j000149 
+	a dcon:Element ; 
+	dcon:recordedBy  urn:j000151 ;
+	dcon:recordedAt  "2011-11-20T13:20:00Z" .
+
+urn:j000152 
+	a dcon:Element ; 
+	dcon:recordedBy  urn:j000151 ; 
+	dcon:recordedAt  "2011-11-20T13:25:00Z" .
+
+urn:j000173
+	a dcon:Attention ;
+	dcon:activeFile urn:j000529 ,
+		urn:j000526 .
+	
+urn:j000529 
+	a dcon:Element ;
+	dcon:recordedBy  urn:j000151 ; 
+	dcon:writeable "true" .
+
+urn:j000526 
+	a dcon:Element ;
+	dcon:recordedBy  urn:j000151 ;
+	dcon:writeable "true" .
+}
+
+
+<urn:uuid:j000571> {
+
+urn:j000571
+	a nrl:GraphMetadata ;
+	nrl:coreGraphMetadataFor urn:j000570 .
+
+urn:j000570
+	a dcon:Situation;
+	nao:created "2011-11-20T13:40:00Z" ;
+	nao:creator urn:j000061 ;
+	nao:prefLabel "Attending Conference" ;
+	dcon:positiveExample urn:j000572 , urn:j000573 ;
+	dcon:negativeExample urn:j000574 , urn:j000575 .
+}   
+
+
+<urn:uuid:j000576> {
+
+urn:j000174
+	a dcon:State ;
+	dcon:currentAvailability urn:j000149 ;
+	dcon:currentMode urn:j000152 .
+# must refer to the Presence instance, not at the dlpo namespace
+# urn:j000174 dcon:currentActivity juan:BusinessMeeting .
+# juan:BusinessMeeting a dcon:Element. 
+
+urn:j000149
+	dcon:recordedBy  urn:j000151 ; 
+	a dcon:Element ; 
+	dcon:recordedAt  "2011-11-22T12:55:00Z" .
+
+urn:j000152
+	dcon:recordedBy  urn:j000151 ; 
+	a dcon:Element ; 
+	dcon:recordedAt  "2011-11-22T12:56:00Z" .
+
+urn:j000175
+	a dcon:Schedule ;
+	dcon:currentEvent urn:j000140 . 
+	
+urn:j000140 
+	a dcon:Element ;
+	dcon:recordedBy  urn:j000151 . 
+
+urn:j000176 
+	a dcon:SpaTem  ; 
+	dcon:currentPlace urn:j000139 .
+
+urn:j000139
+	dcon:recordedBy  urn:j000151 ; 
+	a dcon:Element ; 
+	dcon:recordedAt  "2011-11-22T13:00:00Z" .
+
+
+urn:j000177 
+	a dcon:Peers ;
+	dcon:adHocGroup urn:j000178 ;
+	dcon:nearbyPeer urn:j000102 ,
+		urn:j000100 .
+
+urn:j000102 
+	a dcon:Element ; 
+	dcon:recordedAt  "2011-11-22T12:59:00Z" ;
+	dcon:recordedBy  urn:j000151 . 
+
+urn:j000100 
+	a dcon:Element ; 
+	dcon:recordedAt  "2011-11-22T12:43:00Z" ;
+	dcon:recordedBy  urn:j000151 . 
+
+urn:j000178 
+	a dcon:Element ; 
+	dcon:recordedBy  urn:j000151 ;
+	a pimo:PersonGroup ;
+	nao:prefLabel "DHome Middleware Group" ;
+	pimo:hasMember urn:j000102 , urn:j000100 .
+
+
+urn:j000179
+	a dcon:Connectivity ;
+	dcon:connection urn:j000180 ,
+		urn:j000171 .
+
+urn:j000180 
+	a dcon:Element ; 
+	dcon:recordedAt  "2011-11-22T12:41:00Z" ;
+	dcon:connected "true" ;
+	dcon:recordedBy  urn:j000151 ; 
+	dcon:signal "4.00"^^xsd:float .
+
+urn:j000171 
+	a dcon:Element ; 
+	dcon:recordedAt  "2011-11-22T12:48:00Z" ;
+	dcon:connected "true" ;
+	dcon:recordedBy  urn:j000151 . 
+
+urn:j000181
+	a dcon:Attention ;
+	dcon:activeFile urn:j000526 ,
+		urn:j000525 ,
+		urn:j000528 ;
+	dcon:activeApplication urn:j000182 .
+
+urn:j000526 
+	a dcon:Element ; 
+	dcon:recordedBy  urn:j000151 ;
+	dcon:writeable "false" .
+
+urn:j000525 
+	a dcon:Element ;
+	dcon:recordedBy  urn:j000151 ;
+	dcon:writeable "true" .
+
+urn:j000528 
+	a dcon:Element ; 
+	dcon:recordedBy  urn:j000151 ;
+	dcon:writeable "false" .
+
+urn:j000182 
+	a dcon:Element; 
+	dcon:recordedBy  urn:j000151 ;
+	dcon:foreground "false".
+}
+
+
+<urn:uuid:j000577> {
+
+urn:j000577
+	a nrl:GraphMetadata ;
+	nrl:coreGraphMetadataFor urn:j000576 .
+
+urn:j000576
+	a dcon:Situation ;
+	nao:created "2011-11-23T16:29:00Z" ;
+	nao:creator urn:j000061 ;
+	nao:prefLabel "DHome Middleware" ;
+	dcon:positiveExample urn:j000578 , urn:j000579 ;
+	dcon:negativeExample urn:j000580 , urn:j000581 .	
+}
+
+
+<urn:uuid:j000582> {
+
+urn:j000183
+	a dcon:Schedule ;
+	dcon:currentEvent urn:j000140 . 
+	
+urn:j000140 a dcon:Element .
+
+urn:j000184 a dcon:Peers .
+
+urn:j000185 a dcon:Environment .
+
+urn:j000186
+	a dcon:Attention ;
+	dcon:activeFile urn:j000526 ;
+	dcon:activeFile urn:j000529 ;
+	dcon:activeApplication urn:j000187 ;
+	dcon:activeApplication urn:j000182 .
+
+urn:j000526 
+	a dcon:Element ;
+	dcon:writeable "true" .
+
+urn:j000529 
+	a dcon:Element ;
+	dcon:writeable "true" .
+
+urn:j000182 
+	a dcon:Element ; 
+	dcon:recordedAt  "2011-11-25T12:03:00Z" ;
+	dcon:foreground "true" . 
+
+urn:j000187 
+	a dcon:Element ; 
+	dcon:recordedAt  "2011-11-25T11:58:00Z" . 
+
+urn:j000188
+	a dcon:SpaTem  ; 
+	dcon:position urn:j000189 .
+
+urn:j000189 
+	a dcon:Element ; 
+	dcon:recordedAt  "2011-11-25T12:10:00Z" . 
+
+urn:j000190 
+	a dcon:Connectivity ;
+	dcon:connection urn:j000180 ;
+	dcon:connection urn:j000171 ;
+	dcon:connection urn:j000191 ;
+	dcon:connection urn:j000192 .
+
+urn:j000180
+	a dcon:Element; 
+	dcon:recordedAt  "2011-11-25T1208:00Z" ;
+	dcon:signal "3.00"^^xsd:float ;
+	dcon:connected "true" .
+
+urn:j000171 
+	a dcon:Element ; 
+	dcon:recordedAt  "2011-11-25T12:03:00Z" ;
+	dcon:connected "true" . 
+
+urn:j000191
+	a dcon:Element ; 
+	dcon:recordedAt  "2011-11-25T12:09:00Z" . 
+
+urn:j000192 
+	a dcon:Element ; 
+	dcon:recordedAt  "2011-11-25T12:06:00Z" . 
+
+urn:j000193 
+	a dcon:State ;
+	ddo:currentMode urn:j000152 .
+
+urn:j000152 
+	a dcon:Element ; 
+	dcon:recordedAt  "2011-11-25T12:10:00Z" .
+
+
+}
+
+
+<urn:uuid:j000583> {
+
+urn:j000583
+	a dcon:LiveContext ;
+    nrl:coreGraphMetadataFor urn:j000582 .
+
+urn:j000582
+    a nrl:InstanceBase ;
+	nao:created "0000-00-00T00:00:00Z" .
+}
+
+
+<urn:uuid:j000584> {
+
+urn:j000194 
+	a dcon:Schedule ;
+	dcon:currentEvent urn:j000140 . 
+
+urn:j000140 a dcon:Element. 
+
+urn:j000195 a dcon:Peers .
+
+urn:j000196 a dcon:Environment .
+
+urn:j000197 
+	a dcon:Attention ;
+	dcon:activeFile urn:j000526 .
+	
+urn:j000197 
+	dcon:activeFile urn:j000529 ;
+	dcon:activeApplication urn:j000187 ;
+	dcon:activeApplication urn:j000182 .
+
+urn:j000526 
+	a dcon:Element ; 
+	dcon:writeable "true" .
+
+urn:j000529 
+	a dcon:Element ; 
+	dcon:writeable "true" .
+
+urn:j000182
+	a dcon:Element ;
+	dcon:foreground "true" ;
+	dcon:recordedBy  urn:j000151 . 
+
+urn:j000187
+	a dcon:Element ; 
+	dcon:recordedBy  urn:j000151 . 
+
+
+urn:j000198 
+	a dcon:SpaTem  ; 
+	dcon:position urn:j000189 .
+
+urn:j000189
+	a dcon:Element ; 
+	dcon:recordedBy  urn:j000151 . 
+
+urn:j000199 
+	a dcon:Connectivity ;
+	dcon:connection urn:j000180 ;
+	dcon:connection urn:j000171 ;
+	dcon:connection urn:j000191 ;
+	dcon:connection urn:j000192 .
+
+urn:j000180 
+	a dcon:Element ; 
+	dcon:connected "true" ;
+	dcon:signal "4.00"^^xsd:float ;
+	dcon:recordedBy  urn:j000151 . 
+
+urn:j000171 
+	a dcon:Element ; 
+	dcon:connected "true" ;
+	dcon:recordedBy  urn:j000151 . 
+
+urn:j000191 
+	a dcon:Element; 
+	dcon:recordedBy  urn:j000151 . 
+
+urn:j000192
+	a dcon:Element; 
+	dcon:recordedBy  urn:j000151 . 
+
+urn:j000200 
+	a dcon:State ;
+	dcon:currentMode urn:j000152 .
+
+urn:j000152 
+	a dcon:Element; 
+	dcon:recordedBy  urn:j000151 . 
+
+}
+
+
+<urn:uuid:j000585> {
+
+urn:j000585
+	a dcon:LiveContext ;
+	nrl:coreGraphMetadataFor urn:j000584 .
+
+urn:j000584
+	a nrl:InstanceBase ;
+	nao:created "0000-00-00T00:00:0Z" .
+}
+
+#positive and negative duho:ContextLog examples for situations
+
+#positive example of Situation01
+#changed connection to juanConnection2
+#changed state to juanMode2
+
+<urn:uuid:j000572> {
+	
+urn:j000201
+	a dcon:Schedule ;
+	dcon:currentEvent urn:j000140 . 
+
+urn:j000140 
+	a dcon:Element ; 
+	dcon:recordedBy  urn:j000151 . 
+	
+urn:j000202 
+	a dcon:SpaTem  ; 
+	dcon:position urn:j000138 .
+
+urn:j000138
+	dcon:recordedBy  urn:j000151 ;
+	a dcon:Element; 
+	dcon:recordedAt  "2011-11-20T13:38:00Z" .
+
+urn:j000203 
+	a dcon:Connectivity ;
+	dcon:connection urn:j000180 .
+
+urn:j000180
+	a dcon:Element ; 
+	dcon:speedSignal "4.00"^^xsd:float ;
+	dcon:connected "true" ;
+	dcon:recordedBy  urn:j000151 ;
+	dcon:recordedAt  "2011-11-20T13:40:00Z" .
+
+urn:j000204
+	a dcon:State ;
+	dcon:currentAvailability urn:j000149 ;
+	dcon:currentMode urn:j000153 .
+
+urn:j000149 
+	a dcon:Element ; 
+	dcon:recordedBy  urn:j000151 ;
+	dcon:recordedAt  "2011-11-20T13:20:00Z" .
+
+urn:j000153 
+	a dcon:Element ; 
+	dcon:recordedBy  urn:j000151 ; 
+	dcon:recordedAt  "2011-11-20T13:25:00Z" .
+
+urn:j000205
+	a dcon:Attention ;
+	dcon:activeFile urn:j000529 ,
+		urn:j000526 .
+	
+urn:j000529 
+	a dcon:Element ;
+	dcon:recordedBy  urn:j000151 ; 
+	dcon:writeable "true" .
+
+urn:j000526 
+	a dcon:Element ;
+	dcon:recordedBy  urn:j000151 ;
+	dcon:writeable "true" .
+		
+}
+
+
+<urn:uuid:j000586> {
+	urn:j000586
+		a nrl:GraphMetadata ;
+		nrl:coreGraphMetadataFor urn:j000572 .
+
+	urn:j000572
+		a duho:ContextLog ;
+		nao:lastModified "2011-10-05T00:00:00Z" .
+}
+
+#positive example of Situation01
+#changed connection to juanConnection2
+#changed state to juanMode2
+#removed 1 active file
+
+<urn:uuid:j000573> {
+	
+urn:j000206
+	a dcon:Schedule ;
+	dcon:currentEvent urn:j000140 . 
+
+urn:j000140 
+	a dcon:Element ; 
+	dcon:recordedBy  urn:j000151 . 
+	
+urn:j000207 
+	a dcon:SpaTem  ; 
+	dcon:position urn:j000138 .
+
+urn:j000138
+	dcon:recordedBy  urn:j000151 ;
+	a dcon:Element; 
+	dcon:recordedAt  "2011-11-20T13:38:00Z" .
+
+urn:j000208 
+	a dcon:Connectivity ;
+	dcon:connection urn:j000180 .
+
+urn:j000180
+	a dcon:Element ; 
+	dcon:speedSignal "4.00"^^xsd:float ;
+	dcon:connected "true" ;
+	dcon:recordedBy  urn:j000151 ;
+	dcon:recordedAt  "2011-11-20T13:40:00Z" .
+
+urn:j000209
+	a dcon:State ;
+	dcon:currentAvailability urn:j000149 ;
+	dcon:currentMode urn:j000153 .
+
+urn:j000149 
+	a dcon:Element ; 
+	dcon:recordedBy  urn:j000151 ;
+	dcon:recordedAt  "2011-11-20T13:20:00Z" .
+
+urn:j000153 
+	a dcon:Element ; 
+	dcon:recordedBy  urn:j000151 ; 
+	dcon:recordedAt  "2011-11-20T13:25:00Z" .
+
+urn:j000210
+	a dcon:Attention ;
+	dcon:activeFile urn:j000526 .
+	
+urn:j000526 
+	a dcon:Element ;
+	dcon:recordedBy  urn:j000151 ;
+	dcon:writeable "true" .
+		
+}
+
+
+<urn:uuid:j000587> {
+	urn:j000587
+		a nrl:GraphMetadata ;
+		nrl:coreGraphMetadataFor urn:j000573 .
+
+	urn:j000573
+		a duho:ContextLog ;
+		nao:lastModified "2011-10-05T00:00:00Z" .
+}
+
+#negative example of Situation01
+#changed location to juanLocation1
+#removed connectivity
+#changed active file
+
+<urn:uuid:j000574> {
+	
+urn:j000211
+	a dcon:Schedule ;
+	dcon:currentEvent urn:j000140 . 
+
+urn:j000140 
+	a dcon:Element ; 
+	dcon:recordedBy  urn:j000151 . 
+	
+urn:j000212 
+	a dcon:SpaTem  ; 
+	dcon:position urn:j000078 .
+
+urn:j000078
+	dcon:recordedBy  urn:j000151 ;
+	a dcon:Element; 
+	dcon:recordedAt  "2011-11-20T13:38:00Z" .
+
+urn:j000213
+	a dcon:State ;
+	dcon:currentAvailability urn:j000149 ;
+	dcon:currentMode urn:j000153 .
+
+urn:j000149 
+	a dcon:Element ; 
+	dcon:recordedBy  urn:j000151 ;
+	dcon:recordedAt  "2011-11-20T13:20:00Z" .
+
+urn:j000153 
+	a dcon:Element ; 
+	dcon:recordedBy  urn:j000151 ; 
+	dcon:recordedAt  "2011-11-20T13:25:00Z" .
+
+urn:j000214
+	a dcon:Attention ;
+	dcon:activeFile urn:j000527 .
+	
+urn:j000527
+	a dcon:Element ;
+	dcon:recordedBy  urn:j000151 ; 
+	dcon:writeable "true" .
+		
+}
+
+
+<urn:uuid:j000588> {
+	urn:j000588
+		a nrl:GraphMetadata ;
+		nrl:coreGraphMetadataFor urn:j000574 .
+
+	urn:j000574
+		a duho:ContextLog ;
+		nao:lastModified "2011-10-05T00:00:00Z" .
+}
+
+#negative example of Situation01
+#changed event
+#changed location
+#removed connectivity
+#changed active file
+
+<urn:uuid:j000575> {
+	
+urn:j000215
+	a dcon:Schedule ;
+	dcon:currentEvent urn:j000145 . 
+
+urn:j000145 
+	a dcon:Element ; 
+	dcon:recordedBy  urn:j000151 . 
+	
+urn:j000216 
+	a dcon:SpaTem  ; 
+	dcon:position urn:j000139 .
+
+urn:j000139
+	dcon:recordedBy  urn:j000151 ;
+	a dcon:Element; 
+	dcon:recordedAt  "2011-11-20T13:38:00Z" .
+
+urn:j000217
+	a dcon:State ;
+	dcon:currentAvailability urn:j000149 ;
+	dcon:currentMode urn:j000153 .
+
+urn:j000149 
+	a dcon:Element ; 
+	dcon:recordedBy  urn:j000151 ;
+	dcon:recordedAt  "2011-11-20T13:20:00Z" .
+
+urn:j000153 
+	a dcon:Element ; 
+	dcon:recordedBy  urn:j000151 ; 
+	dcon:recordedAt  "2011-11-20T13:25:00Z" .
+
+urn:j000218
+	a dcon:Attention ;
+	dcon:activeFile urn:j000527 .
+	
+urn:j000527
+	a dcon:Element ;
+	dcon:recordedBy  urn:j000151 ; 
+	dcon:writeable "true" .
+		
+}
+
+
+<urn:uuid:j000589> {
+	urn:j000589
+		a nrl:GraphMetadata ;
+		nrl:coreGraphMetadataFor urn:j000575 .
+
+	urn:j000575
+		a duho:ContextLog ;
+		nao:lastModified "2011-10-05T00:00:00Z" .
+}
+
+
+
+#positive example of Situation02
+#changed availability
+#changed location
+
+<urn:uuid:j000578> {
+	
+urn:j000219
+	a dcon:State ;
+	dcon:currentAvailability urn:j000150 ;
+	dcon:currentMode urn:j000152 .
+
+urn:j000150
+	dcon:recordedBy  urn:j000151 ; 
+	a dcon:Element ; 
+	dcon:recordedAt  "2011-11-22T12:55:00Z" .
+
+urn:j000152
+	dcon:recordedBy  urn:j000151 ; 
+	a dcon:Element ; 
+	dcon:recordedAt  "2011-11-22T12:56:00Z" .
+
+urn:j000220
+	a dcon:Schedule ;
+	dcon:currentEvent urn:j000140 . 
+	
+urn:j000140 
+	a dcon:Element ;
+	dcon:recordedBy  urn:j000151 . 
+
+urn:j000221 
+	a dcon:SpaTem  ; 
+	dcon:currentPlace urn:j000138 .
+
+urn:j000138
+	dcon:recordedBy  urn:j000151 ; 
+	a dcon:Element ; 
+	dcon:recordedAt  "2011-11-22T13:00:00Z" .
+
+
+urn:j000222 
+	a dcon:Peers ;
+	dcon:adHocGroup urn:j000178 ;
+	dcon:nearbyPeer urn:j000102 ,
+		urn:j000100 .
+
+urn:j000102 
+	a dcon:Element ; 
+	dcon:recordedAt  "2011-11-22T12:59:00Z" ;
+	dcon:recordedBy  urn:j000151 . 
+	
+urn:j000100 
+	a dcon:Element ; 
+	dcon:recordedAt  "2011-11-22T12:59:00Z" ;
+	dcon:recordedBy  urn:j000151 . 
+
+urn:j000178 
+	a dcon:Element ; 
+	dcon:recordedBy  urn:j000151 ;
+	a pimo:PersonGroup ;
+	nao:prefLabel "DHome Middleware Group" ;
+	pimo:hasMember urn:j000102 , urn:j000100 .
+
+
+urn:j000223
+	a dcon:Connectivity ;
+	dcon:connection urn:j000180 ,
+		urn:j000171 .
+
+urn:j000180 
+	a dcon:Element ; 
+	dcon:recordedAt  "2011-11-22T12:41:00Z" ;
+	dcon:connected "true" ;
+	dcon:recordedBy  urn:j000151 ; 
+	dcon:signal "4.00"^^xsd:float .
+
+urn:j000171 
+	a dcon:Element ; 
+	dcon:recordedAt  "2011-11-22T12:48:00Z" ;
+	dcon:connected "true" ;
+	dcon:recordedBy  urn:j000151 . 
+
+urn:j000224
+	a dcon:Attention ;
+	dcon:activeFile urn:j000526 ,
+		urn:j000525 ,
+		urn:j000528 ;
+	dcon:activeApplication urn:j000182 .
+
+urn:j000526 
+	a dcon:Element ; 
+	dcon:recordedBy  urn:j000151 ;
+	dcon:writeable "false" .
+
+urn:j000525 
+	a dcon:Element ;
+	dcon:recordedBy  urn:j000151 ;
+	dcon:writeable "true" .
+
+urn:j000528 
+	a dcon:Element ; 
+	dcon:recordedBy  urn:j000151 ;
+	dcon:writeable "false" .
+
+urn:j000182 
+	a dcon:Element; 
+	dcon:recordedBy  urn:j000151 ;
+	dcon:foreground "false".
+		
+}
+
+
+<urn:uuid:j000590> {
+	urn:j000590
+		a nrl:GraphMetadata ;
+		nrl:coreGraphMetadataFor urn:j000578 .
+
+	urn:j000578
+		a duho:ContextLog ;
+		nao:lastModified "2011-10-05T00:00:00Z" .
+}
+
+#positive example of Situation02
+#changed availability
+#removed peers
+
+<urn:uuid:j000579> {
+	
+urn:j000225
+	a dcon:State ;
+	dcon:currentAvailability urn:j000150 ;
+	dcon:currentMode urn:j000152 .
+
+urn:j000150
+	dcon:recordedBy  urn:j000151 ; 
+	a dcon:Element ; 
+	dcon:recordedAt  "2011-11-22T12:55:00Z" .
+
+urn:j000152
+	dcon:recordedBy  urn:j000151 ; 
+	a dcon:Element ; 
+	dcon:recordedAt  "2011-11-22T12:56:00Z" .
+
+urn:j000226
+	a dcon:Schedule ;
+	dcon:currentEvent urn:j000140 . 
+	
+urn:j000140 
+	a dcon:Element ;
+	dcon:recordedBy  urn:j000151 . 
+
+urn:j000227 
+	a dcon:SpaTem  ; 
+	dcon:currentPlace urn:j000139 .
+
+urn:j000139
+	dcon:recordedBy  urn:j000151 ; 
+	a dcon:Element ; 
+	dcon:recordedAt  "2011-11-22T13:00:00Z" .
+
+urn:j000228
+	a dcon:Connectivity ;
+	dcon:connection urn:j000180 ,
+		urn:j000171 .
+
+urn:j000180 
+	a dcon:Element ; 
+	dcon:recordedAt  "2011-11-22T12:41:00Z" ;
+	dcon:connected "true" ;
+	dcon:recordedBy  urn:j000151 ; 
+	dcon:signal "4.00"^^xsd:float .
+
+urn:j000171 
+	a dcon:Element ; 
+	dcon:recordedAt  "2011-11-22T12:48:00Z" ;
+	dcon:connected "true" ;
+	dcon:recordedBy  urn:j000151 . 
+
+urn:j000229
+	a dcon:Attention ;
+	dcon:activeFile urn:j000526 ,
+		urn:j000525 ,
+		urn:j000528 ;
+	dcon:activeApplication urn:j000182 .
+
+urn:j000526 
+	a dcon:Element ; 
+	dcon:recordedBy  urn:j000151 ;
+	dcon:writeable "false" .
+
+urn:j000525 
+	a dcon:Element ;
+	dcon:recordedBy  urn:j000151 ;
+	dcon:writeable "true" .
+
+urn:j000528 
+	a dcon:Element ; 
+	dcon:recordedBy  urn:j000151 ;
+	dcon:writeable "false" .
+
+urn:j000182 
+	a dcon:Element; 
+	dcon:recordedBy  urn:j000151 ;
+	dcon:foreground "false".
+		
+}
+
+
+<urn:uuid:j000591> {
+	urn:j000591
+		a nrl:GraphMetadata ;
+		nrl:coreGraphMetadataFor urn:j000579 .
+
+	urn:j000579
+		a duho:ContextLog ;
+		nao:lastModified "2011-10-05T00:00:00Z" .
+}
+
+
+
+#negative example of Situation02
+#changed location
+#changed peers
+
+<urn:uuid:j000580> {
+	
+urn:j000230
+	a dcon:State ;
+	dcon:currentAvailability urn:j000150 ;
+	dcon:currentMode urn:j000152 .
+
+urn:j000150
+	dcon:recordedBy  urn:j000151 ; 
+	a dcon:Element ; 
+	dcon:recordedAt  "2011-11-22T12:55:00Z" .
+
+urn:j000152
+	dcon:recordedBy  urn:j000151 ; 
+	a dcon:Element ; 
+	dcon:recordedAt  "2011-11-22T12:56:00Z" .
+
+urn:j000231
+	a dcon:Schedule ;
+	dcon:currentEvent urn:j000140 . 
+	
+urn:j000140 
+	a dcon:Element ;
+	dcon:recordedBy  urn:j000151 . 
+
+urn:j000232 
+	a dcon:SpaTem  ; 
+	dcon:currentPlace urn:j000138 .
+
+urn:j000138
+	dcon:recordedBy  urn:j000151 ; 
+	a dcon:Element ; 
+	dcon:recordedAt  "2011-11-22T13:00:00Z" .
+
+
+urn:j000233 
+	a dcon:Peers ;
+	dcon:nearbyPeer urn:j000105 ,
+		urn:j000104 .
+
+urn:j000105 
+	a dcon:Element ; 
+	dcon:recordedAt  "2011-11-22T12:59:00Z" ;
+	dcon:recordedBy  urn:j000151 . 
+
+urn:j000104 
+	a dcon:Element ; 
+	dcon:recordedAt  "2011-11-22T12:59:00Z" ;
+	dcon:recordedBy  urn:j000151 . 
+
+
+urn:j009001
+	a dcon:Connectivity ;
+	dcon:connection urn:j000180 ,
+		urn:j000171 .
+
+urn:j000180 
+	a dcon:Element ; 
+	dcon:recordedAt  "2011-11-22T12:41:00Z" ;
+	dcon:connected "true" ;
+	dcon:recordedBy  urn:j000151 ; 
+	dcon:signal "4.00"^^xsd:float .
+
+urn:j000171 
+	a dcon:Element ; 
+	dcon:recordedAt  "2011-11-22T12:48:00Z" ;
+	dcon:connected "true" ;
+	dcon:recordedBy  urn:j000151 . 
+
+urn:j000234
+	a dcon:Attention ;
+	dcon:activeFile urn:j000526 ,
+		urn:j000525 ,
+		urn:j000528 ;
+	dcon:activeApplication urn:j000182 .
+
+urn:j000526 
+	a dcon:Element ; 
+	dcon:recordedBy  urn:j000151 ;
+	dcon:writeable "false" .
+
+urn:j000525 
+	a dcon:Element ;
+	dcon:recordedBy  urn:j000151 ;
+	dcon:writeable "true" .
+
+urn:j000528 
+	a dcon:Element ; 
+	dcon:recordedBy  urn:j000151 ;
+	dcon:writeable "false" .
+
+urn:j000182 
+	a dcon:Element; 
+	dcon:recordedBy  urn:j000151 ;
+	dcon:foreground "false".
+		
+}
+
+<urn:uuid:j000592> {
+	urn:j000592
+		a nrl:GraphMetadata ;
+		nrl:coreGraphMetadataFor urn:j000580 .
+
+	urn:j000580
+		a duho:ContextLog ;
+		nao:lastModified "2011-10-05T00:00:00Z" .
+}
+
+#negative example of Situation02
+#changed availability
+#changed location
+#changed peers
+#changed active file
+
+<urn:uuid:j000581> {
+	
+urn:j000235
+	a dcon:State ;
+	dcon:currentAvailability urn:j000150 ;
+	dcon:currentMode urn:j000152 .
+
+urn:j000150
+	dcon:recordedBy  urn:j000151 ; 
+	a dcon:Element ; 
+	dcon:recordedAt  "2011-11-22T12:55:00Z" .
+
+urn:j000152
+	dcon:recordedBy  urn:j000151 ; 
+	a dcon:Element ; 
+	dcon:recordedAt  "2011-11-22T12:56:00Z" .
+
+urn:j000236
+	a dcon:Schedule ;
+	dcon:currentEvent urn:j000140 . 
+	
+urn:j000140 
+	a dcon:Element ;
+	dcon:recordedBy  urn:j000151 . 
+
+urn:j000237 
+	a dcon:SpaTem  ; 
+	dcon:currentPlace urn:j000139 .
+
+urn:j000139
+	dcon:recordedBy  urn:j000151 ; 
+	a dcon:Element ; 
+	dcon:recordedAt  "2011-11-22T13:00:00Z" .
+
+urn:j000233 
+	a dcon:Peers ;
+	dcon:nearbyPeer urn:j000105 ,
+		urn:j000104 .
+
+urn:j000105 
+	a dcon:Element ; 
+	dcon:recordedAt  "2011-11-22T12:59:00Z" ;
+	dcon:recordedBy  urn:j000151 . 
+
+urn:j000104 
+	a dcon:Element ; 
+	dcon:recordedAt  "2011-11-22T12:59:00Z" ;
+	dcon:recordedBy  urn:j000151 . 
+
+urn:j000238
+	a dcon:Connectivity ;
+	dcon:connection urn:j000180 ,
+		urn:j000171 .
+
+urn:j000180 
+	a dcon:Element ; 
+	dcon:recordedAt  "2011-11-22T12:41:00Z" ;
+	dcon:connected "true" ;
+	dcon:recordedBy  urn:j000151 ; 
+	dcon:signal "4.00"^^xsd:float .
+
+urn:j000171 
+	a dcon:Element ; 
+	dcon:recordedAt  "2011-11-22T12:48:00Z" ;
+	dcon:connected "true" ;
+	dcon:recordedBy  urn:j000151 . 
+
+urn:j000239
+	a dcon:Attention ;
+	dcon:activeFile urn:j000527 ;
+	dcon:activeApplication urn:j000182 .
+
+	urn:j000527
+	a dcon:Element ; 
+	dcon:recordedBy  urn:j000151 ;
+	dcon:writeable "false" .
+
+urn:j000182 
+	a dcon:Element; 
+	dcon:recordedBy  urn:j000151 ;
+	dcon:foreground "false".
+		
+}
+
+
+<urn:uuid:j000593> {
+	urn:j000593
+		a nrl:GraphMetadata ;
+		nrl:coreGraphMetadataFor urn:j000581 .
+
+	urn:j000581
+		a duho:ContextLog ;
+		nao:lastModified "2011-10-05T00:00:00Z" .
+}

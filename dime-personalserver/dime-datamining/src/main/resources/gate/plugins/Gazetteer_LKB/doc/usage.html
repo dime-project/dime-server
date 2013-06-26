@@ -1,0 +1,220 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+
+
+
+
+
+
+
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>The Large KB gazetteer - Usage</title>
+    <style type="text/css" media="all">
+      @import url("./css/maven-base.css");
+      @import url("./css/maven-theme.css");
+      @import url("./css/site.css");
+    </style>
+    <link rel="stylesheet" href="./css/print.css" type="text/css" media="print" />
+          <meta name="author" content="Marin Nozhchev" />
+        <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+      </head>
+  <body class="composite">
+    <div id="banner">
+                  <a href="http://www.ontotext.com" id="bannerLeft">
+    
+                                    <img src="http://ontotext.com/images/ontotext_logo.jpg" alt="" />
+    
+            </a>
+                    <div class="clear">
+        <hr/>
+      </div>
+    </div>
+    <div id="breadcrumbs">
+          
+  
+
+  
+    
+  
+  
+    
+            <div class="xleft">
+        Last Published: 2009-10-17
+                      </div>
+            <div class="xright">      
+  
+
+  
+    
+  
+  
+    
+  </div>
+      <div class="clear">
+        <hr/>
+      </div>
+    </div>
+    <div id="leftColumn">
+      <div id="navcolumn">
+           
+  
+
+  
+    
+  
+  
+    
+                   <h5>Large KB Gazetteer</h5>
+            <ul>
+              
+    <li class="none">
+                    <a href="index.html">Overview</a>
+          </li>
+              
+    <li class="none">
+              <strong>Usage</strong>
+        </li>
+              
+    <li class="none">
+                    <a href="general.html">Q & A</a>
+          </li>
+              
+    <li class="none">
+                    <a href="gate_compatibility.html">GATE Compatibility</a>
+          </li>
+              
+    <li class="none">
+                    <a href="comparison.html">GATE Gazetteer Feature Comparison</a>
+          </li>
+              
+    <li class="none">
+                    <a href="semantic_encrichment_pr.html">Semantic Enrichment PR</a>
+          </li>
+              
+    <li class="none">
+                    <a href="samples.html">Samples</a>
+          </li>
+          </ul>
+              <h5>Developer Documentation</h5>
+            <ul>
+              
+    <li class="none">
+                    <a href="dictionary_lifecycle.html">Dictionary Lifecycle</a>
+          </li>
+          </ul>
+                                           <a href="http://maven.apache.org/" title="Built by Maven" class="poweredBy">
+            <img alt="Built by Maven" src="./images/logos/maven-feather.png"></img>
+          </a>
+                       
+  
+
+  
+    
+  
+  
+    
+        </div>
+    </div>
+    <div id="bodyColumn">
+      <div id="contentBox">
+        <ul><li><a href="#Required_reading">Required reading</a></li>
+<li><a href="#Basics">Basics</a></li>
+<li><a href="#Dictionary_setup">Dictionary setup</a></li>
+<li><a href="#Additional_dictionary_configuration">Additional dictionary configuration</a></li>
+<li><a href="#Processing_Resource_Configuration">Processing Resource Configuration</a></li>
+<li><a href="#Run-time_configuration">Run-time configuration</a></li>
+</ul>
+<div class="section"><h2>Required reading</h2>
+<p>See at least the quick <a href="http://gate.ac.uk/sale/tao/splitch3.html#x5-650003.4" class="externalLink">walkthrough in using GATE CREOLE plugins</a>. The gazetteer is such plugin. You are probably familiar with RDF already if you have decided to use the Large KB gazetteer.</p>
+</div>
+<div class="section"><h2>Basics</h2>
+<ul><li>The Large KB Gazetteer is included with GATE starting with version 5.1. Download GATE at <a href="http://gate.ac.uk/download" class="externalLink">http://gate.ac.uk/download</a>. The gazetteer requires GATE 5.1. See <a href="./gate_compatibility.html">this</a> if you need to use 5.0.</li>
+<li>There are other gazetteers in GATE that can process RDF. Select the right one for the job, using our <a href="./comparison.html">comparison guide</a>.</li>
+<li>To use the Large KB gazetteer, setup your dictionary first. The dictionary is a folder with some configuration files. Use the samples at <i>GATE_HOME/plugins/lkb_gazetteer/samples</i> as a guide or download a prebuilt dictionary from <a href="http://ontotext.com/kim/lkb_gazetteer/dictionaries" class="externalLink">http://ontotext.com/kim/lkb_gazetteer/dictionaries</a>.</li>
+<li>Load <i>GATE_HOME/plugins/lkb_gazetteer</i> as a CREOLE plugin. See the GATE documentation for details.</li>
+<li>Create a new &quot;Large KB Gazetteer&quot; processing resource (PR). Put the folder of the dictionary you created in the dictionaryPath parameter. You can leave the rest of the parameters as defaults.</li>
+<li>Add the PR to your GATE application. The gazetteer doesn't require a tokenizer or the otput of any other processing resources.</li>
+<li>The gazetteer will create annotations with type Lookup and two features: &quot;inst&quot;, which contains the URI of the ontology instance, and &quot;class&quot; which contains the URI of the ontology class that instance belongs to.<p>See <a href="./usage.html">the detailed usage guide</a> for details on setting up dictionaries and configuration.</p>
+</li>
+</ul>
+</div>
+<div class="section"><h2>Dictionary setup</h2>
+<p>The dictionary is a folder with some configuration files. You can find samples at <i>GATE_HOME/plugins/lkb_gazetteer/samples</i>. Additionaly, prebuilt dictionaries can be downloaded from <a href="./prebuilt_dictionaries.html">here</a>.</p>
+<p>Setting up your own dictionary is easy. You need to define your RDF ontology and then specify a SPARQL or SERQL query that will retrieve a subset of that ontology as a dictionary.</p>
+<p><i>config.ttl</i> is a Turtle RDF file which configures a local RDF ontology or connection to a remote Sesame RDF database. </p>
+<p>If you want to see examples of how to use local RDF files, please check <i>samples/dictionary_from_local_ontology/config.ttl</i>. The <i>Sesame repository configuration</i> section configures a local <a href="http://ontotext.com/owlim" class="externalLink">Ontotext SwiftOWLIM</a> database that loads a list of RDF files. Simply create a list of your RDF files and re-use the rest of the configuration. The sample configuration support datasets with 10 000 000 triples with acceptable performance. For working with larger datasets, advanced users can substitute SwiftOWLIM with another Sesame RDF engine. In that case, make sure you add the necessary JARs to the list in <i>GATE_HOME/plugins/lkb_gazetteer/creole.xml</i>. For example, <a href="http://www.ontotext.com/owlim/big" class="externalLink">Ontotext BigOWL</a> is an Sesame RDF engine that can load bilions of triples on desktop hardware.</p>
+<p>Since any Sesame repository can be confgired in <i>config.ttl</i>, the Large KB gazetteer can extract dictionaries from <b>all</b> significant RDF databases. See the page on <a href="./database_compatibility.html">database compatibility</a> for more information.</p>
+<p><i>query.txt</i> contains a SPARQL query. You can write any query you like, as long as its projection contains at least two columns in the following order: label and instance. As an option, you can also add a third column for the ontology class of the RDF entity. Below you can see a sample query, which creates a dictionary from the names and the unique identifiers of 10,000 entertainers in DbPedia.</p>
+<div class="source"><pre>PREFIX opencyc: &lt;http://sw.opencyc.org/2008/06/10/concept/en/&gt;
+PREFIX rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt;
+
+SELECT ?Name ?Person WHERE {
+        ?Person a opencyc:Entertainer ; rdfs:label ?Name .           
+    FILTER (lang(?Name) = &quot;en&quot;) 
+} LIMIT 10000</pre>
+</div>
+<p>Try this query at the <a href="http://ldsr.ontotext.com" class="externalLink">Linked Data Semantic Repository</a>.</p>
+<p>When you load the dictionary configuration in GATE for the first time, it creates a binary snapshot of the dictionary. Thereafter it will load only this binary snapshot. If the dictionary configuration is changed, the snapshot will be reinitialized automatically. For more information, please see the <a href="./dictionary_lifecycle.html">dictionary lifecycle specification</a> </p>
+</div>
+<div class="section"><h2>Additional dictionary configuration</h2>
+<p>The config.ttl may contain additional dictionary configuration. Such configuration concerns only the initial loading of the dictionary from the RDF database. The options are still being determined and more will appear in future versions. They must be placed below the repository configuration section as attributes of a dictionary configuration. Here is a sample <i>config.ttl</i> file with additional configuration.</p>
+<div class="source"><pre># Sesame configuration template for a (proxy for a) remote repository
+#
+@prefix rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt;.
+@prefix rep: &lt;http://www.openrdf.org/config/repository#&gt;.
+@prefix hr: &lt;http://www.openrdf.org/config/repository/http#&gt;.
+@prefix lkbg: &lt;http://www.ontotext.com/lkb_gazetteer#&gt;.
+
+[] a rep:Repository ;
+   rep:repositoryImpl [
+      rep:repositoryType &quot;openrdf:HTTPRepository&quot; ;
+      hr:repositoryURL &lt;http://ldsr.ontotext.com/openrdf-sesame/repositories/owlim&gt;
+   ];
+   rep:repositoryID &quot;owlim&quot; ;
+   rdfs:label &quot;LDSR&quot; .
+   
+[] a lkbg:DictionaryConfiguration ; 
+  lkbg:caseSensitivity &quot;CASE_INSENSITIVE&quot; .  </pre>
+</div>
+</div>
+<div class="section"><h2>Processing Resource Configuration</h2>
+<p>The following options can be set when the gazetteer PR is initialized:</p>
+<ul><li>dictionaryPath - The dictionary folder described above.</li>
+<li>forceCaseSensitive - Whether the gazeteer should return case-sensitive matches regardless of the loaded dictionary.</li>
+</ul>
+</div>
+<div class="section"><h2>Run-time configuration</h2>
+<ul><li>annotationSetName - The annotation set, which will receive the generated lookup annotations.</li>
+<li>annotationLimit - The maximum number of the generated annotations. NULL or 0 for no limit. Setting limit of the number of the created annotations will reduce the memory consumption of GATE on large documents. Note that GATE documents consume gigabytes of memory if there are tens of thousands of annotations in the document. All PRs that create large number of annotations like the gazetteers and tokenizers may cause an Out Of Memory error on large texts. Setting that options limits the amount of memory that the gazetteer will use. </li>
+</ul>
+</div>
+
+      </div>
+    </div>
+    <div class="clear">
+      <hr/>
+    </div>
+    <div id="footer">
+      <div class="xright">&#169;  
+          2009
+    
+          Ontotext AD
+          
+  
+
+  
+    
+  
+  
+    
+  </div>
+      <div class="clear">
+        <hr/>
+      </div>
+    </div>
+  </body>
+</html>

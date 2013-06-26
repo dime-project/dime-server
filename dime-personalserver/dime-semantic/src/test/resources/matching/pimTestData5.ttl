@@ -1,0 +1,182 @@
+@prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#> . 
+@prefix nao: <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#> . 
+@prefix nie: <http://www.semanticdesktop.org/ontologies/2007/01/19/nie#> . 
+@prefix pimo: <http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#> . 
+@prefix nco: <http://www.semanticdesktop.org/ontologies/2007/03/22/nco#> . 
+@prefix dao: <http://www.semanticdesktop.org/ontologies/2011/10/05/dao#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> . 
+
+@prefix juan: <urn:juan:> .
+@prefix anna: <urn:anna:> .
+@prefix juanLINKEDIN: <urn:juanLINKEDIN:> .
+
+juan:PIM a pimo:PersonalInformationModel .
+juan:PIM pimo:creator juan:juanUser .
+juan:juanUser a pimo:Person .
+juan:juanUser pimo:occurrence juan:c22 .
+
+juan:facebook1 a dao:Account .
+juan:facebook1 dao:accountType "Facebook" .
+
+anna:PIM a pimo:PersonalInformationModel .
+anna:PIM pimo:creator _:annaUser .
+anna:annaUser a pimo:Person .
+anna:annaUser pimo:occurrence anna:c12 .
+anna:annaUser pimo:occurrence anna:c13 .
+
+anna:twitter1 a dao:Account .
+anna:twitter1 dao:accountType "Twitter" .
+
+anna:dime1 a dao:Account .
+anna:dime1 dao:accountType "Di.Me" .
+
+juan:c22 a nco:PersonContact .
+juan:c22 nco:contactUID "1004545677" .
+juan:c22 nie:dataSource juan:facebook1 .
+juan:c22 nco:photo <https://fbcdn-profile-a.akamaihd.net/hprofile-ak-snc4/41731juan1004545677juan9911444juanq.jpg> .
+juan:c22 nao:description "Research Assistant at DERI Galway and a football fanatic." .
+juan:c22 nco:url <https://www.facebook.com/juanmartinez> .
+juan:c22 nco:gender nco:male .
+juan:c22 nco:hobby "Sports" .
+juan:c22 nco:hobby "Technology" .
+juan:c22 nco:hobby "Football" .
+juan:pn4 a nco:PersonName .
+juan:pn4 nco:nameGiven "Juan" .
+juan:pn4 nco:nameFamily "Martinez" .
+juan:pn4 nco:fullname "Juan Martinez" .
+juan:pn4 nco:nickname "juanmartinez" .
+juan:c22 nco:hasPersonName juan:pn4 .
+juan:bd2 a nco:BirthDate .
+juan:bd2 nco:birthDate "1966-08-05"^^xsd:date . 
+juan:c22 nco:hasBirthDate juan:bd2 .
+juan:e3 a nco:EmailAddress .
+juan:e3 nco:emailAddress "juan.martinez@deri.org" .
+juan:c22 nco:hasEmailAddress juan:e3 .
+juan:pos42 a nco:Affiliation .
+juan:pos42 nao:externalIdentifier "320788801299288" .
+juan:pos42 nco:role "Research Assistant" .
+juan:pos42 nco:start "2010-06-01T00:00:00Z"^^xsd:dateTime .
+juan:pos42 nco:org juan:org20 .
+juan:c22 nco:hasAffiliation juan:pos42 .
+juan:org20 a nco:OrganizationContact .
+juan:org20 nie:title "Digital Enterprise Research Institute" .
+juan:pos58 a nco:Affiliation .
+juan:pos58 nao:externalIdentifier "114466787876944" .
+juan:pos58 nco:role "Digital Strategy Manager" .
+juan:pos58 nco:start "2003-01-01T00:00:00Z"^^xsd:dateTime .
+juan:pos58 nco:end "2010-05-31T00:00:00Z"^^xsd:dateTime .
+juan:pos58 nco:org juan:org11 .
+juan:c22 nco:hasAffiliation juan:pos58 .
+juan:org11 a nco:OrganizationContact .
+juan:org11 nie:title "Madrid Ingeneria y Construction Industrial" .
+juan:pos68 a nco:Affiliation .
+juan:pos68 nao:externalIdentifier "114466456876956" .
+juan:pos68 nco:role "Senior Software Developer" .
+juan:pos68 nco:start "1996-01-01T00:00:00Z"^^xsd:dateTime .
+juan:pos68 nco:end "2002-12-31T00:00:00Z"^^xsd:dateTime .
+juan:pos68 nco:org juan:org14 .
+juan:c22 nco:hasAffiliation juan:pos68 .
+juan:org14 a nco:OrganizationContact .
+juan:org14 nie:title "Barcellona Digital" .
+juan:loc36 a nco:PostalAddress .
+juan:loc36 nao:prefLabel "Victoria, Malta" .
+juan:loc36 nco:locality "Victoria" .
+juan:loc36 nco:country "Malta" .
+juan:c22 nco:hasPostalAddress juan:loc36 .
+
+anna:c12 a nco:PersonContact .
+anna:c12 nco:contactUID "12" .
+anna:c12 nie:dataSource anna:twitter1 .
+anna:c12 nco:hasPersonName anna:pn12 .
+anna:pn12 a nco:PersonName .
+anna:pn12 nco:fullname "Anna Alford" .
+anna:pn12 nco:nickname "aalford" .
+
+anna:c13 a nco:PersonContact .
+anna:c13 nco:contactUID "13" .
+anna:c13 nie:dataSource anna:dime1 .
+anna:c13 nco:hasPersonName anna:pn13 .
+anna:pn13 a nco:PersonName .
+anna:pn13 nco:nameHonorificPrefix "Ms." .
+anna:pn13 nco:nameGiven "Anna" .
+anna:pn13 nco:nameFamily "Alford" .
+anna:pn13 nco:fullname "Anna Alford" .
+anna:pn13 nco:nickname "aalford" .
+anna:bd13 a nco:BirthDate .
+anna:bd13 nco:birthDate "1978-12-15"^^xsd:date .
+anna:c13 nco:hasBirthDate anna:bd13 .
+
+juanLINKEDIN:PIM a pimo:PersonalInformationModel .
+juanLINKEDIN:PIM pimo:creator juanLINKEDIN:juanLINKEDINUser .
+juanLINKEDIN:juanLINKEDINUser a pimo:Person .
+juanLINKEDIN:juanLINKEDINUser pimo:occurrence juanLINKEDIN:p1 .
+
+juanLINKEDIN:linkedin1 a dao:Account .
+juanLINKEDIN:linkedin1 dao:accountType "LinkedIn" .
+
+juanLINKEDIN:p1 a nco:PersonContact .
+juanLINKEDIN:p1 nco:contactUID "J7qb67bTP" .
+juanLINKEDIN:p1 nie:dataSource juanLINKEDIN:linkedin1 .
+juanLINKEDIN:p1 nco:photo <http://media.linkedin.com/mpr/mprx/0juanLINKEDINyq555n50SdvS0jaMptNn5qFTTWjuanLINKEDIN8xZ7MOzlV5zqxYuBK8pZJr-vWIv8l7FixpxmvgcbUEtEdTYeM> .
+juanLINKEDIN:p1 nao:description "Research Assistant in the Digital.Me EU Project (http://www.dime-project.eu/).  Responsible for research and development tasks. " .
+juanLINKEDIN:p1 nco:hasPersonName juanLINKEDIN:pn1 .
+juanLINKEDIN:pn1 a nco:PersonName .
+juanLINKEDIN:pn1 nco:nameHonorificPrefix "Dr." .
+juanLINKEDIN:pn1 nco:nameGiven "Juan" .
+juanLINKEDIN:pn1 nco:nameAdditional "Paul" .
+juanLINKEDIN:pn1 nco:nameFamily "Martinez" .
+juanLINKEDIN:pn1 nco:fullname "Juan M." .
+juanLINKEDIN:pn1 nco:nameHonorificSuffix "Jr." .
+juanLINKEDIN:bd24 a nco:BirthDate .
+juanLINKEDIN:bd24 nco:birthDate "1966-08-05"^^xsd:date .
+juanLINKEDIN:p1 nco:hasBirthDate juanLINKEDIN:bd24 .
+juanLINKEDIN:pos4 a nco:Affiliation .
+juanLINKEDIN:pos4 nao:externalIdentifier "320788801" .
+juanLINKEDIN:pos4 nco:role "Research Assistant" .
+juanLINKEDIN:pos4 nco:start "2010-06-01T00:00:00Z"^^xsd:dateTime .
+juanLINKEDIN:pos4 nco:org juanLINKEDIN:org8 .
+juanLINKEDIN:p1 nco:hasAffiliation juanLINKEDIN:pos4 .
+juanLINKEDIN:org8 a nco:OrganizationContact .
+juanLINKEDIN:org8 nie:title "Digital Enterprise Research Institute Galway, National University of Ireland Galway" .
+juanLINKEDIN:pos8 a nco:Affiliation .
+juanLINKEDIN:pos8 nao:externalIdentifier "224093780" .
+juanLINKEDIN:pos8 nco:role "Digital Strategy Manager" .
+juanLINKEDIN:pos8 nco:start "2003-01-01T00:00:00Z"^^xsd:dateTime .
+juanLINKEDIN:pos8 nco:end "2010-05-31T00:00:00Z"^^xsd:dateTime .
+juanLINKEDIN:pos8 nco:org juanLINKEDIN:org16 .
+juanLINKEDIN:p1 nco:hasAffiliation juanLINKEDIN:pos8 .
+juanLINKEDIN:org16 a nco:OrganizationContact .
+juanLINKEDIN:org16 nie:title "Madrid Ingeneria y Construction Industrial" .
+juanLINKEDIN:ph20 a nco:PhoneNumber .
+juanLINKEDIN:ph20 nco:phoneNumber "+34 750 106 567" .
+juanLINKEDIN:p1 nco:hasPhoneNumber juanLINKEDIN:ph20 .
+juanLINKEDIN:im87 a nco:IMAccount .
+juanLINKEDIN:im87 nco:imAccountType "skype" .
+juanLINKEDIN:im87 nco:imID "juan.martinez" .
+juanLINKEDIN:p1 nco:hasIMAccount juanLINKEDIN:im87 .
+juanLINKEDIN:addr94 a nco:PostalAddress .
+juanLINKEDIN:addr94 nao:prefLabel "24, St. Thomas Street., Victoria, Gozo, Malta" .
+juanLINKEDIN:addr94 nco:locality "Victoria" .
+juanLINKEDIN:addr94 nco:country "Malta" .
+juanLINKEDIN:addr94 nco:region "Gozo & Comino" .
+juanLINKEDIN:p1 nco:hasPostalAddress juanLINKEDIN:addr94 .
+
+juan:j000006
+	a pimo:City ;
+	nao:prefLabel "Victoria" ;
+	pimo:locatedWithin juan:j000007 ;
+	pimo:locatedWithin juan:j000008 .
+
+juan:j000007
+	a pimo:State ;
+	nao:prefLabel "Gozo & Comino" ;
+	pimo:locatedWithin juan:j000008 ; 
+	pimo:containsLocation juan:j000006 ;
+	pimo:isLocationOf juan:j000006 .
+	
+juan:j000008
+	a pimo:Country ;
+	nao:prefLabel "Malta" ;
+	pimo:containsLocation juan:j000006 ;
+	pimo:containsLocation juan:j000007 .
+

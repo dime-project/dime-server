@@ -1,0 +1,13 @@
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX dbpedia-owl: <http://dbpedia.org/ontology/>
+
+SELECT DISTINCT ?Name ?Country ?Cls
+WHERE {
+	?Country a ?Cls ; rdfs:label ?Name ;
+        <http://dbpedia.org/property/capital> ?capital .
+	OPTIONAL { ?Country dbpedia-owl:dissolutionYear ?year } .
+	FILTER(!BOUND(?year))     
+        FILTER (?Cls = <http://dbpedia.org/ontology/Country>)
+
+}
+ORDER BY (?Country)

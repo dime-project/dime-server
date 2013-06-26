@@ -1,0 +1,120 @@
+declare namespace nco = "http://www.semanticdesktop.org/ontologies/2007/03/22/nco#";
+declare namespace nao = "http://www.semanticdesktop.org/ontologies/2007/08/15/nao#";
+declare namespace pimo = "http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#";
+declare namespace dlpo = "http://www.semanticdesktop.org/ontologies/2011/10/05/dlpo#";
+declare namespace geo = "http://www.w3.org/2003/01/geo/wgs84_pos#";
+declare namespace xsd = "http://www.w3.org/2001/XMLSchema#";
+
+let $doc := doc("%doc%")
+
+let $liveposts := $doc/a/e
+
+return   
+	
+	for $livepost in $liveposts
+  
+		let $timestamp := $livepost/created_at
+		let $livepostMessage := $livepost/text
+		let $livepostId := $livepost/id
+		let $type := if ($livepost/in_reply_to_status_id="") then "Status"
+	  				 else ( "Comment" )
+	  	let $replyOfId :=  if (fn:not(($livepost/in_reply_to_status_id)="")) 
+	  	                   then ($livepost/in_reply_to_status_id)
+	  	                   else ()
+	  	let $replyOfUserId := if (fn:not(($livepost/in_reply_to_user_id)="")) 
+	  						  then ($livepost/in_reply_to_user_id)
+	  						  else ()
+	  	let $replyOfUsername := $livepost/in_reply_to_screen_name
+	  	let $user := $livepost/user
+		let $userId := $user/id	
+		let $retweetId := $livepost/retweeted_status/id	
+		let $retweetTimestamp := $livepost/retweeted_status/created_at
+		let $retweetText := $livepost/retweeted_status/text
+		let $retweetUser := $livepost/retweeted_status/user		
+		let $retweetUserId := $retweetUser/id
+		let $entities := $livepost/entities
+		let $userMentions := $entities/user_mentions/e
+		let $tweetUrls := $entities/urls/e
+		let $tweetMediaUrls := $entities/media/e
+		 		
+		#Construct for the livepost 			  
+	    construct
+		{		   	
+			_:lvp{data($livepostId)} a dlpo:LivePost, dlpo:{data($type)} ;
+				nao:externalIdentifier {data($livepostId)} ;
+				dlpo:timestamp {data($timestamp)}^^xsd:dateTime ;
+				dlpo:textualContent {data($livepostMessage)} ;
+				nao:creator _:c{data($userId)} .
+			{ 			   		
+				let $userFullname := $user/name
+			   	let $userPhotoUrl := $user/profile_image_url
+			   	let $userDescription := if (fn:not(($user/description)=""))
+     									then ($user/description)
+     									else ()
+			   	let $userUrl := if (fn:not(($user/url)=""))
+     							then ($user/url)
+     							else ()
+			   		
+			   	#Construct for the user's information 	          
+				construct
+				{
+					_:c{data($userId)} a nco:PersonContact ;
+					    nco:contactUID {data($userId)} ;
+						nao:prefLabel {data($userFullname)} ;
+				        nco:photo {data($userPhotoUrl)} ;
+			  			nao:description {data($userDescription)} ;
+			  			nco:websiteUrl {data($userUrl)} .
+				}
+			}.
+			
+			{
+				for $userMention in $userMentions 
+				
+					let $userMentionId := $userMention/id
+					let $userMentionFullname := $userMention/name
+				
+					#Construct for the related resources			  
+			    	construct
+					{
+						_:lvp{data($livepostId)} dlpo:relatedResource _:c{data($userMentionId)} .
+						_:c{data($userMentionId)} a nco:PersonContact ;
+							nco:contactUID {data($userMentionId)} ;
+					 		nao:prefLabel {data($userMentionFullname)} .
+					}
+			}.
+			
+			{
+				for $tweetUrl in $tweetUrls				
+				
+					let $tweetUrlSource := $tweetUrl/expanded_url
+					
+					#Construct for the defining resources (urls)			  
+			    	construct
+					{
+						_:lvp{data($livepostId)} dlpo:definingResource {data($tweetUrlSource)}.					 	
+					}
+			}.
+			
+			{
+				for $tweetMediaUrl in $tweetMediaUrls		
+						
+					let $tweetMediaUrlSource := $tweetMediaUrl/expanded_url
+				
+					#Construct for the defining resources (media)			  
+			    	construct
+					{
+						_:lvp{data($livepostId)} dlpo:definingResource {data($tweetMediaUrlSource)}.		 	
+					}
+			}.
+			
+			_:lvp{data($livepostId)} dlpo:replyOf _:lvp{data($replyOfId)} .
+			_:lvp{data($replyOfId)} a dlpo:LivePost, dlpo:Status ;
+				nao:externalIdentifier {data($replyOfId)} ;
+				nao:creator _:c{data($replyOfUserId)} .
+			_:lvp{data($livepostId)} dlpo:repostOf _:lvp{data($retweetId)} .
+			_:lvp{data($retweetId)} a dlpo:LivePost, dlpo:Status ;
+				nao:externalIdentifier {data($retweetId)} ;
+				dlpo:timestamp {data($retweetTimestamp)}^^xsd:dateTime ;
+				dlpo:textualContent {data($retweetText)} ;
+				nao:creator _:c{data($retweetUserId)} .
+		 }

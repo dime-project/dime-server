@@ -1,0 +1,16 @@
+//These are patterns for sentence splits
+//
+// Valentin Tablan, 24 Aug 2007
+//
+//
+// Lines starting with // are comments; empty lines are ignored
+
+//more than 2 new lines
+\n{2,}+
+\r{2,}+
+(?:\n\r){2,}+
+(?:\r\n){2,}+
+
+//the end of the document is also an external split, so that there is no
+//orphaned text
+\z

@@ -1,0 +1,56 @@
+declare namespace nco = "http://www.semanticdesktop.org/ontologies/2007/03/22/nco#";
+declare namespace pimo = "http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#";
+declare namespace nao = "http://www.semanticdesktop.org/ontologies/2007/08/15/nao#";
+declare namespace nie = "http://www.semanticdesktop.org/ontologies/2007/01/19/nie#";
+declare namespace xsd = "http://www.w3.org/2001/XMLSchema#";
+declare namespace geo = "http://www.w3.org/2003/01/geo/wgs84_pos#";
+
+let $doc := doc("%doc%")
+
+let $connections :=$doc/o/users/e
+
+return 
+ for $connection in $connections 
+     let $personId := fn:replace($connection/id, '-', '')    
+     let $fullname := $connection/name
+     let $nickname := $connection/screen_name
+     let $location := $connection/location 	
+     let $photoUrl := $connection/profile_image_url
+     let $websiteUrl := if (fn:not(($connection/url)=""))
+     					then ($connection/url)
+     					else ()
+     let $summary := if (fn:not(($connection/description)=""))
+     					then (fn:normalize-space($connection/description))
+     					else ()
+                  
+    #Construct for the user     	
+	construct
+	{  	
+	  _:c{data($personId)} a nco:PersonContact;
+	  nco:contactUID {data($personId)};
+	  nco:photo <{$photoUrl}>;	  
+	  nao:description {data($summary)};
+	  nco:url {data($websiteUrl)};	
+	  nco:hasPersonName _:pn{data($personId)} .
+	  	_:pn{data($personId)} a nco:PersonName ;
+       	nco:fullname {data($fullname)};
+       	nco:nickname {data($nickname)}.     
+       	
+       	#Construct for the location of the user
+        {
+     	   if (fn:not(($location)="")) 
+	       then ({
+	           let $counter := count($location/preceding::*) + count($location/ancestor::*)
+	                  
+	           construct
+	           {
+	        	   _:loc{data($counter)} a nco:PostalAddress;
+	        	   nao:prefLabel {data($location)}.
+	       		   _:c{data($personId)} nco:hasPostalAddress _:loc{data($counter)};               
+	           } 
+	        })
+		    else ()           
+         }          	
+     } 
+	  
+	

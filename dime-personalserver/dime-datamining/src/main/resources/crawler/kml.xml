@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<crawler>
+    <adapter>KML</adapter>
+	<jobs>
+		<job>
+			<path>/place/@all</path>
+			<type>eu.dime.ps.semantic.model.nfo.Placemark</type>
+			<cron>0 0 0 * * ?</cron>
+		</job>
+    </jobs>
+</crawler>

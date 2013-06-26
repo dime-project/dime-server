@@ -1,0 +1,111 @@
+Phase:	PersonEntitiesExtended
+Input: Token Lookup Person FirstPerson Title
+Options: control = appelt
+
+Rule: FirstNameExtended
+// Fred
+(
+ {Lookup.majorType == person_first}
+):person
+-->
+{
+	gate.AnnotationSet person = (gate.AnnotationSet)bindings.get("person");
+	gate.Annotation personAnn = (gate.Annotation)person.iterator().next();
+	String mydocContent = doc.getContent().toString(); 
+	gate.FeatureMap features = Factory.newFeatureMap();
+
+	//find out if the gender is unambiguous
+	String gender = (String)personAnn.getFeatures().get("minorType");
+	boolean ambig = false;
+	gate.FeatureMap constraints = Factory.newFeatureMap();
+	constraints.put("majorType", "person_first");
+	Iterator lookupsIter =  inputAS.get(personAnn.getStartNode().getOffset()).get("Lookup", constraints).iterator();
+	while(!ambig && lookupsIter.hasNext()){
+	  gate.Annotation anAnnot = (gate.Annotation)lookupsIter.next();
+	  //we're only interested in annots of the same length
+	  if(anAnnot.getEndNode().getOffset().equals(personAnn.getEndNode().getOffset())){
+		ambig = !gender.equals(anAnnot.getFeatures().get("minorType"));
+	  }
+	}
+	if(!ambig) features.put("gender", gender);
+
+	features.put("rule", "FirstNameExtended");
+	features.put("firstperson",mydocContent.substring(person.firstNode().getOffset().intValue(), person.lastNode().getOffset().intValue()));
+	outputAS.add(person.firstNode(), person.lastNode(), "FirstPersonName",features);
+}
+
+//optional (?), match zero or more (*), one or more (+)
+Rule: PersonEntities
+(
+ ((TITLE)?):prefix
+ ({FirstPerson})+ :name
+ (
+  (PREFIX)* 
+  (UPPER) 
+ )+ :surname
+ ((PERSONENDING)?):suffix
+)
+:person
+
+
+-->
+  {
+    AnnotationSet person = (AnnotationSet) bindings.get("person");
+	AnnotationSet firstname = (AnnotationSet) bindings.get("name");
+	AnnotationSet surname = (AnnotationSet) bindings.get("surname");
+	AnnotationSet prefix = (AnnotationSet) bindings.get("prefix");
+	AnnotationSet suffix = (AnnotationSet) bindings.get("suffix");	
+	String gender = (String)inputAS.get("FirstPerson").iterator().next().getFeatures().get("gender");	
+		
+	String mydocContent = doc.getContent().toString(); 
+    gate.FeatureMap newFeatures= Factory.newFeatureMap();
+	
+    newFeatures.put("rule","PersonEntities");
+	
+	if ( (person!=null) && (!person.isEmpty()) )
+    {
+		newFeatures.put("person",mydocContent.substring(person.firstNode().getOffset().intValue(), person.lastNode().getOffset().intValue()));
+	} else {
+	    newFeatures.put("person","");
+	}
+	
+	if ( (firstname!=null) && (!firstname.isEmpty()) )
+    {
+		newFeatures.put("firstname",mydocContent.substring(firstname.firstNode().getOffset().intValue(), firstname.lastNode().getOffset().intValue()));
+	} else {
+	    newFeatures.put("firsname","");
+	}
+	
+	if ( (surname!=null) && (!surname.isEmpty()) )
+    {
+	   newFeatures.put("surname",mydocContent.substring(surname.firstNode().getOffset().intValue(), surname.lastNode().getOffset().intValue()));
+	} else {
+	    newFeatures.put("surname","");
+	}
+	
+	if ( (prefix!=null) && (!prefix.isEmpty()) )
+    {
+		newFeatures.put("prefix",mydocContent.substring(prefix.firstNode().getOffset().intValue(), prefix.lastNode().getOffset().intValue()));
+	} else {
+	    newFeatures.put("prefix","");
+	}
+	
+	if ( (suffix!=null) && (!suffix.isEmpty()) )
+    {
+		newFeatures.put("suffix",mydocContent.substring(suffix.firstNode().getOffset().intValue(), suffix.lastNode().getOffset().intValue()));
+	} else {
+		newFeatures.put("suffix","");
+	}
+	
+	if ( (gender!=null) && (!gender.isEmpty()) )
+    {
+		newFeatures.put("gender",gender);
+	} else {
+		newFeatures.put("gender","");
+	}
+	
+    outputAS.add(person.firstNode(),person.lastNode(),"PersonEntities", newFeatures);
+  }
+
+  
+  

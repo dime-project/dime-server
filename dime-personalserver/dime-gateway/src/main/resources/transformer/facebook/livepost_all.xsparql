@@ -1,0 +1,96 @@
+declare namespace nco = "http://www.semanticdesktop.org/ontologies/2007/03/22/nco#";
+declare namespace nao = "http://www.semanticdesktop.org/ontologies/2007/08/15/nao#";
+declare namespace pimo = "http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#";
+declare namespace dlpo = "http://www.semanticdesktop.org/ontologies/2011/10/05/dlpo#";
+declare namespace geo = "http://www.w3.org/2003/01/geo/wgs84_pos#";
+declare namespace xsd = "http://www.w3.org/2001/XMLSchema#";
+
+let $doc := doc("%doc%")
+
+let $liveposts := $doc/o/data/e
+
+return 
+	
+	for $livepost in $liveposts
+	    let $livepostId := fn:replace($livepost/id, '-', '')
+		let $timestamp := $livepost/updated_time
+		let $message := $livepost/message  
+		let $type := if ($livepost/type="photo") then "ImagePost"
+	  				  else if ($livepost/type="video") then "VideoPost"
+	  				  else if ($livepost/type="status") then "Status"
+	  				  else if ($livepost/type="link") then "WebDocumentPost"
+	  				  else if ($livepost/type="checkin") then "Checkin"
+	  				  else if ($livepost/type="event") then "EventPost"
+	  				  else ( "LivePost" )	  	
+	  	let $link := $livepost/link
+	  	let $icon := $livepost/icon	
+	  	let $label := $livepost/name  #json 'name' element	  
+	  	let $description := $livepost/description 
+	  	let $userId := $livepost/user/id  #changed xml 'from' element to 'user'
+	    let $userFullname := $livepost/user/name  #changed xml 'from' element to 'user'	
+	    		
+		#Construct for a LivePost		  
+	    construct
+		{		   	
+			_:lvp{data($livepostId)} a dlpo:LivePost , dlpo:{data($type)};
+			nao:externalIdentifier {data($livepostId)};
+			nao:prefSymbol {data($icon)};
+			nao:prefLabel {data($label)};
+			nao:description {data($description)};
+			dlpo:timestamp {data($timestamp)}^^xsd:dateTime;
+			dlpo:textualContent {data($message)};	
+			dlpo:definingResource {data($link)};
+			nao:creator _:c{data($userId)}.
+			_:c{data($userId)} a nco:PersonContact;   
+		    	nco:contactUID {data($userId)};
+				nco:hasName _:name{data($userId)} .
+		    _:name{data($userId)} a nco:Name ;
+			    nco:fullname {data($userFullname)}.		   
+		    
+		    #Construct for the likes of a LivePost  		
+			{ 
+			   		let $likes := $livepost/likes/data/e
+			   					   		
+			   		for $like in $likes
+			   			let $userId := $like/id	 	
+			   			let $userFullname := $like/name	   						 		   		     
+			   		    	
+					    #Construct for the user's information 	          
+					    construct
+						{						   
+							_:c{data($userId)} a nco:PersonContact;   
+					        nco:contactUID {data($userId)};
+					        nco:hasName _:name{data($userId)} .
+				        	_:name{data($userId)} a nco:Name ;
+				            	nco:fullname {data($userFullname)}.
+					        _:lvp{data($livepostId)} nao:favouritedBy _:c{data($userId)}.						        
+					    }					    
+		    }.
+		    
+		    #Construct for the replies (comments) of a LivePost   		
+			{ 
+			   		let $comments := $livepost/comments/data/e
+			   					   		
+			   		for $comment in $comments
+			   			let $commentId := $comment/id	
+			   			let $commentTimestamp := $comment/created_time
+			   			let $commentMessage := $comment/message 	
+			   			let $userId := $comment/user/id  #changed xml 'from' element to 'user'	
+					    let $userFullname := $comment/user/name  #changed xml 'from' element to 'user'					   				 		   		     
+			   		    	         
+					    construct
+						{						   
+							_:com{data($commentId)} a dlpo:LivePost ,dlpo:Comment;   
+					        nao:externalIdentifier {data($commentId)};
+					        dlpo:timestamp {data($commentTimestamp)}^^xsd:dateTime;
+							dlpo:textualContent {data($commentMessage)};
+							nao:creator _:c{data($userId)}.	
+							_:c{data($userId)} a nco:PersonContact;   
+						    	nco:contactUID {data($userId)};
+								nco:hasName _:name{data($userId)} .
+				        	_:name{data($userId)} a nco:Name;
+				            	nco:fullname {data($userFullname)}.
+					        _:lvp{data($livepostId)} dlpo:hasReply _:com{data($commentId)}.						       	        			   
+					    }					    
+		    }						   	    	   
+		}								

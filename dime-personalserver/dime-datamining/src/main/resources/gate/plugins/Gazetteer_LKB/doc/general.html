@@ -1,0 +1,229 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+
+
+
+
+
+
+
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>The Large KB gazetteer - Questions and Answers</title>
+    <style type="text/css" media="all">
+      @import url("./css/maven-base.css");
+      @import url("./css/maven-theme.css");
+      @import url("./css/site.css");
+    </style>
+    <link rel="stylesheet" href="./css/print.css" type="text/css" media="print" />
+        <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+      </head>
+  <body class="composite">
+    <div id="banner">
+                  <a href="http://www.ontotext.com" id="bannerLeft">
+    
+                                    <img src="http://ontotext.com/images/ontotext_logo.jpg" alt="" />
+    
+            </a>
+                    <div class="clear">
+        <hr/>
+      </div>
+    </div>
+    <div id="breadcrumbs">
+          
+  
+
+  
+    
+  
+  
+    
+            <div class="xleft">
+        Last Published: 2009-10-17
+                      </div>
+            <div class="xright">      
+  
+
+  
+    
+  
+  
+    
+  </div>
+      <div class="clear">
+        <hr/>
+      </div>
+    </div>
+    <div id="leftColumn">
+      <div id="navcolumn">
+           
+  
+
+  
+    
+  
+  
+    
+                   <h5>Large KB Gazetteer</h5>
+            <ul>
+              
+    <li class="none">
+                    <a href="index.html">Overview</a>
+          </li>
+              
+    <li class="none">
+                    <a href="usage.html">Usage</a>
+          </li>
+              
+    <li class="none">
+              <strong>Q & A</strong>
+        </li>
+              
+    <li class="none">
+                    <a href="gate_compatibility.html">GATE Compatibility</a>
+          </li>
+              
+    <li class="none">
+                    <a href="comparison.html">GATE Gazetteer Feature Comparison</a>
+          </li>
+              
+    <li class="none">
+                    <a href="semantic_encrichment_pr.html">Semantic Enrichment PR</a>
+          </li>
+              
+    <li class="none">
+                    <a href="samples.html">Samples</a>
+          </li>
+          </ul>
+              <h5>Developer Documentation</h5>
+            <ul>
+              
+    <li class="none">
+                    <a href="dictionary_lifecycle.html">Dictionary Lifecycle</a>
+          </li>
+          </ul>
+                                           <a href="http://maven.apache.org/" title="Built by Maven" class="poweredBy">
+            <img alt="Built by Maven" src="./images/logos/maven-feather.png"></img>
+          </a>
+                       
+  
+
+  
+    
+  
+  
+    
+        </div>
+    </div>
+    <div id="bodyColumn">
+      <div id="contentBox">
+        <div class="section"><h2><a name="top">Questions and Answers</a></h2>
+<p><b>General</b></p>
+<ol type="1"><li><a href="#kim-trusted-entities">
+        Why is a file called kim.trusted.entities.cache created in the dictionary folder?
+      </a></li>
+<li><a href="#rdf-database-compatibility">
+        Can I extract data from any RDF database?
+      </a></li>
+<li><a href="#relational-database-compatibility">
+        Can I extract data from a relational database?
+      </a></li>
+</ol>
+<p><b>Installation</b></p>
+<ol type="1"><li><a href="#how-install">
+        How do I install the Large KB Gazetteer?
+      </a></li>
+<li><a href="#gate-50">
+        Can I install the gazetteer in GATE 5.0 ?
+      </a></li>
+</ol>
+</div>
+<div class="section"><h2>General</h2>
+<dl><dt><a name="kim-trusted-entities">
+        Why is a file called kim.trusted.entities.cache created in the dictionary folder?
+      </a></dt>
+<dd>
+        <p>kim.trusted.entities.cache contains a binary data structure that contains the dictionary
+           extracted according to the dictionary settings. The name of the file is kept for 
+           backwards compatibility with the Ontotext KIM Plaftorm. Note that the file
+           snapshot.properties is a plain text file which contains metadata that, along with 
+           the configuration, describe the contents of the binary dictionary.</p>
+      <hr />
+</dd>
+<dt><a name="rdf-database-compatibility">
+        Can I extract data from any RDF database?
+      </a></dt>
+<dd>
+        <p>  The Large KB gazetteer communicates with RDF databases through the standard open-source <a href="http://www.openrdf.org">Sesame 2 API</a>.
+  The database connection is configured through <em>config.ttl</em> in the dictionary directory which contains standard Sesame
+  <a href="http://www.openrdf.org/doc/sesame2/2.3-pr1/users/ch07.html#d0e606">configuration template</a>. Note that in order to
+  configure a new database, you will need to add to the classpath the database Sesame adapter.</p>
+
+  <p>Here are some databases that should work correctly with the gazetteer.</p>
+  <ul>
+  <li><a href="http://www.mulgara.org/">Mulgara</a> (formerly known as Kowari) - through the 
+  <a href="http://repo.aduna-software.org/maven2/releases/org/openrdf/mulgara/">OpenRDF Mulgara SAIL</a></li>
+  
+  <li><a href="http://virtuoso.openlinksw.com/">OpenLink Virtuoso</a> - through the 
+  <a href="http://www.openlinksw.com/dataspace/dav/wiki/Main/VirtSesame2Provider">Virtuoso Sesame Adapter</a></li>
+  
+  <li><a href="http://www.franz.com/agraph/allegrograph/">Franz Inc. AllegroGraph</a> - through the Sesame 2 SAIL adapter supplied 
+  with the AllegroGraph distribution.</li>
+  
+  <li><a href="http://jena.sf.net">Jena</a> - through <a href="http://semanticweb.org/wiki/RDF2Go">RDF2Go</a></li>
+ </ul>
+      <hr />
+</dd>
+<dt><a name="relational-database-compatibility">
+        Can I extract data from a relational database?
+      </a></dt>
+<dd>
+        <p>You should convert your relational data into simple RDF. Try <a href="http://triplify.org/Overview">Triplify</a>.</p>
+      </dd>
+</dl>
+</div>
+<div class="section"><h2>Installation</h2>
+<dl><dt><a name="how-install">
+        How do I install the Large KB Gazetteer?
+      </a></dt>
+<dd>
+        <p>The gazetteer and its companion processing resources form a standard CREOLE plugin, compatible with GATE 5.1. See the <a href="http://gate.ac.uk/sale/tao/splitch3.html#x5-650003.4"> CREOLE plugin usage guide</a> in the GATE documentation.</p>
+      <hr />
+</dd>
+<dt><a name="gate-50">
+        Can I install the gazetteer in GATE 5.0 ?
+      </a></dt>
+<dd>
+        <p>The gazetteer requires GATE 5.1, but a GATE 5.0 installation can be modified so it becomes compatible. (That is how we tested the gazetteer before the 5.1 release). See <a href="gate_compatibility.html">the GATE compatibility guide</a> for more information.</p>
+      </dd>
+</dl>
+</div>
+
+      </div>
+    </div>
+    <div class="clear">
+      <hr/>
+    </div>
+    <div id="footer">
+      <div class="xright">&#169;  
+          2009
+    
+          Ontotext AD
+          
+  
+
+  
+    
+  
+  
+    
+  </div>
+      <div class="clear">
+        <hr/>
+      </div>
+    </div>
+  </body>
+</html>

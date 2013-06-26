@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OFFER>
+    <NUM>34511</NUM>
+    <DATE>20110109</DATE>
+    <CUSTOMER>
+        <CUSTID>23</CUSTID>
+        <CUSTNAME>Ajuntament de Barcelona</CUSTNAME>
+    </CUSTOMER>
+    <CONCEPT>Media TIC building, 22 district</CONCEPT>
+    <ITEMS>
+        <ITEM>
+           <NAME>Office floor</NAME>
+           <DESCRIPTION>Office floor for Media TIC building</DESCRIPTION>
+           <AMOUNT>350.000</AMOUNT>
+        </ITEM>
+        <ITEM>
+            <NAME>Meeting rooms</NAME>
+           <DESCRIPTION>Meeting rooms for Media TIC building</DESCRIPTION>
+           <AMOUNT>250.000</AMOUNT>
+        </ITEM>
+            <ITEM>
+            <NAME>Social space</NAME>
+           <DESCRIPTION>Social space for Media TIC building</DESCRIPTION>
+           <AMOUNT>150.000</AMOUNT>
+        </ITEM>
+    </ITEMS>
+</OFFER>
+    
+

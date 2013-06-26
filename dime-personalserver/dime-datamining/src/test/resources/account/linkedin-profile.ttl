@@ -1,0 +1,22 @@
+_:p1 a nco:PersonContact .
+_:p1 nao:externalIdentifier "J7qb-67bTP" .
+_:p1 nco:photo <http://media.linkedin.com/mpr/mprx/0_yq555n50SdvS0jaMptNn5qFTTW_8xZ7MOzlV5zqxYuBK8pZJr-vWIv8l7FixpxmvgcbUEtEdTYeM> .
+_:pn2 a nco:PersonName .
+_:pn2 nco:nameGiven "Juan" .
+_:pn2 nco:nameFamily "Martinez" .
+_:pn2 nco:fullname "Juan Martinez" .
+_:p1 nco:hasPersonName _:pn2 .
+_:bd24 a nco:BirthDate .
+_:bd24 nco:birthdate "1966-8-5Z"^^xsd:date .
+_:p1 nco:hasBirthDate _:bd24 .
+_:pos8 a nco:Affiliation .
+_:pos8 nao:externalID "224093780"^^xsd:string .
+_:pos8 nco:role "Digital Strategy Manager" .
+_:pos8 nco:start "2003-1-1T00:00:00Z"^^xsd:dateTime .
+_:pos8 nco:org _:org16 .
+_:p1 nco:hasAffiliation _:pos8 .
+_:org16 a nco:OrganizationContact .
+_:org16 nie:title "Madrid Ingeneria y Construction Industrial" .
+_:ph20 a nco:PhoneNumber .
+_:ph20 nco:phoneNumber "+34 750 106 567" .
+_:p1 nco:hasPhoneNumber _:ph20 .

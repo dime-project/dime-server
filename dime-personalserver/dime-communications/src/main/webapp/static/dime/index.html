@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset=utf-8>
+        <meta name="description" content="">
+        <title>di.me</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="">
+
+        <link href="css/bootstrap.css" rel="stylesheet"/>
+
+        <link rel="stylesheet" href="css/style.css" />
+
+        <link href="css/bootstrap-responsive.css" rel="stylesheet"/>
+        <link href="css/fileuploader.css" rel="stylesheet"/>
+
+
+        <meta itemprop="image" content="img/logo_2.png">
+        <link rel="shortcut icon" href="img/favicon.ico">
+
+    </head>
+    <body>
+        <div class="navbar navbar-fixed-top" id="navBarContainer"></div>
+        <div class="clear"></div>
+
+
+        <div class="container">
+
+            <!-- Example row of columns -->
+            <div class="row">
+                <div class="span8" id="contentContainer" >
+                    <div class="leftTop">
+                        <div class="wrapBoxes">
+                            <div id="searchBox">                                
+                                <div class="search">
+                                    <input class="searchBarInput" id="searchText" placeholder="find" type="text" onchange="DimeView.search()" />
+                                </div>
+                                <div class="searchIcon"><img src="img/leftTop/lupe.png" onclick="DimeView.search()"></div>  
+                            </div>              
+                            
+                            <div class="hidden btn" id="backToGroupButton" onclick="DimeView.restoreGroupView()" >back</div>                            
+                        </div>
+                    </div>	
+                    <div class="leftMiddle hidden" id="groupNavigation"> <!-- group navigation -->                  
+                    </div>
+                    <div class="leftBottom hidden" id="itemNavigation"> <!-- item navigation -->
+
+                    </div>
+                    <div class="globalSearchResultContainer hidden" id="globalItemNavigation"> <!-- global search navigation -->
+                    </div>
+                    <div class="personProfileContainer hidden" id="personProfileNavigation"></div>                    
+                    <div class="personProfileAttributeContainer hidden" id="personProfileAttributeNavigation"></div>                    
+                    <div class="personLivepostContainer hidden" id="personLivepostNavigation"></div>
+                    <div class="personDataboxContainer hidden" id="personDataboxNavigation"></div>
+                    <div class="personResourceContainer hidden" id="personResourceNavigation"></div>
+
+                    <div id="settingsNavigationContainer" class="wrapSettings hidden">
+                        <div class="settingsTab">
+                            <img src="img/settings/open.png" onclick="Dime.Settings.toggleTab(this, 'generalSettingsContainer')">
+                            <img src="img/leftTop/new.png">
+                            General Settings
+                        </div>
+                        <div class="settingsContent collapsedSettingsTab" id="generalSettingsContainer"></div>
+                        <div class="settingsTab">
+                            <img src="img/settings/open.png"  onclick="Dime.Settings.toggleTab(this,'rulesSettingsContainer')">
+                            <img src="img/leftTop/new.png">
+                            Rules
+                        </div>
+                        <div class="settingsContent collapsedSettingsTab" id="rulesSettingsContainer"></div>
+                        <div class="settingsTab" >
+                            <img src="img/settings/collaps.png" onclick="Dime.Settings.toggleTab(this,'serviceContainer')">
+
+                            <div class="btn-group serviceAdapterDropDowngGroup">
+                                <div class="btn serviceAdapterDropDowngButton" data-toggle="dropdown">
+                                    <img src="img/leftTop/new.png"></div>
+                                <ul id="addNewServiceAdapterDropDown" class="dropdown-menu" role="menu" >
+                                </ul>
+                            </div>
+                            Connect to services</div>
+                        <div class="settingsContent expandedSettingsTab" id="serviceContainer"></div>
+                        <div class="settingsTab">
+                            <img src="img/settings/open.png" onclick="Dime.Settings.toggleTab(this,'trustLevelSettingsContainer')">
+                            <img src="img/leftTop/new.png">
+                            Trust level
+                        </div>
+                        <div class="settingsContent collapsedSettingsTab" id="trustLevelSettingsContainer"></div>
+                    </div>
+
+                    <div class="dropzone hidden" id="dropzoneNavigation">
+                        <div id="dropzoneNavigationBtn"></div>
+                    </div>
+
+                </div>
+
+
+                <div class="span4" id="metabarMetaContainer"> <!-- Begin meta-bar container -->
+                    <div class="metaData" id="switch">	
+                        <div class="actionMenu" id="globalActionButton" onclick="DimeView.showSelectedItems()">
+                            <div style="border: 1px solid white;height: 3px; top: 2px; margin:3px; margin-top: 4px; position: relative"></div>
+                            <div style="border: 1px solid white;height: 3px; top: 2px; margin:3px; position: relative"></div>
+                            <div style="border: 1px solid white;height: 3px; top: 2px; margin:3px; position: relative"></div>
+                        </div>
+                        <div class="btn-group metaActionView">                             
+                            <div class="actionButton btn" id="actionButtonNew" data-toggle="dropdown" >New ...</div>
+                            <ul class="dropdown-menu actionButtonDropDownNew" id="actionButtonDropDownNew" role="menu">
+                               
+                            </ul>
+                            <div class="actionButton btn" id="actionButtonEdit" onclick="DimeView.editSelected()">Edit</div>
+
+                            <div class="actionButton btn" id="actionButtonAddRemove" >Action</div>
+
+                            <div class="actionButton btn" id="actionButtonDelete" onclick="DimeView.removeSelected()">Delete</div>
+                            
+                        </div>
+                        <div class="btn-group metaActionView2">
+                            <div class="actionButton btn" id="actionButtonShare" onclick="DimeView.shareSelected()">Share</div>
+                            <div class="actionButton btn " id="actionButtonMore" data-toggle="dropdown" >...</div>
+                            <ul class="dropdown-menu actionButtonDropDownMore" id="actionButtonDropDownMore" role="menu">
+                            </ul>
+                        </div>
+
+                        <div class="metaDataInformationArea">
+                            <div class="headlineMetaArea">
+                                <img src="img/metaData/info.png"><h1 id="metaDataInformationHeader" >Information</h1>
+                            </div>                            
+                            <ul id="metaDataInformationContainer">
+
+                            </ul>                            
+                        </div>  
+                        <div class="clear"></div>
+                        <div class="metaDataShareArea" id="metaDataShareAreaId">
+                            <div class="headlineMetaArea">
+                                <img src="img/metaData/sharedWith.png"><h1 id="metaDataShareAreaSharedWithCaption">Shared with</h1>
+                            </div>                            
+                            <ul id="metaDataSharedWithContainer">
+                            </ul>
+                        </div>  
+                        <div class="clear"></div> 
+                    </div>
+                </div>
+            </div><!-- End meta-bar container -->
+        </div> <!-- /container -->
+
+
+        <div class="clear"></div>
+        <!-- java-script -->
+        <!-- Placed at the end of the document so the pages load faster -->
+        <script src="./script/jquery-1.7.2.min.js"></script>
+        <script src="./script/bootstrap.js"></script>
+
+        <script type="text/javascript" src="script/main.js"></script>
+        <script type="text/javascript" src="script/index.js"></script>
+
+        <script>
+            (function(){
+                $('html').addClass('js');
+                $('.js #expanding-header').slideDown('slow');
+            })();
+        </script>
+
+        <script type="text/javascript" src="script/run_page.js"></script>
+        <script type="text/javascript" src="script/fileuploader.js"></script>
+
+    </body>
+</html>

@@ -1,0 +1,78 @@
+@prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#> . 
+@prefix nao: <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#> . 
+@prefix nie: <http://www.semanticdesktop.org/ontologies/2007/01/19/nie#> . 
+@prefix pimo: <http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#> . 
+@prefix nco: <http://www.semanticdesktop.org/ontologies/2007/03/22/nco#> . 
+@prefix dao: <http://www.semanticdesktop.org/ontologies/2011/10/05/dao#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> . 
+
+@prefix juanLINKEDIN: <urn:juanLINKEDIN:> .
+@prefix anna: <urn:anna:> .
+
+juanLINKEDIN:PIM a pimo:PersonalInformationModel .
+juanLINKEDIN:PIM pimo:creator juanLINKEDIN:juanLINKEDINUser .
+juanLINKEDIN:juanLINKEDINUser a pimo:Person .
+juanLINKEDIN:juanLINKEDINUser pimo:occurrence juanLINKEDIN:p1 .
+
+juanLINKEDIN:linkedin1 a dao:Account .
+juanLINKEDIN:linkedin1 dao:accountType "LinkedIn" .
+
+juanLINKEDIN:p1 a nco:PersonContact .
+juanLINKEDIN:p1 nco:contactUID "J7qb67bTP" .
+juanLINKEDIN:p1 nie:dataSource juanLINKEDIN:linkedin1 .
+juanLINKEDIN:p1 nco:photo <http://media.linkedin.com/mpr/mprx/0juanLINKEDINyq555n50SdvS0jaMptNn5qFTTWjuanLINKEDIN8xZ7MOzlV5zqxYuBK8pZJr-vWIv8l7FixpxmvgcbUEtEdTYeM> .
+juanLINKEDIN:p1 nao:description "Research Assistant in the Digital.Me EU Project (http://www.dime-project.eu/).  Responsible for research and development tasks. " .
+juanLINKEDIN:p1 nco:hasPersonName juanLINKEDIN:pn1 .
+juanLINKEDIN:pn1 a nco:PersonName .
+juanLINKEDIN:pn1 nco:nameGiven "Juan" .
+juanLINKEDIN:pn1 nco:nameFamily "Martinez" .
+juanLINKEDIN:pn1 nco:fullname "Juan M." .
+juanLINKEDIN:bd24 a nco:BirthDate .
+juanLINKEDIN:bd24 nco:birthDate "1966-08-05"^^xsd:date .
+juanLINKEDIN:p1 nco:hasBirthDate juanLINKEDIN:bd24 .
+juanLINKEDIN:pos4 a nco:Affiliation .
+juanLINKEDIN:pos4 nao:externalIdentifier "320788801" .
+juanLINKEDIN:pos4 nco:role "Research Assistant" .
+juanLINKEDIN:pos4 nco:start "2010-06-01T00:00:00Z"^^xsd:dateTime .
+juanLINKEDIN:pos4 nco:org juanLINKEDIN:org8 .
+juanLINKEDIN:p1 nco:hasAffiliation juanLINKEDIN:pos4 .
+juanLINKEDIN:org8 a nco:OrganizationContact .
+juanLINKEDIN:org8 nie:title "Digital Enterprise Research Institute Galway, National University of Ireland Galway" .
+juanLINKEDIN:pos8 a nco:Affiliation .
+juanLINKEDIN:pos8 nao:externalIdentifier "224093780"^^xsd:string .
+juanLINKEDIN:pos8 nco:role "Digital Strategy Manager" .
+juanLINKEDIN:pos8 nco:start "2003-01-01T00:00:00Z"^^xsd:dateTime .
+juanLINKEDIN:pos8 nco:end "2010-05-31T00:00:00Z"^^xsd:dateTime .
+juanLINKEDIN:pos8 nco:org juanLINKEDIN:org16 .
+juanLINKEDIN:p1 nco:hasAffiliation juanLINKEDIN:pos8 .
+juanLINKEDIN:org16 a nco:OrganizationContact .
+juanLINKEDIN:org16 nie:title "Madrid Ingeneria y Construction Industrial" .
+juanLINKEDIN:ph20 a nco:PhoneNumber .
+juanLINKEDIN:ph20 nco:phoneNumber "+34 750 106 567" .
+juanLINKEDIN:p1 nco:hasPhoneNumber juanLINKEDIN:ph20 .
+juanLINKEDIN:im87 a nco:IMAccount .
+juanLINKEDIN:im87 nco:imAccountType "skype" .
+juanLINKEDIN:im87 nco:imID "juan.martinez" .
+juanLINKEDIN:p1 nco:hasIMAccount juanLINKEDIN:im87 .
+juanLINKEDIN:addr94 a nco:PostalAddress .
+juanLINKEDIN:addr94 nao:prefLabel "24, Upper Newcastle, Galway, Ireland" .
+juanLINKEDIN:p1 nco:hasPostalAddress juanLINKEDIN:addr94 .
+
+anna:PIM a pimo:PersonalInformationModel .
+anna:PIM pimo:creator _:annaUser .
+anna:annaUser a pimo:Person .
+anna:annaUser pimo:occurrence anna:c12 .
+
+anna:twitter1 a dao:Account .
+anna:twitter1 dao:accountType "Twitter" .
+
+anna:c12 a nco:PersonContact .
+anna:c12 nco:contactUID "12" .
+anna:c12 nie:dataSource anna:twitter1 .
+anna:hom8 a nco:PostalAddress .
+anna:hom8 nco:locality "Birmingham" .
+anna:hom8 nco:country "UK" .
+anna:c12 nco:hasPostalAddress anna:hom8 .
+
+
+

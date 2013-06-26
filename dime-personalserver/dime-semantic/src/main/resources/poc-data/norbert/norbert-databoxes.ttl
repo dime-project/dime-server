@@ -1,0 +1,128 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix ppo: <http://vocab.deri.ie/ppo#> .
+@prefix nrl: <http://www.semanticdesktop.org/ontologies/2007/08/15/nrl#> .
+@prefix pimo: <http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#> .
+@prefix nao: <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#> .
+@prefix nie: <http://www.semanticdesktop.org/ontologies/2007/01/19/nie#> .
+@prefix ncal: <http://www.semanticdesktop.org/ontologies/2007/04/02/ncal#> . 
+@prefix nco: <http://www.semanticdesktop.org/ontologies/2007/03/22/nco#> .
+@prefix nso: <http://www.semanticdesktop.org/ontologies/2009/11/08/nso#> .
+@prefix nfo: <http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#> .
+@prefix dao: <http://www.semanticdesktop.org/ontologies/2011/10/05/dao#> .
+@prefix dlpo: <http://www.semanticdesktop.org/ontologies/2011/10/05/dlpo#> .
+@prefix dcon: <http://www.semanticdesktop.org/ontologies/2011/10/05/dcon#> .
+@prefix ddo: <http://www.semanticdesktop.org/2011/10/05/ontologies/ddo#> .
+
+@prefix urn: <urn:uuid:> .
+
+
+urn:n000240 
+	nso:hasPrivacyPreference urn:n000241 ,
+		urn:n000241 ,
+		urn:n000242 ,
+		urn:n000243 ,
+		urn:n000244 , 
+		urn:n000245 ,
+		urn:n000246 .
+
+urn:n000241 
+	a ppo:PrivacyPreference , nfo:DataContainer ;
+	rdfs:label "DATABOX" ;
+	nao:prefLabel "CRM documents" ;
+	ppo:hasAccessSpace urn:n000247 ;
+	nie:hasPart urn:n000594 ;
+	ppo:appliesToResource urn:n000594 .
+urn:n000247 
+	a ppo:AccessSpace ;
+	nso:includes
+		urn:n000250 , 
+		urn:n000248 ,
+		urn:n000249 . 
+
+urn:n000242 
+	a ppo:PrivacyPreference , nfo:DataContainer ;
+	rdfs:label "DATABOX" ;
+	nao:prefLabel "Karlsruhe 'City2015' reports" ;
+	ppo:hasAccessSpace urn:n000251 ;
+	nie:hasPart 
+		urn:n000595 ,
+		urn:n000596 ;
+	ppo:appliesToResource 
+		urn:n000595 ,
+		urn:n000596 .
+urn:n000251 
+	a ppo:AccessSpace ;
+	nso:includes 
+		urn:n000250 , 
+		urn:n000252 ,
+		urn:n000253 .
+
+urn:n000243 
+	a ppo:PrivacyPreference , nfo:DataContainer ;
+	rdfs:label "DATABOX" ;
+	nao:prefLabel "DigitalmediaFlyers" ;
+	ppo:hasAccessSpace urn:n000254 ;
+	nie:hasPart 
+		urn:n000255 ,
+		urn:n000595 ;
+	ppo:appliesToResource 
+		urn:n000255 ,
+		urn:n000595 .
+urn:n000254 
+	a ppo:AccessSpace ;
+	nso:includes 
+		urn:n000250 , 
+		urn:n000248 ,
+		urn:n000256 .
+
+
+urn:n000244 
+	a ppo:PrivacyPreference ;
+	rdfs:label "PROFILECARD" ;
+	nao:prefLabel "Public" ;
+	ppo:hasAccessSpace urn:n000257 ;
+	ppo:appliesToResource 
+		urn:n000258 ,
+		urn:n000259 ,
+		urn:n000597 ,
+		urn:n000260 ,
+		urn:n000261 .
+urn:n000257 
+	a ppo:AccessSpace ;
+	nso:includes 
+		urn:n000250 , 
+		urn:n000253 ,
+		urn:n000252 ,
+		urn:n000249 .
+	
+urn:n000245 
+	a ppo:PrivacyPreference ;
+	rdfs:label "PROFILECARD" ;
+	nao:prefLabel "Friends" ;
+	ppo:hasAccessSpace urn:n000262 ;
+	ppo:appliesToResource 
+		urn:n000598 ,
+		urn:n000599 ,
+		urn:n000258 .
+urn:n000262 
+	a ppo:AccessSpace ;
+	nso:includes 
+		urn:n000250 , 
+		urn:n000252,
+		urn:n000249 .
+
+urn:n000246 
+	a ppo:PrivacyPreference ;
+	rdfs:label "PROFILECARD" ;
+	nao:prefLabel "Norbert Familie" ;
+	ppo:hasAccessSpace urn:n000263 ;
+	ppo:appliesToResource urn:n000600 .
+urn:n000263 
+	a ppo:AccessSpace ;
+	nso:includes
+		urn:n000250 , 
+		urn:n000256 .

@@ -1,0 +1,231 @@
+Phase: Locationprocessing
+Input: Token Lookup Location Address
+Options: control = appelt
+
+/////////////////////////////////////////////////////////
+
+//EC1A 1BB, W1A 1HQ, M1 1AA, B33 8TH, CR2 6XH, DN55 1PT
+//New UK postcodes only
+
+Macro: POSTCODE_UK
+(
+ ({Token.orth == allCaps,Token.length == "2"}|
+  {Token.orth == upperInitial,Token.length == "1"}			
+ )	
+ ({Token.kind == number,Token.length == "1"}|
+  {Token.kind == number,Token.length == "2"}
+ )
+ ({Token.orth == upperInitial,Token.length == "1"}	
+ )?
+ ({Token.kind == number,Token.length == "1"}
+ )
+ ({Token.orth == allCaps,Token.length == "2"}	
+ )	
+)
+
+//RBT 2224, VLT 1127
+//Malta postcodes only
+
+Macro: POSTCODE_MALTA
+(
+ ({Token.orth == allCaps,Token.length == "3"}
+ )	
+ ({Token.kind == number,Token.length == "4"}
+ )
+)
+
+//Dublin 12
+//Ireland postal codes for Dublin
+Macro: POSTCODE_EIRE
+(
+ ({Token.kind == number,Token.length == "1"}|
+  {Token.kind == number,Token.length == "2"}
+ )
+)
+
+//USA postcodes e.g. 55416, 55416-1234
+//Spain postcodes e.g. 28900
+//Italy postcodes e.g. 20090
+//Germany postcodes e.g. 80331
+
+Macro: POSTCODE_NUMBERS
+(
+ ({Token.kind == number,Token.length == "5"})
+ ({Token.string == "-"} 
+  {Token.kind == number,Token.length == "4"}
+ )?
+)
+
+/////////////////////////////////////////////////////////
+
+//E.g. 56 Welcome, St Thomas Street | 56b, Thomas Rd. 
+ 
+//Rule: StreetName2
+Macro: STREETNAME
+(
+ ({Token.kind == number}
+  ({Token.string =~ "[a-zA-Z]"})?
+  ({Token.orth == allCaps})?
+  ({Token.string == ","})? 
+  )?
+ ({Token.orth == upperInitial}
+  ({Token.string == "."})?
+  )?
+ ({Token.orth == upperInitial}
+  ({Token.string == "."})? 
+  )?
+ {Lookup.minorType == "street"}
+)
+
+Rule: LocationEntity1
+Priority: 100
+(
+ {Location.locType == country} |
+ //{Lookup.majorType == location, Lookup.minorType == country} | 
+ {Lookup.class == "http://dbpedia.org/ontology/Country"}
+):locCountry
+
+-->
+  {
+    AnnotationSet matchedAnns= (AnnotationSet) bindings.get("locCountry"); 
+	String mydocContent = doc.getContent().toString(); 
+    gate.FeatureMap newFeatures= Factory.newFeatureMap();
+    newFeatures.put("rule","LocationEntity1");
+	newFeatures.put("country",mydocContent.substring(matchedAnns.firstNode().getOffset().intValue(), matchedAnns.lastNode().getOffset().intValue()));
+    outputAS.add(matchedAnns.firstNode(),matchedAnns.lastNode(),"LocationCountry", newFeatures);
+  }  
+
+Rule: LocationEntity2
+Priority: 80
+(
+ {Location.locType == city} |
+ {Lookup.majorType == location, Lookup.minorType == city} | 
+ {Lookup.class == "http://dbpedia.org/ontology/Settlement"}
+):locCity
+
+-->
+  {
+    AnnotationSet matchedAnns= (AnnotationSet) bindings.get("locCity"); 
+	String mydocContent = doc.getContent().toString(); 
+    gate.FeatureMap newFeatures= Factory.newFeatureMap();
+    newFeatures.put("rule","LocationEntity2");
+	newFeatures.put("city",mydocContent.substring(matchedAnns.firstNode().getOffset().intValue(), matchedAnns.lastNode().getOffset().intValue()));
+    outputAS.add(matchedAnns.firstNode(),matchedAnns.lastNode(),"LocationCity", newFeatures);
+  }
+  
+Rule: LocationEntity3
+Priority: 60
+(
+ {Location.locType == region} | 
+ {Lookup.majorType == location, Lookup.minorType == region}
+):locRegion
+
+-->
+  {
+    AnnotationSet matchedAnns= (AnnotationSet) bindings.get("locRegion"); 
+	String mydocContent = doc.getContent().toString(); 
+    gate.FeatureMap newFeatures= Factory.newFeatureMap();
+    newFeatures.put("rule","LocationEntity3");
+	newFeatures.put("region",mydocContent.substring(matchedAnns.firstNode().getOffset().intValue(), matchedAnns.lastNode().getOffset().intValue()));
+    outputAS.add(matchedAnns.firstNode(),matchedAnns.lastNode(),"LocationRegion", newFeatures);
+  } 
+  
+Rule: LocationEntity4
+Priority: 50
+(
+ {Location.locType == province} | 
+ {Lookup.majorType == location, Lookup.minorType == province}
+):locProvince
+
+-->
+  {
+    AnnotationSet matchedAnns= (AnnotationSet) bindings.get("locProvince"); 
+	String mydocContent = doc.getContent().toString(); 
+    gate.FeatureMap newFeatures= Factory.newFeatureMap();
+    newFeatures.put("rule","LocationEntity4");
+	newFeatures.put("province",mydocContent.substring(matchedAnns.firstNode().getOffset().intValue(), matchedAnns.lastNode().getOffset().intValue()));
+    outputAS.add(matchedAnns.firstNode(),matchedAnns.lastNode(),"LocationProvince", newFeatures);
+  }   
+  
+Rule: LocationEntity5
+Priority: 50
+(
+ {Lookup.majorType == address, Lookup.minorType == street} | 
+ //{Location.rule1 == StreetName2, Location.rule2 == StreetFinal}
+ (STREETNAME)
+):locStreet
+
+-->
+  {
+    AnnotationSet matchedAnns= (AnnotationSet) bindings.get("locStreet"); 
+	String mydocContent = doc.getContent().toString(); 
+    gate.FeatureMap newFeatures= Factory.newFeatureMap();
+    newFeatures.put("rule","LocationEntity5");
+	newFeatures.put("street",mydocContent.substring(matchedAnns.firstNode().getOffset().intValue(), matchedAnns.lastNode().getOffset().intValue()));
+    outputAS.add(matchedAnns.firstNode(),matchedAnns.lastNode(),"LocationStreet", newFeatures);
+  }  
+ 
+Rule: LocationEntity6
+(
+ ({Address.rule1 == Postcode1, Address.rule2 == PostcodeFinal}) |
+ (POSTCODE_UK) |
+ (POSTCODE_MALTA) |
+ (POSTCODE_NUMBERS) 
+ //{Address.rule1 == Postcode2, Address.rule2 == PostcodeFinal} |
+ //{Address.rule1 == Postcode3, Address.rule2 == PostcodeFinal} 
+):locPostCode
+
+-->
+  {
+    AnnotationSet matchedAnns= (AnnotationSet) bindings.get("locPostCode"); 
+	String mydocContent = doc.getContent().toString(); 
+    gate.FeatureMap newFeatures= Factory.newFeatureMap();
+    newFeatures.put("rule","LocationEntity6");
+	newFeatures.put("postcode",mydocContent.substring(matchedAnns.firstNode().getOffset().intValue(), matchedAnns.lastNode().getOffset().intValue()));
+    outputAS.add(matchedAnns.firstNode(),matchedAnns.lastNode(),"LocationPostCode", newFeatures);
+  }  
+
+Rule: LocationEntity7
+(
+ {Location.rule1 == POBoxAddress, Location.rule2 == StreetFinal} 
+):locPOBox
+
+-->
+  {
+    AnnotationSet matchedAnns= (AnnotationSet) bindings.get("locPOBox"); 
+	String mydocContent = doc.getContent().toString(); 
+    gate.FeatureMap newFeatures= Factory.newFeatureMap();
+    newFeatures.put("rule","LocationEntity7");
+	newFeatures.put("pobox",mydocContent.substring(matchedAnns.firstNode().getOffset().intValue(), matchedAnns.lastNode().getOffset().intValue()));
+    outputAS.add(matchedAnns.firstNode(),matchedAnns.lastNode(),"LocationPOBox", newFeatures);
+  }   
+
+Rule: LocationEntity8
+(
+ {Lookup.majorType == loc_key, Lookup.minorType == post}
+):locPost
+
+-->
+  {
+    AnnotationSet matchedAnns= (AnnotationSet) bindings.get("locPost"); 
+	String mydocContent = doc.getContent().toString(); 
+    gate.FeatureMap newFeatures= Factory.newFeatureMap();
+    newFeatures.put("rule","LocationEntity8");
+	newFeatures.put("post",mydocContent.substring(matchedAnns.firstNode().getOffset().intValue(), matchedAnns.lastNode().getOffset().intValue()));
+    outputAS.add(matchedAnns.firstNode(),matchedAnns.lastNode(),"LocationPost", newFeatures);
+  } 
+
+Rule: LocationEntity9
+(
+ {Lookup.majorType == location, Lookup.minorType == airport}
+):locAirport
+
+-->
+  {
+    AnnotationSet matchedAnns= (AnnotationSet) bindings.get("locAirport"); 
+	String mydocContent = doc.getContent().toString(); 
+    gate.FeatureMap newFeatures= Factory.newFeatureMap();
+    newFeatures.put("rule","LocationEntity9");
+	newFeatures.put("airport",mydocContent.substring(matchedAnns.firstNode().getOffset().intValue(), matchedAnns.lastNode().getOffset().intValue()));
+    outputAS.add(matchedAnns.firstNode(),matchedAnns.lastNode(),"LocationAirport", newFeatures);
+  } 

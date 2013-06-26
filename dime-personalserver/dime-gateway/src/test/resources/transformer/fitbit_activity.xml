@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <recentActivities>
+     <loggedActivityReference>
+         <activityId>1030</activityId>
+         <calories>1721</calories>
+         <description>Moderate - 12 to 13.9mph</description>
+         <distance>1</distance>
+         <duration>3723000</duration>
+         <name>Bicycling</name>
+     </loggedActivityReference>
+     <loggedActivityReference>
+         <activityId>12030</activityId>
+         <calories>1124</calories>
+         <description>Running - 5 mph (12 min/mile)</description>
+         <distance>2</distance>
+         <duration>7322000</duration>
+         <name>Running</name>
+     </loggedActivityReference>
+     <loggedActivityReference>
+         <activityId>18240</activityId>
+         <calories>1476</calories>
+         <description/>
+         <distance>0</distance>
+         <duration>10983000</duration>
+         <name>Swimming laps, freestyle, slow, moderate or light effort</name>
+     </loggedActivityReference>
+     <loggedActivityReference>
+         <activityId>17151</activityId>
+         <calories>357</calories>
+         <description>Walking less than 2 mph, strolling very slowly</description>
+         <distance>4</distance>
+         <duration>3723000</duration>
+         <name>Walking</name>
+     </loggedActivityReference>
+     <loggedActivityReference>
+         <activityId>18120</activityId>
+         <calories>1291</calories>
+         <description/>
+         <distance>0</distance>
+         <duration>3723000</duration>
+         <name>Sailing, boat and board sailing, windsurfing, ice sailing, general</name>
+     </loggedActivityReference>
+ </recentActivities>

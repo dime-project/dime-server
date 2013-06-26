@@ -1,0 +1,622 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix ppo: <http://vocab.deri.ie/ppo#> .
+@prefix nrl: <http://www.semanticdesktop.org/ontologies/2007/08/15/nrl#> .
+@prefix pimo: <http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#> .
+@prefix nao: <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#> .
+@prefix nie: <http://www.semanticdesktop.org/ontologies/2007/01/19/nie#> .
+@prefix ncal: <http://www.semanticdesktop.org/ontologies/2007/04/02/ncal#> . 
+@prefix nco: <http://www.semanticdesktop.org/ontologies/2007/03/22/nco#> .
+@prefix nso: <http://www.semanticdesktop.org/ontologies/2009/11/08/nso#> .
+@prefix nfo: <http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#> .
+@prefix dao: <http://www.semanticdesktop.org/ontologies/2011/10/05/dao#> .
+@prefix dlpo: <http://www.semanticdesktop.org/ontologies/2011/10/05/dlpo#> .
+@prefix dcon: <http://www.semanticdesktop.org/ontologies/2011/10/05/dcon#> .
+@prefix ddo: <http://www.semanticdesktop.org/ontologies/2011/10/05/ddo#> .
+
+@prefix urn: <urn:uuid:> .
+
+<urn:uuid:j000096> {
+	urn:j000096 rdf:type pimo:PersonalInformationModel .
+	urn:j000096 pimo:creator urn:j000061 .
+	
+	urn:j000061 nao:prefSymbol <http://lorempixel.com/200/200/people/1/> .
+	<http://lorempixel.com/200/200/people/1/> rdf:type nao:Symbol .
+	
+	urn:j000061 
+		a foaf:Agent , pimo:Person ;
+		pimo:isDefinedBy urn:j000096;
+		pimo:groundingOccurrence urn:j000098 ;
+		dcon:hasSituation urn:j000097,
+			urn:j000099;	
+		foaf:knows urn:j000070 ,
+			urn:j000100 ,
+			urn:j000101 ,
+			urn:j000102 ,
+			urn:j000082 ,
+			urn:j000103 ,
+			urn:j000104 ,
+			urn:j000105 ,
+			urn:j000106 ,
+			urn:j000107 ,
+			urn:j000108 ,
+			urn:j000109 ,
+			urn:j000110 .
+			
+	       
+	urn:j000098 
+		a nco:PersonContact , nco:ContactListDataObject ;
+		nao:prefLabel "Juan@di.me" ;
+		nie:dataSource urn:j000071 ;
+		nco:hasPersonName urn:j000076 ;
+		nco:hasEmailAddress urn:j000507 ;
+		nco:hasBirthDate urn:j000077 ;
+		nco:photo <http://lorempixel.com/200/200/people/1/> ;
+		nco:hasLocation urn:j000078 ;
+		nco:hasAffiliation urn:j000079 ;
+		pimo:hasInterest urn:j000084 ,
+			urn:j000085 ,
+			urn:j000086 .
+	
+	urn:j000071
+		a dao:Account ;
+		pimo:isDefinedBy urn:j000096 ;
+		nao:creator urn:j000061 ;
+		dao:accountType "di.me" ;
+		dao:hasCredentials urn:j000111 .
+		
+	urn:j000111
+		a dao:Credentials ;
+		rdfs:label "BasicAuthentication" ;
+		dao:userID "juanmartinez1" ;
+		nao:privacyLevel "0"^^xsd:double ;
+		dao:password "dimeisawesome" .
+		
+	#Juan's dummy linked in profile http://www.linkedin.com/pub/juan-martinez/40/bb3/652	
+		
+	urn:j000112
+	    a dao:Account ;
+	    pimo:isDefinedBy urn:j000096 ;
+		nao:creator urn:j000061 ;
+	    dao:accountType "LinkedIn" ;
+	    dao:hasCredentials urn:j000113 .
+	
+	urn:j000113
+	    a dao:Credentials ;
+	    nao:privacyLevel "0"^^xsd:double ;
+		rdfs:label "BasicAuthentication" ;
+		dao:userID "juan.martinez@deri.org" ;
+		dao:password "juandimeloginpass" .
+	
+	urn:j000114 
+		a nco:PersonContact , nco:ContactListDataObject ;
+		nao:prefLabel "Juan@LinkedIn" ;
+		nie:dataSource urn:j000112 ;
+		nco:hasPersonName urn:j000407 .
+	
+	#juan:ametic1
+	#	a dao:Account ;
+	#	pimo:isDefinedBy urn:j000096 ;
+	#	dao:accountType "AMETIC" ;
+	#	nao:externalIdentifier "https://141.99.96.110:8080/dime-ametic" ;
+	#	dao:hasCredentials juan:credentials03 .
+		
+	#juan:credentials03
+	#	a dao:Credentials ;
+	#	nao:privacyLevel "0"^^xsd:double ;
+	#	rdfs:label "BasicAuthentication" ;
+	#	dao:userID "martinez" ;
+	#	dao:password "chucknorris99" .
+	
+	#juan:juanametic 
+	#	a nco:PersonContact , nco:ContactListDataObject ;
+	#	nao:prefLabel "jmar@Ametic" ;
+	#	nie:dataSource juan:ametic1 ;
+	#	nco:hasPersonName juan:nameametic01 .
+	
+	urn:j000076
+		a nco:PersonName ;
+		nao:privacyLevel "0.9"^^xsd:double ;
+		nco:fullname "Juan Martinez" ;
+		nco:nameGiven "Juan" ;
+		nco:nameFamily "Martinez" ;
+		nco:nameHonorificPrefix "MSC" .
+	
+	urn:j000507 
+		nao:privacyLevel "0.5"^^xsd:double ;
+		a nco:EmailAddress ;
+		nco:emailAddress "jmartinez@gmail.com" .
+	
+	urn:j000077
+		nao:privacyLevel "0.3"^^xsd:double ;
+		rdf:type nco:BirthDate ;
+		nco:birthDate "1966-08-05"^^xsd:date .
+	
+	<http://lorempixel.com/200/200/people/1/> 
+		a nfo:Image ;
+		nao:privacyLevel "0.9"^^xsd:double ;
+		rdf:type nie:DataObject ;
+		nfo:fileName "Juan Martinez" .
+	
+	urn:j000078
+		a geo:Point ;
+		nao:privacyLevel "0.5"^^xsd:double ;
+		rdfs:label "Madrid" ;
+		geo:lat "40.457773"^^xsd:decimal ;
+		geo:long "-3.690269"^^xsd:decimal .
+	
+	urn:j000079
+		nao:privacyLevel "0.8"^^xsd:double ;
+		rdf:type nco:Affiliation ;
+		nco:title "Digital Strategy Manager" .
+		
+	urn:j000098 pimo:hasInterest urn:j000084 .	
+			
+	urn:j000084 
+		a pimo:Tag ;
+		nao:privacyLevel "0.7"^^xsd:double ;
+		nao:prefLabel "Rafting" .
+	
+	urn:j000085 
+		a pimo:Tag ;
+		nao:privacyLevel "0.7"^^xsd:double ;
+		nao:prefLabel "Ironman" .
+	
+	urn:j000086 
+		a pimo:Tag ;
+		nao:privacyLevel "0.7"^^xsd:double ;
+		nao:prefLabel "Karting" .
+	
+	urn:j000116
+		a nco:PersonName ;
+		nao:privacyLevel "0.9"^^xsd:double ;
+		nco:fullname "Juan Martinez" .
+	
+	#juan:nameametic01
+	#	a nco:PersonName ;
+	#	nao:privacyLevel "0.8"^^xsd:double ;
+	#	nco:fullname "jmar" .
+	
+	urn:j000070 
+		a pimo:Person , foaf:Agent ;
+		pimo:isDefinedBy urn:j000096 ;
+		nao:prefLabel "Anna Alford" ;
+		nao:prefSymbol <http://lorempixel.com/200/200/people/2/> ;
+		nao:trustLevel "0.65"^^xsd:double ;
+		pimo:groundingOccurrence urn:j000115 ;
+		pimo:memberOf urn:j000117 .
+	urn:j000115 
+		a nco:PersonContact , nco:ContactListDataObject ;
+		nao:prefLabel "Anna@di.me" ;
+		nie:dataSource urn:j000408 ;
+		nco:hasPersonName urn:j000118 ;
+		nco:hasBirthDate urn:j000119 ;
+		nco:hasEmailAddress urn:j000506 .
+	urn:j000118 
+		a nco:PersonName ;
+		nco:nameGiven "Anna" ;
+		nco:nameFamily "Alford" ;
+		nco:fullname "Anna Alford" .
+	urn:j000119 
+		a nco:BirthDate ;
+		nco:birthDate "1972-11-24"^^xsd:date .
+	urn:j000506 
+		a nco:EmailAddress ;
+		nco:emailAddress "aalford@gmail.com" .
+		
+	urn:j000115
+		a dao:Account ;
+		pimo:isDefinedBy urn:j000096 ;
+		dao:accountType "di.me" ;
+		nao:creator urn:j000070 ;
+		dao:hasCredentials urn:j000120 .
+	urn:j000120
+		a dao:Credentials ;
+		rdfs:label "BasicAuthentication" ;
+		dao:userID "xyz" ;
+		nao:privacyLevel "0"^^xsd:double ;
+		dao:password "123" .
+	
+	
+	urn:j000082
+		a pimo:Person , foaf:Agent ;
+		pimo:isDefinedBy urn:j000096 ;
+		nao:prefLabel "Norbert Drancourt" ;
+		nao:prefSymbol <http://lorempixel.com/200/200/people/8/> ;
+		nao:trustLevel "0.3"^^xsd:double ;
+		pimo:groundingOccurrence urn:j000121 ;
+	#	pimo:memberOf urn:j000069 , urn:j000080 .
+		pimo:memberOf urn:j000080 .
+		
+	urn:j000121
+		a nco:PersonContact , nco:ContactListDataObject ;
+		nao:prefLabel "Norbert@di.me" ;
+		nie:dataSource urn:j000071 ;
+		nco:hasPersonName urn:j000122 ;
+		nco:hasBirthDate urn:j000123 ;
+		nco:hasEmailAddress urn:j000535 .
+	urn:j000122 
+		a nco:PersonName ;
+		nco:nameGiven "Norbert" ;
+		nco:nameFamily "Drancourt" ;
+		nco:fullname "Norbert Drancourt" .
+	urn:j000123 
+		a nco:BirthDate ;
+		nco:birthDate "1956-06-29"^^xsd:date .
+	urn:j000535 
+		a nco:EmailAddress ;
+		nco:emailAddress "ndrancourt@gmail.com" .
+	
+	urn:j000124
+		a dao:Account ;
+		pimo:isDefinedBy urn:j000096 ;
+		dao:accountType "di.me" ;
+		nao:creator urn:j000082 ;
+		dao:hasCredentials urn:j000125 .
+	urn:j000125
+		a dao:Credentials ;
+		rdfs:label "BasicAuthentication" ;
+		dao:userID "xyz" ;
+		nao:privacyLevel "0"^^xsd:double ;
+		dao:password "123" .
+		
+	urn:j000101 
+		a pimo:Person , foaf:Agent ;
+		pimo:isDefinedBy urn:j000096 ;
+		nao:prefLabel "Julian Beene" ;
+		nao:prefSymbol <http://lorempixel.com/200/200/people/4/> ;
+		nao:trustLevel "0.73"^^xsd:double ;
+		pimo:groundingOccurrence urn:j000126 ;
+	#	pimo:memberOf urn:j000080 , urn:j000117 , urn:j000073 .
+		pimo:memberOf urn:j000080 , urn:j000117.
+		
+	urn:j000126 
+		a nco:PersonContact , nco:ContactListDataObject ;
+		nao:prefLabel "Julian@di.me" ;
+		nie:dataSource urn:j000071 ;
+		nco:hasPersonName urn:j000127 ;
+		nco:hasBirthDate urn:j000128 ;
+		nco:hasEmailAddress urn:j000537 .
+	urn:j000127
+		a nco:PersonName ;
+		nco:nameGiven "Julian" ;
+		nco:nameFamily "Beene" ;
+		nco:fullname "Julian Beene" .
+	urn:j000128
+		a nco:BirthDate ;
+		nco:birthDate "1961-03-23"^^xsd:date .
+	urn:j000537
+		a nco:EmailAddress ;
+		nco:emailAddress "jbeene@gmail.com" .
+	
+	urn:j000100
+		a pimo:Person , foaf:Agent ;
+		pimo:isDefinedBy urn:j000096 ;
+		nao:prefLabel "Patrick Cyphers" ;
+		nao:prefSymbol <http://lorempixel.com/200/200/people/3/> ;
+		nao:trustLevel "0.4"^^xsd:double ;
+		pimo:groundingOccurrence urn:j000129 .
+	#   pimo:memberOf urn:j000069 , urn:j000073 .
+		
+	urn:j000129
+		a nco:PersonContact , nco:ContactListDataObject ;
+		nao:prefLabel "Patrick@di.me" ;
+		nie:dataSource urn:j000071 ;
+		nco:hasPersonName urn:j000130 ;
+		nco:hasBirthDate urn:j000131 ;
+		nco:hasEmailAddress urn:j000539 .
+	urn:j000130 
+		a nco:PersonName ;
+		nco:nameGiven "Patrick" ;
+		nco:nameFamily "Cyphers" ;
+		nco:fullname "Patrick Cyphers" .
+	urn:j000131
+		a nco:BirthDate ;
+		nco:birthDate "1976-03-02"^^xsd:date .
+	urn:j000539 
+		a nco:EmailAddress ;
+		nco:emailAddress "pchyphers@gmail.com" .
+	
+	urn:j000102 
+		a pimo:Person , foaf:Agent ;
+		pimo:isDefinedBy urn:j000096 ;
+		nao:prefLabel "James Garrett" ;
+		nao:prefSymbol <http://lorempixel.com/200/200/people/7/> ;
+		nao:trustLevel "0.89"^^xsd:double ;
+		pimo:groundingOccurrence urn:j000132 ;
+		pimo:memberOf urn:j000117 .
+	urn:j000132 
+		a nco:PersonContact , nco:ContactListDataObject ;
+		nao:prefLabel "James@di.me" ;
+		nie:dataSource urn:j000071 ;
+		nco:hasPersonName urn:j000133 ;
+		nco:hasBirthDate urn:j000134 ;
+		nco:hasEmailAddress urn:j000541 .
+	urn:j000133
+		a nco:PersonName ;
+		nco:nameGiven "James" ;
+		nco:nameFamily "Garrett" ;
+		nco:fullname "James Garrett" .
+	urn:j000134
+		a nco:BirthDate ;
+		nco:birthDate "1980-06-15"^^xsd:date .
+	urn:j000541 
+		a nco:EmailAddress ;
+		nco:emailAddress "garrettjames@gmail.com" .
+	
+	urn:j000103 
+		a pimo:Person , foaf:Agent ;
+		pimo:isDefinedBy urn:j000096 ;
+		nao:prefSymbol <http://lorempixel.com/200/200/people/9/> ;
+		nao:prefLabel "Natalia Cole" ;
+		nao:trustLevel "0.23"^^xsd:double .
+	
+	urn:j000104
+		a pimo:Person , foaf:Agent ;
+		pimo:isDefinedBy urn:j000096 ;
+		nao:prefLabel "Andre Beene" ;
+		nao:prefSymbol <http://lorempixel.com/200/200/people/10/>;
+		nao:trustLevel "0.1"^^xsd:double .
+		
+	urn:j000105
+		a pimo:Person , foaf:Agent ;
+		pimo:isDefinedBy urn:j000096 ;
+		nao:prefLabel "David Mitchell" ;
+		nao:trustLevel "0.13"^^xsd:double .
+	
+	urn:j000106
+		a pimo:Person , foaf:Agent ;
+		pimo:isDefinedBy urn:j000096 ;
+		nao:prefLabel "María Lee" ;
+		nao:trustLevel "0.1"^^xsd:double .
+	
+	urn:j000107
+		a pimo:Person , foaf:Agent ;
+		pimo:isDefinedBy urn:j000096 ;
+		nao:prefLabel "Nicole Elie" ;
+		nao:trustLevel "0.1"^^xsd:double .
+	
+	urn:j000108
+		a pimo:Person , foaf:Agent ;
+		pimo:isDefinedBy urn:j000096 ;
+		nao:prefLabel "Greg Hunter" ;
+		nao:trustLevel "0.15"^^xsd:double .
+	
+	urn:j000109
+		a pimo:Person , foaf:Agent ;
+		pimo:isDefinedBy urn:j000096 ;
+		nao:prefLabel "Pia Kaufman" ;
+		nao:trustLevel "0.1"^^xsd:double .
+	
+	urn:j000110
+		a pimo:Person , foaf:Agent ;
+		pimo:isDefinedBy urn:j000096 ;
+		nao:prefLabel "Miyu Tanaka" ;
+		nao:trustLevel "0.15"^^xsd:double .
+	
+	urn:j000080
+		a pimo:PersonGroup ;
+		pimo:isDefinedBy urn:j000096 ;
+		nao:prefLabel "Colleagues" ;
+		nao:prefSymbol <http://www.careerrocketeer.com/wp-content/uploads/Colleagues.png> ;
+		nao:trustLevel "0.3"^^xsd:double ;
+		nao:creator urn:j000061 ;
+		pimo:hasMember urn:j000082 , urn:j000101 .
+	
+	urn:j000117
+		a pimo:PersonGroup ;
+		pimo:isDefinedBy urn:j000096 ;
+		nao:prefLabel "Friends" ;
+		nao:prefSymbol <http://farm1.static.flickr.com/208/495605058_29f95740b4.jpg> ;
+		nao:trustLevel "0.65"^^xsd:double ;
+		nao:creator urn:j000061 ;
+		pimo:hasMember urn:j000070 , urn:j000101 , urn:j000102.
+	
+	urn:j000073
+		a pimo:PersonGroup ;
+		pimo:isDefinedBy urn:j000096 ;
+		nao:prefLabel "Business Meeting 3" ;
+		nao:prefSymbol <http://t1town.com/wp-content/uploads/2010/05/business-meeting.jpg> ;
+		nao:trustLevel "0.4"^^xsd:double ;
+		nao:creator urn:j000061 ;
+		pimo:hasMember urn:j000101 , urn:j000100 .
+	
+	urn:j000069
+		a pimo:PersonGroup ;
+		pimo:isDefinedBy urn:j000096 ;
+		nao:prefLabel "Conference Group 3" ;
+		nao:prefSymbol <http://www.voicetamil.com/wp-content/uploads/2010/02/conferences.jpg> ;
+		nao:trustLevel "0.3"^^xsd:double ;
+		nao:creator urn:j000061 ;
+		pimo:hasMember urn:j000082, urn:j000100 .
+	
+	urn:j000135
+		a pimo:Tag ;
+		pimo:isDefinedBy urn:j000096 ;
+		nao:prefLabel "Exotic Food" ;
+		nao:creator urn:j000061 .
+	
+	urn:j000136
+		a pimo:Project ;
+		pimo:isDefinedBy urn:j000096 ;
+		nao:prefLabel "Digital.Me" ;
+		nao:creator urn:j000061 .
+	
+	urn:j000137
+		a pimo:Project ;
+		pimo:isDefinedBy urn:j000096 ;
+		nao:prefLabel "M30 Madrid Project" ;
+		nao:creator urn:j000061 .
+	
+	urn:j000138
+		nao:prefLabel "Congreso HogarDigital" ;
+		a pimo:Location ;
+		geo:lat "48.74"^^xsd:decimal ;
+		geo:lat "9.09888"^^xsd:decimal .
+	
+	urn:j000139
+		nao:prefLabel "DHome Middleware" ;
+		a pimo:Location ;
+		geo:lat "48.126"^^xsd:decimal ;
+		geo:lat "9.090"^^xsd:decimal .
+	
+		
+	#juan:juanPlace1
+	#	a dpo:Place ;
+	#	nao:prefLabel "Record Store" ;
+	#	dlpo:lastActive "2011-03-30T19:00:00" ;
+	#	dpo:altLocation urn:j000078 ;
+	#	nao:creator urn:j000061 .
+	
+	#urn:j000078 
+	#	a pimo:Location ;
+	#	nao:prefLabel "AmoebaMusic Store" ;
+	#	geo:lat "37,063"^^xsd:decimal ;
+	#	geo:long "-95,677"^^xsd:decimal ;
+	#	pimo:locatedWithin juan:juanLocation2 .
+	
+	#juan:juanLocation2
+	#	a pimo:City ;
+	#	nao:prefLabel "San Francisco" ;
+	#	pimo:locatedWithin urn:j000138 .
+	
+	#urn:j000138 
+	#	a pimo:Country ;
+	#	nao:prefLabel "USA" .
+	
+	#juan:juanPlace2
+	#	a dpo:Place ;
+	#	nao:prefLabel "Museum" ;
+	#	dlpo:lastActive "2010-07-21T15:00:00" ;
+	#	dpo:altLocation urn:j000139 ;
+	#	nao:creator urn:j000061 .
+	
+	#urn:j000139
+	#	a pimo:Building ;
+	#	geo:lat "37,768"^^xsd:decimal ;
+	#	geo:long "-122,452"^^xsd:decimal ;
+	#	nao:prefLabel "Natural History Museum Building" ;
+	#	pimo:locatedWithin juan:juanLocation5 .
+	
+	#juan:juanLocation5 
+	#	a pimo:City ;
+	#	nao:prefLabel "New York" ;
+	#	pimo:locatedWithin urn:j000138 .
+	
+	urn:j000143
+		a ncal:Event ;
+		nao:prefLabel "Construction Fair '11" ;
+		ncal:dtstart urn:j000140 ;
+		ncal:dtend urn:j000142 .
+	
+	urn:j000140 
+		a ncal:NcalDateTime ;
+		ncal:dateTime "2011-11-23T09:00:00"^^xsd:dateTime .
+	
+	urn:j000142
+		a ncal:NcalDateTime ;
+		ncal:dateTime "2011-11-25T18:00:00"^^xsd:dateTime .
+		
+	urn:j000145
+		a ncal:Event ;
+		nao:prefLabel "Weekly meeting" ;
+		ncal:dtstart urn:j000141 ;
+		ncal:dtend urn:j000144 .
+	
+	urn:j000141 
+		a ncal:NcalDateTime ;
+		ncal:dateTime "2011-11-23T09:00:00"^^xsd:dateTime .
+	
+	urn:j000144
+		a ncal:NcalDateTime ;
+		ncal:dateTime "2011-11-25T18:00:00"^^xsd:dateTime .
+		
+	urn:j0000146
+		a ncal:Event ;
+		nao:prefLabel "Ametic Event 2012" ;
+		ncal:dtstart urn:j000147 ;
+		ncal:dtend urn:j000148 .
+	
+	urn:j000147
+		a ncal:NcalDateTime ;
+		ncal:dateTime "2012-07-13T09:00:00"^^xsd:dateTime .
+	
+	urn:j000148
+		a ncal:NcalDateTime ;
+		ncal:dateTime "2012-07-16T18:00:00"^^xsd:dateTime .
+	
+	urn:j000149
+		a dlpo:Availability ; 
+		nao:prefLabel "Busy" .
+		
+	urn:j000150
+		a dlpo:Availability ; 
+		nao:prefLabel "Away" .
+		
+	urn:j000151 
+		a ddo:Device ;
+		ddo:deviceIdentifier "73654519800825" ;
+		ddo:deviceName "Juan's Android" ;
+		ddo:deviceMode urn:j000152 ,
+				urn:j000153;
+		dcon:hasLiveContext urn:j000154 ,
+			urn:j000155;
+		ddo:knownNetwork urn:j000156 ,
+			urn:j000157 ,
+			urn:j000158 ,
+			urn:j000159 ,
+			urn:j000160 .
+	urn:j000061 ddo:owns urn:j000151 .
+	
+	urn:j000161
+		a ddo:Device ;
+		ddo:deviceIdentifier "490154203237518" ;
+		ddo:deviceName "James' Android" .
+	urn:j000102 ddo:owns urn:j000161 .
+	
+	urn:j000162
+		a ddo:Device ;
+		ddo:deviceIdentifier "776100983526185" ;
+		ddo:deviceName "Patrick's Android" .
+	urn:j000100 ddo:owns urn:j000162 .
+	
+	urn:j000156
+		a ddo:WiFi ;
+		ddo:accessPointID "AA:BB:CC:EE:FF" .
+	
+	urn:j000157 
+		a ddo:WiFi ;
+		ddo:accessPointID "FF:EE:CC:BB:AA" .
+	
+	urn:j000158
+		a ddo:CellularNetwork ;
+		ddo:accessPointID "TIM" ;
+		ddo:cellID "cell_IAO" .
+	
+	urn:j000159 
+		a ddo:Bluetooth ;
+		ddo:sourceDevice urn:j000161 .
+	
+	urn:j000160 
+		a ddo:Bluetooth ;
+		ddo:sourceDevice urn:j000162 .
+	
+	urn:j000152 
+		a ddo:Mode ;
+		nao:prefLabel "Silent" .
+		
+	urn:j000153 
+		a ddo:Mode ;
+		nao:prefLabel "Loud" .
+	
+	urn:j000163
+		a nfo:Application ;
+		nie:title "Notepad" .
+	
+	urn:j000164
+		a nfo:Application ;
+		nie:title "Outlook" .
+}	

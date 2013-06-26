@@ -1,0 +1,144 @@
+declare namespace nco = "http://www.semanticdesktop.org/ontologies/2007/03/22/nco#";
+declare namespace pimo = "http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#";
+declare namespace nao = "http://www.semanticdesktop.org/ontologies/2007/08/15/nao#";
+
+let $doc := doc("%doc%")
+let $persons :=$doc/person
+
+return 
+ for $person in $persons
+     let $id := 1
+     let $personID := $person/id
+     let $name := $person/first-name
+     let $surname := $person/last-name
+     let $ims := $person/im-accounts/im-account
+     let $positions := $person/positions/position 
+     let $dobYYYY := $person/date-of-birth/year
+     let $dobDD := $person/date-of-birth/day
+     let $dobMM := $person/date-of-birth/month
+     let $photoUrl := $person/picture-url  
+     let $summary := $person/summary
+     let $phones := $person/phone-numbers/phone-number
+     let $locations := $person/location
+     let $connections := $person/connections/person
+       
+         	
+	construct
+	{  	
+	  _:p{data($id)} a nco:PersonContact;
+	  nao:externalID {data($personID)};
+	  nco:nameGiven {data($name)};
+	  nco:nameFamily {data($surname)};
+	  nco:birthdate {fn:concat(data($dobDD),"/",data($dobMM),"/",data($dobYYYY))};
+	  nco:photo {data($photoUrl)};
+	  nao:description {data($summary)}.   
+	  
+	#Construct for the positions of the user  
+    {              
+      #let $counter := 0
+      for $position in $positions      
+      let $posID:= $position/id
+      let $title := $position/title
+      let $posStartYr := $position/start-date/year
+      let $posStartMo := $position/start-date/month
+      let $posEndYr := $position/end-date/year
+      let $posEndMo := $position/end-date/month
+      let $company := $position/company/name
+      #let $counter := $counter + 1
+      let $counter := count($position/preceding::*) + count($position/ancestor::*)
+            
+      construct
+      {           
+        #_:pos{data($pos_id)} a nco:Affiliation;
+        _:pos{data($counter)} a nco:Affiliation;
+          nao:externalID {data($posID)};
+      	  nco:role {data($title)};
+      	  nco:start {fn:concat(data($posStartMo)," ",data($posStartYr))};
+      	  nco:end {
+			  if (fn:empty(data($posEndYr))) 
+			  then $posEndMo=" " 
+			  else fn:concat(data($posEndMo)," ",data($posEndYr))}; 
+	      nco:org {data($company)}. 
+        #_:p{data($id)} nco:hasAffiliation _:pos{data($posID)};
+        _:p{data($id)} nco:hasAffiliation _:pos{data($counter)};
+      	
+      }
+    }.
+    
+    #Construct for the connections of the user
+    {
+      #let $counter := 0      
+      for $connection in $connections      
+      let $conID := $connection/id
+      let $conName := $connection/first-name
+      let $conSurname := $connection/last-name
+      let $conPhoto := $connection/picture-url
+      #let $counter := $counter + 1
+      let $counter := count($connection/preceding::*) + count($connection/ancestor::*)
+      
+      construct
+      {           
+        _:con{data($counter)} a nco:PersonContact;
+          nao:externalID {data($conID)};
+      	  nco:nameGiven {data($conName)};
+      	  nco:nameFamily {data($conSurname)};
+	      nco:photo {data($conPhoto)}. 
+        _:p{data($id)} nco:linkedIn_ContactGroup _:con{data($counter)};
+      	
+      }
+    }.
+        
+    #Construct for the phone numbers of the user    
+    {
+       #let $phoneID := 0
+       for $phone in $phones       
+       let $phoneNumber := $phone/phone-number
+       #let $phoneID := $phoneID + 1
+       let $counter := count($phone/preceding::*) + count($phone/ancestor::*)
+           
+       construct
+       {
+       		_:ph{data($counter)} a nco:PhoneNumber;
+       		nco:phoneNumber {data($phoneNumber)}.
+       		_:p{data($id)} nco:hasPhoneNumber _:ph{data($counter)};          
+       }    
+     }.
+    
+     #Construct for the instant messenger accounts of the user
+     {
+       #let $imc := 0
+       for $im in $ims
+       let $imName := $im/im-account-name
+       let $imType := $im/im-account-type
+       #let $imc := $imc + 1
+       let $counter := count($im/preceding::*) + count($im/ancestor::*)
+       
+       construct
+       {
+       		_:im{data($counter)} a nco:IMAccount;
+       		nco:imAccountType {data($imType)};
+       		nco:imAccountID {data($imName)}.  
+       		_:p{data($id)} nco:hasIMAccount _:im{data($counter)};      
+       }    
+     }.
+     
+     #Construct for the location of the user
+     {
+       #let $locationID :=0
+       for $location in $locations       
+       let $locationName := $location/name
+       #let $locationID := $locationID + 1
+       let $counter := count($location/preceding::*) + count($location/ancestor::*)
+                  
+       construct
+       {
+       		_:loc{data($counter)} a pimo:Location;
+       		nao:prefLabel {data($locationName)}.
+       		_:p{data($id)} nco:hasLocation _:loc{data($counter)};          
+       }    
+     }            
+    
+    }
+    
+      
+	

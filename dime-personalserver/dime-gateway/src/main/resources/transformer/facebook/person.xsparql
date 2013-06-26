@@ -1,0 +1,198 @@
+declare namespace nco = "http://www.semanticdesktop.org/ontologies/2007/03/22/nco#";
+declare namespace pimo = "http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#";
+declare namespace nao = "http://www.semanticdesktop.org/ontologies/2007/08/15/nao#";
+declare namespace nie = "http://www.semanticdesktop.org/ontologies/2007/01/19/nie#";
+declare namespace xsd = "http://www.w3.org/2001/XMLSchema#";
+
+let $doc := doc("%doc%")
+
+let $connections :=$doc/o/data/e
+
+return 
+ 
+	 for $connection in $connections   
+	   	 let $connectionId := fn:replace($connection/id, '-', '')
+	 	 let $name := $connection/first_name
+	 	 let $addname := $connection/middle_name
+	     let $surname := $connection/last_name
+	     let $fullname := $connection/name
+	     let $nickname := $connection/username
+	     let $locations := $connection/location/name
+	     let $photoUrl := $connection/picture/data/url   
+	     let $summary := $connection/bio
+	     let $positions := $connection/work/e 
+	     let $email := if (fn:exists($connection/email))
+	                   then ($connection/email)
+	                   else ("")         
+	     let $dob := $connection/birthday    
+	     let $dobdd := fn:substring($dob,4,2)
+	     let $dobmm := fn:substring($dob,1,2) 
+	     let $dobyyyy := fn:substring($dob,7)
+		 let $birthdate := fn:concat(data($dobyyyy),"-",data($dobmm),"-",data($dobdd))
+		 let $gender := if ((fn:contains($connection/gender,"female"))) then "female"
+		  				else if ((fn:contains($connection/gender,"male"))) then "male"
+		  				else ()
+		 let $profileUrl := $connection/link
+		 let $websiteUrl := if (fn:matches($connection/website,"^http://[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,4}(/\S*)?$")) 
+     	 				then ($connection/website)
+     					else ()
+		 let $location := if (fn:exists($connection/location/name))
+		                  then ($connection/location/name)
+		                  else ("")
+		 let $hometown := if (fn:exists($connection/hometown/name))
+		                  then ($connection/hometown/name)
+		                  else ("")    
+		 let $interests := $connection/interests/data/e 				
+	               
+	    #Construct for the user     	
+		construct
+		{  	
+		  _:c{data($connectionId)} a nco:PersonContact;
+		  nco:contactUID {data($connectionId)};
+		  nco:photo <{$photoUrl}>;	  
+		  nao:description {data($summary)};
+		  nco:url {data($websiteUrl)};	
+		  nie:url {data($profileUrl)};
+		  nco:gender nco:{data($gender)}. 
+		  
+	     #Construct for the interests of the user  
+	     {
+	     	for $interest in $interests 
+	    	let $interestName := $interest/name
+	    	construct
+	       	{
+	        	_:c{data($connectionId)} nco:hobby {data($interestName)};	      
+	       	}    
+	     }.
+		  
+		#Construct for the personal details of the user    
+	    {              
+	       let $counter := count($name/preceding::*) + count($name/ancestor::*)
+	           
+	       construct
+	       {
+	       		_:pn{data($connectionId)} a nco:PersonName;
+	       		nco:nameGiven {data($name)};
+	       		nco:nameAdditional {data($addname)};
+	       		nco:nameFamily {data($surname)};
+	       		nco:fullname {data($fullname)};
+	       		nco:nickname {data($nickname)}.
+	       		_:c{data($connectionId)} nco:hasPersonName _:pn{data($connectionId)}.      		   
+	       }    
+	     }.
+	     
+	    #Construct for the birth date of the user  
+	    {	 	
+	    	if ((fn:string-length($birthdate))=10)				    	
+			then ({     
+		        let $counter := count($dob/preceding::*) + count($dob/ancestor::*)
+		           
+		        construct
+		        {
+		       		_:bd{data($counter)} a nco:BirthDate;
+			  		nco:birthDate {data($birthdate)}^^xsd:date.  
+		       		_:c{data($connectionId)} nco:hasBirthDate _:bd{data($counter)}.          
+		        }    
+		    })
+		    else () 
+	     }.  
+	     
+	     
+	    #Construct for the email of the user    
+	    { 
+	       if (fn:not(($email)="")) 
+		   then ({            
+		       let $counter := count($email/preceding::*) + count($email/ancestor::*)
+		           
+		       construct
+		       {
+		       		_:e{data($connectionId)} a nco:EmailAddress;
+		       		nco:emailAddress {data($email)}.
+		       		_:c{data($connectionId)} nco:hasEmailAddress _:e{data($connectionId)};          
+		       }    
+		    })
+			else ()     
+	     }.     
+	     
+	    #Construct for the positions of the user  
+	    {      
+	    	      for $position in $positions      
+			      let $posId:= $position/position/id
+			      let $title := $position/position/name
+			      let $posStartYr := fn:substring($position/start_date,1,4)
+			      let $posStMo := fn:substring($position/start_date,6,2)
+			      let $posStartMo := if ((fn:string-length($posStMo))=1)  
+				  	    			 then (fn:concat("0",$posStMo))
+		          					 else if ((fn:string-length($posStMo))=0)  
+				  	    			 then ("01")
+				  	    			 else $posStMo
+			      let $posStart := if (fn:exists($position/start_date)) 
+				  	               then (fn:concat(data($posStartYr),"-",data($posStartMo),"-",data("01"),"T","00:00:00Z"))  
+				            	   else ()
+			      let $posEndYr := fn:substring($position/end_date,1,4)
+			      let $posEMo := fn:substring($position/end_date,6,2)
+			      let $posEndMo := if ((fn:string-length($posEMo))=1)  
+				  	    			   then (fn:concat("0",$posEMo))
+				  	    			   else if ((fn:string-length($posEMo))=0)  
+				  	    			   then ("01")
+		            				   else $posEMo
+			      let $posEnd := if (fn:exists($position/end_date)) 
+				  	               then (fn:concat(data($posEndYr),"-",data($posEndMo),"-",data("01"),"T","00:00:00Z"))  
+				            	   else ()		     
+			      let $counter := count($position/preceding::*) + count($position/ancestor::*)             
+				  let $orgId := $position/employer/id           
+			     
+			      construct
+			      {                
+			        _:pos{data($posId)} a nco:Affiliation;
+			          nao:externalIdentifier {data($posId)};
+			      	  nco:role {data($title)};
+			      	  nco:start {data($posStart)}^^xsd:dateTime;
+			      	  nco:end {data($posEnd)}^^xsd:dateTime;    	
+				      nco:org _:org{data($orgId)}.      
+			        _:c{data($connectionId)} nco:hasAffiliation _:pos{data($posId)}.  
+			        {
+			        let $company := $position/employer/name
+			        construct
+			        {
+			        	_:org{data($orgId)} a nco:OrganizationContact;   
+	         			nie:title {data($company)}.  
+			        }
+			        } 
+			          	
+			      }		  
+	    }.
+	    
+	    #Construct for the location of the user
+	    {
+	    	if (fn:not(($location)="")) 
+		    then ({
+		        let $counter := count($location/preceding::*) + count($location/ancestor::*)
+		                  
+		        construct
+		        {
+		        	_:loc{data($counter)} a nco:PostalAddress;
+		        	nao:prefLabel {data($location)}.
+		       		_:c{data($connectionId)} nco:hasPostalAddress _:loc{data($counter)};               
+		        }  
+		     })
+			 else ()       
+	     }.
+	     
+	     #Construct for the hometown of the user
+	     {
+	     	if (fn:not(($hometown)="")) 
+		    then ({
+		        let $counter := count($hometown/preceding::*) + count($hometown/ancestor::*)
+		                  
+		        construct
+		        {
+		        	_:hom{data($counter)} a nco:PostalAddress;
+		        	nao:prefLabel {data($hometown)}.
+		       		_:c{data($connectionId)} nco:hasPostalAddress _:hom{data($counter)};               
+		        } 
+		     })
+			 else ()           
+	      }         
+	    
+	    }

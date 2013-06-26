@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<crawler>
+	<adapter>Fitbit</adapter>
+	<jobs>
+		<job>
+			<path>/person/@me/@all</path>
+			<type>eu.dime.ps.semantic.model.nco.PersonContact</type>
+			<cron>0 0 0 * * ?</cron>
+		</job>
+		<job>
+			<path>/profile/@me/@all</path>
+			<type>eu.dime.ps.semantic.model.nco.PersonContact</type>
+			<cron>0 0 0 * * ?</cron>
+		</job>
+	    <job>
+			<path>/activity/@me/@all</path>
+			<type>eu.dime.ps.semantic.model.dpo.Activity</type>
+			<cron>0 0/10 * * * ?</cron>
+		</job>
+	</jobs>
+</crawler>

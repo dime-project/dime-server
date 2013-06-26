@@ -1,0 +1,598 @@
+<?xml version="1.0"?>
+<!-- $Id: creole.xml 2087 2009-06-25 13:10:39Z simsce $ -->
+<!-- creole.xml directory file for ANNIE Processing resources -->
+<CREOLE-DIRECTORY>
+	<!-- Language Resources -->
+	<CREOLE>
+		<!-- Annotation schema -->
+		<RESOURCE>
+			<NAME>Annotation schema</NAME>
+			<CLASS>gate.creole.AnnotationSchema</CLASS>
+			<COMMENT>An annotation type and its features
+                        (http://gate.ac.uk/sale/tao/#sec:schemas)</COMMENT>
+			<PARAMETER NAME="xmlFileUrl"
+				COMMENT="The url to the definition file" SUFFIXES="xml;xsd">
+				java.net.URL
+			</PARAMETER>
+			<HIDDEN-AUTOINSTANCE>
+				<PARAM NAME="xmlFileUrl"
+					VALUE="resources/schema/AddressSchema.xml" />
+			</HIDDEN-AUTOINSTANCE>
+			<HIDDEN-AUTOINSTANCE>
+				<PARAM NAME="xmlFileUrl" VALUE="resources/schema/DateSchema.xml" />
+			</HIDDEN-AUTOINSTANCE>
+			<HIDDEN-AUTOINSTANCE>
+				<PARAM NAME="xmlFileUrl"
+					VALUE="resources/schema/FacilitySchema.xml" />
+			</HIDDEN-AUTOINSTANCE>
+			<HIDDEN-AUTOINSTANCE>
+				<PARAM NAME="xmlFileUrl" VALUE="resources/schema/GpeSchema.xml" />
+			</HIDDEN-AUTOINSTANCE>
+			<HIDDEN-AUTOINSTANCE>
+				<PARAM NAME="xmlFileUrl"
+					VALUE="resources/schema/IdentifierSchema.xml" />
+			</HIDDEN-AUTOINSTANCE>
+			<HIDDEN-AUTOINSTANCE>
+				<PARAM NAME="xmlFileUrl"
+					VALUE="resources/schema/PersonSchema.xml" />
+			</HIDDEN-AUTOINSTANCE>
+			<HIDDEN-AUTOINSTANCE>
+				<PARAM NAME="xmlFileUrl"
+					VALUE="resources/schema/LocationSchema.xml" />
+			</HIDDEN-AUTOINSTANCE>
+			<HIDDEN-AUTOINSTANCE>
+				<PARAM NAME="xmlFileUrl" VALUE="resources/schema/MoneySchema.xml" />
+			</HIDDEN-AUTOINSTANCE>
+			<HIDDEN-AUTOINSTANCE>
+				<PARAM NAME="xmlFileUrl"
+					VALUE="resources/schema/OrganizationSchema.xml" />
+			</HIDDEN-AUTOINSTANCE>
+			<HIDDEN-AUTOINSTANCE>
+				<PARAM NAME="xmlFileUrl"
+					VALUE="resources/schema/PercentSchema.xml" />
+			</HIDDEN-AUTOINSTANCE>
+			<HIDDEN-AUTOINSTANCE>
+				<PARAM NAME="xmlFileUrl"
+					VALUE="resources/schema/PersonSchema.xml" />
+			</HIDDEN-AUTOINSTANCE>
+			<HIDDEN-AUTOINSTANCE>
+				<PARAM NAME="xmlFileUrl" VALUE="resources/schema/TokenSchema.xml" />
+			</HIDDEN-AUTOINSTANCE>
+			<HIDDEN-AUTOINSTANCE>
+				<PARAM NAME="xmlFileUrl"
+					VALUE="resources/schema/SyntaxTreeNodeSchema.xml" />
+			</HIDDEN-AUTOINSTANCE>
+			<HIDDEN-AUTOINSTANCE>
+				<PARAM NAME="xmlFileUrl" VALUE="resources/schema/CorefSchema.xml" />
+			</HIDDEN-AUTOINSTANCE>
+		</RESOURCE>
+	</CREOLE>
+
+	<!-- Processing Resources -->
+	<CREOLE>
+		<!-- creole.xml for the Unicode tokeniser -->
+		<RESOURCE>
+			<NAME>GATE Unicode Tokeniser</NAME>
+			<CLASS>gate.creole.tokeniser.SimpleTokeniser</CLASS>
+			<COMMENT>
+				A customisable Unicode tokeniser
+				(http://gate.ac.uk/sale/tao/#sec:tokeniser).
+			</COMMENT>
+			<PARAMETER NAME="document"
+				COMMENT="The document to be tokenised" RUNTIME="true">
+				gate.Document
+			</PARAMETER>
+			<PARAMETER NAME="annotationSetName" RUNTIME="true"
+				COMMENT="The annotation set to be used for the generated annotations"
+				OPTIONAL="true">
+				java.lang.String
+			</PARAMETER>
+			<PARAMETER
+				DEFAULT="resources/tokeniser/DefaultTokeniser.rules"
+				COMMENT="The URL for the rules file" SUFFIXES="rules"
+				NAME="rulesURL">
+				java.net.URL
+			</PARAMETER>
+			<PARAMETER DEFAULT="UTF-8"
+				COMMENT="The encoding used for reading the definitions"
+				NAME="encoding">
+				java.lang.String
+			</PARAMETER>
+			<ICON>tokeniser</ICON>
+		</RESOURCE>
+
+		<!-- creole.xml for the Englishtokeniser -->
+		<RESOURCE>
+			<NAME>ANNIE English Tokeniser</NAME>
+			<CLASS>gate.creole.tokeniser.DefaultTokeniser</CLASS>
+			<COMMENT>
+				A customisable English tokeniser
+				(http://gate.ac.uk/sale/tao/#sec:en-tokeniser).
+			</COMMENT>
+			<PARAMETER NAME="document"
+				COMMENT="The document to be tokenised" RUNTIME="true">
+				gate.Document
+			</PARAMETER>
+			<PARAMETER NAME="annotationSetName" RUNTIME="true"
+				COMMENT="The annotation set to be used for the generated annotations"
+				OPTIONAL="true">
+				java.lang.String
+			</PARAMETER>
+			<PARAMETER NAME="tokeniserRulesURL"
+				DEFAULT="resources/tokeniser/DefaultTokeniser.rules"
+				COMMENT="The URL for the rules file" SUFFIXES="rules">
+				java.net.URL
+			</PARAMETER>
+			<PARAMETER NAME="transducerGrammarURL"
+				DEFAULT="resources/tokeniser/postprocess.jape"
+				COMMENT="The URL for the postprocessing transducer"
+				SUFFIXES="jape">
+				java.net.URL
+			</PARAMETER>
+			<PARAMETER NAME="encoding"
+				COMMENT="The encoding used for reading the definitions"
+				DEFAULT="UTF-8">
+				java.lang.String
+			</PARAMETER>
+			<ICON>tokeniser</ICON>
+		</RESOURCE>
+
+		<!-- creole.xml for gazetteer -->
+		<RESOURCE>
+			<NAME>ANNIE Gazetteer</NAME>
+			<CLASS>gate.creole.gazetteer.DefaultGazetteer</CLASS>
+			<COMMENT>
+				A list lookup component
+				(http://gate.ac.uk/sale/tao/#sec:gazetteer).
+			</COMMENT>
+			<PARAMETER NAME="document" RUNTIME="true"
+				COMMENT="The document to be processed">
+				gate.Document
+			</PARAMETER>
+      <PARAMETER NAME="gazetteerFeatureSeparator"
+        COMMENT="The character used to separate features for entries in gazetteer lists. Accepts strings like &quot;\t&quot; and will unescape it to the relevant character. If not specified, this gazetteer does not support extra features."
+        OPTIONAL="true">
+        java.lang.String
+      </PARAMETER>
+			<PARAMETER NAME="listsURL"
+				DEFAULT="resources/gazetteer/lists.def"
+				COMMENT="The URL to the file with list of lists" SUFFIXES="def">
+				java.net.URL
+			</PARAMETER>
+      <PARAMETER NAME="caseSensitive"
+        DEFAULT="true"
+        COMMENT="Should this gazetteer diferentiate on case">
+        java.lang.Boolean
+      </PARAMETER>
+			<PARAMETER NAME="encoding"
+        DEFAULT="UTF-8"
+				COMMENT="The encoding used for reading the definitions">
+				java.lang.String
+			</PARAMETER>
+      <PARAMETER NAME="annotationSetName" RUNTIME="true"
+        COMMENT="The annotation set to be used for the generated annotations"
+        OPTIONAL="true">
+        java.lang.String
+      </PARAMETER>
+			<PARAMETER NAME="wholeWordsOnly"
+        DEFAULT="true"
+				COMMENT="Should this gazetteer only match whole words"
+        RUNTIME="true">
+				java.lang.Boolean
+			</PARAMETER>
+      <PARAMETER NAME="longestMatchOnly"
+        DEFAULT="true"
+        COMMENT="Should this gazetteer only match the longest string starting from any offset?"
+        RUNTIME="true">
+        java.lang.Boolean
+      </PARAMETER>
+			<ICON>gazetteer</ICON>
+		</RESOURCE>
+
+		<!-- creole.xml for Hash Gazetteer (ex Natural)-->
+		<RESOURCE>
+			<NAME>Hash Gazetteer</NAME>
+			<CLASS>com.ontotext.gate.gazetteer.HashGazetteer</CLASS>
+			<COMMENT>
+				A list lookup component implemented by OntoText Lab. For
+				documentation, download and license agreement please
+				refer to
+				http://www.ontotext.com/downloads/index.html#gazetteer.
+				The licence information is also available in
+				licence.ontotext.html in the lib folder of GATE
+			</COMMENT>
+			<PARAMETER NAME="document" RUNTIME="true"
+				COMMENT="The document to be processed">
+				gate.Document
+			</PARAMETER>
+			<PARAMETER NAME="annotationSetName" RUNTIME="true"
+				COMMENT="The annotation set to be used for the generated annotations"
+				OPTIONAL="true">
+				java.lang.String
+			</PARAMETER>
+			<PARAMETER NAME="listsURL"
+				DEFAULT="resources/gazetteer/lists.def"
+				COMMENT="The URL to the file with list of lists" SUFFIXES="def">
+				java.net.URL
+			</PARAMETER>
+			<PARAMETER DEFAULT="UTF-8"
+				COMMENT="The encoding used for reading the definitions"
+				NAME="encoding">
+				java.lang.String
+			</PARAMETER>
+			<PARAMETER DEFAULT="true" NAME="caseSensitive"
+				COMMENT="Should this gazetteer diferentiate on case. Currently the Gazetteer works only in case sensitive mode.">
+				java.lang.Boolean
+			</PARAMETER>
+			<ICON>gazetteer</ICON>
+		</RESOURCE>
+
+		<!-- creole.xml for JapeTransducer -->
+		<RESOURCE>
+			<NAME>Jape Transducer</NAME>
+			<CLASS>gate.creole.Transducer</CLASS>
+			<COMMENT>
+				A module for executing Jape grammars
+				(http://gate.ac.uk/sale/tao/#chap:jape).
+			</COMMENT>
+			<PARAMETER NAME="document" RUNTIME="true"
+				COMMENT="The document to be processed">
+				gate.Document
+			</PARAMETER>
+			<PARAMETER NAME="inputASName" RUNTIME="true"
+				COMMENT="The annotation set to be used as input for the transducer"
+				OPTIONAL="true">
+				java.lang.String
+			</PARAMETER>
+			<PARAMETER NAME="outputASName" RUNTIME="true"
+				COMMENT="The annotation set to be used as output for the transducer"
+				OPTIONAL="true">
+				java.lang.String
+			</PARAMETER>
+			<OR>
+				<PARAMETER NAME="grammarURL"
+					COMMENT="The URL to the grammar file" SUFFIXES="jape">
+					java.net.URL
+				</PARAMETER>
+				<PARAMETER NAME="binaryGrammarURL"
+					COMMENT="The URL to the grammar file" SUFFIXES="jape">
+					java.net.URL
+				</PARAMETER>
+			</OR>
+			<PARAMETER NAME="encoding" DEFAULT="UTF-8"
+				COMMENT="The encoding used for reading the grammar">
+				java.lang.String
+			</PARAMETER>
+			<PARAMETER NAME="ontology"
+				COMMENT="The ontology to be used by this transducer" OPTIONAL="true"
+				RUNTIME="true">
+				gate.creole.ontology.Ontology
+			</PARAMETER>
+			<ICON>jape</ICON>
+		</RESOURCE>
+
+		<!-- creole.xml for ANNIE Transducer -->
+		<RESOURCE>
+			<NAME>ANNIE NE Transducer</NAME>
+			<CLASS>gate.creole.ANNIETransducer</CLASS>
+			<COMMENT>
+				ANNIE named entity grammar
+				(http://gate.ac.uk/sale/tao/#sec:semantic-tagger)
+			</COMMENT>
+			<PARAMETER NAME="document" RUNTIME="true"
+				COMMENT="The document to be processed">
+				gate.Document
+			</PARAMETER>
+			<PARAMETER NAME="inputASName" RUNTIME="true"
+				COMMENT="The annotation set to be used as input for the transducer"
+				OPTIONAL="true">
+				java.lang.String
+			</PARAMETER>
+			<PARAMETER NAME="outputASName" RUNTIME="true"
+				COMMENT="The annotation set to be used as output for the transducer"
+				OPTIONAL="true">
+				java.lang.String
+			</PARAMETER>
+			<PARAMETER NAME="grammarURL"
+				COMMENT="The URL to the grammar file"
+				DEFAULT="resources/NE/main.jape" SUFFIXES="jape">
+				java.net.URL
+			</PARAMETER>
+			<PARAMETER NAME="encoding" DEFAULT="UTF-8"
+				COMMENT="The encoding used for reading the grammar">
+				java.lang.String
+			</PARAMETER>
+			<ICON>ne-transducer</ICON>
+		</RESOURCE>
+
+		<!-- creole.xml for Sentence splitter-->
+		<RESOURCE>
+			<NAME>ANNIE Sentence Splitter</NAME>
+			<COMMENT>
+				ANNIE sentence splitter
+				(http://gate.ac.uk/sale/tao/#sec:splitter)
+			</COMMENT>
+			<CLASS>gate.creole.splitter.SentenceSplitter</CLASS>
+			<PARAMETER COMMENT="The document to be processed"
+				NAME="document" RUNTIME="true">
+				gate.Document
+			</PARAMETER>
+			<PARAMETER NAME="inputASName"
+				COMMENT="The name used for the temporary annotation set"
+				RUNTIME="true" OPTIONAL="true">
+				java.lang.String
+			</PARAMETER>
+			<PARAMETER NAME="outputASName"
+				COMMENT="The name used for the temporary annotation set"
+				RUNTIME="true" OPTIONAL="true">
+				java.lang.String
+			</PARAMETER>
+			<PARAMETER NAME="encoding"
+				COMMENT="The encoding used for reading the definition files"
+				DEFAULT="UTF-8">
+				java.lang.String
+			</PARAMETER>
+			<PARAMETER NAME="gazetteerListsURL"
+				DEFAULT="resources/sentenceSplitter/gazetteer/lists.def"
+				COMMENT="The URL to the custom list lookup definition file"
+				OPTIONAL="true" SUFFIXES="def">
+				java.net.URL
+			</PARAMETER>
+			<PARAMETER NAME="transducerURL"
+				DEFAULT="resources/sentenceSplitter/grammar/main.jape"
+				COMMENT="The URL to the custom Jape grammar file" OPTIONAL="true"
+				SUFFIXES="jape">
+				java.net.URL
+			</PARAMETER>
+			<ICON>sentence-splitter</ICON>
+		</RESOURCE>
+
+		<!-- creole.xml for RegEx Sentence splitter-->
+		<RESOURCE>
+			<NAME>RegEx Sentence Splitter</NAME>
+			<COMMENT>
+				A sentence splitter based on regular expressions
+			</COMMENT>
+			<CLASS>gate.creole.splitter.RegexSentenceSplitter</CLASS>
+			<PARAMETER COMMENT="The document to be processed"
+				NAME="document" RUNTIME="true">
+				gate.Document
+			</PARAMETER>
+			<PARAMETER NAME="outputASName"
+				COMMENT="The name used for the temporary annotation set"
+				RUNTIME="true" OPTIONAL="true">
+				java.lang.String
+			</PARAMETER>
+			<PARAMETER NAME="encoding"
+				COMMENT="The encoding used for reading the definition files"
+				DEFAULT="UTF-8">
+				java.lang.String
+			</PARAMETER>
+			<PARAMETER NAME="internalSplitListURL"
+				DEFAULT="resources/regex-splitter/internal-split-patterns.txt"
+				COMMENT="The URL to the internal splits pattern list"
+				OPTIONAL="false" SUFFIXES="txt">
+				java.net.URL
+			</PARAMETER>
+			<PARAMETER NAME="externalSplitListURL"
+				DEFAULT="resources/regex-splitter/external-split-patterns.txt"
+				COMMENT="The URL to the external splits pattern list"
+				OPTIONAL="false" SUFFIXES="txt">
+				java.net.URL
+			</PARAMETER>
+			<PARAMETER NAME="nonSplitListURL"
+				DEFAULT="resources/regex-splitter/non-split-patterns.txt"
+				COMMENT="The URL to the non splits pattern list"
+				OPTIONAL="false" SUFFIXES="txt">
+				java.net.URL
+			</PARAMETER>			
+			<ICON>sentence-splitter</ICON>
+		</RESOURCE>
+
+		<!-- creole.xml for HepTag (Mark Hepple's POS tagger)-->
+		<RESOURCE>
+			<NAME>ANNIE POS Tagger</NAME>
+			<COMMENT>
+				Mark Hepple's Brill-style POS tagger
+				(http://gate.ac.uk/sale/tao/#sec:tagger)
+			</COMMENT>
+			<CLASS>gate.creole.POSTagger</CLASS>
+			<PARAMETER NAME="document"
+				COMMENT="The document to be processed" RUNTIME="true">
+				gate.Document
+			</PARAMETER>
+			<PARAMETER NAME="inputASName"
+				COMMENT="The name of the annotation set used for input"
+				RUNTIME="true" OPTIONAL="true">
+				java.lang.String
+			</PARAMETER>
+			<PARAMETER NAME="outputASName"
+				COMMENT="The name of the annotation set used for output"
+				RUNTIME="true" OPTIONAL="true">
+				java.lang.String
+			</PARAMETER>
+			<PARAMETER NAME="encoding"
+				COMMENT="Encoding to use to read rules and lexicons"
+				OPTIONAL="true">
+				java.lang.String
+			</PARAMETER>
+			<PARAMETER NAME="lexiconURL"
+				DEFAULT="resources/heptag/lexicon"
+				COMMENT="The URL for the lexicon file" OPTIONAL="true">
+				java.net.URL
+			</PARAMETER>
+			<PARAMETER NAME="rulesURL"
+				DEFAULT="resources/heptag/ruleset"
+				COMMENT="The URL for the ruleset file" OPTIONAL="true">
+				java.net.URL
+			</PARAMETER>
+			<PARAMETER NAME="baseTokenAnnotationType"
+				COMMENT="The name of the base Token annotation type" RUNTIME="true"
+				OPTIONAL="false" DEFAULT="Token">
+				java.lang.String
+			</PARAMETER>
+			<PARAMETER NAME="baseSentenceAnnotationType"
+				COMMENT="The name of the base Sentence annotation type"
+				RUNTIME="true" OPTIONAL="false" DEFAULT="Sentence">
+				java.lang.String
+			</PARAMETER>
+			<PARAMETER NAME="outputAnnotationType"
+				COMMENT="The name of the annotation type where the new features should be added"
+				RUNTIME="true" OPTIONAL="false" DEFAULT="Token">
+				java.lang.String
+			</PARAMETER>
+			<ICON>pos-tagger</ICON>
+		</RESOURCE>
+
+		<!-- creole.xml for namematch -->
+		<RESOURCE>
+			<NAME>ANNIE OrthoMatcher</NAME>
+			<CLASS>gate.creole.orthomatcher.OrthoMatcher</CLASS>
+			<COMMENT>
+				ANNIE orthographical coreference component
+				(http://gate.ac.uk/sale/tao/#sec:annie:orthomatcher)
+			</COMMENT>
+			<PARAMETER DEFAULT="resources/othomatcher/listsNM.def"
+				COMMENT="The URL for the definition file" SUFFIXES="def"
+				NAME="definitionFileURL">
+				java.net.URL
+			</PARAMETER>
+			<PARAMETER DEFAULT="UTF-8"
+				COMMENT="The encoding used for reading the definitions"
+				NAME="encoding">
+				java.lang.String
+			</PARAMETER>
+			<PARAMETER NAME="document" RUNTIME="true">
+				gate.Document
+			</PARAMETER>
+			<PARAMETER NAME="annotationSetName" RUNTIME="true"
+				OPTIONAL="true">
+				java.lang.String
+			</PARAMETER>
+			<PARAMETER NAME="caseSensitive" DEFAULT="false"
+				OPTIONAL="true">
+				java.lang.Boolean
+			</PARAMETER>
+			<PARAMETER NAME="annotationTypes"
+				DEFAULT="Organization;Person;Location;Date" RUNTIME="true"
+				OPTIONAL="true">
+				java.util.ArrayList
+			</PARAMETER>
+			<PARAMETER NAME="processUnknown" DEFAULT="true"
+				OPTIONAL="true">
+				java.lang.Boolean
+			</PARAMETER>
+			<PARAMETER NAME="organizationType" DEFAULT="Organization"
+				OPTIONAL="true">
+				java.lang.String
+			</PARAMETER>
+			<PARAMETER NAME="personType" DEFAULT="Person"
+				OPTIONAL="true">
+				java.lang.String
+			</PARAMETER>
+			<PARAMETER NAME="extLists" DEFAULT="true" OPTIONAL="true">
+				java.lang.Boolean
+			</PARAMETER>
+			<ICON>ortho-matcher</ICON>
+		</RESOURCE>
+
+		<!--  creole.xml for the coreferencer -->
+		<RESOURCE>
+			<NAME>ANNIE Pronominal Coreferencer</NAME>
+			<CLASS>gate.creole.coref.Coreferencer</CLASS>
+			<COMMENT>
+				Pronominal Coreference resolution component
+				(http://gate.ac.uk/sale/tao/#sec:annie:pronom-coref)
+			</COMMENT>
+			<PARAMETER NAME="document" RUNTIME="true"
+				COMMENT="The document to be processed">
+				gate.Document
+			</PARAMETER>
+			<PARAMETER NAME="annotationSetName" RUNTIME="true"
+				COMMENT="The annotation set to be used for the generated annotations"
+				OPTIONAL="true">
+				java.lang.String
+			</PARAMETER>
+			<PARAMETER NAME="resolveIt" RUNTIME="true"
+				COMMENT="Whether or not to resolve it pronouns" DEFAULT="false"
+				OPTIONAL="true">
+				java.lang.Boolean
+			</PARAMETER>
+			<ICON>pronominal-coreferencer</ICON>
+		</RESOURCE>
+
+		<!--  creole.xml for the coreferencer -->
+		<RESOURCE>
+			<NAME>ANNIE Nominal Coreferencer</NAME>
+			<CLASS>gate.creole.coref.NominalCoref</CLASS>
+			<COMMENT>Nominal Coreference resolution component</COMMENT>
+			<PARAMETER NAME="document" RUNTIME="true"
+				COMMENT="The document to be processed">
+				gate.Document
+			</PARAMETER>
+			<PARAMETER NAME="annotationSetName" RUNTIME="true"
+				COMMENT="The annotation set to be used for the generated annotations"
+				OPTIONAL="true">
+				java.lang.String
+			</PARAMETER>
+			<ICON>nominal-coreferencer</ICON>
+		</RESOURCE>
+
+		<RESOURCE>
+			<NAME>Document Reset PR</NAME>
+			<CLASS>gate.creole.annotdelete.AnnotationDeletePR</CLASS>
+			<COMMENT>
+				Document cleaner
+				(http://gate.ac.uk/sale/tao/#sec:misc-creole:reset)
+			</COMMENT>
+			<PARAMETER NAME="document" RUNTIME="true">
+				gate.Document
+			</PARAMETER>
+			<PARAMETER NAME="annotationTypes" RUNTIME="true"
+				OPTIONAL="true" ITEM_CLASS_NAME="java.lang.String">
+				java.util.ArrayList
+			</PARAMETER>
+			<PARAMETER NAME="setsToKeep" RUNTIME="true" OPTIONAL="true"
+				ITEM_CLASS_NAME="java.lang.String">
+				java.util.ArrayList
+			</PARAMETER>
+			<PARAMETER NAME="keepOriginalMarkupsAS" RUNTIME="true"
+			OPTIONAL="true" DEFAULT="true">
+				java.lang.Boolean
+			</PARAMETER>
+			<ICON>document-reset</ICON>
+		</RESOURCE>
+	</CREOLE>
+
+	<!-- creole.xml for Visual Resources -->
+	<CREOLE>
+		<RESOURCE>
+			<NAME>Jape Viewer</NAME>
+			<CLASS>gate.gui.jape.JapeViewer</CLASS>
+			<COMMENT>A JAPE grammar file viewer</COMMENT>
+			<!-- type values can be "large" or "small"-->
+			<GUI TYPE="large">
+				<MAIN_VIEWER />
+				<RESOURCE_DISPLAYED>
+					gate.creole.Transducer
+				</RESOURCE_DISPLAYED>
+			</GUI>
+		</RESOURCE>
+		<!-- VR Gaze - Gazetteers editor -->
+		<RESOURCE>
+			<NAME>Gaze</NAME>
+			<CLASS>com.ontotext.gate.vr.Gaze</CLASS>
+			<COMMENT>
+				Gazetteer viewer and editor
+				(http://gate.ac.uk/sale/tao/#sect:gaze)
+			</COMMENT>
+			<GUI TYPE="large">
+				<MAIN_VIEWER />
+				<RESOURCE_DISPLAYED>
+					gate.creole.gazetteer.Gazetteer
+				</RESOURCE_DISPLAYED>
+			</GUI>
+		</RESOURCE>
+
+	</CREOLE>
+</CREOLE-DIRECTORY>

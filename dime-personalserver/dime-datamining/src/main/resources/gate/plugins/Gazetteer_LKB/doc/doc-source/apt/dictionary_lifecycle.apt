@@ -1,0 +1,16 @@
+ -----
+ Developer Documentation - Dictionary Lifecycle
+ -----
+ Marin Nozhchev
+ -----
+ 2009-10-17
+ -----
+
+~~ http://maven.apache.org/doxia/references/apt-format.html
+
+  Multiple instances of the large KB gazetteer processing resource share the same dictionary, thus saving
+  memory when parallel annotation is implemented. The dictionary lifecycle specification explains in details how and when
+  dictionaries are loaded during the initialization of the PR. This text is aimed at advanced users,
+  that seek to understand the details, and developers, that intends to extends the gazetteer.
+  
+  This is a work in progress. Contact {{{./team-list.html}the team}} if you need immediate information on that topic.

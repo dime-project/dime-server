@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd">
+	
+	<import resource="classpath*:spring-config/ps-storage-applicationContext.xml" />
+	<context:annotation-config/>
+	
+	<bean id="connection"
+	    class="eu.dime.ps.semantic.connection.Connection">
+ 		<constructor-arg value="12345"/>
+	    <constructor-arg><ref bean="repository"/></constructor-arg>
+	</bean>
+
+	<bean id="connectionProviderMock"
+	    class="org.easymock.EasyMock" factory-method="createNiceMock" primary="true" >
+		<constructor-arg value="eu.dime.ps.semantic.connection.ConnectionProvider" />
+	</bean>
+	
+	<bean id="repositoryFactory"
+		class="eu.dime.ps.semantic.rdf.impl.SesameMemoryRepositoryFactory"/>
+
+ 	<bean id="repository"
+ 		factory-bean="repositoryFactory"
+ 		factory-method="get">
+ 		<constructor-arg value="12345"/>
+ 	</bean>
+		
+	<bean id="modelFactory"
+		class="eu.dime.ps.semantic.model.ModelFactory">
+	</bean>
+
+	<bean id="tripleStore"
+		class="ie.deri.smile.rdf.impl.TripleStoreImpl">
+ 		<constructor-arg value="12345"/>
+		<constructor-arg><ref bean="repository"/></constructor-arg>
+	</bean>
+
+	<bean id="resourceStore"
+		class="eu.dime.ps.semantic.rdf.impl.ResourceStoreImpl">
+		<constructor-arg><ref bean="tripleStore"/></constructor-arg>
+	</bean>
+
+	<bean id="pimoService"
+		class="eu.dime.ps.semantic.service.impl.PimoService">
+		<constructor-arg><value>default-config.trig</value></constructor-arg>
+		<constructor-arg><ref bean="tripleStore"/></constructor-arg>
+	</bean>
+
+	<bean id="resourceMatchingService"
+		class="eu.dime.ps.semantic.service.impl.ResourceMatchingServiceImpl">
+		<property name="tripleStore" ref="tripleStore"/>
+	</bean>
+	
+	<bean id="serviceGatewayMock"
+	    class="org.easymock.EasyMock" factory-method="createNiceMock" primary="true" >
+		<constructor-arg value="eu.dime.ps.gateway.ServiceGateway" />
+	</bean>
+	
+	<bean id="taskScheduler"
+	    class="org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler">
+		<property name="poolSize" value="5" />
+	</bean>
+	
+	<bean id="entityFactory"
+	    class="eu.dime.ps.storage.manager.EntityFactory" factory-method="getInstance" lazy-init="false" scope="singleton"/>
+	
+	<bean id="jpaPersistence"
+	    class="eu.dime.ps.datamining.service.api.impl.JPAPersistenceManager"/>
+	
+	<bean id="mockCrawlerHandler"
+	    class="eu.dime.ps.datamining.service.api.impl.MockCrawlerHandler"/>
+	
+	<bean id="serviceCrawlerRegistry"
+	    class="eu.dime.ps.datamining.service.api.impl.ServiceCrawlerRegistryImpl">
+		<constructor-arg type="org.springframework.scheduling.TaskScheduler" index="0" ref="taskScheduler" />
+		<constructor-arg type="eu.dime.ps.gateway.ServiceGateway" index="1" ref="serviceGatewayMock" />
+		<!-- set the persistence manager. must be used in constructor to enable restore -->
+		<!-- <constructor-arg type="eu.dime.ps.datamining.service.PersistenceManager" index="2" ref="jpaPersistence" /> -->
+		
+		<property name="defaultHandler" ref="mockCrawlerHandler"/>
+	</bean>
+
+	<bean id="accountUpdaterService"
+		class="eu.dime.ps.datamining.account.AccountUpdaterServiceImpl">
+		<constructor-arg><ref bean="pimoService"/></constructor-arg>
+		<constructor-arg><ref bean="resourceMatchingService"/></constructor-arg>
+	</bean>
+
+</beans>

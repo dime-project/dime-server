@@ -1,0 +1,47 @@
+declare namespace nco = "http://www.semanticdesktop.org/ontologies/2007/03/22/nco#";
+declare namespace nao = "http://www.semanticdesktop.org/ontologies/2007/08/15/nao#";
+declare namespace pimo = "http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#";
+declare namespace dlpo = "http://www.semanticdesktop.org/ontologies/2011/10/05/dlpo#";
+declare namespace xsd = "http://www.w3.org/2001/XMLSchema#";
+
+let $doc := doc("%doc%")
+
+let $statuses := $doc/network/updates/update
+
+return 
+
+	for $status in $statuses	 
+	     let $statusId := $status/update-key
+	     let $stId := fn:replace($statusId,'-','')
+	     let $timestamp := $status/timestamp
+	     let $statusMessage := $status/update-content/person/current-status    
+	     	   	          
+	     let $counter := count($statusId/preceding::*) + count($statusId/ancestor::*)
+	     
+	     #Construct for the status message     	
+		 construct
+		 {  	
+		   _:stm{data($counter)} a dlpo:LivePost , dlpo:Status ;
+		   nao:externalIdentifier {data($stId)};
+		   dlpo:timestamp {data($timestamp)}^^xsd:dateTime;
+		   dlpo:textualContent {data($statusMessage)};
+		   nao:creator _:c{data($counter)}.		 
+		   { 
+		   		let $userId := fn:replace($status/update-content/person/id,'-','')
+		   		let $name := $status/update-content/person/first-name
+		   		let $surname := $status/update-content/person/last-name
+		   		let $summary := $status/update-content/person/headline
+		   		let $photoUrl := $status/update-content/person/picture-url
+			    
+			    #Construct for the user's information 	          
+			    construct
+				{
+					_:c{data($counter)} a nco:PersonContact ;
+			        nco:contactUID {data($userId)} ;
+			        nao:prefLabel {fn:concat(data($name)," ",data($surname))} ;
+			        nco:photo {data($photoUrl)} ;
+	  				nao:description {data($summary)} .
+			    }
+	       }
+	     } 
+ 	   

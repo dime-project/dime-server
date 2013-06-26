@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jee="http://www.springframework.org/schema/jee" 
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+		 http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		 http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd	 
+		 http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.0.xsd	 
+		 http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd">
+
+	<import resource="classpath*:spring-config/dime-controllers-applicationContext.xml" />
+		
+	<!-- This will automatically locate any and all property files you have 
+		within your classpath, provided they fall under the META-INF/spring directory. 
+		The located property files are parsed and their values can then be used within 
+		application context files in the form of ${propertyKey}. -->
+	<context:property-placeholder location="classpath*:META-INF/spring/*.properties" />
+	<context:spring-configured />
+
+	<context:component-scan base-package="eu.dime">
+		<context:exclude-filter expression=".*_Roo_.*" type="regex" />
+		<context:exclude-filter expression="org.springframework.stereotype.Controller" type="annotation" />
+	</context:component-scan>
+	
+	<!-- Multi-tenancy filter -->
+	<bean class="eu.dime.ps.communications.filter.TenantSetFilter" id="TenantSetFilter" />
+	
+	<!-- Access Filter -->
+	<bean class="eu.dime.ps.communications.filter.AccessFilter" id="AccessFilter" />
+	
+	
+	<!-- API controllers -->	
+	<bean id="activityController"
+		class="eu.dime.ps.communications.requestbroker.controllers.context.ActivityController">
+		<property name="connectionProvider" ref="connectionProvider"></property>
+	</bean>
+	
+	<bean id="adminController"
+		class="eu.dime.ps.communications.requestbroker.controllers.infosphere.PSAdminController">		
+		<property name="userManager" ref="userManager"></property>
+	</bean>
+	
+	<bean id="psEvaluationController"
+		class="eu.dime.ps.communications.requestbroker.controllers.evaluation.PSEvaluationController">		
+		<property name="userManager" ref="userManager"></property>
+		<property name="evaluationManager" ref="evaluationManager"></property>
+	</bean>
+
+	<bean id="psLivePostController"
+		class="eu.dime.ps.communications.requestbroker.controllers.infosphere.PSLivePostController">
+		<property name="livePostManager" ref="livePostManager"></property>
+		<property name="accountManager" ref="accountManager"></property>
+		<property name="personManager" ref="personManager"></property>
+		<property name="personGroupManager" ref="personGroupManager"></property>
+		<property name="sharingManager" ref="sharingManager"></property>
+	</bean>
+	
+	<bean id="psDataboxController"
+		class="eu.dime.ps.communications.requestbroker.controllers.infosphere.PSDataboxController">
+		<property name="databoxManager" ref="databoxManager"></property>
+		<property name="accountManager" ref="accountManager"></property>
+		<property name="personManager" ref="personManager"></property>
+		<property name="personGroupManager" ref="personGroupManager"></property>
+		<property name="sharingManager" ref="sharingManager"></property>
+	</bean>
+
+	<bean id="psEventsController"
+		class="eu.dime.ps.communications.requestbroker.controllers.infosphere.PSEventController">
+		<property name="eventManager" ref="eventManager"></property>
+	</bean>
+
+	<bean id="psServiceAccountsController"
+		class="eu.dime.ps.communications.requestbroker.controllers.infosphere.PSAccountController">
+		<property name="personManager" ref="personManager"></property>
+		<property name="accountManager" ref="accountManager"></property>		
+	</bean>
+
+	<bean id="psNotificationsController"
+		class="eu.dime.ps.communications.requestbroker.controllers.notifications.PSNotificationsController">
+		<property name="notifierManager" ref="notifierManager"></property>
+		<property name="tenantManager" ref="tenantManager"></property>
+	</bean>
+	
+	<bean id="psUserNotificationsController"
+		class="eu.dime.ps.communications.requestbroker.controllers.notifications.PSUserNotificationsController">
+		<property name="notifierManager" ref="notifierManager"></property>
+		<property name="tenantManager" ref="tenantManager"></property>
+	</bean>
+	    
+	<bean id="psResourcesController"
+		class="eu.dime.ps.communications.requestbroker.controllers.infosphere.PSResourcesController">
+		<property name="accountManager" ref="accountManager"></property>	
+		<property name="personManager" ref="personManager"></property>
+		<property name="personGroupManager" ref="personGroupManager"></property>
+		<property name="sharingManager" ref="sharingManager"></property>
+		<property name="fileManager" ref="fileManager"></property>
+		<property name="serviceGateway" ref="serviceGateway"></property>
+		<property name="credentialStore" ref="credentialStore"></property>
+	</bean>
+	
+	<bean id="psPersonMatchController"
+		class="eu.dime.ps.communications.requestbroker.controllers.infosphere.PSPersonMatchController">
+		<property name="personMatchManager" ref="personMatchManager"></property>
+	</bean>
+	
+	<bean id="psServiceAdapterController"
+		class="eu.dime.ps.communications.requestbroker.controllers.infosphere.PSServiceAdapterController">
+		<property name="serviceGateway" ref="serviceGateway"></property>
+		<property name="accountManager" ref="accountManager"></property>
+	</bean>
+	
+	<bean id="psContextController"
+		class="eu.dime.ps.communications.requestbroker.controllers.context.PSContextController">
+		<property name="contextManager" ref="contextManager"></property>
+		<property name="connectionProvider" ref="connectionProvider"></property>
+		<!-- [TI] <property name="tenantManager" ref="tenantManager"></property>
+		<property name="contextProcessor" ref="contextProcessor"></property>
+		<property name="accountManager" ref="accountManager"></property>  -->
+	</bean>
+	
+	<bean id="psSituationController"
+		class="eu.dime.ps.communications.requestbroker.controllers.context.PSSituationController">
+		<property name="liveContextManager" ref="liveContextManager"></property>
+		<property name="situationManager" ref="situationManager"></property>
+		</bean>
+	
+	<bean id="psPlaceController"
+		class="eu.dime.ps.communications.requestbroker.controllers.context.PSPlaceController">
+		<!-- [TI] <property name="tenantManager" ref="tenantManager"></property> -->
+		<property name="placeProcessor" ref="placeProcessor"></property>
+	</bean>
+	
+	<bean id="psPersonController"
+		class="eu.dime.ps.communications.requestbroker.controllers.infosphere.PSPersonController">
+		<property name="personManager" ref="personManager"></property>
+		<property name="sharingManager" ref="sharingManager"></property>
+	</bean>
+	
+	<bean id="psGroupController"
+		class="eu.dime.ps.communications.requestbroker.controllers.infosphere.PSGroupController">
+		<property name="personGroupManager" ref="personGroupManager"></property>
+		<property name="sharingManager" ref="sharingManager"></property>
+	</bean>	
+	
+	<bean id="psDeviceController"
+		class="eu.dime.ps.communications.requestbroker.controllers.infosphere.PSDeviceController">
+		<property name="deviceManager" ref="deviceManager"></property>		
+	</bean>
+	
+	<bean id="psUserController"
+		class="eu.dime.ps.communications.requestbroker.controllers.register.PSUserController">
+		<property name="userManager" ref="userManager"></property>
+	</bean>
+	
+	<bean id="psSearchController" class="eu.dime.ps.communications.requestbroker.controllers.infosphere.PSSearchController">
+		<property name="serviceGateway" ref="serviceGateway"></property>
+	</bean>
+	
+	<bean id="psProfileController"
+		class="eu.dime.ps.communications.requestbroker.controllers.infosphere.PSProfileController">
+		<property name="profileManager" ref="profileManager"></property>		
+		<property name="profileCardManager" ref="profileCardManager"></property>
+		<property name="sharingManager" ref="sharingManager"></property>
+		<property name="accountManager" ref="accountManager"></property>	
+		<property name="personManager" ref="personManager"></property>
+		<property name="personGroupManager" ref="personGroupManager"></property>
+	</bean>	
+	
+	<bean id="psProfileAttributeController"
+		class="eu.dime.ps.communications.requestbroker.controllers.infosphere.PSProfileAttributeController">
+		<property name="profileManager" ref="profileManager"></property>		
+		<property name="profileAttributeManager" ref="profileAttributeManager"></property>	
+		<property name="personManager" ref="personManager"></property>		
+	</bean>	
+		
+	<bean id="authenticationController"
+		class="eu.dime.ps.communications.requestbroker.controllers.authentication.AuthenticationController">
+		<!-- FIXME accessControlManager is not available, not used in Y2 anyway... -->
+		<!-- property name="accessControlManager" ref="accessControlDecisionManager"></property> -->
+	</bean>
+	
+	<bean id="psSharedController"
+		class="eu.dime.ps.communications.requestbroker.controllers.infosphere.PSSharedController">
+		<property name="shareableDataboxManager" ref="shareableDataboxManager"></property>
+		<property name="shareableFileManager" ref="shareableFileManager"></property>
+		<property name="shareableLivePostManager" ref="shareableLivePostManager"></property>
+		<property name="shareableProfileManager" ref="shareableProfileManager"></property>
+		<property name="fileManager" ref="fileManager"></property>	
+	</bean>	
+	
+	<bean id="loginController" class="eu.dime.ps.communications.web.authentication.LoginController"/>
+	
+	<bean id="psDumpController"
+		class="eu.dime.ps.communications.requestbroker.controllers.system.PSDumpController">
+		<property name="connectionProvider" ref="connectionProvider"></property>
+	</bean>
+	
+	<bean id="psServicesController"
+		class="eu.dime.ps.communications.requestbroker.controllers.servicegateway.PSServicesController">
+		<property name="serviceGateway" ref="serviceGateway"></property>
+		<property name="tenantManager" ref="tenantManager"></property>		
+		<property name="shareableDataboxManager" ref="shareableDataboxManager"></property>
+		<property name="shareableFileManager" ref="shareableFileManager"></property>
+		<property name="shareableLivePostManager" ref="shareableLivePostManager"></property>
+		<property name="accountManager" ref="accountManager"></property>
+		<property name="credentialStore" ref="credentialStore"></property>
+	</bean>
+	
+ 	<bean class="eu.dime.ps.communications.requestbroker.controllers.advisory.PrivacyAdvisoryController">
+		<property name="advisoryController" ref="advisoryController" />
+		<property name="trustEngine" ref="trustEngine"></property>
+	</bean> 
+
+
+</beans>

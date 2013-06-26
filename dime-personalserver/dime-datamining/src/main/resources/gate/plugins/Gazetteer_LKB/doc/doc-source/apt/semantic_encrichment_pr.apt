@@ -1,0 +1,37 @@
+ -----
+ Semantic Enrichment PR
+ -----
+ Marin Nozhchev
+ -----
+ 2009-10-17
+ -----
+
+~~ http://maven.apache.org/doxia/references/apt-format.html
+
+  The Semantic Enrichment PR allows adding new data to semantic annotations by querying external RDF (Linked Data) repositories.
+  It is a companion to the large KB gazetteer that showcases the usefulness of using Linked Data URI as identifiers.
+  
+  Here a semantic annotation is an annotation that is linked to an RDF entity by having the URI of the entity in the 
+  "inst" feature of the annotation. For all such annotation of a given type, this PR runs a SPARQL query against
+  the defined repository and puts a comma-separated list of the values mentioned in the query output in the 
+  "connections"	feature of the same annotation.
+  
+  There is {{{./samples.html}a sample pipeline}} that features the Semantic Enrichment PR.
+   
+Parameters
+  
+  * inputASName - The annotation set, which annotation will be processed. 
+
+  * server - The URL of the Sesame 2 HTTP repository. Support for generic SPARQL endpoints can be implemented if required.
+
+  * repositoryId - The ID of the Sesame repository.
+
+  * annotationTypes - A list of types of annotation tha twill be processed.
+  
+  * query - A SPARQL query pattern. The query will be processed like this - String.format(query, uriFromAnnotation), 
+		so you can use parameters like %s or %1$s.
+		
+  * deleteOnNoRelations - Whether we want to delete the annotation that weren't encriched. Helps to clean up the input
+  annotations.
+
+

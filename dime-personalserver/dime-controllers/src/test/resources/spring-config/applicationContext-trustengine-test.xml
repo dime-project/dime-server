@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jee="http://www.springframework.org/schema/jee" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd         
+	http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd         
+	http://www.springframework.org/schema/context 
+	http://www.springframework.org/schema/context/spring-context-3.0.xsd         
+	http://www.springframework.org/schema/jee 
+	http://www.springframework.org/schema/jee/spring-jee-3.0.xsd         
+	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd">
+
+	<import resource="classpath*:spring-config/ps-storage-applicationContext.xml" />
+
+	<bean id="entityFactory" class="eu.dime.ps.storage.manager.EntityFactory" factory-method="getInstance" lazy-init="false" scope="singleton" />	
+	
+	<bean id="trustEngineUpdateService" class="eu.dime.ps.controllers.trustengine.impl.TrustEngineUpdateService">	
+	</bean>
+
+	<bean id="advisoryController" class="eu.dime.ps.controllers.trustengine.impl.AdvisoryController">
+		<property name="personManager" ref="personManager"/>
+		<property name="trustEngine" ref="trustEngine" />
+		<property name="personGroupManager" ref="personGroupManager" />
+		<property name="connectionProvider" ref="connectionProvider"/>		
+	</bean>
+	
+		<bean id="trustEngine" class="eu.dime.ps.controllers.trustengine.impl.TrustEngineImpl">
+		<property name="personManager" ref="personManager"/>
+		<property name="profileAttributeManager" ref="profileAttributeManager"/>
+		<property name="livePostManager" ref="livePostManager"/>
+		<property name="connectionProvider" ref="connectionProvider"/>
+	</bean>
+
+	<bean id="modelFactory"
+		class="eu.dime.ps.semantic.model.ModelFactory">
+	</bean>
+
+	<bean id="tripleStore"
+		class="ie.deri.smile.rdf.impl.TripleStoreImpl">
+ 		<constructor-arg value="12345"/>
+		<constructor-arg><ref bean="repository"/></constructor-arg>
+	</bean>
+
+	<bean id="resourceStore"
+		class="eu.dime.ps.semantic.rdf.impl.ResourceStoreImpl">
+		<constructor-arg><ref bean="tripleStore"/></constructor-arg>
+	</bean>
+	
+	<bean id="repositoryFactory"
+		class="eu.dime.ps.semantic.rdf.impl.SesameMemoryRepositoryFactory"/>
+
+ 	<bean id="repository"
+ 		factory-bean="repositoryFactory"
+ 		factory-method="get">
+ 		<constructor-arg value="12345"/>
+ 	</bean>
+ 	
+ 	<bean id="connection"
+	    class="eu.dime.ps.semantic.connection.Connection">
+ 		<constructor-arg value="12345"/>
+	    <constructor-arg><ref bean="repository"/></constructor-arg>
+	</bean>
+	
+	<bean id="connectionProvider"
+		class="eu.dime.ps.controllers.SingleConnectionProviderMock">
+		<property name="connection" ref="connection"/>
+	</bean>
+	
+		<bean id="profileManager"
+		class="eu.dime.ps.controllers.infosphere.manager.ProfileManagerImpl">
+		<property name="connectionProvider" ref="connectionProvider"/>
+	</bean>
+
+	<bean id="profileAttributeManager"
+		class="eu.dime.ps.controllers.infosphere.manager.ProfileAttributeManagerImpl">
+		<property name="connectionProvider" ref="connectionProvider"/>
+	</bean>
+	
+	<bean id="livePostManager"
+		class="eu.dime.ps.controllers.infosphere.manager.LivePostManagerImpl">
+		<property name="connectionProvider" ref="connectionProvider"/>
+	</bean>
+	
+		<bean id="personGroupManager"
+		class="eu.dime.ps.controllers.infosphere.manager.PersonGroupManagerImpl">
+		<property name="connectionProvider" ref="connectionProvider"/>
+	</bean>
+
+	<bean id="personManager"
+		class="eu.dime.ps.controllers.infosphere.manager.PersonManagerImpl">
+		<property name="connectionProvider" ref="connectionProvider"/>
+	</bean>
+	
+	<bean id="pimoService"
+		class="eu.dime.ps.semantic.service.impl.PimoService">
+		<constructor-arg><value>default-config.trig</value></constructor-arg>
+		<constructor-arg><ref bean="tripleStore"/></constructor-arg>
+	</bean>
+	
+	<bean id="fileDataMining" class="eu.dime.ps.datamining.impl.FileDataMiningImpl"/>
+
+	<bean id="fileManager"
+		class="eu.dime.ps.controllers.infosphere.manager.FileManagerImpl">
+		<property name="fileDataMining" ref="fileDataMining"/>
+		<property name="connectionProvider" ref="connectionProvider"/>
+	</bean>
+
+	<bean id="privacyPreferenceService"
+		class="eu.dime.ps.semantic.privacy.impl.PrivacyPreferenceServiceImpl">
+		<property name="pimoService" ref="pimoService"/>
+	</bean>
+	
+	<bean id="sharingManager"
+		class="eu.dime.ps.controllers.infosphere.manager.SharingManagerImpl">
+		<property name="connectionProvider" ref="connectionProvider"/>
+	</bean>
+	
+	<bean id="notifierManager"
+		class="eu.dime.ps.controllers.notifier.impl.NotifierManagerImpl">
+		<property name="internalNotifyFifo" ref="internalNotifyFifo"/>
+		<property name="externalNotifyFifo" ref="externalNotifyFifo"/>
+		<property name="notifyHistory" ref="notifyHistory"/>
+	</bean>
+	
+	<bean id="notifyHistory" class="eu.dime.ps.controllers.notifier.impl.NotifyHistoryImpl">
+		<property name="entityFactory" ref="entityFactory"/>
+	</bean>	
+
+	<bean id="internalNotifyFifo" class="eu.dime.ps.controllers.notifier.NotifyFIFOMultiTenant" />		
+	<bean id="externalNotifyFifo" class="eu.dime.ps.controllers.notifier.NotifyFIFOExternal" />
+</beans>

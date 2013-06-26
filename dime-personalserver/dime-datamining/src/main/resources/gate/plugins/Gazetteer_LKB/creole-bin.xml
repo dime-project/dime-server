@@ -1,0 +1,47 @@
+<!-- This maven assembly descriptor defines a GATE CREOLE plugin zip package.
+      See the documentation in src/main/creole/creole.xml for usage and purpose details.
+      See http://maven.apache.org/plugins/maven-assembly-plugin/assembly.html for details on the format of this file.
+ -->
+<assembly>
+	<id>creole-bin</id>
+	<baseDirectory>Gazetteer_LKB</baseDirectory>
+	<formats>
+		<format>zip</format>
+	</formats>
+	<files>
+		<file>
+			<source>creole.xml</source>
+			<outputDirectory/>
+		</file>
+	</files>
+	<fileSets>
+		<fileSet>
+			<directory>lib</directory>
+			<useDefaultExcludes/>
+			<outputDirectory>lib</outputDirectory>   
+		</fileSet>  
+
+		<fileSet>
+			<!-- The directory "dictionary" doesn't exist in the standard distribution.
+           Please don't remove this fileSet though.	  -->
+			<directory>dictionary</directory>
+			<useDefaultExcludes/>
+			<outputDirectory>dictionary</outputDirectory>
+		</fileSet>
+
+	</fileSets>
+	<dependencySets>
+		<dependencySet>
+			<!-- Should match the name in creole.xml -->
+			<outputFileNameMapping>${artifact.artifactId}.${artifact.extension}</outputFileNameMapping>
+
+			<useProjectArtifact>true</useProjectArtifact>
+			<useProjectAttachments>false</useProjectAttachments>
+			<useTransitiveDependencies>false</useTransitiveDependencies>
+			<outputDirectory />
+			<includes>
+				<include>*:Gazetteer_LKB:*</include>
+			</includes>      
+		</dependencySet>        
+	</dependencySets>
+</assembly>

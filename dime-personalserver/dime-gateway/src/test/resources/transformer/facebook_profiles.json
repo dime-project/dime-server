@@ -1,0 +1,158 @@
+{
+  "id": "1003264926", 
+  "name": "Keith Cortis", 
+  "first_name": "Keith", 
+  "last_name": "Cortis", 
+  "gender": "male", 
+  "username": "keithcortis", 
+  "bio": "Hi there, I'm an addict, yes a football addict!", 
+  "birthday": "01/04/1988", 
+  "hometown": {
+    "id": "108266985860330", 
+    "name": "Rabat, Malta"
+  }, 
+  "location": {
+    "id": "108228399212088", 
+    "name": "Galway, Ireland"
+  }, 
+  "work": [
+    {
+      "employer": {
+        "id": "201023279922020", 
+        "name": "Digital Enterprise Research Institute"
+      }, 
+      "location": {
+        "id": "108228399212088", 
+        "name": "Galway, Ireland"
+      }, 
+      "position": {
+        "id": "320788801299288", 
+        "name": "MAppSc (DERI)"
+      }, 
+      "start_date": "2011-07", 
+      "projects": [
+        {
+          "id": "140947189273219", 
+          "name": "DigitalME", 
+          "description": "http://dime-project.eu/"
+        }
+      ]
+    }, 
+    {
+      "employer": {
+        "id": "115515755125868", 
+        "name": "Mybet"
+      }, 
+      "location": {
+        "id": "108164202550581", 
+        "name": "Sliema, Malta"
+      }, 
+      "position": {
+        "id": "116869725031943", 
+        "name": "Junior Trader"
+      }, 
+      "start_date": "2010-04", 
+      "end_date": "2011-07"
+    }, 
+    {
+      "employer": {
+        "id": "108938239135496", 
+        "name": "Global IT Solutions"
+      }, 
+      "location": {
+        "id": "109375785755626", 
+        "name": "Paola, Malta"
+      }, 
+      "position": {
+        "id": "106134736085305", 
+        "name": "Software Developer"
+      }, 
+      "start_date": "2009-06", 
+      "end_date": "2009-10"
+    }, 
+    {
+      "employer": {
+        "id": "311059134775", 
+        "name": "The Computer Training Centre (TCTC)"
+      }, 
+      "start_date": "2008-07", 
+      "end_date": "2008-10"
+    }, 
+    {
+      "employer": {
+        "id": "150185325031131", 
+        "name": "Malta Industrial Parks Ltd."
+      }, 
+      "position": {
+        "id": "120942534620610", 
+        "name": "Office Clerk"
+      }, 
+      "start_date": "2007-07", 
+      "end_date": "2007-09"
+    }, 
+    {
+      "employer": {
+        "id": "111023768916662", 
+        "name": "Radisson SAS Hotel"
+      }, 
+      "location": {
+        "id": "108110459216871", 
+        "name": "St. Julian's"
+      }, 
+      "position": {
+        "id": "120854591295052", 
+        "name": "Pool Boy"
+      }, 
+      "start_date": "2006-06", 
+      "end_date": "2006-09"
+    }, 
+    {
+      "employer": {
+        "id": "121249737908572", 
+        "name": "Suncrest Hotel"
+      }, 
+      "location": {
+        "id": "115086321836450", 
+        "name": "Bugibba"
+      }, 
+      "position": {
+        "id": "110667508962097", 
+        "name": "Waiter"
+      }, 
+      "start_date": "2004-06", 
+      "end_date": "2004-08"
+    }
+  ], 
+  "email": "keithcortis@msn.com", 
+  "link": "https://www.facebook.com/keithcortis", 
+  "type": "user", 
+  "picture": "https://fbcdn-profile-a.akamaihd.net/hprofile-ak-snc4/41731_1003264926_9901454_q.jpg",
+  "interests": {
+    "data": [
+      {
+        "name": "Travelling", 
+        "category": "Interest", 
+        "id": "110778582280184", 
+        "created_time": "2012-05-21T15:25:44+0000"
+      }, 
+      {
+        "name": "Sports", 
+        "category": "Interest", 
+        "id": "106303419405901", 
+        "created_time": "2012-05-21T15:24:56+0000"
+      }, 
+      {
+        "name": "Technology", 
+        "category": "Interest", 
+        "id": "108213575873147", 
+        "created_time": "2012-05-21T15:24:43+0000"
+      }, 
+      {
+        "name": "Football", 
+        "category": "Sport", 
+        "id": "104019549633137", 
+        "created_time": "2012-05-21T15:23:56+0000"
+      }
+    ]
+   }
+}

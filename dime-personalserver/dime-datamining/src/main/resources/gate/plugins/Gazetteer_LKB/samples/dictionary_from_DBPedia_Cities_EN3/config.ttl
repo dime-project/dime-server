@@ -1,0 +1,53 @@
+# Gazetteer_LKB dictionary configuration file.
+#
+# %temp% will be automatically replaced with the TEMP folder for the current user
+# %relpath% will be replaced with the path to the dictionary folder.
+#
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix rep: <http://www.openrdf.org/config/repository#>.
+@prefix hr: <http://www.openrdf.org/config/repository/http#>.
+@prefix lkbg: <http://www.ontotext.com/lkb_gazetteer#>.
+
+# The dictionary will be loaded from a remote Sesame HTTP repository. 
+# Its configuration follows. See the Sesame configuration for detals.
+# http://www.openrdf.org/doc/sesame2/users/ch07.html#section-repository-config
+[] a rep:Repository ;
+   rep:repositoryImpl [
+      rep:repositoryType "openrdf:HTTPRepository" ;
+	  
+	  # This URL is a public limitted SPARQL endpoint. All queries are truncated to 10000 results.
+	  hr:repositoryURL <http://dbpedia.org/sparql>
+	  
+	  # This URL points to the unlimitted password-protected factforge endpoint.
+	  # Ontotext partners can contact info@factforge.net to request credentials. 
+	  # Please include the SPARQL that you indend to run.
+	  # Set the credentials below.
+      #hr:repositoryURL <http://factforge.net/repositories/owlim>
+	  
+	  
+   ];
+   rep:repositoryID "owlim" ;
+   rdfs:label "FactForge" .
+   
+# The gazetteer-specific options follow.
+lkbg:DictionaryConfiguration 
+   # Whether the gazeetteer will be sensitive to case.
+   # Possible values: caseinsensitive, casesensitive
+   lkbg:caseSensitivity "caseinsensitive" ;
+   
+   #(optional) Authentication
+   #If you are connecting to a repository guarded by HTTP basic authentication,
+   #supply credentials as follows:
+   #lkbg:username "<username>" ;
+   #lkbg:password "<password>" ;
+      
+   # Whether the gazetteer will cache the dictionary after loading it from the data source.   
+   # Put "enabled" to enable the cache, any other values will disable it.
+   lkbg:caching "enabled" .
+   
+   # The cache will be automatically reloaded on initialization if the configuration have been    
+   # modified since the last initialization. However, changes in the underlying datastore 
+   # can't be detected and the cache will not be automatically reloaded in that case. 
+   # Thus, if you expect changes in your datastore, disable the cache, or make use
+   # of the modifications API.
+   

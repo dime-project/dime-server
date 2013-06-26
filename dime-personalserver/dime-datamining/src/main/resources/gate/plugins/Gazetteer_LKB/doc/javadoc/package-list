@@ -1,0 +1,5 @@
+com.ontotext.kim.gate
+com.ontotext.kim.model
+com.ontotext.kim.test
+com.ontotext.kim.util.datastore
+org.openrdf.repository.http

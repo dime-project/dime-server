@@ -1,0 +1,694 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://earth.google.com/kml/2.2">
+<Document>
+  <name>EKAW 2012 land-marks</name>
+  <description><![CDATA[List of important places for the 
+EKAW 2012 Conference
+8th October, 2012 - 12th October, 2012. Aula Maxima, NUI Galway (Ireland)]]></description>
+  <Style id="style29">
+    <IconStyle>
+      <Icon>
+        <href>http://maps.gstatic.com/mapfiles/ms2/micons/blue-dot.png</href>
+      </Icon>
+    </IconStyle>
+  </Style>
+  <Style id="style36">
+    <IconStyle>
+      <Icon>
+        <href>http://maps.gstatic.com/intl/en_ie/mapfiles/ms/micons/blue-dot.png</href>
+      </Icon>
+    </IconStyle>
+  </Style>
+  <Style id="style8">
+    <IconStyle>
+      <Icon>
+        <href>http://maps.gstatic.com/mapfiles/ms2/micons/blue-dot.png</href>
+      </Icon>
+    </IconStyle>
+  </Style>
+  <Style id="style9">
+    <IconStyle>
+      <Icon>
+        <href>http://maps.gstatic.com/mapfiles/ms2/micons/rail.png</href>
+      </Icon>
+    </IconStyle>
+  </Style>
+  <Style id="style33">
+    <IconStyle>
+      <Icon>
+        <href>http://maps.gstatic.com/mapfiles/ms2/micons/bus.png</href>
+      </Icon>
+    </IconStyle>
+  </Style>
+  <Style id="style40">
+    <IconStyle>
+      <Icon>
+        <href>http://maps.gstatic.com/mapfiles/ms2/micons/bus.png</href>
+      </Icon>
+    </IconStyle>
+  </Style>
+  <Style id="style43">
+    <IconStyle>
+      <Icon>
+        <href>http://maps.gstatic.com/mapfiles/ms2/micons/restaurant.png</href>
+      </Icon>
+    </IconStyle>
+  </Style>
+  <Style id="style7">
+    <IconStyle>
+      <Icon>
+        <href>http://maps.gstatic.com/mapfiles/ms2/micons/restaurant.png</href>
+      </Icon>
+    </IconStyle>
+  </Style>
+  <Style id="style2">
+    <IconStyle>
+      <Icon>
+        <href>http://maps.gstatic.com/mapfiles/ms2/micons/grn-pushpin.png</href>
+      </Icon>
+    </IconStyle>
+  </Style>
+  <Style id="style5">
+    <IconStyle>
+      <Icon>
+        <href>http://maps.gstatic.com/mapfiles/ms2/micons/grn-pushpin.png</href>
+      </Icon>
+    </IconStyle>
+  </Style>
+  <Style id="style32">
+    <IconStyle>
+      <Icon>
+        <href>http://maps.gstatic.com/mapfiles/ms2/micons/grn-pushpin.png</href>
+      </Icon>
+    </IconStyle>
+  </Style>
+  <Style id="style26">
+    <IconStyle>
+      <Icon>
+        <href>http://maps.gstatic.com/mapfiles/ms2/micons/grn-pushpin.png</href>
+      </Icon>
+    </IconStyle>
+  </Style>
+  <Style id="style6">
+    <IconStyle>
+      <Icon>
+        <href>http://maps.gstatic.com/mapfiles/ms2/micons/grn-pushpin.png</href>
+      </Icon>
+    </IconStyle>
+  </Style>
+  <Style id="style19">
+    <IconStyle>
+      <Icon>
+        <href>http://maps.gstatic.com/mapfiles/ms2/micons/grn-pushpin.png</href>
+      </Icon>
+    </IconStyle>
+  </Style>
+  <Style id="style30">
+    <IconStyle>
+      <Icon>
+        <href>http://maps.gstatic.com/mapfiles/ms2/micons/grn-pushpin.png</href>
+      </Icon>
+    </IconStyle>
+  </Style>
+  <Style id="style17">
+    <IconStyle>
+      <Icon>
+        <href>http://maps.gstatic.com/mapfiles/ms2/micons/grn-pushpin.png</href>
+      </Icon>
+    </IconStyle>
+  </Style>
+  <Style id="style39">
+    <IconStyle>
+      <Icon>
+        <href>http://maps.gstatic.com/mapfiles/ms2/micons/camera.png</href>
+      </Icon>
+    </IconStyle>
+  </Style>
+  <Style id="style1">
+    <IconStyle>
+      <Icon>
+        <href>http://maps.gstatic.com/mapfiles/ms2/micons/camera.png</href>
+      </Icon>
+    </IconStyle>
+  </Style>
+  <Style id="style4">
+    <IconStyle>
+      <Icon>
+        <href>http://maps.gstatic.com/mapfiles/ms2/micons/camera.png</href>
+      </Icon>
+    </IconStyle>
+  </Style>
+  <Style id="style35">
+    <IconStyle>
+      <Icon>
+        <href>http://maps.gstatic.com/mapfiles/ms2/micons/restaurant.png</href>
+      </Icon>
+    </IconStyle>
+  </Style>
+  <Style id="style21">
+    <IconStyle>
+      <Icon>
+        <href>http://maps.gstatic.com/mapfiles/ms2/micons/restaurant.png</href>
+      </Icon>
+    </IconStyle>
+  </Style>
+  <Style id="style22">
+    <IconStyle>
+      <Icon>
+        <href>http://maps.gstatic.com/mapfiles/ms2/micons/restaurant.png</href>
+      </Icon>
+    </IconStyle>
+  </Style>
+  <Style id="style11">
+    <IconStyle>
+      <Icon>
+        <href>http://maps.gstatic.com/mapfiles/ms2/micons/restaurant.png</href>
+      </Icon>
+    </IconStyle>
+  </Style>
+  <Style id="style27">
+    <IconStyle>
+      <Icon>
+        <href>http://maps.gstatic.com/mapfiles/ms2/micons/restaurant.png</href>
+      </Icon>
+    </IconStyle>
+  </Style>
+  <Style id="style24">
+    <IconStyle>
+      <Icon>
+        <href>http://maps.gstatic.com/mapfiles/ms2/micons/restaurant.png</href>
+      </Icon>
+    </IconStyle>
+  </Style>
+  <Style id="style23">
+    <IconStyle>
+      <Icon>
+        <href>http://maps.gstatic.com/mapfiles/ms2/micons/restaurant.png</href>
+      </Icon>
+    </IconStyle>
+  </Style>
+  <Style id="style41">
+    <IconStyle>
+      <Icon>
+        <href>http://maps.gstatic.com/mapfiles/ms2/micons/restaurant.png</href>
+      </Icon>
+    </IconStyle>
+  </Style>
+  <Style id="style42">
+    <IconStyle>
+      <Icon>
+        <href>http://maps.gstatic.com/mapfiles/ms2/micons/coffeehouse.png</href>
+      </Icon>
+    </IconStyle>
+  </Style>
+  <Style id="style10">
+    <IconStyle>
+      <Icon>
+        <href>http://maps.gstatic.com/mapfiles/ms2/micons/red-pushpin.png</href>
+      </Icon>
+    </IconStyle>
+  </Style>
+  <Style id="style20">
+    <IconStyle>
+      <Icon>
+        <href>http://maps.gstatic.com/mapfiles/ms2/micons/red-pushpin.png</href>
+      </Icon>
+    </IconStyle>
+  </Style>
+  <Style id="style38">
+    <IconStyle>
+      <Icon>
+        <href>http://maps.gstatic.com/mapfiles/ms2/micons/red-pushpin.png</href>
+      </Icon>
+    </IconStyle>
+  </Style>
+  <Style id="style28">
+    <IconStyle>
+      <Icon>
+        <href>http://maps.gstatic.com/mapfiles/ms2/micons/red-pushpin.png</href>
+      </Icon>
+    </IconStyle>
+  </Style>
+  <Style id="style12">
+    <IconStyle>
+      <Icon>
+        <href>http://maps.gstatic.com/mapfiles/ms2/micons/red-pushpin.png</href>
+      </Icon>
+    </IconStyle>
+  </Style>
+  <Style id="style14">
+    <IconStyle>
+      <Icon>
+        <href>http://maps.gstatic.com/mapfiles/ms2/micons/red-pushpin.png</href>
+      </Icon>
+    </IconStyle>
+  </Style>
+  <Style id="style31">
+    <IconStyle>
+      <Icon>
+        <href>http://maps.gstatic.com/mapfiles/ms2/micons/red-pushpin.png</href>
+      </Icon>
+    </IconStyle>
+  </Style>
+  <Style id="style18">
+    <IconStyle>
+      <Icon>
+        <href>http://maps.gstatic.com/mapfiles/ms2/micons/convienancestore.png</href>
+      </Icon>
+    </IconStyle>
+  </Style>
+  <Style id="style37">
+    <IconStyle>
+      <Icon>
+        <href>http://maps.gstatic.com/mapfiles/ms2/micons/convienancestore.png</href>
+      </Icon>
+    </IconStyle>
+  </Style>
+  <Style id="style3">
+    <IconStyle>
+      <Icon>
+        <href>http://maps.gstatic.com/mapfiles/ms2/micons/convienancestore.png</href>
+      </Icon>
+    </IconStyle>
+  </Style>
+  <Style id="style34">
+    <IconStyle>
+      <Icon>
+        <href>http://maps.gstatic.com/mapfiles/ms2/micons/camera.png</href>
+      </Icon>
+    </IconStyle>
+  </Style>
+  <Style id="style15">
+    <IconStyle>
+      <Icon>
+        <href>http://maps.gstatic.com/mapfiles/ms2/micons/bus.png</href>
+      </Icon>
+    </IconStyle>
+  </Style>
+  <Style id="style25">
+    <IconStyle>
+      <Icon>
+        <href>http://maps.gstatic.com/mapfiles/ms2/micons/lodging.png</href>
+      </Icon>
+    </IconStyle>
+  </Style>
+  <Style id="style13">
+    <IconStyle>
+      <Icon>
+        <href>http://maps.gstatic.com/mapfiles/ms2/micons/bus.png</href>
+      </Icon>
+    </IconStyle>
+  </Style>
+  <Style id="style16">
+    <IconStyle>
+      <Icon>
+        <href>http://maps.gstatic.com/mapfiles/ms2/micons/bus.png</href>
+      </Icon>
+    </IconStyle>
+  </Style>
+  <Placemark>
+    <name>The Quadrangle</name>
+    <Snippet>The place from where the City Tour will start from. It corresponds to the main e</Snippet>
+    <description><![CDATA[<div dir="ltr">The place from where the main conference will take place. It corresponds to the main entrance of the University Campus.</div>]]></description>
+    <styleUrl>#style29</styleUrl>
+    <Point>
+      <coordinates>-9.062004,53.277611,0.000000</coordinates>
+    </Point>
+  </Placemark>
+  <Placemark>
+    <name>DERI building</name>
+    <Snippet>The building where everybody from DERI is working. It is located in the IDA busi</Snippet>
+    <description><![CDATA[<div dir="ltr">The building where everybody from DERI is working. It is located in the IDA business park. <br><br>None of the events of the conference will happen here. (But good to have it as a reference ;) </div>]]></description>
+    <styleUrl>#style36</styleUrl>
+    <Point>
+      <coordinates>-9.074240,53.289936,0.000000</coordinates>
+    </Point>
+  </Placemark>
+  <Placemark>
+    <name>IT Building</name>
+    <Snippet>Site where the Reasoning and Rule System Conference will take place. It correspo</Snippet>
+    <description><![CDATA[<div dir="ltr">NUI Galway I.T. Building.</div>]]></description>
+    <styleUrl>#style8</styleUrl>
+    <Point>
+      <coordinates>-9.058764,53.280022,0.000000</coordinates>
+    </Point>
+  </Placemark>
+  <Placemark>
+    <name>Galway train station</name>
+    <Snippet>Irish Rail / Iarnrod Eireann trains arrive and leave from here. In addition Bus</Snippet>
+    <description><![CDATA[<div dir="ltr">Irish Rail / Iarnrod Eireann trains arrive and leave from here. <br><br>In addition Bus Eireann coaches arrive and leave from here.</div>]]></description>
+    <styleUrl>#style9</styleUrl>
+    <Point>
+      <coordinates>-9.046882,53.273518,0.000000</coordinates>
+    </Point>
+  </Placemark>
+  <Placemark>
+    <name>Central coach station</name>
+    <Snippet>Citylink and GoBus coaches arrive and leave from here.</Snippet>
+    <description><![CDATA[<div dir="ltr">Citylink and GoBus coaches arrive and leave from here. </div>]]></description>
+    <styleUrl>#style33</styleUrl>
+    <Point>
+      <coordinates>-9.045637,53.274994,0.000000</coordinates>
+    </Point>
+  </Placemark>
+  <Placemark>
+    <name>Local bus station at Eyre Square</name>
+    <Snippet>This is where local buses from the city centre to the university part of town ar</Snippet>
+    <description><![CDATA[<div dir="ltr">This is where local buses from the city centre to the university part of town are leaving. <br><br>Most important are #404 Newcastle bus (Mon-Sat) and #405 Rahoon bus, which both run past NUI Galway.</div>]]></description>
+    <styleUrl>#style40</styleUrl>
+    <Point>
+      <coordinates>-9.048942,53.274792,0.000000</coordinates>
+    </Point>
+  </Placemark>
+  <Placemark>
+    <name>The College Bar</name>
+    <Snippet>You can find the usual cafes and restaurants here.</Snippet>
+    <description><![CDATA[<div dir="ltr">In the main university Campus, this is the place where you can grab a drink or something to eat.</div>]]></description>
+    <styleUrl>#style43</styleUrl>
+    <Point>
+      <coordinates>-9.057949,53.277828,0.000000</coordinates>
+    </Point>
+  </Placemark>
+  <Placemark>
+    <name>Westwood hotel</name>
+    <Snippet>The hotel where most of the speakers will be staying.</Snippet>
+    <description><![CDATA[<div dir="ltr">One of the hotels close to the conference venue and to DERI.</div>]]></description>
+    <styleUrl>#style7</styleUrl>
+    <Point>
+      <coordinates>-9.074954,53.289116,0.000000</coordinates>
+    </Point>
+  </Placemark>
+  <Placemark>
+    <name>Bar 8</name>
+    <Snippet>Restaurant before 22, afterwards pub with nice sofas and view of the harbour.</Snippet>
+    <description><![CDATA[<div dir="ltr">Restaurant before 22:00, afterwards pub with nice sofas and view of the harbour.</div>]]></description>
+    <styleUrl>#style2</styleUrl>
+    <Point>
+      <coordinates>-9.051340,53.270527,0.000000</coordinates>
+    </Point>
+  </Placemark>
+  <Placemark>
+    <name>Crane Bar</name>
+    <Snippet>No-nonsense, traditional Irish Pub. Almost always authentic Irish live music.</Snippet>
+    <description><![CDATA[<div dir="ltr">No-nonsense, traditional Irish Pub. Almost always authentic Irish live music.</div>]]></description>
+    <styleUrl>#style5</styleUrl>
+    <Point>
+      <coordinates>-9.060556,53.269848,0.000000</coordinates>
+    </Point>
+  </Placemark>
+  <Placemark>
+    <name>&quot;Neachtain&#39;s&quot;</name>
+    <Snippet>Small, crowded Irish Pub. Fantastic selection of whiskeys (Irish and Scotch). Ou</Snippet>
+    <description><![CDATA[<div dir="ltr">Small, crowded Irish Pub. Fantastic selection of whiskeys (Irish and Scotch). Outside seating in the summer. Pronounce ~ &quot;Noktens&quot;.</div>]]></description>
+    <styleUrl>#style32</styleUrl>
+    <Point>
+      <coordinates>-9.053890,53.271420,0.000000</coordinates>
+    </Point>
+  </Placemark>
+  <Placemark>
+    <name>O&#39;Connor&#39;s Famous Pub</name>
+    <Snippet>Traditional Irish Pub. Worth checking.</Snippet>
+    <description><![CDATA[<div dir="ltr">Traditional Irish Pub. Worth checking.</div>]]></description>
+    <styleUrl>#style26</styleUrl>
+    <Point>
+      <coordinates>-9.074568,53.261166,0.000000</coordinates>
+    </Point>
+  </Placemark>
+  <Placemark>
+    <name>Spanish Arch Bar</name>
+    <Snippet>Often live music, both traditional and rock covers</Snippet>
+    <description><![CDATA[<div dir="ltr">Often live music, both traditional and rock covers</div>]]></description>
+    <styleUrl>#style6</styleUrl>
+    <Point>
+      <coordinates>-9.054419,53.270878,0.000000</coordinates>
+    </Point>
+  </Placemark>
+  <Placemark>
+    <name>Cookes Thatch Pub</name>
+    <Snippet>Traditional Irish Pub</Snippet>
+    <description><![CDATA[<div dir="ltr">Traditional Irish Pub</div>]]></description>
+    <styleUrl>#style19</styleUrl>
+    <Point>
+      <coordinates>-9.062648,53.272598,0.000000</coordinates>
+    </Point>
+  </Placemark>
+  <Placemark>
+    <name>Bierhaus</name>
+    <Snippet>Good selection of beers</Snippet>
+    <description><![CDATA[<div dir="ltr">Good selection of beers</div>]]></description>
+    <styleUrl>#style30</styleUrl>
+    <Point>
+      <coordinates>-9.058909,53.270248,0.000000</coordinates>
+    </Point>
+  </Placemark>
+  <Placemark>
+    <name>Monroe&#39;s</name>
+    <Snippet>Traditional pub. Traditional Irish dance on Tuesdays at 8.30</Snippet>
+    <description><![CDATA[<div dir="ltr">Traditional pub. Traditional Irish dance on Tuesdays at 8.30</div>]]></description>
+    <styleUrl>#style17</styleUrl>
+    <Point>
+      <coordinates>-9.057627,53.270142,0.000000</coordinates>
+    </Point>
+  </Placemark>
+  <Placemark>
+    <name>Forthill Cemetery</name>
+    <Snippet>Part of the Spanish Armada shipwrecked off the Irish coast near Galway. The sail</Snippet>
+    <description><![CDATA[<div dir="ltr">Part of the Spanish Armada shipwrecked off the Irish coast near Galway. The sailors and soldiers were killed by the Galwegians (who were loyal to the English Crown back then) and buried here.<br><br>http://www.flickr.com/photos/dunken69/2855203759</div>]]></description>
+    <styleUrl>#style39</styleUrl>
+    <Point>
+      <coordinates>-9.046683,53.271385,0.000000</coordinates>
+    </Point>
+  </Placemark>
+  <Placemark>
+    <name>Great view of Galway</name>
+    <Snippet>Climb this parking garage (elevator, then some stairs) to get a great view of th</Snippet>
+    <description><![CDATA[<div dir="ltr">Climb this parking garage (elevator, then some stairs) to get a great view of the city in all directions.</div>]]></description>
+    <styleUrl>#style1</styleUrl>
+    <Point>
+      <coordinates>-9.050782,53.271374,0.000000</coordinates>
+    </Point>
+  </Placemark>
+  <Placemark>
+    <name>Eyre square</name>
+    <Snippet>The main square of Galway, you can find taxis here at any time of the day.</Snippet>
+    <description><![CDATA[<div dir="ltr">The main square of Galway, you can find taxis here at any time of the day. </div>]]></description>
+    <styleUrl>#style4</styleUrl>
+    <Point>
+      <coordinates>-9.049344,53.273964,0.000000</coordinates>
+    </Point>
+  </Placemark>
+  <Placemark>
+    <name>McSwiggan&#39;s</name>
+    <Snippet>restaurant, pub and bar with good selection of food at fair prices.</Snippet>
+    <description><![CDATA[<div dir="ltr">restaurant, pub and bar with good selection of food at fair prices. </div>]]></description>
+    <styleUrl>#style35</styleUrl>
+    <Point>
+      <coordinates>-9.050369,53.275288,0.000000</coordinates>
+    </Point>
+  </Placemark>
+  <Placemark>
+    <name>Mustard</name>
+    <Snippet>Restaurant</Snippet>
+    <description><![CDATA[<div dir="ltr">Restaurant<br>&nbsp;</div>]]></description>
+    <styleUrl>#style21</styleUrl>
+    <Point>
+      <coordinates>-9.056436,53.271587,0.000000</coordinates>
+    </Point>
+  </Placemark>
+  <Placemark>
+    <name>Oslo</name>
+    <Snippet>Restaurant and Bar. They brew their own lager and ale.</Snippet>
+    <description><![CDATA[<div dir="ltr">Restaurant and Bar. They brew their own lager and ale.</div>]]></description>
+    <styleUrl>#style22</styleUrl>
+    <Point>
+      <coordinates>-9.076252,53.259956,0.000000</coordinates>
+    </Point>
+  </Placemark>
+  <Placemark>
+    <name>Da Tang Noodle House</name>
+    <Snippet>Stylish and cosy Chinese restaurant</Snippet>
+    <description><![CDATA[<div dir="ltr">Stylish and cosy Chinese restaurant </div>]]></description>
+    <styleUrl>#style11</styleUrl>
+    <Point>
+      <coordinates>-9.053276,53.271530,0.000000</coordinates>
+    </Point>
+  </Placemark>
+  <Placemark>
+    <name>Asian Tea House</name>
+    <Snippet>asian restaurant</Snippet>
+    <description><![CDATA[<div dir="ltr">asian restaurant</div>]]></description>
+    <styleUrl>#style27</styleUrl>
+    <Point>
+      <coordinates>-9.053335,53.274529,0.000000</coordinates>
+    </Point>
+  </Placemark>
+  <Placemark>
+    <name>SpudHouse</name>
+    <Snippet>Restaurant, nice filled baked potatoes!</Snippet>
+    <description><![CDATA[<div dir="ltr">Restaurant, nice filled baked potatoes!</div>]]></description>
+    <styleUrl>#style24</styleUrl>
+    <Point>
+      <coordinates>-9.068270,53.279995,0.000000</coordinates>
+    </Point>
+  </Placemark>
+  <Placemark>
+    <name>Tamarind</name>
+    <Snippet>Contemporary Asian Cuisine</Snippet>
+    <description><![CDATA[<div dir="ltr">Contemporary Asian Cuisine</div>]]></description>
+    <styleUrl>#style23</styleUrl>
+    <Point>
+      <coordinates>-9.053646,53.270462,0.000000</coordinates>
+    </Point>
+  </Placemark>
+  <Placemark>
+    <name>Mc Donagh&#39;s</name>
+    <Snippet>Huge selection of seafood</Snippet>
+    <description><![CDATA[<div dir="ltr">Huge selection of seafood</div>]]></description>
+    <styleUrl>#style41</styleUrl>
+    <Point>
+      <coordinates>-9.054497,53.270756,0.000000</coordinates>
+    </Point>
+  </Placemark>
+  <Placemark>
+    <name>Java&#39;s</name>
+    <Snippet>Light dinner and good selection of teas</Snippet>
+    <description><![CDATA[<div dir="ltr">Light dinner and good selection of coffees, teas and desserts.</div>]]></description>
+    <styleUrl>#style42</styleUrl>
+    <Point>
+      <coordinates>-9.053260,53.273815,0.000000</coordinates>
+    </Point>
+  </Placemark>
+  <Placemark>
+    <name>Róisín Dubh</name>
+    <Snippet>Nice big pub, premier live music venue in Galway, smoking terrace.</Snippet>
+    <description><![CDATA[<div dir="ltr">Nice big pub, premier live music venue in Galway, smoking terrace.</div>]]></description>
+    <styleUrl>#style10</styleUrl>
+    <Point>
+      <coordinates>-9.058131,53.270226,0.000000</coordinates>
+    </Point>
+  </Placemark>
+  <Placemark>
+    <name>The Dail Bar</name>
+    <Snippet>Late night pub</Snippet>
+    <description><![CDATA[<div dir="ltr">Late night pub</div>]]></description>
+    <styleUrl>#style20</styleUrl>
+    <Point>
+      <coordinates>-9.053442,53.271423,0.000000</coordinates>
+    </Point>
+  </Placemark>
+  <Placemark>
+    <name>Buskar Browns</name>
+    <Snippet></Snippet>
+    <description><![CDATA[]]></description>
+    <styleUrl>#style38</styleUrl>
+    <Point>
+      <coordinates>-9.054306,53.271641,0.000000</coordinates>
+    </Point>
+  </Placemark>
+  <Placemark>
+    <name>The Quays</name>
+    <Snippet>Late night pub</Snippet>
+    <description><![CDATA[<div dir="ltr">Late night pub</div>]]></description>
+    <styleUrl>#style28</styleUrl>
+    <Point>
+      <coordinates>-9.053904,53.271156,0.000000</coordinates>
+    </Point>
+  </Placemark>
+  <Placemark>
+    <name>King&#39;s Head</name>
+    <Snippet>Crowded late night pub</Snippet>
+    <description><![CDATA[<div dir="ltr">Crowded late night pub</div>]]></description>
+    <styleUrl>#style12</styleUrl>
+    <Point>
+      <coordinates>-9.053292,53.272259,0.000000</coordinates>
+    </Point>
+  </Placemark>
+  <Placemark>
+    <name>Front Door</name>
+    <Snippet>Loud and crowded, late night pub</Snippet>
+    <description><![CDATA[<div dir="ltr">Loud and crowded, late night pub</div>]]></description>
+    <styleUrl>#style14</styleUrl>
+    <Point>
+      <coordinates>-9.053807,53.271515,0.000000</coordinates>
+    </Point>
+  </Placemark>
+  <Placemark>
+    <name>Massimo&#39;s</name>
+    <Snippet>late night pub, wednesdays live music</Snippet>
+    <description><![CDATA[<div dir="ltr">late night pub, wednesdays live music</div>]]></description>
+    <styleUrl>#style31</styleUrl>
+    <Point>
+      <coordinates>-9.059542,53.269989,0.000000</coordinates>
+    </Point>
+  </Placemark>
+  <Placemark>
+    <name>TESCO 24/7</name>
+    <Snippet>In the Galway Shopping Center you can find a TESCO grocery store opened 24/7.</Snippet>
+    <description><![CDATA[<div dir="ltr">In the Galway Shopping Center you can find a TESCO grocery store opened 24/7.</div>]]></description>
+    <styleUrl>#style18</styleUrl>
+    <Point>
+      <coordinates>-9.048550,53.280663,0.000000</coordinates>
+    </Point>
+  </Placemark>
+  <Placemark>
+    <name>Centra Food Store</name>
+    <Snippet>Small supermarket where u can find ready made food and a selection of groceries.</Snippet>
+    <description><![CDATA[<div dir="ltr">Small supermarket where u can find ready made food and a selection of groceries.</div>]]></description>
+    <styleUrl>#style37</styleUrl>
+    <Point>
+      <coordinates>-9.064922,53.281227,0.000000</coordinates>
+    </Point>
+  </Placemark>
+  <Placemark>
+    <name>Tesco Express Store</name>
+    <Snippet>Small store with selection of grocery items and fresh vegetables.</Snippet>
+    <description><![CDATA[<div dir="ltr">Small store with selection of grocery items and fresh vegetables.</div>]]></description>
+    <styleUrl>#style3</styleUrl>
+    <Point>
+      <coordinates>-9.063120,53.276505,0.000000</coordinates>
+    </Point>
+  </Placemark>
+  <Placemark>
+    <name>Salthill Promenade</name>
+    <Snippet>This is a 2 miles long (3kms) nice promenade, which overlooks Galway Bay.</Snippet>
+    <description><![CDATA[<div dir="ltr">This is a 2 miles long (3kms) nice promenade, which overlooks Galway Bay.</div>]]></description>
+    <styleUrl>#style34</styleUrl>
+    <Point>
+      <coordinates>-9.078355,53.258255,0.000000</coordinates>
+    </Point>
+  </Placemark>
+  <Placemark>
+    <name>Bus Stop to town</name>
+    <Snippet>Here you can take the bus to town, number 5</Snippet>
+    <description><![CDATA[<div dir="ltr">Here you can take the bus to town, number 404 (Mon-Sat) or 405 (Sun)</div>]]></description>
+    <styleUrl>#style15</styleUrl>
+    <Point>
+      <coordinates>-9.074686,53.287758,0.000000</coordinates>
+    </Point>
+  </Placemark>
+  <Placemark>
+    <name>Hotel Meyrick</name>
+    <description><![CDATA[<div dir="ltr">This is the venue of the Conference Dinner.</div>]]></description>
+    <styleUrl>#style25</styleUrl>
+    <Point>
+      <coordinates>-9.047971,53.273952,0.000000</coordinates>
+    </Point>
+  </Placemark>
+  <Placemark>
+    <name>Bus stop to Quadrangle</name>
+    <description><![CDATA[This is the bus stop to Quadrangle, the venue of the conference.]]></description>
+    <styleUrl>#style13</styleUrl>
+    <Point>
+      <coordinates>-9.063420,53.277687,0.000000</coordinates>
+    </Point>
+  </Placemark>
+  <Placemark>
+    <name>Bus stop to town</name>
+    <description><![CDATA[This is the bus stop to town]]></description>
+    <styleUrl>#style16</styleUrl>
+    <Point>
+      <coordinates>-9.063141,53.277821,0.000000</coordinates>
+    </Point>
+  </Placemark>
+</Document>
+</kml>

@@ -1,0 +1,185 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<artifactId>dime-personalserver</artifactId>
+		<groupId>eu.dime</groupId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>dime-datamining</artifactId>
+	<packaging>jar</packaging>
+	
+	<name>Digital.me Datamining Module</name>
+
+	<repositories>
+		<repository>
+			<id>aperture-repo</id>
+			<url>http://aperture.sourceforge.net/maven/</url>
+			<name>Aperture Maven Repository</name>
+		</repository>
+
+		<!-- 'conja' library -->
+		<repository>
+			<id>dev.davidsoergel.com releases</id>
+			<url>http://dev.davidsoergel.com/artifactory/repo</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
+
+	<dependencies>
+
+		<dependency>
+			<groupId>eu.dime</groupId>
+			<artifactId>dime-common</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>eu.dime</groupId>
+			<artifactId>dime-gateway</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>eu.dime</groupId>
+			<artifactId>dime-semantic</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>eu.dime</groupId>
+			<artifactId>dime-storage</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>ie.deri.smile</groupId>
+			<artifactId>smile-extraction</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>ie.deri.smile</groupId>
+			<artifactId>smile-extraction-opengraph</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+
+		<!-- Aperture -->
+		<!-- Note: XSPARQL is provided as one jar with all dependencies, and includes 
+			a newer version of antlr than aperture (and bibsonomy) loads. It gives an 
+			error if it finds other version of this library, hence they have to be excluded -->
+		<dependency>
+			<groupId>org.semanticdesktop.aperture</groupId>
+			<artifactId>aperture-core</artifactId>
+			<version>1.5.0</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.antlr</groupId>
+					<artifactId>antlr</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.bibsonomy</groupId>
+					<artifactId>bibsonomy-rest-client</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-jdk14</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.semanticdesktop.aperture</groupId>
+			<artifactId>aperture-runtime-optional</artifactId>
+			<version>1.5.0</version>
+			<type>pom</type>
+			<exclusions>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-jdk14</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<dependency>
+			<groupId>org.easymock</groupId>
+			<artifactId>easymock</artifactId>
+			<version>3.0</version>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- Handy classes for parallel processing -->
+		<dependency>
+			<groupId>com.davidsoergel</groupId>
+			<artifactId>conja</artifactId>
+			<version>1.051</version>
+		</dependency>
+
+		<!-- NLP framework -->
+		<dependency>
+			<groupId>uk.ac.gate</groupId>
+			<artifactId>gate-core</artifactId>
+			<version>7.0</version>
+			<exclusions>
+				<exclusion>
+					<groupId>commons-logging</groupId>
+					<artifactId>commons-logging</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<!-- Filters for profiles -->
+		<filters>
+			<filter>src/main/filters/${env}.properties</filter>
+		</filters>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+				<includes>
+					<include>**/*.xml</include>
+					<include>**/*.txt</include>
+					<include>**/*.properties</include>
+				</includes>
+			</resource>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>false</filtering>
+				<excludes>
+					<exclude>**/*.xml</exclude>
+					<exclude>**/*.txt</exclude>
+					<exclude>**/*.properties</exclude>
+				</excludes>
+			</resource>
+		</resources>
+	</build>
+	<profiles>
+		<profile>
+			<id>development</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+				<env>development</env>
+			</properties>
+		</profile>
+		<profile>
+			<id>deploy</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<properties>
+				<env>deploy</env>
+			</properties>
+		</profile>
+	</profiles>
+</project>

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+    <head>
+        <title>di.me</title>
+        <meta charset=utf-8>
+        <link rel="stylesheet" href="css/bootstrap.css" >
+        <link rel="stylesheet" href="css/style.css" />
+
+        <link href="css/bootstrap-responsive.css" rel="stylesheet">
+
+        <meta itemprop="image" content="img/logo_2.png">
+        <link rel="shortcut icon" href="img/favicon.ico">
+
+    </head>
+    <body>
+        <div class="navbar navbar-fixed-top" id="navBarContainer"></div>
+
+
+        <div class="clear"></div>
+
+        <div class="container">
+
+            <!-- Example row of columns -->
+            <div class="row">
+                <div class="span8" id="contentContainer" >                 
+                    <div class="wrapSettings">
+                        <div class="settingsTab">
+                            <img src="img/settings/open.png" onclick="Dime.Settings.toggleTab(this, 'generalSettingsContainer')">
+                            <img src="img/leftTop/new.png">
+                            General Settings
+                        </div>
+                        <div class="settingsContent collapsedSettingsTab" id="generalSettingsContainer"></div>
+                        <div class="settingsTab">
+                            <img src="img/settings/open.png"  onclick="Dime.Settings.toggleTab(this,'rulesSettingsContainer')">
+                            <img src="img/leftTop/new.png">
+                            Rules
+                        </div>
+                        <div class="settingsContent collapsedSettingsTab" id="rulesSettingsContainer"></div>
+                        <div class="settingsTab" >
+                            <img src="img/settings/collaps.png" onclick="Dime.Settings.toggleTab(this,'serviceContainer')">
+
+                            <div class="btn-group serviceAdapterDropDowngGroup">
+                                <div class="btn serviceAdapterDropDowngButton" data-toggle="dropdown">
+                                    <img src="img/leftTop/new.png"></div>
+                                <ul id="addNewServiceAdapterDropDown" class="dropdown-menu" role="menu" >
+                                </ul>
+                            </div>
+                            Connect to services</div>
+                        <div class="settingsContent expandedSettingsTab" id="serviceContainer"></div>
+                        <div class="settingsTab">
+                            <img src="img/settings/open.png" onclick="Dime.Settings.toggleTab(this,'trustLevelSettingsContainer')">
+                            <img src="img/leftTop/new.png">
+                            Trust level
+                        </div>
+                        <div class="settingsContent collapsedSettingsTab" id="trustLevelSettingsContainer"></div>
+                    </div>
+
+                </div>
+
+
+
+
+            </div>
+            <div class="clear"></div>
+
+
+        </div> <!-- /container -->
+        <div class="clear"></div>
+        <!-- Le javascript
+        ================================================== -->
+        <!-- Placed at the end of the document so the pages load faster -->
+
+        <script src="./script/jquery-1.7.2.min.js"></script>
+        <script src="./script/bootstrap.js"></script>
+
+        <script type="text/javascript" src="script/main.js"></script>
+        <script type="text/javascript" src="script/settings.js"></script>
+        <script type="text/javascript" src="script/run_page.js"></script>
+
+
+        <script>
+            (function(){
+                $('html').addClass('js');
+                $('.js #expanding-header').slideDown('slow');
+            })();
+        </script>
+
+    </body>
+</html>

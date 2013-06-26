@@ -1,0 +1,84 @@
+@prefix nao: <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#> . 
+@prefix pimo: <http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#> . 
+@prefix nco: <http://www.semanticdesktop.org/ontologies/2007/03/22/nco#> . 
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> . 
+
+_:p7 a nco:PersonContact .
+_:p7 nco:contactUID "7N49Odr3Dk"^^xsd:string .
+_:p7 nco:hasPersonName _:n7 .
+_:n7 nco:fullname "Charlie Abela" .
+_:n7 nco:nameGiven "Charlie" .
+_:n7 nco:nameFamily "Abela" .
+_:p7 nco:photo <http://media.linkedin.com/mpr/mprx/0_izp7YxT1BvTqPC_3it0yYjAlB1cnACP3T-HrYjtTe9iQa6kT712_rg67MgBWt5tDG9OllshuOmP-> .
+
+_:p12 a nco:PersonContact .
+_:p12 nco:contactUID "VF7uOlrmja"^^xsd:string .
+_:p12 nco:hasPersonName _:n12 .
+_:n12 nco:fullname "Erika L. Borg" .
+_:n12 nco:nameGiven "Erika L." .
+_:n12 nco:nameFamily "Borg" .
+_:p12 nco:photo <http://media.linkedin.com/mpr/mprx/0_Vu55r8uITNDCdR1PsInsrGebTqxSwZiPZwlVriEVYAwgNpq1nEvWY_Oq7s0tHxGxR7bU0kZqVAu9> .
+
+_:p17 a nco:PersonContact .
+_:p17 nco:contactUID "j8aKQtXria"^^xsd:string .
+_:p17 nco:hasPersonName _:n17 .
+_:n17 nco:fullname "John J. Camilleri" .
+_:n17 nco:nameGiven "John J." .
+_:n17 nco:nameFamily "Camilleri" .
+_:p17 nco:photo <http://media.linkedin.com/mpr/mprx/0_FEYCE70cnWxML8jkb27AE2uQNwUvb8Dk5HEjE20Qwm75ZXVXwummXuwesLREXb2e6Wyy5w3hCQsG> .
+
+_:p22 a nco:PersonContact .
+_:p22 nco:contactUID "Br52FcLWmK"^^xsd:string .
+_:p22 nco:hasPersonName _:n22 .
+_:n22 nco:fullname "Kenneth Chircop" .
+_:n22 nco:nameGiven "Kenneth" .
+_:n22 nco:nameFamily "Chircop" .
+_:p22 nco:photo <http://media.linkedin.com/mpr/mprx/0_FIUn3egQHyRnkaNRLfjL3o2EoRSveSkR527d3oxczOM5BdPUwDws7EIJXvDEIE5c6HMeaSS_FeA9> .
+
+_:p27 a nco:PersonContact .
+_:p27 nco:contactUID "EZVRM-m0N6"^^xsd:string .
+_:p27 nco:hasPersonName _:n27 .
+_:n27 nco:fullname "Jeremy Debattista" .
+_:n27 nco:nameGiven "Jeremy" .
+_:n27 nco:nameFamily "Debattista" .
+_:p27 nco:photo <http://media.linkedin.com/mpr/mprx/0_M5umgFJOq-jSqL32cipjg5MpNAd3nLA2RFZAgkRawqjAWT6uz_yC1X7hsxWOzGrhZQmKtiWBSJsJ> .
+
+_:p32 a nco:PersonContact .
+_:p32 nco:contactUID "pZziEnOkYZ"^^xsd:string .
+_:p32 nco:hasPersonName _:n32 .
+_:n32 nco:fullname "Mark Pace" .
+_:n32 nco:nameGiven "Mark" .
+_:n32 nco:nameFamily "Pace" .
+_:p32 nco:photo <http://media.linkedin.com/mpr/mprx/0_W1fpi2kpUJRUg5vqwNa_imLuMxyIl5vqIqR_imF2QseRm3CNLz0rSaPGBApq-CN4erDG2dv2p402> .
+
+_:p37 a nco:PersonContact .
+_:p37 nco:contactUID "czWR9bvFhQ"^^xsd:string .
+_:p37 nco:hasPersonName _:n37 .
+_:n37 nco:fullname "Simon Scerri" .
+_:n37 nco:nameGiven "Simon" .
+_:n37 nco:nameFamily "Scerri" .
+_:p37 nco:photo <http://media.linkedin.com/mpr/mprx/0_UciCehF0t7Smr12bUz-AeC6AtEVG-zSbJvcje_92S7a-DlsFcA1m6iCGyXsjl-uwsq3ybXHKVinL> .
+
+_:p42 a nco:PersonContact .
+_:p42 nco:contactUID "ZsfOOG1DJe"^^xsd:string .
+_:p42 nco:hasPersonName _:n42 .
+_:n42 nco:fullname "James Scicluna" .
+_:n42 nco:nameGiven "James" .
+_:n42 nco:nameFamily "Scicluna" .
+_:p42 nco:photo <http://media.linkedin.com/mpr/mprx/0_oFea4wWynhyHZi22HLUg4HEiNiWb4Qp2e5yl4dVyw6gBFGIuQ3ZGnWmtsSdZUTjhIXErcmkz40wX> .
+
+_:p47 a nco:PersonContact .
+_:p47 nco:contactUID "DL5RVbjUKz"^^xsd:string .
+_:p47 nco:hasPersonName _:n47 .
+_:n47 nco:fullname "Jakob Vestergaard-Laustsen" .
+_:n47 nco:nameGiven "Jakob" .
+_:n47 nco:nameFamily "Vestergaard-Laustsen" .
+_:p47 nco:photo <http://media.linkedin.com/mpr/mprx/0_gxkFOr9FTNhYuMThxO54OtNWinvm2VTh0YKZOPFJpPTY1Yn8AMNIK1PcD4zl7j82yyQJAqzGRuoU> .
+
+_:p52 a nco:PersonContact .
+_:p52 nco:contactUID "ZjKGVCEqfw"^^xsd:string .
+_:p52 nco:hasPersonName _:n52 .
+_:n52 nco:fullname "Ryan Zammit" .
+_:n52 nco:nameGiven "Ryan" .
+_:n52 nco:nameFamily "Zammit" .
+_:p52 nco:photo <http://media.linkedin.com/mpr/mprx/0__NWrbZ_SZHlqpbds31JfbRTyVeCcOXds3Pg7bRlpLSnF38OVftMpdUL-q6GHgiHnCBwaey7N6Gt0> .

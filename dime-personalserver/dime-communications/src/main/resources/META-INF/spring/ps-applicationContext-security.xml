@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:sec="http://www.springframework.org/schema/security"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+						http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd	
+                        http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.0.xsd">
+
+	<!-- HTTP(S) security configurations -->
+    <sec:http create-session="ifRequired" auto-config="true" use-expressions="true" realm="dime_realm" lowercase-comparisons="false">
+		
+		<!-- HTTPS For API -->
+	    <!--  <sec:intercept-url pattern="/dime" access="permitAll" requires-channel="http" /> 
+	    	  <sec:intercept-url pattern="/lookup" access="permitAll" requires-channel="http" />   
+	    -->
+        <sec:intercept-url pattern="/api/application.wadl" filters="none"/>
+	    
+	    
+	    <!-- used to check authentication from mobile client -->
+        <sec:intercept-url pattern="/web/access/auth/@me" access="hasAnyRole('OWNER', 'ADMIN')" requires-channel="any"/>
+	     
+	    <!--  scripts for register page -->
+        <sec:intercept-url pattern="/static/ui/dime/register/**" filters="none"/>
+	    <!-- required for login call :Request URL:https://127.0.0.1:8443/dime-communications/j_spring_security_check -->
+        <sec:intercept-url pattern="/*" access="permitAll" requires-channel="any" />
+	    	          	    
+	    <!--  notification endpoint, open for all -->
+        <sec:intercept-url pattern="/api/services/*/set/notification" filters="none"/>
+    	
+    	<!--  request shared -->
+        <sec:intercept-url pattern="/api/dime/rest/*/shared/**" access="hasRole('GUEST')" requires-channel="https" />
+    
+        <sec:intercept-url pattern="/api/dime/rest/*/user/credentials/*" filters="none"/>
+        <sec:intercept-url pattern="/api/dime/rest/*/admin/*" access="hasRole('ADMIN')" requires-channel="https" />
+	    
+	       		
+	<!-- Only used for PING -->  		
+        <sec:intercept-url pattern="/api/dime/system/*" filters="none"/>
+		
+	<!-- Registration does not need authentication -->
+        <sec:intercept-url pattern="/api/dime/user" filters="none" method="POST"/>
+        
+        <!-- Registration does not need authentication -->
+        <sec:intercept-url pattern="/api/dime/server" filters="none" method="GET"/> 
+        
+
+		
+<!-- 		<sec:intercept-url pattern="/api/dime/rest/*/profile/*" access="authenticated" requires-channel="any"/> 
+ -->		
+<!-- 	    <sec:intercept-url pattern="/api/dime/rest/**" access="hasRole('OWNER')" requires-channel="https" />
+ -->					
+        <sec:intercept-url pattern="/api/**" access="hasAnyRole('OWNER', 'ADMIN')" requires-channel="https" />
+		
+ 		<!-- <sec:intercept-url pattern="/login.jsp" access="permitAll" requires-channel="https" /> -->
+        <sec:intercept-url pattern="/static/ui/images/**" access="permitAll" requires-channel="any"/>
+        <sec:intercept-url pattern="/static/**" access="hasAnyRole('OWNER', 'ADMIN')"  requires-channel="https" />
+				
+		<!-- TODO: Define more restriction .. to be discussed with the partners -->		
+        <sec:http-basic />
+ 		
+        <sec:form-login
+            login-page="/web/access/login"
+            default-target-url="/static/ui/dime/index.html"
+            authentication-failure-url="/web/access/login" />
+  			
+        <sec:access-denied-handler error-page="/web/access/notauthenticated"/>
+  	    
+        <sec:logout invalidate-session="true" logout-success-url="/web/access/logout" logout-url="/j_spring_security_logout"/>
+    </sec:http>
+
+	<!-- Configure dimeAuthenticationProvider mechanism -->
+    <!-- Configure userAccountAuthenticationProvider mechanism -->
+
+	<!-- Configure Authentication mechanism -->
+	<!-- THIS IS A VERY PRiMITIVE VERSION - DIME AUTHENTICATION IS ONGOING 
+		WORK ACCORDING TO PRIORITIES AND USE CASES! -->
+
+    <sec:authentication-manager alias="authenticationManager">
+        <sec:authentication-provider ref="dimeAuthenticationProvider">
+            <sec:password-encoder ref="dimePasswordEncoder">
+                <sec:salt-source ref="dimeSaltSource"/>
+            </sec:password-encoder>
+        </sec:authentication-provider>
+    </sec:authentication-manager>
+
+</beans>

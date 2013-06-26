@@ -1,0 +1,90 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix ppo: <http://vocab.deri.ie/ppo#> .
+@prefix nrl: <http://www.semanticdesktop.org/ontologies/2007/08/15/nrl#> .
+@prefix pimo: <http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#> .
+@prefix nao: <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#> .
+@prefix nie: <http://www.semanticdesktop.org/ontologies/2007/01/19/nie#> .
+@prefix ncal: <http://www.semanticdesktop.org/ontologies/2007/04/02/ncal#> . 
+@prefix nco: <http://www.semanticdesktop.org/ontologies/2007/03/22/nco#> .
+@prefix nso: <http://www.semanticdesktop.org/ontologies/2009/11/08/nso#> .
+@prefix nfo: <http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#> .
+@prefix dao: <http://www.semanticdesktop.org/ontologies/2011/10/05/dao#> .
+@prefix dlpo: <http://www.semanticdesktop.org/ontologies/2011/10/05/dlpo#> .
+@prefix dcon: <http://www.semanticdesktop.org/ontologies/2011/10/05/dcon#> .
+@prefix ddo: <http://www.semanticdesktop.org/ontologies/2011/10/05/ddo#> .
+
+@prefix urn: <urn:uuid:> .
+
+urn:j000088 a dlpo:Status ;
+	dlpo:textualContent "Preparing for next week's Congress..." ;
+	dlpo:timestamp "2011-11-23T10:26:00"^^xsd:datetime ;
+	nao:privacyLevel "0"^^xsd:double ;
+	nao:creator urn:j000061 .
+
+urn:j000089 a dlpo:Status ;
+	dlpo:textualContent "I'm back in Barcelona!" ;
+	dlpo:timestamp "2011-11-18T15:26:00"^^xsd:datetime ;
+	nao:privacyLevel "0"^^xsd:double ;
+	nao:creator urn:j000061 .
+
+urn:j000090 a dlpo:Status ;
+	dlpo:textualContent "Ya hemos llegado a Stuttgart :)" ;
+	dlpo:timestamp "2011-11-22T20:04:00"^^xsd:datetime ;
+	nao:privacyLevel "0"^^xsd:double ;
+	nao:creator urn:j000061 .
+
+urn:j000091 a dlpo:LivePost ;
+	dlpo:textualContent "Arrived in Madrid with @aalford for #AmeticEvent2012" ;
+	dlpo:timestamp "2012-07-12T16:50:00"^^xsd:datetime ;
+	dlpo:isComposedOf urn:j000092 ;
+	dlpo:isComposedOf urn:j000093 ;
+	dlpo:isComposedOf urn:j000094 ;
+	dlpo:relatedResource urn:j000070 ;
+	dlpo:relatedResource urn:j000095 ;
+	dlpo:relatedResource <http://dbpedia.org/resource/Madrid> ;
+	nao:privacyLevel "0"^^xsd:double ;
+	nao:creator urn:j000061 . 
+	
+urn:j000092 a dlpo:Status ;
+	dlpo:textualContent "Arrived in Madrid with @aalford for @AmeticEvent2012" ;
+	dlpo:timestamp "2012-07-12T16:50:00"^^xsd:datetime ;
+	nao:privacyLevel "0"^^xsd:double ;
+	nao:creator urn:j000061 . 
+	
+urn:j000093 a dlpo:EventPost ;
+	dlpo:textualContent "Arrived in Madrid with @aalford for @AmeticEvent2012" ;
+	dlpo:timestamp "2012-07-12T16:50:00"^^xsd:datetime ;
+	dlpo:definingResource urn:j000095 ;
+	nao:privacyLevel "0"^^xsd:double ;
+	nao:creator urn:j000061 . 
+	
+urn:j000094 a dlpo:Checkin ;
+	dlpo:textualContent "Arrived in Madrid with @aalford for @AmeticEvent2012" ;
+	dlpo:timestamp "2012-07-12T16:50:00"^^xsd:datetime ;
+	dlpo:definingResource <http://dbpedia.org/resource/Madrid> ;
+	nao:privacyLevel "0"^^xsd:double ;
+	nao:creator urn:j000061 . 
+
+
+
+########################
+### SHARED LIVEPOSTS ###
+########################
+
+urn:j000404 
+	a ppo:PrivacyPreference ;
+	nao:creator urn:j000061 ;
+	rdfs:label "LIVEPOST" ;
+	ppo:hasAccessSpace urn:j000405 ;
+	ppo:appliesToResource urn:j000092 . 
+			
+urn:j000405
+	a ppo:AccessSpace ;
+	nso:includes urn:j000073 , 
+		urn:j000070 ,
+		urn:j000071 . 
+

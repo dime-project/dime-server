@@ -1,0 +1,154 @@
+@media (max-width: 1200px) {
+
+
+
+	.span3{
+	height: 310px;
+	}
+	
+	.iao-logo{
+		width:250px;
+	}
+	
+	
+
+
+
+	
+	@media (max-width: 720px) {
+	
+		.iao-logo{
+		width:220px;
+	}
+	
+	
+	
+		.span3{
+	font-size: 15px;
+	height: auto;
+	}
+	
+		.span6{
+		height:auto;
+		}
+		
+		
+		h1{
+		font-size: 35px;
+		
+		}
+		
+		h2{
+		font-size: 18px;
+		}
+		
+	
+		
+		h4{
+		font-size: 12px;
+		}
+		
+		h3{
+		font-size: 15px;
+		}
+	
+		
+		#video{
+		width: 100%;
+		height:300px;
+		}
+	
+	
+		#qr{
+		visibility: hidden;
+		width: 100%;
+		height: 50px;
+		}
+		
+		#download{
+		width:200px;
+	
+		}
+		#start_server{
+		width:200px;
+		
+		}
+		.headerlogo{
+		width:70px;
+		height:70px;
+		
+		
+
+		}
+		
+		
+
+			
+		
+	}
+		
+		@media (max-width: 979px) {
+		
+		.span6{
+	   height:auto;
+		}
+	
+	.name{
+		visibility: visible;
+		}
+		
+		.logo{
+		display: none;
+		width:0px;
+		}
+		
+		.nav > li > .linkToLogin{
+		margin-left: 1px;
+		}
+		
+		.dime_logo_small{
+		display: block;
+		}
+		
+		.bumper{
+		height:0px;
+		}
+		
+		.headerlogo{
+		
+		float: left;
+		visibility: visible;
+		width: 90px;
+		height:90px;
+		}
+		
+			#push{
+			
+			margin-left: 0px;
+		
+		}
+		
+			#header1{
+	margin-top: -30px;
+		}
+		
+			#register_push{
+		margin-bottom: 90px;
+		}
+		
+		#headfloat{
+		float: left;
+		}
+		
+		.iao-logo{
+	
+		position: relative;
+
+		}
+		
+	
+	
+	}
+	
+
+	

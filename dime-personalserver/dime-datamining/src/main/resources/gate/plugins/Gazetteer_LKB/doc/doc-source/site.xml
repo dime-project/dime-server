@@ -1,0 +1,22 @@
+<project>
+  <bannerLeft>
+    <name>Ontotext AD</name>
+    <src>http://ontotext.com/images/ontotext_logo.jpg</src>
+    <href>http://www.ontotext.com</href>
+  </bannerLeft>
+  <body>
+    <menu name="Large KB Gazetteer">
+      <item name="Overview" href="index.html"/>      
+	  <item name="Usage" href="usage.html" />	  
+	  <item name="Q &amp; A" href="general.html"/>
+	  <item name="GATE Compatibility" href="gate_compatibility.html" />	  
+	  <item name="GATE Gazetteer Feature Comparison" href="comparison.html" />
+	  <item name="Semantic Enrichment PR" href="semantic_encrichment_pr.html" />	
+	  <item name="Samples" href="samples.html" />
+    </menu>
+    <menu name="Developer Documentation">
+		<item name="Dictionary Lifecycle" href="dictionary_lifecycle.html" />
+    </menu>	
+    <menu ref="reports"/>	
+  </body>
+</project>

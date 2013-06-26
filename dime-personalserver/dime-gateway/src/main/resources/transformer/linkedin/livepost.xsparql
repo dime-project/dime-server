@@ -1,0 +1,44 @@
+declare namespace nco = "http://www.semanticdesktop.org/ontologies/2007/03/22/nco#";
+declare namespace nao = "http://www.semanticdesktop.org/ontologies/2007/08/15/nao#";
+declare namespace pimo = "http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#";
+declare namespace dlpo = "http://www.semanticdesktop.org/ontologies/2011/10/05/dlpo#";
+declare namespace xsd = "http://www.w3.org/2001/XMLSchema#";
+
+let $doc := doc("%doc%")
+
+let $status := $doc/person/current-share
+let $statusId := fn:replace($status/id, '-', '')
+
+return
+
+#Construct for the status message 
+    if (fn:not(($statusId)="")) 
+    then ({	
+		let $timestamp := $status/timestamp
+		let $statusMessage := $status/message	#changed xml 'comment' element to 'message'
+		 			  
+	    construct
+		{		   	
+			_:stm{data($statusId)} a dlpo:LivePost , dlpo:Status ;
+			nao:externalIdentifier {data($statusId)};
+			dlpo:timestamp {data($timestamp)}^^xsd:dateTime;
+			dlpo:textualContent {data($statusMessage)}; 	
+			nao:creator _:c{data($statusId)}. 
+			
+			{ 
+			   		let $userId := fn:replace($status/author/id,'-','')
+			   		let $name := $status/author/first-name
+				    let $surname := $status/author/last-name
+				    
+				    #Construct for the user's information 	          
+				    construct
+					{
+						_:c{data($statusId)} a nco:PersonContact ;
+				        nco:contactUID {data($userId)} ;
+				        nao:prefLabel {fn:concat(data($name)," ",data($surname))} .
+				    }
+		    } 
+		 }
+	 })
+	 else ()
+	 

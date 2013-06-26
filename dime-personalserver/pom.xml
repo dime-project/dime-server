@@ -1,0 +1,531 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>eu.dime</groupId>
+	<artifactId>dime-personalserver</artifactId>
+	<name>Digital.me Personal Server</name>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>pom</packaging>
+
+	<url>http://dime-project.eu</url>
+
+	<modules>
+		<module>dime-communications</module>
+		<module>dime-controllers</module>
+		<module>dime-gateway</module>
+		<module>dime-contextprocessor</module>
+		<module>dime-datamining</module>
+		<module>dime-storage</module>
+		<module>dime-semantic</module>
+		<module>dime-common</module>
+	</modules>
+
+	<properties>
+		<jvm.version>1.6</jvm.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<!-- Versions -->
+		<spring.version>3.0.5.RELEASE</spring.version>
+		<spring-security.version>3.0.5.RELEASE</spring-security.version>
+		<spring-social.version>1.0.2.RELEASE</spring-social.version>
+		<spring-social.security.crypto.version>3.1.0.RELEASE</spring-social.security.crypto.version>
+		<junit.version>4.8.1</junit.version>
+		<jersey.version>1.8</jersey.version>
+		<log4j.version>1.2.16</log4j.version>
+		<commons-logging.version>1.1.1</commons-logging.version>
+		<slf4j.version>1.6.1</slf4j.version>
+		<aspectj.version>1.6.11</aspectj.version>
+		<powermock.version>1.5</powermock.version>
+		<!-- Cobertura / Sonar properties -->
+		<cobertura.maxmem>256M</cobertura.maxmem>
+		<sonar.core.codeCoveragePlugin>cobertura</sonar.core.codeCoveragePlugin>
+		<sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
+		<!-- The destination file for the code coverage report has to be set to 
+			the same value in the parent pom and in each module pom. Then JaCoCo will 
+			add up information in the same report, so that, it will give the cross-module 
+			code coverage. -->
+		<sonar.jacoco.itReportPath>${project.build.directory}/jacoco/jacoco-it.exec</sonar.jacoco.itReportPath>
+		<sonar.language>java</sonar.language>
+	</properties>
+
+	<repositories>
+		<!-- MAin Repositories -->
+		<repository>
+			<id>central 2</id>
+			<name>Maven Repository Switchboard 2</name>
+			<url>http://repo2.maven.org/maven2</url>
+			<layout>default</layout>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+			<releases>
+				<updatePolicy>never</updatePolicy>
+			</releases>
+		</repository>
+		<repository>
+			<id>central 1</id>
+			<name>Maven Repository Switchboard 1</name>
+			<url>http://repo1.maven.org/maven2</url>
+			<layout>default</layout>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+			<releases>
+				<updatePolicy>never</updatePolicy>
+			</releases>
+		</repository>
+		<!-- Mirrors Repositories -->
+		<repository>
+			<id>ibiblio mirror</id>
+			<url>http://mirrors.ibiblio.org/pub/mirrors/maven2/</url>
+		</repository>
+		<repository>
+			<id>java.net-Public</id>
+			<name>Maven Java Net Snapshots and Releases</name>
+			<url>https://maven.java.net/content/groups/public/</url>
+		</repository>
+		<!-- Specific Repositories -->
+		<repository>
+			<id>sonatype-releases</id>
+			<name>Releases</name>
+			<url>https://oss.sonatype.org/content/repositories/releases/</url>
+		</repository>
+		<repository>
+			<id>griddynamics</id>
+			<name>griddynamics</name>
+			<url>https://nexus.griddynamics.net/nexus/content/repositories/svn-sonatype-flexmojos/</url>
+		</repository>
+		<repository>
+			<id>exoplatform</id>
+			<name>exoplatform</name>
+			<url>https://projects.exoplatform.org/content/groups/ci/</url>
+		</repository>
+		<repository>
+			<id>Codehaus</id>
+			<url>http://repository.codehaus.org</url>
+		</repository>
+		<repository>
+			<id>Codehaus.Snapshots</id>
+			<url>http://snapshots.repository.codehaus.org</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+		<!-- repositories for SmILE and DERI libraries -->
+		<repository>
+			<id>deri-mvn-repository</id>
+			<name>DERI Maven Repository</name>
+			<url>http://resources.smile.deri.ie/maven-repository/</url>
+			<snapshots>
+				<enabled>true</enabled>
+				<updatePolicy>always</updatePolicy>
+				<checksumPolicy>fail</checksumPolicy>
+			</snapshots>
+		</repository>
+		<repository>
+			<id>smile-maven2-snapshot-repository</id>
+			<name>Smile Maven2 Snapshot Repository</name>
+			<url>http://resources.smile.deri.ie/m2-snapshots/</url>
+			<snapshots>
+				<enabled>true</enabled>
+				<updatePolicy>always</updatePolicy>
+				<checksumPolicy>fail</checksumPolicy>
+			</snapshots>
+		</repository>
+	</repositories>
+
+	<pluginRepositories>
+		<pluginRepository>
+			<id>m2.java.net</id>
+			<name>Java.net Maven 2 Repository</name>
+			<url>http://download.java.net/maven/2</url>
+			<layout>default</layout>
+		</pluginRepository>
+		<pluginRepository>
+			<id>spring-maven-release</id>
+			<name>Spring Maven Release Repository</name>
+			<url>http://maven.springframework.org/release</url>
+		</pluginRepository>
+		<pluginRepository>
+			<id>spring-maven-milestone</id>
+			<name>Spring Maven Milestone Repository</name>
+			<url>http://maven.springframework.org/milestone</url>
+		</pluginRepository>
+		<pluginRepository>
+			<id>spring-roo-repository</id>
+			<name>Spring Roo Repository</name>
+			<url>http://spring-roo-repository.springsource.org/release</url>
+		</pluginRepository>
+	</pluginRepositories>
+
+	<scm>
+		<connection>scm:svn:https://subversion.deri.ie/digital_me/code/WP6/trunk/dime-personalserver/</connection>
+		<developerConnection>scm:svn:https://subversion.deri.ie/digital_me/code/WP6/trunk/dime-personalserver/</developerConnection>
+		<url>scm:svn:https://subversion.deri.ie/digital_me/code/WP6/trunk/dime-personalserver/</url>
+	</scm>
+
+	<build>
+		<!-- Filters for profiles -->
+		<filters>
+			<filter>src/main/filters/${env}.properties</filter>
+		</filters>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+				<includes>
+					<include>**/*.xml</include>
+					<include>**/*.txt</include>
+					<include>**/*.properties</include>
+				</includes>
+			</resource>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>false</filtering>
+				<excludes>
+					<exclude>**/*.xml</exclude>
+					<exclude>**/*.txt</exclude>
+					<exclude>**/*.properties</exclude>
+				</excludes>
+			</resource>
+		</resources>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.3.2</version>
+				<configuration>
+					<source>${jvm.version}</source>
+					<target>${jvm.version}</target>
+					<encoding>${project.build.sourceEncoding}</encoding>
+					<debug>${compilerInfoDebug}</debug>
+					<optimize>${compilerOptimize}</optimize>
+					<showWarnings>${compilerShowWarnings}</showWarnings>
+					<showDeprecation>${compilerShowDeprecation}</showDeprecation>
+					<verbose>${compilerVerbose}</verbose>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>2.8</version>
+				<configuration>
+					<show>private</show>
+					<nohelp>true</nohelp>
+				</configuration>
+			</plugin>
+
+			<!-- Unit Test Generation -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.14.1</version>
+				<dependencies>
+					<dependency>
+						<groupId>org.apache.maven.surefire</groupId>
+						<artifactId>surefire-junit47</artifactId>
+						<version>2.14.1</version>
+					</dependency>
+				</dependencies>
+				<configuration>
+					<encoding>UTF-8</encoding>
+					<argLine>-Xmx512m -XX:PermSize=256m</argLine>
+					<excludes>
+						<exclude>**/*TestIt.java</exclude>
+					</excludes>
+				</configuration>	
+				<executions>
+					<execution>
+						<id>unit-tests</id>
+						<phase>test</phase>
+						<goals>
+							<goal>test</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+			<!-- Integration test -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-failsafe-plugin</artifactId>
+				<version>2.14.1</version>
+				<dependencies>
+					<dependency>
+						<groupId>org.apache.maven.surefire</groupId>
+						<artifactId>surefire-junit47</artifactId>
+						<version>2.14.1</version>
+					</dependency>
+				</dependencies>
+				<configuration>
+					<encoding>UTF-8</encoding>
+					<reportsDirectory>${project.build.directory}/surefire-reports</reportsDirectory>
+					<argLine>${jacoco.agent.argLine}</argLine>
+					<includes>
+						<include>**/*TestIt.java</include>
+					</includes>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>integration-test</goal>
+							<goal>verify</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			
+			<!-- Cobertura -->
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>cobertura-maven-plugin</artifactId>
+				<version>2.5.2</version>
+				<configuration>
+					<instrumentation>
+						<excludes>
+							<exclude>eu/dime/commons/**/*.*</exclude>
+							<exclude>eu/dime/**/*Exception.*</exclude>
+							<exclude>eu/dime/**/*Job.*</exclude>
+						</excludes>
+						<ignores>
+							<ignore>eu.dime.commons.*</ignore>
+							<ignore>eu.dime.ps.storage.dto.*</ignore>
+							<ignore>eu.dime.ps.semmantic.model.*</ignore>
+						</ignores>
+					</instrumentation>
+					<check>
+						<haltOnFailure>false</haltOnFailure>
+					</check>
+					<outputDirectory> ${project.reporting.outputDirectory}/cobertura</outputDirectory>
+					<formats>
+						<format>html</format>
+						<format>xml</format>
+					</formats>
+				</configuration>
+				<executions>
+					<execution>
+						<phase>${cobertura.phase}</phase>
+						<goals>
+							<goal>clean</goal>
+							<goal>cobertura</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+ 			<!-- Jacoco -->
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>0.6.2.201302030002</version>
+				<configuration>
+					<propertyName>jacoco.agent.argLine</propertyName>
+					<!-- The destination file for the code coverage report has to be set 
+						to the same value in the parent pom and in each module pom. Then JaCoCo will 
+						add up information in the same report, so that, it will give the cross-module 
+						code coverage. -->
+					<destFile>${project.build.directory}/jacoco/jacoco-it.exec</destFile>
+					<dataFile>${project.build.directory}/jacoco/jacoco-it.exec</dataFile>
+				</configuration>
+				<executions>
+					<execution>
+						<id>agent</id>
+						<phase>${jacoco.pre.phase}</phase>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+						<configuration>
+						<includes><include>eu.dime.ps.*</include></includes>
+						<excludes><exclude>eu/dime/ps/semmantic/model/**/*.*</exclude></excludes>
+						<append>true</append>
+						</configuration>
+					</execution>
+					<execution>
+						<id>post-test</id>
+						<phase>${jacoco.post.phase}</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+			<!-- Tomcat 6 - see: pom.xml dime-communications -->
+			<plugin>
+				<groupId>org.apache.tomcat.maven</groupId>
+				<artifactId>tomcat6-maven-plugin</artifactId>
+				<version>2.0</version>
+			</plugin>
+			
+			
+
+		</plugins>
+	</build>
+
+	<dependencies>
+		<!-- Digital.me dependencies <dependency> <groupId>eu.dime</groupId> <artifactId>dime-edb</artifactId> 
+			<version>0.0.1-SNAPSHOT</version> <type>jar</type> <scope>compile</scope> 
+			</dependency> -->
+
+		<!-- General dependencies for standard applications -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${junit.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-all</artifactId>
+			<version>1.9.5</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.powermock</groupId>
+			<artifactId>powermock-mockito-release-full</artifactId>
+			<version>1.5</version>
+			<classifier>full</classifier>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- Logging -->
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>${log4j.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>${slf4j.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jcl-over-slf4j</artifactId>
+			<version>${slf4j.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>${slf4j.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-jdk14</artifactId>
+			<version>${slf4j.version}</version>
+		</dependency>
+
+		<!-- Spring dependencies -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+			<version>${spring.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>commons-logging</groupId>
+					<artifactId>commons-logging</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<version>${spring.version}</version>
+			<scope>test</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>commons-logging</groupId>
+					<artifactId>commons-logging</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<version>${spring.version}</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>commons-logging</artifactId>
+					<groupId>commons-logging</groupId>
+				</exclusion>
+			</exclusions>
+
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-aop</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-aspects</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-tx</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-beans</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+	</dependencies>
+
+	<profiles>
+		<!-- Default Profile -->
+		<profile>
+			<id>development</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+				<env>development</env>
+				<compilerInfoDebug>true</compilerInfoDebug>
+				<compilerOptimize>false</compilerOptimize>
+				<compilerShowDeprecation>true</compilerShowDeprecation>
+				<compilerVerbose>true</compilerVerbose>
+				<jacoco.pre.phase/>
+				<jacoco.post.phase/>
+				<cobertura.phase />
+			</properties>
+		</profile>
+		<!-- Cobertura Test profile -->
+		<profile>
+			<id>hudson</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<properties>
+				<env>development</env>
+				<compilerInfoDebug>false</compilerInfoDebug>
+				<compilerOptimize>false</compilerOptimize>
+				<compilerShowDeprecation>false</compilerShowDeprecation>
+				<compilerVerbose>false</compilerVerbose>
+				<jacoco.pre.phase>pre-integration-test</jacoco.pre.phase>
+				<jacoco.post.phase>post-integration-test</jacoco.post.phase>
+				<cobertura.phase>package</cobertura.phase>
+			</properties>
+		</profile>
+		<profile>
+			<id>deploy</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<properties>
+				<env>deploy</env>
+				<compilerInfoDebug>false</compilerInfoDebug>
+				<compilerOptimize>true</compilerOptimize>
+				<compilerShowDeprecation>false</compilerShowDeprecation>
+				<compilerVerbose>false</compilerVerbose>
+				<jacoco.pre.phase/>
+				<jacoco.post.phase/>
+				<cobertura.phase/>
+			</properties>
+		</profile>
+	</profiles>
+
+</project>

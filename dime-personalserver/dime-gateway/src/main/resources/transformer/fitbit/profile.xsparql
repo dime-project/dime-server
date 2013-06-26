@@ -1,0 +1,79 @@
+declare namespace nco = "http://www.semanticdesktop.org/ontologies/2007/03/22/nco#";
+declare namespace pimo = "http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#";
+declare namespace nao = "http://www.semanticdesktop.org/ontologies/2007/08/15/nao#";
+declare namespace nie = "http://www.semanticdesktop.org/ontologies/2007/01/19/nie#";
+declare namespace xsd = "http://www.w3.org/2001/XMLSchema#";
+declare namespace geo = "http://www.w3.org/2003/01/geo/wgs84_pos#";
+
+let $doc := doc("%doc%")
+
+let $persons := $doc/result/user
+
+return 
+ for $person in $persons
+     let $personId := $person/encodedId
+     let $summary := if ((fn:string-length($person/aboutMe)) > 0) then $person/aboutMe else ()
+     let $thumbnailUrl :=  if ((fn:string-length($person/avatar)) > 0) then $person/avatar else ()     
+     let $birthdate := if ((fn:string-length($person/dateOfBirth)) > 0) then $person/dateOfBirth else ()
+     let $displayName := if ((fn:string-length($person/displayName)) > 0) then $person/displayName else ()
+     let $fullname := if ((fn:string-length($person/fullName)) > 0) then $person/fullName else ()
+     let $gender := if ((fn:contains($person/gender,"FEMALE"))) then "female"
+	  				else if ((fn:contains($person/gender,"MALE"))) then "male"
+	  				else if ((fn:contains($person/gender,"NA"))) then "NA"
+	  				else ()    
+	 let $nickname := if ((fn:string-length($person/nickname)) > 0) then $person/nickname else ()	 
+	 let $city := if ((fn:string-length($person/city)) > 0) then $person/city else ()
+	 let $country := if ((fn:string-length($person/country)) > 0) then $person/country else ()
+	 let $state := if ((fn:string-length($person/state)) > 0) then $person/state else ()
+	               
+    #Construct for the user     	
+	construct
+	{  	
+	  _:c{data($personId)} a nco:PersonContact;
+	  nco:contactUID {data($personId)};
+	  nao:description {data($summary)};
+	  nao:prefSymbol {data($thumbnailUrl)};
+	  nco:gender nco:{data(if (fn:not(($gender)="NA")) then $gender else ())};
+	  nco:hasPersonName _:pn{data($personId)}.
+	  _:pn{data($personId)} a nco:PersonName;
+       	 nao:prefLabel {data($displayName)};
+	     nco:fullname {data($fullname)};
+	     nco:nickname {data($nickname)}.    
+     
+      #Construct for the birth date of the user  
+      {	 	
+    	 if ((fn:string-length($birthdate))>0)				    	
+		 then ({     
+	        let $counter := count($birthdate/preceding::*) + count($birthdate/ancestor::*)
+	        let $dob := fn:concat(data($birthdate),"T","00:00:00Z")
+	           
+	        construct
+	        {
+	       		_:bd{data($counter)} a nco:BirthDate;
+		  		nco:birthDate {data($dob)}^^xsd:date.  
+	       		_:c{data($personId)} nco:hasBirthDate _:bd{data($counter)}.          
+	        }    
+	     })
+	     else () 
+      }.
+      
+      #Construct for the address of the user
+      {   
+         #if ((fn:string-length($person/city) > 0) or (fn:string-length($person/country) > 0) or (fn:string-length($person/state) > 0))
+         if (($city) or ($country) or ($state))
+         then ({	      	
+		     let $counter := count($person/preceding::*) + count($person/ancestor::*)       
+		     construct
+		     {
+		         _:addr{data($counter)} a nco:PostalAddress;
+		       	 nco:locality {data($city)};
+		       	 nco:country {data($country)};
+		       	 nco:region {data($state)}.	      
+		       	 _:c{data($personId)} nco:hasPostalAddress _:addr{data($counter)}.       		      	        		              
+		     } 
+		})
+	    else ()   
+       }
+        
+    }
+    

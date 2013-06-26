@@ -1,0 +1,68 @@
+declare namespace nco = "http://www.semanticdesktop.org/ontologies/2007/03/22/nco#";
+declare namespace pimo = "http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#";
+declare namespace nao = "http://www.semanticdesktop.org/ontologies/2007/08/15/nao#";
+declare namespace nie = "http://www.semanticdesktop.org/ontologies/2007/01/19/nie#";
+declare namespace xsd = "http://www.w3.org/2001/XMLSchema#";
+declare namespace geo = "http://www.w3.org/2003/01/geo/wgs84_pos#";
+
+let $doc := doc("%doc%")
+
+let $persons :=$doc/o
+
+return 
+ for $person in $persons 
+     let $personId := fn:replace($person/id, '-', '')    
+     let $fullname := $person/name
+     let $nickname := $person/screen_name
+     let $location := $person/location	
+     let $photoUrl := $person/profile_image_url
+     let $websiteUrl := if (fn:not(($person/url)=""))
+     					then ($person/url)
+     					else ()
+     let $summary := if (fn:not(($person/description)=""))
+     					then (fn:normalize-space($person/description))
+     					else ()
+     let $interests := $person/a/e
+                  
+    #Construct for the user     	
+	construct
+	{  	
+	  _:c{data($personId)} a nco:PersonContact;
+	  nco:contactUID {data($personId)};
+	  nco:photo <{$photoUrl}>;	  
+	  nao:description {data($summary)};
+	  nco:url {data($websiteUrl)};
+	  nco:hasPersonName _:pn{data($personId)} .
+	  	_:pn{data($personId)} a nco:PersonName ;
+	    nco:fullname {data($fullname)};
+	    nco:nickname {data($nickname)}.	  
+	  
+	  #Construct for the interests (suggestions) of the user  
+      {
+      	 for $interest in $interests 
+      	 let $interestName := $interest/name
+      	 construct
+       	 {
+         	_:c{data($personId)} nco:hobby {data($interestName)};	      
+       	 }    
+      }.
+      
+      #Construct for the location of the user
+      {
+     	 if (fn:not(($location)="")) 
+	     then ({
+	         let $counter := count($location/preceding::*) + count($location/ancestor::*)
+	                  
+	         construct
+	         {
+	        	 _:loc{data($counter)} a nco:PostalAddress;
+	        	 nao:prefLabel {data($location)}.
+	       		 _:c{data($personId)} nco:hasPostalAddress _:loc{data($counter)};               
+	         } 
+	      })
+		  else ()           
+       }        
+              	
+     } 
+	  
+	

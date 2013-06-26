@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<atmosphere-handlers>
+	<atmosphere-handler context-root="/push" class-name="org.atmosphere.handler.ReflectorServletProcessor">
+		<property name="servletClass" value="com.sun.jersey.spi.container.servlet.ServletContainer" />
+	</atmosphere-handler>
+</atmosphere-handlers>

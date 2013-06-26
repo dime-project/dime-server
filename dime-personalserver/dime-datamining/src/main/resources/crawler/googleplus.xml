@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<crawler>
+	<adapter>GooglePlus</adapter>
+	<jobs>
+		<job>
+			<path>/profile/@me/@all</path>
+			<type>eu.dime.ps.semantic.model.nco.PersonContact</type>
+			<cron>0 0 0 * * ?</cron>
+		</job>
+		<job>
+			<path>/livepost/@me/@all</path>
+			<type>eu.dime.ps.semantic.model.dlpo.LivePost</type>
+			<cron>0 0/15 * * * ?</cron>
+		</job>
+	</jobs>
+</crawler>

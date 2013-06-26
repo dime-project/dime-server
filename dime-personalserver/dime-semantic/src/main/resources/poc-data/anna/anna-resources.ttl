@@ -1,0 +1,257 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix ppo: <http://vocab.deri.ie/ppo#> .
+@prefix nrl: <http://www.semanticdesktop.org/ontologies/2007/08/15/nrl#> .
+@prefix pimo: <http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#> .
+@prefix nao: <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#> .
+@prefix nie: <http://www.semanticdesktop.org/ontologies/2007/01/19/nie#> .
+@prefix ncal: <http://www.semanticdesktop.org/ontologies/2007/04/02/ncal#> . 
+@prefix nco: <http://www.semanticdesktop.org/ontologies/2007/03/22/nco#> .
+@prefix nso: <http://www.semanticdesktop.org/ontologies/2009/11/08/nso#> .
+@prefix nfo: <http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#> .
+@prefix dao: <http://www.semanticdesktop.org/ontologies/2011/10/05/dao#> .
+@prefix dlpo: <http://www.semanticdesktop.org/ontologies/2011/10/05/dlpo#> .
+@prefix dcon: <http://www.semanticdesktop.org/ontologies/2011/10/05/dcon#> .
+@prefix ddo: <http://www.semanticdesktop.org/2011/10/05/ontologies/ddo#> .
+
+@prefix urn: <urn:uuid:> .
+
+
+##################################
+### Data from the file crawler ###
+##################################
+
+urn:a000512 a nfo:FileDataObject ;
+	nfo:fileLastModified "2011-10-09T13:27:54.000+01:00"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
+	nfo:fileName "Anna" ;
+	nfo:belongsToContainer urn:a000513 .
+
+urn:a000513 a nfo:Folder .
+
+urn:a000512 nie:hasPart urn:a000514 .
+
+urn:a000514 a nfo:FileDataObject .
+
+urn:a000512 nie:hasPart urn:a000515 .
+
+urn:a000515 a nfo:FileDataObject .
+
+urn:a000512 a nie:DataObject , nfo:Folder ;
+	nie:rootElementOf urn:a000516 .
+
+urn:a000514 nfo:fileLastModified "2011-10-09T13:53:48.000+01:00"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
+	nfo:fileName "Media clipping" ;
+	nfo:belongsToContainer urn:a000512 ;
+	nie:hasPart urn:a000517 .
+
+urn:a000517 a nfo:FileDataObject .
+
+urn:a000514 a nie:DataObject , nfo:Folder .
+
+urn:a000517 nfo:fileLastModified "2011-10-09T13:53:48.000+01:00"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
+	nfo:fileName "Architecture Summercamp" ;
+	nfo:belongsToContainer urn:a000514 ;
+	nie:hasPart urn:a000518 .
+
+urn:a000518 a nfo:FileDataObject .
+
+urn:a000517 nie:hasPart urn:a000500 .
+
+urn:a000500 a nfo:FileDataObject .
+
+urn:a000517 a nie:DataObject , nfo:Folder .
+
+urn:a000500 nfo:fileLastModified "2011-09-16T13:32:54.000+01:00"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
+	nfo:fileName "elpais_20110524.jpg" ;
+	nfo:belongsToContainer urn:a000517 ;
+	nfo:fileSize "140582"^^<http://www.w3.org/2001/XMLSchema#long> ;
+	a nie:DataObject ;
+	nie:mimeType "image/jpeg" ;
+	a <http://www.semanticdesktop.org/ontologies/2007/05/10/nexif#Photo> .
+
+urn:a000515 nfo:fileLastModified "2011-09-19T08:20:40.000+01:00"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
+	nfo:fileName "Toronto Urban planning 2013-2020" ;
+	nfo:belongsToContainer urn:a000512 ;
+	nie:hasPart urn:a000519 .
+
+urn:a000519 a nfo:FileDataObject .
+
+urn:a000515 nie:hasPart urn:a000520 .
+
+urn:a000520 a nfo:FileDataObject .
+
+urn:a000515 a nie:DataObject , nfo:Folder .
+
+urn:a000519 nfo:fileLastModified "2011-10-09T13:53:35.000+01:00"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
+	nfo:fileName "Public transport systems" ;
+	nfo:belongsToContainer urn:a000515 ;
+	nie:hasPart urn:a000521 .
+
+urn:a000521 a nfo:FileDataObject .
+
+urn:a000519 nie:hasPart urn:a000502 .
+
+urn:a000502 a nfo:FileDataObject .
+
+urn:a000519 a nie:DataObject , nfo:Folder .
+
+urn:a000502 nfo:fileLastModified "2011-09-16T11:36:36.000+01:00"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
+	nfo:fileName "construction_plan_university_building.jpg" ;
+	nfo:belongsToContainer urn:a000519 ;
+	nfo:fileSize "235297"^^<http://www.w3.org/2001/XMLSchema#long> ;
+	a nie:DataObject ;
+	nie:mimeType "image/jpeg" ;
+	<http://www.semanticdesktop.org/ontologies/2007/05/10/nexif#height> "569" ;
+	<http://www.semanticdesktop.org/ontologies/2007/05/10/nexif#width> "842" ;
+	a <http://www.semanticdesktop.org/ontologies/2007/05/10/nexif#Photo> .
+
+urn:a000520 nfo:fileLastModified "2011-10-09T13:53:16.000+01:00"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
+	nfo:fileName "Social studies" ;
+	nfo:belongsToContainer urn:a000515 ;
+	nie:hasPart urn:a000522 .
+
+urn:a000522 a nfo:FileDataObject .
+
+urn:a000520 nie:hasPart urn:a000501 .
+
+urn:a000501 a nfo:FileDataObject .
+
+urn:a000520 a nie:DataObject , nfo:Folder .
+
+urn:a000501 nfo:fileLastModified "2011-09-16T13:55:48.000+01:00"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
+	nfo:fileName "sociodemographic_evolution_2012-2018.dot" ;
+	nfo:belongsToContainer urn:a000520 ;
+	nfo:fileSize "183808"^^<http://www.w3.org/2001/XMLSchema#long> ;
+	a nie:DataObject ;
+	nie:mimeType "application/vnd.ms-word" ;
+	nie:generator "Microsoft Office Word" ;
+	nco:creator urn:a000523 .
+
+urn:a000523 a nco:Contact ;
+	nco:fullname "Fabian Hermann" .
+
+urn:a000501 nco:contributor urn:a000524 .
+
+urn:a000524 a nco:Contact ;
+	nco:fullname "fhermann" .
+
+urn:a000501 nie:contentCreated "2011-01-27T16:51:00.000Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
+	nie:contentLastModified "2011-01-27T16:58:00.000Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
+	<http://www.semanticdesktop.org/ontologies/2009/10/06/aperture_nie_extensions#contentLastPrinted> "2011-01-27T16:41:00.000Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
+	nie:version "6" ;
+	nfo:characterCount "2303"^^<http://www.w3.org/2001/XMLSchema#integer> ;
+	nfo:wordCount "365"^^<http://www.w3.org/2001/XMLSchema#integer> ;
+	<http://www.semanticdesktop.org/ontologies/2009/10/06/aperture_nie_extensions#template> "dime D00.00 --TEMPLATE.dot" ;
+	nfo:lineCount "19"^^<http://www.w3.org/2001/XMLSchema#integer> ;
+	nie:plainTextContent """digital.meIntegrated digital.me Userware for the Intelligent, Intuitive, and Trust-Enhancing Management of the User�s Personal Information Sphere in Digital and Social EnvironmentsProject ID: 257787Accompanying Report to Deliverable D0x.xx <title>
+<subtilte>
+keywords: <keywords>;
+Date:DD/MM/YYYYAuthors:<author> (<partner>);  Contributors:Status:<internal deliverable draft / internal deliverable / draft / revised draft / final>Dissemination level:<...>Nature:<...>Workpackage:WP # <title>Related Tasks: Task # <title>Task # <title>Task # <title>
+
+
+Version History
+VersionDateEditorChange descriptionDraftDD/MM/YYYYxxxdraft version, xxx
+
+
+
+
+Table of Contents 
+Table of Contents	2
+1	Introduction	3
+2	Section title	4
+3	heading 1	5
+3.1	heading 2	5
+3.1.1	heading 3	5
+3.1.1.1	heading 4	5
+3.1.1.1.1	heading 5	5
+heading 6	5
+heading 7	5
+4	References	6
+5	Appendix	7
+ Introduction
+<a brief introduction shall guide the reader to the topic of the report. This may include
+brief WP or task description, 
+goals and purpose of the deliverable and the described work
+scientific state-of-the-art>
+
+Section title
+Please check on the Wiki the quality guidelines for writing deliverables
+heading 1
+heading 2
+heading 3
+heading 4
+heading 5
+heading 6�
+heading 7
+for text paragraph format �dimetext� 
+for lists use paragraph format �dimelist� 
+for lists use paragraph format �dimelist� 
+for lists use paragraph format �dimelist� 
+
+for indented text use �dime-indented�
+
+for figure titles use pagraph format �dime-figure-title�a asdfasdf asdfasdf asdfasdfasdf
+for table titles use pagraph format �dime-table-title asdfasdf asdf asdf asdf asdfasdf asdfasdf 
+headingheadingtexttexttextReferences
+For References use pagraph �dime-reference�
+Palmer, N., Kemp, R., Kielmann, T., and Bal, H. 2009. Ibis for mobility: solving challenges of mobile computing using grid techniques. In Proceedings of the 10th Workshop on Mobile Computing Systems and Applications (Santa Cruz, California, February 23 - 24, 2009). HotMobile '09. ACM, New York, NY, 1-6
+Appendix
+<used materials shall be included in the appendix; this may cover e.g. 
+scientific publications
+dissemination materials
+used evaluation materials (e.g.questionnaires)>
+
+
+
+
+
+
+
+
+
+digital.me Collaborative Project (STREP) 257787	Deliverable D00.00
+
+
+Page   of 8
+
+
+digital.me Collaborative Project (STREP) 257787	Accompanying Report to Deliverable D01.01 and D01.02""" ;
+	a nfo:PaginatedTextDocument .
+
+
+################################################
+### PIMO resources for the file crawler data ###
+################################################
+
+urn:a000400
+	pimo:groundingOccurrence urn:a000501 ;
+	pimo:isDefinedBy urn:a000026 ;
+	a pimo:Thing ;
+	nao:prefLabel "sociodemographic_evolution_2012-2018" ;
+	nao:privacyLevel "3"^^xsd:double ;
+	nso:sharedWith 	urn:a000030 ,
+					urn:a000010 ,
+					urn:a000031 .
+
+urn:a000401
+	pimo:groundingOccurrence urn:a000502 ;
+	pimo:isDefinedBy urn:a000026 ;
+	a pimo:Thing ;
+	nao:privacyLevel "0"^^xsd:double ;
+	nao:prefLabel "construction_plan_university_building" ;
+	nso:sharedWith 	urn:a000029 ,
+				 	urn:a000032 ,
+				 	urn:a000033 .
+
+urn:a000402
+	pimo:groundingOccurrence urn:a000500 ;
+	pimo:isDefinedBy urn:a000026 ;
+	a pimo:Thing ;
+	nao:privacyLevel "5"^^xsd:double ;
+	nao:prefLabel "elpais_20110524" ;
+	nso:sharedWith 	urn:a000403 ,
+					urn:a000010 ,
+				 	urn:a000034 .

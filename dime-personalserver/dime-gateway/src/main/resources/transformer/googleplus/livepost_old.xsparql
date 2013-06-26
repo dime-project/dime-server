@@ -1,0 +1,106 @@
+declare namespace nco = "http://www.semanticdesktop.org/ontologies/2007/03/22/nco#";
+declare namespace nao = "http://www.semanticdesktop.org/ontologies/2007/08/15/nao#";
+declare namespace pimo = "http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#";
+declare namespace dlpo = "http://www.semanticdesktop.org/ontologies/2011/10/05/dlpo#";
+declare namespace geo = "http://www.w3.org/2003/01/geo/wgs84_pos#";
+declare namespace xsd = "http://www.w3.org/2001/XMLSchema#";
+
+let $doc := doc("%doc%")
+
+let $liveposts := $doc/response/items/e
+
+return 
+
+  if (fn:exists($liveposts))	
+  then ({
+  
+	for $livepost in $liveposts
+	      
+    	let $livepostId := $livepost/id
+		let $timestamp := $livepost/published
+		let $content := $livepost/title
+		let $post := if (fn:exists($livepost/object/attachments/e/objectType))
+					 then ("LivePost")
+					 else ("Status")
+		let $attachment := $livepost/object/attachments/e		
+										 		
+		#Construct for the LivePost		  
+	    construct
+		{		   	
+			_:lvp{data($livepostId)} a dlpo:LivePost , dlpo:{data($post)} ;
+			nao:externalIdentifier {data($livepostId)};
+			dlpo:timestamp {data($timestamp)}^^xsd:dateTime;
+			dlpo:textualContent {data($content)}.	
+			
+			#Construct for the gender of the user  
+	        {	 	
+	    	   if (($post)="LivePost") 			    	
+			   then ({     
+		          let $livepostType := if (($livepost/verb="post") and ($attachment/objectType="photo")) then "ImagePost"
+	  				  				   else if (($livepost/verb="post") and ($attachment/objectType="video")) then "VideoPost"
+	  				  				   else if (($livepost/verb="checkin") and ($attachment/objectType="place")) then "Checkin"
+	  				  				   else if (($livepost/verb="post") and ($attachment/objectType="article")) then "WebDocumentPost" 
+	  				  				   else ( "Status" )	
+	  			  let $attachmentContent := $attachment/content
+	  			  let $attachmentDisplayName := $attachment/displayName
+	  			  let $attachmentUrl := $attachment/url  		
+	  			  let $statusId	 := count($livepost/preceding::*) + count($livepost/ancestor::*)
+	  			  let $postId	 := count($attachment/preceding::*) + count($attachment/ancestor::*)
+	  			  
+		          construct		        
+		          {
+		       		  _:lvp{data($livepostId)} dlpo:isComposedOf _:stm{data($statusId)}.
+		       		  _:stm{data($statusId)} a dlpo:LivePost , dlpo:Status ;
+		       		    nao:externalIdentifier {data($statusId)};
+		       		  	dlpo:textualContent {data($content)}.
+		       		  _:lvp{data($livepostId)} dlpo:isComposedOf _:lvt{data($postId)}.
+		       		  _:lvt{data($postId)} a dlpo:LivePost , dlpo:{data($livepostType)};
+		       		    nao:externalIdentifier {data($postId)};
+		       		  	nao:prefLabel {data(if ($livepostType="ImagePost") then ($attachmentContent) else ($attachmentDisplayName))};
+		       		  	nao:description {data(if ($livepostType="ImagePost") then ($attachmentDisplayName) else ($attachmentContent))};
+		       		  	dlpo:definingResource {data($attachmentUrl)}.
+		       		  	{
+			       		  	if (($livepostType)="Checkin")
+			       		  	then ({		     		  	
+			       		  		let $geocode := fn:tokenize($livepost/geocode," ")
+		  			  			let $address := $livepost/address
+		  			  			let $placeName := $livepost/placeName
+			       		  		
+			       		  		construct
+			       		  		{
+			       		  			_:lvt{data($postId)} dlpo:relatedResource _:loc{data($postId)}.
+			       		  			_:loc{data($postId)} a pimo:Location;		       		  				
+			       		  				nao:prefLabel {data($placeName)};
+			       		  				nao:description {data(fn:concat($placeName,", ",$address))}.
+			       		  			_:loc{data($postId)} a geo:Point;
+				    					geo:lat {data($geocode[1])};
+				    					geo:long {data($geocode[2])}.	       		  		
+			       		  		}
+			       		  	})
+			       		  	else ()	    
+			       		  	}   		  		       			    
+		          }    
+		       }) 
+		       else () 
+	        }.  		
+			
+			#Construct for the user of a LivePost   		
+			{ 
+			   		let $userId := $livepost/actor/id   
+			   		let $userFullname := $livepost/actor/displayName  	   		
+			   					   		      
+				    #Construct for the user's information 	          
+				    construct
+					{
+						_:lvp{data($livepostId)} nao:creator _:c{data($userId)}.	
+						_:c{data($userId)} a nco:PersonContact;   
+				        nco:contactUID {data($userId)};
+				        nco:hasName _:name{data($userId)} .
+				        	_:name{data($userId)} a nco:Name ;
+				            nao:prefLabel {data($userFullname)}.     			        				   
+				    }
+		    }	   	    	   
+		}
+  })
+  else ()
+				 

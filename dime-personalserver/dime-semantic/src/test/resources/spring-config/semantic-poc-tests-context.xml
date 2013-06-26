@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd">
+	
+	<context:annotation-config/>
+
+ 	<!-- REPOSITORIES & TRIPLE STORE -->
+	
+	<bean id="repositoryFactory"
+		class="eu.dime.ps.semantic.rdf.impl.SesameMemoryRepositoryFactory"/>
+
+ 	<bean id="repository"
+ 		factory-bean="repositoryFactory"
+ 		factory-method="get">
+ 		<constructor-arg value="12345"/>
+ 	</bean>
+ 	
+ 	<!-- sesame native repository -->
+ 	<!-- bean id="repository"
+ 		factory-bean="repositoryFactory"
+ 		factory-method="getSesameNativeRepository">
+ 		<constructor-arg>
+ 			<bean class="java.io.File">
+ 				<constructor-arg value="/tmp/dime/spring-test"/>
+ 			</bean>
+ 		</constructor-arg>
+ 	</bean -->
+ 	
+ 	<!-- sesame native repository with specific indexes -->
+ 	<!-- bean id="repository"
+ 		factory-bean="repositoryFactory"
+ 		factory-method="getSesameNativeRepository">
+ 		<constructor-arg>
+ 			<bean class="java.io.File">
+ 				<constructor-arg value="/tmp/dime/spring-test"/>
+ 			</bean>
+ 		</constructor-arg>
+ 		<constructor-arg value="spoc,posc"/>
+ 	</bean -->
+ 	
+ 	<!-- virtuoso repository -->
+ 	<!-- bean id="repository"
+ 		factory-bean="repositoryFactory"
+ 		factory-method="getVirtuosoRepository">
+ 		<constructor-arg value="jdbcUrl"/>
+ 		<constructor-arg value="username"/>
+ 		<constructor-arg value="password"/>
+ 	</bean -->
+ 	 	
+	<bean id="modelFactory"
+		class="eu.dime.ps.semantic.model.ModelFactory">
+	</bean>
+
+	<bean id="tripleStore"
+		class="ie.deri.smile.rdf.impl.TripleStoreImpl">
+ 		<constructor-arg value="12345"/>
+		<constructor-arg><ref bean="repository"/></constructor-arg>
+	</bean>
+
+	<bean id="resourceStore"
+		class="eu.dime.ps.semantic.rdf.impl.ResourceStoreImpl">
+		<constructor-arg><ref bean="tripleStore"/></constructor-arg>
+	</bean>
+
+	<bean id="searcher"
+		class="eu.dime.ps.semantic.search.impl.SparqlSearcher">
+		<constructor-arg><ref bean="tripleStore"/></constructor-arg>
+	</bean>
+
+</beans>

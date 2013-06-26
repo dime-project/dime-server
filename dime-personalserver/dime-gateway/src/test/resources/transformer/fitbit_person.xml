@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<result>
+    <friends>
+        <friend>
+            <user>
+                <aboutMe>Strategist and technology enthusiast.</aboutMe>
+				<avatar>http://www.fitbit.com/images/profile/defaultProfile_100_female.gif</avatar>
+				<city>Galway</city>
+				<country>IE</country>
+				<dateOfBirth>1977-05-12</dateOfBirth>
+				<displayName>Anna Alf.</displayName>
+				<distanceUnit>en_US</distanceUnit>
+				<encodedId>23K9KQ</encodedId>
+				<foodsLocale>en_US</foodsLocale>
+				<fullName>Anna Alford</fullName>
+				<gender>FEMALE</gender>
+				<glucoseUnit>METRIC</glucoseUnit>
+				<height>165.10000000000002</height>
+				<heightUnit>en_US</heightUnit>
+				<locale>en_GB</locale>
+				<memberSince>2012-11-08</memberSince>
+				<nickname>Annie</nickname>
+				<offsetFromUTCMillis>0</offsetFromUTCMillis>
+				<strideLengthRunning>0</strideLengthRunning>
+				<strideLengthWalking>0</strideLengthWalking>
+				<timezone>Europe/London</timezone>
+				<waterUnit>METRIC</waterUnit>
+				<weight>56</weight>
+				<weightUnit>METRIC</weightUnit>
+            </user>
+        </friend>
+        <friend>
+            <user>
+                <aboutMe/>
+                <avatar>http://www.fitbit.com/images/profile/defaultProfile_100_male.gif</avatar>
+                <city />
+                <country/>
+                <dateOfBirth/>
+                <displayName>Fitbit U.</displayName>
+                <encodedId>2246K9</encodedId>
+                <fullName>Fitbit User</fullName>
+                <gender>NA</gender>
+                <height>190.7</height>
+                <nickname/>
+                <offsetFromUTCMillis>14400000</offsetFromUTCMillis>
+                <state/>
+                <strideLengthRunning>0</strideLengthRunning>
+                <strideLengthWalking>0</strideLengthWalking>
+                <timezone>Europe/Moscow</timezone>
+                <weight>0</weight>
+            </user>
+        </friend>
+    </friends>
+</result>

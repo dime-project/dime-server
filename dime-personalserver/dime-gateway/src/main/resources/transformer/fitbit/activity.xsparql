@@ -1,0 +1,60 @@
+declare namespace nco = "http://www.semanticdesktop.org/ontologies/2007/03/22/nco#";
+declare namespace pimo = "http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#";
+declare namespace nao = "http://www.semanticdesktop.org/ontologies/2007/08/15/nao#";
+declare namespace nie = "http://www.semanticdesktop.org/ontologies/2007/01/19/nie#";
+declare namespace xsd = "http://www.w3.org/2001/XMLSchema#";
+declare namespace geo = "http://www.w3.org/2003/01/geo/wgs84_pos#";
+declare namespace dpo = "http://www.semanticdesktop.org/ontologies/2011/10/05/dpo#";
+declare namespace dcon = "http://www.semanticdesktop.org/ontologies/2011/10/05/dcon#";
+declare namespace fitbit = "http://www.fitbit.com/activities#";
+
+let $doc := doc("%doc%")
+
+let $activities := $doc/recentActivities/loggedActivityReference
+
+return 
+ for $activity in $activities
+     let $activityId := $activity/activityId
+     let $calories := $activity/calories
+     let $description := if ((fn:string-length($activity/description)) > 0) then $activity/description else ()
+     let $distance := $activity/distance
+     let $duration := $activity/duration
+     let $name := $activity/name
+      
+     let $activityName := if ($activity/name="Shopping") then "Shopping"
+	  				  else if ($activity/name="Sleeping") then "Sleeping"
+	  				  else if ($activity/name="Bicycling") then "Bicycling"
+	  				  else if ($activity/name="Running") then "Running"
+	  				  else if ($activity/name="Swimming") then "Swimming"
+	  				  else if ($activity/name="Walking") then "Walking"
+	  				  else if ($activity/name="Squash") then "SportActivity"
+	  				  else if ($activity/name="Soccer, casual, general") then "SportActivity"
+	  				  else if ($activity/name="Riding in a bus") then "RidingInABus"
+	  				  else (fn:replace($activity/name,"[, ;]",""))	
+	  				    
+	 let $activity := if ($name="Shopping") then "OtherActivity"
+	 				  else if ($name="Shopping") then "OtherActivity"
+	 				  else if ($name="Sleeping") then "OtherActivity"
+	 				  else if ($name="Bicycling") then "OtherActivity"
+	 				  else if ($name="Running") then "OtherActivity"
+	 				  else if ($name="Swimming") then "OtherActivity"
+	 				  else if ($name="Walking") then "OtherActivity"
+	 				  else if ($name="SportActivity") then "OtherActivity"
+	 				  else if ($name="RidingInABus") then "Travelling"
+	 				  else ("Activity")
+	 				  
+	 let $uri := if ($activity = "Activity") then "fitbit"
+	 		     else ("dpo")
+                   
+    #Construct for the activity	
+	construct
+	{  	
+	  {data($uri)}:{data($activityName)} a dpo:Activity , dpo:{data($activity)};
+	  nao:externalIdentifier {data($activityId)};
+	  nao:prefLabel {data($name)};
+	  nao:description {data($description)};
+	  dcon:caloriesExpended {data($calories)}^^xsd:nonNegativeInteger;
+	  dcon:distanceCovered {data($distance)}^^xsd:nonNegativeInteger;
+	  dcon:duration {data($duration)}^^xsd:nonNegativeInteger.        
+    }
+    

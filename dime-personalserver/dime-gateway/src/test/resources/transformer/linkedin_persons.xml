@@ -1,0 +1,5700 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<connections total="71">
+  <person>
+    <id>g_xvPyW6QW</id>
+    <first-name>Puja</first-name>
+    <last-name>Abbassi</last-name>
+    <location>
+      <name>Cologne Area, Germany</name>
+    </location>
+    <picture-url>http://media.linkedin.com/mpr/mprx/0_527Sxe0v9KDU6TlfLwm-xI0JnPeU6XrfFDU-xIuWWnywJ8F7doxTAw4bZjHk5iAikfSPKuO0Rf3Q</picture-url>
+    <positions total="8">
+      <position>
+        <id>131595516</id>
+        <title>PhD Student, Researcher</title>
+        <summary>- IT assisted Security in (Food) Supply Chains
+- Influence of Real Life Social Networks on Startup Performance
+- Other SCM or SNA related projects</summary>
+        <start-date>
+          <year>2010</year>
+          <month>8</month>
+        </start-date>
+        <is-current>true</is-current>
+        <company>
+          <id>1970046</id>
+          <name>Department of Information Systems and Information Management, Prof. Dr. Detlef Schoder, University</name>
+          <type>Educational Institution</type>
+          <industry>Research</industry>
+        </company>
+      </position>
+      <position>
+        <id>182983579</id>
+        <title>Associate Researcher</title>
+        <summary>Working on a project for GLORAD (glorad.org) researching internationalization of scientific journals</summary>
+        <start-date>
+          <year>2010</year>
+          <month>8</month>
+        </start-date>
+        <is-current>true</is-current>
+        <company>
+          <id>940276</id>
+          <name>Tongji University</name>
+          <type>Educational Institution</type>
+          <industry>Electrical/Electronic Manufacturing</industry>
+        </company>
+      </position>
+      <position>
+        <id>36619137</id>
+        <title>Teacher</title>
+        <summary>Teacher for Chinese Gongfu and Taiji</summary>
+        <start-date>
+          <year>2004</year>
+          <month>4</month>
+        </start-date>
+        <is-current>true</is-current>
+        <company>
+          <name>Wan Fu Cologne</name>
+          <industry>Sports</industry>
+        </company>
+      </position>
+      <position>
+        <id>73501351</id>
+        <title>Associate Researcher</title>
+        <summary>Working on a project for GLORAD (glorad.org) researching internationalization of scientific journals</summary>
+        <start-date>
+          <year>2009</year>
+          <month>4</month>
+        </start-date>
+        <end-date>
+          <year>2010</year>
+          <month>8</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <id>20289</id>
+          <name>Peking University</name>
+          <type>Educational Institution</type>
+          <industry>Research</industry>
+        </company>
+      </position>
+      <position>
+        <id>36619245</id>
+        <title>IT Freelancer</title>
+        <summary></summary>
+        <start-date>
+          <year>2007</year>
+          <month>10</month>
+        </start-date>
+        <end-date>
+          <year>2009</year>
+          <month>6</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <name>Niku GmbH</name>
+          <industry>Architecture &amp; Planning</industry>
+        </company>
+      </position>
+      <position>
+        <id>35391961</id>
+        <title>Student Assistant</title>
+        <summary>Fields of Work:
+- Social Network Analysis
+- ERP Systems
+- ”Shaping the Future of the Newspaper” (www.medieninnovation.com)</summary>
+        <start-date>
+          <year>2007</year>
+          <month>4</month>
+        </start-date>
+        <end-date>
+          <year>2009</year>
+          <month>4</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <id>15189</id>
+          <name>University of Cologne</name>
+          <type>Educational Institution</type>
+          <industry>Research</industry>
+        </company>
+      </position>
+      <position>
+        <id>36619335</id>
+        <title>Consultant</title>
+        <summary>Wrote a business plan and recommendation for founding a new BSU for a German telecommunication association for support/production of asterisk* based PBX</summary>
+        <start-date>
+          <year>2005</year>
+          <month>4</month>
+        </start-date>
+        <end-date>
+          <year>2005</year>
+          <month>7</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <name>OSCAR GmbH</name>
+          <size>11-50 employees</size>
+          <industry>Management Consulting</industry>
+        </company>
+      </position>
+      <position>
+        <id>43068252</id>
+        <title>Web-Developer/Trendscout</title>
+        <summary>- Developement of modules (statistics, rss-feed, etc.) to the job-crawler wimmi.de
+- Ranking of important &quot;media-cities&quot; in Germany for a well known German finance magazine</summary>
+        <start-date>
+          <year>2004</year>
+          <month>5</month>
+        </start-date>
+        <end-date>
+          <year>2004</year>
+          <month>10</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <name>empirica Delasasse</name>
+          <size>11-50 employees</size>
+          <industry>Internet</industry>
+        </company>
+      </position>
+    </positions>
+    <phone-numbers total="1">
+      <phone-number>
+        <phone-type>mobile</phone-type>
+        <phone-number>+491799120593</phone-number>
+      </phone-number>
+    </phone-numbers>
+    <im-accounts total="1">
+      <im-account>
+        <im-account-type>skype</im-account-type>
+        <im-account-name>puja108</im-account-name>
+      </im-account>
+    </im-accounts>
+    <date-of-birth>
+      <year>1982</year>
+      <month>8</month>
+      <day>29</day>
+    </date-of-birth>
+    <main-address>Cologne, Germany</main-address>
+    <interests>social network analysis, supply chain management, knowledge management, enterprise 2.0, communication, languages, travelling, web 2.0, traditional chinese martial arts, traditional chinese medicine</interests>
+  </person>
+  <person>
+    <id>X7VHaaRjyo</id>
+    <first-name>Isaac</first-name>
+    <last-name>Agudo</last-name>
+    <location>
+      <name>Málaga Area, Spain</name>
+    </location>
+    <picture-url>http://media.linkedin.com/mpr/mprx/0_r7IZBnukEXntefspKuUFBzy4e3_jEERptD0FBzDZBXBDva2yyWRNJvMnQ7iGdSVrAudQZt1E93hZ</picture-url>
+    <positions total="4">
+      <position>
+        <id>123061856</id>
+        <title>Assitant Professor</title>
+        <summary></summary>
+        <start-date>
+          <year>2010</year>
+          <month>4</month>
+        </start-date>
+        <is-current>true</is-current>
+        <company>
+          <id>333206</id>
+          <name>University of Malaga</name>
+          <type>Educational Institution</type>
+          <industry>Higher Education</industry>
+        </company>
+      </position>
+      <position>
+        <id>102569167</id>
+        <title>Assitant Professor</title>
+        <summary></summary>
+        <start-date>
+          <year>2009</year>
+          <month>10</month>
+        </start-date>
+        <end-date>
+          <year>2010</year>
+          <month>4</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <id>333206</id>
+          <name>University of Malaga</name>
+          <type>Educational Institution</type>
+          <industry>Higher Education</industry>
+        </company>
+      </position>
+      <position>
+        <id>59451175</id>
+        <title>Post. Doc. Researcher</title>
+        <summary></summary>
+        <start-date>
+          <year>2008</year>
+          <month>7</month>
+        </start-date>
+        <end-date>
+          <year>2009</year>
+          <month>11</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <id>333206</id>
+          <name>University of Malaga</name>
+          <type>Educational Institution</type>
+          <industry>Higher Education</industry>
+        </company>
+      </position>
+      <position>
+        <id>59451462</id>
+        <title>Ph.D. Student</title>
+        <summary></summary>
+        <start-date>
+          <year>2004</year>
+        </start-date>
+        <end-date>
+          <year>2007</year>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <id>333206</id>
+          <name>University of Malaga</name>
+          <type>Educational Institution</type>
+          <industry>Higher Education</industry>
+        </company>
+      </position>
+    </positions>
+    <phone-numbers total="0" />
+    <im-accounts total="0" />
+  </person>
+  <person>
+    <id>hT25mf0-Pq</id>
+    <first-name>Mousa</first-name>
+    <last-name>Alfalayleh</last-name>
+    <location>
+      <name>Jordan</name>
+    </location>
+    <positions total="1">
+      <position>
+        <id>173837322</id>
+        <title>Chair of The Computer Information System Department</title>
+        <is-current>true</is-current>
+        <company>
+          <name>AHU</name>
+          <industry>Education Management</industry>
+        </company>
+      </position>
+    </positions>
+    <phone-numbers total="0" />
+    <im-accounts total="0" />
+  </person>
+  <person>
+    <id>JcAV8Ba_GE</id>
+    <first-name>Dirk</first-name>
+    <last-name>Balfanz</last-name>
+    <location>
+      <name>Mannheim Area, Germany</name>
+    </location>
+    <picture-url>http://media.linkedin.com/mpr/mprx/0_cDHk-hOs5ro-emlrvdfR-COEFnxxHITrv2pR-_7s4Pw7c7nKUI4eyiRNd408w28p9aosjXgUGKRe</picture-url>
+    <positions total="5">
+      <position>
+        <id>210452238</id>
+        <title>Head of Business Unit</title>
+        <summary></summary>
+        <start-date>
+          <year>2011</year>
+          <month>7</month>
+        </start-date>
+        <is-current>true</is-current>
+        <company>
+          <id>6701</id>
+          <name>CAS Software AG / CAS Education</name>
+          <type>Privately Held</type>
+          <industry>Computer Software</industry>
+        </company>
+      </position>
+      <position>
+        <id>22011397</id>
+        <title>Head of Innovation and Research</title>
+        <summary></summary>
+        <start-date>
+          <year>2006</year>
+          <month>11</month>
+        </start-date>
+        <end-date>
+          <year>2011</year>
+          <month>6</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <id>6701</id>
+          <name>CAS Software AG</name>
+          <type>Privately Held</type>
+          <industry>Computer Software</industry>
+        </company>
+      </position>
+      <position>
+        <id>42771802</id>
+        <title>Head of Department</title>
+        <summary></summary>
+        <start-date>
+          <year>2001</year>
+        </start-date>
+        <end-date>
+          <year>2006</year>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <name>ZGDV - Computer Graphics Center</name>
+          <industry>Research</industry>
+        </company>
+      </position>
+      <position>
+        <id>42771916</id>
+        <title>Researcher</title>
+        <start-date>
+          <year>1996</year>
+        </start-date>
+        <end-date>
+          <year>2000</year>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <id>5642</id>
+          <name>Fraunhofer IGD</name>
+          <size>51-200 employees</size>
+          <type>Nonprofit</type>
+          <industry>Research</industry>
+        </company>
+      </position>
+      <position>
+        <id>42772057</id>
+        <title>Software Engineer</title>
+        <start-date>
+          <year>1993</year>
+        </start-date>
+        <end-date>
+          <year>1996</year>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <id>9094</id>
+          <name>Bosch Telecom</name>
+          <size>10,001+ employees</size>
+          <type>Privately Held</type>
+          <industry>Telecommunications</industry>
+        </company>
+      </position>
+    </positions>
+    <phone-numbers total="0" />
+    <im-accounts total="0" />
+  </person>
+  <person>
+    <id>JiklbKi1Mj</id>
+    <first-name>Thomas</first-name>
+    <last-name>Barth</last-name>
+    <location>
+      <name>Hagen Area, Germany</name>
+    </location>
+    <positions total="2">
+      <position>
+        <id>133704854</id>
+        <title>Senior Consultant, Member of the Scientific Advisory Board</title>
+        <summary>Topics: SOA, BPM, national and international knowledge transfer between Academia and Industry</summary>
+        <start-date>
+          <year>2006</year>
+        </start-date>
+        <is-current>true</is-current>
+        <company>
+          <name>Brockhaus GmbH</name>
+          <industry>Information Technology and Services</industry>
+        </company>
+      </position>
+      <position>
+        <id>55083485</id>
+        <title>Visiting Lecturer, Project Lead, Researcher</title>
+        <summary>Topics: SOA, Security in Service- and Process-oriented Systems, Grid/Cloud Computing, Distributed Applications in Simulation-based Optimization</summary>
+        <start-date>
+          <year>1995</year>
+          <month>3</month>
+        </start-date>
+        <is-current>true</is-current>
+        <company>
+          <id>27899</id>
+          <name>University of Siegen</name>
+          <type>Educational Institution</type>
+          <industry>Research</industry>
+        </company>
+      </position>
+    </positions>
+    <phone-numbers total="0" />
+    <im-accounts total="0" />
+  </person>
+  <person>
+    <id>pN7sixnfZi</id>
+    <first-name>Markus</first-name>
+    <last-name>Bauer</last-name>
+    <location>
+      <name>Stuttgart Area, Germany</name>
+    </location>
+    <picture-url>http://media.linkedin.com/mpr/mprx/0_WfMGO24XR9ybdkhhIWslOmZ6czJIwChhIHSgOmI9HrDRN6c8LdWaKax4JUMqH532e2UpAdz41mSi</picture-url>
+    <positions total="2">
+      <position>
+        <id>12210320</id>
+        <title>Project Manager CAS Open and CAS PIA</title>
+        <summary>Responsible for the design and implementation of a new SaaS CRM system, see http://www.cas-pia.de</summary>
+        <start-date>
+          <year>2005</year>
+          <month>6</month>
+        </start-date>
+        <is-current>true</is-current>
+        <company>
+          <id>6701</id>
+          <name>CAS Software AG</name>
+          <type>Privately Held</type>
+          <industry>Computer Software</industry>
+        </company>
+      </position>
+      <position>
+        <id>12210937</id>
+        <title>Department Manager</title>
+        <summary>Responsible for a research group on software engineering topics. Project lead of several international research projects.</summary>
+        <start-date>
+          <year>1998</year>
+          <month>10</month>
+        </start-date>
+        <end-date>
+          <year>2005</year>
+          <month>5</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <name>FZI Forschungszentrum Informatik Karlsruhe</name>
+          <size>51-200 employees</size>
+          <industry>Research</industry>
+        </company>
+      </position>
+    </positions>
+    <phone-numbers total="0" />
+    <im-accounts total="0" />
+  </person>
+  <person>
+    <id>_wkNVKWeax</id>
+    <first-name>Federico</first-name>
+    <last-name>Botella</last-name>
+    <location>
+      <name>Murcia Area, Spain</name>
+    </location>
+    <picture-url>http://media.linkedin.com/mpr/mprx/0_lxZqPr6okn5audBP144bPP1HevPY2u6P1YuwPP3zBKbm1HA1jMe4j1vRQR1T7wFxKysoyqP-tMVQ</picture-url>
+    <positions total="1">
+      <position>
+        <id>56873251</id>
+        <title>Profesor Titular</title>
+        <summary></summary>
+        <start-date>
+          <year>1997</year>
+        </start-date>
+        <is-current>true</is-current>
+        <company>
+          <id>35507</id>
+          <name>UMH</name>
+          <type>Public Company</type>
+          <industry>Hospital &amp; Health Care</industry>
+        </company>
+      </position>
+    </positions>
+    <phone-numbers total="0" />
+    <im-accounts total="0" />
+  </person>
+  <person>
+    <id>LkywLFsVFq</id>
+    <first-name>Katja</first-name>
+    <last-name>Böttcher</last-name>
+    <location>
+      <name>Dresden Area, Germany</name>
+    </location>
+    <picture-url>http://media.linkedin.com/mpr/mprx/0_ByD7XF1wnWjp3LxVcYgyX51Uqf7O3QxVzOJrX58IIoUaOGesRsj_ELqLVTf3CTY9nxflIGOlqRf5</picture-url>
+    <positions total="7">
+      <position>
+        <id>217161731</id>
+        <title>Project Manager</title>
+        <summary></summary>
+        <start-date>
+          <year>2011</year>
+          <month>9</month>
+        </start-date>
+        <is-current>true</is-current>
+        <company>
+          <name>European Project Center (Technische Universität Dresden)</name>
+          <industry>Government Administration</industry>
+        </company>
+      </position>
+      <position>
+        <id>152895027</id>
+        <title>Parental Leave</title>
+        <summary></summary>
+        <start-date>
+          <year>2010</year>
+          <month>9</month>
+        </start-date>
+        <end-date>
+          <year>2011</year>
+          <month>9</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <name>Johann Wolfgang Goethe Universität Frankfurt</name>
+          <industry>Research</industry>
+        </company>
+      </position>
+      <position>
+        <id>53117752</id>
+        <title>Project Coordination and Researcher</title>
+        <summary></summary>
+        <start-date>
+          <year>2008</year>
+          <month>3</month>
+        </start-date>
+        <end-date>
+          <year>2011</year>
+          <month>9</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <name>Johann Wolfgang Goethe Universität Frankfurt</name>
+          <industry>Research</industry>
+        </company>
+      </position>
+      <position>
+        <id>56920547</id>
+        <title>Research Associate</title>
+        <summary>Faculty of Computer Science,
+Chair for Privacy and Security, Institute for System Architecture 
+http://dud.inf.tu-dresden.de
+Emphases: Research, IT; Cooperative Multimedia Applications, Privacy-enhancing Technologies</summary>
+        <start-date>
+          <year>2005</year>
+          <month>4</month>
+        </start-date>
+        <end-date>
+          <year>2008</year>
+          <month>2</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <id>12236</id>
+          <name>Technische Universität Dresden</name>
+          <size>1001-5000 employees</size>
+          <type>Educational Institution</type>
+          <industry>Research</industry>
+        </company>
+      </position>
+      <position>
+        <id>56920411</id>
+        <title>Research Assistant</title>
+        <summary>Faculty of Computer Science,
+Chair for Privacy and Security, Institute for System Architecture 
+http://dud.inf.tu-dresden.de</summary>
+        <start-date>
+          <year>2004</year>
+          <month>10</month>
+        </start-date>
+        <end-date>
+          <year>2005</year>
+          <month>3</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <id>12236</id>
+          <name>Technische Universität Dresden</name>
+          <size>1001-5000 employees</size>
+          <type>Educational Institution</type>
+          <industry>Research</industry>
+        </company>
+      </position>
+      <position>
+        <id>56919658</id>
+        <title>Student Research Assistant</title>
+        <summary>Faculty of Computer Science,
+Chair for Computer Networks, Institute for System Architecturehttp://rn.inf.tu-dresden.de</summary>
+        <start-date>
+          <year>2003</year>
+          <month>3</month>
+        </start-date>
+        <end-date>
+          <year>2003</year>
+          <month>12</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <id>12236</id>
+          <name>Technische Universität Dresden</name>
+          <size>1001-5000 employees</size>
+          <type>Educational Institution</type>
+          <industry>Research</industry>
+        </company>
+      </position>
+      <position>
+        <id>56919328</id>
+        <title>Assistant</title>
+        <summary></summary>
+        <start-date>
+          <year>2000</year>
+          <month>11</month>
+        </start-date>
+        <end-date>
+          <year>2001</year>
+          <month>3</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <name>schwarzweissgrau, Dresden</name>
+          <size>1-10 employees</size>
+          <industry>Marketing and Advertising</industry>
+        </company>
+      </position>
+    </positions>
+    <phone-numbers total="0" />
+    <im-accounts total="0" />
+  </person>
+  <person>
+    <id>iLczvC152C</id>
+    <first-name>Félix</first-name>
+    <last-name>Brezo Fernández</last-name>
+    <location>
+      <name>Bilbao Area, Spain</name>
+    </location>
+    <picture-url>http://media.linkedin.com/mpr/mprx/0_y_g-snwKUhT39CsaOQ0TsqZ0RX6un3EaOCWSszeCX3-yW5gmr5SOqvpuzEQPz6wGg8x2vtssh5Cc</picture-url>
+    <positions total="3">
+      <position>
+        <id>135552822</id>
+        <title>Researcher assistant</title>
+        <summary>Specialised in computer security at the S3Lab, Laboratory for Semantics, Smarteness and Security</summary>
+        <start-date>
+          <year>2009</year>
+          <month>2</month>
+        </start-date>
+        <is-current>true</is-current>
+        <company>
+          <id>53503</id>
+          <name>Universidad de Deusto</name>
+          <size>10,001+ employees</size>
+          <type>Educational Institution</type>
+          <industry>Higher Education</industry>
+        </company>
+      </position>
+      <position>
+        <id>135554782</id>
+        <title>Football referee</title>
+        <summary>Regional referee for the Football Federation of Biscay.</summary>
+        <start-date>
+          <year>2008</year>
+          <month>9</month>
+        </start-date>
+        <end-date>
+          <year>2011</year>
+          <month>6</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <name>Federación Vizcaína de Fútbol</name>
+          <industry>Sports</industry>
+        </company>
+      </position>
+      <position>
+        <id>135555054</id>
+        <title>Professor assistant</title>
+        <summary>Professor assistant in the Data Bases Administration (5th course Computer Studies Engineering) and Data Bases (2nd course Computer Studies Engineering) practical courses.</summary>
+        <start-date>
+          <year>2008</year>
+          <month>2</month>
+        </start-date>
+        <end-date>
+          <year>2008</year>
+          <month>6</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <id>53503</id>
+          <name>Universidad de Deusto</name>
+          <size>10,001+ employees</size>
+          <type>Educational Institution</type>
+          <industry>Higher Education</industry>
+        </company>
+      </position>
+    </positions>
+    <phone-numbers total="0" />
+    <im-accounts total="0" />
+    <date-of-birth>
+      <year>1987</year>
+      <month>6</month>
+      <day>6</day>
+    </date-of-birth>
+  </person>
+  <person>
+    <id>u0SAcIrw2j</id>
+    <first-name>Robert</first-name>
+    <last-name>Briggs</last-name>
+    <location>
+      <name>Greater San Diego Area</name>
+    </location>
+    <picture-url>http://media.linkedin.com/mpr/mprx/0_9G8uJ8p-1XxyvP7G95T1JiuyPhVjzvOGN8N1JiSauLaDoAdCsXK8B_JhgmsGnt0ac3Ct9k0ls9mx</picture-url>
+    <positions total="10">
+      <position>
+        <id>21404072</id>
+        <title>Professor of Information Systems</title>
+        <summary>Developing a Ph.D. Program in Information Systems</summary>
+        <start-date>
+          <year>2011</year>
+          <month>8</month>
+        </start-date>
+        <is-current>true</is-current>
+        <company>
+          <id>6206</id>
+          <name>San Diego State University</name>
+          <type>Educational Institution</type>
+          <industry>Higher Education</industry>
+        </company>
+      </position>
+      <position>
+        <id>90107589</id>
+        <title>Associate Professor</title>
+        <summary></summary>
+        <start-date>
+          <year>2006</year>
+          <month>7</month>
+        </start-date>
+        <end-date>
+          <year>2011</year>
+          <month>8</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <id>5923</id>
+          <name>University of Nebraska at Omaha</name>
+          <type>Educational Institution</type>
+          <industry>Higher Education</industry>
+        </company>
+      </position>
+      <position>
+        <id>34392887</id>
+        <title>Director of Academic Affairs, Institute for Collaboration Science</title>
+        <summary></summary>
+        <start-date>
+          <year>2006</year>
+        </start-date>
+        <end-date>
+          <year>2008</year>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <id>5923</id>
+          <name>University of Nebraska at Omaha</name>
+          <type>Educational Institution</type>
+          <industry>Higher Education</industry>
+        </company>
+      </position>
+      <position>
+        <id>166049668</id>
+        <title>Funded External Researcher</title>
+        <start-date>
+          <year>2006</year>
+        </start-date>
+        <end-date>
+          <year>2008</year>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <name>USSTRATCOM</name>
+          <industry>Education Management</industry>
+        </company>
+      </position>
+      <position>
+        <id>73469230</id>
+        <title>Visiting Rearch Professor</title>
+        <summary></summary>
+        <start-date>
+          <year>2005</year>
+        </start-date>
+        <end-date>
+          <year>2006</year>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <name>University o Alaska Fairbaks, Center for Distance Education</name>
+          <industry>Education Management</industry>
+        </company>
+      </position>
+      <position>
+        <id>51987887</id>
+        <title>Associate Professor of Systems Engineering</title>
+        <start-date>
+          <year>2002</year>
+        </start-date>
+        <end-date>
+          <year>2006</year>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <name>Delft University of Technology</name>
+          <industry>Education Management</industry>
+        </company>
+      </position>
+      <position>
+        <id>32130786</id>
+        <title>Director of Innovation</title>
+        <summary></summary>
+        <start-date>
+          <year>1999</year>
+        </start-date>
+        <end-date>
+          <year>2005</year>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <id>36171</id>
+          <name>GroupSystems</name>
+          <type>Privately Held</type>
+          <industry>Computer Software</industry>
+        </company>
+      </position>
+      <position>
+        <id>35265866</id>
+        <title>Director of Innovation</title>
+        <start-date>
+          <year>1999</year>
+        </start-date>
+        <end-date>
+          <year>2005</year>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <name>Ventana Corporation</name>
+          <industry>Education Management</industry>
+        </company>
+      </position>
+      <position>
+        <id>72844390</id>
+        <title>Research Coordinator</title>
+        <start-date>
+          <year>1994</year>
+        </start-date>
+        <end-date>
+          <year>2005</year>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <name>University of Arizona Center for the Management of Information</name>
+          <industry>Education Management</industry>
+        </company>
+      </position>
+      <position>
+        <id>166048674</id>
+        <title>Research Coordinator</title>
+        <start-date>
+          <year>1994</year>
+        </start-date>
+        <end-date>
+          <year>2005</year>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <name>University of Arizona</name>
+          <industry>Education Management</industry>
+        </company>
+      </position>
+    </positions>
+    <phone-numbers total="1">
+      <phone-number>
+        <phone-type>work</phone-type>
+        <phone-number>402.554.2972</phone-number>
+      </phone-number>
+    </phone-numbers>
+    <im-accounts total="0" />
+    <date-of-birth>
+      <year>1953</year>
+      <month>4</month>
+      <day>1</day>
+    </date-of-birth>
+  </person>
+  <person>
+    <id>OwmJo8c3_V</id>
+    <first-name>Jan</first-name>
+    <last-name>Camenisch</last-name>
+    <location>
+      <name>Switzerland</name>
+    </location>
+    <positions total="6">
+      <position>
+        <id>11288481</id>
+        <title>Dr</title>
+        <is-current>true</is-current>
+        <company>
+          <id>1009</id>
+          <name>ibm</name>
+          <type>Public Company</type>
+          <industry>Dairy</industry>
+        </company>
+      </position>
+      <position>
+        <id>19357279</id>
+        <title>Research Staff Member</title>
+        <start-date>
+          <year>1999</year>
+        </start-date>
+        <is-current>true</is-current>
+        <company>
+          <id>1009</id>
+          <name>IBM Research</name>
+          <type>Public Company</type>
+          <industry>Dairy</industry>
+        </company>
+      </position>
+      <position>
+        <id>23543862</id>
+        <title>RSM</title>
+        <start-date>
+          <year>1999</year>
+        </start-date>
+        <is-current>true</is-current>
+        <company>
+          <id>1009</id>
+          <name>IBM Zurich Research Lab</name>
+          <type>Public Company</type>
+          <industry>Dairy</industry>
+        </company>
+      </position>
+      <position>
+        <id>18028842</id>
+        <title>research assistant professor</title>
+        <start-date>
+          <year>1998</year>
+        </start-date>
+        <end-date>
+          <year>1999</year>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <name>arhus university</name>
+          <type>Educational Institution</type>
+          <industry>Research</industry>
+        </company>
+      </position>
+      <position>
+        <id>35026861</id>
+        <title>Research Assistang</title>
+        <start-date>
+          <year>1993</year>
+        </start-date>
+        <end-date>
+          <year>1998</year>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <name>ETH Zurich</name>
+          <industry>Dairy</industry>
+        </company>
+      </position>
+      <position>
+        <id>21487533</id>
+        <title>electrical engineer</title>
+        <start-date>
+          <year>1989</year>
+        </start-date>
+        <end-date>
+          <year>1993</year>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <name>martignoni electronics</name>
+          <industry>Dairy</industry>
+        </company>
+      </position>
+    </positions>
+    <phone-numbers total="0" />
+    <im-accounts total="0" />
+  </person>
+  <person>
+    <id>VbZw_2hb8w</id>
+    <first-name>Emanuele</first-name>
+    <last-name>Carisio</last-name>
+    <location>
+      <name>Madrid Area, Spain</name>
+    </location>
+    <picture-url>http://media.linkedin.com/mpr/mprx/0_73E_PZDGqqcF48P0fiUpPRR7qvCwZL_0DhYpPRogIKnUbTNxiFs7jUYPVRGNRGC1mGegyyNtCrMC</picture-url>
+    <positions total="3">
+      <position>
+        <id>198768739</id>
+        <title>Project Manager / Industry Groups Manager</title>
+        <summary>• Management of RTD, innovation, dissemination and training projects, carried out by the Association and its members.  Activities: proposals writing, project management and coordination, technical and financial administration, liaison with subcontractors. Specialised in European Union programmes (FP7, CIP, AAL, LIFE+, ETPs, PPPs) and in Spanish public programmes (Ministry of Industry, Ministry of Science).
+
+• Industry Groups management: coordination and organisation of meetings, organisation of dissemination activities (events, campaigns, publications), policy analysis, advocacy activities with Spanish Government, dialogue with member companies’ C-level executives. Communities managed: Digital Content, Cloud Computing, Contact Centres &amp; Voice Technologies.
+
+• Definition, creation and management of the Association’s social media presence (SMO): Facebook and LinkedIn groups, Twitter accounts .</summary>
+        <start-date>
+          <year>2011</year>
+          <month>1</month>
+        </start-date>
+        <is-current>true</is-current>
+        <company>
+          <id>2350626</id>
+          <name>AMETIC</name>
+          <size>51-200 employees</size>
+          <type>Nonprofit</type>
+          <industry>Information Technology and Services</industry>
+        </company>
+      </position>
+      <position>
+        <id>10417591</id>
+        <title>Project Manager / ICT Industry Development and Advocacy</title>
+        <summary>•  Management of RTD, innovation, dissemination and training projects, carried out by the Association and its members. Direct responsible for international funding programmes. Activities: proposals writing, project management and coordination, technical and financial administration, liaison with subcontractors. Specialised in European Union programmes (FP7, CIP, AAL, LIFE+, ETPs, PPPs) and in Spanish public programmes (Ministry of Industry, Ministry of Science).
+
+• Advisory services to enable Spanish companies’ participation into EU public co-funded RTD and innovation programs, providing information and professional advice on: work programmes and calls, project ideas generation, partners/consortiums search, proposals writing, submission and negotiation, projects running and follow-up.
+
+• Industry Groups management: coordination and organisation of meetings, organisation of dissemination activities (events, campaigns, publications), analysis of legislation, advocacy activities with Spanish Government, dialogue with member companies’ C-level executives. Communities managed: Software, Internet &amp; Telecommunications, Contact Centres &amp; Voice Technologies, Digital Content, Cloud Computing, e-Health.
+
+• Representing the Association in several Ministerial Commissions and Working Groups, drafting and discussing laws and policies affecting telecommunications sector.
+
+• Definition, creation and management of the Association’s social media presence (SMO): Facebook and LinkedIn groups, Twitter accounts.</summary>
+        <start-date>
+          <year>2008</year>
+          <month>1</month>
+        </start-date>
+        <end-date>
+          <year>2010</year>
+          <month>12</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <id>359170</id>
+          <name>ASIMELEC</name>
+          <type>Nonprofit</type>
+          <industry>Information Technology and Services</industry>
+        </company>
+      </position>
+      <position>
+        <id>36867708</id>
+        <title>Project Manager</title>
+        <summary>• Management of EU co-funded RTD projects: work package and activity leader. Writing of deliverables and technical reports. Writing and negotiation of proposals. Participation to project meetings and audits.
+
+• Performing R&amp;D in human-machine interaction in e-health systems: accessibility, usability, technology acceptance and motivational aspects in designing, developing and evaluating user interfaces. Embodied Conversational Agents. Ambient Intelligence.
+
+• Mobile and Web applications design and development.
+Writing of papers and participation to international conferences.</summary>
+        <start-date>
+          <year>2004</year>
+          <month>11</month>
+        </start-date>
+        <end-date>
+          <year>2007</year>
+          <month>12</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <id>166617</id>
+          <name>Universidad Politécnica de Madrid</name>
+          <type>Educational Institution</type>
+          <industry>Higher Education</industry>
+        </company>
+      </position>
+    </positions>
+    <phone-numbers total="0" />
+    <im-accounts total="0" />
+  </person>
+  <person>
+    <id>ypMpuwkRI_</id>
+    <first-name>Alberto</first-name>
+    <last-name>Crespo</last-name>
+    <location>
+      <name>Madrid Area, Spain</name>
+    </location>
+    <positions total="3">
+      <position>
+        <id>41407216</id>
+        <title>Head of Secure Identity Technologies Lab at Atos Research &amp; Innovation</title>
+        <summary>Research &amp; Development national and European projects, specialised in Security (Biometrics, Identity Management, Privacy, Trust, Access Control, Document Issuing, Electronic ID/Passport, Standardisation). Currently working in CIP ICT-PSP Project STORK (Secure idenTity acrOss boRders linKed).</summary>
+        <start-date>
+          <year>2007</year>
+          <month>9</month>
+        </start-date>
+        <is-current>true</is-current>
+        <company>
+          <id>1259</id>
+          <name>Atos Origin</name>
+          <type>Public Company</type>
+          <industry>Information Technology and Services</industry>
+        </company>
+      </position>
+      <position>
+        <id>41407280</id>
+        <title>Analyst</title>
+        <start-date>
+          <year>2002</year>
+          <month>1</month>
+        </start-date>
+        <end-date>
+          <year>2007</year>
+          <month>9</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <id>4230</id>
+          <name>Indra</name>
+          <size>10,001+ employees</size>
+          <type>Privately Held</type>
+          <industry>Information Technology and Services</industry>
+          <ticker>IDR</ticker>
+        </company>
+      </position>
+      <position>
+        <id>51389115</id>
+        <title>R&amp;D Engineer</title>
+        <start-date>
+          <year>2002</year>
+        </start-date>
+        <end-date>
+          <year>2007</year>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <name>Indra Sistemas</name>
+          <industry>Research</industry>
+        </company>
+      </position>
+    </positions>
+    <phone-numbers total="0" />
+    <im-accounts total="0" />
+  </person>
+  <person>
+    <id>Fi26fyqKq8</id>
+    <first-name>Gert-Jan</first-name>
+    <last-name>De Vreede</last-name>
+    <location>
+      <name>Greater Omaha Area</name>
+    </location>
+    <picture-url>http://media.linkedin.com/mpr/mprx/0_pl4fenqfce3GPCxwYAerezqfBu6Sx3OwY12Kez61eW-g85dIKBHi6vtjMGQtp60bjtVAbtZj4vIP</picture-url>
+    <positions total="4">
+      <position>
+        <id>53630277</id>
+        <title>Director, Center for Collaboration Science</title>
+        <summary></summary>
+        <start-date>
+          <year>2006</year>
+        </start-date>
+        <is-current>true</is-current>
+        <company>
+          <name>the Unversity of Nebraska at Omaha</name>
+          <industry>Research</industry>
+        </company>
+      </position>
+      <position>
+        <id>77602744</id>
+        <title>Kayser Distinguished Professor</title>
+        <summary></summary>
+        <start-date>
+          <year>2005</year>
+        </start-date>
+        <is-current>true</is-current>
+        <company>
+          <id>5923</id>
+          <name>the University of Nebraska at Omaha</name>
+          <type>Educational Institution</type>
+          <industry>Higher Education</industry>
+        </company>
+      </position>
+      <position>
+        <id>21232990</id>
+        <title>Associate Professor</title>
+        <start-date>
+          <year>1991</year>
+        </start-date>
+        <is-current>true</is-current>
+        <company>
+          <id>166529</id>
+          <name>Delft University of Technology</name>
+          <size>5001-10,000 employees</size>
+          <type>Educational Institution</type>
+          <industry>Research</industry>
+        </company>
+      </position>
+      <position>
+        <id>4018144</id>
+        <title>Professor</title>
+        <summary></summary>
+        <start-date>
+          <year>2002</year>
+        </start-date>
+        <end-date>
+          <year>2005</year>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <id>5923</id>
+          <name>UNO</name>
+          <type>Educational Institution</type>
+          <industry>Higher Education</industry>
+        </company>
+      </position>
+    </positions>
+    <phone-numbers total="0" />
+    <im-accounts total="0" />
+  </person>
+  <person>
+    <id>4cXE1jKo0J</id>
+    <first-name>habib</first-name>
+    <last-name>fardoun</last-name>
+    <location>
+      <name>Albacete Area, Spain</name>
+    </location>
+    <picture-url>http://media.linkedin.com/mpr/mprx/0_9fXpRTaLyTWKdBJT9Ic7RiuspCVjwBJTNHr_RiDsibaDN1a3sdqrv_MN-2sGHK4Sc26GqkPBPJqe</picture-url>
+    <positions total="2">
+      <position>
+        <id>133079744</id>
+        <title>Project Manager: ISEResearch Group</title>
+        <summary>?	Responsible for a set of common software modules that were used by a number of projects for the user-interface, logging and mutual communication.
+
+1.	Investigating the pre-existing situation of the SCM in all projects;
+2.	Maintenance of the existing changes at work environment and support of the users changes;
+3.	Design and implementation of a new work environment for software development and configuration management;
+4.	Co-ordination and support in the process of transition to the new work environment for all projects;
+5.	Reaching agreement on standard procedures for SCM in all projects and documenting these procedures;
+6.	Co-ordination of maintenance and use of shared software modules;
+7.	Defining mechanisms for managing different versions of these work products;
+8.	Controlling changes that are imposed, and auditing and reporting on the changes that are made.
+
+?	Web Project Planning and Management: 
+
+1.	Definition and management of project documents,
+2.	 Managing project documents, coordination of processes, 
+3.	Creation of tasks and resources,
+4.	Printing and tracking projects, 
+5.	Knowledge of the process of budgeting.
+
+?	Administration and management of all .NET applications realized by the ISEResearch group.
+
+1.	Interactive Learning Panels, MPrinceTool, ELearniXML, ELearniNET, TabletNET.
+2.	Creation and management of the Human-Computer Interaction 2008 Congress Web Site and its Data Base. http://www.interaccion08.uclm.es
+3.	Creation of the Bank pays Gateway TPV (Terminal Point of sale)</summary>
+        <start-date>
+          <year>2008</year>
+          <month>2</month>
+        </start-date>
+        <is-current>true</is-current>
+        <company>
+          <id>57318</id>
+          <name>UCLM</name>
+          <type>Public Company</type>
+          <industry>Higher Education</industry>
+        </company>
+      </position>
+      <position>
+        <id>151997648</id>
+        <title>Programmer Senior</title>
+        <summary>?	Developing hospitals Web applications.</summary>
+        <start-date>
+          <year>2006</year>
+          <month>1</month>
+        </start-date>
+        <end-date>
+          <year>2007</year>
+          <month>1</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <id>57318</id>
+          <name>UCLM</name>
+          <type>Public Company</type>
+          <industry>Higher Education</industry>
+        </company>
+      </position>
+    </positions>
+    <phone-numbers total="1">
+      <phone-number>
+        <phone-type>mobile</phone-type>
+        <phone-number>655403027</phone-number>
+      </phone-number>
+    </phone-numbers>
+    <im-accounts total="1">
+      <im-account>
+        <im-account-type>skype</im-account-type>
+        <im-account-name>habibfardoun</im-account-name>
+      </im-account>
+    </im-accounts>
+    <date-of-birth>
+      <year>1980</year>
+      <month>9</month>
+      <day>19</day>
+    </date-of-birth>
+  </person>
+  <person>
+    <id>_LjagtlfPN</id>
+    <first-name>birgit</first-name>
+    <last-name>Feldmann</last-name>
+    <location>
+      <name>Cologne Area, Germany</name>
+    </location>
+    <positions total="1">
+      <position>
+        <id>180922119</id>
+        <title>Research Assistent</title>
+        <is-current>true</is-current>
+        <company>
+          <id>74085</id>
+          <name>FernUniversität in Hagen</name>
+          <size>10,001+ employees</size>
+          <type>Educational Institution</type>
+          <industry>Education Management</industry>
+        </company>
+      </position>
+    </positions>
+    <phone-numbers total="0" />
+    <im-accounts total="0" />
+  </person>
+  <person>
+    <id>pEj7vbsA9n</id>
+    <first-name>Alejandro</first-name>
+    <last-name>Fernandez</last-name>
+    <location>
+      <name>Argentina</name>
+    </location>
+    <picture-url>http://media.linkedin.com/mpr/mprx/0_zVbmG3AL1Yep2Nh9cyklG_ieAy0rucl9BjPAGC1ZaMIhPPQnMpBCuGbn0-xffrKVqJ5KDLSBVvd1</picture-url>
+    <positions total="6">
+      <position>
+        <id>141302477</id>
+        <title>Secretario Academico de la Facultad de Ciencias Exactas y Tecnología</title>
+        <start-date>
+          <year>2010</year>
+          <month>3</month>
+        </start-date>
+        <is-current>true</is-current>
+        <company>
+          <id>784695</id>
+          <name>Universidad Católica de La Plata</name>
+          <type>Educational Institution</type>
+          <industry>Education Management</industry>
+        </company>
+      </position>
+      <position>
+        <id>12207457</id>
+        <title>Professor</title>
+        <summary>I teach courses on Object Oriented Software Engineering for the 5th semester.</summary>
+        <start-date>
+          <year>2005</year>
+          <month>2</month>
+        </start-date>
+        <is-current>true</is-current>
+        <company>
+          <name>UNLu</name>
+          <size>201-500 employees</size>
+          <type>Educational Institution</type>
+          <industry>Higher Education</industry>
+        </company>
+      </position>
+      <position>
+        <id>12206641</id>
+        <title>Manager - Knowledge Transfer Partnerships</title>
+        <summary>To get  a better picture of or work please visit http://www.lifia.info.unlp.edu.ar/en/technology.htm</summary>
+        <start-date>
+          <year>2004</year>
+          <month>2</month>
+        </start-date>
+        <is-current>true</is-current>
+        <company>
+          <id>164734</id>
+          <name>LIFIA</name>
+          <size>51-200 employees</size>
+          <industry>Research</industry>
+        </company>
+      </position>
+      <position>
+        <id>12207472</id>
+        <title>Professor</title>
+        <summary>As a professor in the masters program (http://www.info.unlp.edu.ar/externas/postgrado/) I teach third semester courses on Object Oriented Software Engineering. 
+As for the undergraduate program, I coordinate the team of teaching assistants for courses on Object Oriented Programming in the fourth and fifth semester.</summary>
+        <start-date>
+          <year>2004</year>
+          <month>2</month>
+        </start-date>
+        <is-current>true</is-current>
+        <company>
+          <name>UNLP</name>
+          <size>201-500 employees</size>
+          <type>Educational Institution</type>
+          <industry>Higher Education</industry>
+        </company>
+      </position>
+      <position>
+        <id>12207475</id>
+        <title>Professor</title>
+        <summary>I am a professor in the masters program (http://www.vaneduc.edu.ar/uai/facultad/posgrado/maestria_TI/fac-mti-crono.asp) I teach third semester courses on Object Oriented Software Engineering and on CSCW and groupware.</summary>
+        <start-date>
+          <year>2004</year>
+          <month>2</month>
+        </start-date>
+        <is-current>true</is-current>
+        <company>
+          <name>UAI</name>
+          <size>51-200 employees</size>
+          <type>Educational Institution</type>
+          <industry>Higher Education</industry>
+        </company>
+      </position>
+      <position>
+        <id>12206679</id>
+        <title>Researcher</title>
+        <start-date>
+          <year>2000</year>
+          <month>2</month>
+        </start-date>
+        <end-date>
+          <year>2004</year>
+          <month>2</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <name>Fraunhofer IPSI</name>
+          <size>51-200 employees</size>
+          <type>Government Agency</type>
+          <industry>Research</industry>
+        </company>
+      </position>
+    </positions>
+    <phone-numbers total="0" />
+    <im-accounts total="0" />
+  </person>
+  <person>
+    <id>N8AYYCAWSm</id>
+    <first-name>Antonio</first-name>
+    <last-name>Fernández-Caballero</last-name>
+    <location>
+      <name>Albacete Area, Spain</name>
+    </location>
+    <picture-url>http://media.linkedin.com/mpr/mprx/0_r9mLMBAxXLnPKdO7Y1OVMqt-X65lrEa7tcssMzKfRilTfaJfyrYdcvX3oeLmPSf_AzuRntafeZLl</picture-url>
+    <positions total="4">
+      <position>
+        <id>149753753</id>
+        <title>Catedrático de Universidad (Full Professor)</title>
+        <summary>Antonio Fernández-Caballero received his Master in Computer Science from the School of Computer Science at the Technical University of Madrid, Spain, and he received his Ph.D. from the Department of Artificial Intelligence of the National University for Distance Education, Spain. 
+
+From 1984 to 1995, he works in Madrid, Spain, in private enterprise Local Area Networks, S.A., as an Analyst / Programmer in several projects for the Institute of Foreign Trade (ICEX), for public company Telefónica Investigación y Desarrollo (TID), for the Spanish Industrial Credit Bank (BCI) and for the Spanish Army in the context of project RADITE (Automatic Digital Network Integrated Tactical Army). He works as well as Project Manager for flight company IBERIA in a message switching application for international connections with British Airways and Air France, among others. He also serves as a System Analyst - Project Manager in various companies in Andersen Consulting Group for a maintenance system called SIMOC (Integral On-Condition Maintenance System) for Spanish Air Force combat aircraft EF-18. He ends working at Madrid as a freelance for ALCATEL in a Research and Development project on Monitoring System for Aircraft Guidance for Domestic Airports, under the technical supervision of the National Institute of Aerospace Technology (INTA) and the control of the Spanish Ministry of Transport, National Airports and Air Navigation (AENA). 
+
+In 1995 he starts teaching at the University of Castilla-La Mancha. He is the head of the n&amp;aIS (Artificial and Natural Interaction Systems) team, belonging to the LoUISE (Laboratory on User Interfaces and Software Engineering) research laboratory at the Computer Science Research Institute at Albacete (i3A) since 2001. Among his research interests are computer vision, pattern recognition, human-machine interaction and multi-agent systems.
+
+He is an Associate Editor of the Pattern Recognition Letters international journal.</summary>
+        <start-date>
+          <year>1996</year>
+          <month>9</month>
+        </start-date>
+        <is-current>true</is-current>
+        <company>
+          <id>57318</id>
+          <name>Universidad de Castilla-La Mancha</name>
+          <size>1001-5000 employees</size>
+          <type>Public Company</type>
+          <industry>Higher Education</industry>
+        </company>
+      </position>
+      <position>
+        <id>221220949</id>
+        <title>Freelance</title>
+        <summary></summary>
+        <start-date>
+          <year>1992</year>
+        </start-date>
+        <end-date>
+          <year>1993</year>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <id>1058</id>
+          <name>Alcatel-Lucent</name>
+          <size>10,001+ employees</size>
+          <type>Public Company</type>
+          <industry>Telecommunications</industry>
+          <ticker>ALU</ticker>
+        </company>
+      </position>
+      <position>
+        <id>221220738</id>
+        <title>Jefe de proyectos</title>
+        <summary></summary>
+        <start-date>
+          <year>1990</year>
+        </start-date>
+        <end-date>
+          <year>1992</year>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <id>1033</id>
+          <name>Accenture</name>
+          <size>10,001+ employees</size>
+          <type>Public Company</type>
+          <industry>Management Consulting</industry>
+          <ticker>ACN</ticker>
+        </company>
+      </position>
+      <position>
+        <id>221067601</id>
+        <title>Jefe de proyectos</title>
+        <summary></summary>
+        <start-date>
+          <year>1985</year>
+        </start-date>
+        <end-date>
+          <year>1990</year>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <name>LAN Ibérica</name>
+          <industry>Higher Education</industry>
+        </company>
+      </position>
+    </positions>
+    <phone-numbers total="0" />
+    <im-accounts total="0" />
+  </person>
+  <person>
+    <id>k4VDA9WRYB</id>
+    <first-name>Kai</first-name>
+    <last-name>Fischbach</last-name>
+    <location>
+      <name>Cologne Area, Germany</name>
+    </location>
+    <picture-url>http://media.linkedin.com/mpr/mprx/0_hqAXN0l18CbsPsgA8v-RNylOCLlc1y2ACzLUNylCgh5F24Rlu-3HVpLuuwAHKUDj3c1VURiokbjU</picture-url>
+    <positions total="6">
+      <position>
+        <id>25780523</id>
+        <title>Akademischer Rat a.Z. / Assistant Professor</title>
+        <summary></summary>
+        <start-date>
+          <year>2007</year>
+          <month>9</month>
+        </start-date>
+        <is-current>true</is-current>
+        <company>
+          <id>15189</id>
+          <name>University of Cologne</name>
+          <type>Educational Institution</type>
+          <industry>Research</industry>
+        </company>
+      </position>
+      <position>
+        <id>204769659</id>
+        <title>Researcher</title>
+        <summary></summary>
+        <start-date>
+          <year>2007</year>
+          <month>1</month>
+        </start-date>
+        <is-current>true</is-current>
+        <company>
+          <id>303951</id>
+          <name>galaxyadvisors</name>
+          <type>Privately Held</type>
+          <industry>Information Technology and Services</industry>
+        </company>
+      </position>
+      <position>
+        <id>158472577</id>
+        <title>Visiting Scholar</title>
+        <summary></summary>
+        <start-date>
+          <year>2009</year>
+          <month>7</month>
+        </start-date>
+        <end-date>
+          <year>2009</year>
+          <month>11</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <id>1503</id>
+          <name>Massachusetts Institute of Technology</name>
+          <type>Educational Institution</type>
+          <industry>Higher Education</industry>
+        </company>
+      </position>
+      <position>
+        <id>153612642</id>
+        <title>Wissenschaftlicher Mitarbeiter</title>
+        <summary></summary>
+        <start-date>
+          <year>2003</year>
+          <month>12</month>
+        </start-date>
+        <end-date>
+          <year>2007</year>
+          <month>9</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <id>15189</id>
+          <name>University of Cologne</name>
+          <type>Educational Institution</type>
+          <industry>Research</industry>
+        </company>
+      </position>
+      <position>
+        <id>158472933</id>
+        <title>Wissenschaftlicher Mitarbeiter</title>
+        <summary></summary>
+        <start-date>
+          <year>2001</year>
+          <month>2</month>
+        </start-date>
+        <end-date>
+          <year>2003</year>
+          <month>12</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <id>27905</id>
+          <name>WHU - Otto Beisheim School of Management</name>
+          <type>Educational Institution</type>
+          <industry>Higher Education</industry>
+        </company>
+      </position>
+      <position>
+        <id>158472668</id>
+        <title>Visiting Scholar</title>
+        <summary></summary>
+        <start-date>
+          <year>2003</year>
+          <month>2</month>
+        </start-date>
+        <end-date>
+          <year>2003</year>
+          <month>7</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <id>2650</id>
+          <name>University of Illinois at Urbana-Champaign</name>
+          <type>Educational Institution</type>
+          <industry>Higher Education</industry>
+        </company>
+      </position>
+    </positions>
+    <phone-numbers total="1">
+      <phone-number>
+        <phone-type>work</phone-type>
+        <phone-number>+492214705394</phone-number>
+      </phone-number>
+    </phone-numbers>
+    <im-accounts total="1">
+      <im-account>
+        <im-account-type>skype</im-account-type>
+        <im-account-name>kaifischbach</im-account-name>
+      </im-account>
+    </im-accounts>
+  </person>
+  <person>
+    <id>4XyZOdpRqt</id>
+    <first-name>Benjamim</first-name>
+    <last-name>Fonseca</last-name>
+    <location>
+      <name>Portugal</name>
+    </location>
+    <picture-url>http://media.linkedin.com/mpr/mprx/0_xrBNYrc_Sv5fyRBTglAFYPkCDnnSyjbTjA_IYtQt-PCg_MK319bZr--yi49t0VQSY1vElzNYcY_N</picture-url>
+    <positions total="5">
+      <position>
+        <id>45378428</id>
+        <title>Assistant Professor</title>
+        <is-current>true</is-current>
+        <company>
+          <id>24164</id>
+          <name>UTAD</name>
+          <size>501-1000 employees</size>
+          <type>Public Company</type>
+          <industry>Education Management</industry>
+        </company>
+      </position>
+      <position>
+        <id>78001406</id>
+        <title>Researcher</title>
+        <summary></summary>
+        <start-date>
+          <year>2009</year>
+          <month>1</month>
+        </start-date>
+        <is-current>true</is-current>
+        <company>
+          <name>GECAD</name>
+          <industry>Research</industry>
+        </company>
+      </position>
+      <position>
+        <id>78001373</id>
+        <title>Collaborator</title>
+        <summary></summary>
+        <start-date>
+          <year>2008</year>
+          <month>1</month>
+        </start-date>
+        <is-current>true</is-current>
+        <company>
+          <id>24164</id>
+          <name>CITAB</name>
+          <type>Public Company</type>
+          <industry>Research</industry>
+        </company>
+      </position>
+      <position>
+        <id>55273521</id>
+        <title>Researcher</title>
+        <summary>Researcher in ACTS Project ATLANTIC.</summary>
+        <start-date>
+          <year>1996</year>
+          <month>7</month>
+        </start-date>
+        <end-date>
+          <year>1998</year>
+          <month>1</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <id>17189</id>
+          <name>INESC Porto</name>
+          <size>201-500 employees</size>
+          <type>Nonprofit</type>
+          <industry>Research</industry>
+        </company>
+      </position>
+      <position>
+        <id>55273930</id>
+        <title>Math teacher</title>
+        <summary></summary>
+        <start-date>
+          <year>1992</year>
+          <month>9</month>
+        </start-date>
+        <end-date>
+          <year>1992</year>
+          <month>10</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <name>Escola Secundária Morgado de Mateus</name>
+          <size>51-200 employees</size>
+          <industry>Primary/Secondary Education</industry>
+        </company>
+      </position>
+    </positions>
+    <phone-numbers total="0" />
+    <im-accounts total="0" />
+  </person>
+  <person>
+    <id>TGDIpJj7on</id>
+    <first-name>David</first-name>
+    <last-name>Franklin</last-name>
+    <location>
+      <name>Hagen Area, Germany</name>
+    </location>
+    <picture-url>http://media.linkedin.com/mpr/mprx/0_pCD07nR0Z0TjqLXWOXg27zdt4p5DNQqWY5J87zwDFJljwGidKkj13v0i9tL-cTz5jTf38tv-70W_</picture-url>
+    <positions total="0" />
+    <phone-numbers total="0" />
+    <im-accounts total="0" />
+  </person>
+  <person>
+    <id>633INA_Hw4</id>
+    <first-name>José</first-name>
+    <last-name>Gallud</last-name>
+    <location>
+      <name>Albacete Area, Spain</name>
+    </location>
+    <positions total="1">
+      <position>
+        <id>26270750</id>
+        <title>Professor</title>
+        <is-current>true</is-current>
+        <company>
+          <name>University of Castilla-La Mancha</name>
+          <industry>Computer Software</industry>
+        </company>
+      </position>
+    </positions>
+    <phone-numbers total="0" />
+    <im-accounts total="0" />
+  </person>
+  <person>
+    <id>z4vRgHnscs</id>
+    <first-name>Eva</first-name>
+    <last-name>Ganglbauer</last-name>
+    <location>
+      <name>Austria</name>
+    </location>
+    <picture-url>http://media.linkedin.com/mpr/mprx/0_-OwaAz-kcqqAiFAjyRElAB-Wct3YfFKjKyxlABTZHBzmr_bgY4UGxcznJpTTuhlA1jWrOr1pfJQ7</picture-url>
+    <positions total="2">
+      <position>
+        <id>120872163</id>
+        <title>Research and Teaching Assistant, PhD Student</title>
+        <summary></summary>
+        <start-date>
+          <year>2010</year>
+          <month>5</month>
+        </start-date>
+        <is-current>true</is-current>
+        <company>
+          <id>166803</id>
+          <name>Vienna University of Technology</name>
+          <type>Educational Institution</type>
+          <industry>Research</industry>
+        </company>
+      </position>
+      <position>
+        <id>99475539</id>
+        <title>HCI Researcher</title>
+        <summary></summary>
+        <start-date>
+          <year>2008</year>
+          <month>11</month>
+        </start-date>
+        <end-date>
+          <year>2010</year>
+          <month>4</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <id>248220</id>
+          <name>CURE - Center for Usability Research and Engineering</name>
+          <type>Nonprofit</type>
+          <industry>Research</industry>
+        </company>
+      </position>
+    </positions>
+    <phone-numbers total="0" />
+    <im-accounts total="0" />
+  </person>
+  <person>
+    <id>PSo2K5Ipxj</id>
+    <first-name>Erick</first-name>
+    <last-name>Gankam Tambo</last-name>
+    <location>
+      <name>Germany</name>
+    </location>
+    <picture-url>http://media.linkedin.com/mpr/mprx/0_54wi7eiwvJ7v7CPdbxdy7IP5BVecfFGdFsxy7IlZe0yFr_zWdOUf3wLnMNHHuhiLkRWj8u_ZSEbz</picture-url>
+    <positions total="3">
+      <position>
+        <id>159001146</id>
+        <title>Research Assistant. Head of ICT4Development at the chair of Cooperative systems</title>
+        <summary>My research group designs and develops socio-technical systems to support the development processes of southern countries with a special focus on sub Saharan African countries.</summary>
+        <start-date>
+          <year>2010</year>
+          <month>7</month>
+        </start-date>
+        <is-current>true</is-current>
+        <company>
+          <id>74085</id>
+          <name>FernUniversität in Hagen</name>
+          <type>Educational Institution</type>
+          <industry>Education Management</industry>
+        </company>
+      </position>
+      <position>
+        <id>159031645</id>
+        <title>Research Assistant</title>
+        <summary>Design and Development of concepts and systems aiming to support the transfer of knowhow of experts in the Diaspora to students in Africa within the scope of my PhD Thesis.</summary>
+        <start-date>
+          <year>2007</year>
+          <month>3</month>
+        </start-date>
+        <end-date>
+          <year>2010</year>
+          <month>6</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <id>74085</id>
+          <name>FernUniversität in Hagen</name>
+          <type>Educational Institution</type>
+          <industry>Education Management</industry>
+        </company>
+      </position>
+      <position>
+        <id>53595879</id>
+        <title>Student research assistant</title>
+        <summary>- Development of E-Learning Systems (Learning Content Management System)
+- Development of applet for descriptive statistics 
+- Developemnt of digital content for distance learning education 
+- System administration</summary>
+        <start-date>
+          <year>2001</year>
+          <month>9</month>
+        </start-date>
+        <end-date>
+          <year>2006</year>
+          <month>9</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <id>74085</id>
+          <name>FernUniversität in Hagen</name>
+          <type>Educational Institution</type>
+          <industry>Education Management</industry>
+        </company>
+      </position>
+    </positions>
+    <phone-numbers total="0" />
+    <im-accounts total="1">
+      <im-account>
+        <im-account-type>skype</im-account-type>
+        <im-account-name>erostambo</im-account-name>
+      </im-account>
+    </im-accounts>
+    <date-of-birth>
+      <month>7</month>
+      <day>30</day>
+    </date-of-birth>
+  </person>
+  <person>
+    <id>URYaPsRS9x</id>
+    <first-name>Rafa</first-name>
+    <last-name>Giménez</last-name>
+    <location>
+      <name>Spain</name>
+    </location>
+    <positions total="3">
+      <position>
+        <id>12064374</id>
+        <title>Project Manager</title>
+        <start-date>
+          <year>2006</year>
+          <month>12</month>
+        </start-date>
+        <is-current>true</is-current>
+        <company>
+          <name>Fundació Barcelona Digital</name>
+          <size>11-50 employees</size>
+          <type>Nonprofit</type>
+          <industry>Information Technology and Services</industry>
+        </company>
+      </position>
+      <position>
+        <id>4930527</id>
+        <title>Project manager &amp; information architect</title>
+        <start-date>
+          <year>2001</year>
+          <month>2</month>
+        </start-date>
+        <end-date>
+          <year>2006</year>
+          <month>11</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <id>69092</id>
+          <name>Lavinia TC</name>
+          <size>51-200 employees</size>
+          <type>Privately Held</type>
+          <industry>Internet</industry>
+        </company>
+      </position>
+      <position>
+        <id>12064449</id>
+        <title>Systems analyst and developer</title>
+        <start-date>
+          <year>1998</year>
+          <month>3</month>
+        </start-date>
+        <end-date>
+          <year>2001</year>
+          <month>2</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <id>1429</id>
+          <name>Getronics</name>
+          <size>5001-10,000 employees</size>
+          <type>Public Company</type>
+          <industry>Information Services</industry>
+        </company>
+      </position>
+    </positions>
+    <phone-numbers total="0" />
+    <im-accounts total="0" />
+  </person>
+  <person>
+    <id>S4iONP9o5T</id>
+    <first-name>M. Tarek</first-name>
+    <last-name>Habieb</last-name>
+    <location>
+      <name>Cologne Area, Germany</name>
+    </location>
+    <picture-url>http://media.linkedin.com/mpr/mprx/0_-KgZfK3yW0ktAeBXrP0bf-KyIpnOADBXK-WFf-83qJCaaW8kYnSNTtqfLt93tonH1PxQhvtZbbpV</picture-url>
+    <positions total="6">
+      <position>
+        <id>157435508</id>
+        <title>Management Consultant</title>
+        <summary></summary>
+        <start-date>
+          <year>2011</year>
+          <month>1</month>
+        </start-date>
+        <is-current>true</is-current>
+        <company>
+          <id>1669434</id>
+          <name>Habieb Management Consulting</name>
+          <industry>Information Technology and Services</industry>
+        </company>
+      </position>
+      <position>
+        <id>65978012</id>
+        <title>Senior Consultant</title>
+        <summary>Business Consultant - Project Manager</summary>
+        <start-date>
+          <year>2009</year>
+          <month>1</month>
+        </start-date>
+        <end-date>
+          <year>2010</year>
+          <month>12</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <id>32370</id>
+          <name>Ab Ovo</name>
+          <type>Privately Held</type>
+          <industry>Information Technology and Services</industry>
+        </company>
+      </position>
+      <position>
+        <id>128333339</id>
+        <title>Senior IT-Consultant</title>
+        <summary></summary>
+        <start-date>
+          <year>2009</year>
+        </start-date>
+        <end-date>
+          <year>2010</year>
+          <month>12</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <name>Ab Ovo Deutschland GmbH</name>
+          <industry>Information Technology and Services</industry>
+        </company>
+      </position>
+      <position>
+        <id>39907237</id>
+        <title>Managing Consultant</title>
+        <summary>Managing Consultant - 
+
+08/2007-10/2007 IT-Service Manager @EnBW 10/2007-03/2008 Testmanager@Deutschen Post World Net 04/2008 -07/2008 Projektleiter @ Vallourec &amp; Mannesmann Tubes 08/2008-12/2008 Business Process Analyst @ Logica/EnBW</summary>
+        <start-date>
+          <year>2007</year>
+          <month>7</month>
+        </start-date>
+        <end-date>
+          <year>2008</year>
+          <month>12</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <id>2347</id>
+          <name>Logica</name>
+          <type>Public Company</type>
+          <industry>Information Technology and Services</industry>
+          <ticker>LOG</ticker>
+        </company>
+      </position>
+      <position>
+        <id>65988031</id>
+        <title>Quality Assurance Manager</title>
+        <summary>Quality Assurance, Requirements Engineering, Software Developement</summary>
+        <start-date>
+          <year>2005</year>
+          <month>7</month>
+        </start-date>
+        <end-date>
+          <year>2007</year>
+          <month>6</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <name>Midoco GmbH</name>
+          <industry>Information Technology and Services</industry>
+        </company>
+      </position>
+      <position>
+        <id>65988133</id>
+        <title>Consultant</title>
+        <summary>Project Management, SAP-Consultant, SAP MDM</summary>
+        <start-date>
+          <year>2004</year>
+          <month>10</month>
+        </start-date>
+        <end-date>
+          <year>2005</year>
+          <month>4</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <id>87240</id>
+          <name>ecenta AG</name>
+          <type>Partnership</type>
+          <industry>Information Technology and Services</industry>
+        </company>
+      </position>
+    </positions>
+    <phone-numbers total="0" />
+    <im-accounts total="0" />
+  </person>
+  <person>
+    <id>r3qsFr1h_E</id>
+    <first-name>Siegfried</first-name>
+    <last-name>Handschuh</last-name>
+    <location>
+      <name>Ireland</name>
+    </location>
+    <positions total="6">
+      <position>
+        <id>57332207</id>
+        <title>Senior Lecturer</title>
+        <summary></summary>
+        <start-date>
+          <year>2008</year>
+          <month>12</month>
+        </start-date>
+        <is-current>true</is-current>
+        <company>
+          <id>7899</id>
+          <name>National University of Ireland, Galway</name>
+          <type>Educational Institution</type>
+          <industry>Higher Education</industry>
+        </company>
+      </position>
+      <position>
+        <id>31969315</id>
+        <title>Senior Lecturer and Project Leader</title>
+        <summary></summary>
+        <start-date>
+          <year>2006</year>
+          <month>1</month>
+        </start-date>
+        <is-current>true</is-current>
+        <company>
+          <name>Digital Enterprise Research Institute (DERI) Galway</name>
+          <industry>Internet</industry>
+        </company>
+      </position>
+      <position>
+        <id>2682191</id>
+        <title>Research Fellow</title>
+        <summary></summary>
+        <start-date>
+          <year>2006</year>
+          <month>1</month>
+        </start-date>
+        <end-date>
+          <year>2008</year>
+          <month>11</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <id>7899</id>
+          <name>National University of Ireland, Galway</name>
+          <type>Educational Institution</type>
+          <industry>Higher Education</industry>
+        </company>
+      </position>
+      <position>
+        <id>21821297</id>
+        <title>Senior Researcher</title>
+        <start-date>
+          <year>2004</year>
+          <month>11</month>
+        </start-date>
+        <end-date>
+          <year>2005</year>
+          <month>12</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <name>FZI - Research Center for Computer Science</name>
+          <industry>Internet</industry>
+        </company>
+      </position>
+      <position>
+        <id>7518929</id>
+        <title>Senior Researcher</title>
+        <start-date>
+          <year>2004</year>
+          <month>11</month>
+        </start-date>
+        <end-date>
+          <year>2005</year>
+          <month>12</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <id>78862</id>
+          <name>Ontoprise GmbH</name>
+          <industry>Internet</industry>
+        </company>
+      </position>
+      <position>
+        <id>23919008</id>
+        <title>Research Assistant, PhD Student</title>
+        <start-date>
+          <year>2000</year>
+          <month>8</month>
+        </start-date>
+        <end-date>
+          <year>2004</year>
+          <month>10</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <name>Institut AIFB, Universität Karlsruhe</name>
+          <industry>Internet</industry>
+        </company>
+      </position>
+    </positions>
+    <phone-numbers total="0" />
+    <im-accounts total="0" />
+  </person>
+  <person>
+    <id>S4b3RGTF8l</id>
+    <first-name>Mark</first-name>
+    <last-name>Hefke</last-name>
+    <location>
+      <name>Germany</name>
+    </location>
+    <picture-url>http://media.linkedin.com/mpr/mprx/0_iqpxyYhtUNK9PkNCitfuyj_PU-cn1CzCTnHhyj-GkciQ26GG7-2P-gQ2vyBWK5qmGcOTPs2-I0N3</picture-url>
+    <positions total="2">
+      <position>
+        <id>122322365</id>
+        <title>Manager Innovation and Business Development</title>
+        <summary></summary>
+        <start-date>
+          <year>2010</year>
+          <month>4</month>
+        </start-date>
+        <is-current>true</is-current>
+        <company>
+          <id>6701</id>
+          <name>CAS Software AG</name>
+          <type>Privately Held</type>
+          <industry>Information Technology and Services</industry>
+        </company>
+      </position>
+      <position>
+        <id>19252843</id>
+        <title>Scientific Assistent</title>
+        <summary>Projects:
+
+    * VISION - Towards Next Generation Knowledge Management
+
+    * WIMAN - Kompetenznetzwerk Wissensmanagement Baden-Württemberg
+
+    * MODALE - Modellbasiertes Anlagen-Engineering, kundenorientierte Dienstleistungen für Anlagensteuerung und -kontrolle (Project Coordination)
+
+    * Im Wissensnetz - Vernetzte Informationsprozesse in Forschungsverbünden (Project Coordination)</summary>
+        <start-date>
+          <year>2001</year>
+        </start-date>
+        <end-date>
+          <year>2010</year>
+          <month>5</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <id>330817</id>
+          <name>FZI Forschungszentrum Informatik</name>
+          <size>51-200 employees</size>
+          <type>Educational Institution</type>
+          <industry>Research</industry>
+        </company>
+      </position>
+    </positions>
+    <phone-numbers total="0" />
+    <im-accounts total="1">
+      <im-account>
+        <im-account-type>skype</im-account-type>
+        <im-account-name>mhe_fzi</im-account-name>
+      </im-account>
+    </im-accounts>
+  </person>
+  <person>
+    <id>oRc2ejjBUU</id>
+    <first-name>Torsten</first-name>
+    <last-name>Holmer</last-name>
+    <location>
+      <name>Dresden Area, Germany</name>
+    </location>
+    <picture-url>http://media.linkedin.com/mpr/mprx/0_uMN4t0NL2AXnaJbAGgvbtykem1lQ2y9AaY8btyNzl95n143lhxkqpphR8gAM7UcjSsn6gR65zlXv</picture-url>
+    <positions total="3">
+      <position>
+        <id>45124046</id>
+        <title>Dipl.-Psych.</title>
+        <is-current>true</is-current>
+        <company>
+          <name>FH Oberösterreich</name>
+          <industry>Research</industry>
+        </company>
+      </position>
+      <position>
+        <id>93321620</id>
+        <title>parental leave</title>
+        <summary></summary>
+        <start-date>
+          <year>2009</year>
+          <month>2</month>
+        </start-date>
+        <is-current>true</is-current>
+        <company>
+          <name>Family</name>
+          <industry>Research</industry>
+        </company>
+      </position>
+      <position>
+        <id>93321353</id>
+        <title>Researcher</title>
+        <start-date>
+          <year>1995</year>
+        </start-date>
+        <end-date>
+          <year>2006</year>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <name>Fraunhofer IPSI</name>
+          <industry>Research</industry>
+        </company>
+      </position>
+    </positions>
+    <phone-numbers total="0" />
+    <im-accounts total="0" />
+  </person>
+  <person>
+    <id>bp851vtx5-</id>
+    <first-name>Editor</first-name>
+    <last-name>IJACSA</last-name>
+    <location>
+      <name>Greater New York City Area</name>
+    </location>
+    <positions total="1">
+      <position>
+        <id>130201309</id>
+        <title>Managing Editor</title>
+        <summary>IJACSA's mission is to provide an outlet for quality research to be publicised and published to a global audience.
+It aims freely to promote universal access with equal opportunities for international scientific community; to scientific knowledge, and the creation, and dissemination of scientific and technical information
+
+In sync with the Journal's vision “ to be a globally respected publication that provides best-of breed Research Papers and Discussions, leveraging technology, delivered by best-in-class people” we have drawn the best of talent from Industries and Institutions across the globe to ensure that we retain high standards. 
+
+At IJACSA, we stand strong because we know that global challenges make way for new innovations, new ways and new talent.
+
+IJACSA encourages submissions of papers addressing theoretical and practical implementations in information and systems applications. It also focusses on areas such as Artificial Intelligence, Networking, Multimedia Tools, Virtual Reality and Computational Intelligence to name a few. 
+
+IJACSA solicits papers in domains that have not been represented much in the past at the conference, such as database security/privacy, usability aspects, operating systems, and Self Learning Capability algorithms.
+
+Papers that introduce and address unique algorithms and application challenges or present thought-provoking ideas are welcome.</summary>
+        <start-date>
+          <year>2010</year>
+          <month>6</month>
+        </start-date>
+        <is-current>true</is-current>
+        <company>
+          <id>2159462</id>
+          <name>The Science and Information Organization</name>
+          <type>Partnership</type>
+          <industry>Research</industry>
+        </company>
+      </position>
+    </positions>
+    <phone-numbers total="0" />
+    <im-accounts total="0" />
+  </person>
+  <person>
+    <id>XQ52-gz15F</id>
+    <first-name>Youssef</first-name>
+    <last-name>Jaabari</last-name>
+    <location>
+      <name>Essen Area, Germany</name>
+    </location>
+    <positions total="1">
+      <position>
+        <id>48303097</id>
+        <title>Consultant</title>
+        <start-date>
+          <year>2006</year>
+          <month>5</month>
+        </start-date>
+        <is-current>true</is-current>
+        <company>
+          <id>2347</id>
+          <name>Logica</name>
+          <size>10,001+ employees</size>
+          <type>Public Company</type>
+          <industry>Information Technology and Services</industry>
+          <ticker>LOG</ticker>
+        </company>
+      </position>
+    </positions>
+    <phone-numbers total="0" />
+    <im-accounts total="0" />
+  </person>
+  <person>
+    <id>UG2eta5AYz</id>
+    <first-name>Stefan</first-name>
+    <last-name>Jungmayr</last-name>
+    <location>
+      <name>Stuttgart Area, Germany</name>
+    </location>
+    <picture-url>http://media.linkedin.com/mpr/mprx/0_UQF0Z_wiyhyDMzW3M_58Zhe3O8UGRn43Jb18Zhsj357-X-fTc8c198a1raRjZlJDs5L3BbeGiw9R</picture-url>
+    <positions total="5">
+      <position>
+        <id>9004669</id>
+        <title>Research Engineer</title>
+        <summary></summary>
+        <start-date>
+          <year>2006</year>
+          <month>7</month>
+        </start-date>
+        <is-current>true</is-current>
+        <company>
+          <id>165755</id>
+          <name>Robert Bosch GmbH</name>
+          <size>10,001+ employees</size>
+          <industry>Automotive</industry>
+        </company>
+      </position>
+      <position>
+        <id>77424372</id>
+        <title>Senior Software Engineer</title>
+        <summary></summary>
+        <start-date>
+          <year>2004</year>
+          <month>1</month>
+        </start-date>
+        <end-date>
+          <year>2006</year>
+          <month>6</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <name>Teradyne Diagnostic Solutions</name>
+          <industry>Automotive</industry>
+        </company>
+      </position>
+      <position>
+        <id>56258427</id>
+        <title>Research Assistant</title>
+        <summary></summary>
+        <start-date>
+          <year>1998</year>
+        </start-date>
+        <end-date>
+          <year>2004</year>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <id>74085</id>
+          <name>FernUniversität in Hagen</name>
+          <type>Educational Institution</type>
+          <industry>Computer Software</industry>
+        </company>
+      </position>
+      <position>
+        <id>33026806</id>
+        <title>Researcher</title>
+        <summary></summary>
+        <start-date>
+          <year>1996</year>
+        </start-date>
+        <end-date>
+          <year>1998</year>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <name>Fraunhofer IESE</name>
+          <industry>Research</industry>
+        </company>
+      </position>
+      <position>
+        <id>77424678</id>
+        <title>Project Assistent</title>
+        <summary></summary>
+        <start-date>
+          <year>1995</year>
+        </start-date>
+        <end-date>
+          <year>1996</year>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <id>166803</id>
+          <name>Technische Universität Wien</name>
+          <type>Educational Institution</type>
+          <industry>Research</industry>
+        </company>
+      </position>
+    </positions>
+    <phone-numbers total="0" />
+    <im-accounts total="0" />
+  </person>
+  <person>
+    <id>ycqY3JEInq</id>
+    <first-name>Christian</first-name>
+    <last-name>Kahl</last-name>
+    <location>
+      <name>Germany</name>
+    </location>
+    <picture-url>http://media.linkedin.com/mpr/mprx/0_R7Vm6_mecmwGEkyzMaJA63ZHcSOfECjzMmaA6heqHeo0v6ovBWoCe8pVJiYrd5pJVu4KdbsozmFj</picture-url>
+    <positions total="3">
+      <position>
+        <id>23370668</id>
+        <title>PhD Student &amp; Research Assistant</title>
+        <is-current>true</is-current>
+        <company>
+          <name>Frankfurt University</name>
+          <industry>Research</industry>
+        </company>
+      </position>
+      <position>
+        <id>150850951</id>
+        <title>Researcher</title>
+        <summary>European research project on mobile social networks and aspects of privacy, identity management and marketing/advertising.</summary>
+        <start-date>
+          <year>2008</year>
+        </start-date>
+        <is-current>true</is-current>
+        <company>
+          <name>PICOS Project</name>
+          <industry>Research</industry>
+        </company>
+      </position>
+      <position>
+        <id>213716270</id>
+        <title>Presenter</title>
+        <start-date>
+          <year>2011</year>
+        </start-date>
+        <end-date>
+          <year>2011</year>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <name>MCIS 2011</name>
+          <industry>Research</industry>
+        </company>
+      </position>
+    </positions>
+    <phone-numbers total="0" />
+    <im-accounts total="0" />
+  </person>
+  <person>
+    <id>IA1aAv8HtX</id>
+    <first-name>Adil</first-name>
+    <last-name>Kassabi</last-name>
+    <location>
+      <name>United Arab Emirates</name>
+    </location>
+    <picture-url>http://media.linkedin.com/mpr/mprx/0_3PuunYiPz3vdt6YtinSPnpAOvTlJK5Yt_NZ1npCaEk5d73W-Svy84y9hUfA61CxYhKmtMUKHGPVh</picture-url>
+    <positions total="3">
+      <position>
+        <id>213762380</id>
+        <title>Service Development Manager</title>
+        <summary></summary>
+        <start-date>
+          <year>2010</year>
+          <month>2</month>
+        </start-date>
+        <is-current>true</is-current>
+        <company>
+          <name>Abu Dhabi Systems and Information Center</name>
+          <industry>Information Technology and Services</industry>
+        </company>
+      </position>
+      <position>
+        <id>57714365</id>
+        <title>Key Account Manager</title>
+        <summary></summary>
+        <start-date>
+          <year>2008</year>
+          <month>12</month>
+        </start-date>
+        <end-date>
+          <year>2010</year>
+          <month>2</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <name>init AG</name>
+          <size>201-500 employees</size>
+          <industry>Information Technology and Services</industry>
+        </company>
+      </position>
+      <position>
+        <id>57711631</id>
+        <title>Int. Business Development</title>
+        <summary></summary>
+        <start-date>
+          <year>2004</year>
+          <month>2</month>
+        </start-date>
+        <end-date>
+          <year>2008</year>
+          <month>11</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <id>125111</id>
+          <name>itemis AG</name>
+          <size>51-200 employees</size>
+          <type>Privately Held</type>
+          <industry>Information Services</industry>
+        </company>
+      </position>
+    </positions>
+    <phone-numbers total="0" />
+    <im-accounts total="0" />
+  </person>
+  <person>
+    <id>-cen43J1Lo</id>
+    <first-name>Nils</first-name>
+    <last-name>Kempin</last-name>
+    <location>
+      <name>Cologne Area, Germany</name>
+    </location>
+    <positions total="1">
+      <position>
+        <id>133546184</id>
+        <title>Unit Manager</title>
+        <is-current>true</is-current>
+        <company>
+          <id>2347</id>
+          <name>Logica</name>
+          <size>10,001+ employees</size>
+          <type>Public Company</type>
+          <industry>Information Technology and Services</industry>
+          <ticker>Euronext: LOG</ticker>
+        </company>
+      </position>
+    </positions>
+    <phone-numbers total="0" />
+    <im-accounts total="0" />
+  </person>
+  <person>
+    <id>j1tbzuKscn</id>
+    <first-name>Abdelhadi</first-name>
+    <last-name>Khouri</last-name>
+    <location>
+      <name>Cologne Area, Germany</name>
+    </location>
+    <positions total="1">
+      <position>
+        <id>7432711</id>
+        <title>SAP Technical Consultant</title>
+        <summary></summary>
+        <start-date>
+          <year>2002</year>
+          <month>7</month>
+        </start-date>
+        <is-current>true</is-current>
+        <company>
+          <name>Rockwool International A/S</name>
+          <industry>Information Technology and Services</industry>
+        </company>
+      </position>
+    </positions>
+    <phone-numbers total="0" />
+    <im-accounts total="0" />
+  </person>
+  <person>
+    <id>IPdgO30i3O</id>
+    <first-name>Aydin</first-name>
+    <last-name>Kocas</last-name>
+    <location>
+      <name>Cologne Area, Germany</name>
+    </location>
+    <picture-url>http://media.linkedin.com/mpr/mprx/0_xrBNYrcffP_CORBTAzFwYt3GDnnSyjbTjc_IYtQt-PCg_MK319bZr--yi49t0VQSY1vElzZVys_N</picture-url>
+    <positions total="6">
+      <position>
+        <id>74174634</id>
+        <title>Freelancer</title>
+        <summary>Contractor, Enterprise Integration / T-Mobile headquarters (Bonn, DE).</summary>
+        <start-date>
+          <year>2009</year>
+          <month>5</month>
+        </start-date>
+        <is-current>true</is-current>
+        <company>
+          <name>Kocas IT</name>
+          <industry>Information Technology and Services</industry>
+        </company>
+      </position>
+      <position>
+        <id>105476587</id>
+        <title>Enterprise Integration (mobile)</title>
+        <summary></summary>
+        <start-date>
+          <year>2008</year>
+          <month>10</month>
+        </start-date>
+        <is-current>true</is-current>
+        <company>
+          <id>1593</id>
+          <name>Deutsche Telekom</name>
+          <type>Public Company</type>
+          <industry>Telecommunications</industry>
+          <ticker>DT</ticker>
+        </company>
+      </position>
+      <position>
+        <id>35165739</id>
+        <title>Associate Consultant</title>
+        <summary>Enterprise Architecture</summary>
+        <start-date>
+          <year>2008</year>
+          <month>3</month>
+        </start-date>
+        <end-date>
+          <year>2009</year>
+          <month>5</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <id>2347</id>
+          <name>Logica</name>
+          <type>Public Company</type>
+          <industry>Information Technology and Services</industry>
+          <ticker>LOG</ticker>
+        </company>
+      </position>
+      <position>
+        <id>22807298</id>
+        <title>Billing Specialist - Technical Lead</title>
+        <start-date>
+          <year>2007</year>
+          <month>9</month>
+        </start-date>
+        <end-date>
+          <year>2008</year>
+          <month>3</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <id>2831</id>
+          <name>Tele2 Central Billing</name>
+          <type>Public Company</type>
+          <industry>Telecommunications</industry>
+        </company>
+      </position>
+      <position>
+        <id>22980669</id>
+        <title>Operations Support</title>
+        <start-date>
+          <year>2007</year>
+          <month>2</month>
+        </start-date>
+        <end-date>
+          <year>2007</year>
+          <month>9</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <id>2831</id>
+          <name>Tele2 Central Billing</name>
+          <type>Public Company</type>
+          <industry>Telecommunications</industry>
+        </company>
+      </position>
+      <position>
+        <id>27810248</id>
+        <title>Education as IT-Specialist</title>
+        <start-date>
+          <year>2000</year>
+        </start-date>
+        <end-date>
+          <year>2003</year>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <id>138872</id>
+          <name>IMOCOS</name>
+          <size>1-10 employees</size>
+          <type>Privately Held</type>
+          <industry>Internet</industry>
+        </company>
+      </position>
+    </positions>
+    <phone-numbers total="0" />
+    <im-accounts total="0" />
+  </person>
+  <person>
+    <id>SJlFhhPJ8u</id>
+    <first-name>Jens</first-name>
+    <last-name>Krinke</last-name>
+    <location>
+      <name>United Kingdom</name>
+    </location>
+    <picture-url>http://media.linkedin.com/mpr/mprx/0_-1nutzi31Pk-xPGjKAv1tnCuPK3YjP-jKqC1tB3luvzmGcLgYzQ8pcvxgOTTYN1A1rNtgrPmpUzF</picture-url>
+    <positions total="7">
+      <position>
+        <id>221921767</id>
+        <title>Senior Lecturer</title>
+        <summary></summary>
+        <start-date>
+          <year>2011</year>
+          <month>10</month>
+        </start-date>
+        <is-current>true</is-current>
+        <company>
+          <id>4171</id>
+          <name>University College London</name>
+          <size>5001-10,000 employees</size>
+          <type>Educational Institution</type>
+          <industry>Research</industry>
+        </company>
+      </position>
+      <position>
+        <id>133253718</id>
+        <title>Lecturer</title>
+        <summary></summary>
+        <start-date>
+          <year>2010</year>
+          <month>8</month>
+        </start-date>
+        <end-date>
+          <year>2011</year>
+          <month>9</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <id>4171</id>
+          <name>University College London</name>
+          <type>Educational Institution</type>
+          <industry>Research</industry>
+        </company>
+      </position>
+      <position>
+        <id>48042343</id>
+        <title>Lecturer</title>
+        <summary></summary>
+        <start-date>
+          <year>2008</year>
+          <month>9</month>
+        </start-date>
+        <end-date>
+          <year>2010</year>
+          <month>7</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <id>7198</id>
+          <name>King's College London</name>
+          <type>Educational Institution</type>
+          <industry>Research</industry>
+        </company>
+      </position>
+      <position>
+        <id>5756362</id>
+        <title>Assistant Professor for Software Technology</title>
+        <summary>Juniorprofessor für Softwaretechnik</summary>
+        <start-date>
+          <year>2003</year>
+          <month>10</month>
+        </start-date>
+        <end-date>
+          <year>2008</year>
+          <month>8</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <id>74085</id>
+          <name>FernUniversität in Hagen</name>
+          <size>1001-5000 employees</size>
+          <type>Educational Institution</type>
+          <industry>Computer Software</industry>
+        </company>
+      </position>
+      <position>
+        <id>44132211</id>
+        <title>Visiting Scientist</title>
+        <start-date>
+          <year>2008</year>
+          <month>4</month>
+        </start-date>
+        <end-date>
+          <year>2008</year>
+          <month>7</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <id>82321</id>
+          <name>GrammaTech</name>
+          <size>11-50 employees</size>
+          <type>Privately Held</type>
+          <industry>Computer Software</industry>
+        </company>
+      </position>
+      <position>
+        <id>5756782</id>
+        <title>Researcher</title>
+        <summary>Wissenschaftlicher Assistent</summary>
+        <start-date>
+          <year>1999</year>
+          <month>4</month>
+        </start-date>
+        <end-date>
+          <year>2003</year>
+          <month>9</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <name>Universität Passau</name>
+          <type>Educational Institution</type>
+          <industry>Higher Education</industry>
+        </company>
+      </position>
+      <position>
+        <id>5757093</id>
+        <title>Researcher</title>
+        <summary>Wissenschaftlicher Mitarbeiter</summary>
+        <start-date>
+          <year>1995</year>
+          <month>8</month>
+        </start-date>
+        <end-date>
+          <year>1999</year>
+          <month>3</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <id>18809</id>
+          <name>TU Braunschweig</name>
+          <type>Educational Institution</type>
+          <industry>Higher Education</industry>
+        </company>
+      </position>
+    </positions>
+    <phone-numbers total="0" />
+    <im-accounts total="0" />
+  </person>
+  <person>
+    <id>yxVYwbfxPH</id>
+    <first-name>Falk</first-name>
+    <last-name>Kühnel</last-name>
+    <location>
+      <name>Cologne Area, Germany</name>
+    </location>
+    <picture-url>http://media.linkedin.com/mpr/mprx/0_R84qR_H_dQamUIE3JCJFR34_IkU7UDE3MG2wRhdKqT7xkWgTBQH4v8gYLoRK4owDV_VoqbRa1eMF</picture-url>
+    <positions total="2">
+      <position>
+        <id>40829451</id>
+        <title>CEO</title>
+        <start-date>
+          <year>2007</year>
+          <month>9</month>
+        </start-date>
+        <is-current>true</is-current>
+        <company>
+          <name>justread - Die neue Art zu lesen</name>
+          <industry>Consumer Electronics</industry>
+        </company>
+      </position>
+      <position>
+        <id>44114229</id>
+        <title>CEO</title>
+        <start-date>
+          <year>1998</year>
+          <month>1</month>
+        </start-date>
+        <is-current>true</is-current>
+        <company>
+          <name>cogitatio</name>
+          <size>Myself Only</size>
+          <industry>Online Media</industry>
+        </company>
+      </position>
+    </positions>
+    <phone-numbers total="1">
+      <phone-number>
+        <phone-type>work</phone-type>
+        <phone-number>+49 228 3693699</phone-number>
+      </phone-number>
+    </phone-numbers>
+    <im-accounts total="0" />
+  </person>
+  <person>
+    <id>MmD4gWBpA9</id>
+    <first-name>Carlo Alberto</first-name>
+    <last-name>Licciardi</last-name>
+    <location>
+      <name>Novara Area, Italy</name>
+    </location>
+    <picture-url>http://media.linkedin.com/mpr/mprx/0_OPQTE1QGA78myrDkyqhOEK9h1HcmyvukyttOElFO2DiY_AUXtvnSXAPrjQBl0tSe0Kkx59z9U8tX</picture-url>
+    <positions total="9">
+      <position>
+        <id>23227511</id>
+        <title>Senior Project Manager</title>
+        <start-date>
+          <year>1999</year>
+        </start-date>
+        <is-current>true</is-current>
+        <company>
+          <id>166302</id>
+          <name>Telecomitalia</name>
+          <industry>Telecommunications</industry>
+        </company>
+      </position>
+      <position>
+        <id>8995750</id>
+        <title>Project Manager</title>
+        <start-date>
+          <year>1992</year>
+          <month>6</month>
+        </start-date>
+        <is-current>true</is-current>
+        <company>
+          <id>1936</id>
+          <name>Telecom Italia</name>
+          <industry>Telecommunications</industry>
+        </company>
+      </position>
+      <position>
+        <id>58792714</id>
+        <title>Board member</title>
+        <start-date>
+          <year>2007</year>
+        </start-date>
+        <end-date>
+          <year>2008</year>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <name>EU Project CCAST</name>
+          <industry>Telecommunications</industry>
+        </company>
+      </position>
+      <position>
+        <id>22399707</id>
+        <title>Board member</title>
+        <start-date>
+          <year>2001</year>
+        </start-date>
+        <end-date>
+          <year>2008</year>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <name>SPICE Project</name>
+          <industry>Telecommunications</industry>
+        </company>
+      </position>
+      <position>
+        <id>41583368</id>
+        <title>Project Manager</title>
+        <start-date>
+          <year>1999</year>
+        </start-date>
+        <end-date>
+          <year>2008</year>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <name>TILAB (formerly CSELT)</name>
+          <industry>Telecommunications</industry>
+        </company>
+      </position>
+      <position>
+        <id>58788229</id>
+        <title>Project Manager</title>
+        <start-date>
+          <year>1998</year>
+        </start-date>
+        <end-date>
+          <year>2005</year>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <id>1940</id>
+          <name>Telecom Italia Lab</name>
+          <industry>Telecommunications</industry>
+        </company>
+      </position>
+      <position>
+        <id>37022185</id>
+        <title>Technical leader</title>
+        <start-date>
+          <year>1996</year>
+        </start-date>
+        <end-date>
+          <year>1999</year>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <name>TINA</name>
+          <industry>Telecommunications</industry>
+        </company>
+      </position>
+      <position>
+        <id>27045260</id>
+        <title>Specification Leader</title>
+        <start-date>
+          <year>1996</year>
+        </start-date>
+        <end-date>
+          <year>1999</year>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <name>TINA-C</name>
+          <industry>Telecommunications</industry>
+        </company>
+      </position>
+      <position>
+        <id>44430574</id>
+        <title>Master TLC</title>
+        <start-date>
+          <year>1992</year>
+        </start-date>
+        <end-date>
+          <year>1993</year>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <name>Scuola Superiore Guglielmo Reiss Romoli</name>
+          <industry>Telecommunications</industry>
+        </company>
+      </position>
+    </positions>
+    <phone-numbers total="0" />
+    <im-accounts total="0" />
+  </person>
+  <person>
+    <id>TllCRXJsc_</id>
+    <first-name>Heide</first-name>
+    <last-name>Lukosch</last-name>
+    <location>
+      <name>The Hague Area, Netherlands</name>
+    </location>
+    <picture-url>http://media.linkedin.com/mpr/mprx/0_9G8uJ8IjlLaSz9xG9hr1JiSYPhVjzvOGNiN1JiSauLaDoAdCsXK8B_JhgmsGnt0ac3Ct9kPpV3Rx</picture-url>
+    <positions total="4">
+      <position>
+        <id>48020968</id>
+        <title>Assistant Professor</title>
+        <summary>Research on the relationship on virtuality and training/learning from a social science perspective.</summary>
+        <start-date>
+          <year>2008</year>
+        </start-date>
+        <is-current>true</is-current>
+        <company>
+          <id>166529</id>
+          <name>Delft University of Technology</name>
+          <size>5001-10,000 employees</size>
+          <type>Educational Institution</type>
+          <industry>Research</industry>
+        </company>
+      </position>
+      <position>
+        <id>44854664</id>
+        <title>Research Assistant</title>
+        <summary>Advice and development of training media.</summary>
+        <start-date>
+          <year>2004</year>
+          <month>9</month>
+        </start-date>
+        <end-date>
+          <year>2008</year>
+          <month>8</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <name>LAFP NRW</name>
+          <industry>Education Management</industry>
+        </company>
+      </position>
+      <position>
+        <id>131060994</id>
+        <title>Research Assistant</title>
+        <summary>Development of virtual learning material, research on the use of e- and blended learning scenarios within the social sciences. Teaching at the department of sociology.</summary>
+        <start-date>
+          <year>2001</year>
+        </start-date>
+        <end-date>
+          <year>2003</year>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <id>74085</id>
+          <name>FernUniversität in Hagen</name>
+          <type>Educational Institution</type>
+          <industry>Education Management</industry>
+        </company>
+      </position>
+      <position>
+        <id>131060581</id>
+        <title>Research Assistant</title>
+        <summary>Research within the media industry. Teaching at the department of sociology.</summary>
+        <start-date>
+          <year>1999</year>
+        </start-date>
+        <end-date>
+          <year>2001</year>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <id>700268</id>
+          <name>Technische Universität Kaiserslautern</name>
+          <type>Educational Institution</type>
+          <industry>Mechanical or Industrial Engineering</industry>
+        </company>
+      </position>
+    </positions>
+    <phone-numbers total="0" />
+    <im-accounts total="0" />
+  </person>
+  <person>
+    <id>8yZNrzSKOz</id>
+    <first-name>Stephan</first-name>
+    <last-name>Lukosch</last-name>
+    <location>
+      <name>The Hague Area, Netherlands</name>
+    </location>
+    <picture-url>http://media.linkedin.com/mpr/mprx/0_QQ0tAdax4no9zLnjk6gDAwjyZcS9BiFjXTIDAE0hb-M6ebrgo8fYxowanMDdqX6Ab5juODDpIMJT</picture-url>
+    <positions total="6">
+      <position>
+        <id>140153068</id>
+        <title>Associate Professor</title>
+        <summary></summary>
+        <start-date>
+          <year>2010</year>
+          <month>9</month>
+        </start-date>
+        <is-current>true</is-current>
+        <company>
+          <id>166529</id>
+          <name>Delft University of Technology</name>
+          <size>5001-10,000 employees</size>
+          <type>Educational Institution</type>
+          <industry>Research</industry>
+        </company>
+      </position>
+      <position>
+        <id>43935670</id>
+        <title>Assistant Professor</title>
+        <summary></summary>
+        <start-date>
+          <year>2008</year>
+          <month>10</month>
+        </start-date>
+        <end-date>
+          <year>2010</year>
+          <month>9</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <id>166529</id>
+          <name>Delft University of Technology</name>
+          <size>5001-10,000 employees</size>
+          <type>Educational Institution</type>
+          <industry>Research</industry>
+        </company>
+      </position>
+      <position>
+        <id>51883871</id>
+        <title>Assistant Professor</title>
+        <summary></summary>
+        <start-date>
+          <year>2003</year>
+          <month>8</month>
+        </start-date>
+        <end-date>
+          <year>2008</year>
+          <month>9</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <id>74085</id>
+          <name>FernUniversität in Hagen</name>
+          <type>Educational Institution</type>
+          <industry>Education Management</industry>
+        </company>
+      </position>
+      <position>
+        <id>44105201</id>
+        <title>Visiting Scientist</title>
+        <start-date>
+          <year>2008</year>
+          <month>4</month>
+        </start-date>
+        <end-date>
+          <year>2008</year>
+          <month>6</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <id>1053</id>
+          <name>Intel</name>
+          <size>10,001+ employees</size>
+          <type>Public Company</type>
+          <industry>Semiconductors</industry>
+          <ticker>INTC</ticker>
+        </company>
+      </position>
+      <position>
+        <id>44098602</id>
+        <title>Scientific assistant</title>
+        <start-date>
+          <year>1998</year>
+          <month>8</month>
+        </start-date>
+        <end-date>
+          <year>2003</year>
+          <month>7</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <id>74085</id>
+          <name>FernUniversität in Hagen</name>
+          <size>1001-5000 employees</size>
+          <type>Educational Institution</type>
+          <industry>Computer Software</industry>
+        </company>
+      </position>
+      <position>
+        <id>44098608</id>
+        <title>Student assistant</title>
+        <start-date>
+          <year>1996</year>
+          <month>5</month>
+        </start-date>
+        <end-date>
+          <year>1998</year>
+          <month>4</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <id>74085</id>
+          <name>FernUniversität in Hagen</name>
+          <size>1001-5000 employees</size>
+          <type>Educational Institution</type>
+          <industry>Computer Software</industry>
+        </company>
+      </position>
+    </positions>
+    <phone-numbers total="0" />
+    <im-accounts total="0" />
+  </person>
+  <person>
+    <id>bOlBzSCPVL</id>
+    <first-name>Christian</first-name>
+    <last-name>Maas</last-name>
+    <location>
+      <name>Ottawa, Canada Area</name>
+    </location>
+    <picture-url>http://media.linkedin.com/mpr/mprx/0_in1UQMG-DWcU1MRZ3PleQVigfa39lxsZTqFXQR1hrIz6mRS47KiBHUba38Td-ZUNGvA5WyT-VriZ</picture-url>
+    <positions total="3">
+      <position>
+        <id>13098230</id>
+        <title>System Architect</title>
+        <summary></summary>
+        <start-date>
+          <year>2007</year>
+          <month>5</month>
+        </start-date>
+        <is-current>true</is-current>
+        <company>
+          <id>8969</id>
+          <name>HP Enterprise Services</name>
+          <size>10,001+ employees</size>
+          <type>Public Company</type>
+          <industry>Information Technology and Services</industry>
+        </company>
+      </position>
+      <position>
+        <id>17229339</id>
+        <title>Consultant</title>
+        <start-date>
+          <year>2000</year>
+          <month>6</month>
+        </start-date>
+        <end-date>
+          <year>2007</year>
+          <month>4</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <name>EDS Operations Services GmbH</name>
+          <type>Public Company</type>
+          <industry>Information Technology and Services</industry>
+        </company>
+      </position>
+      <position>
+        <id>45249167</id>
+        <title>Vocational Training in Business Administration</title>
+        <summary></summary>
+        <start-date>
+          <year>1998</year>
+          <month>9</month>
+        </start-date>
+        <end-date>
+          <year>2000</year>
+          <month>6</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <name>Adam Opel AG</name>
+          <industry>Automotive</industry>
+        </company>
+      </position>
+    </positions>
+    <phone-numbers total="0" />
+    <im-accounts total="0" />
+  </person>
+  <person>
+    <id>DDispGyJ6h</id>
+    <first-name>Tim A.</first-name>
+    <last-name>Majchrzak</last-name>
+    <location>
+      <name>Dortmund Area, Germany</name>
+    </location>
+    <positions total="1">
+      <position>
+        <id>130488191</id>
+        <title>Research Associate</title>
+        <summary></summary>
+        <start-date>
+          <year>2007</year>
+          <month>2</month>
+        </start-date>
+        <is-current>true</is-current>
+        <company>
+          <id>15594</id>
+          <name>University of Münster</name>
+          <type>Educational Institution</type>
+          <industry>Research</industry>
+        </company>
+      </position>
+    </positions>
+    <phone-numbers total="0" />
+    <im-accounts total="0" />
+  </person>
+  <person>
+    <id>6RhJMmwJaI</id>
+    <first-name>Gunnar</first-name>
+    <last-name>Mau</last-name>
+    <location>
+      <name>Germany</name>
+    </location>
+    <picture-url>http://media.linkedin.com/mpr/mprx/0_9fXpR8DwYXggdqeTNmLfRGuVpCVjwBJTNar_RiDsibaDN1a3sdqrv_MN-2sGHK4Sc26GqkxXWXle</picture-url>
+    <positions total="4">
+      <position>
+        <id>165289427</id>
+        <title>Postdoc</title>
+        <summary></summary>
+        <start-date>
+          <year>2010</year>
+          <month>8</month>
+        </start-date>
+        <is-current>true</is-current>
+        <company>
+          <id>27899</id>
+          <name>University of Siegen</name>
+          <type>Educational Institution</type>
+          <industry>Research</industry>
+        </company>
+      </position>
+      <position>
+        <id>174735550</id>
+        <title>Owner &amp; Founder</title>
+        <summary></summary>
+        <start-date>
+          <year>2008</year>
+          <month>5</month>
+        </start-date>
+        <is-current>true</is-current>
+        <company>
+          <id>1314968</id>
+          <name>Shoppermetrics GmbH &amp; Co. KG</name>
+          <industry>Market Research</industry>
+        </company>
+      </position>
+      <position>
+        <id>167690151</id>
+        <title>Dipl.-Psych.</title>
+        <summary></summary>
+        <start-date>
+          <year>1998</year>
+          <month>10</month>
+        </start-date>
+        <end-date>
+          <year>2001</year>
+          <month>10</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <name>Diplom-Psychologie an der Universität Mannheim</name>
+          <industry>Research</industry>
+        </company>
+      </position>
+      <position>
+        <id>167690161</id>
+        <title>cand. psych.</title>
+        <summary></summary>
+        <start-date>
+          <year>1995</year>
+          <month>10</month>
+        </start-date>
+        <end-date>
+          <year>1998</year>
+          <month>9</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <name>Christian-Albrechts</name>
+          <industry>Research</industry>
+        </company>
+      </position>
+    </positions>
+    <phone-numbers total="0" />
+    <im-accounts total="0" />
+  </person>
+  <person>
+    <id>EBNZCNYcIt</id>
+    <first-name>Ruben</first-name>
+    <last-name>Mendez</last-name>
+    <location>
+      <name>Madrid Area, Spain</name>
+    </location>
+    <picture-url>http://media.linkedin.com/mpr/mprx/0_y_g-snWlU3G293RaOXuTszZxRX6un3EaO3WSszeCX3-yW5gmr5SOqvpuzEQPz6wGg8x2vtsVZsLc</picture-url>
+    <positions total="2">
+      <position>
+        <id>115238783</id>
+        <title>Research Engineer</title>
+        <summary>Part of the Security Lab, carrying out managerial and development tasks in several projects for the Eurpean Community.</summary>
+        <start-date>
+          <year>2008</year>
+          <month>6</month>
+        </start-date>
+        <is-current>true</is-current>
+        <company>
+          <id>1259</id>
+          <name>ATOS Research &amp; Innovation</name>
+          <size>10,001+ employees</size>
+          <type>Public Company</type>
+          <industry>Telecommunications</industry>
+          <ticker>ATO</ticker>
+        </company>
+      </position>
+      <position>
+        <id>52926366</id>
+        <title>SAP Consultant</title>
+        <summary>He worked as SAP consultant during 6 months for the company Atos Origin S.A.E executing supporting tasks in different projects. Moreover, he obtained official SAP certificates in SD and CRM modules in that period.</summary>
+        <start-date>
+          <year>2008</year>
+          <month>2</month>
+        </start-date>
+        <end-date>
+          <year>2008</year>
+          <month>6</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <name>ATOS ORIGIN SAE</name>
+          <industry>Management Consulting</industry>
+        </company>
+      </position>
+    </positions>
+    <phone-numbers total="0" />
+    <im-accounts total="0" />
+  </person>
+  <person>
+    <id>flIwUgMU8x</id>
+    <first-name>Jesús</first-name>
+    <last-name>Merino</last-name>
+    <location>
+      <name>Madrid Area, Spain</name>
+    </location>
+    <picture-url>http://media.linkedin.com/mpr/mprx/0_N0TLAL3IT1Z-ijCj9pisAQ8nTcD03RCj94vsAbCIY-JfOxvg4JldxF9L7MShCp_Avp_ROhprocQY</picture-url>
+    <positions total="4">
+      <position>
+        <id>200009358</id>
+        <title>Project and Internationalization Manager</title>
+        <summary>- Project management and finance control of the projects developed by the Association (technological promotion, R&amp;D&amp;I, e-skills, among other topics)
+- Expert assessment for member companies in internationalization and international trade (trade promotion, tendering, investments, international finance and risk management)</summary>
+        <start-date>
+          <year>2011</year>
+          <month>1</month>
+        </start-date>
+        <is-current>true</is-current>
+        <company>
+          <name>AMETIC</name>
+          <industry>Information Technology and Services</industry>
+        </company>
+      </position>
+      <position>
+        <id>54711847</id>
+        <title>Director of the Technological Transfer and International Trade Office</title>
+        <summary>Project management and finance control.
+Project financing. 
+R&amp;D&amp;I Promotion. Management of the Association’s International Innovation Unit (UII).
+Expert assessment in internationalization and international trade.</summary>
+        <start-date>
+          <year>2007</year>
+          <month>3</month>
+        </start-date>
+        <end-date>
+          <year>2010</year>
+          <month>12</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <id>359170</id>
+          <name>ASIMELEC</name>
+          <type>Nonprofit</type>
+          <industry>Information Technology and Services</industry>
+        </company>
+      </position>
+      <position>
+        <id>137838806</id>
+        <title>Senior risk underwriter and analyst</title>
+        <summary>Senior commercial risk analyst for Mexico and Central America.
+Expert assessment on commercial and credit risk in Mexico for Spanish investors and exporters.
+Project-finance risk analysis.
+Risk portfolio analysis.
+CESCE is the Spanish Export Credit Agency.</summary>
+        <start-date>
+          <year>2000</year>
+          <month>8</month>
+        </start-date>
+        <end-date>
+          <year>2007</year>
+          <month>3</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <id>1018320</id>
+          <name>CESCE, S.A.</name>
+          <type>Privately Held</type>
+          <industry>Insurance</industry>
+        </company>
+      </position>
+      <position>
+        <id>137839056</id>
+        <title>Scholarship on International Trade in the Netherlands</title>
+        <summary>Scholarship on International Trade at the Commercial Office of the Embassy of Spain in the Netherlands, granted by the Spanish Institute for International Trade Promotion (ICEX)</summary>
+        <start-date>
+          <year>1999</year>
+          <month>7</month>
+        </start-date>
+        <end-date>
+          <year>2000</year>
+          <month>7</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <name>Oficina Comercial de la Embajada de España en los Países Bajos</name>
+          <industry>International Trade and Development</industry>
+        </company>
+      </position>
+    </positions>
+    <phone-numbers total="0" />
+    <im-accounts total="0" />
+  </person>
+  <person>
+    <id>TRkw2EiLo-</id>
+    <first-name>Salim Tieb</first-name>
+    <last-name>Mohamedi</last-name>
+    <location>
+      <name>Melilla Area, Spain</name>
+    </location>
+    <positions total="0" />
+    <phone-numbers total="0" />
+    <im-accounts total="0" />
+  </person>
+  <person>
+    <id>0iZ45jYbxw</id>
+    <first-name>Christian</first-name>
+    <last-name>Neumann</last-name>
+    <location>
+      <name>Hagen Area, Germany</name>
+    </location>
+    <positions total="2">
+      <position>
+        <id>215749109</id>
+        <title>SHK</title>
+        <start-date>
+          <year>2010</year>
+        </start-date>
+        <end-date>
+          <year>2011</year>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <name>Universität Siegen</name>
+          <industry>Computer Software</industry>
+        </company>
+      </position>
+      <position>
+        <id>188783812</id>
+        <title>Vereinsvertreter</title>
+        <start-date>
+          <year>2006</year>
+        </start-date>
+        <end-date>
+          <year>2011</year>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <name>Westdeutscher Basketball Verband e.V.</name>
+          <industry>Computer Software</industry>
+        </company>
+      </position>
+    </positions>
+    <phone-numbers total="0" />
+    <im-accounts total="0" />
+  </person>
+  <person>
+    <id>rQmeLuVHVp</id>
+    <first-name>Fabian</first-name>
+    <last-name>Ochs</last-name>
+    <location>
+      <name>Mannheim Area, Germany</name>
+    </location>
+    <positions total="1">
+      <position>
+        <id>150843345</id>
+        <title>Project Manager</title>
+        <is-current>true</is-current>
+        <company>
+          <id>97050</id>
+          <name>YellowMap AG</name>
+          <size>11-50 employees</size>
+          <type>Privately Held</type>
+          <industry>Internet</industry>
+        </company>
+      </position>
+    </positions>
+    <phone-numbers total="0" />
+    <im-accounts total="0" />
+  </person>
+  <person>
+    <id>URbpRQRiFF</id>
+    <first-name>John</first-name>
+    <last-name>O'Connell</last-name>
+    <location>
+      <name>Grenoble Area, France</name>
+    </location>
+    <picture-url>http://media.linkedin.com/mpr/mprx/0_RSNOt_VLOrESw16AMIXTtho5Y1g7WK9AMu8TthWzT9Wxnq3lBwk-p8jRKgjKoBcjVmnhgbBx2OMA</picture-url>
+    <positions total="5">
+      <position>
+        <id>59383434</id>
+        <title>Senior Technologist, Portfolio Management</title>
+        <summary>A senior technologist in the Portfolio Management team of HP's Communications and Media Solutions business</summary>
+        <start-date>
+          <year>2008</year>
+          <month>11</month>
+        </start-date>
+        <is-current>true</is-current>
+        <company>
+          <id>1025</id>
+          <name>Hewlett-Packard</name>
+          <type>Public Company</type>
+          <industry>Computer Hardware</industry>
+          <ticker>HPQ</ticker>
+        </company>
+      </position>
+      <position>
+        <id>53592760</id>
+        <title>Senior Technologist, Strategy</title>
+        <summary>Senior Technologist within strategy organisation of the HP OpenCall Software business group</summary>
+        <start-date>
+          <year>2008</year>
+          <month>2</month>
+        </start-date>
+        <end-date>
+          <year>2008</year>
+          <month>10</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <id>1025</id>
+          <name>Hewlett-Packard</name>
+          <type>Public Company</type>
+          <industry>Computer Hardware</industry>
+          <ticker>HPQ</ticker>
+        </company>
+      </position>
+      <position>
+        <id>7458949</id>
+        <title>Senior Architect</title>
+        <summary></summary>
+        <start-date>
+          <year>2002</year>
+          <month>1</month>
+        </start-date>
+        <end-date>
+          <year>2008</year>
+          <month>2</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <id>1025</id>
+          <name>Hewlett-Packard</name>
+          <size>10,001+ employees</size>
+          <type>Public Company</type>
+          <industry>Information Technology and Services</industry>
+          <ticker>HPQ</ticker>
+        </company>
+      </position>
+      <position>
+        <id>30874801</id>
+        <title>Software Architect</title>
+        <start-date>
+          <year>1994</year>
+          <month>1</month>
+        </start-date>
+        <end-date>
+          <year>2001</year>
+          <month>12</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <id>1025</id>
+          <name>Hewlett-Packard</name>
+          <size>10,001+ employees</size>
+          <type>Public Company</type>
+          <industry>Telecommunications</industry>
+          <ticker>HPQ</ticker>
+        </company>
+      </position>
+      <position>
+        <id>30874723</id>
+        <title>Researcher</title>
+        <summary>Researcher in formal software methods and distributed systems at HPLabs in Bristol, England.</summary>
+        <start-date>
+          <year>1986</year>
+          <month>10</month>
+        </start-date>
+        <end-date>
+          <year>1993</year>
+          <month>12</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <id>1026</id>
+          <name>Hewlett-Packard Laboratories</name>
+          <size>10,001+ employees</size>
+          <type>Public Company</type>
+          <industry>Information Technology and Services</industry>
+          <ticker>HPQ</ticker>
+        </company>
+      </position>
+    </positions>
+    <phone-numbers total="0" />
+    <im-accounts total="0" />
+  </person>
+  <person>
+    <id>9_ZM5SseqW</id>
+    <first-name>Hugo</first-name>
+    <last-name>Paredes</last-name>
+    <location>
+      <name>Portugal</name>
+    </location>
+    <picture-url>http://media.linkedin.com/mpr/mprx/0_fl6WHRz2_W1IgR7o7AknHMXGTfLo0ZxoSn-9HZ5OYoAVhpeE_B95Q4Ar7T5zyxY6atXBF0R9a1tB</picture-url>
+    <positions total="6">
+      <position>
+        <id>177578794</id>
+        <title>Researcher</title>
+        <summary></summary>
+        <start-date>
+          <year>2009</year>
+          <month>5</month>
+        </start-date>
+        <is-current>true</is-current>
+        <company>
+          <name>GECAD - Grupo de Investigação em Engenharia do Conhecimento e Apoio a Decisão</name>
+          <industry>Research</industry>
+        </company>
+      </position>
+      <position>
+        <id>43574677</id>
+        <title>Assistant Professor</title>
+        <summary></summary>
+        <start-date>
+          <year>2005</year>
+          <month>5</month>
+        </start-date>
+        <is-current>true</is-current>
+        <company>
+          <id>24164</id>
+          <name>UTAD</name>
+          <type>Public Company</type>
+          <industry>Higher Education</industry>
+        </company>
+      </position>
+      <position>
+        <id>90554326</id>
+        <title>FCT Researcher</title>
+        <summary></summary>
+        <start-date>
+          <year>2003</year>
+          <month>2</month>
+        </start-date>
+        <end-date>
+          <year>2005</year>
+          <month>5</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <id>24164</id>
+          <name>UTAD</name>
+          <type>Public Company</type>
+          <industry>Higher Education</industry>
+        </company>
+      </position>
+      <position>
+        <id>90510048</id>
+        <title>Software Consultant</title>
+        <summary></summary>
+        <start-date>
+          <year>2002</year>
+          <month>6</month>
+        </start-date>
+        <end-date>
+          <year>2003</year>
+          <month>2</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <id>2148</id>
+          <name>Infineon Technologies</name>
+          <type>Public Company</type>
+          <industry>Semiconductors</industry>
+          <ticker>IFX</ticker>
+        </company>
+      </position>
+      <position>
+        <id>90554791</id>
+        <title>PKI Developer</title>
+        <summary></summary>
+        <start-date>
+          <year>2000</year>
+          <month>11</month>
+        </start-date>
+        <end-date>
+          <year>2002</year>
+          <month>6</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <id>17341</id>
+          <name>SIBS</name>
+          <type>Privately Held</type>
+          <industry>Information Technology and Services</industry>
+        </company>
+      </position>
+      <position>
+        <id>90554951</id>
+        <title>Software Developer</title>
+        <summary></summary>
+        <start-date>
+          <year>2000</year>
+          <month>2</month>
+        </start-date>
+        <end-date>
+          <year>2000</year>
+          <month>11</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <id>10064</id>
+          <name>Universidade do Minho</name>
+          <type>Educational Institution</type>
+          <industry>Higher Education</industry>
+        </company>
+      </position>
+    </positions>
+    <phone-numbers total="1">
+      <phone-number>
+        <phone-type>work</phone-type>
+        <phone-number>+351259350332</phone-number>
+      </phone-number>
+    </phone-numbers>
+    <im-accounts total="1">
+      <im-account>
+        <im-account-type>msn</im-account-type>
+        <im-account-name>hparedes@utad.pt</im-account-name>
+      </im-account>
+    </im-accounts>
+    <date-of-birth>
+      <year>1977</year>
+      <month>9</month>
+      <day>29</day>
+    </date-of-birth>
+  </person>
+  <person>
+    <id>1v3jYiQ0Xy</id>
+    <first-name>Fabio</first-name>
+    <last-name>Paternò</last-name>
+    <location>
+      <name>Prato Area, Italy</name>
+    </location>
+    <positions total="1">
+      <position>
+        <id>5504914</id>
+        <title>Head of Research Laboratory</title>
+        <is-current>true</is-current>
+        <company>
+          <id>565371</id>
+          <name>ISTI-CNR</name>
+          <type>Public Company</type>
+          <industry>Information Technology and Services</industry>
+        </company>
+      </position>
+    </positions>
+    <phone-numbers total="0" />
+    <im-accounts total="0" />
+  </person>
+  <person>
+    <id>jriVFmz4rH</id>
+    <first-name>Marc</first-name>
+    <last-name>Planagumà i Valls</last-name>
+    <location>
+      <name>Barcelona Area, Spain</name>
+    </location>
+    <picture-url>http://media.linkedin.com/mpr/mprx/0_SLdZcMwfebzwJdsj7_wwcVR3e3TkUdRjfbjFcVRpBXvNkS2g3iJNMs7-Q73U4aVAu6IQ4gLc752l</picture-url>
+    <positions total="6">
+      <position>
+        <id>137941775</id>
+        <title>Researcher and Data Engineer</title>
+        <summary>- Research on a Mobility Group about Smart Cities management and mobility services.
+- Expert and consultant on Recommender &amp; Context-Aware Systems, Data Mining, Information Retrieval, Semantic Web, Knowledge Discovery and Data Processing.
+- Software Architect and Senior developer on distributed architectures, parallelism, high scalability and big data systems.
+- DIGITAL.ME Project (http://dime-project.eu/) : Researcher and Software developer on a distributed system for data management.</summary>
+        <start-date>
+          <year>2010</year>
+          <month>9</month>
+        </start-date>
+        <is-current>true</is-current>
+        <company>
+          <id>214412</id>
+          <name>Barcelona Digital Technology Centre</name>
+          <size>51-200 employees</size>
+          <type>Nonprofit</type>
+          <industry>Research</industry>
+        </company>
+      </position>
+      <position>
+        <id>38193215</id>
+        <title>R&amp;D Engineer</title>
+        <summary>Research engineer at Recomender Systems Group.
+
+- ENVIRO Project – Management and research leadership on contextual and recommendation services for projects of Telefonica I + D.
+- WALKOPEDIA Project – Development and research of a O2-UK commercial product in contextual Services.</summary>
+        <start-date>
+          <year>2008</year>
+          <month>6</month>
+        </start-date>
+        <end-date>
+          <year>2010</year>
+          <month>6</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <id>2103</id>
+          <name>Telefònica I+D</name>
+          <size>10,001+ employees</size>
+          <type>Privately Held</type>
+          <industry>Telecommunications</industry>
+        </company>
+      </position>
+      <position>
+        <id>38060394</id>
+        <title>R&amp;D Consultant</title>
+        <summary>- TERESE Project – Development and innovation of the global recommendation product in Telefonica Spain.</summary>
+        <start-date>
+          <year>2007</year>
+          <month>3</month>
+        </start-date>
+        <end-date>
+          <year>2008</year>
+          <month>6</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <id>226146</id>
+          <name>eXperience Ingeniería y Servicios</name>
+          <type>Privately Held</type>
+          <industry>Information Technology and Services</industry>
+        </company>
+      </position>
+      <position>
+        <id>15246010</id>
+        <title>Research Intern</title>
+        <summary>- AMIGO Project – Development and innovation of new features with semantic Web technologies. 
+- IMAGENIO 3.0 Project – Development of recommendation system for IPTV product prototype.</summary>
+        <start-date>
+          <year>2005</year>
+          <month>3</month>
+        </start-date>
+        <end-date>
+          <year>2007</year>
+          <month>3</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <id>520847</id>
+          <name>Telefonica I+D</name>
+          <type>Privately Held</type>
+          <industry>Telecommunications</industry>
+        </company>
+      </position>
+      <position>
+        <id>15895880</id>
+        <title>Sound Technician and Dj</title>
+        <summary>Partner and technician.</summary>
+        <start-date>
+          <year>2002</year>
+          <month>2</month>
+        </start-date>
+        <end-date>
+          <year>2007</year>
+          <month>1</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <name>One Music</name>
+          <industry>Music</industry>
+        </company>
+      </position>
+      <position>
+        <id>15895738</id>
+        <title>Developer</title>
+        <summary>-  Developer in a comprehensive management system for fleet vehicles with GPS and GPRS technologies.</summary>
+        <start-date>
+          <year>2004</year>
+          <month>9</month>
+        </start-date>
+        <end-date>
+          <year>2005</year>
+          <month>7</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <name>2EmbedCom</name>
+          <industry>Telecommunications</industry>
+        </company>
+      </position>
+    </positions>
+    <phone-numbers total="0" />
+    <im-accounts total="0" />
+  </person>
+  <person>
+    <id>cONkWXdR79</id>
+    <first-name>Marc</first-name>
+    <last-name>Pous</last-name>
+    <location>
+      <name>Munich Area, Germany</name>
+    </location>
+    <picture-url>http://media.linkedin.com/mpr/mprx/0_SLdsnYE2IFQwUoJt76wLnpE2WTlkUWZtfbjLnpRpnk5NkD7-3iJn4y7-bfAU4mMYu6IkMUWNTjx6</picture-url>
+    <positions total="8">
+      <position>
+        <id>89322944</id>
+        <title>Researcher</title>
+        <summary>I am a member of the research staff at the mobility area doing research on city and urban computing projects.
+
+Publications:
+
+- Marc Pous, Luigi Ceccaroni: &quot;Multimodal Interaction in Distributed and Ubiquitous Computing.&quot;, 2010. ICIW 2010; Fifth International Conference on Internet and Web Applications and Services on Volume, Issue, 9 - 15 May. 2010. Page(s): 457 - 462. Digital Object Identifier 10.1109/ICIW.2010.75
+
+- Rafael Gimenez and Marc Pous: &quot;Augmented reality as an enabling factor for the Internet of Things.&quot; W3C Workshop: Augmented Reality on the Web 2010, Barcelona.</summary>
+        <start-date>
+          <year>2009</year>
+          <month>9</month>
+        </start-date>
+        <is-current>true</is-current>
+        <company>
+          <id>214412</id>
+          <name>Barcelona Digital Technology Centre</name>
+          <type>Nonprofit</type>
+          <industry>Research</industry>
+        </company>
+      </position>
+      <position>
+        <id>68969049</id>
+        <title>Co-founder, traveller and blogger</title>
+        <summary>Co-founder, blogger and developer of the travel blog 3viajesaldia.com
+
+Website: http://www.3viajesaldia.com</summary>
+        <start-date>
+          <year>2007</year>
+          <month>8</month>
+        </start-date>
+        <is-current>true</is-current>
+        <company>
+          <name>3viajesaldia.com</name>
+          <industry>Internet</industry>
+        </company>
+      </position>
+      <position>
+        <id>104698779</id>
+        <title>Co-founder and developer</title>
+        <summary>HooverNotes is a Mozilla Firefox plugin (with Jetpack 0.9 technology) which was finalist at the Mozilla JetPack for Learning Design Challenge at the SXSW 2010 in Austin, Texas (10-12th March 2010).
+
+Blog: http://blog.hoovernotes.org
+Source: http://hoovernotes.org</summary>
+        <start-date>
+          <year>2009</year>
+          <month>8</month>
+        </start-date>
+        <end-date>
+          <year>2010</year>
+          <month>9</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <name>HooverNotes</name>
+          <industry>Computer Software</industry>
+        </company>
+      </position>
+      <position>
+        <id>27947522</id>
+        <title>Researcher and Developer</title>
+        <summary>Research at TMT Factory. 
+
+Lead of technical and managing activities at TMT Factory in the INREDIS project (INterfaces de RElación entre el Entorno y personas con DIScapacidad). INREDIS project (CEN-2007-2011), is part of the CENIT program, supported by CDTI within the INGENIO 2010 framework. Also, he collaborated at the Alive 7FP project and SOPAT Avanza's project.
+
+Publications: Books or chapters 
+ 
+- Pous, M., Ceccaroni, L. y Martínez, J. A., 2008. Plataforma colaborativa de gestión de proyectos accesible para personas con diversidad funcional, en Lozano, M. y Gallud, J.A. (editores) Interacción 2008 - IX Congreso Internacional de Interacción Persona-Ordenador, 207-215, Albacete, España. ISBN 978-84-691-3871-7 (PDF)
+
+- Ceccaroni, Luigi; Codina, Victor; Palau, Manel; Pous, Marc; PaTac: Urban, Ubiquitous, Personalized Services for Citizens and Tourists, Digital Society, 2009. ICDS apos;09. Third International Conference on Volume , Issue , 1-7 Feb. 2009 Page(s):7 - 12
+Digital Object Identifier   10.1109/ICDS.2009.25 (PDF)
+
+- Marc Pous, Luigi Ceccaroni, Manel Palau, Victor Codina; Ubiquitous, social networks in the street, 2009; W3C Workshop on the Future of Social Networking (PDF)</summary>
+        <start-date>
+          <year>2007</year>
+          <month>11</month>
+        </start-date>
+        <end-date>
+          <year>2009</year>
+          <month>9</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <id>123496</id>
+          <name>TMT Factory</name>
+          <type>Privately Held</type>
+          <industry>Computer Software</industry>
+        </company>
+      </position>
+      <position>
+        <id>27947613</id>
+        <title>Analyst and PHP developer</title>
+        <summary>Analyst and developer with PHP and MySQL at Atrapalo.com.
+
+Working with SEM and SEO, and developing more features of the website.</summary>
+        <start-date>
+          <year>2006</year>
+          <month>8</month>
+        </start-date>
+        <end-date>
+          <year>2007</year>
+          <month>10</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <id>58009</id>
+          <name>Atrapalo.com</name>
+          <type>Privately Held</type>
+          <industry>Leisure, Travel &amp; Tourism</industry>
+        </company>
+      </position>
+      <position>
+        <id>15705338</id>
+        <title>Analyst and PHP developer</title>
+        <summary>PHP analyst developer and MySQL designer, developing applications (intranets and websites) for small companies.</summary>
+        <start-date>
+          <year>2002</year>
+          <month>9</month>
+        </start-date>
+        <end-date>
+          <year>2006</year>
+          <month>9</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <name>Hidroxid.com</name>
+          <industry>Internet</industry>
+        </company>
+      </position>
+      <position>
+        <id>15705401</id>
+        <title>Research internship at AI department</title>
+        <summary>Intern during the thesis bachelor (Mecanismes autònoms de coordinació d’agents físics - Mechanisms of coordination of autonomous physical agents)at the AI department (UPC) developing for the 6th framework european project Share-IT.</summary>
+        <start-date>
+          <year>2005</year>
+          <month>7</month>
+        </start-date>
+        <end-date>
+          <year>2006</year>
+          <month>6</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <id>2642</id>
+          <name>UPC</name>
+          <type>Public Company</type>
+          <industry>Telecommunications</industry>
+          <ticker>LBTYA</ticker>
+        </company>
+      </position>
+      <position>
+        <id>15705406</id>
+        <title>C# .NET Teacher</title>
+        <summary>C# and .NET teacher in a 3 months course for non-employed or autonomous workers.</summary>
+        <start-date>
+          <year>2005</year>
+          <month>9</month>
+        </start-date>
+        <end-date>
+          <year>2006</year>
+          <month>1</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <name>Academia Adams</name>
+          <size>51-200 employees</size>
+          <type>Privately Held</type>
+          <industry>Education Management</industry>
+        </company>
+      </position>
+    </positions>
+    <phone-numbers total="0" />
+    <im-accounts total="0" />
+  </person>
+  <person>
+    <id>z9UIs8Xk4v</id>
+    <first-name>Gero</first-name>
+    <last-name>Presser</last-name>
+    <location>
+      <name>Essen Area, Germany</name>
+    </location>
+    <picture-url>http://media.linkedin.com/mpr/mprx/0_OPQTE-BTlWKOprukyBX-EKQC1HcmyvukyNtOElFO2DiY_AUXtvnSXAPrjQBl0tSe0Kkx59M9XsKX</picture-url>
+    <positions total="2">
+      <position>
+        <id>165195442</id>
+        <title>Consultant</title>
+        <start-date>
+          <year>2011</year>
+        </start-date>
+        <is-current>true</is-current>
+        <company>
+          <name>CPI QuinScape</name>
+          <industry>Computer Software</industry>
+        </company>
+      </position>
+      <position>
+        <id>8021336</id>
+        <title>CEO</title>
+        <summary></summary>
+        <start-date>
+          <year>2001</year>
+          <month>3</month>
+        </start-date>
+        <is-current>true</is-current>
+        <company>
+          <name>QuinScape GmbH</name>
+          <industry>Computer Software</industry>
+        </company>
+      </position>
+    </positions>
+    <phone-numbers total="1">
+      <phone-number>
+        <phone-type>mobile</phone-type>
+        <phone-number>+491638437969</phone-number>
+      </phone-number>
+    </phone-numbers>
+    <im-accounts total="1">
+      <im-account>
+        <im-account-type>skype</im-account-type>
+        <im-account-name>gero.presser</im-account-name>
+      </im-account>
+    </im-accounts>
+    <date-of-birth>
+      <year>1973</year>
+      <month>7</month>
+      <day>22</day>
+    </date-of-birth>
+  </person>
+  <person>
+    <id>8V4M95wVzq</id>
+    <first-name>Victor M.</first-name>
+    <last-name>R. Penichet</last-name>
+    <location>
+      <name>Albacete Area, Spain</name>
+    </location>
+    <picture-url>http://media.linkedin.com/mpr/mprx/0_5J73_7KsssWJ3blzbxYt_DhJnVYcTXTzFUUY_DAoW0EFY8nvd0xDDS5XZNOHGi8JkVS0uE701rZy</picture-url>
+    <positions total="1">
+      <position>
+        <id>172556368</id>
+        <title>Assistant Professor</title>
+        <is-current>true</is-current>
+        <company>
+          <id>57318</id>
+          <name>UCLM</name>
+          <size>1001-5000 employees</size>
+          <type>Public Company</type>
+          <industry>Higher Education</industry>
+        </company>
+      </position>
+    </positions>
+    <phone-numbers total="0" />
+    <im-accounts total="0" />
+  </person>
+  <person>
+    <id>cjLWDxHGfY</id>
+    <first-name>Ismael</first-name>
+    <last-name>Rivera</last-name>
+    <location>
+      <name>Madrid Area, Spain</name>
+    </location>
+    <positions total="3">
+      <position>
+        <id>34434023</id>
+        <title>Research Assistant</title>
+        <start-date>
+          <year>2008</year>
+          <month>5</month>
+        </start-date>
+        <is-current>true</is-current>
+        <company>
+          <id>7898</id>
+          <name>DERI</name>
+          <size>51-200 employees</size>
+          <type>Educational Institution</type>
+          <industry>Information Technology and Services</industry>
+        </company>
+      </position>
+      <position>
+        <id>39781789</id>
+        <title>Researcher</title>
+        <start-date>
+          <year>2007</year>
+        </start-date>
+        <end-date>
+          <year>2008</year>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <id>13120</id>
+          <name>Universidad Carlos III de Madrid</name>
+          <size>1001-5000 employees</size>
+          <type>Educational Institution</type>
+          <industry>Higher Education</industry>
+        </company>
+      </position>
+      <position>
+        <id>62558712</id>
+        <title>Junior Developer</title>
+        <summary></summary>
+        <start-date>
+          <year>2006</year>
+          <month>5</month>
+        </start-date>
+        <end-date>
+          <year>2007</year>
+          <month>11</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <name>Teléfonica I+D</name>
+          <industry>Information Technology and Services</industry>
+        </company>
+      </position>
+    </positions>
+    <phone-numbers total="0" />
+    <im-accounts total="0" />
+  </person>
+  <person>
+    <id>Fu_x5uPuEl</id>
+    <first-name>Jessica</first-name>
+    <last-name>Rubart</last-name>
+    <location>
+      <name>Bielefeld Area, Germany</name>
+    </location>
+    <picture-url>http://media.linkedin.com/mpr/mprx/0_sMe3tGcXvvEf2hTAVUMYtTLdzng826TA4ZyYt8NJoPWK1Cnl9xZDphhcR4jx738jUsE0gFQk6REn</picture-url>
+    <positions total="5">
+      <position>
+        <id>134550749</id>
+        <title>Professor</title>
+        <summary>I'm working as a professor for business information systems. This includes teaching as well as research and development of information systems in the business application context, e.g. knowledge management and groupware solutions, enterprise resource planning and data warehouse systems, customer relationship management, project management, innovations in social media, hypertext, database systems or security.</summary>
+        <start-date>
+          <year>2010</year>
+          <month>8</month>
+        </start-date>
+        <is-current>true</is-current>
+        <company>
+          <id>1150783</id>
+          <name>University of Applied Sciences Ostwestfalen-Lippe</name>
+          <type>Educational Institution</type>
+          <industry>Higher Education</industry>
+        </company>
+      </position>
+      <position>
+        <id>24169946</id>
+        <title>Senior Software Architect, Coach, Technical Project Manager</title>
+        <summary>I've worked as a senior software architect, coach, and technical project manager focusing on innovations and enterprise solutions in the customer relationship management and telecommunications domains.</summary>
+        <start-date>
+          <year>2006</year>
+          <month>11</month>
+        </start-date>
+        <end-date>
+          <year>2010</year>
+          <month>7</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <id>4349</id>
+          <name>arvato services (Bertelsmann)</name>
+          <type>Privately Held</type>
+          <industry>Outsourcing/Offshoring</industry>
+        </company>
+      </position>
+      <position>
+        <id>24172285</id>
+        <title>System Analyst</title>
+        <summary>As a system analyst, coach, and consultant I worked in research and development projects concentrating on next generation’s smart card, middleware, and context-sensitive mobiles devices. The addressed marked segments are telecommunications, health care, and banking.</summary>
+        <start-date>
+          <year>2005</year>
+          <month>1</month>
+        </start-date>
+        <end-date>
+          <year>2006</year>
+          <month>10</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <id>12761</id>
+          <name>Sagem Orga</name>
+          <type>Privately Held</type>
+          <industry>Telecommunications</industry>
+        </company>
+      </position>
+      <position>
+        <id>24172370</id>
+        <title>Research Scientist</title>
+        <summary>Based on this work I did my Dr. rer. nat. (~PhD). I worked as a research scientist and tutor on several projects in the areas of Computer Supported Cooperative Work (CSCW), hypermedia, e-Learning, knowledge management, workflow management, distributed systems, and software engineering.</summary>
+        <start-date>
+          <year>1999</year>
+          <month>3</month>
+        </start-date>
+        <end-date>
+          <year>2004</year>
+          <month>12</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <id>389224</id>
+          <name>Fraunhofer-Gesellschaft</name>
+          <type>Nonprofit</type>
+          <industry>Research</industry>
+        </company>
+      </position>
+      <position>
+        <id>24172744</id>
+        <title>Software Developer</title>
+        <summary>I worked as a software developer in several research and development projects in the fields of object-oriented database systems, object-relational mapping, database middleware, and web-based database applications.</summary>
+        <start-date>
+          <year>1994</year>
+          <month>7</month>
+        </start-date>
+        <end-date>
+          <year>1999</year>
+          <month>3</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <name>C-LAB (Cooperation of Paderborn University and Siemens AG)</name>
+          <industry>Research</industry>
+        </company>
+      </position>
+    </positions>
+    <phone-numbers total="0" />
+    <im-accounts total="0" />
+  </person>
+  <person>
+    <id>l8JxKWPT05</id>
+    <first-name>Simon</first-name>
+    <last-name>Scerri</last-name>
+    <location>
+      <name>Ireland</name>
+    </location>
+    <picture-url>http://media.linkedin.com/mpr/mprx/0_UciCehF0t7Smr12bUz-AeC6AtEVG-zSbJvcje_92S7a-DlsFcA1m6iCGyXsjl-uwsq3ybXHKVinL</picture-url>
+    <positions total="2">
+      <position>
+        <id>171850921</id>
+        <title>Postdoc</title>
+        <summary>NUIG Partner representative within the EU FP7 Digital.Me Project: Integrated Userware for the Intelligent, Intuitive, and Trust-Enhancing Management of the User's Personal Information Sphere in Digital and Social Environments</summary>
+        <start-date>
+          <year>2011</year>
+          <month>3</month>
+        </start-date>
+        <is-current>true</is-current>
+        <company>
+          <id>7899</id>
+          <name>National University of Ireland, Galway</name>
+          <type>Educational Institution</type>
+          <industry>Higher Education</industry>
+        </company>
+      </position>
+      <position>
+        <id>32249088</id>
+        <title>Researcher</title>
+        <summary>Throughout the course of my Ph.D. I have fulfilled the position of a researcher at this international institute. Experiences gained include working within different international teams (involving both academia and enterprise) in a number of projects, supervising students, leading project task forces and writing successful project proposals, as well as representing  the institute in international events on many occasions.
+
+In particular, while in DERI I have contributed to the following projects:
+
+Nepomuk: The Social Semantic Desktop (2006-2008)
+This projects brought together researchers and industrial software developers to develop a comprehensive solution for extending the personal desktop into a collaboration environment which supports both the personal information management and the sharing and exchange across social and organisational relations. Within this project, I was entrusted to lead the Ontologies Task Force, which was responsible for the knowledge modelling aspect of the architecture.
+
+Digital Me: Userware for the Semantic Personal Sphere (2010-present)
+This project aims at the integration and management of all personal data within a user’s personal sphere via a single user-controlled point of access: the digital.me userware. Disclosable personal information will be shared with peers and services via digital faces, i.e. automatically generated context-dependant views of user’s information, subject to privacy settings. Within this project, I lead the work package responsible for the lifting , representation and processing of personal data.</summary>
+        <start-date>
+          <year>2005</year>
+        </start-date>
+        <is-current>true</is-current>
+        <company>
+          <id>7898</id>
+          <name>DERI</name>
+          <type>Educational Institution</type>
+          <industry>Information Technology and Services</industry>
+        </company>
+      </position>
+    </positions>
+    <phone-numbers total="1">
+      <phone-number>
+        <phone-type>mobile</phone-type>
+        <phone-number>+353 (0)868917685</phone-number>
+      </phone-number>
+    </phone-numbers>
+    <im-accounts total="0" />
+    <date-of-birth>
+      <year>1982</year>
+      <month>5</month>
+      <day>19</day>
+    </date-of-birth>
+  </person>
+  <person>
+    <id>lUyvAyFp4v</id>
+    <first-name>Till</first-name>
+    <last-name>Schümmer</last-name>
+    <location>
+      <name>Frankfurt Am Main Area, Germany</name>
+    </location>
+    <picture-url>http://media.linkedin.com/mpr/mprx/0_FJCU171USKoNSM6tFYGk12GMfPgzTV9t5UnX12tErnWLYY3-w0tBgu6k3jjoGjcY6V85pwuzs3q7</picture-url>
+    <positions total="7">
+      <position>
+        <id>6950904</id>
+        <title>Senior Researcher</title>
+        <is-current>true</is-current>
+        <company>
+          <id>74085</id>
+          <name>FernUniversität in Hagen</name>
+          <industry>Computer Software</industry>
+        </company>
+      </position>
+      <position>
+        <id>22885683</id>
+        <title>Participant</title>
+        <start-date>
+          <year>2006</year>
+        </start-date>
+        <is-current>true</is-current>
+        <company>
+          <name>PLoP</name>
+          <industry>Computer Software</industry>
+        </company>
+      </position>
+      <position>
+        <id>141965355</id>
+        <title>Participant</title>
+        <start-date>
+          <year>2000</year>
+        </start-date>
+        <end-date>
+          <year>2009</year>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <name>EuroPLoP</name>
+          <industry>Computer Software</industry>
+        </company>
+      </position>
+      <position>
+        <id>43798442</id>
+        <title>Chair</title>
+        <start-date>
+          <year>2007</year>
+        </start-date>
+        <end-date>
+          <year>2008</year>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <name>EuroPLoP</name>
+          <industry>Computer Software</industry>
+        </company>
+      </position>
+      <position>
+        <id>67866634</id>
+        <title>Research Partner</title>
+        <start-date>
+          <year>2005</year>
+        </start-date>
+        <end-date>
+          <year>2008</year>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <name>MAPPER (EU Project)</name>
+          <industry>Computer Software</industry>
+        </company>
+      </position>
+      <position>
+        <id>43798545</id>
+        <title>Participant</title>
+        <start-date>
+          <year>2005</year>
+        </start-date>
+        <end-date>
+          <year>2005</year>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <name>CSCW Conference</name>
+          <industry>Computer Software</industry>
+        </company>
+      </position>
+      <position>
+        <id>17257223</id>
+        <title>student and then researcher</title>
+        <start-date>
+          <year>1995</year>
+        </start-date>
+        <end-date>
+          <year>2000</year>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <name>Fraunhofer IPSI</name>
+          <industry>Computer Software</industry>
+        </company>
+      </position>
+    </positions>
+    <phone-numbers total="0" />
+    <im-accounts total="0" />
+  </person>
+  <person>
+    <id>tNOlmFeFE4</id>
+    <first-name>AbdelMonaim</first-name>
+    <last-name>Seghyar</last-name>
+    <location>
+      <name>Karlsruhe Area, Germany</name>
+    </location>
+    <positions total="1">
+      <position>
+        <id>140146047</id>
+        <title>sofftwareentwickler</title>
+        <is-current>true</is-current>
+        <company>
+          <id>83549</id>
+          <name>Markant Handels und Service GmbH</name>
+          <size>201-500 employees</size>
+          <industry>Consumer Goods</industry>
+        </company>
+      </position>
+    </positions>
+    <phone-numbers total="0" />
+    <im-accounts total="0" />
+  </person>
+  <person>
+    <id>MIT-0lpitn</id>
+    <first-name>Mads</first-name>
+    <last-name>Soegaard</last-name>
+    <location>
+      <name>Århus Area, Denmark</name>
+    </location>
+    <picture-url>http://media.linkedin.com/mpr/mprx/0_3vxs_YAYes8B-wqz3BjW_pi1op-zraqz_NwL_pt_zJ6LfEivSP7nDy6SXttoPdzJhngkuU2FoVB2</picture-url>
+    <positions total="6">
+      <position>
+        <id>53843200</id>
+        <title>Editor-In-Chief</title>
+        <summary></summary>
+        <start-date>
+          <year>2003</year>
+          <month>1</month>
+        </start-date>
+        <is-current>true</is-current>
+        <company>
+          <name>Interaction-Design.org</name>
+          <industry>Information Technology and Services</industry>
+        </company>
+      </position>
+      <position>
+        <id>53842396</id>
+        <title>Senior Consultant</title>
+        <summary></summary>
+        <start-date>
+          <year>2008</year>
+          <month>5</month>
+        </start-date>
+        <end-date>
+          <year>2010</year>
+          <month>12</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <name>Danish Technological Institute</name>
+          <industry>Information Technology and Services</industry>
+        </company>
+      </position>
+      <position>
+        <id>53843366</id>
+        <title>Phd stud</title>
+        <summary></summary>
+        <start-date>
+          <year>2004</year>
+        </start-date>
+        <end-date>
+          <year>2007</year>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <id>4648</id>
+          <name>University of Aarhus</name>
+          <size>1001-5000 employees</size>
+          <type>Educational Institution</type>
+          <industry>Research</industry>
+        </company>
+      </position>
+      <position>
+        <id>154235</id>
+        <title>Lecturer</title>
+        <summary></summary>
+        <start-date>
+          <year>2003</year>
+          <month>9</month>
+        </start-date>
+        <end-date>
+          <year>2004</year>
+          <month>9</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <id>4648</id>
+          <name>University of Aarhus</name>
+          <size>1001-5000 employees</size>
+          <type>Educational Institution</type>
+          <industry>Research</industry>
+        </company>
+      </position>
+      <position>
+        <id>53842893</id>
+        <title>Project worker</title>
+        <summary></summary>
+        <start-date>
+          <year>2000</year>
+        </start-date>
+        <end-date>
+          <year>2000</year>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <name>DaimlerChrysler Services, Corporate Think Tank, Berlin Headquarters</name>
+          <industry>Information Technology and Services</industry>
+        </company>
+      </position>
+      <position>
+        <id>8187249</id>
+        <title>Co-founder</title>
+        <summary></summary>
+        <start-date>
+          <year>1997</year>
+        </start-date>
+        <end-date>
+          <year>2000</year>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <name>Csite Internet (went out of business 2007)</name>
+          <size>51-200 employees</size>
+          <industry>Information Technology and Services</industry>
+        </company>
+      </position>
+    </positions>
+    <phone-numbers total="0" />
+    <im-accounts total="0" />
+  </person>
+  <person>
+    <id>itEdCm19FJ</id>
+    <first-name>Ricardo</first-name>
+    <last-name>Tesoriero</last-name>
+    <location>
+      <name>Albacete Area, Spain</name>
+    </location>
+    <positions total="6">
+      <position>
+        <id>162868473</id>
+        <title>Associate Professor</title>
+        <summary></summary>
+        <start-date>
+          <year>2010</year>
+          <month>12</month>
+        </start-date>
+        <is-current>true</is-current>
+        <company>
+          <id>1373418</id>
+          <name>UNIVERSIDAD DE CASTILLA LA MANCHA</name>
+          <industry>Management Consulting</industry>
+        </company>
+      </position>
+      <position>
+        <id>105932125</id>
+        <title>Adjunct Professor</title>
+        <summary></summary>
+        <start-date>
+          <year>2008</year>
+          <month>9</month>
+        </start-date>
+        <end-date>
+          <year>2010</year>
+          <month>12</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <id>57318</id>
+          <name>University of Castilla-La Mancha</name>
+          <type>Public Company</type>
+          <industry>Higher Education</industry>
+        </company>
+      </position>
+      <position>
+        <id>123123721</id>
+        <title>Console Operator</title>
+        <summary>Developer</summary>
+        <start-date>
+          <year>2008</year>
+          <month>6</month>
+        </start-date>
+        <end-date>
+          <year>2010</year>
+          <month>11</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <name>Genesis XXI</name>
+          <industry>Information Technology and Services</industry>
+        </company>
+      </position>
+      <position>
+        <id>123123487</id>
+        <title>Assistant research</title>
+        <summary>Working on applying MDA to UsiXML  2.0</summary>
+        <start-date>
+          <year>2010</year>
+          <month>4</month>
+        </start-date>
+        <end-date>
+          <year>2010</year>
+          <month>9</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <name>UCL - Université catholique de Louvain</name>
+          <industry>Research</industry>
+        </company>
+      </position>
+      <position>
+        <id>38492162</id>
+        <title>Assistant Research</title>
+        <summary>I'm actually permirming my PhD thesis about Applying Model Driven Development on Ubiquitous and Context Aware systems</summary>
+        <start-date>
+          <year>2006</year>
+          <month>2</month>
+        </start-date>
+        <end-date>
+          <year>2009</year>
+          <month>12</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <name>University of Castilla-La Mancha</name>
+          <industry>Education Management</industry>
+        </company>
+      </position>
+      <position>
+        <id>38492250</id>
+        <title>Assistant Research</title>
+        <summary>Reasearch and developer in Groupware and CSCW fields of computer science. I have also participated in LIFIA initial training</summary>
+        <start-date>
+          <year>1999</year>
+          <month>7</month>
+        </start-date>
+        <end-date>
+          <year>2005</year>
+          <month>10</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <id>164734</id>
+          <name>LIFIA</name>
+          <size>51-200 employees</size>
+          <type>Educational Institution</type>
+          <industry>Computer Software</industry>
+        </company>
+      </position>
+    </positions>
+    <phone-numbers total="1">
+      <phone-number>
+        <phone-type>work</phone-type>
+        <phone-number>+34 967599200 2406</phone-number>
+      </phone-number>
+    </phone-numbers>
+    <im-accounts total="1">
+      <im-account>
+        <im-account-type>skype</im-account-type>
+        <im-account-name>tesorieror</im-account-name>
+      </im-account>
+    </im-accounts>
+    <date-of-birth>
+      <year>1977</year>
+      <month>7</month>
+      <day>1</day>
+    </date-of-birth>
+  </person>
+  <person>
+    <id>2lDbS5MCfw</id>
+    <first-name>Marc</first-name>
+    <last-name>Torrent Moreno</last-name>
+    <location>
+      <name>Other</name>
+    </location>
+    <picture-url>http://media.linkedin.com/mpr/mprx/0_uQ-Va4eguV-QUOqEm63Wassp20X6BgvEaX65asJ81Vr9eJCoh8G98VSmGlkJqsNQS5rX3jFUWQNI</picture-url>
+    <positions total="9">
+      <position>
+        <id>89888011</id>
+        <title>Head of R&amp;D Mobility</title>
+        <summary></summary>
+        <start-date>
+          <year>2009</year>
+          <month>9</month>
+        </start-date>
+        <is-current>true</is-current>
+        <company>
+          <id>214412</id>
+          <name>Barcelona Digital Centre Tecnològic</name>
+          <type>Nonprofit</type>
+          <industry>Research</industry>
+        </company>
+      </position>
+      <position>
+        <id>27285270</id>
+        <title>Business Development and Project Manager, Advanced Communications Business Unit</title>
+        <summary></summary>
+        <start-date>
+          <year>2007</year>
+          <month>9</month>
+        </start-date>
+        <end-date>
+          <year>2009</year>
+          <month>9</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <id>14332</id>
+          <name>Ficosa International</name>
+          <type>Privately Held</type>
+          <industry>Automotive</industry>
+        </company>
+      </position>
+      <position>
+        <id>27285185</id>
+        <title>Process Management</title>
+        <start-date>
+          <year>2007</year>
+          <month>4</month>
+        </start-date>
+        <end-date>
+          <year>2007</year>
+          <month>9</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <name>SEAT S.A.</name>
+          <size>10,001+ employees</size>
+          <industry>Automotive</industry>
+        </company>
+      </position>
+      <position>
+        <id>1781268</id>
+        <title>Research Staff Memeber</title>
+        <summary></summary>
+        <start-date>
+          <year>2004</year>
+          <month>1</month>
+        </start-date>
+        <end-date>
+          <year>2007</year>
+          <month>3</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <id>166644</id>
+          <name>University of Karlsruhe</name>
+          <type>Educational Institution</type>
+          <industry>Research</industry>
+        </company>
+      </position>
+      <position>
+        <id>5988056</id>
+        <title>Research Visitor</title>
+        <start-date>
+          <year>2004</year>
+          <month>9</month>
+        </start-date>
+        <end-date>
+          <year>2004</year>
+          <month>11</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <id>2517</id>
+          <name>U.C. Berkeley</name>
+          <industry>Research</industry>
+        </company>
+      </position>
+      <position>
+        <id>5988011</id>
+        <title>Researcher</title>
+        <start-date>
+          <year>2003</year>
+          <month>1</month>
+        </start-date>
+        <end-date>
+          <year>2003</year>
+          <month>12</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <name>Mercedes-Benz Research &amp; Development North America, Inc. (a Daimler company)</name>
+          <industry>Automotive</industry>
+        </company>
+      </position>
+      <position>
+        <id>5988012</id>
+        <title>Research Assistant, Mobile Communications Team (Intern)</title>
+        <summary></summary>
+        <start-date>
+          <year>2002</year>
+          <month>1</month>
+        </start-date>
+        <end-date>
+          <year>2002</year>
+          <month>10</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <id>1696</id>
+          <name>NEC Europe</name>
+          <type>Public Company</type>
+          <industry>Information Technology and Services</industry>
+          <ticker>NIPNY</ticker>
+        </company>
+      </position>
+      <position>
+        <id>5988014</id>
+        <title>Software Developer, Personalization Services Team (Intern)</title>
+        <summary></summary>
+        <start-date>
+          <year>2001</year>
+          <month>4</month>
+        </start-date>
+        <end-date>
+          <year>2001</year>
+          <month>11</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <id>1182</id>
+          <name>British Telecom</name>
+          <size>10,001+ employees</size>
+          <type>Public Company</type>
+          <industry>Telecommunications</industry>
+          <ticker>BT.A</ticker>
+        </company>
+      </position>
+      <position>
+        <id>5988026</id>
+        <title>IT Consultant</title>
+        <summary></summary>
+        <start-date>
+          <year>1999</year>
+          <month>11</month>
+        </start-date>
+        <end-date>
+          <year>2001</year>
+          <month>3</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <id>24287</id>
+          <name>Nextret</name>
+          <type>Privately Held</type>
+          <industry>Information Technology and Services</industry>
+        </company>
+      </position>
+    </positions>
+    <phone-numbers total="0" />
+    <im-accounts total="0" />
+  </person>
+  <person>
+    <id>rClciUQUop</id>
+    <first-name>Bernd</first-name>
+    <last-name>Ueberschaer</last-name>
+    <location>
+      <name>Kiel Area, Germany</name>
+    </location>
+    <positions total="1">
+      <position>
+        <id>120251543</id>
+        <title>Wissenschaftler</title>
+        <is-current>true</is-current>
+        <company>
+          <id>134517</id>
+          <name>IFM-GEOMAR</name>
+          <size>1001-5000 employees</size>
+          <type>Educational Institution</type>
+          <industry>Research</industry>
+        </company>
+      </position>
+    </positions>
+    <phone-numbers total="0" />
+    <im-accounts total="0" />
+  </person>
+  <person>
+    <id>YpCDWnvkj5</id>
+    <first-name>Massimo</first-name>
+    <last-name>Valla</last-name>
+    <location>
+      <name>Italy</name>
+    </location>
+    <picture-url>http://media.linkedin.com/mpr/mprx/0_Wn8k2260CROWjsK5IrrU2mkgCUJbAJ35IlNR2mnSgYDBag9LLKKeCaG_uzMZtOhWevCsidHXha9W</picture-url>
+    <positions total="3">
+      <position>
+        <id>8888264</id>
+        <title>Researcher</title>
+        <start-date>
+          <year>2006</year>
+          <month>1</month>
+        </start-date>
+        <is-current>true</is-current>
+        <company>
+          <id>1936</id>
+          <name>Telecom Italia</name>
+          <size>10,001+ employees</size>
+          <type>Privately Held</type>
+          <industry>Telecommunications</industry>
+          <ticker>TI</ticker>
+        </company>
+      </position>
+      <position>
+        <id>8888688</id>
+        <title>Researcher</title>
+        <start-date>
+          <year>2003</year>
+          <month>4</month>
+        </start-date>
+        <end-date>
+          <year>2005</year>
+          <month>12</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <id>1940</id>
+          <name>Telecom Italia Lab</name>
+          <size>501-1000 employees</size>
+          <type>Privately Held</type>
+          <industry>Telecommunications</industry>
+        </company>
+      </position>
+      <position>
+        <id>36427289</id>
+        <title>Graduate Research Assistant</title>
+        <start-date>
+          <year>2001</year>
+          <month>1</month>
+        </start-date>
+        <end-date>
+          <year>2002</year>
+          <month>7</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <id>2477</id>
+          <name>UCLA - Computer Science Department</name>
+          <size>10,001+ employees</size>
+          <type>Educational Institution</type>
+          <industry>Research</industry>
+        </company>
+      </position>
+    </positions>
+    <phone-numbers total="0" />
+    <im-accounts total="0" />
+  </person>
+  <person>
+    <id>Pc_GBQv2Ia</id>
+    <first-name>Jean</first-name>
+    <last-name>Vanderdonckt</last-name>
+    <location>
+      <name>Brussels Area, Belgium</name>
+    </location>
+    <picture-url>http://media.linkedin.com/mpr/mprx/0_fquK8jNjJpzw16Lq79oi8Y51MUKQ15kqSzZf8YqaQYkn23PN_-yyaO8hBzrMKC54acmm7J6ZgR-Q</picture-url>
+    <positions total="4">
+      <position>
+        <id>22097433</id>
+        <title>Professor</title>
+        <start-date>
+          <year>1998</year>
+        </start-date>
+        <is-current>true</is-current>
+        <company>
+          <id>166698</id>
+          <name>Université catholique de Louvain, Belgium</name>
+          <industry>Higher Education</industry>
+        </company>
+      </position>
+      <position>
+        <id>66084447</id>
+        <title>Researcher</title>
+        <start-date>
+          <year>2005</year>
+        </start-date>
+        <end-date>
+          <year>2006</year>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <name>CARE Technologies S.A.</name>
+          <industry>Higher Education</industry>
+        </company>
+      </position>
+      <position>
+        <id>11588188</id>
+        <title>Maître de conférence</title>
+        <start-date>
+          <year>1997</year>
+          <month>8</month>
+        </start-date>
+        <end-date>
+          <year>1998</year>
+          <month>8</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <name>Facultés Universitaires Notre Dame de la Paix</name>
+          <size>501-1000 employees</size>
+          <type>Privately Held</type>
+          <industry>Education Management</industry>
+          <ticker>FUNDP</ticker>
+        </company>
+      </position>
+      <position>
+        <id>11588184</id>
+        <title>Researcher</title>
+        <summary>I have been researcher at FUNDP and assistant until 1997.</summary>
+        <start-date>
+          <year>1989</year>
+          <month>9</month>
+        </start-date>
+        <end-date>
+          <year>1997</year>
+          <month>7</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <name>Facultés Universitaires Notre-Dame de la Paix</name>
+          <size>501-1000 employees</size>
+          <type>Privately Held</type>
+          <industry>Education Management</industry>
+          <ticker>FUNDP</ticker>
+        </company>
+      </position>
+    </positions>
+    <phone-numbers total="0" />
+    <im-accounts total="0" />
+  </person>
+  <person>
+    <id>WsamZvhcOz</id>
+    <first-name>Dirk</first-name>
+    <last-name>Veiel</last-name>
+    <location>
+      <name>Cologne Area, Germany</name>
+    </location>
+    <picture-url>http://media.linkedin.com/mpr/mprx/0_IdV5bDMLLwVXwIm9ImeVb7sIbexLImf9WwaVb7ZBZSwzqo4nbfoWdf2MW60VeWaVoo4UeHokKSLO</picture-url>
+    <positions total="5">
+      <position>
+        <id>45202245</id>
+        <title>Research assistant</title>
+        <summary>Enabling Context-adaptive Collaboration for Knowledge-intense Processes</summary>
+        <start-date>
+          <year>2007</year>
+          <month>10</month>
+        </start-date>
+        <is-current>true</is-current>
+        <company>
+          <id>74085</id>
+          <name>FernUniversität in Hagen</name>
+          <type>Educational Institution</type>
+          <industry>Education Management</industry>
+        </company>
+      </position>
+      <position>
+        <id>102988335</id>
+        <title>Guest Researcher</title>
+        <summary>I visited the Section Systems Engineering of the Faculty of Technology, Policy and Management. We worked on a multi-agent system approach for context gathering and managing within adaptive collaborative workspaces.</summary>
+        <start-date>
+          <year>2009</year>
+          <month>12</month>
+        </start-date>
+        <end-date>
+          <year>2009</year>
+          <month>12</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <id>166529</id>
+          <name>TU Delft</name>
+          <type>Educational Institution</type>
+          <industry>Research</industry>
+        </company>
+      </position>
+      <position>
+        <id>45202908</id>
+        <title>Student assistant</title>
+        <summary>Project IRSAW (Intelligent Information Retrieval on the Basis of a Semantically Annotated Web)</summary>
+        <start-date>
+          <year>2007</year>
+          <month>7</month>
+        </start-date>
+        <end-date>
+          <year>2007</year>
+          <month>8</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <id>74085</id>
+          <name>FernUniversität in Hagen</name>
+          <type>Educational Institution</type>
+          <industry>Education Management</industry>
+        </company>
+      </position>
+      <position>
+        <id>45202907</id>
+        <title>Student assistant</title>
+        <summary>Project IRSAW (Intelligent Information Retrieval on the Basis of a Semantically Annotated Web); GIRSA (Geographic Information Retrieval based on Semantic Annotation) - participated at GeoCLEF 2005/2006-2008; Project NLI-Z39.50 (Natural Language Interface to the Z39.50 protocol)</summary>
+        <start-date>
+          <year>2004</year>
+          <month>1</month>
+        </start-date>
+        <end-date>
+          <year>2007</year>
+          <month>3</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <id>74085</id>
+          <name>FernUniversität in Hagen</name>
+          <type>Educational Institution</type>
+          <industry>Education Management</industry>
+        </company>
+      </position>
+      <position>
+        <id>45202904</id>
+        <title>Software Developer</title>
+        <start-date>
+          <year>2000</year>
+          <month>2</month>
+        </start-date>
+        <end-date>
+          <year>2003</year>
+          <month>9</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <id>6594</id>
+          <name>Bosch Rexroth</name>
+          <size>10,001+ employees</size>
+          <type>Privately Held</type>
+          <industry>Industrial Automation</industry>
+        </company>
+      </position>
+    </positions>
+    <phone-numbers total="0" />
+    <im-accounts total="0" />
+  </person>
+  <person>
+    <id>PWhjx7EcOv</id>
+    <first-name>Joss</first-name>
+    <last-name>Wright</last-name>
+    <location>
+      <name>Oxford, United Kingdom</name>
+    </location>
+    <picture-url>http://media.linkedin.com/mpr/mprx/0_OYjMBBkvoTNahuepK4SQBqqnHCimCuJpypd6BqbFcbcYgHaytZDvJN1d62_l3w4r0g0bZPvOPk-0</picture-url>
+    <positions total="4">
+      <position>
+        <id>25840535</id>
+        <title>FRESNEL Research Fellow</title>
+        <summary>The FRESNEL project is concerned with the development and deployment of a federated wireless sensor network (WSN) across the University of Cambridge campus. My role in the project is to research and design methods and technologies to preserve the privacy of personal data gathered by the network, whilst still allowing the network to provide useful statistical information.</summary>
+        <start-date>
+          <year>2010</year>
+          <month>1</month>
+        </start-date>
+        <is-current>true</is-current>
+        <company>
+          <id>4477</id>
+          <name>University of Oxford</name>
+          <type>Educational Institution</type>
+          <industry>Research</industry>
+        </company>
+      </position>
+      <position>
+        <id>105662526</id>
+        <title>Postdoctoral Researcher</title>
+        <summary>My major role at Siegen was to manage and write an EU Framework Programme 7 Integrating Project (IP) proposal, involving 16 universities and industrial partners, to investigate the security and privacy issues of cloud computing. In my time in Siegen I also conducted research into security, privacy-enhancing technologies and anonymous communications.</summary>
+        <start-date>
+          <year>2009</year>
+          <month>3</month>
+        </start-date>
+        <end-date>
+          <year>2009</year>
+          <month>12</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <id>27899</id>
+          <name>University of Siegen</name>
+          <type>Educational Institution</type>
+          <industry>Research</industry>
+        </company>
+      </position>
+      <position>
+        <id>74401659</id>
+        <title>PhD Student</title>
+        <summary>My PhD in the computer science department at the University of York focused on the classification and analysis of fundamental strategies for anonymous communications.</summary>
+        <start-date>
+          <year>2003</year>
+          <month>10</month>
+        </start-date>
+        <end-date>
+          <year>2008</year>
+          <month>10</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <id>10399</id>
+          <name>University of York</name>
+          <type>Educational Institution</type>
+          <industry>Higher Education</industry>
+        </company>
+      </position>
+      <position>
+        <id>25840537</id>
+        <title>Undergraduate Student</title>
+        <summary>I studied Computer Science for four years, receiving an MComp masters' degree. The course was relatively engineering-based, although I focused more on the theoretical courses with a particular interest in the pi-calculus.
+
+My third-year undergraduate research project simulated social insect communities, looking at ant foraging strategies as well as implementing a CORBA-based mobile agent system modelled on bee behaviour.
+
+My fourth-year individual research project involved modelling the TLS protocol in the SPI calculus, a version of the pi-calculus with cryptographic primitives added.</summary>
+        <start-date>
+          <year>1999</year>
+          <month>10</month>
+        </start-date>
+        <end-date>
+          <year>2003</year>
+          <month>7</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <id>8421</id>
+          <name>University of Sheffield</name>
+          <type>Educational Institution</type>
+          <industry>Research</industry>
+        </company>
+      </position>
+    </positions>
+    <phone-numbers total="0" />
+    <im-accounts total="0" />
+  </person>
+  <person>
+    <id>04N-4db-6W</id>
+    <first-name>Sophie</first-name>
+    <last-name>Wrobel</last-name>
+    <location>
+      <name>Mannheim Area, Germany</name>
+    </location>
+    <positions total="3">
+      <position>
+        <id>176218378</id>
+        <title>Software Architect</title>
+        <summary></summary>
+        <start-date>
+          <year>2011</year>
+          <month>4</month>
+        </start-date>
+        <is-current>true</is-current>
+        <company>
+          <id>6701</id>
+          <name>CAS Software AG</name>
+          <type>Privately Held</type>
+          <industry>Computer Software</industry>
+        </company>
+      </position>
+      <position>
+        <id>3106935</id>
+        <title>Application Development Expert</title>
+        <summary></summary>
+        <start-date>
+          <year>2004</year>
+          <month>5</month>
+        </start-date>
+        <end-date>
+          <year>2011</year>
+          <month>3</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <id>1009</id>
+          <name>IBM Deutschland GmbH</name>
+          <type>Public Company</type>
+          <industry>Information Technology and Services</industry>
+          <ticker>IBM</ticker>
+        </company>
+      </position>
+      <position>
+        <id>3106937</id>
+        <title>QA Analyst</title>
+        <start-date>
+          <year>2003</year>
+          <month>9</month>
+        </start-date>
+        <end-date>
+          <year>2003</year>
+          <month>12</month>
+        </end-date>
+        <is-current>false</is-current>
+        <company>
+          <id>3368</id>
+          <name>Invensys Avantis</name>
+          <type>Public Company</type>
+          <industry>Information Technology and Services</industry>
+        </company>
+      </position>
+    </positions>
+    <phone-numbers total="0" />
+    <im-accounts total="0" />
+  </person>
+</connections>

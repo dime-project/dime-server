@@ -1,0 +1,188 @@
+declare namespace nco = "http://www.semanticdesktop.org/ontologies/2007/03/22/nco#";
+declare namespace pimo = "http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#";
+declare namespace nao = "http://www.semanticdesktop.org/ontologies/2007/08/15/nao#";
+declare namespace nie = "http://www.semanticdesktop.org/ontologies/2007/01/19/nie#";
+declare namespace xsd = "http://www.w3.org/2001/XMLSchema#";
+
+let $doc := doc("%doc%")
+
+let $connections :=$doc/connections/person
+
+return 
+ 
+	 for $connection in $connections   
+	 	let $connectionId := fn:replace($connection/id, '-', '')
+		let $name := $connection/first-name
+		let $surname := $connection/last-name
+		let $location := $connection/location/name
+		let $photoUrl := $connection/picture-url 
+		let $summary := $connection/summary
+		let $positions := $connection/positions/position 
+		let $phones := $connection/phone-numbers/phone-number
+		let $ims := $connection/im-accounts/im-account     
+		let $dob := $connection/date-of-birth   
+		let $dobdd := if ((fn:string-length($dob/day))=1)  
+		     		  then (fn:concat("0",$dob/day))
+	        		  else ($dob/day)	 
+	    let $dobmm := if ((fn:string-length($dob/month))=1)  
+				      then (fn:concat("0",$dob/month))
+	            	  else ($dob/month)	
+	    let $dobyyyy  := if ((fn:string-length($dob/year))=4)  
+	        	 		 then ($dob/year)
+	        	 		 else ("")
+	    let $birthdate := fn:concat(data($dobyyyy),"-",data($dobmm),"-",data($dobdd))
+	    let $address := $connection/main-address
+	 	let $interests := fn:tokenize($connection/interests,", ")
+	             
+      
+        #Construct for the connection    	
+		construct
+		{  	
+		 	_:c{data($connectionId)} a nco:PersonContact;
+			nco:contactUID {data($connectionId)};
+			nco:photo {data($photoUrl)};	  
+			nao:description {data($summary)}; #'summary' field for each connection is not retrieved from LinkedIn API - probably an API bug
+			nao:prefLabel {fn:concat(data($name)," ",data($surname))};
+			nao:prefSymbol {data($photoUrl)};
+			nco:hasPersonName _:pn{data($connectionId)}.
+	  			_:pn{data($connectionId)} a nco:PersonName;
+       			nco:nameGiven {data($name)};
+       			nco:nameFamily {data($surname)};
+       			nco:fullname {fn:concat(data($name)," ",data($surname))}.
+       			
+       		 #Construct for the interests of the user
+		     {
+		    	 for $interest in $interests
+		    	 construct
+		       	 {
+		         	_:c{data($connectionId)} nco:hobby {data($interest)};	      
+		       	 }    
+		     }.
+		     
+			 #Construct for the birth date of the user  
+			 {				  
+		     	if ((fn:string-length($birthdate))=10)				    	
+				then ({ 				
+					let $counter := count($dob/preceding::*) + count($dob/ancestor::*)
+					            
+					construct
+					{
+						_:bd{data($counter)} a nco:BirthDate;
+						nco:birthDate {data($birthdate)}^^xsd:date.  
+					    _:c{data($connectionId)} nco:hasBirthDate _:bd{data($counter)};          
+					} 
+				})
+			    else ()   
+			  }.   
+					  
+			 #Construct for the positions of the user  
+			 {      
+			 	for $position in $positions  			 	       		 	   
+					let $posId := fn:string($position/id)						
+					let $title := $position/title
+					let $posStartYr := $position/start-date/year
+	        		let $posStartMo := if ((fn:string-length($position/start-date/month))=1)  
+				    			   then (fn:concat("0",$position/start-date/month))
+	        					   else if ((fn:string-length($position/start-date/month))=0)  
+				    			   then ("01")
+				    			   else ($position/start-date/month)	
+					let $posStart := if (fn:exists($position/start-date)) 
+					                 then (fn:concat(data($posStartYr),"-",data($posStartMo),"-",data("01"),"T","00:00:00Z"))  
+							         else ()
+				    let $posEndYr := $position/end-date/year
+					let $posEndMo := if ((fn:string-length($position/end-date/month))=1)  
+				    			   then (fn:concat("0",$position/end-date/month))
+				    			   else if ((fn:string-length($position/end-date/month))=0)  
+				    			   then ("01")
+	        					   else ($position/end-date/month)	
+					let $posEnd := if (fn:exists($position/end-date)) 
+					               then (fn:concat(data($posEndYr),"-",data($posEndMo),"-",data("01"),"T","00:00:00Z"))  
+					           	   else ()		     
+					let $counter := count($position/preceding::*) + count($position/ancestor::*)             
+					let $orgID := count($position/company/preceding::*) + count($position/company/ancestor::*)            
+						     
+					construct
+					{                
+						_:pos{data($counter)} a nco:Affiliation;
+						nao:externalIdentifier {data($posId)}^^xsd:string;
+						nco:role {data($title)};
+						nco:start {data($posStart)}^^xsd:dateTime;
+						nco:end {data($posEnd)}^^xsd:dateTime;  	
+						nco:org _:org{data($orgID)}.      
+						_:c{data($connectionId)} nco:hasAffiliation _:pos{data($counter)}.  
+						{
+							let $company := $position/company/name
+							construct
+							{
+								_:org{data($orgID)} a nco:OrganizationContact;   
+					         	nie:title {data($company)}.  
+							}
+						} 
+						          	
+					}		  
+			}.
+				    
+			#Construct for the phone numbers of the connection 
+			{       
+				for $phone in $phones       
+					let $phoneNumber := $phone/phone-number       
+				    let $counter := count($phone/preceding::*) + count($phone/ancestor::*)
+				           
+				    construct
+				    {
+				    	_:ph{data($counter)} a nco:PhoneNumber;
+				       	nco:phoneNumber {data($phoneNumber)}.
+				       	_:c{data($connectionId)} nco:hasPhoneNumber _:ph{data($counter)};          
+				    }    
+		    }.
+				     
+			#Construct for the instant messenger accounts of the connection
+			{       
+				for $im in $ims
+					let $imName := $im/im-account-name
+				    let $imType := $im/im-account-type       
+				    let $counter := count($im/preceding::*) + count($im/ancestor::*)
+				       
+				    construct
+				    {
+				    	_:im{data($counter)} a nco:IMAccount;
+				       	nco:imAccountType {data($imType)};
+				       	nco:imID {data($imName)}.  
+				       	_:c{data($connectionId)} nco:hasIMAccount _:im{data($counter)};      
+				    }    
+			}.
+			
+			#Construct for the address of the user
+		    {
+		    	if (fn:exists($address))  
+	     		then ({
+			    	let $counter := count($address/preceding::*) + count($address/ancestor::*)
+			     	construct 
+			     	{
+			     		_:addr{data($counter)} a nco:PostalAddress;
+			     		nao:prefLabel {data($address)}.
+			     		_:c{data($connectionId)} nco:hasPostalAddress _:addr{data($counter)};
+			     	}
+			      })
+		 		else ()
+		    }.
+		    
+		    #Construct for the location of the user
+		    {     	     	 
+		     	if (fn:exists($location)) 
+			    then ({
+			        let $counter := count($location/preceding::*) + count($location/ancestor::*)	        	                  
+			        construct
+			        {
+			       		_:loc{data($counter)} a nco:PostalAddress;
+			        	nao:prefLabel {data($location)}.
+			       		_:c{data($connectionId)} nco:hasPostalAddress _:loc{data($counter)};               
+			        } 
+			    })
+				else ()           
+		    }    	  
+				     
+			     
+      
+    }
+    

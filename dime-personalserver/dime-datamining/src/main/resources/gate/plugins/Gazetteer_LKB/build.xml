@@ -1,0 +1,143 @@
+<!--======================================================================
+
+   Build file for Large KB Gazetteer
+
+   This file will allow you to build your plugin with Ant.  If you do not
+   have an Ant installation of your own, you can use the one supplied with
+   GATE by running
+
+     {gate.home}/bin/ant
+
+   where {gate.home} is the directory in which GATE was installed.
+
+=======================================================================-->
+<project name="lkb-gazetteer" basedir="." default="all">
+
+  <!-- Prevent Ant from warning about includeantruntime not being set -->
+  <property name="build.sysclasspath" value="ignore" />
+
+  <property file="build.properties" />
+
+  <!--=======================================================
+    Property settings.  You should not need to edit these
+    directly, if you need to set a different value for any
+    property you should create or edit build.properties and override
+    them there. build.properties is ignored in SVN, so you can safely
+	put local settings there.
+  ========================================================-->
+
+  <property name="plugin.name" value="Gazetteer_LKB" />
+
+  <!-- location of the top-level GATE installation directory -->
+  <property name="gate.home" location="../.." />
+
+  <!-- location of GATE lib directory - should be inferred from gate.home -->
+  <property name="gate.lib" location="${gate.home}/lib" />
+
+  <!-- location of gate.jar - should be inferred from gate.home -->
+  <property name="gate.jar" location="${gate.home}/bin/gate.jar" />
+
+  <!-- Source directory - contains the Java source files for this plugin -->
+  <property name="src.dir" location="src" />
+
+  <!-- directory to contain the compiled classes -->
+  <property name="classes.dir" location="classes" />
+
+  <!-- documentation directory -->
+  <property name="doc.dir" location="doc" />
+
+  <!-- JavaDoc documentation directory -->
+  <property name="javadoc.dir" location="${doc.dir}/javadoc" />
+
+  <!-- lib directory - put any additional JAR files your plugin requires into
+       this directory.  You will also need to add them as <JAR> entries in
+       creole.xml -->
+  <property name="lib.dir" location="lib" />
+
+  <!-- location for the generated JAR file -->
+  <property name="jar.location" location="${plugin.name}.jar" />
+
+
+
+  <!-- Classpath to compile - includes gate.jar, GATE/lib/*.jar and any local
+       library JAR files. -->
+  <path id="compile.classpath">
+    <pathelement location="${gate.jar}" />
+    <fileset dir="${gate.lib}">
+      <include name="**/*.jar" />
+      <include name="**/*.zip" />
+    </fileset>
+    <fileset dir="${lib.dir}" includes="**/*.jar" />
+  </path>
+  
+  <!--====================== Targets ============================-->
+  
+  <!-- create build directory structure -->
+  <target name="prepare">
+    <mkdir dir="${classes.dir}" />
+  </target>
+
+  <!-- compile the source -->
+  <target name="compile" depends="prepare">
+    <javac classpathref="compile.classpath"
+           srcdir="${src.dir}"
+           destdir="${classes.dir}"
+           debug="true"
+           debuglevel="lines,source"
+           source="1.5" />
+  </target>
+
+  <!-- copy resources (anything non-.java) from src to classes -->
+  <target name="copy.resources" depends="prepare">
+    <copy todir="${classes.dir}">
+      <fileset dir="${src.dir}" excludes="**/*.java" />
+    </copy>
+  </target>
+
+  <!-- create the JAR file -->
+  <target name="jar" depends="compile, copy.resources" >
+    <jar destfile="${jar.location}"
+         update="false"
+         basedir="${classes.dir}" />
+  </target>
+
+  <!-- remove the generated .class files -->
+  <target name="clean.classes" >
+    <delete dir="${classes.dir}" />
+  </target>
+
+  <!-- Clean up - remove .class and .jar files -->
+  <target name="clean" depends="clean.classes" >
+    <delete file="${jar.location}" />
+  </target>
+
+  <!-- Build JavaDoc documentation -->
+  <target name="doc.prepare">
+    <mkdir dir="${javadoc.dir}" />
+  </target>
+
+  <target name="javadoc" depends="doc.prepare">
+    <javadoc destdir="${javadoc.dir}" packagenames="*"
+             classpathref="compile.classpath"
+             encoding="UTF-8"
+             windowtitle="${plugin.name} JavaDoc"
+             source="1.6">
+      <sourcepath>
+        <pathelement location="${src.dir}" />
+      </sourcepath>
+      <link href="http://docs.oracle.com/javase/6/docs/api/" />
+      <link href="http://gate.ac.uk/gate/doc/javadoc/" />
+    </javadoc>
+  </target>
+
+  <target name="test" depends="jar">
+  </target>
+
+  <!-- Build everything - the code and JavaDoc -->
+  <target name="all" depends="jar, javadoc" />
+
+  <!-- Targets used by the main GATE build file -->
+  <target name="build" depends="jar" />
+  <target name="distro.prepare" depends="clean.classes" />
+ 
+</project>

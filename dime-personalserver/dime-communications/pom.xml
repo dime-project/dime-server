@@ -1,0 +1,571 @@
+<?xml version="1.0"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
+		http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<artifactId>dime-personalserver</artifactId>
+		<groupId>eu.dime</groupId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>dime-communications</artifactId>
+	<packaging>war</packaging>
+
+	<name>Digital.me Communication Interface</name>
+
+	<properties>
+		<web.container.server>localhost</web.container.server>
+		<web.container.server.port>8080</web.container.server.port>
+		<web.container.https.port>8443</web.container.https.port>
+		<tomcat.user>admin</tomcat.user>
+		<tomcat.password>admin</tomcat.password>
+		<key.store.filename>dime-server-ssl.keystore</key.store.filename>
+		<key.store.keypass>dimepass</key.store.keypass>
+		<key.store.storepass>dimepass</key.store.storepass>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<org.apache.version>4.1</org.apache.version>
+		<atmosphere.version>1.0.0</atmosphere.version>
+	</properties>
+
+	<dependencies>
+		<!-- Internal dependency -->
+		<dependency>
+			<groupId>eu.dime</groupId>
+			<artifactId>dime-controllers</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+			<type>jar</type>
+		</dependency>
+
+		<dependency>
+			<groupId>eu.dime</groupId>
+			<artifactId>dime-gateway</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+			<type>jar</type>
+		</dependency>
+		<dependency>
+			<groupId>eu.dime</groupId>
+			<artifactId>dime-common</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+			<type>jar</type>
+		</dependency>
+		<dependency>
+			<groupId>eu.dime</groupId>
+			<artifactId>dime-semantic</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+			<type>jar</type>
+		</dependency>
+		<dependency>
+			<groupId>eu.dime</groupId>
+			<artifactId>dime-datamining</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+			<type>jar</type>
+		</dependency>
+		<dependency>
+			<groupId>eu.dime</groupId>
+			<artifactId>dime-contextprocessor</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+			<type>jar</type>
+		</dependency>
+
+
+
+		<!-- REST interface dependencies -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sun.jersey</groupId>
+			<artifactId>jersey-server</artifactId>
+			<version>${jersey.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sun.jersey.contribs</groupId>
+			<artifactId>jersey-spring</artifactId>
+			<version>${jersey.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-core</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-context</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-aop</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-support</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-web</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-beans</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>com.sun.jersey</groupId>
+			<artifactId>jersey-json</artifactId>
+			<version>${jersey.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sun.jersey</groupId>
+			<artifactId>jersey-client</artifactId>
+			<version>${jersey.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sun.jersey.contribs</groupId>
+			<artifactId>jersey-multipart</artifactId>
+			<version>${jersey.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.json</groupId>
+			<artifactId>json</artifactId>
+			<version>20090211</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sun.jersey.jersey-test-framework</groupId>
+			<artifactId>jersey-test-framework-http</artifactId>
+			<!-- <artifactId>jersey-test-framework-grizzly</artifactId> -->
+			<!-- <artifactId>jersey-test-framework-grizzly2</artifactId> -->
+			<version>${jersey.version}</version>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- Atmosphere framework Pub/Sub -->
+		<dependency>
+			<groupId>org.atmosphere</groupId>
+			<artifactId>atmosphere-annotations</artifactId>
+			<version>${atmosphere.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.atmosphere</groupId>
+			<artifactId>atmosphere-jersey</artifactId>
+			<version>${atmosphere.version}</version>
+		</dependency>
+
+		<!-- Aspects and JXB -->
+		<dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>aspectjweaver</artifactId>
+			<version>${aspectj.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>aspectjrt</artifactId>
+			<version>${aspectj.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sun.xml.bind</groupId>
+			<artifactId>jaxb-impl</artifactId>
+			<version>2.2.3</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpmime</artifactId>
+			<version>${org.apache.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>commons-logging</groupId>
+					<artifactId>commons-logging</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>${org.apache.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>commons-logging</groupId>
+					<artifactId>commons-logging</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.scribe</groupId>
+			<artifactId>scribe</artifactId>
+			<version>1.2.2</version>
+		</dependency>
+		
+		<!-- for integration test -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<version>${spring.version}</version>
+			<scope>test</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>commons-logging</groupId>
+					<artifactId>commons-logging</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<!-- Security Dependencies TO GATEWAY??? -->
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-core</artifactId>
+			<version>${spring-security.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>commons-logging</groupId>
+					<artifactId>commons-logging</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-config</artifactId>
+			<version>${spring-security.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>commons-logging</groupId>
+					<artifactId>commons-logging</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-web</artifactId>
+			<version>${spring-security.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-taglibs</artifactId>
+			<version>${spring-security.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ca.juliusdavies</groupId>
+			<artifactId>not-yet-commons-ssl</artifactId>
+			<version>0.3.11</version>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
+			<version>2.5</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>net.sf.flexjson</groupId>
+			<artifactId>flexjson</artifactId>
+			<version>2.1</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>jstl</artifactId>
+			<version>1.2</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.el</groupId>
+			<artifactId>el-api</artifactId>
+			<version>1.0</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>joda-time</groupId>
+			<artifactId>joda-time</artifactId>
+			<version>1.6</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet.jsp</groupId>
+			<artifactId>jsp-api</artifactId>
+			<version>2.1</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>commons-codec</groupId>
+			<artifactId>commons-codec</artifactId>
+			<version>1.4</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.tika</groupId>
+			<artifactId>tika-parsers</artifactId>
+			<version>0.9</version>
+		</dependency>
+
+		<!-- Apache Commons -->
+		<dependency>
+			<groupId>commons-fileupload</groupId>
+			<artifactId>commons-fileupload</artifactId>
+			<version>1.2.1</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-validator</groupId>
+			<artifactId>commons-validator</artifactId>
+			<version>1.3.1</version>
+		</dependency>
+
+		<!-- Required to transform ametic json to xml -->
+		<dependency>
+			<groupId>net.sf.json-lib</groupId>
+			<artifactId>json-lib</artifactId>
+			<version>2.3</version>
+			<type>jar</type>
+			<classifier>jdk15</classifier>
+			<scope>compile</scope>
+		</dependency>
+		<!-- dependecy of json-lib -->
+		<dependency>
+			<groupId>xom</groupId>
+			<artifactId>xom</artifactId>
+			<version>1.1</version>
+		</dependency>
+
+		<!-- Tasks -->
+		<dependency>
+			<groupId>opensymphony</groupId>
+			<artifactId>quartz-all</artifactId>
+			<version>1.6.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>net.sf.opencsv</groupId>
+			<artifactId>opencsv</artifactId>
+			<version>2.0</version>
+		</dependency>
+	</dependencies>
+
+	<pluginRepositories>
+		<pluginRepository>
+			<id>eviwarePluginRepository</id>
+			<url>http://www.eviware.com/repository/maven2/</url>
+		</pluginRepository>
+	</pluginRepositories>
+
+	<build>
+		<finalName>dime-communications</finalName>
+		<!-- Filters for profiles -->
+		<filters>
+			<filter>src/main/filters/${env}.properties</filter>
+		</filters>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+				<includes>
+					<include>**/*.xml</include>
+					<include>**/*.properties</include>
+					<!-- Will: added resources for transformer.. -->
+					<include>**/*.xsparql</include>
+				</includes>
+			</resource>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>false</filtering>
+				<excludes>
+					<exclude>**/*.xml</exclude>
+					<exclude>**/*.txt</exclude>
+					<exclude>**/*.properties</exclude>
+					<exclude>**/*.xsparql</exclude>
+				</excludes>
+			</resource>
+		</resources>
+
+		<plugins>
+
+			<plugin>
+				<groupId>eviware</groupId>
+				<artifactId>maven-soapui-plugin</artifactId>
+				<version>4.5.0</version>
+				<dependencies>
+					<dependency>
+						<groupId>com.fifesoft</groupId>
+						<artifactId>rsyntaxtextarea</artifactId>
+						<version>1.4.0</version>
+					</dependency>
+				</dependencies>
+				<configuration>
+					<projectFile>${project.basedir}/src/main/resources/dime-API-soapui-project.xml</projectFile>
+					<outputFolder>${project.basedir}/target/surefire-reports</outputFolder>
+					<junitReport>true</junitReport>
+					<exportAll>true</exportAll>
+					<printReport>false</printReport>
+				</configuration>
+				<executions>
+					<execution>
+						<id>soapUI</id>
+						<phase>${acceptanceTestPhase}</phase>
+						<goals>
+							<goal>test</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+			<!-- Embeded Tomcat "mvn tomcat:run" -->
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>tomcat-maven-plugin</artifactId>
+				<version>1.1</version>
+				<configuration>
+					<url>http://${web.container.server}:${web.container.server.port}/manager/html</url>
+					<warFile>target/dime-communications.war</warFile>
+					<update>true</update>
+					<username>${tomcat.user}</username>
+					<password>${tomcat.password}</password>
+					<port>${web.container.server.port}</port>
+					<httpsPort>${web.container.https.port}</httpsPort>
+					<keystoreFile>${project.build.directory}/${key.store.filename}</keystoreFile>
+					<keystorePass>${key.store.keypass}</keystorePass>
+					<systemProperties>
+						<org.apache.tomcat.util.buf.UDecoder.ALLOW_ENCODED_SLASH>true</org.apache.tomcat.util.buf.UDecoder.ALLOW_ENCODED_SLASH>
+					</systemProperties>
+				</configuration>
+			</plugin>
+			
+			<!-- Embeded Tomcat 6 "mvn tomcat6:run" -->
+			<plugin>
+				<groupId>org.apache.tomcat.maven</groupId>
+				<artifactId>tomcat6-maven-plugin</artifactId>
+				<version>2.0</version>
+				<configuration>
+					<path>/${project.build.finalName}</path>
+                	<contextFile>${basedir}/src/main/webapp/WEB-INF/webContext.xml</contextFile>
+					<port>${web.container.server.port}</port>
+					<httpsPort>${web.container.https.port}</httpsPort>
+					<keystoreFile>${project.build.directory}/${key.store.filename}</keystoreFile>
+					<keystorePass>${key.store.keypass}</keystorePass>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-release-plugin</artifactId>
+				<version>2.0-beta-9</version>
+			</plugin>
+
+			<!-- Generating a SSL/TLS server key store -->
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>keytool-maven-plugin</artifactId>
+				<version>1.0</version>
+				<executions>
+					<execution>
+						<phase>generate-resources</phase>
+						<id>clean</id>
+						<goals>
+							<goal>clean</goal>
+						</goals>
+					</execution>
+					<execution>
+						<phase>generate-resources</phase>
+						<id>genkey</id>
+						<goals>
+							<goal>genkey</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<keystore>${project.build.directory}/${key.store.filename}</keystore>
+					<!-- Will: removed line break here as it cause keystore gen to fail 
+						on my machine - maybe windows specific? -->
+					<dname>cn=www.dime-project.eu, ou=None, L=Siegen,ST=None,o=USIEGEN, c=DE</dname>
+					<keypass>${key.store.keypass}</keypass>
+					<storepass>${key.store.storepass}</storepass>
+					<alias>dime</alias>
+					<keyalg>RSA</keyalg>
+				</configuration>
+			</plugin>
+
+			<!-- Supporting development by considering HTTPS inside Eclipse -->
+			<plugin>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>deploy</phase>
+						<configuration>
+							<tasks>
+								<!-- FOR TESTING UNDER ECLIPSE THE USER.HOME DIR IS USED -->
+								<copy file="${project.build.directory}/${key.store.filename}"
+									tofile="${user.home}/${key.store.filename}" />
+							</tasks>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+
+		<pluginManagement>
+			<plugins>
+				<!--This plugin's configuration is used to store Eclipse m2e settings 
+					only. It has no influence on the Maven build itself. -->
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>
+											org.codehaus.mojo
+										</groupId>
+										<artifactId>
+											keytool-maven-plugin
+										</artifactId>
+										<versionRange>
+											[1.0,)
+										</versionRange>
+										<goals>
+											<goal>clean</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+	<profiles>
+		<profile>
+			<id>development</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+				<env>development</env>
+			</properties>
+		</profile>
+		<profile>
+			<id>deploy</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<properties>
+				<env>deploy</env>
+			</properties>
+		</profile>
+	</profiles>
+</project>

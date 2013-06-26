@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans default-autowire="byName"
+    xmlns="http://www.springframework.org/schema/beans" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:tx="http://www.springframework.org/schema/tx" 
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:mvc="http://www.springframework.org/schema/mvc"
+    xmlns:p="http://www.springframework.org/schema/p" 
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-beans-3.0.xsd
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd">
+              
+
+    <!-- ***************************************************** -->
+    <!-- *******  Load Application Context			   ******* -->
+    <!-- ***************************************************** -->
+     <import resource="classpath*:META-INF/spring/ps-applicationContext.xml" />
+     <import resource="classpath*:META-INF/spring/ps-applicationContext-security.xml" />
+	 <import resource="classpath*:META-INF/spring/ps-applicationContext-task.xml" />
+     
+	<!-- ***************************************************** -->
+    <!-- *******  Load Context Annotations			   ******* -->
+    <!-- ***************************************************** -->
+
+    <context:annotation-config />
+    <context:component-scan base-package="eu.dime.ps.communications.ui"/>
+    <context:component-scan base-package="eu.dime">
+		<context:exclude-filter expression=".*_Roo_.*"
+			type="regex" />
+		<context:exclude-filter expression="org.springframework.stereotype.Controller"
+			type="annotation" />
+	</context:component-scan>
+
+    <!-- ***************************************************** -->
+    <!-- *******  Basic Authentication Services Layer  ******* -->
+    <!-- ***************************************************** -->
+
+	<bean id="basicAuthenticationFilter"
+		class="org.springframework.security.web.authentication.www.BasicAuthenticationFilter">
+		<property name="authenticationManager" ref="authenticationManager" />
+		<property name="authenticationEntryPoint" ref="authenticationEntryPoint" />
+	</bean>
+	
+	<bean id="authenticationEntryPoint"
+		class="org.springframework.security.web.authentication.www.BasicAuthenticationEntryPoint">
+		<property name="realmName" value="dime_realm" />
+	</bean>
+           
+</beans>

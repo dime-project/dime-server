@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<faqs xmlns="http://maven.apache.org/FML/1.0.1"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/FML/1.0.1 http://maven.apache.org/xsd/fml-1.0.1.xsd"
+  title="Questions and Answers"
+  toplink="false">
+
+  <part id="general">
+    <title>General</title>
+
+    <faq id="kim-trusted-entities">
+      <question>
+        Why is a file called kim.trusted.entities.cache created in the dictionary folder?
+      </question>
+      <answer>
+        <p>kim.trusted.entities.cache contains a binary data structure that contains the dictionary
+           extracted according to the dictionary settings. The name of the file is kept for 
+           backwards compatibility with the Ontotext KIM Plaftorm. Note that the file
+           snapshot.properties is a plain text file which contains metadata that, along with 
+           the configuration, describe the contents of the binary dictionary.</p>
+      </answer>
+    </faq>
+
+    <faq id="rdf-database-compatibility">
+      <question>
+        Can I extract data from any RDF database?
+      </question>
+      <answer>
+        <p>  The Large KB gazetteer communicates with RDF databases through the standard open-source <a href="http://www.openrdf.org">Sesame 2 API</a>.
+  The database connection is configured through <em>config.ttl</em> in the dictionary directory which contains standard Sesame
+  <a href="http://www.openrdf.org/doc/sesame2/2.3-pr1/users/ch07.html#d0e606">configuration template</a>. Note that in order to
+  configure a new database, you will need to add to the classpath the database Sesame adapter.</p>
+
+  <p>Here are some databases that should work correctly with the gazetteer.</p>
+  <ul>
+  <li><a href="http://www.mulgara.org/">Mulgara</a> (formerly known as Kowari) - through the 
+  <a href="http://repo.aduna-software.org/maven2/releases/org/openrdf/mulgara/">OpenRDF Mulgara SAIL</a></li>
+  
+  <li><a href="http://virtuoso.openlinksw.com/">OpenLink Virtuoso</a> - through the 
+  <a href="http://www.openlinksw.com/dataspace/dav/wiki/Main/VirtSesame2Provider">Virtuoso Sesame Adapter</a></li>
+  
+  <li><a href="http://www.franz.com/agraph/allegrograph/">Franz Inc. AllegroGraph</a> - through the Sesame 2 SAIL adapter supplied 
+  with the AllegroGraph distribution.</li>
+  
+  <li><a href="http://jena.sf.net">Jena</a> - through <a href="http://semanticweb.org/wiki/RDF2Go">RDF2Go</a></li>
+  </ul>
+      </answer>
+    </faq>
+	
+    <faq id="relational-database-compatibility">
+      <question>
+        Can I extract data from a relational database?
+      </question>
+      <answer>
+        <p>You should convert your relational data into simple RDF. Try <a href="http://triplify.org/Overview">Triplify</a>.</p>
+      </answer>
+    </faq>	
+  </part>
+
+  <part id="install">
+
+    <title>Installation</title>
+
+    <faq id="how-install">
+      <question>
+        How do I install the Large KB Gazetteer?
+      </question>
+      <answer>
+        <p>The gazetteer and its companion processing resources form a standard CREOLE plugin, compatible with GATE 5.1. See the <a href="http://gate.ac.uk/sale/tao/splitch3.html#x5-650003.4" > CREOLE plugin usage guide</a> in the GATE documentation.</p>
+      </answer>
+    </faq>
+
+    <faq id="gate-50">
+      <question>
+        Can I install the gazetteer in GATE 5.0 ?
+      </question>
+      <answer>
+        <p>The gazetteer requires GATE 5.1, but a GATE 5.0 installation can be modified so it becomes compatible. (That is how we tested the gazetteer before the 5.1 release). See <a href="gate_compatibility.html">the GATE compatibility guide</a> for more information.</p>
+      </answer>
+    </faq>	
+  </part>
+
+</faqs>

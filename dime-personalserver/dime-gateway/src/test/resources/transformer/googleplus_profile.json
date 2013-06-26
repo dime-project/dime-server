@@ -1,0 +1,63 @@
+{
+ "kind": "plus#person",
+ "etag": "\"B5qy9FrOWdxDdMjDQafiSQ7H8OY/jexwjAk7_meuyOGhlytJKBsRyxU\"",
+ "birthday": "1988-01-04",
+ "gender": "male",
+ "urls": [
+  {
+   "value": "http://www.deri.ie/about/team/member/keith_cortis/",
+   "type": "other"
+  }
+ ],
+ "objectType": "person",
+ "id": "105758250853721587989",
+ "displayName": "Keith Cortis",
+ "name": {
+  "familyName": "Cortis",
+  "givenName": "Keith"
+ },
+ "aboutMe": "Currently a Masters student at DERI Galway.",
+ "url": "https://plus.google.com/105758250853721587989",
+ "image": {
+  "url": "https://lh6.googleusercontent.com/-pBdNpRL7Bgg/AAAAAAABBBI/AAABBBAAAB8/Dz6GFrr3ryM/photo.jpg?sz=50"
+ },
+ "organizations": [
+  {
+   "name": "University of Malta",
+   "title": "BSc. I.T. (Hons) (Melit.) Computer Science and Artificial Intelligence",
+   "type": "school",
+   "startDate": "2006",
+   "endDate": "2010",
+   "primary": false
+  },
+  {
+   "name": "Digital Enterprise Research Institute Galway",
+   "title": "Master Student",
+   "type": "work",
+   "startDate": "2011",
+   "endDate": "2012",
+   "primary": true
+  },
+  {
+   "name": "mybet",
+   "title": "Junior Trader",
+   "type": "work",
+   "startDate": "2010",
+   "endDate": "2011",
+   "primary": false
+  }
+ ],
+ "placesLived": [
+  {
+   "value": "Galway, Ireland",
+   "primary": true
+  },
+  {
+   "value": "Rabat, Malta"
+  },
+  {
+   "value": "Warsaw, Poland"
+  }
+ ],
+ "isPlusUser": true
+}

@@ -1,0 +1,251 @@
+declare namespace nco = "http://www.semanticdesktop.org/ontologies/2007/03/22/nco#";
+declare namespace nao = "http://www.semanticdesktop.org/ontologies/2007/08/15/nao#";
+declare namespace ncal = "http://www.semanticdesktop.org/ontologies/2007/04/02/ncal#";
+declare namespace nie = "http://www.semanticdesktop.org/ontologies/2007/01/19/nie#";
+declare namespace xsd = "http://www.w3.org/2001/XMLSchema#";
+
+let $doc := doc("%doc%")
+
+let $events :=$doc/AmeticEvent
+let $users :=$events/participants/e
+
+return 
+
+for $event in $events 	
+	let $eventId := $events/id
+	let $summary := if (fn:not($event/introduction=""))
+				    then ($event/introduction)
+	        		else ()		
+    let $description := if (fn:not($event/eventDesc=""))
+					    then ($event/eventDesc)
+					    else ()
+    let $name := $event/eventName    
+	let $location := if (fn:not($event/location=""))
+					 then ($event/location)
+					 else ()                	   
+    let $startDate := $event/startDate
+	let $endDate := $event/dateCompleted
+	#let $image := $event/entryImage					    
+	              
+	#Construct for the event    	
+	construct
+	{  	
+		_:e{data($eventId)} a ncal:Event;
+		ncal:summary {data($summary)};
+		ncal:description {data($description)};
+		nie:title {data($name)};
+		nao:externalIdentifier {data($eventId)}^^xsd:string;
+		ncal:location {data($location)}.
+						  
+		#Construct for the start date of the event    
+		{                    
+			let $counter := count($startDate/preceding::*) + count($startDate/ancestor::*)
+					                 
+			construct
+			{
+				_:st{data($counter)} a ncal:NcalDateTime;
+				ncal:dateTime {data($startDate)}^^xsd:dateTime.
+				_:e{data($eventId)} ncal:dtstart _:st{data($counter)};        		         
+	        }    
+	    }.
+					     
+		#Construct for the end date of the event    
+		{            
+			let $counter := count($endDate/preceding::*) + count($endDate/ancestor::*)
+					                
+			construct
+			{
+				_:ed{data($counter)} a ncal:NcalDateTime;
+				ncal:dateTime {data($endDate)}^^xsd:dateTime.
+				_:e{data($eventId)} ncal:dtend _:ed{data($counter)};        		         
+			}    
+	    }.
+					     
+		#Construct for the image of the event    
+		#{           
+			 #let $counter := count($image/preceding::*) + count($image/ancestor::*)
+					                       
+			 #construct
+			 #{
+			 #	_:im{data($counter)} a nao:Symbol; a nfo:FileDataObject;
+			 #  nfo:fileUrl {data($image)}.
+			 #  _:e{data($eventId)} nao:prefSymbol _:im{data($counter)};        		         
+			 #}    
+         # }.
+					               
+	    {      
+			for $user in $users
+				let $name := $user/firstName
+				let $surname := $user/lastname
+				let $userId := $user/id			
+				let $personalId := if (fn:not($user/personald=""))  #typo - has to be changed to personalId when modified by Siegen
+				    			   then ($user/personald)
+	        					   else ()							
+				let $email := $user/email 
+				let $fax := $user/fax	
+				let $mobile := $user/mobile
+				let $phone := $user/phone	
+										 	             
+				#Construct for the user (participant of the event)  	
+				construct
+				{  	
+				 	_:c{data($userId)} a nco:PersonContact; a ncal:Attendee;
+					nao:externalIdentifier {data($userId)}^^xsd:string;
+					nie:identifier {data($personalId)}^^xsd:string.									
+						    
+					#Construct for the personal details of the user    
+				    {              
+						let $counter := count($name/preceding::*) + count($name/ancestor::*)
+									           
+						construct
+						{
+						 	_:pn{data($counter)} a nco:PersonName;
+							nco:nameGiven {data($name)};
+							nco:nameFamily {data($surname)};
+							nco:fullname {fn:concat(data($name)," ",data($surname))}.
+							_:c{data($userId)} nco:hasPersonName _:pn{data($counter)};          
+					    }  
+					}.  
+							 
+					#Construct for the address of the user  
+					{				  
+				    	if ((fn:not($user/address="")) or (fn:not($user/city="")) or (fn:not($user/postalCode="")) or (fn:not($user/country="")) or (fn:not($user/region="")))
+				    	then ({          
+				    		let $address := if (fn:not($user/address=""))
+											then ($user/address)
+											else ()
+							let $city := if (fn:not($user/city=""))
+										 then ($user/city)
+									     else ()
+							let $pcode := if (fn:not($user/postalCode=""))
+										  then ($user/postalCode)
+										  else ()							
+							let $country := if (fn:not($user/country=""))
+										    then ($user/country)
+										    else ()
+							let $region := if (fn:not($user/region=""))
+							    		   then ($user/region)
+										   else ()									
+							let $counter := count($userId/preceding::*) + count($userId/ancestor::*)	
+												           
+							construct
+							{
+								_:ad{data($counter)} a nco:PostalAddress;
+							    nco:streetAddress {data($address)}^^xsd:string;
+							    nco:locality {data($city)};
+							    nco:postalcode {data($pcode)}^^xsd:string;
+							    nco:country {data($country)};
+							    nco:region {data($region)}.       		
+							    _:c{data($userId)} nco:hasPostalAddress _:ad{data($counter)};          
+							} 
+						})
+						else ()   
+				     }.
+						     
+					#Construct for the job position of the user
+					{				  
+				    	if ((fn:not($user/jobPosition="")) or (fn:not($user/company=""))) 
+				    	then ({		
+							let $position := if (fn:not($user/jobPosition=""))
+		        					 		 then ($user/jobPosition)
+		        					 		 else ()			  
+							let $counter := count($userId/preceding::*) + count($userId/ancestor::*)						
+							let $orgNode := if (fn:not($user/company=""))
+								    		   then (fn:concat("_:org",data($counter)))
+											   else ()		
+								
+							construct
+							{                
+								_:pos{data($counter)} a nco:Affiliation;
+								nco:role {data($position)};	
+								nco:org {data($orgNode)}.      
+								_:c{data($userId)} nco:hasAffiliation _:pos{data($counter)}.  
+								{
+									if (fn:not($user/company="")) 
+						    		then (
+									{
+										let $company := $user/company
+										construct
+										{
+											_:org{data($counter)} a nco:OrganizationContact;   
+											nie:title {data($company)}.  
+										}
+									})
+									else ()
+								}
+							} 
+						}) 
+						else ()						
+				    }.				    					    	    
+						    
+				    #Construct for the email address of the user  
+					{				  
+				    	if (fn:not($email="")) 
+				    	then ({          
+					    	let $emailprefix := "mailto:"		
+							 										           
+							construct
+							{									 				            
+								<{fn:concat($emailprefix,$email)}> a nco:EmailAddress;	  						 	       		  		
+								nco:email {data($email)}.       	
+							    _:c{data($userId)} nco:hasEmailAddress <{fn:concat($emailprefix,$email)}>;  	  
+							}   
+						})
+						else ()
+				    }.
+				    
+				    #Construct for the fax number of the user 
+				    {				  
+				    	if (fn:not($fax="")) 
+				    	then ({
+						    let $counter := count($fax/preceding::*) + count($fax/ancestor::*)	
+						    					    
+						    construct
+							{
+								_:fax{data($counter)} a nco:FaxNumber;
+								nco:phoneNumber {data($fax)}.      		
+								_:c{data($userId)} nco:hasPhoneNumber _:fax{data($counter)};          
+							}								
+						})						   
+				    	else ()				   
+				    }.					   
+						     
+					#Construct for the mobile number of the user    
+					{				  
+				    	if (fn:not($mobile="")) 
+				    	then ({          
+							let $counter := count($mobile/preceding::*) + count($mobile/ancestor::*)	
+													           
+							construct
+							{
+								_:mob{data($counter)} a nco:CellPhoneNumber;
+							    nco:phoneNumber {data($mobile)}.       		
+							    _:c{data($userId)} nco:hasPhoneNumber _:mob{data($counter)};          
+							}
+						})
+						else ()    
+					}.
+						     
+					#Construct for the phone number of the user   
+					{				  
+				    	if (fn:not($phone="")) 
+				    	then ({					         
+							let $counter := count($phone/preceding::*) + count($phone/ancestor::*)	
+													           
+							construct
+							{
+								_:ph{data($counter)} a nco:PhoneNumber;
+							    nco:phoneNumber {data($phone)}.       		
+							    _:c{data($userId)} nco:hasPhoneNumber _:ph{data($counter)};          
+							}  
+						}) 
+						else () 
+					 }.
+						     
+					_:e{data($eventId)} ncal:attendee _:c{data($userId)}.
+				}
+		}
+	}
+ 
+      
+	

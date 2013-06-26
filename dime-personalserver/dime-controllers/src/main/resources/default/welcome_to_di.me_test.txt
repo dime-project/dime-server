@@ -1,0 +1,22 @@
+Welcome to the di.me Test Trial 2013! Please try out the prototype and give us feedback! This helps us a lot!
+
+Trusted Social Networking and Personal Identity
+
+%%% What it is
+
+The di.me useware is a system prototype which
+- is a decentralized social network
+
+- gives full control of personal data to the user
+
+- offers communication with multiple identities
+
+- gives intelligent system recommendations for trustworthines and data privacy
+
+We offer di.me as a test trail for scientific evaluation. The code of di.me is open source. 
+
+%%% Who we are: The digital.me research project
+
+Digital.me is a European research project (FP7/2007 - 2013, grant agreement n° 257787) with eight research and industrial partners (di.me-project.eu).
+
+We research on technology that use personal data in controlled, trustworthy and intelligent way. The project develops a di.me platform that can be used for social, privacy-preserving services e.g. on smart business events, or for business Customer Relationship Management. 
