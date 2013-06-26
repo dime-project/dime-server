@@ -2,9 +2,16 @@ target/
 dime-personalserver/dime-gateway/logs/
 dime-personalserver/dime-gateway/src/main/resources/services.properties_full
 dime-personalserver/dime-gateway/src/main/resources/services.properties
+dime-personalserver/services.properties
+
 *.class
 
 # Package Files #
 *.war
 *.ear
 *.*~
+
+# Eclipse files #
+*.project
+*.settings*
+*.classpath
