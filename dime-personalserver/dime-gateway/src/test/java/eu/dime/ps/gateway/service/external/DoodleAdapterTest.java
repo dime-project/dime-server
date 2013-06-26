@@ -5,12 +5,17 @@ package eu.dime.ps.gateway.service.external;
 
 import static org.junit.Assert.*;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.util.Properties;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.scribe.model.Token;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -18,6 +23,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import eu.dime.ps.gateway.exception.ServiceNotAvailableException;
 import eu.dime.ps.gateway.policy.PolicyManager;
 import eu.dime.ps.gateway.service.ServiceResponse;
+import eu.dime.ps.gateway.service.external.FacebookAdapterTest.AdapterNotEnabledException;
 import eu.dime.ps.gateway.service.external.oauth.DoodleServiceAdapter;
 import eu.dime.ps.gateway.transformer.Transformer;
 
@@ -41,12 +47,22 @@ public class DoodleAdapterTest {
 	@Autowired
 	private PolicyManager policyManager;
 
-	private DoodleServiceAdapter initAdapter() throws ServiceNotAvailableException, MalformedURLException, IOException {
+	final Logger logger = LoggerFactory.getLogger(LinkedInAdapterTest.class);
+	class AdapterNotEnabledException extends Exception {
+		
+	}
+
+	private DoodleServiceAdapter initAdapter() throws ServiceNotAvailableException, MalformedURLException, IOException, AdapterNotEnabledException {
 		DoodleServiceAdapter adapter = new DoodleServiceAdapter();
 		adapter.setConsumerToken(new Token(APP_ID, APP_SECRET));
 		//adapter.setTransformer(transformer);
 		
 		// Set token
+		Properties properties = new Properties();
+		properties.load(new FileInputStream("services.properties"));
+		if (!properties.getProperty("GLOBAL_ENABLED").contains("Doodle")) {
+			throw new AdapterNotEnabledException();
+		}
 		adapter.setAccessToken(new Token(ACCESS_ID, ACCESS_SECRET));
 		return adapter;
 	}
@@ -68,7 +84,9 @@ public class DoodleAdapterTest {
 			assert (result[0].getResponse().length() > 0);
 			assertFalse (result[0].getResponse().contains("\"error\""));
 			
-		} catch (Exception e) {
+		} catch (AdapterNotEnabledException e) {
+			logger.warn("Please enable Doodle Adapter in services.properties to run this test.");
+		}  catch (Exception e) {
 			e.printStackTrace();
 			fail (e.getMessage());
 		}
@@ -90,7 +108,9 @@ public class DoodleAdapterTest {
 		try {
 			DoodleServiceAdapter adapter = initAdapter();
 			assert (adapter.getAdapterName() == "Doodle");
-		} catch (Exception e) {
+		} catch (AdapterNotEnabledException e) {
+			logger.warn("Please enable Doodle Adapter in services.properties to run this test.");
+		}  catch (Exception e) {
 			e.printStackTrace();
 			fail (e.getMessage());
 		}

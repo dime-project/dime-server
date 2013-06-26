@@ -9,6 +9,8 @@ import java.util.Map;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -31,6 +33,7 @@ public class ServiceGatewayTestIt {
 
 	private ServiceGatewayImpl serviceGateway;
 	private PolicyManagerImpl policyManager;
+	final Logger logger = LoggerFactory.getLogger(ServiceGatewayTestIt.class);
 	
 	public ServiceGatewayTestIt() {
 		super();
@@ -113,8 +116,17 @@ public class ServiceGatewayTestIt {
 		this.serviceGateway = new ServiceGatewayImpl();
 		Map<String, ServiceMetadata> supportedAdapters = this.serviceGateway
 				.listSupportedAdapters("juan");
-		assert (supportedAdapters.size() > 0);		
-		assert (supportedAdapters.containsKey("di.me"));
+		try {
+			// Make sure that LinkedIn is actually supported
+			if (this.serviceGateway.makeServiceAdapter("LinkedIn") != null) {
+				assert (supportedAdapters.size() > 0);
+				assert (supportedAdapters.containsKey("LinkedIn"));
+			}
+		} catch (Exception e) {
+			// LinkedIn is not a supported adapter - it has not been activated!
+			logger.warn("To run this test, please enable LinkedIn in services.properties.");
+			e.printStackTrace();
+		}
 	}
 
 }

@@ -17,6 +17,8 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.scribe.model.Token;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -31,38 +33,47 @@ import eu.dime.ps.gateway.service.external.oauth.LinkedInServiceAdapter;
 import eu.dime.ps.gateway.transformer.Transformer;
 
 /**
+ * Note: Please put in your developer keys before enabling this test!
+ * 
  * @author Sophie.Wrobel
  * 
  */
+@Ignore
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:spring-config/adapter-tests-context.xml"})
 public class LinkedInAdapterTest {
 
-	// The di.me Facebook App is managed by Borja
 	// To create a facebook application, visit here: https://developers.facebook.com/apps/
 	// Test users can be created from that page. It seems that the graph API for creating test users programmatically is not working.
-	private static final String APPID = "251215821668348";
-	private static final String APPSECRET = "25e53670ae161465165bac4cc5c14640";
+	private static final String APPID = "...";
+	private static final String APPSECRET = "...";
 
 	// To get an APP_ACCESS_TOKEN, visit here:
 	// https://graph.facebook.com/oauth/access_token?client_id=APPID&client_secret=APPSECRET&grant_type=client_credentials
-	private String app_access_token = "251215821668348|_kMuaDDGBDt0Lhc4WEI_vvdhuNQ";
+	private String app_access_token = "...";
 
 	// You can find test users registered for an account here:
 	// https://graph.facebook.com/APPID/accounts/test-users?access_token=APP_ACCESS_TOKEN
-	private String id = "100004484774596";
-	private String access_token = "AAADker3PZCZCwBAIFYpAdcuBkXljX3OLQlcil3B4x93KjZBUu1ZB0hs1cwTbV6wIcVAmDIRXlkqRIEkpYXYQSsXvTCAbyo4s0nWxcOrQnlVM4CIfxfhH";
+	private String id = "...";
+	private String access_token = "...";
 	
 	@Autowired
 	private Transformer transformer;
 
 	@Autowired
 	private PolicyManager policyManager;
+	
+	final Logger logger = LoggerFactory.getLogger(LinkedInAdapterTest.class);
+
+	class AdapterNotEnabledException extends Exception {
+		
+	}
 
 	/**
 	 * Test method for
 	 * {@link eu.dime.ps.controllers.service.ametic.AMETICDummyAdapter#get(java.lang.String)}
 	 * .
+	 * @throws AdapterNotEnabledException 
 	 */
 	// These tests will only work if you add your linkedin token to the
 	// services.properties:
@@ -70,7 +81,7 @@ public class LinkedInAdapterTest {
 	//   LinkedIn_TestSecret=...
 	// After doing that you can remove the Ignore annotation.
 	private LinkedInServiceAdapter initAdapter()
-			throws ServiceNotAvailableException, FileNotFoundException, IOException {
+			throws ServiceNotAvailableException, FileNotFoundException, IOException, AdapterNotEnabledException {
 		LinkedInServiceAdapter adapter = new LinkedInServiceAdapter();
 		adapter.setConsumerToken(new Token(APPID, APPSECRET));
 		adapter.setTransformer(transformer);
@@ -78,6 +89,9 @@ public class LinkedInAdapterTest {
 		// Set token
 		Properties properties = new Properties();
 		properties.load(new FileInputStream("services.properties"));
+		if (!properties.getProperty("GLOBAL_ENABLED").contains("LinkedIn")) {
+			throw new AdapterNotEnabledException();
+		}
 		adapter.setAccessToken(new Token(properties.getProperty("LinkedIn_TestToken"), properties.getProperty("LinkedIn_TestSecret")));
 
 		return adapter;
@@ -86,7 +100,6 @@ public class LinkedInAdapterTest {
 	/**
 	 * Test method for {@link eu.dime.ps.gateway.service.external.oauth.LinkedInServiceAdapter#getRaw(java.lang.String)}.
 	 */
-	@Ignore
 	@Test
 	public void testGetRaw() {
 		try {
@@ -107,6 +120,8 @@ public class LinkedInAdapterTest {
 				assertTrue(s[0].getResponse().length() > 0);
 				assertFalse (s[0].getResponse().contains("\"error\""));
 			}
+		} catch (AdapterNotEnabledException e) {
+			logger.warn("Please enable LinkedIn Adapter in services.properties to run this test.");
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail (e.getMessage());
@@ -123,6 +138,8 @@ public class LinkedInAdapterTest {
 		try {
 			LinkedInServiceAdapter adapter = initAdapter();
 			assert (adapter.getAdapterName() == "LinkedIn");
+		} catch (AdapterNotEnabledException e) {
+			logger.warn("Please enable LinkedIn Adapter in services.properties to run this test.");
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail (e.getMessage());

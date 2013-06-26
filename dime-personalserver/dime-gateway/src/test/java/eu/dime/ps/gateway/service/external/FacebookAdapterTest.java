@@ -5,17 +5,20 @@ package eu.dime.ps.gateway.service.external;
 
 import static org.junit.Assert.*;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.Properties;
 import java.util.Scanner;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
 
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.scribe.model.Token;
+import org.slf4j.LoggerFactory;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -26,9 +29,12 @@ import eu.dime.ps.gateway.exception.AttributeNotSupportedException;
 import eu.dime.ps.gateway.exception.InvalidLoginException;
 import eu.dime.ps.gateway.exception.ServiceNotAvailableException;
 import eu.dime.ps.gateway.service.ServiceResponse;
+import eu.dime.ps.gateway.service.external.LinkedInAdapterTest.AdapterNotEnabledException;
 import eu.dime.ps.gateway.service.external.oauth.FacebookServiceAdapter;
 
 /**
+ * Note: Please put in your developer keys before enabling this test!
+ * 
  * @author Sophie.Wrobel
  *
  */
@@ -39,23 +45,34 @@ public class FacebookAdapterTest {
 	// The di.me Facebook App is managed by Borja
 	// To create a facebook application, visit here: https://developers.facebook.com/apps/
 	// You need to put a valid app token and account access token here before you enable this test.
-	private static final String APPID = "495923027090815";
-	private static final String APPSECRET = "6e69f6b6c4623ba0bfd6bf5ba6e8bfef";
+	private static final String APPID = "...";
+	private static final String APPSECRET = "...";
 	
 	// To get an APP_ACCESS_TOKEN, visit here:
 	// https://graph.facebook.com/oauth/access_token?client_id=APPID&client_secret=APPSECRET&grant_type=client_credentials
-	private String app_access_token = "495923027090815|qlGcR6Oh7ws07yfrQCXoNf-atZg";
+	private String app_access_token = "...";
 
 	// You can find test users registered for an account here:
 	// https://graph.facebook.com/APPID/accounts/test-users?access_token=APP_ACCESS_TOKEN
-	private String id = "100004086272271";
-	private String access_token = "AAAHDChPdnX8BAFIxxbQu3af56qKm1yzE6Mdkf7nWTatDpZBqgAQrgCbCWZAKkdpUhmtd15Y6V0Deh7HCFOzvuCpjdZAt5Vlj1LfA7qlwrhr2JpMTEsf";
-	
+	private String id = "...";
+	private String access_token = "...";
 
-	private FacebookServiceAdapter initAdapter() throws ServiceNotAvailableException, MalformedURLException, IOException {
+	final Logger logger = LoggerFactory.getLogger(FacebookAdapterTest.class);
+
+	class AdapterNotEnabledException extends Exception {
+		
+	}
+
+	private FacebookServiceAdapter initAdapter() throws ServiceNotAvailableException, MalformedURLException, IOException, AdapterNotEnabledException {
 		FacebookServiceAdapter adapter = new FacebookServiceAdapter();
 		adapter.setConsumerToken(new Token(APPID, APPSECRET));
 		adapter.setAccessToken(new Token(id, access_token));
+		
+		Properties properties = new Properties();
+		properties.load(new FileInputStream("services.properties"));
+		if (!properties.getProperty("GLOBAL_ENABLED").contains("LinkedIn")) {
+			throw new AdapterNotEnabledException();
+		}
 		return adapter;
 	}
 
@@ -82,6 +99,8 @@ public class FacebookAdapterTest {
 			result = adapter.getRaw("/livepost/"+this.id+"/@all");
 			assert (result[0].getResponse().length() > 0);
 			assertFalse (result[0].getResponse().contains("\"error\""));
+		} catch (AdapterNotEnabledException e) {
+			logger.warn("Please enable Facebook Adapter in services.properties to run this test.");
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail (e.getMessage());
@@ -96,7 +115,9 @@ public class FacebookAdapterTest {
 		try {
 			FacebookServiceAdapter adapter = initAdapter();
 			assert (adapter.getAdapterName() == "Facebook");
-		} catch (Exception e) {
+		} catch (AdapterNotEnabledException e) {
+			logger.warn("Please enable Facebook Adapter in services.properties to run this test.");
+		}  catch (Exception e) {
 			e.printStackTrace();
 			fail (e.getMessage());
 		}
