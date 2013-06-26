@@ -71,7 +71,7 @@ public class DefaultDataSetup implements BroadcastReceiver {
 		CONTACTS.put("todo", new String[] { "Marcel Heupel", "marcel.heupel@email.com", "mheupel" });
 		CONTACTS.put("todo", new String[] { "Massimo Valla ", "massimo.valla@email.com", "mvalla" });
 		CONTACTS.put("todo", new String[] { "Rafael Gimenez", "rafael.gimenez@email.com", "rgimenez" });
-		CONTACTS.put("todo", new String[] { "Simon Scerri", "simon.scerri@email.com", "simsce" });
+		CONTACTS.put("b7b27244-4466-4f9b-9997-6799e31894de", new String[] { "Simon Scerri", "simon.scerri@email.com", "simsce" });
 		CONTACTS.put("todo", new String[] { "Simon Thiel", "simon.thiel@email.com", "sthiel" });
 		CONTACTS.put("todo", new String[] { "Sophie Wrobel", "sophie.wrobel@email.com", "wrobel" });
 	}
