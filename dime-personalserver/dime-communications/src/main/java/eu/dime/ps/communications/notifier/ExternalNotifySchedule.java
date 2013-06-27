@@ -1,8 +1,5 @@
 package eu.dime.ps.communications.notifier;
 
-import javax.naming.NamingException;
-import javax.persistence.NoResultException;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,14 +10,14 @@ import eu.dime.ps.gateway.ServiceGateway;
 import eu.dime.ps.gateway.auth.CredentialStore;
 import eu.dime.ps.gateway.exception.ServiceNotAvailableException;
 import eu.dime.ps.gateway.service.internal.DimeServiceAdapter;
-import eu.dime.ps.semantic.exception.NotFoundException;
-import eu.dime.ps.semantic.exception.RepositoryStorageException;
 
 public class ExternalNotifySchedule {
 
     private NotifierManager notifierManager;
     private ServiceGateway serviceGateway;
     private CredentialStore credentialStore;
+    
+    // Git mola!
 
     public void setNotifierManager(NotifierManager notifierManager) {
 	this.notifierManager = notifierManager;
