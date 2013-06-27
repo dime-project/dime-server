@@ -3,19 +3,14 @@ package eu.dime.ps.storage.datastore.engine;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.HashSet;
-
 import org.apache.log4j.Logger;
 
-import com.db4o.Db4o;
 import com.db4o.ObjectContainer;
 import com.db4o.ObjectServer;
 import com.db4o.cs.Db4oClientServer;
 import com.db4o.cs.config.ServerConfiguration;
 import com.db4o.ext.DatabaseFileLockedException;
 import com.db4o.io.FileStorage;
-import com.db4o.io.NonFlushingStorage;
-
 import eu.dime.ps.storage.util.CMSInitHelper;
 
 /**
