@@ -38,6 +38,7 @@ import eu.dime.ps.gateway.service.external.oauth.FacebookServiceAdapter;
  * @author Sophie.Wrobel
  *
  */
+@Ignore
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:spring-config/adapter-tests-context.xml"})
 public class FacebookAdapterTest {
