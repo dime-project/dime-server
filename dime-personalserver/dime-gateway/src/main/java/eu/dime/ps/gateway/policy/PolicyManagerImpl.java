@@ -81,7 +81,7 @@ public class PolicyManagerImpl implements PolicyManager {
 								this.properties.getProperty(propertyName));	
 					} else {
 						String adapterId = propertyName.replaceFirst("_(.*)$", "");
-						this.adapterPolicy.put(adapterId + "_" + 
+						this.adapterPolicy.put(clean(adapterId) + "_" + 
 								propertyName.substring(adapterId.length()+1), 
 								this.properties.getProperty(propertyName));
 					}
@@ -178,6 +178,8 @@ public class PolicyManagerImpl implements PolicyManager {
 	 */
 	public Integer getPolicyInteger(String policyName, String adapterId) {
 		Integer value = null;
+		policyName = clean(policyName);
+		adapterId = clean(adapterId);
 		if (globalPolicy.get(policyName) != null) {
 			value = Integer.parseInt(globalPolicy.get(policyName));
 		}
@@ -195,6 +197,8 @@ public class PolicyManagerImpl implements PolicyManager {
 	 * String, java.lang.String)
 	 */
 	public String getPolicyString(String policyName, String adapterId) {
+		policyName = clean(policyName);
+		adapterId = clean(adapterId);
 		String value = globalPolicy.get(policyName);
 		if (adapterId != null && adapterPolicy.get(adapterId + "_" + policyName) != null) {
 			value = adapterPolicy.get(adapterId + "_" + policyName);
@@ -210,6 +214,8 @@ public class PolicyManagerImpl implements PolicyManager {
 	 * .lang.String, java.lang.Integer)
 	 */
 	public void setGlobalPolicy(String policyName, String value) {
+		policyName = clean(policyName);
+		
 		globalPolicy.put(policyName, value);
 
 		// Write changes to disk
@@ -237,6 +243,8 @@ public class PolicyManagerImpl implements PolicyManager {
 	 */
 	public void setAdapterPolicy(String policyName, String adapterId,
 			String value) {
+		policyName = clean(policyName);
+		adapterId = clean(adapterId);
 		adapterPolicy.put(adapterId + "_" + policyName, value);
 		
 		// Write changes to disk
@@ -319,6 +327,13 @@ public class PolicyManagerImpl implements PolicyManager {
 	@Override
 	public void registerPolicyPlugin(ServicePolicy plugin) {
 		this.policyPlugins.add(plugin);
+	}
+	
+	private String clean(String dirty) {
+		if (dirty == null)
+			return null;
+		else
+			return dirty.replaceAll(":", "-").replaceAll("_", "-");
 	}
 
 }
