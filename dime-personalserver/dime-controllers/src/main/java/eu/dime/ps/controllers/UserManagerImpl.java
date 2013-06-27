@@ -1,6 +1,8 @@
 package eu.dime.ps.controllers;
 
 import java.util.List;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import javax.persistence.NoResultException;
 
@@ -65,6 +67,9 @@ public class UserManagerImpl implements UserManager {
     private final ModelFactory modelFactory;
 
     private final BroadcastManager broadcastManager;
+    
+    static final Lock lock = new ReentrantLock();
+
 
     private TenantManager tenantManager;
     private AccountManager accountManager;
@@ -175,8 +180,7 @@ public class UserManagerImpl implements UserManager {
         return tenant;
     }
 
-    private PersonContact initModelForUser(UserRegister userRegister, Tenant tenant) throws DimeException {
-
+    private PersonContact buildProfile(UserRegister userRegister){
         // create RDF profile object and attributes
 
         PersonContact profile = modelFactory.getNCOFactory().createPersonContact();
@@ -201,10 +205,15 @@ public class UserManagerImpl implements UserManager {
         String username = userRegister.getUsername();
         profile.setPrefLabel(username + "@di.me");
         
+        return profile;
+    }
+    
+    private PersonContact initModelForUser(PersonContact profile, Tenant tenant) throws DimeException {
+
         // create the di.me account
         Account account = modelFactory.getDAOFactory().createAccount();
         account.setAccountType(DimeServiceAdapter.NAME);
-        account.setPrefLabel(username + "@di.me");
+        account.setPrefLabel(profile.getPrefLabel());
 
         // create the profile card for the di.me account
         PrivacyPreference profileCard = modelFactory.getPPOFactory().createPrivacyPreference();
@@ -279,33 +288,66 @@ public class UserManagerImpl implements UserManager {
     }
 
     @Override 
-    public User register(UserRegister userRegister) throws IllegalArgumentException, DimeException, DNSRegisterFailedException {
-        validateUser(userRegister.getUsername(), userRegister.getPassword());
+    public User register(UserRegister userRegister) throws IllegalArgumentException, DNSRegisterFailedException, DimeException {
+       
+    	lock.lock(); // only one register at a time    
+    	
+    	validateUser(userRegister.getUsername(), userRegister.getPassword());  
+        User user;
+        try {
+			// TODO improve performance: register it asynchronously
+			// TODO improve robustness: what happens if this fails? rollback mechanism! Transaction.
+			//
+			//EDIT by Simon: moved to the beginning of the registration process:
+			// we try first to register and hope that no one will try to connect before the rest is established
+			// so, we run into an exception in case the dns is not available
+			// better would be to somehow reserve a registration and enable it after the user was created
+			dimeDNSRegisterService.registerSaid(userRegister.getUsername());
+			user = createUser(userRegister);
+			user.persist();
+			user.flush();
+			logger.debug("Created new user [id=" + user.getId() + ", username="
+					+ user.getUsername() + ", role=" + user.getRole() + "]");
+			Tenant tenant = createTenant(userRegister.getUsername(), user);
+			PersonContact profile = null;
+			try {
+			} catch (Exception e1) {
+				//FIXME: unregister at DNS
+				user.remove();
+				tenant.remove();
+				throw new DimeException(
+						"Failed to create profile for user. Registering could not be completed. ",
+						e1);
+			}
+			try {
+				profile = buildProfile(userRegister);
+			} catch (Exception e) {
+				//FIXME: unregister at DNS
+				user.remove();
+				tenant.remove();
+				throw new DimeException("Failed to publish public " +
+						"profile when registering. Aborting register.", e);
 
-         
-        // TODO improve performance: register it asynchronously
-        // TODO improve robustness: what happens if this fails? rollback mechanism! Transaction.
-        //
-        //EDIT by Simon: moved to the beginning of the registration process:
-        // we try first to register and hope that no one will try to connect before the rest is established
-        // so, we run into an exception in case the dns is not available
-        // better would be to somehow reserve a registration and enable it after the user was created
-        dimeDNSRegisterService.registerSaid(userRegister.getUsername());
-
-        User user = createUser(userRegister);
-        user.persist();
-        user.flush();
-        logger.debug("Created new user [id=" + user.getId() + ", username=" + user.getUsername() + ", role=" + user.getRole() + "]");
-
-        Tenant tenant = createTenant(userRegister.getUsername(), user);
-
-        PersonContact profile = initModelForUser(userRegister, tenant);
-
-        //FIXME in case this fails an exception is thrown and the created user remains
-        // in model and database :-(( - we need to precheck before making things persistent
-        registerToUserResolverService(user, profile);
-
-        return user;
+			}
+			try {
+				initModelForUser(profile, tenant);
+				registerToUserResolverService(user, profile); //FIXME:<--- unfortunately, this requires an Account to be created, 
+																		//to rdf register needs to be done before (to be fixed)
+			} catch (DimeException e) {
+				//FIXME: unregister at DNS
+				user.remove();
+				tenant.remove();
+				//FIXME: remove profile from URS
+				throw new DimeException(
+						"Failed to store semantic model when registering. Aborting register.",
+						e);
+			}
+		} catch (DimeException e) {
+			throw e;
+		} finally {
+			lock.unlock();
+		}
+		return user;
     }
 
     private boolean existsOwnerByUsername(String username) {
