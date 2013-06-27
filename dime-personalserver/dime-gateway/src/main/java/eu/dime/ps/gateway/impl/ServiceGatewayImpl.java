@@ -111,9 +111,13 @@ public class ServiceGatewayImpl implements ServiceGateway {
 
 	public ServiceAdapter makeServiceAdapter(String adapterName) throws Exception {
 
-		ServiceAdapter adapter = (ServiceAdapter) this.loadedAdapters.get(adapterName).newInstance();
+		if (supportedAdapters.containsKey(adapterName)){
+			ServiceAdapter adapter = (ServiceAdapter) this.loadedAdapters.get(adapterName).newInstance();
 
-		return adapter;
+			return adapter;
+		} else {
+			return null;
+		}
 	}
 	
 	@Override
