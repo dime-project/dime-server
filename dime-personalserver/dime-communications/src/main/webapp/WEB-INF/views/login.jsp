@@ -257,7 +257,8 @@
                     <h3>3. Please contribute to the scientific evaluation</h3>
                     </p>
                     <p>
-                        We kindly ask you to send us <em>anonymous click data</em><strong>. </strong>These data cannot be traced back to your person. We use these data only to
+                        We kindly ask you to send us <em>anonymous click data.</em>
+                        These data cannot be traced back to your person. We use these data only to
                         analyse how users use our prototype.
                     </p>
                     <p>
@@ -265,20 +266,24 @@
                     </p>
                     <ul>
                         <li>
-                            an <em>anonymous identifyier </em>which allows us to know what click data and questionaire answers come from the same account. No other identity
-                            information like your di.me username, nickname, real name, or email-address is sent. No location information is sent.
+                            an <em>anonymous identifyier </em>which allows us to know what click data and questionaire answers come from the same account.
+                            No other identity information like your di.me username, nickname, real name, or email-address is sent.
+                            No location information is sent.
                         </li>
                         <li>
-                            statistics about how many contacts, files, messages, and connected systems you use in your system. <em>Only the number and time when created, </em>but no
+                            statistics about how many contacts, files, messages, and connected systems you use in your system.
+                            <em>Only the number and time when created, </em>but no
                             information about names, content, or anything else is sent.
                         </li>
                         <li>
-                            data about <em>what type of pages you click </em>in the system (e.g. a page „person“). This includes the time the page was clicked. No
-                            title, text, or other content of the pages are sent.
+                            data about <em>what type of pages you click </em>in the system (e.g. a page „person“). 
+                            This includes the time the page was clicked.
+                            No title, text, or other content of the pages are sent.
                         </li>
                     </ul>
                     <p>
-                        We do not use other click analysis (like e.g. Google Analytics). You can <em>switch this off at any time </em>on the page “Settings“.
+                        We do not use other click analysis (like e.g. Google Analytics).
+                        You can <em>switch this off at any time </em>on the page “Settings“.
                     </p>
 
 
@@ -305,7 +310,9 @@
                             By registering to our server, you agree to our usage conditions
                         </p>
                         <p>
-                            Please read our full usage conditions: Nutzungsbedingungen (Deutsch) Usage Terms (English)
+                            Please read our full usage conditions: 
+                            <span class="linkToUsageTerms_DE">Nutzungsbedingungen (Deutsch)</span>
+                            <span class="linkToUsageTerms">Usage Terms (English)</span>
                         </p>
 
                         <div class="regist">
@@ -413,10 +420,6 @@
             <p>
                 &lt;When you have used di.me for a while, please fill out the short questionnaire&gt;
             </p>
-
-
-            <br>
-
         </div>
     </div>
 
@@ -478,7 +481,8 @@
                 <br/>
                 Prof. Dr. Ulrich Buller, Research Planning
                 <br/>
-                Prof. (Univ. Stellenbosch) Dr. Alfred Gossner, Finance and Controlling (incl. Business Administration, Purchasing and Real Estate), IT
+                Prof. (Univ. Stellenbosch) Dr. Alfred Gossner, Finance and Controlling
+                (incl. Business Administration, Purchasing and Real Estate), IT
                 <br/>
                 Dr. Alexander Kurz, Personnel Affairs and Legal Affairs
                 <br/>
@@ -494,7 +498,8 @@
                 70569 Stuttgart
             </p>
             <p>
-                has no separate legal status and is a constituent entity of the Fraunhofer-Gesellschaft zur Förderung der angewandten Forschung e.V., which hosts and
+                has no separate legal status and is a constituent entity of the Fraunhofer-Gesellschaft
+                zur Förderung der angewandten Forschung e.V., which hosts and
                 provides these web sites.
                 <br/>
                 <br/>
