@@ -31,6 +31,7 @@ import eu.dime.ps.gateway.transformer.Transformer;
  * @author Sophie.Wrobel
  *
  */
+@Ignore
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:spring-config/adapter-tests-context.xml"})
 public class DoodleAdapterTest {

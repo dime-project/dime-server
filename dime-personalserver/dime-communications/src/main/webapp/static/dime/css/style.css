@@ -2858,3 +2858,38 @@ input[type="checkbox"] {
     border-radius: 5px;
     border: 1px solid silver;
 }
+
+.orangeBubble{
+    background-color: #F6C200;
+    top: 120px;
+    left: 14%;
+    /*left: 140px; */
+    min-width: 55%;
+    margin: 0;
+}
+
+.orangeBubble > .modal-body{
+    padding: 15px;
+
+    min-height: 294px;
+}
+
+
+.orangeBubble > .modal-body > * > h3{
+
+    color: #313031;
+    text-shadow: none ;
+    font-weight: bold;
+    font-size: 14px;
+}
+.orangeBubble > .modal-body > * > h2{
+    margin-bottom: 10px;
+    color: #313031;
+    text-shadow: none ;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.orangeBubble > .modal-footer{
+    background-color: #F6E39D;
+}

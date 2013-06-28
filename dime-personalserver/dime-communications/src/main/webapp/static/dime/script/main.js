@@ -3063,7 +3063,10 @@ Dime.Navigation = {
                 )
             .append($('<a/>')
                 .attr('id','aboutLink')
-                .attr('href','about.html')
+                //FIXME don't call DimeView from navigation!!!
+                .click(function(){
+                    DimeView.showAbout.call(DimeView)
+                })
                 .text('about')
                 );
             var situationLink = $('<a/>')

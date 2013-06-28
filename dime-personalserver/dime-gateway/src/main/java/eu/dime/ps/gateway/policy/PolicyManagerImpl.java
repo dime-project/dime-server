@@ -333,7 +333,7 @@ public class PolicyManagerImpl implements PolicyManager {
 		if (dirty == null)
 			return null;
 		else
-			return dirty.replaceAll(":", "-").replaceAll("-", "_");
+			return dirty.replaceAll(":", "-");
 	}
 
 }

@@ -23,3 +23,6 @@ dime-personalserver/logs/
 
 #Mac Files
 *.DS_Store
+
+# Local properties
+dime-personalserver/dime-gateway/services.properties

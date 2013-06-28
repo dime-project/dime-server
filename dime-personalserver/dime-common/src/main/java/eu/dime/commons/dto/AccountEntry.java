@@ -18,6 +18,10 @@ public class AccountEntry extends Entry {
     private Boolean evaluationDataCapturingEnabled;
     @javax.xml.bind.annotation.XmlElement(name = "evaluationId")
     private String evaluationId;
+    @javax.xml.bind.annotation.XmlElement(name = "userStatusFlag")
+    private Integer userStatusFlag=0;
+
+
 
     public AccountEntry() {
         super();
@@ -133,5 +137,19 @@ public class AccountEntry extends Entry {
      */
     public void setEvaluationId(String evaluationId) {
         this.evaluationId = evaluationId;
+    }
+
+    /**
+     * @return the userStatusFlag
+     */
+    public Integer getUserStatusFlag() {
+        return userStatusFlag;
+    }
+
+    /**
+     * @param userStatusFlag the userStatusFlag to set
+     */
+    public void setUserStatusFlag(Integer userStatusFlag) {
+        this.userStatusFlag = userStatusFlag;
     }
 }

@@ -41,6 +41,7 @@ import eu.dime.ps.semantic.model.nie.DataObject;
 import eu.dime.ps.semantic.model.pimo.Agent;
 import eu.dime.ps.semantic.model.pimo.Person;
 import eu.dime.ps.semantic.model.pimo.PersonGroup;
+import eu.dime.ps.semantic.model.ppo.PrivacyPreference;
 import eu.dime.ps.semantic.rdf.ResourceStore;
 
 /**
@@ -151,7 +152,7 @@ public class AdvisoryController {
 		} else if (resourceStore.isTypedAs(resUri, DLPO.LivePost)){
 			resource = resourceStore.get(resUri, LivePost.class);
 		} else if (resourceStore.isTypedAs(resUri, PPO.PrivacyPreference)){
-			//Error. Databox should already be resolved here...
+			resource = resourceStore.get(resUri, PrivacyPreference.class);
 		} else {
 			resource = resourceStore.get(resUri, RDFReactorThing.class);
 		}		
