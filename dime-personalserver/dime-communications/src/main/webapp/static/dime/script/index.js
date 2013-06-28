@@ -1234,10 +1234,95 @@ DimeView = {
         Dime.REST.getAll(Dime.psMap.TYPE.RESOURCE, updateResourceContainer, guid);
         
         
+    },
+
+    OrangeBubble: function(handlerSelf, bubbleBody){
+
+        var bubbleSelf = this;
+
+        this.bubbleId="Bubble_"+JSTool.randomGUID();
+
+        bubbleBody.addClass('modal-body');
+
+        var footerElement=$('<div></div>').addClass("modal-footer")
+            .append($('<button class="YellowMenuButton" data-dismiss="modal" aria-hidden="true">Dismiss</button>')
+                .click(function(){
+                    bubbleSelf.dismiss.call(bubbleSelf);
+                }));
+
+
+        this.bubble= $('<div/>')
+            .addClass('modal')
+            .addClass('orangeBubble')
+            .attr('id',this.bubbleId)
+            .append(bubbleBody)
+            .append(footerElement)
+            ;
+
+    },
+
+    showAbout: function(){
+        var bubbleBody = $('<div/>')
+            .append(
+                $('<div/>')
+                    .append($('<h2/>').text('Welcome and many thanks for trying out di.me!'))
+                    .append($('<p/>').text('Please follow our tutorial: Link.link.newTab.htm'))
+                    .append($('<h3/>').text('Please give us feedback to the concept on:'))
+                    .append($('<p/>').text('di.me Questionnaire (English)'))
+                    .append($('<p/>').text('di.me Fragebogen (German)'))
+                    
+                    .append($('<h3/>').text('This is a demonstration prototype'))
+                    .append($('<p/>').text('.. so you will find many bugs and issues. Please report them on xxxlink.github.newTab.url'))
+                    
+                    .append($('<h3/>').text('About'))
+                    .append($('<p/>').text('The test trial homepage: 	http://dimetrials.bdigital.org:8080/dime'))
+                    .append($('<p/>').text('di.me open source: 		xxxlink.github.newTab.url'))
+                    .append($('<p/>').text('The research project: 	www.di.me-project.eu'))
+                    .append($('<p/>').text('Your server @ Fraunhofer: 	Serverstartpage'))
+                    .append($('<p/>').text('Nutzungsbedingungen (DE)| Usage Conditions (EN)'))
+                    .append($('<p/>').text('Datenschutzerklärung  (DE)| Privacy declaration (EN)'))
+                    .append($('<p/>').text('Impressum (DE) | Imprint (EN)'))
+                
+                
+                
+            );
+
+
+//        Welcome and many thanks for trying out di.me!
+//
+//Please follow our tutorial: Link.link.newTab.htm
+//
+//This is a demonstration prototype, so you will find many bugs and issues.
+//Please report them on xxxlink.github.newTab.url
+//
+//Please give us feedback to the concept on:
+//	di.me Questionnaire (English)
+//	di.me Fragebogen (German)
+//
+//About
+//     The test trial homepage: 	http://dimetrials.bdigital.org:8080/dime
+//     di.me open source: 		xxxlink.github.newTab.url
+//     The research project:  		www.di.me-project.eu
+//     Your server @ Fraunhofer: 	Serverstartpage
+//			Nutzungsbedingungen (DE)| Usage Conditions (EN)
+//			Datenschutzerklärung  (DE)| Privacy declaration (EN)
+//			Impressum (DE) | Imprint (EN)
+
+
+        var bubble = new DimeView.OrangeBubble(this, bubbleBody);
+        bubble.show();
     }
 };
 
+DimeView.OrangeBubble.prototype = {
 
+    show: function(){
+        $('body').append(this.bubble);
+    },
+    dismiss: function(){
+        $(this.bubble).remove();
+    }
+};
 //                                               id, groupActive, settingsActive, personViewActive
 DimeView.addToViewMap(new DimeView.viewMapEntry('groupNavigation', false, false, false)); //initially set to false, so it will only be shown with some content in place
 DimeView.addToViewMap(new DimeView.viewMapEntry('itemNavigation', false, false, false)); //initially set to false, so it will only be shown with some content in place
