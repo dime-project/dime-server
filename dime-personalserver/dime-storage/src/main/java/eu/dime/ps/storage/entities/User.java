@@ -37,6 +37,8 @@ import java.util.UUID;
 @Table(uniqueConstraints =
 @UniqueConstraint(columnNames = {"id", "accountUri"}))
 public class User {
+    public static Integer USER_STATUS_FLAG_USER_INITIALIZED=0;
+    public static Integer USER_STATUS_FLAG_USER_LOGGED_IN=1;
 
 
 
@@ -84,6 +86,8 @@ public class User {
     private String accountUri;
 
     private String emailAddress;
+
+    private Integer userStatusFlag=USER_STATUS_FLAG_USER_INITIALIZED;
 
     public User() {
         this.role = Role.GUEST;
@@ -392,5 +396,19 @@ public class User {
      */
     public void setEmailAddress(String emailAddress) {
         this.emailAddress = emailAddress;
+    }
+
+    /**
+     * @return the userStatusFlag
+     */
+    public Integer getUserStatusFlag() {
+        return userStatusFlag;
+    }
+
+    /**
+     * @param userStatusFlag the userStatusFlag to set
+     */
+    public void setUserStatusFlag(Integer userStatusFlag) {
+        this.userStatusFlag = userStatusFlag;
     }
 }

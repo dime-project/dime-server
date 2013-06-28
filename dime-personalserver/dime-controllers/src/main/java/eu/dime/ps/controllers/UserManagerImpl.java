@@ -599,6 +599,7 @@ public class UserManagerImpl implements UserManager {
             oldUser.setPassword(encodedPWD);
         }
         oldUser.setUiLanguage(accountEntry.getUiLanguage());
+        oldUser.setUserStatusFlag(accountEntry.getUserStatusFlag());
 
         return oldUser;
     }
@@ -615,6 +616,7 @@ public class UserManagerImpl implements UserManager {
         result.setUiLanguage(user.getUiLanguage());
         result.setUsername(user.getUsername());
         result.setType("auth");
+        result.setUserStatusFlag(user.getUserStatusFlag());
         return result;
     }
 
