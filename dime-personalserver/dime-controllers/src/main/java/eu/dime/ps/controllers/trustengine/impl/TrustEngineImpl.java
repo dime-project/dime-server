@@ -1,9 +1,7 @@
 package eu.dime.ps.controllers.trustengine.impl;
 
 import ie.deri.smile.vocabulary.DLPO;
-import ie.deri.smile.vocabulary.DPO;
 import ie.deri.smile.vocabulary.NAO;
-import ie.deri.smile.vocabulary.NDO;
 import ie.deri.smile.vocabulary.NIE;
 import ie.deri.smile.vocabulary.PIMO;
 import ie.deri.smile.vocabulary.PPO;
@@ -16,7 +14,6 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
-import org.h2.server.web.DbTableOrView;
 import org.ontoware.aifbcommons.collection.ClosableIterator;
 import org.ontoware.rdf2go.model.Statement;
 import org.ontoware.rdf2go.model.node.URI;
@@ -302,6 +299,9 @@ public class TrustEngineImpl implements TrustEngine {
 			resource = this.getResourceStore().get(resUri, LivePost.class);
 		} else if (getResourceStore().isTypedAs(resUri, PPO.PrivacyPreference)){
 			//Error. Databox should already be resolved here...
+			logger.error("Error. Databox should already be resolved here...");
+			resource = this.getResourceStore().get(resUri, PrivacyPreference.class);
+
 		} else {
 			resource = this.getResourceStore().get(resUri, RDFReactorThing.class);
 		}		
@@ -788,25 +788,40 @@ public class TrustEngineImpl implements TrustEngine {
 	public List<TrustWarning> getRecommendation(List<String> agents, List<String> sharedThings) {
 		//TrustRecommendation recommendation = new TrustRecommendation("init");
 		List <TrustWarning> warnings = new ArrayList<TrustWarning>();
+		 
+		List<URI> resolvedList = new ArrayList<URI>();
+		
 		for (String thing : sharedThings) {
 			URI thing_uri = new URIImpl(thing);
+			try {
+				if (getResourceStore().isTypedAs(thing_uri, PPO.PrivacyPreference)){
+					resolvedList.addAll(getAllItemsInDataboxAsURI(thing_uri));
+				} else {
+					resolvedList.add(thing_uri);
+				}
+			} catch (NotFoundException e1) {
+				logger.info("Could not find resource. "+thing);
+			}
+			
 			TrustWarning tmpRec = null;
-			for (String agent : agents){
-				try {
-					//tmpRec = this.getTrustRecommendation(list, thing_uri);
-					tmpRec = getSimpleRecommendation(new URIImpl(agent), thing_uri);
-					if (tmpRec!=null){
-						warnings.add(tmpRec);
+			for (URI resUri : resolvedList){
+				for (String agent : agents){
+					try {
+						//tmpRec = this.getTrustRecommendation(list, thing_uri);
+						tmpRec = getSimpleRecommendation(new URIImpl(agent), resUri);
+						if (tmpRec!=null){
+							warnings.add(tmpRec);
+						}
+					} catch (PrivacyValueNotValidException e) {
+						logger.error("Could not calculate recommendations.",e);
+						return null;
+					} catch (TrustValueNotValidException e) {
+						logger.error("Could not calculate recommendations.",e);
+						return null;
+					} catch (ClassCastException e) {
+						logger.error("Could not calculate recommendations.",e);
+						return null;
 					}
-				} catch (PrivacyValueNotValidException e) {
-					logger.error("Could not calculate recommendations.",e);
-					return null;
-				} catch (TrustValueNotValidException e) {
-					logger.error("Could not calculate recommendations.",e);
-					return null;
-				} catch (ClassCastException e) {
-					logger.error("Could not calculate recommendations.",e);
-					return null;
 				}
 			}
 		}
@@ -921,7 +936,7 @@ public class TrustEngineImpl implements TrustEngine {
 			persons = new Person[1];
 			persons[0] = this.getResourceStore().get(agentUri, Person.class);
 
-		}else {
+		}else if(this.getResourceStore().isTypedAs(agentUri, PIMO.PersonGroup)) {
 			PersonGroup group;
 			Collection <Person> agents;
 			group = this.getResourceStore().get(agentUri, PersonGroup.class);
@@ -956,6 +971,31 @@ public class TrustEngineImpl implements TrustEngine {
 		
 		return items;
 	}
+	
+	/**
+	 * Retrieves all the items contained in a databox. URI
+	 * 
+	 * @param databoxUri
+	 * @return
+	 */
+	private Collection<URI> getAllItemsInDataboxAsURI(URI databoxUri)
+			throws NotFoundException {
+		PrivacyPreference databox = this.getResourceStore().get(databoxUri, PrivacyPreference.class);
+		
+		// only the URIs of the things are shared in the databox
+		Collection<Resource> itemUris = databox.getAllAppliesToResource_as().asList();
+		
+		// loading all the metadata from the triple store
+		Collection<URI> items = new ArrayList<URI>();
+		for (Resource item : itemUris) {
+			if(!getResourceStore().isTypedAs(item, PIMO.Agent)){
+				items.add(item.asURI());
+			}
+		}
+		return items;
+	}
+	
+	List<Resource> resolvedList = new ArrayList<Resource>();
 	
 	public ResourceStore getResourceStore() {
 		if (this.resourceStore== null){
