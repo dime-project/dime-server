@@ -2889,6 +2889,12 @@ input[type="checkbox"] {
 }
 
 
+
+.orangeBubble > .modal-body > div > p > span {
+    margin-right: 5px;
+}
+
+
 .orangeBubble > .modal-body > * > h2{
     margin-top: 5px;
     margin-bottom: 10px;
@@ -2899,7 +2905,8 @@ input[type="checkbox"] {
 }
 
 .orangeBubbleLink{
-    margin-left: 10px;
+    color: #0074D5;
+    margin-right: 15px;
 }
 
 .orangeBubble > .modal-footer{

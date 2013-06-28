@@ -149,6 +149,20 @@ jQuery.fn.extend({
         this.append(childs);
 
         return this;
+    },
+
+    /**
+     *  appends an 'a' element with the given parameters
+     *  @param targetUrl uri for href attribute
+     *  @param caption text added to the a element
+     *  @param classes classes added to the a element
+     */
+    addHrefOpeningInNewWindow:function(targetUrl, caption, classes){
+        this.append($('<a/>').addClass(classes)
+            .attr('href',targetUrl).text(caption)
+            .attr('target','_blank')
+        );
+        return this;
     }
 });
 
