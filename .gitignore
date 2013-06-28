@@ -20,3 +20,6 @@ dime-personalserver/logs/
 *.project
 *.settings*
 *.classpath
+
+#Mac Files
+*.DS_Store
