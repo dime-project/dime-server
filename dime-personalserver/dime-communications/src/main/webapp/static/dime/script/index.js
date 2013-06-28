@@ -1262,30 +1262,75 @@ DimeView = {
     },
 
     showAbout: function(){
-        var bubbleBody = $('<div/>')
-            .append(
-                $('<div/>')
-                    .append($('<h2/>').text('Welcome and many thanks for trying out di.me!'))
-                    .append($('<p/>').text('Please follow our tutorial: Link.link.newTab.htm'))
-                    .append($('<h3/>').text('Please give us feedback to the concept on:'))
-                    .append($('<p/>').text('di.me Questionnaire (English)'))
-                    .append($('<p/>').text('di.me Fragebogen (German)'))
-                    
-                    .append($('<h3/>').text('This is a demonstration prototype'))
-                    .append($('<p/>').text('.. so you will find many bugs and issues. Please report them on xxxlink.github.newTab.url'))
-                    
-                    .append($('<h3/>').text('About'))
-                    .append($('<p/>').text('The test trial homepage: 	http://dimetrials.bdigital.org:8080/dime'))
-                    .append($('<p/>').text('di.me open source: 		xxxlink.github.newTab.url'))
-                    .append($('<p/>').text('The research project: 	www.di.me-project.eu'))
-                    .append($('<p/>').text('Your server @ Fraunhofer: 	Serverstartpage'))
-                    .append($('<p/>').text('Nutzungsbedingungen (DE)| Usage Conditions (EN)'))
-                    .append($('<p/>').text('Datenschutzerklärung  (DE)| Privacy declaration (EN)'))
-                    .append($('<p/>').text('Impressum (DE) | Imprint (EN)'))
-                
-                
-                
-            );
+
+        var showInformation=function(serverInfo){
+
+            var loginbaselink=Dime.ps_configuration.getRealBasicUrlString()
+                +'/dime-communications/web/access/';
+            var githubLink='https://github.com/thielsn/dime/';
+
+            var openInNewWindow=function(targetUrl){
+                window.open(targetUrl);
+            };
+
+            var addLinkTojElement=function(targetUrl, caption){
+
+            };
+
+            var bubbleBody = $('<div/>')
+                .append(
+                    $('<div/>')
+                        .append($('<h2/>').text('Welcome and many thanks for trying out di.me!'))
+                        .append($('<p/>')
+                            .append($('<span/>').text('Please follow our'))
+                            .append($('<a/>').addClass('orangeBubbleLink').attr('href',loginbaselink+'howto').text('tutorial'))
+                            )
+                        .append($('<h3/>').text('Please give us feedback to the concept on:'))
+                        .append($('<ul/>')
+                            .append($('<li/>').click(openInNewWindow(loginbaselink+'questionaire?lang=en')).text('di.me Questionnaire (English)'))
+                            .append($('<li/>').click(openInNewWindow(loginbaselink+'questionaire?lang=en')).text('di.me Fragebogen (German)'))
+                            )
+
+                        .append($('<h3/>').text('This is a demonstration prototype'))
+                        .append($('<p/>')
+                            .append($('<span/>').text('.. so you will find many bugs and issues. Please report them on'))
+                            .append($('<a/>').addClass('orangeBubbleLink').attr('href',githubLink+'issues').text(githubLink+'issues'))
+                        )
+                        .append($('<h3/>').text('About'))
+                        .append($('<p/>')
+                            .append($('<span/>').text('The test trial homepage:'))
+                            .append($('<a/>').addClass('orangeBubbleLink').attr('href','http://dimetrials.bdigital.org:8080/dime').text('dimetrials.bdigital.org'))
+                        )
+                        .append($('<p/>')
+                            .append($('<span/>').text('di.me open source:'))
+                            .append($('<a/>').addClass('orangeBubbleLink').attr('href',githubLink).text(githubLink))
+                        )
+                        .append($('<p/>')
+                            .append($('<span/>').text('The research project:'))
+                            .append($('<a/>').addClass('orangeBubbleLink').attr('href','http://www.di.me-project.eu').text('www.di.me-project.eu'))
+                        )
+                        .append($('<p/>')
+                            .append($('<span/>').text('Your dime-server @ '+serverInfo.affiliation))
+                            .append($('<a/>').addClass('orangeBubbleLink').attr('href',loginbaselink+"login").text(loginbaselink+"login"))
+                        )
+                        .append($('<p/>')
+                            .append($('<a/>').addClass('orangeBubbleLink').attr('href',loginbaselink+"conditions?lang=de").text('Nutzungsbedingungen (DE)'))
+                            .append($('<a/>').addClass('orangeBubbleLink').attr('href',loginbaselink+"conditions").text('Usage Conditions (EN)'))
+                        )
+                        .append($('<p/>')
+                            .append($('<a/>').addClass('orangeBubbleLink').attr('href',loginbaselink+"privacypolicy?lang=de").text('Datenschutzerklärung (DE)'))
+                            .append($('<a/>').addClass('orangeBubbleLink').attr('href',loginbaselink+"privacypolicy").text('Privacy declaration (EN)'))
+                            )
+                        .append($('<p/>')
+                            .append($('<a/>').addClass('orangeBubbleLink').attr('href',loginbaselink+"about?lang=de").text('Impressum (DE)'))
+                            .append($('<a/>').addClass('orangeBubbleLink').attr('href',loginbaselink+"about").text('Imprint (EN)'))
+                            )
+                );
+                var bubble = new DimeView.OrangeBubble(this, bubbleBody);
+                bubble.show();
+        };
+
+        Dime.REST.getServerInformation(showInformation, this);
 
 
 //        Welcome and many thanks for trying out di.me!
@@ -1309,8 +1354,7 @@ DimeView = {
 //			Impressum (DE) | Imprint (EN)
 
 
-        var bubble = new DimeView.OrangeBubble(this, bubbleBody);
-        bubble.show();
+        
     }
 };
 

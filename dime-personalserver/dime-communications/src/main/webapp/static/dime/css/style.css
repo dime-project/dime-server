@@ -2876,18 +2876,30 @@ input[type="checkbox"] {
 
 
 .orangeBubble > .modal-body > * > h3{
-
+    margin-top: 5px;
     color: #313031;
     text-shadow: none ;
     font-weight: bold;
     font-size: 14px;
 }
+
+.orangeBubble > .modal-body > * > p {
+    margin-bottom: 2px;
+    margin-top: 2px;
+}
+
+
 .orangeBubble > .modal-body > * > h2{
+    margin-top: 5px;
     margin-bottom: 10px;
     color: #313031;
     text-shadow: none ;
     font-weight: bold;
     font-size: 16px;
+}
+
+.orangeBubbleLink{
+    margin-left: 10px;
 }
 
 .orangeBubble > .modal-footer{

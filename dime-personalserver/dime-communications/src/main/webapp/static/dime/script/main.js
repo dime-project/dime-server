@@ -2161,9 +2161,15 @@ Dime.psHelper = {
         if (!result || result.length==0){
             return result;
         }
-        //check content and repair entries dependent on the type
-        result = this.prepareResponseEntry(result);
+        if (!skipCheck){
+            //check content and repair entries dependent on the type
+            result = this.prepareResponseEntry(result);
+        }
         
+        if(result.length < 2){ //nothing to sort anyway
+            return result;
+        }
+
         if (result && result.length>0 && 
             (result[0].type===Dime.psMap.TYPE.NOTIFICATION
                 ||result[0].type===Dime.psMap.TYPE.EVENT
@@ -2172,8 +2178,11 @@ Dime.psHelper = {
                 )){
             return this.sortResponseEntryByCreatedReverse(result);
         }
-        //sort result by name
-        return this.sortResponseEntryByName(result);
+        if (result[0].name){
+            //sort result by name
+            return this.sortResponseEntryByName(result);
+        }
+        return result;
 
     },
   
@@ -2792,7 +2801,8 @@ Dime.REST = {
             $.getJSON(callPath, "", jointCallBack);
         }  
     },
-    
+
+
    
     
     postAdvisoryRequest: function(profileGuid, receivers, items, callBack, callerSelf){
@@ -2817,6 +2827,38 @@ Dime.REST = {
         
         //console.log(callPath);
         $.postJSON(callPath, request, jointCallBack);        
+    },
+
+    getServerInformation: function(callBack, callerSelf){
+
+        if (!callerSelf){
+            callerSelf = this;
+        }
+
+  
+
+        var callPath = Dime.ps_configuration.getRealBasicUrlString()
+            + '/dime-communications/api/dime/server';
+
+        var jointCallBack = function(response){
+            var responseEntries = Dime.REST.handleResponse(response, true);
+            var result=null;
+            if (responseEntries && responseEntries.length>0){
+                result = responseEntries[0];
+                Dime.cache.put(callPath, result);
+            }            
+            callBack.call(callerSelf, result);
+        };
+
+
+        var cacheEntries = Dime.cache.get(callPath);
+        if (cacheEntries){
+            callBack.call(callerSelf, cacheEntries);
+        }else{
+            //console.log(callPath);
+            $.getJSON(callPath, "", jointCallBack);
+        }
+
     }
 
     
@@ -4692,7 +4734,7 @@ Dime.ConfigurationDialog.prototype = {
                                 });
                                 break;
 
-                            case "profile":
+                            case "account":
                                 var selectElem =
                                 $("<select></select>")
                                 .attr("id", "InputFieldID_" + serviceAccount.settings[i].name)
