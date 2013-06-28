@@ -20,7 +20,7 @@ public class ProximityServiceAdapter extends ServiceAdapterBase implements Exter
 	private final Logger logger = LoggerFactory.getLogger(ProximityServiceAdapter.class);
 	
 	public static String adapterName = "ProximityService";
-	private String identifier;
+	//private String identifier;
 	private String accountId;
 	
 	private PolicyManager policyManager;
@@ -40,12 +40,12 @@ public class ProximityServiceAdapter extends ServiceAdapterBase implements Exter
 		
 		super();
 		
-		this.identifier = "urn:account:"+UUID.randomUUID();
+		//this.identifier = "urn:account:"+UUID.randomUUID();
 		this.policyManager = PolicyManagerImpl.getInstance();
 		this.serviceURL = this.policyManager.getPolicyString("SERVICEURL", "PROXIMITY");
 		this.token = this.policyManager.getPolicyString("PASS", "PROXIMITY");
-		this.accountId = this.policyManager.getPolicyString("accountId","PROXIMITY");
-		this.sadapter.addSetting(new SAdapterSetting("accountId", true, SAdapterSetting.ACCOUNT, this.accountId));
+		this.accountId = this.policyManager.getPolicyString("accountId",this.identifier);
+		if (this.accountId != null) this.sadapter.addSetting(new SAdapterSetting("accountId", true, SAdapterSetting.ACCOUNT, this.accountId));
 			
 		this.helper = new CloudServiceHelper();
 	}

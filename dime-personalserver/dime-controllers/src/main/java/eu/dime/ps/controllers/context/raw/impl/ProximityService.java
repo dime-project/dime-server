@@ -92,7 +92,7 @@ public class ProximityService implements IProximityService, IContextListener {
 		this.groupService = new ContextGroupService(tenantManager, accountManager, personManager, personGroupManager);
 	}
 	
-	private Account retrieveProximityAccount(IEntity entity) {
+	private Account retrieveProximityAccount(Tenant t, IEntity entity) {
 		// [TI] commented code was used when service config was not yet available
 		/*if (this.accountManager != null && this.serviceGateway != null) {
 			Account proximityAccount = contextProcessor.getProximityAccount(entity.getEntityIDAsString());
@@ -103,7 +103,12 @@ public class ProximityService implements IProximityService, IContextListener {
 		}
 		return null;*/
 		if (this.accountManager != null && this.serviceGateway != null) {
-			String accountId = this.policyManager.getPolicyString("accountId","PROXIMITY");
+			Account adapterAccount = retrieveAdapterAccount(t);
+			if (adapterAccount == null) {
+				logger.debug("Proximity Adapter account not found");
+				return null;
+			}
+			String accountId = this.policyManager.getPolicyString("accountId",adapterAccount.asURI().toString());
 			//String accountId = "urn:uuid:j000071";
 			//String accountId = "urn:uuid:a000018";
 			if (accountId == null || accountId.equalsIgnoreCase("")) {
@@ -249,7 +254,7 @@ public class ProximityService implements IProximityService, IContextListener {
 		
 		if (t != null) TenantContextHolder.setTenant(t.getId());
 		
-		Account proximityAccount = retrieveProximityAccount(entity);
+		Account proximityAccount = retrieveProximityAccount(t,entity);
 		if (proximityAccount == null) return;
 		
 		Account adapterAccount = retrieveAdapterAccount(t);
@@ -491,7 +496,7 @@ public class ProximityService implements IProximityService, IContextListener {
 			return IContextDataset.EMPTY_CONTEXT_DATASET;
 		}*/
 		
-		Account proximityAccount = retrieveProximityAccount(entity);
+		Account proximityAccount = retrieveProximityAccount(t,entity);
 		if (proximityAccount == null) return IContextDataset.EMPTY_CONTEXT_DATASET;
 		
 		
