@@ -7,6 +7,8 @@ import eu.dime.commons.dto.UserRegister;
 import eu.dime.ps.communications.requestbroker.controllers.infosphere.APIController;
 import eu.dime.ps.communications.requestbroker.controllers.infosphere.RequestValidator;
 import eu.dime.ps.controllers.UserManager;
+import eu.dime.ps.controllers.eventlogger.data.LogType;
+import eu.dime.ps.controllers.eventlogger.manager.LogEventManager;
 import eu.dime.ps.gateway.service.MediaType;
 import eu.dime.ps.semantic.model.ModelFactory;
 import eu.dime.ps.semantic.model.nco.PersonContact;
@@ -28,13 +30,19 @@ public class PSUserController implements APIController {
     private static final Logger logger = LoggerFactory.getLogger(PSUserController.class);
     private final ModelFactory modelFactory = new ModelFactory();
     private UserManager userManager;
+    private LogEventManager logEventManager;
 
     @Autowired
     public void setUserManager(UserManager userManager) {
         this.userManager = userManager;
     }
 
-    /**
+    @Autowired
+    public void setLogEventManager(LogEventManager logEventManager) {
+		this.logEventManager = logEventManager;
+	}
+
+	/**
      * register user
      *
      * @param request 
@@ -55,11 +63,12 @@ public class PSUserController implements APIController {
 
             validateRegisterRequest(userRegister);
 
-
-
             //register and store in database
             User user = userManager.register(userRegister);
-
+            
+            // Logging the register in EvaluationData Table
+            logEventManager.setLog(LogType.RESISTER, user.getTenant().getId().toString());
+            
             //prepare response
             userRegister.setUsername(user.getUsername());
             userRegister.setPassword(user.getPassword());

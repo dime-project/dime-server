@@ -6,6 +6,8 @@ import javax.xml.bind.annotation.XmlElement;
 @javax.xml.bind.annotation.XmlRootElement
 @javax.xml.bind.annotation.XmlAccessorType(XmlAccessType.FIELD)
 public class UserRegister {
+	
+	public final static String CLIENT_WEB = "0";
 
     @javax.xml.bind.annotation.XmlElement(name = "username")
     private String username;

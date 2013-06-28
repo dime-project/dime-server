@@ -340,6 +340,11 @@
 	
 	<bean id="evaluationManager"
 	    	class="eu.dime.ps.controllers.evaluationtool.EvaluationManagerImpl">
+	    	<property name="entityFactory" ref="entityFactory"/>
+	</bean>
+	
+	<bean id="logogEventManager" class="eu.dime.ps.controllers.eventlogger.manager.LogEventManagerImpl">
+		<property name="entityFactory" ref="entityFactory"/>
 	</bean>
 	
 	<bean id="dimeDNSRegisterService" 

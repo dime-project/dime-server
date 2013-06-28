@@ -17,8 +17,6 @@ public class ExternalNotifySchedule {
     private ServiceGateway serviceGateway;
     private CredentialStore credentialStore;
     
-    // Git mola!
-
     public void setNotifierManager(NotifierManager notifierManager) {
 	this.notifierManager = notifierManager;
     }

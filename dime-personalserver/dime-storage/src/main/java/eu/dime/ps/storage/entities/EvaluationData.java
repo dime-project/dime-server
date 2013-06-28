@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.TypedQuery;
 import javax.persistence.Version;
 
 import org.springframework.beans.factory.annotation.Configurable;
@@ -21,6 +22,8 @@ import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
 import org.springframework.transaction.annotation.Transactional;
 
+import eu.dime.commons.notifications.DimeInternalNotification;
+
 @Entity
 @Configurable
 @RooJavaBean
@@ -28,6 +31,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RooEntity
 public class EvaluationData {
 
+	public final static String EVALUATIONDATA_ACTION_REGISTER = "register";
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -149,6 +153,12 @@ public class EvaluationData {
 
 	public static List<EvaluationData> findAllEvaluationDatas() {
 		return entityManager().createQuery("SELECT o FROM EvaluationData o", EvaluationData.class).getResultList();
+	}
+	
+	public static List<EvaluationData> findAllLogRegisterEvaluationDatas() {
+		TypedQuery<EvaluationData> q = entityManager().createQuery("SELECT o FROM EvaluationData o WHERE o.evaluationaction LIKE :evaluationaction", EvaluationData.class);
+		q.setParameter("evaluationaction", EvaluationData.EVALUATIONDATA_ACTION_REGISTER);
+		return q.getResultList();
 	}
 
 	public static EvaluationData findEvaluationData(Long id) {

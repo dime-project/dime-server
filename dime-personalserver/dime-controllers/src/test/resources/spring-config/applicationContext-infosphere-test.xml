@@ -201,4 +201,8 @@
 	
 	<bean id="evaluationManager" class="eu.dime.ps.controllers.evaluationtool.EvaluationManagerImpl"/>
 	
+	<bean id="logogEventManager" class="eu.dime.ps.controllers.eventlogger.manager.LogEventManagerImpl">
+		<property name="entityFactory" ref="entityFactory"/>
+	</bean>
+	
 </beans>

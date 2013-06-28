@@ -18,4 +18,5 @@ public interface LogEventManager {
 	 */
 	public void setLog (LogType type, String message) throws EventLoggerException;
 
+
 }
