@@ -31,6 +31,7 @@ import eu.dime.ps.controllers.infosphere.manager.PersonGroupManager;
 import eu.dime.ps.controllers.infosphere.manager.PersonManager;
 import eu.dime.ps.controllers.infosphere.manager.ShareableProfileManager;
 import eu.dime.ps.controllers.trustengine.TrustEngine;
+import eu.dime.ps.controllers.trustengine.utils.AdvisoryConstants;
 import eu.dime.ps.semantic.connection.ConnectionProvider;
 import eu.dime.ps.semantic.exception.NotFoundException;
 import eu.dime.ps.semantic.model.RDFReactorThing;
@@ -130,8 +131,12 @@ public class AdvisoryController {
 				logger.warn("Privacy values are not retrievable. Wrong data format?", e);
 				continue;
 			}
-			if (TrustProcessor.getThreshold(size, privacyLevel)){
-				warning_level = warning_level + 1/size;
+			if (TrustProcessor.getRecipientThreahold(size, privacyLevel)){
+				//warning_level = warning_level + 1.0/size;
+				//TODO: optimize warning level
+				if (warning_level < privacyLevel){
+					warning_level = privacyLevel;
+				}
 			}
 			
 		}
@@ -167,7 +172,7 @@ public class AdvisoryController {
 		int size = sharedThingIDs.size();
 		resourceWarning.setNumberOfResources(size);
 
-		if (size < 5){
+		if (size < AdvisoryConstants.RESOURCE_WARNING_TRIGGER){
 			return warnings;
 		} else if (size > 100){
 			resourceWarning.setWarningLevel(1.0);

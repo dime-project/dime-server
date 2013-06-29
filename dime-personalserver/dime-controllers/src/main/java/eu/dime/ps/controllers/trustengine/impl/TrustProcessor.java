@@ -69,4 +69,16 @@ public class TrustProcessor {
 		//logger.info("was false");
 		return false;
 	}
+	
+	public static boolean getRecipientThreahold(int numberOfPersons, double privacy_level) {
+		if (privacy_level == AdvisoryConstants.PV_MAX){
+			privacy_level = AdvisoryConstants.PV_SECRET;
+		}
+		double trustValue = calculateAdopted3AbasedDirectTrust(privacy_level, numberOfPersons);
+		PrivacyLevel trustPL = PrivacyLevel.getLevelForValue(trustValue);
+		if ((privacy_level - trustValue) >= 0.3){
+			return true;
+		}
+		return false;
+	}
 }
