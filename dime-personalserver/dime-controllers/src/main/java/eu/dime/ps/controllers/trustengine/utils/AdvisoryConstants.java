@@ -6,6 +6,10 @@ public class AdvisoryConstants {
 	public final static double MED_TRUST_VALUE = 0.5;
 	public final static double MAX_TRUST_VALUE = 0.99;
 	
+	public final static double MIN_PRIVACY_VALUE = 0.01;
+	public final static double MED_PRIVACY_VALUE = 0.5;
+	public final static double MAX_PRIVACY_VALUE = 0.99;
+	
 	
 	/* preset privacy values for levels */
 	public final static double PV_ZERO = 0.0;
@@ -32,5 +36,6 @@ public class AdvisoryConstants {
 	// ----  DEFAULTS ------
 	public final static double DEFAULT_PRIVACY_LEVEL = PV_HIGH;
 	public final static double DEFAULT_TRUST_VALUE = TV_MED;
+	public static final int RESOURCE_WARNING_TRIGGER = 5;
 	
 }
