@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -101,6 +102,10 @@ public abstract class ServiceAdapterBase implements ServiceAdapter {
 //    	return new Token(this.policyManager.getPolicyString("USER_TOKEN", this.identifier), this.policyManager.getPolicyString("USER_SECRET", this.identifier));
 //    }
     
+	public List<SAdapterSetting> getSettings() {
+		return this.sadapter.getSettings();
+	}
+	
 	/**
 	 * 
 	 * @param name

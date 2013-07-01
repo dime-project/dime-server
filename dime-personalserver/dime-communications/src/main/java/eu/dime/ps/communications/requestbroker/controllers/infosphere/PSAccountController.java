@@ -185,7 +185,6 @@ public class PSAccountController implements APIController {
 			// Use Service Adapter Name to create the adapter
 			String serviceAdapterName = (String) dto.get("serviceadapterguid");
 			ServiceAdapter sa = this.serviceGateway.makeServiceAdapter(serviceAdapterName);
-			accountManager.add(sa);
 
 			// Set configuration
 			if (dto.getSettings() != null) {
@@ -196,8 +195,12 @@ public class PSAccountController implements APIController {
 				}
 			}
 			
+			// Add account
+			accountManager.add(sa);
+			
 			// Fix the GUID on the returned object
 			dto.put("guid", sa.getIdentifier());
+			dto.setSettings(sa.getSettings());
 			Collection<SAdapterWrapper> entries = new ArrayList<SAdapterWrapper>();
 			entries.add(dto);
 			data.setEntry(entries);
