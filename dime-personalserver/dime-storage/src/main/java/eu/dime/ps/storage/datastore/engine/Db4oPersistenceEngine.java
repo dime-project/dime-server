@@ -22,8 +22,8 @@ public class Db4oPersistenceEngine {
 
 	Logger logger = Logger.getLogger(Db4oPersistenceEngine.class);
 	
-	private static String CMS_ROOT_FOLDER;
-	private static String BLOB_FOLDER;
+	private String CMS_ROOT_FOLDER;
+	private String BLOB_FOLDER;
 	
 	private static int recursionCounter = 0;
 	
@@ -34,12 +34,12 @@ public class Db4oPersistenceEngine {
 		BLOB_FOLDER = CMSInitHelper.getBlobFolder();
 
 	}
-	
-		public Db4oPersistenceEngine(String folder){
-			CMS_ROOT_FOLDER = folder;
-			BLOB_FOLDER = CMSInitHelper.getBlobFolder();
-		}
 
+	public Db4oPersistenceEngine(String path){
+		CMS_ROOT_FOLDER = path;
+		BLOB_FOLDER = CMSInitHelper.getBlobFolder();
+	}
+	
 	public ObjectContainer openConnection(String dbName){
 
 		if (serverMap.containsKey(dbName)){

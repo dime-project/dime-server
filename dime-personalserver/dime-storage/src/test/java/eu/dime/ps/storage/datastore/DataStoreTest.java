@@ -6,18 +6,11 @@ import static org.junit.Assert.assertTrue;
 import eu.dime.ps.storage.datastore.engine.Db4oPersistenceEngine;
 import eu.dime.ps.storage.datastore.impl.DataStoreProvider;
 import eu.dime.ps.storage.datastore.types.DimeBinary;
-import eu.dime.ps.storage.util.CMSInitHelper;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
-import java.nio.ByteBuffer;
-import java.nio.channels.Channels;
-import java.nio.channels.ReadableByteChannel;
-
-import org.apache.commons.io.IOUtils;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -26,7 +19,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -56,9 +48,11 @@ public class DataStoreTest {
 	
 	@BeforeClass
 	public static void init(){
-		Db4oPersistenceEngine engine = new Db4oPersistenceEngine(tempFolder.newFolder("cms-test").getAbsolutePath());
-		dataStoreProvider = new DataStoreProvider();
-		dataStoreProvider.setDb4oPersistenceEngine(engine);
+		Db4oPersistenceEngine engine = new Db4oPersistenceEngine(
+				tempFolder.newFolder(System.getProperty("java.io.tmpdir") + 
+						File.separator+"cms-test").getAbsolutePath());
+		DataStoreTest.dataStoreProvider = new DataStoreProvider();
+		DataStoreTest.dataStoreProvider.setDb4oPersistenceEngine(engine);
 	}
 		
 	
@@ -68,12 +62,11 @@ public class DataStoreTest {
 		dataStore.deleteAll();
 	}
 	
-//	@AfterClass
-//	public static void destroyTestDataStore(){
-//		//boolean deleted = dataStoreProvider.deleteTenantStore(99999999);
-//		//assertTrue(dataStoreProvider.getTenantStore(99999999, false) == null);		
-//		
-//	}
+	@AfterClass
+	public static void destroyTestDataStore(){
+		boolean deleted = dataStoreProvider.deleteTenantStore(99999999);
+		assertTrue(dataStoreProvider.getTenantStore(99999999, false) == null);		
+	}
 	
 	
 //	@AfterClass

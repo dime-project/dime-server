@@ -22,10 +22,10 @@ public class DataStoreProvider {
 	private Logger logger = Logger.getLogger(DataStoreProvider.class);
 	
 	private static HashMap <Long, DataStore> dataStores = new HashMap<Long, DataStore>();
-	private Db4oPersistenceEngine db4oPersistenceEngine;
+	private static Db4oPersistenceEngine db4oPersistenceEngine;
 	
 	public void setDb4oPersistenceEngine(Db4oPersistenceEngine db4oPersistenceEngine) {
-		this.db4oPersistenceEngine = db4oPersistenceEngine;
+		DataStoreProvider.db4oPersistenceEngine = db4oPersistenceEngine;
 	}
 
 	/** 
