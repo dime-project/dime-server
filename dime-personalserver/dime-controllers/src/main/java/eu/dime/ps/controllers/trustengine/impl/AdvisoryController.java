@@ -7,8 +7,10 @@ import ie.deri.smile.vocabulary.PPO;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.collections.MapIterator;
 import org.apache.commons.collections.map.HashedMap;
@@ -31,16 +33,17 @@ import eu.dime.ps.controllers.infosphere.manager.PersonGroupManager;
 import eu.dime.ps.controllers.infosphere.manager.PersonManager;
 import eu.dime.ps.controllers.infosphere.manager.ShareableProfileManager;
 import eu.dime.ps.controllers.trustengine.TrustEngine;
+import eu.dime.ps.controllers.trustengine.utils.AdvisoryConstants;
 import eu.dime.ps.semantic.connection.ConnectionProvider;
 import eu.dime.ps.semantic.exception.NotFoundException;
 import eu.dime.ps.semantic.model.RDFReactorThing;
-import eu.dime.ps.semantic.model.dao.Account;
 import eu.dime.ps.semantic.model.dlpo.LivePost;
-import eu.dime.ps.semantic.model.nco.PersonContact;
 import eu.dime.ps.semantic.model.nie.DataObject;
 import eu.dime.ps.semantic.model.pimo.Agent;
 import eu.dime.ps.semantic.model.pimo.Person;
 import eu.dime.ps.semantic.model.pimo.PersonGroup;
+import eu.dime.ps.semantic.model.ppo.AccessSpace;
+import eu.dime.ps.semantic.model.ppo.PrivacyPreference;
 import eu.dime.ps.semantic.rdf.ResourceStore;
 
 /**
@@ -94,7 +97,7 @@ public class AdvisoryController {
 			persons = this.getPersonList(agentIDs);
 			warnings.addAll(getTrustWarnings(persons, sharedThingIDs));
 			warnings.addAll(getGroupWarnings(agentIDs, sharedThingIDs));
-			//warnings.addAll(getProfileWarnings(persons, profile));
+			warnings.addAll(getProfileWarnings(persons, profile));
 			warnings.addAll(getResourceWarnings(sharedThingIDs));
 			warnings.addAll(getReceiverWarnings(persons, sharedThingIDs));
 		} catch (RepositoryException e) {
@@ -129,8 +132,12 @@ public class AdvisoryController {
 				logger.warn("Privacy values are not retrievable. Wrong data format?", e);
 				continue;
 			}
-			if (TrustProcessor.getThreshold(size, privacyLevel)){
-				warning_level = warning_level + 1/size;
+			if (TrustProcessor.getRecipientThreahold(size, privacyLevel)){
+				//warning_level = warning_level + 1.0/size;
+				//TODO: optimize warning level
+				if (warning_level < privacyLevel){
+					warning_level = privacyLevel;
+				}
 			}
 			
 		}
@@ -151,7 +158,7 @@ public class AdvisoryController {
 		} else if (resourceStore.isTypedAs(resUri, DLPO.LivePost)){
 			resource = resourceStore.get(resUri, LivePost.class);
 		} else if (resourceStore.isTypedAs(resUri, PPO.PrivacyPreference)){
-			//Error. Databox should already be resolved here...
+			resource = resourceStore.get(resUri, PrivacyPreference.class);
 		} else {
 			resource = resourceStore.get(resUri, RDFReactorThing.class);
 		}		
@@ -166,7 +173,7 @@ public class AdvisoryController {
 		int size = sharedThingIDs.size();
 		resourceWarning.setNumberOfResources(size);
 
-		if (size < 5){
+		if (size < AdvisoryConstants.RESOURCE_WARNING_TRIGGER){
 			return warnings;
 		} else if (size > 100){
 			resourceWarning.setWarningLevel(1.0);
@@ -182,20 +189,32 @@ public class AdvisoryController {
 		List <ProfileWarning> warnings = new ArrayList<ProfileWarning>();
 		List <String> newPersons = new ArrayList<String>();
 		//TODO: get Profile object, get mySaid,
-		PersonContact pc;
+		PrivacyPreference pc;
 		try {
-			pc = resourceStore.get(new URIImpl(profile), PersonContact.class);
-			Account account = pc.getSharedThrough();
-			for (String person : persons){
-				//Collection<PersonContact> profiles = shareableProfileManager.getAll(account.asURI().toString(), person); 
-				//TODO: if profiles empty -> profile unshared
-				newPersons.add(person);
+			pc = resourceStore.get(new URIImpl(profile), PrivacyPreference.class);
+			Set<Person> set = new HashSet<Person>();
+			if (pc.hasAccessSpace()){
+				List<AccessSpace> accessSpaces = pc.getAllAccessSpace_as().asList();
+				for (AccessSpace as : accessSpaces){
+					eu.dime.ps.semantic.model.nso.AccessSpace asNSO = 
+							resourceStore.get(as.asURI(), eu.dime.ps.semantic.model.nso.AccessSpace.class);
+					set.addAll(getPersonsFromAccesSpace(asNSO, resourceStore));
+				}				
 			}
+			for (String pString : persons) {
+				Person person = resourceStore.get(new URIImpl(pString), Person.class);
+				if(!set.contains(person)){
+					newPersons.add(person.asURI().toString());
+				}
+			}	
 		} catch (NotFoundException e) {
 			logger.warn("could not find resource.",e);
 		} catch (ClassCastException e) {
-			logger.warn("Uri is not a PersonContact)",e);
-
+			logger.warn("Uri is not a PersonContact",e);
+		} catch (RepositoryException e) {
+			logger.warn("Could not get resource.", e);
+		} catch (InfosphereException e) {
+			logger.warn("Could not resolve accesspace.",e);
 		}
 		
 		if (!newPersons.isEmpty()){
@@ -207,6 +226,26 @@ public class AdvisoryController {
 		}
 		return warnings;
 	}
+	
+	private Set<Person> getPersonsFromAccesSpace(eu.dime.ps.semantic.model.nso.AccessSpace as, 
+			ResourceStore resourceStore) throws NotFoundException, RepositoryException, InfosphereException {
+		List<Agent> agents = as.getAllIncludes_as().asList();
+		List <String> aStrings = new ArrayList();
+		HashSet <Person> resultSet = new HashSet<Person>();
+		for (Agent agent : agents){				
+				if (getResourceStore().isTypedAs(agent, PIMO.Person)){
+					resultSet.add(resourceStore.get(agent, Person.class));
+				} else {
+					PersonGroup group = personGroupManager.get(agent.toString());
+					Collection<Person> members = personManager.getAllByGroup(group);
+					for (Person member : members) {
+						resultSet.add(member);
+					}
+				}
+			}
+		return resultSet;
+		}
+		
 	
 	public List<TrustWarning> getTrustWarnings(List<String> agentIDs, List<String> sharedThingIDs){
 		List <TrustWarning> warnings = trustEngine.getRecommendation(agentIDs, sharedThingIDs);
@@ -380,6 +419,8 @@ public class AdvisoryController {
 		}
 		return map;
 	}
+	
+
 	
 	private HashedMap getGroupList(List<String> agentIDs) 
 			throws NotFoundException, InfosphereException, RepositoryException{

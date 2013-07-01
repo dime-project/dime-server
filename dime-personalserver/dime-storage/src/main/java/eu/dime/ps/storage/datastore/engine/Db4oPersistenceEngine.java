@@ -34,6 +34,11 @@ public class Db4oPersistenceEngine {
 		BLOB_FOLDER = CMSInitHelper.getBlobFolder();
 
 	}
+	
+		public Db4oPersistenceEngine(String folder){
+			CMS_ROOT_FOLDER = folder;
+			BLOB_FOLDER = CMSInitHelper.getBlobFolder();
+		}
 
 	public ObjectContainer openConnection(String dbName){
 

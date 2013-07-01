@@ -597,7 +597,6 @@
   /* Marina */
   [class*="span"] {
     float: left;
-    margin-left: 55px;
     position: relative;
     top: 57px;
   }

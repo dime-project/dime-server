@@ -1,5 +1,6 @@
 package eu.dime.ps.communications.requestbroker.controllers.advisory;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -78,11 +79,23 @@ public class PrivacyAdvisoryController {
 		Data<Warning> data = new Data<Warning>();
 		
 		int i = profileId.indexOf("urn:uuid");
-		if (i > 0){
+		while (i>0){
 			profileId = profileId.substring(i);
+			i = profileId.indexOf("urn:uuid");
+		}
+		
+		//check if shared item is profilecard and remove "pc_"
+		List <String> checkedThings = new ArrayList<String>();
+		for (String id :sharedThingIDs){
+			int index = id.indexOf("urn:uuid");
+			while (index > 0){
+				id = id.substring(index);
+				index = id.indexOf("urn:uuid");
+				checkedThings.add(id);
+			}
 		}
 		try {
-			Collection <Warning> warnings = advisoryController.getAdvisory(agentIDs, sharedThingIDs, profileId);
+			Collection <Warning> warnings = advisoryController.getAdvisory(agentIDs, checkedThings, profileId);
 			
 			for (Warning warning :warnings){
 				data.addEntry(warning);
