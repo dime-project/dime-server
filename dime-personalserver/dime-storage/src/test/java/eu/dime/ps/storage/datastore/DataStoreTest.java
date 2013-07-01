@@ -3,6 +3,7 @@ package eu.dime.ps.storage.datastore;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import eu.dime.ps.storage.datastore.engine.Db4oPersistenceEngine;
 import eu.dime.ps.storage.datastore.impl.DataStoreProvider;
 import eu.dime.ps.storage.datastore.types.DimeBinary;
 import eu.dime.ps.storage.util.CMSInitHelper;
@@ -21,7 +22,9 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -35,8 +38,11 @@ public class DataStoreTest {
 	
 	private static DataStore dataStore;
 	
-	@Autowired
-	private DataStoreProvider dataStoreProvider;
+	@Rule
+	public static TemporaryFolder tempFolder = new TemporaryFolder();
+	
+	//@Autowired
+	private static DataStoreProvider dataStoreProvider;
 	
 	public void setDataStoreProvider(DataStoreProvider dataStoreProvider) {
 		this.dataStoreProvider = dataStoreProvider;
@@ -47,6 +53,15 @@ public class DataStoreTest {
 		dataStore = dataStoreProvider.getTenantStore(99999999, true);
 		assertTrue(dataStore != null);
 	}
+	
+	@BeforeClass
+	public static void init(){
+		Db4oPersistenceEngine engine = new Db4oPersistenceEngine(tempFolder.newFolder("cms-test").getAbsolutePath());
+		dataStoreProvider = new DataStoreProvider();
+		dataStoreProvider.setDb4oPersistenceEngine(engine);
+	}
+		
+	
 	
 	@After
 	public void deleteContent(){
@@ -61,12 +76,12 @@ public class DataStoreTest {
 //	}
 	
 	
-	@AfterClass
-	public static void cleanUp() throws IOException{
-		// TODO:destroying of teststore should be optimized
-		String path = CMSInitHelper.getCMSFolder() + File.separator + "99999999";
-		org.apache.commons.io.FileUtils.deleteDirectory(new File(path));	
-	}
+//	@AfterClass
+//	public static void cleanUp() throws IOException{
+//		// TODO:destroying of teststore should be optimized
+//		String path = CMSInitHelper.getCMSFolder() + File.separator + "99999999";
+//		org.apache.commons.io.FileUtils.deleteDirectory(new File(path));	
+//	}
 	
 	@Test
 	public void testGetFile() throws Exception {
