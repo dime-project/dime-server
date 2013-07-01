@@ -20,5 +20,9 @@ dime-personalserver/logs/
 *.project
 *.settings*
 *.classpath
-dime-personalserver/dime-gateway/src/main/resources/services.properties
-dime-personalserver/dime-gateway/src/main/resources/services.properties
+
+#Mac Files
+*.DS_Store
+
+# Local properties
+dime-personalserver/dime-gateway/services.properties
