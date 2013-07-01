@@ -28,6 +28,7 @@ import eu.dime.ps.gateway.policy.PolicyManagerImpl;
 import eu.dime.ps.gateway.proxy.HttpRestProxy;
 import eu.dime.ps.gateway.service.AttributeMap;
 import eu.dime.ps.gateway.service.MediaType;
+import eu.dime.ps.gateway.service.ServiceAdapterBase;
 import eu.dime.ps.gateway.service.ServiceResponse;
 import eu.dime.ps.semantic.model.nco.PersonContact;
 import eu.dime.userresolver.client.IdemixClient;
@@ -37,7 +38,7 @@ import eu.dime.userresolver.client.ResolverClient;
  * @author Sophie.Wrobel
  * 
  */
-public class DimeUserResolverServiceAdapter implements ExternalServiceAdapter {
+public class DimeUserResolverServiceAdapter extends ServiceAdapterBase implements ExternalServiceAdapter {
 	
 	private final Logger logger = LoggerFactory.getLogger(DimeUserResolverServiceAdapter.class);
 
@@ -216,8 +217,7 @@ public class DimeUserResolverServiceAdapter implements ExternalServiceAdapter {
 
 	@Override
 	public <T extends Resource> Collection<T> search(Resource values,
-			Class<T> returnType) throws ServiceNotAvailableException,
-			AttributeNotSupportedException, InvalidLoginException {
+			Class<T> returnType) throws ServiceNotAvailableException {
 
 		// Search not supported.
 		throw new ServiceNotAvailableException("Unsupported search query.");
@@ -269,8 +269,7 @@ public class DimeUserResolverServiceAdapter implements ExternalServiceAdapter {
 	}
 
 	@Override
-	public void setSetting(String name, String value)
-			throws ServiceNotAvailableException {
+	public void setSetting(String name, String value) {
 		// Do nothing, since there are no settings for the Dime URS
 	}
 
