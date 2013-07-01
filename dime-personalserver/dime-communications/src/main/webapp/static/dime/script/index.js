@@ -1274,8 +1274,7 @@ DimeView = {
             var loginbaselink=Dime.ps_configuration.getRealBasicUrlString()
                 +'/dime-communications/web/access/';
             var githubLink='https://github.com/thielsn/dime/';
-
-            
+            var loginFromServerSettings=serverInfo.baseUrl+'/dime-communications/web/access/login';
 
 
             var bubbleBody = $('<div/>')
@@ -1315,7 +1314,7 @@ DimeView = {
                         )
                         .append($('<p/>')
                             .append($('<span/>').text('Your dime-server @ '+serverInfo.affiliation+":"))
-                            .addHrefOpeningInNewWindow(loginbaselink+"login",Dime.ps_configuration.getRealBasicUrlString()+"/../login",'orangeBubbleLink')
+                            .addHrefOpeningInNewWindow(loginFromServerSettings,serverInfo.baseUrl+"/[..]/login",'orangeBubbleLink')
                         )
                         .append($('<table/>')
                         .append($('<tr/>')
@@ -1348,7 +1347,7 @@ DimeView = {
 
         Dime.REST.getServerInformation(showInformation, this);
         
-    }
+    }//END DimeView.showAbout()
 };
 
 DimeView.OrangeBubble.prototype = {
