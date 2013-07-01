@@ -20,6 +20,7 @@ DimeView = {
     groupType:Dime.psMap.TYPE.GROUP,
     itemType:Dime.psMap.TYPE.PERSON,
     currentGuid: null,
+    pushState:{}, //browser history to manage back-button
     
     getShortName: function(name){
         var myName = name;
@@ -1093,15 +1094,22 @@ DimeView = {
     addToViewMap: function(viewMapEntry){
         DimeView.viewMap[viewMapEntry.id]=viewMapEntry;
     },
-    
-    updateView: function(groupType, viewType){
+    /**
+     *
+     *
+     */
+    updateView: function(groupType, viewType, avoidPushingHistory){
 
         if (!viewType){
             viewType = DimeView.GROUP_CONTAINER_VIEW;
         }
         DimeView.currentView=viewType;
         DimeView.switchViewForViewType();
-        
+
+        if (groupType && !avoidPushingHistory){ //FIXME add support for settings by furhter url parameters --> refactoring required!
+            window.history.pushState({groupType:groupType, viewType:viewType}, "", "index.html?type="+groupType);
+        }
+
         if (viewType===DimeView.SETTINGS_VIEW){
             Dime.Navigation.setButtonsActive("navButtonSettings");
             Dime.Settings.updateServices();
@@ -1117,9 +1125,10 @@ DimeView = {
         }
         
         //update grouptype and itemtype
-        DimeView.groupType = groupType; 
-       
+        DimeView.groupType = groupType;        
         DimeView.itemType =  Dime.psHelper.getChildType(DimeView.groupType);
+
+        
         
         //update navigation button shown
         if (DimeView.groupType===Dime.psMap.TYPE.DATABOX){
@@ -1779,3 +1788,11 @@ Dime.Navigation.createNotificationIcon=function(){
 //#############################################
 //---------------------------------------------
 
+ window.onpopstate = function(event) {
+     var viewState = event.state;
+     if (viewState){
+         DimeView.updateView(viewState.groupType, viewState.viewType, true);
+     }
+
+  
+};

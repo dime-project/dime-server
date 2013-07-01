@@ -52,6 +52,18 @@ public class LoginController {
         return modelAndView;
     }
 
+    @RequestMapping(value = "/howto", method = RequestMethod.GET)
+    public ModelAndView howto() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("login");
+
+        modelAndView.addObject("jspContainerId", "howtoContainer");
+
+        logger.info("howto page accessed");
+        return modelAndView;
+    }
+
+
     @RequestMapping(value = "/notauthenticated", method = RequestMethod.GET)
     public ModelAndView checklogin() {
         logger.info("notauthenticated.");
