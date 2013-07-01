@@ -25,8 +25,7 @@ public class ShareableLivePostManager extends ShareableManagerBase<LivePost> imp
 		SHAREABLE_LIVEPOST_PROPERTIES = new ArrayList<URI>(6);
 		SHAREABLE_LIVEPOST_PROPERTIES.add(NAO.created);
 		SHAREABLE_LIVEPOST_PROPERTIES.add(NAO.lastModified);
-		SHAREABLE_LIVEPOST_PROPERTIES.add(NAO.prefLabel);
-		SHAREABLE_LIVEPOST_PROPERTIES.add(NAO.prefSymbol);
+		SHAREABLE_LIVEPOST_PROPERTIES.add(NAO.prefLabel);		
 		SHAREABLE_LIVEPOST_PROPERTIES.add(DLPO.textualContent);
 		SHAREABLE_LIVEPOST_PROPERTIES.add(DLPO.timestamp);
 	};

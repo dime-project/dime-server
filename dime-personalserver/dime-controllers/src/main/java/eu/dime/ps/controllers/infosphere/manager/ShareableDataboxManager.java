@@ -30,8 +30,7 @@ public class ShareableDataboxManager extends ShareableManagerBase<DataContainer>
 		SHAREABLE_DATABOX_PROPERTIES = new ArrayList<URI>(5);
 		SHAREABLE_DATABOX_PROPERTIES.add(NAO.created);
 		SHAREABLE_DATABOX_PROPERTIES.add(NAO.lastModified);
-		SHAREABLE_DATABOX_PROPERTIES.add(NAO.prefLabel);
-		SHAREABLE_DATABOX_PROPERTIES.add(NAO.prefSymbol);
+		SHAREABLE_DATABOX_PROPERTIES.add(NAO.prefLabel);		
 		SHAREABLE_DATABOX_PROPERTIES.add(NIE.hasPart);
 	};
 
