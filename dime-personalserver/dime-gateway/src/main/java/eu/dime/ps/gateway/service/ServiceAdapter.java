@@ -1,9 +1,11 @@
 package eu.dime.ps.gateway.service;
 
 import java.util.Collection;
+import java.util.List;
 
 import org.ontoware.rdfreactor.schema.rdfs.Resource;
 
+import eu.dime.commons.dto.SAdapterSetting;
 import eu.dime.ps.gateway.exception.AttributeNotSupportedException;
 import eu.dime.ps.gateway.exception.InvalidDataException;
 import eu.dime.ps.gateway.exception.InvalidLoginException;
@@ -160,5 +162,11 @@ public interface ServiceAdapter {
 	 * @return TRUE if connection exists, FALSE otherwise.
 	 */
 	public Boolean isConnected();
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public List<SAdapterSetting> getSettings();
 
 }

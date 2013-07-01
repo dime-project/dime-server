@@ -36,7 +36,8 @@ public class SAdapterWrapper extends Resource {
 			lm.put("guid", setting.getGuid());
 			lm.put("imageUrl", setting.getImageUrl());
 			lm.put("mandatory", setting.getMandatory());
-			lm.put("value", setting.getValue().toString());
+			if (setting.getValue() != null)
+				lm.put("value", setting.getValue().toString());
 			lm.put("type", setting.getType());
 			
 		}
