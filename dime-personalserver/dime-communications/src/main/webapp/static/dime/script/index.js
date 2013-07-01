@@ -1110,9 +1110,8 @@ DimeView = {
 
         }
 
-        //GO on with viewType===PERSON_VIEW and viewType===GROUP_CONTAINER_VIEW
-
-        if (!groupType){        
+        if (!groupType){
+            //GO on with viewType===PERSON_VIEW and viewType===GROUP_CONTAINER_VIEW
             console.log("grouptype not set - using default: GROUP");
             groupType = Dime.psMap.TYPE.GROUP;
         }
@@ -1180,8 +1179,8 @@ DimeView = {
 
     //called from back button in index.html
     restoreGroupView:function(){
-        DimeView.currentView=DimeView.GROUP_CONTAINER_VIEW;
-        DimeView.switchViewForViewType();
+        DimeView.updateView(DimeView.groupType, DimeView.GROUP_CONTAINER_VIEW);
+        
     },
 
 

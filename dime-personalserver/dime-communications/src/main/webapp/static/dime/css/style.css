@@ -178,20 +178,6 @@ body {
 
 }
 
-#personDataboxNavigation {
-    width: 420px;
-    float: left;
-    position: relative;
-    height: 420px;
-    max-height: 420px;
-    margin-right: 20px;
-}
-
-#personResourceNavigation {
-    width: 305px;
-    float: left;
-    position: relative;
-}
 
 
 .wrapProfileImage {
