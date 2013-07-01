@@ -2875,13 +2875,7 @@ input[type="checkbox"] {
 }
 
 
-.orangeBubble > .modal-body > * > h3{
-    margin-top: 5px;
-    color: #313031;
-    text-shadow: none ;
-    font-weight: bold;
-    font-size: 14px;
-}
+
 
 .orangeBubble > .modal-body > * > p {
     margin-bottom: 2px;
@@ -2902,6 +2896,13 @@ input[type="checkbox"] {
     text-shadow: none ;
     font-weight: bold;
     font-size: 16px;
+}
+.orangeBubble > .modal-body > * > h3{
+    margin-top: 16px;
+    color: #313031;
+    text-shadow: none ;
+    font-weight: bold;
+    font-size: 14px;
 }
 
 .orangeBubbleLink{
