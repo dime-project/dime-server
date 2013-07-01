@@ -20,3 +20,5 @@ dime-personalserver/logs/
 *.project
 *.settings*
 *.classpath
+dime-personalserver/dime-gateway/src/main/resources/services.properties
+dime-personalserver/dime-gateway/src/main/resources/services.properties
