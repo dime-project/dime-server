@@ -304,7 +304,7 @@ body {
 }
 
 .metaDataShareArea, .metaDataServicesView {
-   
+
     min-height: 120px;
     width: 100%;
     border-top: 10px solid #8f8e8f;
@@ -456,7 +456,7 @@ input[type="file"] {
     min-height: 101px;
     background-color: white;	
     border: 1px solid silver;	
-    
+
     overflow-y: auto;
     overflow-x: hidden;
     border-radius: 5px;
@@ -633,7 +633,7 @@ input[type="file"] {
 }
 
 .groupItem> h4:hover  {
-    
+
     text-decoration: underline;
     /* cursor: text;*/
     cursor: url("../img/edit_16.ico"),auto;
@@ -653,7 +653,7 @@ input[type="file"] {
     border-radius: 0 0 5px 5px;
     border-top: 1px solid white;
     text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
-    
+
 }
 
 
@@ -1864,7 +1864,7 @@ input[type="checkbox"] {
     cursor: pointer;
     height: 14px;
     width: 14px;
-    
+
 }
 
 .itemDetailPicImagePerson {
@@ -1982,7 +1982,7 @@ input[type="checkbox"] {
 .metaDataShareArea span {
     float: left;
     position: relative;
-    
+
     margin-left: 4px;
 }
 
@@ -2669,7 +2669,7 @@ input[type="checkbox"] {
     cursor: pointer;  
     border: solid 1px lightgray;    
     border-radius: 5px 5px 5px 5px;
-    
+
 }
 
 .shareDlgWarnType{
@@ -2703,7 +2703,7 @@ input[type="checkbox"] {
 
 .shareDlgWarnRed{
     background-color: #B64B4B;
-    
+
 }
 
 
@@ -2729,8 +2729,8 @@ input[type="checkbox"] {
 }
 
 .stop-scrolling {
-  height: 100%;
-  overflow: hidden;
+    height: 100%;
+    overflow: hidden;
 }
 
 /* Showing accounts */
@@ -2771,7 +2771,7 @@ input[type="checkbox"] {
 }
 
 .modal-body .radio input[type="radio"], .modal-body .checkbox input[type="checkbox"]{
-      margin-top: 7px;
+    margin-top: 7px;
 }
 
 /****** Validation ******/
@@ -2912,4 +2912,35 @@ input[type="checkbox"] {
 
 .orangeBubble > .modal-footer{
     background-color: #F6E39D;
+}
+
+#infoButtonLeft{
+    position: absolute;
+    top: 130px;
+    left: -23px;
+    background-color: #F6C200;
+    z-index: 1030;
+    width: 80px;
+    height: 80px;
+    overflow: hidden;
+    border-radius: 5px;
+    padding: 5px;
+    color: #f3f3f3;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+    font-weight: bold;
+    font-size: 32px;
+    -webkit-background-clip: padding-box;
+    -moz-background-clip: padding-box;
+    background-clip: padding-box;
+}
+#infoButtonLeft:hover{
+    cursor:pointer;
+    -webkit-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+    -moz-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+}
+#infoButtonLeft>span{
+    position: relative;
+    top: 30px;
+    left: 12px;
 }

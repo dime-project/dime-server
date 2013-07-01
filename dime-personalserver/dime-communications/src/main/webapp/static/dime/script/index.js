@@ -1236,7 +1236,7 @@ DimeView = {
         
     },
 
-    OrangeBubble: function(handlerSelf, bubbleBody){
+    OrangeBubble: function(handlerSelf, bubbleBody, dismissHandler){
 
         var bubbleSelf = this;
 
@@ -1248,8 +1248,8 @@ DimeView = {
             .append($('<button class="YellowMenuButton" data-dismiss="modal" aria-hidden="true">Dismiss</button>')
                 .click(function(){
                     bubbleSelf.dismiss.call(bubbleSelf);
+                    dismissHandler.call(handlerSelf);
                 }));
-
 
         this.bubble= $('<div/>')
             .addClass('modal')
@@ -1258,10 +1258,17 @@ DimeView = {
             .append(bubbleBody)
             .append(footerElement)
             ;
-
     },
 
     showAbout: function(){
+
+        //if dialog is shown already - dismiss
+        if (DimeView.bubble){
+            DimeView.bubble.dismiss();
+            DimeView.bubble=null;
+            return;
+        }
+
 
         var showInformation=function(serverInfo){
 
@@ -1332,34 +1339,15 @@ DimeView = {
                                 
                         ))
                 );
-                var bubble = new DimeView.OrangeBubble(this, bubbleBody);
-                bubble.show();
+
+                DimeView.bubble = new DimeView.OrangeBubble(this, bubbleBody, function(){
+                    //dismiss handler
+                    DimeView.bubble=null;
+                });
+                DimeView.bubble.show();
         };
 
         Dime.REST.getServerInformation(showInformation, this);
-
-
-//        Welcome and many thanks for trying out di.me!
-//
-//Please follow our tutorial: Link.link.newTab.htm
-//
-//This is a demonstration prototype, so you will find many bugs and issues.
-//Please report them on xxxlink.github.newTab.url
-//
-//Please give us feedback to the concept on:
-//	di.me Questionnaire (English)
-//	di.me Fragebogen (German)
-//
-//About
-//     The test trial homepage: 	http://dimetrials.bdigital.org:8080/dime
-//     di.me open source: 		xxxlink.github.newTab.url
-//     The research project:  		www.di.me-project.eu
-//     Your server @ Fraunhofer: 	Serverstartpage
-//			Nutzungsbedingungen (DE)| Usage Conditions (EN)
-//			Datenschutzerklärung  (DE)| Privacy declaration (EN)
-//			Impressum (DE) | Imprint (EN)
-
-
         
     }
 };
