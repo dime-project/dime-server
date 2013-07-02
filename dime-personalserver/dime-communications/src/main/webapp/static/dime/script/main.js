@@ -1270,7 +1270,12 @@ Dime.PsConfigurationClass = function(mainSaid, hostname, port, useHttps){
         var result = this.useHttps ? "https://" : "http://";
         return result + this.hostname + ":"+this.port+this.serverPath;    
     };
-    
+
+    this.getUserUrlString=function(){
+        return this.getBasicUrlString()
+            +'/'
+            + encodeURIComponent(this.mainSaid);
+    };
    
     
     this.handleMainSaidRetrieve = function(response){ 
@@ -2873,6 +2878,69 @@ Dime.REST = {
             $.getJSON(callPath, "", jointCallBack);
         }
 
+    },
+
+    getUser: function(callBack, callerSelf){
+
+        if (!callerSelf){
+            callerSelf = this;
+        }
+
+        // api/dime/rest/{mainSaId}/user/*
+
+        var callPath = Dime.ps_configuration.getUserUrlString()+"/user/@me";
+
+        var jointCallBack = function(response){
+            var responseEntries = Dime.REST.handleResponse(response, true);
+            var result=null;
+            if (responseEntries && responseEntries.length>0){
+                result = responseEntries[0];
+                Dime.cache.put(callPath, result);
+            }
+            callBack.call(callerSelf, result);
+        };
+
+
+        var cacheEntries = Dime.cache.get(callPath);
+        if (cacheEntries){
+            callBack.call(callerSelf, cacheEntries);
+        }else{
+            //console.log(callPath);
+            $.getJSON(callPath, "", jointCallBack);
+        }
+    },
+    /**
+     * posts an update of the user item to the ps
+     *
+     */
+    updateUser: function(userItem, callBack, callerSelf){
+
+        if (!callBack){
+            callBack = function(response){
+                console.log("updateUser callback - response:", response);
+            };
+        }
+
+        if (!callerSelf){
+            callerSelf = this;
+        }
+
+        var callPath = Dime.ps_configuration.getUserUrlString()+"/user/@me";
+
+        var jointCallBack = function(response){
+            var responseEntries = Dime.REST.handleResponse(response, true);
+            var result=null;
+            if (responseEntries && responseEntries.length>0){
+                result = responseEntries[0];
+                //update cache
+                Dime.cache.put(callPath, result);
+            }
+            callBack.call(callerSelf, result);
+        };
+
+        var request = Dime.psHelper.prepareRequest(userItem);
+
+        $.postJSON(callPath, request, jointCallBack);
     }
 
     

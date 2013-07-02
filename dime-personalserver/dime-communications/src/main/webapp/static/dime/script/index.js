@@ -1692,6 +1692,28 @@ Dime.initProcessor.registerFunction(function(callback){
     callback();
 });
 
+/**
+ * show info page on first login
+ *
+ * handler for URL-parameter
+ */
+Dime.initProcessor.registerFunction(function(callback){
+    var getUserCallback=function(response){
+        if (!response){
+            return;
+        }
+        if (response.userStatusFlag===0){            
+            //update user status
+            response.userStatusFlag=1;
+            Dime.REST.updateUser(response);
+            DimeView.showAbout();
+        }
+    }
+    Dime.REST.getUser(getUserCallback, DimeView);
+
+    callback();
+});
+
 //---------------------------------------------
 //#############################################
 //  Dime.initProcessor - END
