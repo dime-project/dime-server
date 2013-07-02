@@ -252,6 +252,15 @@ public class PSDataboxControllerTestIt extends PSInfosphereControllerTestIt {
 
 	}	
 
+	@Test
+	public void testGetEmptySharedDataboxWellFormedJSON() throws Exception {
+		
+		Person person = createPerson("Ismael Rivera");			
+		Response<Resource> response = controller.getAllMyDataboxesByPerson(SAID, person.asURI().toString());
+		assertNotNull(response);
+		assertEquals(0, response.getMessage().getData().getEntries().size());
+		assertEquals(Integer.toString(200), response.getMessage().getMeta().getCode().toString());
 
+	}	
 
 }
