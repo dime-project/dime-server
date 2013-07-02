@@ -11,7 +11,7 @@
 <html >
     <head>
 
-        <!-- Adapt here to customize your server's page -->
+        
         <title>di.me Server</title>
         <link href="/dime-communications/static/ui/dime/register/css/bootstrap.css" rel="stylesheet" type="text/css" />
         <link href="/dime-communications/static/ui/dime/register/css/generic.css" rel="stylesheet" type="text/css" />
@@ -98,16 +98,13 @@
 
                     Trusted Social Networking and Personal Identity<br>
                     The European research project digital.me evaluates a system prototype.<br>
-                    <!-- Adapt here to customize your server's page -->
-                    <!-- <h1>di.me Server Fraunhofer IAO</h1>-->
-                    <h2>di.me Server &lt;name of institution&gt;</h2>
+                
+                    <h2 id="serverNameHeader">di.me Server &lt;name of institution&gt;</h2>
                     <h5>A server of the di.me prototype evaluation 2013</h5>
 
                 </div>
 
-                <div class="float_this">
-                    <!-- Adapt here to customize your server's page -->
-                    <!--<img class="institutionLogo" src="/dime-communications/static/ui/dime/register/img/fraunhofer_logo.png"/> -->
+                <div class="float_this">                    
                     <img class=".institutionLogo" src="/dime-communications/static/ui/dime/register/img/dummyInstitute.png"/>
                 </div>
             </div>
@@ -266,7 +263,8 @@
                     </p>
                     <ul>
                         <li>
-                            an <em>anonymous identifyier </em>which allows us to know what click data and questionaire answers come from the same account.
+                            an <em>anonymous identifyier </em>which allows us to know what click data and questionaire answers come
+                            from the same account.
                             No other identity information like your di.me username, nickname, real name, or email-address is sent.
                             No location information is sent.
                         </li>
@@ -302,7 +300,7 @@
                             <strong>Scientific purpose of the test server</strong>
                         </p>
                         <p>
-                            Fraunhofer IAO provides this server as test operation for a system prototype of the dime userware. The objective is to give access to and to evaluate the
+                            <span class="adaptAffiliation"></span> provides this server as test operation for a system prototype of the dime userware. The objective is to give access to and to evaluate the
                             results of the research project digital.me (www.dime-project.eu). The test operation is not intended to provide a service for end-users or enterprises for
                             other purposes than the above stated. The test operation has no commercial interests.
                         </p>
@@ -311,7 +309,7 @@
                         </p>
                         <p>
                             Please read our full usage conditions: 
-                            <span class="linkToUsageTerms_DE">Nutzungsbedingungen (Deutsch)</span>
+                            <span class="linkToUsageTerms_DE">Nutzungsbedingungen (Deutsch)</span>, 
                             <span class="linkToUsageTerms">Usage Terms (English)</span>
                         </p>
 
@@ -776,7 +774,7 @@
                 University of Galway (IRL), Universität Siegen (DE), Telecom Italia (IT), Yellowmap GmbH (DE).
             </p>
             <p>
-                2.3 Fraunhofer provides by its institute Fraunhofer IAO the server dime2013.iao.fraunhofer.de as test-operation of the di.me. The test operation is planned
+                2.3 Fraunhofer provides by its institute Fraunhofer IAO the server dime.hci.iao.fraunhofer.de as test-operation of the di.me. The test operation is planned
                 for &lt;startdatumxxx&gt; until 31.12.2013.
             </p>
             <p>
@@ -786,7 +784,7 @@
                 intended to provide a service which can be used for other purposes than the above stated. The test operation has no commerical interests.
             </p>
             <p>
-                Besides the server xxxdime2013.iao.fraunhofer.de, the project partners offer further test servers (see www.xxx). The users of all test-servers can get into
+                Besides the server dime.hci.iao.fraunhofer.de, the project partners offer further test servers (see www.xxx). The users of all test-servers can get into
                 contact via a user directory (the “di.me user directory”).
             </p>
             <p>
@@ -854,7 +852,7 @@
                 or criminal offences, publish statements or images of an insulting, slanderous, anti-constitutional, racist, sexist, violent, or pornographic nature.
             </p>
             <p>
-                4.3 The misuse of di.me or the test-server xxxxdime2013.iao.fraunhofer.de will be prosecuted.
+                4.3 The misuse of di.me or the test-server dime.hci.iao.fraunhofer.de will be prosecuted.
             </p>
             <p>
                 4.4 Any indication of misuse has to be reported to Fraunhofer immediately.

@@ -17,6 +17,7 @@ jQuery.extend({
             processData: false
         });
     }
+
 });
 
 
@@ -65,6 +66,34 @@ Dime.register={
         envelope.request.data.entry.push(myEntry);
         return envelope;
     },
+
+    getServerInformation: function(callBack, callerSelf){
+
+        if (!callerSelf){
+            callerSelf = this;
+        }
+
+
+
+        var callPath = 'https://'+ window.location.host+ '/dime-communications/api/dime/server';
+
+        var jointCallBack = function(response){
+            var result = null;
+            if (response){
+
+                response=response.response;
+
+                if (response && response.meta && response.meta.status && response.meta.code
+                    && (response.meta.status.toLowerCase()==="ok")
+                    && response.data && response.data.entry && response.data.entry.length>0){
+                    result = response.data.entry[0];
+                }
+            }
+            callBack.call(callerSelf, result);
+        };
+        $.getJSON(callPath, "", jointCallBack);
+    },
+
 
     LINK_CLASSES:{
         'linkToRegister':{
@@ -128,6 +157,21 @@ Dime.register={
         }else{
             Dime.register.showContainer('loginContainer');
         }
+
+        //update server specific fields
+        var serverInfoCallBack=function(serverInfo){
+            document.title =serverInfo.name;
+            var exp = /(\b(https?|ftp|file):\/\/)([-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/i;
+
+            var servername = serverInfo.baseUrl.replace(exp, "$3");
+
+            $('.institutionLogo').attr('src',serverInfo.imageUrl);
+            $('#serverNameHeader').text(serverInfo.name);
+            $('.adaptAffiliation').text(serverInfo.affiliation);
+            $('.adaptServerName').text(servername);
+        };
+        Dime.register.getServerInformation(serverInfoCallBack, Dime.register);
+
 
     },
 
@@ -256,7 +300,7 @@ Dime.register={
         };
 
 
-        var path = 'HTTPS://'+ window.location.host+ '/dime-communications/api/dime/user';
+        var path = 'https://'+ window.location.host+ '/dime-communications/api/dime/user';
 
         var envelope = Dime.register.prepareRequest(request);
 
