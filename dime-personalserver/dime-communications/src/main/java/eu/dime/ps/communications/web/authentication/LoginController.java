@@ -55,47 +55,50 @@ public class LoginController {
         return modelAndView;
     }
 
-   
-
-     @RequestMapping(value = "/conditions", method = RequestMethod.GET)
-    public ModelAndView conditions(@RequestParam(value="lang", required=false) String language) {
+    @RequestMapping(value = "/howto", method = RequestMethod.GET)
+    public ModelAndView howto() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("login");
-        if (language!=null && language.equals("de")){
+        modelAndView.addObject("jspContainerId", "howtoContainer");
+        logger.info("howto page accessed");
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/conditions", method = RequestMethod.GET)
+    public ModelAndView conditions(@RequestParam(value = "lang", required = false) String language) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("login");
+        if (language != null && language.equals("de")) {
             modelAndView.addObject("jspContainerId", "usageTermsContainer_DE");
 
-        }else{
+        } else {
             modelAndView.addObject("jspContainerId", "usageTermsContainer");
         }
         logger.info("conditions page accessed");
         return modelAndView;
     }
 
-
-
     @RequestMapping(value = "/about", method = RequestMethod.GET)
-    public ModelAndView about(@RequestParam(value="lang", required=false) String language) {
+    public ModelAndView about(@RequestParam(value = "lang", required = false) String language) {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("login");
-        if (language!=null && language.equals("de")){
+        if (language != null && language.equals("de")) {
             modelAndView.addObject("jspContainerId", "aboutContainer_DE");
-        }else{
+        } else {
             modelAndView.addObject("jspContainerId", "aboutContainer");
         }
         logger.info("about page accessed");
         return modelAndView;
     }
 
-
-
     @RequestMapping(value = "/privacypolicy", method = RequestMethod.GET)
-    public ModelAndView privacypolicy(@RequestParam(value="lang", required=false) String language) {
+    public ModelAndView privacypolicy(@RequestParam(value = "lang", required = false) String language) {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("login");
-        if (language!=null && language.equals("de")){
+        if (language != null && language.equals("de")) {
             modelAndView.addObject("jspContainerId", "privacyPolicyContainer_DE");
 
-        }else{
+        } else {
             modelAndView.addObject("jspContainerId", "privacyPolicyContainer");
         }
         logger.info("privacypolicy page accessed");
