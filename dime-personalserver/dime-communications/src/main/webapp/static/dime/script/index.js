@@ -350,6 +350,17 @@ DimeView = {
             }
         }
 
+        //for profile we skip profiles with no said
+        if (type===Dime.psMap.TYPE.PROFILE){
+            isInFilter = function(entry){
+                if (!entry.said || entry.said.length<1){
+                    return false; //skip this
+                }
+                return isSubString(DimeView.searchFilter, entry.name);
+                //TODO - also search in attributes
+            }
+
+        }
 
 
         DimeView.initContainer(jContainerElement, Dime.psHelper.getPluralCaptionForItemType(entries[0].type));
