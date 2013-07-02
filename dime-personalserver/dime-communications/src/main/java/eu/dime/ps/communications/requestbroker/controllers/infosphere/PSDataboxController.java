@@ -182,7 +182,7 @@ public class PSDataboxController extends PSSharingControllerBase implements APIC
 
 		try {
 			Collection<DataContainer> databoxes = databoxManager
-					.getAllByCreator(databoxManager.get(personID).asURI());
+					.getAllByCreator(personManager.get(personID).asURI());
 
 			data = new Data<Resource>(0, databoxes.size(), databoxes.size());
 			for (DataContainer databox : databoxes) {

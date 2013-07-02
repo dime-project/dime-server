@@ -212,42 +212,46 @@ public class PSDataboxControllerTestIt extends PSInfosphereControllerTestIt {
 		assertEquals(resource.get("items"),  Arrays.asList(new String[]{dataObjectID}));		
 
 	}
+	
+	@Test
+	public void testGetSharedDataboxWellFormedJSON() throws Exception {
 
-	/*
-	private DataContainer createDatabox() throws ResourceExistsException {
 		Account sender = createAccount(pimoService.getUserUri());
-		Person person = createPerson("Ismael Rivera");		
-		//create a resource to add to the databox
-		DataObject f1 = createDataObject();		 
+		Person person = createPerson("Ismael Rivera");
+		DataObject f1 = createDataObject();
+		Databox databox =  createDataboxJSON(sender,person,f1);
+		databox.put("userId", person.asURI().toString());
+		Request<Databox> request = buildDataboxRequest(databox);
+		Response<Databox> resp = controller.postCreateMyDatabox(SAID, request);
+	
+		Response<Resource> response = controller.getAllMyDataboxesByPerson(SAID, person.asURI().toString());
 
+		assertNotNull(response);
+		assertEquals(1, response.getMessage().getData().getEntries().size());		 
 
-		PrivacyPreference databox = modelFactory.getPPOFactory().createPrivacyPreference();
-		databox.addType(NFO.DataContainer);
-		databox.setLabel(PrivacyPreferenceType.DATABOX.toString());
-		databox.setPrefLabel("Test databox");
-		//databox.setCreator(pimoService.getUserUri());
-		databox.setCreated(new DatatypeLiteralImpl("1970-01-16T11:53:44.999Z", XSD._dateTime));
-		databox.setLastModified(new DatatypeLiteralImpl("1970-01-16T11:53:44.999Z", XSD._dateTime));
-		databox.getModel().addStatement(databox, NIE.hasPart, f1);	
-		databox.setPrivacyLevel(0.5);
-		databox.addAppliesToResource(f1);	
+		String guid = response.getMessage().getData().getEntries().iterator().next().get("guid").toString();
+		assertNotNull(guid);
 
-		AccessSpace accessSpace = modelFactory.getNSOFactory().createAccessSpace();
-		accessSpace.setIncludes(person);
-		accessSpace.setSharedThrough(sender);		
-		databox.setAccessSpace(accessSpace);
+		URI uri = new URIImpl(guid);
+		TripleStore tripleStore = pimoService.getTripleStore();
+		Model pimo = tripleStore.getModel(pimoService.getPimoUri());
 
-		databox.getModel().addAll(accessSpace.getModel().iterator());
-		databox.getModel().addAll(f1.getModel().iterator());
-		databox.getModel().addAll(sender.getModel().iterator());
-		databox.getModel().addAll(person.getModel().iterator());
-		
-		
+		ClosableIterator<Statement> hasPart = pimo.findStatements(uri, NIE.hasPart ,Variable.ANY);
+		assertNotNull(hasPart);
+		String dataObjectID= hasPart.next().getObject().asURI().toString();
+		Resource resource =  response.getMessage().getData().getEntries().iterator().next();
 
-		return (DataContainer) databox.castTo(DataContainer.class);
+		assertNotNull(resource);		
+		assertEquals(resource.get("name"),"Test databox" );
+		assertEquals(resource.get("type"),"databox");
+		assertEquals(resource.get("userId"),person.asURI().toString());
+		assertEquals(resource.get("created"), 1338824999L);
+		assertEquals(resource.get("lastModified"), 1338824999L);
+		assertEquals(resource.get("nao:privacyLevel"), 0.5);
+		assertEquals(resource.get("items"),  Arrays.asList(new String[]{dataObjectID}));		
 
-	}
-*/
+	}	
+
 
 
 }
