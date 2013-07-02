@@ -1261,7 +1261,8 @@ DimeView = {
 
         this.bubbleId="Bubble_"+JSTool.randomGUID();
 
-        bubbleBody.addClass('modal-body');
+        //bubbleBody.addClass('modal-body');
+        bubbleBody.addClass('bubble-body');
 
         var footerElement=$('<div></div>').addClass("modal-footer")
             .append($('<button class="YellowMenuButton" data-dismiss="modal" aria-hidden="true">Dismiss</button>')
@@ -1271,7 +1272,7 @@ DimeView = {
                 }));
 
         this.bubble= $('<div/>')
-            .addClass('modal')
+          //  .addClass('modal')
             .addClass('orangeBubble')
             .attr('id',this.bubbleId)
             .append(bubbleBody)

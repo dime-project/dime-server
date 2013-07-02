@@ -1619,19 +1619,9 @@ input[type="checkbox"] {
 }
 
 
-#aboutLink{
-    color: white;
-    position: relative;
-    padding-left: 10px;
-    padding-right: 10px;
-    float: right;
-    border-left: 1px solid white;
-}
-
-
-#aboutLink:hover{  
+#username:hover{
     text-decoration: underline;
-    background-color: #313031;
+    cursor: pointer;
 }
 
 
@@ -2847,43 +2837,51 @@ input[type="checkbox"] {
 
 .orangeBubble{
     background-color: #F6C200;
-    top: 120px;
-    left: 14%;
-    /*left: 140px; */
+    top: 130px;
+    left: 84px;
     min-width: 55%;
     margin: 0;
+
+    position: fixed;
+    z-index: 1050;
+    overflow: auto;
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    border-radius: 0 6px 6px 6px;
+    -webkit-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+    -moz-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+    -webkit-background-clip: padding-box;
+    -moz-background-clip: padding-box;
+    background-clip: padding-box;
 }
 
-.orangeBubble > .modal-body{
+.bubble-body{
     padding: 15px;
-
     min-height: 294px;
 }
 
-
-
-
-.orangeBubble > .modal-body > * > p {
+.bubble-body > * > p {
     margin-bottom: 2px;
     margin-top: 2px;
 }
 
-
-
-.orangeBubble > .modal-body > div > p > span {
+.bubble-body > div > p > span {
     margin-right: 5px;
 }
 
 
-.orangeBubble > .modal-body > * > h2{
+.bubble-body > * > h2{
     margin-top: 5px;
     margin-bottom: 10px;
     color: #313031;
-    text-shadow: none ;
     font-weight: bold;
-    font-size: 16px;
+    font-size: 24px;
+
+    color: #f3f3f3;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
 }
-.orangeBubble > .modal-body > * > h3{
+.bubble-body > * > h3{
     margin-top: 16px;
     color: #313031;
     text-shadow: none ;

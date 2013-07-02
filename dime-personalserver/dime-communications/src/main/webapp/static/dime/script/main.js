@@ -3184,14 +3184,6 @@ Dime.Navigation = {
                 $('<img/>')
                 .attr('src','img/navigation/white/logOut.png')
                 .attr('onclick','self.location.href=\'/dime-communications/j_spring_security_logout\'')
-                )
-            .append($('<a/>')
-                .attr('id','aboutLink')
-                //FIXME don't call DimeView from navigation!!!
-                .click(function(){
-                    DimeView.showAbout.call(DimeView)
-                })
-                .text('about')
                 );
             var situationLink = $('<a/>')
             .attr('id','currentSituation')
@@ -3290,10 +3282,15 @@ Dime.initProcessor.registerFunction( function(callback){
         callback();
         return;
     }
+
+    var serverInfoCallBack=function(response){
+        var userString = Dime.ps_configuration.mainSaid+'@'+response.name;
+        $('#username').text(userString.substr(0, 27)).click(function(){
+                    DimeView.showAbout.call(DimeView)
+                });
+    };
+    Dime.REST.getServerInformation(serverInfoCallBack)
     
-    var usernameCell = document.getElementById('username');
-    usernameCell.innerHTML = Dime.ps_configuration.mainSaid+'@di.me';
-   
     callback();
 });
 
