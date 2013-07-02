@@ -1585,9 +1585,9 @@ Dime.Settings = {
         $.getJSON(callPath, "", doubleCallBack);
     },
 
-    createAccount: function(name, guid, settings) {
+    createAccount: function(name, adapterGuid, settings) {
         var newAccount = Dime.psHelper.createNewItem(Dime.psMap.TYPE.ACCOUNT, name);
-        newAccount.serviceadapterguid = guid;
+        newAccount.serviceadapterguid = adapterGuid;
         //deep copy of settings
         var clonedArray = $.map(settings, function(obj){
             return $.extend(true, {}, obj);

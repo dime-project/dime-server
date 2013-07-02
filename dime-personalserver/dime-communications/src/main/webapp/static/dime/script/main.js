@@ -4690,6 +4690,7 @@ Dime.ConfigurationDialog.prototype = {
         var inputs = [];
         this.modal = document.createElement("div");
         this.modal.setAttribute("id", "ConfigServiceWrapperID");
+        var dialogSelf=this;
 
         var setForm = function(){
             for(var i = 0; i < serviceAccount.settings.length; i++){
@@ -4735,7 +4736,6 @@ Dime.ConfigurationDialog.prototype = {
                                 .append(textInput);
 
                                 inputs.push({
-                                    element: textInput,
                                     type: type,
                                     name: serviceAccount.settings[i].name,
                                     mandatory: serviceAccount.settings[i].mandatory,
@@ -4748,46 +4748,40 @@ Dime.ConfigurationDialog.prototype = {
                                 });
                                 break;
 
-                            case "account":
-                                var selectElem =
-                                $("<select></select>")
-                                .attr("id", "InputFieldID_" + serviceAccount.settings[i].name)
-                                .addClass("controls")
-                                .attr("name", "InputFieldName_" + serviceAccount.settings[i].name);
+                            case "account": //profile
 
-                                $(this)
-                                .append(
-                                    $("<label></label>")
-                                    .attr("for", "InputFieldID_" + serviceAccount.settings[i].name)
-                                    .attr("class", "control-label")
-                                    .append("Please select a profile: ")
-                                    )
-                                .append(selectElem);
+                                var profileDropdown=[];
+
+                                var appendTarget = $(this);
 
                                 //fill-in dropdown list with profiles
                                 var callback = function(response){
                                     $.each(response, function(index, value) {
-                                        selectElem.append(
-                                            $("<option></option>")
-                                            .attr("value", value.name)
-                                            .text(value.name)
-                                            );
+
+                                         var updateProfileOnClick=function(){
+                                            dialogSelf.selectedProfile=value;
+                                            console.log("profile", value, "said", value.said);
+                                        };
+                                        if (value.said && value.said.length>0){
+                                            profileDropdown.push(new BSTool.DropDownEntry(dialogSelf, value.name, updateProfileOnClick));
+                                        }
+                                        
                                     });
+                                    appendTarget.append(BSTool.createDropdown("Please select a profile:", profileDropdown, "btn-large"));
                                 };
                                 Dime.REST.getAll(Dime.psMap.TYPE.PROFILE, callback);
                                 //at the end: setting focus on picked profile (for edit)
 
                                 inputs.push({
-                                    element: selectElem,
                                     type: "select",
                                     name: serviceAccount.settings[i].name,
                                     mandatory: serviceAccount.settings[i].mandatory,
                                     value: function(){
                                         //TODO null
-                                        return selectElem.val();
+                                        return dialogSelf.selectedProfile.said;
                                     },
                                     validation: function(){
-                                        return selectElem.val()!=="";
+                                        return (dialogSelf.selectedProfile!==undefined);
                                     }
                                 });
                                 break;
@@ -4809,7 +4803,6 @@ Dime.ConfigurationDialog.prototype = {
                                 .append(linkInput);
 
                                 inputs.push({
-                                    element: linkInput,
                                     type: "link",
                                     name: serviceAccount.settings[i].name,
                                     //mandatory: serviceAccount.settings[i].mandatory,
@@ -4843,7 +4836,6 @@ Dime.ConfigurationDialog.prototype = {
                                     );
 
                                 inputs.push({
-                                    element: checkInput,
                                     type: "boolean",
                                     name: serviceAccount.settings[i].name,
                                     mandatory: serviceAccount.settings[i].mandatory,
@@ -4860,16 +4852,13 @@ Dime.ConfigurationDialog.prototype = {
                     );
             }
         };
-
+        var deleteAcc = "";
         if(!isNewAccount){
-            var deleteAcc =
-            $('<div></div>')
-            .addClass("ConfigServiceDeleteAccount")
-            .attr("href", "#")
-            .clickExt(Dime.Settings, Dime.Settings.deactivateServiceAccount, serviceAccount)
-            .append("Delete");
-        }else{
-            var deleteAcc = "";
+            deleteAcc = $('<div></div>')
+                .addClass("ConfigServiceDeleteAccount")
+                .attr("href", "#")
+                .clickExt(Dime.Settings, Dime.Settings.deactivateServiceAccount, serviceAccount)
+                .append("Delete");
         }
 
         $(this.modal)
