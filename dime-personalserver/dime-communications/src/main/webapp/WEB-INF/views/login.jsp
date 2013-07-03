@@ -704,7 +704,7 @@
                 <strong><h1>Usage Conditions</h1></strong>
             </p>
             <p>
-                We offer this English translation of the German document for your convenience. The German xxxLinkversion, however, is legally binding.
+                We offer this English translation of the German document for your convenience. The <span class="linkToUsageTerms_DE">German version</span>, however, is legally binding.
             </p>
             <h3>
                 1. Registration and Privity of Contract

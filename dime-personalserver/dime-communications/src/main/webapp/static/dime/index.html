@@ -56,31 +56,26 @@
 
                     <div id="settingsNavigationContainer" class="wrapSettings hidden">
                         <div class="settingsTab">
-                            <img src="img/settings/open.png" onclick="Dime.Settings.toggleTab(this, 'generalSettingsContainer')">
-                            <img src="img/leftTop/new.png">
+                            <img src="img/settings/collaps.png" onclick="Dime.Settings.toggleTab(this, 'generalSettingsContainer')">
                             General Settings
                         </div>
-                        <div class="settingsContent collapsedSettingsTab" id="generalSettingsContainer"></div>
-                        <div class="settingsTab">
-                            <img src="img/settings/open.png"  onclick="Dime.Settings.toggleTab(this,'rulesSettingsContainer')">
-                            <img src="img/leftTop/new.png">
-                            Rules
-                        </div>
-                        <div class="settingsContent collapsedSettingsTab" id="rulesSettingsContainer"></div>
+                        <div class="settingsContent expandedSettingsTab" id="generalSettingsContainer"></div>
                         <div class="settingsTab" >
+                            <span class="settingsTabTitle">Connect to services</span>
+                            
                             <img src="img/settings/collaps.png" onclick="Dime.Settings.toggleTab(this,'serviceContainer')">
-
                             <div class="btn-group serviceAdapterDropDowngGroup">
+                                
                                 <div class="btn serviceAdapterDropDowngButton" data-toggle="dropdown">
                                     <img src="img/leftTop/new.png"></div>
                                 <ul id="addNewServiceAdapterDropDown" class="dropdown-menu" role="menu" >
                                 </ul>
-                            </div>
-                            Connect to services</div>
+                            </div>                            
+                            <span class="settingsTabSubTitle">add service</span>
+                        </div>
                         <div class="settingsContent expandedSettingsTab" id="serviceContainer"></div>
                         <div class="settingsTab">
-                            <img src="img/settings/open.png" onclick="Dime.Settings.toggleTab(this,'trustLevelSettingsContainer')">
-                            <img src="img/leftTop/new.png">
+                            <img src="img/settings/open.png" onclick="Dime.Settings.toggleTab(this,'trustLevelSettingsContainer')">                            
                             Trust level
                         </div>
                         <div class="settingsContent collapsedSettingsTab" id="trustLevelSettingsContainer"></div>

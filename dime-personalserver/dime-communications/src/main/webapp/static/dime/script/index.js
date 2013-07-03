@@ -350,10 +350,11 @@ DimeView = {
             }
         }
 
-        //for profile we skip profiles with no said
+        //for @me profiles we skip profiles with no said
         if (type===Dime.psMap.TYPE.PROFILE){
             isInFilter = function(entry){
-                if (!entry.said || entry.said.length<1){
+                if ((entry.userId==='@me')
+                    &&(!entry.said || entry.said.length<1)){
                     return false; //skip this
                 }
                 return isSubString(DimeView.searchFilter, entry.name);
@@ -1255,7 +1256,7 @@ DimeView = {
         
     },
 
-    OrangeBubble: function(handlerSelf, bubbleBody, dismissHandler){
+    OrangeBubble: function(handlerSelf, caption, bubbleBody, dismissHandler){
 
         var bubbleSelf = this;
 
@@ -1264,19 +1265,23 @@ DimeView = {
         //bubbleBody.addClass('modal-body');
         bubbleBody.addClass('bubble-body');
 
-        var footerElement=$('<div></div>').addClass("modal-footer")
-            .append($('<button class="YellowMenuButton" data-dismiss="modal" aria-hidden="true">Dismiss</button>')
+        var headerElement=
+            $('<div></div>').addClass("modal-header")
+            .append($('<button type="button" class="close" data-dismiss="modal" aria-hidden="true" >x</button>')
                 .click(function(){
-                    bubbleSelf.dismiss.call(bubbleSelf);
-                    dismissHandler.call(handlerSelf);
-                }));
+                        bubbleSelf.dismiss.call(bubbleSelf);
+                        dismissHandler.call(handlerSelf);
+                    }
+                ))
+            .append($('<h3 id="myModalLabel">'+caption+'</h3>\n'));
+
 
         this.bubble= $('<div/>')
           //  .addClass('modal')
             .addClass('orangeBubble')
             .attr('id',this.bubbleId)
+            .append(headerElement)
             .append(bubbleBody)
-            .append(footerElement)
             ;
     },
 
@@ -1300,9 +1305,8 @@ DimeView = {
 
             var bubbleBody = $('<div/>')
                 .append(
-                    $('<div/>')
-                        .append($('<h2/>').text('Welcome and many thanks for trying out di.me!'))
-                        .append($('<h3/>').text('Getting started with di.me:').css('margin-top','30px'))
+                    $('<div/>')                        
+                        .append($('<h3/>').text('Getting started with di.me:')) 
                         .append($('<p/>')
                             .append($('<span/>').text('Please follow our'))
                             .addHrefOpeningInNewWindow(loginbaselink+'howto','tutorial!','orangeBubbleLink')
@@ -1359,7 +1363,7 @@ DimeView = {
                         ))
                 );
 
-                DimeView.bubble = new DimeView.OrangeBubble(this, bubbleBody, function(){
+                DimeView.bubble = new DimeView.OrangeBubble(this,'Welcome and many thanks for trying out di.me!',  bubbleBody, function(){
                     //dismiss handler
                     DimeView.bubble=null;
                 });
@@ -1415,28 +1419,15 @@ Dime.Settings = {
     //in segovia some services have been hidden
     //hiddenServices: ['SocialRecommenderServiceAdapter', 'AMETICDummyAdapter', 'Facebook'],
     hiddenServices: [],
+
     createServiceAccountElement: function(item) {
-
-        //try to get the image from the adapter
-        var adapter = Dime.Settings.getAdapterByGUID(item.serviceadapterguid);
-        var imageUrl;
-        if (!adapter) {
-            console.log("Unable to find service adapter "
-                + item.serviceadapterguid
-                + " for account: " + item.name);
-            imageUrl = item.imageUrl;
-        } else {
-            imageUrl = adapter.imageUrl;
-        }
-
+        
         return $('<div></div>')
                 .addClass("wrapConnect")
                 .clickExt(Dime.Settings, Dime.Settings.editServiceAccount, item)
                 .append(
-                    $('<img></img>')
-                    //.attr("src", Dime.psHelper.guessLinkURL("'" + item.guid + "'"))
-                    .attr("src", imageUrl)
-                    .attr("alt", "service logo")
+                    $('<img></img>')                    
+                    .attr("src", Dime.psHelper.guessLinkURL(item.imageUrl))                    
                    )
                 .append("<b>" + item.name.substring(0,25) + "</b></br>")
                 .append(
@@ -1446,22 +1437,13 @@ Dime.Settings = {
                     );
     },
 
-    getAdapterByGUID: function(guid) {
+    getAdapterByGUID: function(guid, callback) {
 
-        //FIXME handle case when adapters have not been loaded yet!!!
-        for (var i = 0; i < Dime.Settings.adapters.length; i++) {
-            if (Dime.Settings.adapters[i].guid === guid) {
-                return Dime.Settings.adapters[i];
-            }
-        }
-        return null;
+        Dime.REST.getItem(guid, Dime.psMap.TYPE.SERVICEADAPTER, callback, "@me", Dime.Settings);
     },
 
-    initServiceAdapters: function(response) {
-        console.log(response);
-        var adapters = Dime.psHelper.getEntryOfResponseObject(response, false, false);
-        console.log(adapters);
-        Dime.Settings.adapters = adapters;
+    initServiceAdapters: function(adapters) {
+        
 
         var dropdownList = $("#addNewServiceAdapterDropDown").empty();
 
@@ -1493,10 +1475,7 @@ Dime.Settings = {
 
     },
 
-    initServiceAccounts: function(response) {
-        console.log(response);
-        var accounts = Dime.psHelper.getEntryOfResponseObject(response, false, false);
-        console.log(accounts);
+    initServiceAccounts: function(accounts) {
 
         var serviceContainer=$('#serviceContainer').empty();
         
@@ -1521,9 +1500,13 @@ Dime.Settings = {
     },
 
     editServiceAccount: function(event, element, item){
-        var serviceAdapter = Dime.Settings.getAdapterByGUID(item.serviceadapterguid);
-        var dialog = new Dime.ConfigurationDialog(this, this.configurationSubmitHandler);
-        dialog.show(serviceAdapter.name,serviceAdapter.description, item, false);
+        var serviceAdapterCallback=function(serviceAdapter){
+            var dialog = new Dime.ConfigurationDialog(this, this.configurationSubmitHandler);
+            dialog.show(serviceAdapter.name,serviceAdapter.description, item, false);
+        }
+
+        Dime.Settings.getAdapterByGUID(item.serviceadapterguid, serviceAdapterCallback);
+        
     },
 
     deactivateServiceAccount: function(event, element, serviceAccount) {
@@ -1531,13 +1514,8 @@ Dime.Settings = {
         var callBackHandler = function(response) {
             console.log("DELETED service " + serviceAccount.guid + " - response:", response);
         };
-        var path = Dime.psHelper.generateRestPath(Dime.psMap.TYPE.ACCOUNT,
-            '@me',
-            Dime.psMap.CALLTYPE.AT_ITEM_DELETE,
-            serviceAccount.guid
-            );
 
-        $.deleteJSON(path, "", callBackHandler);
+        Dime.REST.removeItem(serviceAccount, callBackHandler, Dime.Settings);
     },
 
     toggleTab: function(element, containerId) {
@@ -1562,46 +1540,44 @@ Dime.Settings = {
 
     updateServices: function(callBack) {
         if (!callBack){
-            callBack=function(){
-                console.log('callback missing')
+            callBack=function(response){
+                console.log('updateServices: received:', response);
             }
-        }
-        var callPath = Dime.psHelper.generateRestPath(Dime.psMap.TYPE.SERVICEADAPTER,
-            Dime.ps_static_configuration.ME_OWNER,
-            Dime.psMap.CALLTYPE.AT_ALL_GET);
-
-        console.log(callPath);
+        }        
+        Dime.REST.clearCacheForType(Dime.psMap.TYPE.SERVICEADAPTER, '@me');
+        
         var doubleCallBack = function(response) {
             Dime.Settings.initServiceAdapters(response);
-            callBack();
+            callBack(response);
         };
-        $.getJSON(callPath, "", doubleCallBack);
+        
+        Dime.REST.getAll(Dime.psMap.TYPE.SERVICEADAPTER, doubleCallBack , '@me', Dime.Settings);
+
     },
 
     updateAccounts: function(callBack) {
         if (!callBack){
-            callBack=function(){
-                console.log('callback missing')
+            callBack=function(response){
+                console.log('updateAccounts: received:', response);
             }
         }
 
-        var callPath = Dime.psHelper.generateRestPath(Dime.psMap.TYPE.ACCOUNT,
-            Dime.ps_static_configuration.ME_OWNER,
-            Dime.psMap.CALLTYPE.AT_ALL_GET);
+        Dime.REST.clearCacheForType(Dime.psMap.TYPE.ACCOUNT, '@me');
 
-        console.log(callPath);
         var doubleCallBack = function(response) {
             Dime.Settings.initServiceAccounts(response);
-            callBack();
+            callBack(response);
         };
-        $.getJSON(callPath, "", doubleCallBack);
+
+        Dime.REST.getAll(Dime.psMap.TYPE.ACCOUNT, doubleCallBack , '@me', Dime.Settings);
     },
 
-    createAccount: function(name, adapterGuid, settings) {
-        var newAccount = Dime.psHelper.createNewItem(Dime.psMap.TYPE.ACCOUNT, name);
-        newAccount.serviceadapterguid = adapterGuid;
+    createAccount: function(serviceAdapter) {
+        var newAccount = Dime.psHelper.createNewItem(Dime.psMap.TYPE.ACCOUNT, serviceAdapter.name+"_account");
+        newAccount.imageUrl=serviceAdapter.imageUrl;
+        newAccount.serviceadapterguid = serviceAdapter.guid;
         //deep copy of settings
-        var clonedArray = $.map(settings, function(obj){
+        var clonedArray = $.map(serviceAdapter.settings, function(obj){
             return $.extend(true, {}, obj);
         });
         newAccount.settings = clonedArray;
@@ -1609,12 +1585,12 @@ Dime.Settings = {
     },
 
     dropdownOnClick: function(event, jqueryItem, serviceAdapter) {
-        console.log("clicked GUID: " + serviceAdapter.guid);
+        
         if (serviceAdapter.authUrl) {
             window.open(serviceAdapter.authUrl, "_blank", "");
         } else {
             //create account item
-            var newAccountItem = Dime.Settings.createAccount('_name_'+serviceAdapter.name, serviceAdapter.guid, serviceAdapter.settings);
+            var newAccountItem = Dime.Settings.createAccount(serviceAdapter);
 
             var dialog = new Dime.ConfigurationDialog(this, this.configurationSubmitHandler);
             dialog.show(serviceAdapter.name, serviceAdapter.description, newAccountItem, true);
@@ -1627,12 +1603,12 @@ Dime.Settings = {
         if(isNewAccount){
             callBack = function(response) {
                 console.log("NEW ACCOUNT: " + response);
-                };
+            };
             Dime.REST.postNewItem(serviceAccount, callBack);
         }else{
             callBack = function(response) {
                 console.log("ACCOUNT UPDATED: " + response);
-                };
+            };
             Dime.REST.updateItem(serviceAccount, callBack);
         }
     }

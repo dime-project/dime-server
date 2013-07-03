@@ -1176,6 +1176,18 @@ input[type="file"] {
     border-radius: 5px;
 }
 
+.settingsTabTitle{
+    float: left;
+}
+
+.settingsTabSubTitle{
+    float: right;
+    margin-right: 8px;
+    margin-top: 3px;
+
+}
+
+
 .settingsTab img {
     float: right;	
     width: 20px;
@@ -1391,8 +1403,8 @@ input[type="checkbox"] {
     margin-left: 50px;	
 }
 
-.modal-header h3 {
-    color: white !important;
+.modal-header > h3 {
+    color: white;
     font-size: 14px;	
 }
 
@@ -2837,7 +2849,7 @@ input[type="checkbox"] {
 
 .orangeBubble{
     background-color: #F6C200;
-    top: 130px;
+    top: 95px;
     left: 84px;
     min-width: 55%;
     margin: 0;
@@ -2877,8 +2889,6 @@ input[type="checkbox"] {
     color: #313031;
     font-weight: bold;
     font-size: 24px;
-
-    color: #f3f3f3;
     text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
 }
 .bubble-body > * > h3{
@@ -2894,8 +2904,15 @@ input[type="checkbox"] {
     margin-right: 15px;
 }
 
-.orangeBubble > .modal-footer{
-    background-color: #F6E39D;
+.orangeBubble > .modal-header{
+    
+    background-color: #F6C200;
+}
+.orangeBubble > .modal-header > h3{
+    color: #f3f3f3;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+    font-weight: bold;
+    font-size: 20px;
 }
 
 #infoButtonLeft{
