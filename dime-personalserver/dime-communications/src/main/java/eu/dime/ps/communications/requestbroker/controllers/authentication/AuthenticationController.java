@@ -133,6 +133,7 @@ public class AuthenticationController {
             }
 
             AccountEntry result = userManager.updateUserByAccount(accountEntry);
+            result.setPassword(""); //clear password
 
             returnData = new Data<AccountEntry>();
             returnData.addEntry(result);

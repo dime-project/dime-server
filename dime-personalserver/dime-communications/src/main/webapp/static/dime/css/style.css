@@ -1208,6 +1208,14 @@ input[type="file"] {
     padding: 20px;		
 }
 
+.settingsSettings{
+    float: left;    
+}
+.settingsSettings > .YellowMenuButton{
+    width: auto;
+}
+
+
 input[type="checkbox"] {
     margin-left: 10px;	
     float: left;
@@ -1454,20 +1462,8 @@ input[type="checkbox"] {
 }
 
 .YellowMenuButton:hover {
-    color: white;
-    float: right;
-    font-size: 12px;
-    height: 30px;
-    margin-left: 10px;
-    margin-top: 5px;
-    padding: 5px;
-    text-align: center;
-    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
-    width: 100px;	
     background-color: #9CC6E6;
-    border-radius: 5px;
     box-shadow: 2px 2px 0 #5a9dd5;
-
 }
 
 .profileName {

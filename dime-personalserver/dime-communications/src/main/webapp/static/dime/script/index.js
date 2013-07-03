@@ -1124,8 +1124,7 @@ DimeView = {
 
         if (viewType===DimeView.SETTINGS_VIEW){
             Dime.Navigation.setButtonsActive("navButtonSettings");
-            Dime.Settings.updateServices();
-            Dime.Settings.updateAccounts();
+            Dime.Settings.updateView();
             return;
 
         }
@@ -1538,38 +1537,74 @@ Dime.Settings = {
         }
     },
 
-    updateServices: function(callBack) {
-        if (!callBack){
-            callBack=function(response){
-                console.log('updateServices: received:', response);
-            }
-        }        
-        Dime.REST.clearCacheForType(Dime.psMap.TYPE.SERVICEADAPTER, '@me');
-        
-        var doubleCallBack = function(response) {
+    updateView: function(){
+        Dime.Settings.updateSettings();
+        Dime.Settings.updateServices();
+        Dime.Settings.updateAccounts();
+    },
+
+    updateSettings: function(){
+       
+
+        var handleUserSettings=function(user){
+            var evaluationCheckbox=function(){
+                var checkboxId=JSTool.randomGUID();
+
+                var input = $('<input/>')
+                    .attr('id',checkboxId)
+                    .attr('type','checkbox')
+                    .prop("checked", user.evaluationDataCapturingEnabled)
+                    .click(function(){
+                        //update user
+                        user.evaluationDataCapturingEnabled=input.prop("checked");
+                        Dime.REST.updateUser(user,Dime.Settings.updateSettings, Dime.Settings);
+                    });
+                    
+                $(this)
+                    .append($('<div/>').text("Evaluation:"))
+                    .append(input)
+                    .append($('<label/>')
+                        .attr('for',checkboxId)
+                        .text('send evaluation-data')
+                        .css('width', '166px')
+                );
+            };
+
+            var changePasswordButton=function(){
+                var input= $('<button/>').addClass('YellowMenuButton').text("Change Password")
+                $(this).append(input);
+            };
+
+
+            var container = $('#generalSettingsContainer');
+            container.empty();
+            container
+                .append($('<div/>').addClass('settingsSettings').append(evaluationCheckbox))
+                .append($('<div/>').addClass('settingsSettings').append(changePasswordButton))
+            ;
+        };
+        Dime.REST.getUser(handleUserSettings, Dime.Settings);
+    },
+
+    updateServices: function() {
+                
+        var callback = function(response) {
             Dime.Settings.initServiceAdapters(response);
-            callBack(response);
+        
         };
         
-        Dime.REST.getAll(Dime.psMap.TYPE.SERVICEADAPTER, doubleCallBack , '@me', Dime.Settings);
+        Dime.REST.getAll(Dime.psMap.TYPE.SERVICEADAPTER, callback , '@me', Dime.Settings);
 
     },
 
-    updateAccounts: function(callBack) {
-        if (!callBack){
-            callBack=function(response){
-                console.log('updateAccounts: received:', response);
-            }
-        }
+    updateAccounts: function() {
 
-        Dime.REST.clearCacheForType(Dime.psMap.TYPE.ACCOUNT, '@me');
-
-        var doubleCallBack = function(response) {
+        var callback = function(response) {
             Dime.Settings.initServiceAccounts(response);
-            callBack(response);
+        
         };
 
-        Dime.REST.getAll(Dime.psMap.TYPE.ACCOUNT, doubleCallBack , '@me', Dime.Settings);
+        Dime.REST.getAll(Dime.psMap.TYPE.ACCOUNT, callback , '@me', Dime.Settings);
     },
 
     createAccount: function(serviceAdapter) {
@@ -1744,15 +1779,12 @@ Dime.Navigation.updateView = function(notifications){
             DimeView.search();
         }
     }else if (DimeView.currentView===DimeView.SETTINGS_VIEW){
-        var callBack = function() {
-            //do nothing atm - maybe a sequence adapter --> account should be asserted through callbacks
-            return;
-        };
+        
         if (refreshServices) {
-            Dime.Settings.updateServices(callBack);
+            Dime.Settings.updateServices();
         }
         if (refreshAccounts) {
-            Dime.Settings.updateAccounts(callBack);
+            Dime.Settings.updateAccounts();
         }
     }
 
