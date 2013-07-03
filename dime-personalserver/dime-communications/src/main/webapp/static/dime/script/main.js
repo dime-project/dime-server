@@ -680,8 +680,14 @@ Dime.psMap = {
     },
     map: {},
     callTypeMap: {},
-    unTypeMap:{}
+    unTypeMap:{},
     
+    getInfoHtmlForType: function(type){
+        return "Detail view for "+Dime.psHelper.getCaptionForItemType(type)
+            +"<br/><br/>In this dialog, you can see (and edit) the properties of this item...";
+    }
+
+
 };
 
 /*
@@ -3655,7 +3661,7 @@ Dime.SelectDialog.prototype = {
  *@param caption caption of the dialog
 * @param item the items to be shown   
 */
-Dime.DetailDialog = function(caption, item, createNewItem, changeImageUrl, isEditable, message){
+Dime.DetailDialog = function(caption, item, createNewItem, changeImageUrl, isEditable, message, infoHtml){
     
     this.resultFunction= null;
     this.assembleFunctions=[];
@@ -3683,7 +3689,8 @@ Dime.DetailDialog = function(caption, item, createNewItem, changeImageUrl, isEdi
         + '" height=15px" width="15px" ></img>').addClass("itemDetailPicImage");
 
 
-    this.body = $('<div id="'+this.nameId+'" class="dimeDialogBody detailDialogBody" style="clear:both; float:left"></div>');   
+    this.body = $('<div id="'+this.nameId+'" class="dimeDialogBody detailDialogBody" style="clear:both; float:left"></div>');
+    this.body.append(Dime.Dialog.Helper.getInfoBox(infoHtml, "detailDialogInfoBox", "detailDialogInfoIcon"))
     if (message && message.length>0){
         this.body.append($('<div/>').addClass('dimeDetailDialogMessage').text(message));
     }
@@ -4711,7 +4718,9 @@ Dime.ShareDialog.prototype={
         
         this.warningsLabel=$('<span class="label">Warnings (0)</span>');        
         this.warnings=$('<div class="shareDlgWarnings"></div>');
-        
+
+        var infoMsg="Sharing in di.me<br/><br/>When sharing something, you allow the recipient to get full access on the shared resource. Even when \"unsharing\" it later, the recipient may still be able to keep a copy of it. ";
+
         this.body.append(
             $('<div class="well"></div>')  
             .append($('<span class="label">Share as</span>'))
@@ -4721,8 +4730,10 @@ Dime.ShareDialog.prototype={
             .append(this.itemsLabel)
             .append(this.items)
             )
+        
         .append(
             $('<div class="well"></div>')
+            .append(Dime.Dialog.Helper.getInfoBox(infoMsg, "shareInfoBox"))
             .append(this.warningsLabel)
             .append($('<div class="shareDlgSection"></div>').append(this.warnings))
             );
@@ -5061,7 +5072,7 @@ Dime.Dialog={
         }else{
             caption = Dime.psHelper.getCaptionForItemType(entry.type)+': '+entry.name+' - (read only)';
         }
-        var dialog = new Dime.DetailDialog(caption, entry, false, true, isEditable, message);
+        var dialog = new Dime.DetailDialog(caption, entry, false, true, isEditable, message, Dime.psMap.getInfoHtmlForType(entry.type));
         
         var callbackFunction = function(item, isOk){
             
@@ -5078,7 +5089,7 @@ Dime.Dialog={
 
     showNewItemModal: function(type, message){
         var caption = "New "+ Dime.psHelper.getCaptionForItemType(type)+' ...';
-        var dialog = new Dime.DetailDialog(caption, Dime.psHelper.createNewItem(type, ""), true, true, true, message);
+        var dialog = new Dime.DetailDialog(caption, Dime.psHelper.createNewItem(type, ""), true, true, true, message, Dime.psMap.getInfoHtmlForType(type));
         
         var callbackFunction = function(item, isOk){
             
@@ -5152,6 +5163,28 @@ Dime.Dialog={
         };
        
         dialog.show(this, callback);
+    },
+    Helper:{
+        getInfoBox: function(infoHtml, infoBoxClass, infoBoxIconClass){
+            var infoBoxId=JSTool.randomGUID();
+
+            return $('<div/>').addClass('dimeDialogInfoBoxMeta')
+                .append(
+                    $('<div/>')
+                    .addClass('infoBoxIcon').addClass(infoBoxIconClass)
+                    .append($('<img/>').attr('src','img/metaData/info.png'))
+                    
+                ).append(
+                $('<div/>').addClass('dimeDialogInfoBox hidden').addClass(infoBoxClass)
+                    .attr('id',infoBoxId)
+                    .append(
+                    $('<div/>').append(infoHtml)
+                ))
+                .click(function(){
+                    $('#'+infoBoxId).toggleClass('hidden');
+                });
+            
+        }
     }
 };
 

@@ -2912,7 +2912,7 @@ input[type="checkbox"] {
 }
 
 #infoButtonLeft{
-    position: absolute;
+    position: fixed;
     top: 130px;
     left: -23px;
     background-color: #F6C200;
@@ -2940,4 +2940,33 @@ input[type="checkbox"] {
     position: relative;
     top: 30px;
     left: 12px;
+}
+
+.infoBoxIcon{
+    background-color: #999999;
+    border-radius: 30px;
+    float: right;
+ 
+}
+.dimeDialogInfoBoxMeta{
+    float: right;
+}
+
+.dimeDialogInfoBox{
+    position: fixed;
+    background-color: white;
+    left: 50%;
+    width: 320px;
+    margin-left: -150px;
+    border: 1px solid;
+    border-radius: 5px;
+    padding: 5px;
+    -webkit-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+    -moz-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+    z-index: 2000;
+}
+
+.shareDlg .dimeDialogInfoBox{
+    margin-left: -40px;
 }
