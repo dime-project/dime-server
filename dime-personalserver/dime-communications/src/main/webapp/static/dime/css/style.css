@@ -2038,6 +2038,8 @@ input[type="checkbox"] {
 }
 
 .selectionDialogBodyList{
+
+    overflow: auto;
     margin-top: 6px;    
     clear: both;
     border: solid lightgray 1px;

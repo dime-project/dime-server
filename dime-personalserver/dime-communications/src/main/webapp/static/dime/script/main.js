@@ -1447,6 +1447,15 @@ Dime.psHelper = {
     isAgentType: function(type){
         return (type===Dime.psMap.TYPE.GROUP) || (type===Dime.psMap.TYPE.PERSON) || (type===Dime.psMap.TYPE.ACCOUNT);
     },
+
+    isSharableAgent: function(agent){
+        if (!Dime.psHelper.isAgentType(agent.type)){
+            return false;
+        }
+        return ((agent.type!==Dime.psMap.TYPE.PERSON)
+                || (agent.defProfile && agent.defProfile.length >0));
+
+    },
    
     isShareableType: function(type){
                 
@@ -1458,6 +1467,8 @@ Dime.psHelper = {
             //|| (type===Dime.psMap.TYPE.PROFILEATTRIBUTE)
             );
     },
+
+
     
     getChildType: function(type){        
         var typeMap = Dime.psMap.map[type];
@@ -4616,6 +4627,16 @@ Dime.ShareDialog.prototype={
         //update warnings
         this.updateWarnings();
     },
+
+    filterNonSharableAgents: function(allAgents){
+        var result=[];
+        for (var i=0;i<allAgents.length;i++){
+            if (Dime.psHelper.isSharableAgent(allAgents[i])){
+                result.push(allAgents[i]);
+            }
+        }
+        return result;
+    },
     
     getReceivers: function(){
         var shareDlgRef=this;
@@ -4631,10 +4652,13 @@ Dime.ShareDialog.prototype={
        
             var itemLoadingFunction = function(){   
 
-                var loadingHandler = function(response){
-                    dialog.addItemsToList(response);
+                var loadingHandler = function(agents){
+                    var shareableAgents = shareDlgRef.filterNonSharableAgents(agents);
+
+                    dialog.addItemsToList(shareableAgents);
                     for (var i=0;i<shareDlgRef.selectedReceivers.length;i++){
-                        dialog.selectEntryByGuid(shareDlgRef.selectedReceivers[i].guid);
+                        var receiver = shareDlgRef.selectedReceivers[i];
+                        dialog.selectEntryByGuid(receiver.guid);
                     }
                 };
                 //set loading functions to get all groups and persons
@@ -5121,7 +5145,7 @@ Dime.Dialog={
 
             var isAgent = Dime.psHelper.isAgentType(selectedItems[0].type);
             if (isAgent){
-                dialog.selectedReceivers=selectedItems;
+                dialog.selectedReceivers=dialog.filterNonSharableAgents(selectedItems);
             }else{
                 dialog.selectedItems=selectedItems;
             }
