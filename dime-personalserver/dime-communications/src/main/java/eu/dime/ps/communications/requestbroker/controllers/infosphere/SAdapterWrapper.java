@@ -28,19 +28,20 @@ public class SAdapterWrapper extends Resource {
 	public void setSettings(List<SAdapterSetting> settings) {
 		Iterator<SAdapterSetting> iter = settings.iterator();
 		ArrayList<LinkedHashMap<String, String>> setMap = new ArrayList<LinkedHashMap<String, String>>();
-		this.put("settings", new ArrayList<LinkedHashMap<String, Object>>());
+		ArrayList<LinkedHashMap<String, Object>> ret = new ArrayList<LinkedHashMap<String, Object>>();
 		
 		while (iter.hasNext()) {
 			LinkedHashMap<String, Object> lm = new LinkedHashMap<String, Object>();
 			SAdapterSetting setting = iter.next();
-			lm.put("guid", setting.getGuid());
+			lm.put("name", setting.getName());
 			lm.put("imageUrl", setting.getImageUrl());
 			lm.put("mandatory", setting.getMandatory());
 			if (setting.getValue() != null)
 				lm.put("value", setting.getValue().toString());
 			lm.put("type", setting.getType());
-			
+			ret.add(lm);
 		}
+		this.put("settings", ret);
 	}
 	
 	public List<SAdapterSetting> getSettings() {

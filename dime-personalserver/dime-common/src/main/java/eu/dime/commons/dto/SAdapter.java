@@ -106,7 +106,10 @@ public class SAdapter extends Entry {
 			sb.append(setting.getValue());
 			sb.append("###");
 		}
-		return sb.substring(0, sb.length()-3);
+		if (sb.length() > 0)
+			return sb.substring(0, sb.length()-3);
+		else
+			return "";
 	}
 	
 	public void importSettings(String rawSettings) {
@@ -137,11 +140,17 @@ public class SAdapter extends Entry {
 
 	public void updateSetting(String name, String value) {
 		Iterator<SAdapterSetting> iter = this.settings.iterator();
+		boolean updated = false;
 		while (iter.hasNext()) {
 			SAdapterSetting setting = iter.next();
 			if (setting.getName().equals(name)) {
 				setting.setValue(value);
+				updated = true;
 			}
+		}
+		// We don't know what type it is, so default to string
+		if (!updated) {
+			this.settings.add(new SAdapterSetting(name, true, "string", value));
 		}
 		
 	}
