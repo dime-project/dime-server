@@ -78,9 +78,8 @@ public class Profile extends Resource {
 
 			}
 		}else{ //FIXME HACK - in case the creator is null assume @me
-			logger.debug("creator is null for item: "+ this.get("guid")+ " ("+this.get("type")+") searching for the field sharedBy or set to \"@me\"");
-			Node accountCreator = ModelUtils.findObject(resource.getModel(), new URIImpl(serviceAccountId),  NAO.creator);			
-			this.put("userId", accountCreator == null ? "@me" :accountCreator.asResource().toString());
+			logger.debug("creator is null for item: "+ this.get("guid")+ " ("+this.get("type")+") searching for the field sharedBy or set to \"@me\"");					
+			this.put("userId", "@me");
 		}
 		
 
