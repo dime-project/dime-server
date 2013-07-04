@@ -29,6 +29,8 @@ jQuery.extend({
 
 Dime={};
 Dime.register={
+    currentContainerId:'',
+
     ajaxError: function(x, e) {
         Dime.register.toggleWaitModal(false);
             
@@ -97,35 +99,44 @@ Dime.register={
 
     LINK_CLASSES:{
         'linkToRegister':{
-            targetId:'registerContainer'
+            targetId:'registerContainer',
+            urlFragment:'register'
         },
         'linkToLogin':{
-            targetId:'loginContainer'
+            targetId:'loginContainer',
+            urlFragment:'login'
         },
         'linkToHowto':{
-            targetId:'howtoContainer'
+            targetUrl:'/dime-communications/static/ui/dime/howto.html'
+
         },
         'linkToFeedback':{
-            targetId:'feedbackContainer'
+            targetUrl:'questionaire?lang=en'
         },
         'linkToAbout':{
-            targetId: 'aboutContainer'
+            targetId: 'aboutContainer',
+            urlFragment:'about'
         },
         'linkToUsageTerms':{
-            targetId: 'usageTermsContainer'
+            targetId: 'usageTermsContainer',
+            urlFragment:'conditions'
         },
         'linkToPrivacyPolicy':{
-            targetId:'privacyPolicyContainer'
+            targetId:'privacyPolicyContainer',
+            urlFragment:'privacypolicy'
         },
 		
         'linkToAbout_DE':{
-            targetId: 'aboutContainer_DE'
+            targetId: 'aboutContainer_DE',
+            urlFragment:'about?lang=de'
         },
         'linkToUsageTerms_DE':{
-            targetId: 'usageTermsContainer_DE'
+            targetId: 'usageTermsContainer_DE',
+            urlFragment:'conditions?lang=de'
         },
         'linkToPrivacyPolicy_DE':{
-            targetId:'privacyPolicyContainer_DE'
+            targetId:'privacyPolicyContainer_DE',
+            urlFragment:'privacypolicy?lang=de'
         }
     },
 
@@ -137,12 +148,20 @@ Dime.register={
         //enable links for navigation
         jQuery.each(Dime.register.LINK_CLASSES,function(k){
             var linkElements = $('.'+k);
-            var targetId=this.targetId;
+            var targetId = this.targetId;
+            var targetUrl = this.targetUrl;
             if (linkElements){
+                if (targetId){//local navigation
+                    linkElements.click(function(event){
+                        Dime.register.showContainer(targetId);
+                    });
+                }
+                if (targetUrl){
+                    linkElements.click(function(event){
 
-                linkElements.click(function(event){
-                    Dime.register.showContainer(targetId);
-                });
+                        window.open(targetUrl, "_blank", "");
+                    });
+                }
             }
         });
 
@@ -152,9 +171,9 @@ Dime.register={
         });
 
         //finally show containerId set from jsp if any
-        if (initialContainerId){
+        if (initialContainerId){            
             Dime.register.showContainer(initialContainerId);
-        }else{
+        }else{            
             Dime.register.showContainer('loginContainer');
         }
 
@@ -176,20 +195,28 @@ Dime.register={
     },
 
 
-    showContainer:function(newId){
+    showContainer:function(newId, dontSaveNavigation){
         jQuery.each(Dime.register.LINK_CLASSES,function(key){
-            //var linkElement=$('.nav > li > .'+key);
+            
             var linkElement=$('.'+key);
-		
-            if(this.targetId===newId){
-                $('#'+this.targetId).removeClass('hidden');
-                linkElement.addClass('active');
-            }else{
-                $('#'+this.targetId).addClass('hidden');				
-                linkElement.removeClass('active');
+	
+            //local navigation
+            if (this.targetId){
+                if(this.targetId===newId){
+                    if(!dontSaveNavigation && Dime.register.currentContainerId){
+                        window.history.pushState({
+                            oldId:Dime.register.currentContainerId}
+                            , "", this.urlFragment);
+                    }
+                    $('#'+this.targetId).removeClass('hidden');
+                    linkElement.addClass('active');
+                }else{
+                    $('#'+this.targetId).addClass('hidden');
+                    linkElement.removeClass('active');
+                }
             }
-
         });
+        Dime.register.currentContainerId=newId;
     },
 
     REGISTRATION_REQUIRED_FIELDS:{
@@ -366,12 +393,15 @@ $(document).ready(function() {
 
     Dime.register.init();
 	
-	
-	
-	
 });
 
-	
+
+window.onpopstate = function(event) {
+     var state = event.state;
+     if (state){
+         Dime.register.showContainer(state.oldId, true);
+     }
+};
 
 	
 	

@@ -302,8 +302,6 @@ h5{
 
 .institutionLogo{
     position: relative;
-    width: 400px;
-
 
 }
 
@@ -383,6 +381,8 @@ h5{
 .linkToUsageTerms:hover,
 .linkToPrivacyPolicy:hover{
     cursor: pointer;
+    text-decoration: underline;
+    text-decoration-color: white;
 }
 
 
@@ -396,7 +396,8 @@ h5{
 .nav > li > .linkToAbout:hover,
 .nav > li > .linkToUsageTerms:hover,
 .nav > li > .linkToPrivacyPolicy:hover{
-    color: #0088CC;
+    text-decoration: underline;
+    text-decoration-color: white;
     text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
 }
 

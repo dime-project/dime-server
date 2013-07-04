@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <%-- 
     Document   : login
     Created on : May 29, 2013, 4:14:44 PM
@@ -7,8 +8,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <c:url var="postLoginUrl" value="/j_spring_security_check" />
 <c:url value="/j_spring_security_logout" var="logoutUrl"/>
-<!DOCTYPE html>
-<html >
+<html>
     <head>
 
         
@@ -62,16 +62,12 @@
                     </button>
                     <div class="brand linkToLogin"><img class="logo" src="/dime-communications/static/ui/dime/register/img/logo.png"/></div>
 
-
-
                     <div class="nav-collapse collapse">
 
 
                         <ul class="nav">
                             <li><div class="linkToLogin">Login</div></li>
                             <li><div class="linkToRegister" >Register</div></li>
-                            <li><div class="linkToHowto">How to use di.me</div></li>
-                            <li><div class="linkToFeedback">Feedback</div></li>
                         </ul>
 
                     </div><!--/.nav-collapse -->
@@ -105,7 +101,7 @@
                 </div>
 
                 <div class="float_this">                    
-                    <img class=".institutionLogo" src="/dime-communications/static/ui/dime/register/img/dummyInstitute.png"/>
+                    <img class="institutionLogo" src="/dime-communications/static/ui/dime/register/img/dummyInstitute.png"/>
                 </div>
             </div>
 

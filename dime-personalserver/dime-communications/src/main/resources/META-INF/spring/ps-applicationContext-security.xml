@@ -23,6 +23,8 @@
 	     
 	    <!--  scripts for register page -->
         <sec:intercept-url pattern="/static/ui/dime/register/**" filters="none"/>
+	<!--  howto page -->
+        <sec:intercept-url pattern="/static/ui/dime/howto.html" filters="none"/>
 	    <!-- required for login call :Request URL:https://127.0.0.1:8443/dime-communications/j_spring_security_check -->
         <sec:intercept-url pattern="/*" access="permitAll" requires-channel="any" />
 	    	          	    

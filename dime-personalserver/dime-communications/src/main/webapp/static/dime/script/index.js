@@ -1308,7 +1308,7 @@ DimeView = {
                         .append($('<h3/>').text('Getting started with di.me:')) 
                         .append($('<p/>')
                             .append($('<span/>').text('Please follow our'))
-                            .addHrefOpeningInNewWindow(loginbaselink+'howto','tutorial!','orangeBubbleLink')
+                            .addHrefOpeningInNewWindow('/dime-communications/static/ui/dime/howto.html','tutorial!','orangeBubbleLink')
                             .css('margin-bottom','30px')
                             
                             )
