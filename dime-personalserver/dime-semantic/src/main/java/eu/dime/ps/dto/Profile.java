@@ -1,7 +1,9 @@
 package eu.dime.ps.dto;
 
+import ie.deri.smile.rdf.util.ModelUtils;
 import ie.deri.smile.vocabulary.NAO;
 import ie.deri.smile.vocabulary.NCO;
+import ie.deri.smile.vocabulary.NSO;
 
 import java.util.Calendar;
 import java.util.LinkedList;
@@ -20,6 +22,8 @@ import org.ontoware.rdf2go.model.node.impl.PlainLiteralImpl;
 import org.ontoware.rdf2go.model.node.impl.URIImpl;
 import org.ontoware.rdfreactor.runtime.RDFReactorRuntime;
 import org.ontoware.rdfreactor.runtime.converter.CalendarConverter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import eu.dime.commons.vocabulary.NIE;
 import eu.dime.ps.semantic.model.ModelFactory;
@@ -38,29 +42,47 @@ public class Profile extends Resource {
 	private static final URI[] ITEMS_PROPERTIES = new URI[] { NCO.hasPersonName, NCO.hasAffiliation,
 		NCO.hasEmailAddress, NCO.hasPhoneNumber, NCO.hasBirthDate};
 
+	
+	private static final Logger logger = LoggerFactory.getLogger(Profile.class);
 	public Profile() {
 		super();
 	}
 
-	public Profile(org.ontoware.rdfreactor.schema.rdfs.Resource resource) {
+	public Profile(org.ontoware.rdfreactor.schema.rdfs.Resource resource,URI me) {
 		super();
 		put("type", "profile");	
-		addToMap(resource,"");
+		addToMap(resource,"",me);
 	}
 
-	public Profile(org.ontoware.rdfreactor.schema.rdfs.Resource resource, String serviceAccountId) {
+	public Profile(org.ontoware.rdfreactor.schema.rdfs.Resource resource, String serviceAccountId,URI me) {
 		super();
 		put("type", "profile");	
-		addToMap(resource,serviceAccountId);
+		addToMap(resource,serviceAccountId,me);
 	}
 
-	protected void addToMap(org.ontoware.rdfreactor.schema.rdfs.Resource resource, String serviceAccountId) {
+	protected void addToMap(org.ontoware.rdfreactor.schema.rdfs.Resource resource, String serviceAccountId,URI me) {
 		put("guid", "p_"+resource.asURI().toString());
-		// UserID is set to "@me" for all Resources and then (TO DO) rewritten
-		// for the shareable items
 
-		// FIXME userId should be correctly set to the creator of the profile
-		this.put("userId", "@me");
+
+		//set userId
+		// userId is the person who shared the item, or '@me' if it was created
+		// by
+		//the owner of the PS or one of her accounts/devices
+		Node creator = ModelUtils.findObject(resource.getModel(), resource, NAO.creator);
+		if (creator != null){
+			if (creator instanceof  Literal){
+				this.put("userId", creator.asLiteral().toString().equals(me.toString()) ? "@me" : creator.asLiteral().toString());
+			}
+			else{
+				this.put("userId", creator.asResource().toString().equals(me.toString()) ? "@me" : creator.asResource().toString());
+
+			}
+		}else{ //FIXME HACK - in case the creator is null assume @me
+			logger.debug("creator is null for item: "+ this.get("guid")+ " ("+this.get("type")+") searching for the field sharedBy or set to \"@me\"");
+			Node accountCreator = ModelUtils.findObject(resource.getModel(), new URIImpl(serviceAccountId),  NAO.creator);			
+			this.put("userId", accountCreator == null ? "@me" :accountCreator.asResource().toString());
+		}
+		
 
 		List<String> items = new LinkedList<String>();
 		put("items", items);
@@ -87,14 +109,10 @@ public class Profile extends Resource {
 				else if (object instanceof URI)
 					put("imageUrl", object.asURI().toString());
 			} 
-
-			/*  // Adding said for dimeAccounts
-	    else if (predicate.equals(NIE.dataSource)) {
-	       put("said",object.asURI().toString());
-	    }*/
-
-			this.put("said",serviceAccountId);
+		
 			// adding said 
+			this.put("said",serviceAccountId);
+			
 
 		}
 		it.close();
