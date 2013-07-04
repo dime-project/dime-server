@@ -496,6 +496,8 @@ public class DefaultDataSetup implements BroadcastReceiver {
 			logger.error("An error ocurred when creating pre-defined file '" + fileName + "': " + e.getMessage(), e);
 		} catch (InfosphereException e) {
 			logger.error("An error ocurred when creating pre-defined file '" + fileName + "': " + e.getMessage(), e);
+                } catch (Exception e) {
+			logger.error("An error ocurred when creating pre-defined file '" + fileName + "': " + e.getMessage(), e);
 		}
 		
 		return file;
