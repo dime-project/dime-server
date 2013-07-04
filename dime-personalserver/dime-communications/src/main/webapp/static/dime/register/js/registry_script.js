@@ -115,28 +115,35 @@ Dime.register={
         },
         'linkToAbout':{
             targetId: 'aboutContainer',
-            urlFragment:'about'
+            urlFragment:'about',
+            loadUrl:'/dime-communications/static/ui/dime/register/html/about.html'
+
         },
         'linkToUsageTerms':{
             targetId: 'usageTermsContainer',
-            urlFragment:'conditions'
+            urlFragment:'conditions',
+            loadUrl:'/dime-communications/static/ui/dime/register/html/conditions.html'
         },
         'linkToPrivacyPolicy':{
             targetId:'privacyPolicyContainer',
-            urlFragment:'privacypolicy'
+            urlFragment:'privacypolicy',
+            loadUrl:'/dime-communications/static/ui/dime/register/html/privacypolicy_DE.html'
         },
 		
         'linkToAbout_DE':{
             targetId: 'aboutContainer_DE',
-            urlFragment:'about?lang=de'
+            urlFragment:'about?lang=de',
+            loadUrl:'/dime-communications/static/ui/dime/register/html/about_DE.html'
         },
         'linkToUsageTerms_DE':{
             targetId: 'usageTermsContainer_DE',
-            urlFragment:'conditions?lang=de'
+            urlFragment:'conditions?lang=de',
+            loadUrl:'/dime-communications/static/ui/dime/register/html/conditions_DE.html'
         },
         'linkToPrivacyPolicy_DE':{
             targetId:'privacyPolicyContainer_DE',
-            urlFragment:'privacypolicy?lang=de'
+            urlFragment:'privacypolicy?lang=de',
+            loadUrl:'/dime-communications/static/ui/dime/register/html/privacypolicy_DE.html'
         }
     },
 
@@ -208,7 +215,11 @@ Dime.register={
                             oldId:Dime.register.currentContainerId}
                             , "", this.urlFragment);
                     }
-                    $('#'+this.targetId).removeClass('hidden');
+                    var targetDiv = $('#'+this.targetId);
+                    if (this.loadUrl && targetDiv.is(':empty')){
+                        targetDiv.load(this.loadUrl);
+                    }
+                    targetDiv.removeClass('hidden');
                     linkElement.addClass('active');
                 }else{
                     $('#'+this.targetId).addClass('hidden');
