@@ -127,7 +127,7 @@ Dime.register={
         'linkToPrivacyPolicy':{
             targetId:'privacyPolicyContainer',
             urlFragment:'privacypolicy',
-            loadUrl:'/dime-communications/static/ui/dime/register/html/privacypolicy_DE.html'
+            loadUrl:'/dime-communications/static/ui/dime/register/html/privacypolicy.html'
         },
 		
         'linkToAbout_DE':{
