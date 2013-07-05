@@ -50,8 +50,10 @@ import eu.dime.ps.semantic.exception.ResourceExistsException;
 import eu.dime.ps.semantic.model.ModelFactory;
 import eu.dime.ps.semantic.model.NAOFactory;
 import eu.dime.ps.semantic.model.NFOFactory;
+import eu.dime.ps.semantic.model.dao.Account;
 import eu.dime.ps.semantic.model.nao.Symbol;
 import eu.dime.ps.semantic.model.nfo.FileDataObject;
+import eu.dime.ps.semantic.model.pimo.Person;
 import eu.dime.ps.semantic.query.impl.BasicQuery;
 import eu.dime.ps.semantic.rdf.ResourceStore;
 import eu.dime.ps.storage.datastore.DataStore;
@@ -143,6 +145,25 @@ public class FileManagerImpl extends InfoSphereManagerBase<FileDataObject> imple
 				.where(NSO.sharedBy).is(new URIImpl(personId))
 				.results();
 	}
+	
+	@Override
+	public Collection<FileDataObject> getAllByCreator(Person creator)
+			throws InfosphereException {	
+		return getAllByCreator(creator, new ArrayList<URI>(0));
+	}
+	
+	
+	@Override
+	public Collection<FileDataObject> getAllByCreator(Person creator, List<URI> properties)
+			throws InfosphereException {	
+		return getResourceStore().find(FileDataObject.class)
+				.distinct()
+				.select(properties.toArray(new URI[properties.size()]))
+				.where(RDF.type).isNot(NFO.Folder) // to filter out nfo:Folders
+				.where(NAO.creator).is(creator.asResource())
+				.results();	 
+	}
+	
 
 	@Override
 	public FileDataObject get(String fileId) throws InfosphereException {

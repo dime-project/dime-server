@@ -27,6 +27,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import eu.dime.commons.util.FileUtils;
 import eu.dime.ps.controllers.infosphere.manager.FileManager;
 import eu.dime.ps.semantic.model.nfo.FileDataObject;
+import eu.dime.ps.semantic.model.pimo.Person;
 import eu.dime.ps.storage.util.CMSInitHelper;
 
 public class FileManagerTest extends InfoSphereManagerTest {
@@ -76,6 +77,21 @@ public class FileManagerTest extends InfoSphereManagerTest {
 		assertEquals("file-updated", fileManager.get(file.asURI().toString()).getFileName());
 	}
 
+	@Test
+	public void testGetByCreatorFile() throws Exception {
+		FileDataObject file = modelFactory.getNFOFactory().createFileDataObject();
+		Person creator = modelFactory.getPIMOFactory().createPerson();
+		creator.setPrefLabel("creator1");
+		file.setFileName("file-example");
+		file.setFileSize(9876L);
+		file.setCreator(creator);
+		fileManager.add(file);
+		
+		assertEquals(1, fileManager.getAllByCreator(creator).size());
+		assertEquals("file-example", fileManager.getAll().iterator().next().getFileName());
+	}
+	
+	
 	@Ignore
 	@Test
 	public void testRemoveFile() throws Exception {
