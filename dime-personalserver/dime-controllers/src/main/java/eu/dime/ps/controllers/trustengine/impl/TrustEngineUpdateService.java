@@ -130,15 +130,13 @@ public class TrustEngineUpdateService implements BroadcastReceiver{
 			List<org.ontoware.rdfreactor.schema.rdfs.Resource> resources = pp.getAllAppliesToResource_as().asList();
 			for (Resource res : resources) {
 				try {
-					if (getResourceStore().isTypedAs(res, PIMO.Person)){
-
+					if (getResourceStore().isTypedAs(res, NIE.DataObject) || 
+							getResourceStore().isTypedAs(res, NFO.FileDataObject)){
+							processDataObject(res, ppoService);
+						} else if (getResourceStore().isTypedAs(res, DLPO.LivePost)){
+							processLivePost(res, ppoService);
+						} else if (getResourceStore().isTypedAs(res, PIMO.Person)){
 					} else if (getResourceStore().isTypedAs(res, PIMO.PersonGroup)){
-
-					} else if (getResourceStore().isTypedAs(res, NIE.DataObject) || 
-						getResourceStore().isTypedAs(res, NFO.FileDataObject)){
-						processDataObject(res, ppoService);
-					} else if (getResourceStore().isTypedAs(res, DLPO.LivePost)){
-						processLivePost(res, ppoService);
 					}
 				} catch (NotFoundException e) {
 					logger.error("Could not process trust for: <"+res.toString()+"> . ",e);
