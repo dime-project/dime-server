@@ -173,21 +173,6 @@
                     </div>
                 </div>
             </div>
-
-
-
-            <br><hr>
-            <h5>Getting started</h5>
-            Get the <a href="">Android App</a>
-            </br> how to use di.me: check out the <a class="linkToHowto">how-to page</a> <br>
-
-            <br><hr>
-
-            <h5>Please give us feedback!</h5>
-            Fill out our very short <a class="linkToFeedback">questionnaire &lt;Link to LimeSurvey&gt;</a><br>
-            <br>
-            <a href="">Report errors, bugs, ideas or requirements &lt;link to github&gt;</a>
-
         </div>
 
 
@@ -325,7 +310,7 @@
 
 
 
-        <div id="aboutContainer" class="container contentContainer hidden"></div>
+    <div id="aboutContainer" class="container contentContainer hidden"></div>
 
 
     <div id="aboutContainer_DE" class="container contentContainer hidden"></div>

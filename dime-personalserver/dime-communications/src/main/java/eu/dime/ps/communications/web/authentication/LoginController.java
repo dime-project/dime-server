@@ -105,12 +105,6 @@ public class LoginController {
         return modelAndView;
     }
 
-    @RequestMapping(value = "/questionaire", method = RequestMethod.GET)
-    public ModelAndView forwardQuestionaire() {
-        ModelAndView modelAndView = new ModelAndView("ajax_result");
-        modelAndView.addObject("result", "Forwarding to questionaire...");
-        return modelAndView;
-    }
 
     @RequestMapping(value = "/notauthenticated", method = RequestMethod.GET)
     public ModelAndView checklogin() {
@@ -132,4 +126,6 @@ public class LoginController {
         }
         return modelAndView;
     }
+
+
 }

@@ -1282,7 +1282,10 @@ Dime.PsConfigurationClass = function(mainSaid, hostname, port, useHttps){
             +'/'
             + encodeURIComponent(this.mainSaid);
     };
-   
+
+    this.getQuestionairePath=function(){
+        return this.getUserUrlString()+"/user/questionaire"
+    };
     
     this.handleMainSaidRetrieve = function(response){ 
         console.log("received mainSAID:", response);

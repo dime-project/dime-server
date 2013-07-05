@@ -1300,6 +1300,7 @@ DimeView = {
                 +'/dime-communications/web/access/';
             var githubLink='https://github.com/thielsn/dime/';
             var loginFromServerSettings=serverInfo.baseUrl+'/dime-communications/web/access/login';
+            var questionaireLink = Dime.ps_configuration.getQuestionairePath();
 
 
             var bubbleBody = $('<div/>')
@@ -1314,8 +1315,8 @@ DimeView = {
                             )
                         .append($('<h3/>').text('Please give us feedback to the concept on:'))
                         .append($('<ul/>')
-                            .append($('<li/>').addHrefOpeningInNewWindow(loginbaselink+'questionaire?lang=en','di.me Questionnaire (English)','orangeBubbleLink'))
-                            .append($('<li/>').addHrefOpeningInNewWindow(loginbaselink+'questionaire?lang=de','di.me Fragebogen (German)','orangeBubbleLink'))
+                            .append($('<li/>').addHrefOpeningInNewWindow(questionaireLink+'?lang=en','di.me Questionnaire (English)','orangeBubbleLink'))
+                            .append($('<li/>').addHrefOpeningInNewWindow(questionaireLink+'?lang=de','di.me Fragebogen (German)','orangeBubbleLink'))
                             )
 
                         .append($('<h3/>').text('This is a demonstration prototype'))
