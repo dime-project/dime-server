@@ -246,7 +246,7 @@ public class PSResourcesController extends PSSharingControllerBase implements AP
 		try {
 			Collection<FileDataObject> files = fileManager.getAll(properties);
 
-			data = new Data<Resource>(0, files.size(), files.size());
+			data = new Data<Resource>(0, 0, 0);
 			for (FileDataObject file : files) {
 				Resource fileResource = new Resource(file, said,fileManager.getMe().asURI());
 				//FIXME workaround to return only the resources created by the user
@@ -256,7 +256,7 @@ public class PSResourcesController extends PSSharingControllerBase implements AP
 					writeIncludes(fileResource,pp);
 					fileResource.remove("nao:creator");
 					resolveImageUrl(file, said, fileResource);
-					data.getEntries().add(fileResource);
+					data.addEntry(fileResource);
 				}
 			}
 		} catch (InfosphereException e) {
