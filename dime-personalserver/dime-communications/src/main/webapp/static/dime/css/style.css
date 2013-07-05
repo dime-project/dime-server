@@ -534,12 +534,16 @@ input[type="file"] {
     z-index: 300;
 
 }
-
 .ItemChecked{
     background-color: #F6C200;
     border: 2px solid white;
     height: 18px;
     width: 18px;
+}
+
+.groupChecked.groupItem{
+    background-color: #DDDEDD;
+   
 }
 
 #containerCaption{
@@ -550,36 +554,40 @@ input[type="file"] {
 }
 
 .groupItem {
+    margin: 5px;
     float: left;
+    border-radius: 5px;
+}
+
+.groupItem > div {
     height: 90px;	
     width: 100px;
     background-color: #F9F8F8; 
     border: 1px solid silver;
     border-radius: 5px;
-    margin-bottom: 20px;
-    margin-left: 15px;
+    margin: 5px;
 }
 
-.groupItem:hover {
+.groupItem > div:hover {
     cursor: pointer;
     box-shadow: 2px 2px #9CC6E6;
     border: 1px solid #5A9DD5;
 }
 
-.groupItem:focus {
+.groupItem > div:focus {
     cursor: pointer;
     box-shadow: 2px 2px #9CC6E6;
     border: 1px solid #5A9DD5;
 }
 
 
-.groupItem:active {
+.groupItem > div:active {
     background-color: #5A9DD5;
 }
 
 
 
-.groupItem > img {
+.groupItem > div > img {
     float: left;
     position: relative;
     padding: 12.5px;
@@ -618,19 +626,19 @@ input[type="file"] {
     text-decoration: underline;
 }
 
-.groupItem> h4:hover  {
+.groupItem > div > h4:hover  {
 
     text-decoration: underline;
     /* cursor: text;*/
     cursor: url("../img/edit_16.ico"),auto;
 }
 
-.groupItem:active > h4 {
+.groupItem > div:active > h4 {
     color: white;
     text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
 }
 
-.groupItem > h4 {
+.groupItem > div > h4 {
     top: -53px;
     height: 25px;
     position: relative;    
@@ -644,7 +652,7 @@ input[type="file"] {
 
 
 
-.groupItem > .mark {
+.groupItem > div > .mark {
     float: right;
     top: -8px;
     left: 8px;
@@ -1896,6 +1904,11 @@ input[type="checkbox"] {
 .inactiveButton{
     color: lightgray;
 }
+
+.detailDialogBody{
+    width: 98%;
+}
+
 .DimeDetailDialogText{
     float: left;
     clear: both;
@@ -2581,6 +2594,7 @@ input[type="checkbox"] {
 
 .shareDlg > .modal-body{
     height: 650px;
+    width: 104%;
 }
 
 
@@ -2956,7 +2970,7 @@ input[type="checkbox"] {
 
 .dimeDialogInfoBox{
     position: fixed;
-    background-color: white;
+    background-color: #F6F2E1;
     left: 50%;
     width: 320px;
     margin-left: -150px;

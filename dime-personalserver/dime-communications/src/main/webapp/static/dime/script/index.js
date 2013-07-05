@@ -94,7 +94,7 @@ DimeView = {
    
         var groupClass=(entry.type!==Dime.psMap.TYPE.GROUP?entry.type+"Item groupItem":"groupItem");
         
-        var jGroupItem=$('<div/>').addClass(groupClass)
+        var jGroupItem=$('<div/>').addClass(groupClass).append($('<div/>')
                 .append(
                     $('<img/>').attr('src', Dime.psHelper.guessLinkURL(entry.imageUrl)))
                 .append(
@@ -105,7 +105,7 @@ DimeView = {
                 .append(
                     $('<h4>'+ DimeView.getShortName(entry.name) + '</h4>')
                         .clickExt(DimeView, DimeView.editItem, entry)
-                );
+                ));
    
 
         DimeView.setActionAttributeForElements(entry, jGroupItem, true, false);
@@ -309,11 +309,18 @@ DimeView = {
     
     itemEntries: [],
 
-    initContainer: function(jContainer, caption){
+    initContainer: function(jContainer, caption, selectingGroupName){
+        var containerCaption = JSTool.upCaseFirstLetter(caption);
+        if (selectingGroupName){
+            containerCaption += ' in "' +selectingGroupName+'"';
+        }else if (DimeView.searchFilter.length===0){
+            containerCaption = "All "+containerCaption;
+        }
+
         jContainer.empty();
         jContainer.append(
             $('<div/>').attr('id','containerCaption').addClass('h2ModalScreen')
-                .text(JSTool.upCaseFirstLetter(caption))
+                .text(containerCaption)
                 .append($('<div/>').addClass('clear')));
 
     },
@@ -401,7 +408,7 @@ DimeView = {
         for (var i=0;i<mySelectedItems.length;i++){
             var item = mySelectedItems[i];
             if (item){
-                $(item).removeClass("ItemChecked");
+                item.element.removeClass("ItemChecked");
             }
         }
         DimeView.selectedItems = {};
@@ -423,7 +430,7 @@ DimeView = {
         {
             id: "actionButtonAddRemove",
             minItems: 1,
-            maxItems: 1
+            maxItems: 0
         },
         {
             id: "actionButtonDelete",
@@ -494,7 +501,8 @@ DimeView = {
                 guid:guid, 
                 userId:entry.userId,
                 type:entry.type,
-                isGroupItem:isGroupItem
+                isGroupItem:isGroupItem,
+                element:element
             };
             $(element).addClass("ItemChecked");
         }
@@ -761,10 +769,11 @@ DimeView = {
         }
     },
         
-    updateItemContainerFromArray: function(entries){
+    updateItemContainerFromArray: function(entries, selectingGroupName){
 
-         DimeView.initContainer($('#itemNavigation'), Dime.psHelper.getPluralCaptionForItemType(DimeView.itemType));
-
+         DimeView.initContainer($('#itemNavigation'), 
+            Dime.psHelper.getPluralCaptionForItemType(DimeView.itemType),
+            selectingGroupName);
 
 
         var itemContainer = $('#itemNavigation');
@@ -784,9 +793,11 @@ DimeView = {
         if ((!groupEntry) || (!groupEntry.items)){
          return;
         }
+        $('.groupItem').removeClass('groupChecked');
+        element.addClass('groupChecked');
 
         var updateGroupMembers = function(response){
-         this.updateItemContainerFromArray(response);
+            this.updateItemContainerFromArray(response, groupEntry.name);
         }
 
         Dime.REST.getItems(groupEntry.items,Dime.psHelper.getChildType(groupEntry.type), updateGroupMembers, groupEntry.userId, this);
@@ -805,7 +816,7 @@ DimeView = {
     editSelected: function(){
         var selectedItems = JSTool.getDefinedMembers(DimeView.selectedItems);
         if (selectedItems.length!==1){
-            window.alert("Please select only a single item.");
+            window.alert("Please select a single item.");
             return;
         }
         var triggerDialog=function(response){
@@ -818,9 +829,11 @@ DimeView = {
     
     removeSelected: function(){
         var mySelectedItems = JSTool.getDefinedMembers(DimeView.selectedItems);
-        for (var i=0;i<mySelectedItems.length;i++){
-            var item = mySelectedItems[i];
-            Dime.REST.removeItem(item);
+        if (confirm("Are you sure, you want to delete "+mySelectedItems.length+" items?")){
+            for (var i=0;i<mySelectedItems.length;i++){
+                var item = mySelectedItems[i];
+                Dime.REST.removeItem(item);
+            }
         }
     },    
            
@@ -858,7 +871,7 @@ DimeView = {
             .append($('<div/>').addClass('addPublicPersonBtn btn')
                     .clickExt(DimeView, DimeView.addPublicPerson, entry.said)
                     .text('add'))
-            .append('<div class="globalSearchResultBackgroundText">PRS Profile</div>')
+            .append('<div class="globalSearchResultBackgroundText">Public Profile</div>')
             .append(
                 $('<div class="globalSearchResultName"/>')
                     .append(createNameEntryString(entry, "name","FirstName"))
@@ -993,7 +1006,7 @@ DimeView = {
             //also search on global search if groupType==GROUP
             if (DimeView.groupType===Dime.psMap.TYPE.GROUP && searchText.value && (searchText.value.length>0)){
 
-                DimeView.initContainer($('#globalItemNavigation'), "PRS");
+                DimeView.initContainer($('#globalItemNavigation'), "di.me Users in the di.me User Directory");
                 
                 Dime.REST.searchGlobal(searchText.value, DimeView.handleGlobalSearchResult);
                 
@@ -1147,10 +1160,10 @@ DimeView = {
             $('#searchText').attr('placeholder', 'find data');
         }else if (DimeView.groupType===Dime.psMap.TYPE.PROFILE){
             Dime.Navigation.setButtonsActive("navButtonProfile");
-            $('#searchText').attr('placeholder', 'find my profile(s)');
+            $('#searchText').attr('placeholder', 'find my profile cards');
         }else if (DimeView.groupType===Dime.psMap.TYPE.GROUP){
             Dime.Navigation.setButtonsActive("navButtonPeople");
-            $('#searchText').attr('placeholder', 'find persons and groups');
+            $('#searchText').attr('placeholder', 'find persons and groups (single search-word, avoid incomplete names)');
         }else if (DimeView.groupType===Dime.psMap.TYPE.LIVESTREAM){
             Dime.Navigation.setButtonsActive("navButtonMessages");
             $('#searchText').attr('placeholder', 'find liveposts');
