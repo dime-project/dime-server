@@ -18,13 +18,17 @@
         <sec:intercept-url pattern="/api/application.wadl" filters="none"/>
 	    
 	    
-	    <!-- used to check authentication from mobile client -->
+        <!-- used to check authentication from mobile client -->
         <sec:intercept-url pattern="/web/access/auth/@me" access="hasAnyRole('OWNER', 'ADMIN')" requires-channel="any"/>
+
+        <!-- used to check authentication for forwarding to questionaire -->
+        <sec:intercept-url pattern="/web/access/questionaire" access="hasAnyRole('OWNER', 'ADMIN')" requires-channel="https"/>
 	     
 	    <!--  scripts for register page -->
         <sec:intercept-url pattern="/static/ui/dime/register/**" filters="none"/>
 	<!--  howto page -->
         <sec:intercept-url pattern="/static/ui/dime/howto.html" filters="none"/>
+
 	    <!-- required for login call :Request URL:https://127.0.0.1:8443/dime-communications/j_spring_security_check -->
         <sec:intercept-url pattern="/*" access="permitAll" requires-channel="any" />
 	    	          	    

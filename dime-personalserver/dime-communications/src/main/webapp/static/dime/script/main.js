@@ -1284,7 +1284,8 @@ Dime.PsConfigurationClass = function(mainSaid, hostname, port, useHttps){
     };
 
     this.getQuestionairePath=function(){
-        return this.getUserUrlString()+"/user/questionaire"
+        return '/dime-communications/web/access/questionaire';
+        //return this.getUserUrlString()+"/user/questionaire"
     };
     
     this.handleMainSaidRetrieve = function(response){ 

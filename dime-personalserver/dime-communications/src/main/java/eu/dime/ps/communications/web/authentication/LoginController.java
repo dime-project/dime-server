@@ -1,5 +1,6 @@
 package eu.dime.ps.communications.web.authentication;
 
+import eu.dime.ps.communications.requestbroker.controllers.authentication.AuthenticationController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,8 +11,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import eu.dime.ps.controllers.UserManager;
+import eu.dime.ps.gateway.service.MediaType;
 import eu.dime.ps.storage.entities.User;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.logging.Level;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -115,6 +123,8 @@ public class LoginController {
         return modelAndView;
     }
 
+
+
     @RequestMapping(value = "/auth/@me", method = RequestMethod.GET)
     public ModelAndView getCurrentTenant() {
         ModelAndView modelAndView = new ModelAndView("ajax_result");
@@ -127,5 +137,43 @@ public class LoginController {
         return modelAndView;
     }
 
+
+    @RequestMapping(value = "/questionaire", method = RequestMethod.GET)
+    public String forwardQuestionaire(@RequestParam(value = "lang", required = false) String language) {
+        User user = getCurrentUser();
+
+        String myLanguage=language;
+        if (language==null){
+            myLanguage="en";
+        }
+
+        String forwardUrl;
+        String encodedId="";
+        if (user!=null){
+            try {
+                encodedId = URLEncoder.encode(user.getEvaluationId(), "UTF-8");
+            } catch (UnsupportedEncodingException ex) {
+                java.util.logging.Logger.getLogger(AuthenticationController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        forwardUrl= "http://www.survey-hci.iao.fraunhofer.de/index.php?sid=18346&18346X319X1680="+encodedId+"&lang="+myLanguage;
+
+       
+        return "redirect:"+forwardUrl;
+    }
+
+    private User getCurrentUser() {
+
+
+        String username = SecurityContextHolder.getContext().getAuthentication().getName().toString();
+        String pw = SecurityContextHolder.getContext().getAuthentication().getCredentials().toString();
+        User user = userManager.getByUsernameAndPassword(username, pw);
+
+        if (user != null) {
+            return user;
+        } else {
+            return null;
+        }
+    }
 
 }

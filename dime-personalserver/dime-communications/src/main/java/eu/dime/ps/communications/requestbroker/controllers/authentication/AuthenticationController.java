@@ -294,34 +294,8 @@ public class AuthenticationController {
         } else {
             return Response.badRequest("Useraccount was null", null);
         }
-
-
     }
 
-    @GET
-    @Produces(MediaType.TEXT_HTML)
-    @Path("/questionaire")
-    public String forwardQuestionaire() {
-        User user = getCurrentUser();
-
-        String forwardUrl;
-        String encodedId="";
-        if (user!=null){
-            try {
-                encodedId = URLEncoder.encode(user.getEvaluationId(), "UTF-8");
-            } catch (UnsupportedEncodingException ex) {
-                java.util.logging.Logger.getLogger(AuthenticationController.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        forwardUrl= "http://www.survey-hci.iao.fraunhofer.de/index.php?sid=18346&18346X319X1680="+encodedId+"&lang=en";
-
-        String result = "<!DOCTYPE HTML><html><head><meta http-equiv=\"refresh\" content=\"1;url=\""+forwardUrl
-                +"\"><script type=\"text/javascript\">window.location.href = \""+forwardUrl
-                +"\"</script><title>Questionaire</title></head><body>If you are not redirected automatically, follow the <a href='"+forwardUrl
-                +"'>link</a></body></html>";
-
-        return result;
-    }
 
     private String validateUsername(String userName) throws AccessDeniedException {
         String currentUserName = getCurrentUserName();
