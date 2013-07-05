@@ -169,7 +169,7 @@ public class PSResourcesController extends PSSharingControllerBase implements AP
 				PrivacyPreference pp = sharingManager.findPrivacyPreference(file.asURI().toString(), PrivacyPreferenceType.FILE);
 				writeIncludes(fileResource,pp);
 				fileResource.remove("nao:creator");
-				resolveImageUrl(file, said, fileResource);
+				resolveImageUrl(file, said, fileResource);				
 				data.getEntries().add(fileResource);
 			}
 		} catch (InfosphereException e) {
@@ -249,11 +249,15 @@ public class PSResourcesController extends PSSharingControllerBase implements AP
 			data = new Data<Resource>(0, files.size(), files.size());
 			for (FileDataObject file : files) {
 				Resource fileResource = new Resource(file, said,fileManager.getMe().asURI());
-				PrivacyPreference pp = sharingManager.findPrivacyPreference(file.asURI().toString(), PrivacyPreferenceType.FILE);
-				writeIncludes(fileResource,pp);
-				fileResource.remove("nao:creator");
-				resolveImageUrl(file, said, fileResource);
-				data.getEntries().add(fileResource);
+				//FIXME workaround to return only the resources created by the user
+				// a call to the manager would be a better approach
+				if (fileResource.get("userId").equals("@me")){
+					PrivacyPreference pp = sharingManager.findPrivacyPreference(file.asURI().toString(), PrivacyPreferenceType.FILE);
+					writeIncludes(fileResource,pp);
+					fileResource.remove("nao:creator");
+					resolveImageUrl(file, said, fileResource);
+					data.getEntries().add(fileResource);
+				}
 			}
 		} catch (InfosphereException e) {
 			return Response.badRequest(e.getMessage(), e);
@@ -497,13 +501,13 @@ public class PSResourcesController extends PSSharingControllerBase implements AP
 				logger.error("Error retrieving file "+resourceID+": mime type not found.");
 				mimeString = "application"; // if no mimetype assume binary
 			} else {
-				 try {
+				try {
 					mimeString = mimetype.asLiteral().getValue();
 				} catch (ClassCastException e) {
 					logger.warn("Could not retrieve mimetype. assuming binary.",e);
 					mimeString = "application";
 				}
-				 
+
 			}
 
 			// gets file contents
@@ -995,7 +999,7 @@ public class PSResourcesController extends PSSharingControllerBase implements AP
 				}
 			}
 			if(image != null){
-				
+
 				String guid = UriUtil.decodeUri(image.asURI().toString());
 				String encodedGuid = null;
 				try {
