@@ -146,15 +146,9 @@ Dime.register={
             loadUrl:'/dime-communications/static/ui/dime/register/html/privacypolicy_DE.html'
         }
     },
-
-    init: function(){
-        //init error handler for ajax calls
-        $.ajaxSetup({
-            error: Dime.register.ajaxError
-            });
-        //enable links for navigation
+    activateLinks: function(jStartElem){
         jQuery.each(Dime.register.LINK_CLASSES,function(k){
-            var linkElements = $('.'+k);
+            var linkElements = jStartElem.find('.'+k);
             var targetId = this.targetId;
             var targetUrl = this.targetUrl;
             if (linkElements){
@@ -171,6 +165,15 @@ Dime.register={
                 }
             }
         });
+    },
+
+    init: function(){
+        //init error handler for ajax calls
+        $.ajaxSetup({
+            error: Dime.register.ajaxError
+            });
+        //enable links for navigation
+        Dime.register.activateLinks($('body'));
 
         //set link for register
         $('#registerSubmitButton').click(function(){
@@ -217,7 +220,9 @@ Dime.register={
                     }
                     var targetDiv = $('#'+this.targetId);
                     if (this.loadUrl && targetDiv.is(':empty')){
-                        targetDiv.load(this.loadUrl);
+                        targetDiv.load(this.loadUrl, null, function(){
+                            Dime.register.activateLinks(targetDiv);
+                        });
                     }
                     targetDiv.removeClass('hidden');
                     linkElement.addClass('active');
