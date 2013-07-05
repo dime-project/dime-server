@@ -1298,7 +1298,7 @@ DimeView = {
 
             var loginbaselink=Dime.ps_configuration.getRealBasicUrlString()
                 +'/dime-communications/web/access/';
-            var githubLink='https://github.com/thielsn/dime/';
+            var githubLink='https://github.com/dime-project/meta/';
             var loginFromServerSettings=serverInfo.baseUrl+'/dime-communications/web/access/login';
             var questionaireLink = Dime.ps_configuration.getQuestionairePath();
 
@@ -1308,9 +1308,13 @@ DimeView = {
                     $('<div/>')                        
                         .append($('<h3/>').text('Getting started with di.me:')) 
                         .append($('<p/>')
-                            .append($('<span/>').text('Please follow our'))
-                            .addHrefOpeningInNewWindow('/dime-communications/static/ui/dime/howto.html','tutorial!','orangeBubbleLink')
+                            .append($('<span/>').text('Please follow our')).css('margin-top','10px')
+                            .addHrefOpeningInNewWindow('/dime-communications/static/ui/dime/howto.html','Tutorial','orangeBubbleLink')
+                            .append($('<span/>').text('... and get the mobile App'))
+                            .addHrefOpeningInNewWindow('http://dimetrials.bdigital.org:8080/dimemobile.apk','for Android.','orangeBubbleLink')
+                            
                             .css('margin-bottom','30px')
+                            .css('font-size','16px')
                             
                             )
                         .append($('<h3/>').text('Please give us feedback to the concept on:'))
@@ -1321,7 +1325,8 @@ DimeView = {
 
                         .append($('<h3/>').text('This is a demonstration prototype'))
                         .append($('<p/>')
-                            .append($('<span/>').text('.. so you will find many bugs and issues. Please report them on'))
+                            .append($('<span/>').text('.. so you will find many bugs and issues.'))
+                            .append($('<br/>')).append($('<span/>').text('Please report them on:'))
                             .addHrefOpeningInNewWindow(githubLink+'issues',githubLink+'issues','orangeBubbleLink')
                         )
                         .append($('<h3/>').text('About'))
