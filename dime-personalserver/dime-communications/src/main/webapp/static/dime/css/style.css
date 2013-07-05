@@ -24,6 +24,12 @@ body {
 
 }
 
+#pushthis{
+position:absolute;
+left:200px;
+
+}
+
 .clear {
     clear: both;
     width: 0;
