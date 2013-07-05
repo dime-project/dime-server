@@ -80,7 +80,7 @@ public class FileManagerImpl extends InfoSphereManagerBase<FileDataObject> imple
 	
 	private FileDataMining fileDataMining;
 	
-	private DataStore dataStore;
+	//private DataStore dataStore;
 		
 	@Autowired
 	private DataStoreProvider dataStoreProvider;
@@ -99,10 +99,10 @@ public class FileManagerImpl extends InfoSphereManagerBase<FileDataObject> imple
 	}
 	
 	public DataStore getDataStore() {
-		if (dataStore == null){
-			dataStore = dataStoreProvider.getTenantStore(TenantContextHolder.getTenant().longValue());
-		}
-		return dataStore;
+		//if (dataStore == null){
+			return dataStoreProvider.getTenantStore(TenantContextHolder.getTenant().longValue());
+		//}
+		//return dataStore;
 	}
 
 	@Override
