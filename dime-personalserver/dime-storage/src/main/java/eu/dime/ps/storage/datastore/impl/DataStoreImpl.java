@@ -107,16 +107,29 @@ public class DataStoreImpl implements DataStore{
 	@Override
 	public PersistentDimeObject getObject(final String uri) {
 		
-		ObjectSet<PersistentDimeObject> set =  db.query(PersistentDimeObject.class);
-		int size = set.size();
-		if (size > 0){
-			for (PersistentDimeObject persistentDimeObject : set) {
-				if (persistentDimeObject.getId().equals(uri)){
-					return persistentDimeObject;
-				}
-			}
-		} 
-		return null;
+		List <DimeBinary> objects = db.query(new Predicate<DimeBinary>() {
+			private static final long serialVersionUID = 1L;
+
+			public boolean match(DimeBinary object) {
+		        return object.getRdfUri().equals(uri);
+		    }
+		});
+		
+		if (objects.isEmpty()){
+			return null;
+		} else {
+			return objects.get(0);
+		}
+//		ObjectSet<PersistentDimeObject> set =  db.ext().query(PersistentDimeObject.class);
+//		int size = set.size();
+//		if (size > 0){
+//			for (PersistentDimeObject persistentDimeObject : set) {
+//				if (persistentDimeObject.getId().equals(uri)){
+//					return persistentDimeObject;
+//				}
+//			}
+//		} 
+//		return null;
 	}
 
 	@Override
