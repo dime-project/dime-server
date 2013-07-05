@@ -115,21 +115,8 @@ public class DataStoreImpl implements DataStore{
 					return persistentDimeObject;
 				}
 			}
-		}
-		List <PersistentDimeObject> objects = db.query(new Predicate<PersistentDimeObject>() {
-
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public boolean match(PersistentDimeObject binary) {
-				return binary.getId().equals(uri);
-			}
-		});
-		if (objects.isEmpty()){
-			return null;
-		} else {
-		return objects.get(0);
-		}
+		} 
+		return null;
 	}
 
 	@Override
