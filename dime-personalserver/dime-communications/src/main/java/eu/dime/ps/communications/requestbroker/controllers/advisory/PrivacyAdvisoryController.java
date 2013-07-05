@@ -88,6 +88,9 @@ public class PrivacyAdvisoryController {
 		List <String> checkedThings = new ArrayList<String>();
 		for (String id :sharedThingIDs){
 			int index = id.indexOf("urn:uuid");
+			if (index == 0){
+				checkedThings.add(id);
+			}
 			while (index > 0){
 				id = id.substring(index);
 				index = id.indexOf("urn:uuid");
