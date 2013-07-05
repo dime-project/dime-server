@@ -9,6 +9,7 @@ import ie.deri.smile.vocabulary.PPO;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -283,6 +284,7 @@ public class TrustEngineUpdateService implements BroadcastReceiver{
 			}
 		} else {
 			// iterate over persons...
+			Set <Person> personsToAdapt = new HashSet<Person>();
 			for (Agent agent : agentsWithAccess) {
 				Collection<LivePost> liveposts = sharingManager.getSharedLivePost(agent.toString());
 				Collection<FileDataObject> files = sharingManager.getSharedFiles(agent.toString());
@@ -320,14 +322,26 @@ public class TrustEngineUpdateService implements BroadcastReceiver{
 				else if (targetTrustValue > person.getAllTrustLevel().next()){
 					//send notification
 					logger.debug("notify: trust level should increase");
-					notifyUI(UNRefToItem.OPERATION_INC_TRUST, UNRefToItem.TYPE_PERSON, person.asURI().toString(), person.getPrefLabel());
+					personsToAdapt.add(person);
 				}
 				
 			}
+			sendTrustNotifications(personsToAdapt);
 		}
 		
 	}
 	
+	private void sendTrustNotifications(Set<Person> personsToAdapt) {
+		if (personsToAdapt.isEmpty()){
+			return;
+		} else {
+			for (Person person : personsToAdapt){
+				notifyUI(UNRefToItem.OPERATION_INC_TRUST, UNRefToItem.TYPE_PERSON, person.asURI().toString(), person.getPrefLabel());
+			}
+		}
+		
+	}
+
 	private List<Agent> getPersonsFromPP(PrivacyPreference pp, 
 			ResourceStore resourceStore) throws NotFoundException{
 		List <AccessSpace> asList =  pp.getAllAccessSpace_as().asList();
