@@ -56,10 +56,15 @@ public class DimeIPResolver {
 		
 		// FIXME doing this for the ametic event as well, getting only the last part of the account URI
 		String said = targetURI.substring(targetURI.lastIndexOf(":") + 1, targetURI.length());
-		
-		String targetLocation = "https://" + DnsResolver.resolve(dimeDns, said + ".dns.dime-project.eu") + ":" + this.port + "/dime-communications";
-
-		return targetLocation;
+                return "https://" + resolveSaid(said) + ":" + this.port + "/dime-communications";
 	}
+
+        public String resolveSaid (String said) throws NamingException {
+		return DnsResolver.resolve(dimeDns, said + ".dns.dime-project.eu");
+	}
+
+        public String getDimeDns(){
+            return dimeDns;
+        }
 
 }

@@ -29,6 +29,7 @@ import eu.dime.commons.util.HttpUtils;
 import eu.dime.commons.util.JaxbJsonSerializer;
 import eu.dime.ps.controllers.accesscontrol.utils.KeyStoreManager;
 import eu.dime.ps.gateway.policy.PolicyManager;
+import eu.dime.ps.gateway.service.internal.DimeIPResolver;
 import eu.dime.ps.gateway.service.internal.DimeServiceAdapter;
 import eu.dime.ps.gateway.util.DnsResolver;
 import eu.dime.ps.semantic.BroadcastManager;
@@ -135,6 +136,20 @@ public class DimeDNSRegisterService implements BroadcastReceiver {
 
         String payloadString = JaxbJsonSerializer.jsonValue(payload);
         sendRegisterPost(payloadString, dns);
+        try {
+            //double check for successfull registration
+            String retrievedIP = new DimeIPResolver().resolveSaid(said);
+            if (!retrievedIP.equals(ip)){
+                String message = "DNS resolve delivered "+retrievedIP+" expected was "+ip+"! Resolving at " + dns + " failed!";
+                logger.error(message);
+                throw new DNSRegisterFailedException(message, new Exception());
+            }
+        } catch (NamingException ex) {
+            String message = "DNS resolve failed! Unable to resolve "+said+" at " + dns + "\n" + ex.getMessage();
+            logger.error(message, ex);
+            throw new DNSRegisterFailedException(message, ex);
+        }
+
 
     }
 
@@ -153,14 +168,16 @@ public class DimeDNSRegisterService implements BroadcastReceiver {
             HttpResponse response = httpClient.execute(request);
             //System.out.println(JaxbJsonSerializer.jsonValue(response.getEntity()));
 
+
+
         } catch (ClientProtocolException ex) {
-            logger.error(ex.getMessage(), ex);
+            logger.error("Unable to register at" + dnsRegisterUrl + "\n" + ex.getMessage(), ex);
             throw new DNSRegisterFailedException("Unable to register at" + dnsRegisterUrl + "\n" + ex.getMessage(), ex);
         } catch (UnsupportedEncodingException ex) {
-            logger.error(ex.getMessage(), ex);
+            logger.error("Unable to register at" + dnsRegisterUrl + "\n" + ex.getMessage(), ex);
             throw new DNSRegisterFailedException("Unable to register at" + dnsRegisterUrl + "\n" + ex.getMessage(), ex);
         } catch (IOException ex) {
-            logger.error(ex.getMessage(), ex);
+            logger.error("Unable to register at" + dnsRegisterUrl + "\n" + ex.getMessage(), ex);
             throw new DNSRegisterFailedException("Unable to register at" + dnsRegisterUrl + "\n" + ex.getMessage(), ex);
         } finally {
             httpClient.getConnectionManager().shutdown();

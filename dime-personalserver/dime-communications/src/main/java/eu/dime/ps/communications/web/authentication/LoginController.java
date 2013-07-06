@@ -12,10 +12,12 @@ import org.springframework.web.servlet.ModelAndView;
 
 import eu.dime.ps.controllers.UserManager;
 import eu.dime.ps.gateway.service.MediaType;
+import eu.dime.ps.gateway.service.internal.DimeIPResolver;
 import eu.dime.ps.storage.entities.User;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.logging.Level;
+import javax.naming.NamingException;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -161,6 +163,22 @@ public class LoginController {
        
         return "redirect:"+forwardUrl;
     }
+
+    @RequestMapping(value = "/resolveSaid", method = RequestMethod.GET)
+    public ModelAndView resolveSaid(@RequestParam(value = "said", required = true) String said) {
+
+         ModelAndView modelAndView = new ModelAndView("ajax_result");
+         DimeIPResolver dir = new DimeIPResolver();
+        try {
+
+            modelAndView.addObject("result", "received from "+dir.getDimeDns()+": ip:"+dir.resolveSaid(said));
+        } catch (NamingException ex) {
+            modelAndView.addObject("result", "DNS resolve failed! Unable to resolve said: "+said+" at "+dir.getDimeDns());
+        }
+
+        return modelAndView;
+    }
+
 
     private User getCurrentUser() {
 
