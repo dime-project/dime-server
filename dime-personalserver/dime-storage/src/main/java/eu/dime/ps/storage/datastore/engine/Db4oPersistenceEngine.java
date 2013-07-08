@@ -56,6 +56,7 @@ public class Db4oPersistenceEngine {
 		
 		ServerConfiguration config = Db4oClientServer.newServerConfiguration();
 		config.common().weakReferences(false);
+		config.common().callConstructors(false);
 		config.file().freespace().useRamSystem();
 		config.file().storage(new FileStorage());
 		try {

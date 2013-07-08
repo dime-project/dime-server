@@ -142,7 +142,11 @@ public class DataStoreImpl implements DataStore{
 				return false;
 			} else {
 				bin.setHash(hash);
-				bin.updateFile(is);
+				try {
+					bin.updateFile(is);
+				} catch (IOException e) {
+					logger.error("Could not update file: "+uri, e);
+				}
 				db.commit();
 			}
 		return false;
@@ -256,7 +260,11 @@ public class DataStoreImpl implements DataStore{
 	private boolean delete(PersistentDimeObject obj) {
 		String uri = obj.getId();
 		if (obj instanceof DimeBinary){
-			((DimeBinary) obj).delete();
+			try {
+				((DimeBinary) obj).delete();
+			} catch (IOException e) {
+				logger.error("Could not delete file "+obj.getId(), e);
+			}
 		}
 		db.delete(obj);
 		db.commit();

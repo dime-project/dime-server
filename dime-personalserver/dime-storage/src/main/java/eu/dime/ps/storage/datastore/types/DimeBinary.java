@@ -9,13 +9,9 @@ import java.util.Date;
 import java.util.UUID;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.log4j.Logger;
-
 import com.db4o.ext.Status;
-import com.db4o.internal.BlobImpl;
 import com.db4o.types.Blob;
 
-import eu.dime.ps.storage.util.CMSInitHelper;
 
 /**
  * wrapper for blobs
@@ -25,9 +21,7 @@ import eu.dime.ps.storage.util.CMSInitHelper;
 public class DimeBinary extends PersistentDimeObject{
 
 	private final String fileId = UUID.randomUUID().toString();
-	
-	Logger logger = Logger.getLogger(DimeBinary.class);
-	
+		
 	private boolean isStored = false;
 	
 	private Blob blob;
@@ -39,7 +33,7 @@ public class DimeBinary extends PersistentDimeObject{
 	private String hash;
 	private long tenantId;
 	
-	private Date lastUpdate;
+	private String lastUpdate;
 	
 	public DimeBinary(){	
 	}
@@ -58,14 +52,9 @@ public class DimeBinary extends PersistentDimeObject{
 		readFile(file);
 	}
 
-	public boolean updateFile(InputStream is){
-		try {
-			streamToFile(is, getFile());
-			readFile(getFile());
-		} catch (IOException e) {
-			logger.warn("error when updating file.", e);
-			return false;
-		}
+	public boolean updateFile(InputStream is) throws IOException{
+		streamToFile(is, getFile());
+		readFile(getFile());
 		return true;
 	}
 	
@@ -73,7 +62,7 @@ public class DimeBinary extends PersistentDimeObject{
 		return id;
 	}
 	
-	public Date getLastUpdate(){
+	public String getLastUpdate(){
 		return lastUpdate;
 	}
 
@@ -105,12 +94,8 @@ public class DimeBinary extends PersistentDimeObject{
 		this.type = type;
 	}
 
-	public void delete(){
-		try {
-			blob.deleteFile();
-		} catch (IOException e) {
-			logger.error("Could not delete blob with id: "+fileId, e);
-		}
+	public void delete() throws IOException{
+		blob.deleteFile();		
 	}
 	
 	public String getFileName() {
@@ -141,12 +126,12 @@ public class DimeBinary extends PersistentDimeObject{
 	        Thread.sleep(20);
 	        status = blob.getStatus();
 	      } catch (InterruptedException e) {
-	        	logger.warn(e);
+	    	  return false;
 	      }
 	    }
 	    boolean successful = (status == Status.COMPLETED);
 	    if (successful){
-	    	this.lastUpdate = new Date();
+	    	this.lastUpdate = new Date().toLocaleString();
 	    	isStored = true;
 	    }
 	    return successful;    
@@ -160,7 +145,7 @@ public class DimeBinary extends PersistentDimeObject{
 	    		Thread.sleep(20);
 	    		status = blob.getStatus();
 	    	} catch (InterruptedException e) {
-	        	logger.warn(e);
+	        	return false;
 	        }
 	    }
 	    return (status == Status.COMPLETED);
