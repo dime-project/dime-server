@@ -63,9 +63,9 @@ public class DefaultDataSetup implements BroadcastReceiver {
 	
 	private static final Map<String, String[]> CONTACTS = new HashMap<String, String[]>();
 	static {
-		CONTACTS.put("todo", new String[] { "Christian Knecht ", "christian.knecht@email.com", "ismriv" });
-		CONTACTS.put("todo", new String[] { "Cristina Fra ", "cristina.fra@email.com", "cfra" });
-		CONTACTS.put("todo", new String[] { "Fabian Hermann ", "fabian.hermann@email.com", "fabian" });
+		CONTACTS.put("todo", new String[] { "Christian Knecht", "christian.knecht@email.com", "ismriv" });
+		CONTACTS.put("todo", new String[] { "Cristina Fra", "cristina.fra@email.com", "cfra" });
+		CONTACTS.put("todo", new String[] { "Fabian Hermann", "fabian.hermann@email.com", "fabian" });
 		CONTACTS.put("3f57e7e5-6cdc-4488-bfcb-d41de0b98a89", new String[] { "Ismael Rivera", "ismael.rivera@email.com", "ismriv" });
 		CONTACTS.put("todo", new String[] { "Marc Planaguma", "marc.planaguma@email.com", "marc" });
 		CONTACTS.put("todo", new String[] { "Marcel Heupel", "marcel.heupel@email.com", "mheupel" });
@@ -74,6 +74,10 @@ public class DefaultDataSetup implements BroadcastReceiver {
 		CONTACTS.put("b7b27244-4466-4f9b-9997-6799e31894de", new String[] { "Simon Scerri", "simon.scerri@email.com", "simsce" });
 		CONTACTS.put("todo", new String[] { "Simon Thiel", "simon.thiel@email.com", "sthiel" });
 		CONTACTS.put("todo", new String[] { "Sophie Wrobel", "sophie.wrobel@email.com", "wrobel" });
+		//new contacts - testusers
+		CONTACTS.put("todo", new String[] { "Test User1", "test.user1@email.com", "testuser1"});
+		CONTACTS.put("todo", new String[] { "Test User2", "test.user2@email.com", "testuser2"});
+		CONTACTS.put("todo", new String[] { "Test User3", "test.user3@email.com", "testuser3"});
 	}
 
 	private static final Logger logger = LoggerFactory.getLogger(DefaultDataSetup.class);
@@ -284,7 +288,20 @@ public class DefaultDataSetup implements BroadcastReceiver {
 				
 				Account account = accountManager.get(accountUri.toString());
 				if (account.hasCreator()) {
-					dimePeople.add(personManager.get(account.getCreator().toString()));
+					
+					//original person add call for adding default dime people to dime group
+					//dimePeople.add(personManager.get(account.getCreator().toString()));
+					
+					//new person add call + retrieval of test user accounts & trust level modification
+    					Person person = personManager.get(account.getCreator().toString());
+    					//test user 1 said 
+    					//if (said.equals("todo")) then person.setTrustLevel(0.5);
+    					//test user 2 said 
+    					if (said.equals("3f57e7e5-6cdc-4488-bfcb-d41de0b98a89")) then person.setTrustLevel(0);
+    					//test user 3 said 
+    					else if (said.equals("b7b27244-4466-4f9b-9997-6799e31894de")) then person.setTrustLevel(1);
+					//add person to the group
+					dimePeople.add(person);					
 				} else {
 					logger.error("Contact account " + accountUri + " does not have a pimo:Person as creator.");
 				}
