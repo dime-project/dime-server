@@ -258,6 +258,9 @@ public class DataStoreImpl implements DataStore{
 	}
 
 	private boolean delete(PersistentDimeObject obj) {
+		if (obj == null){
+			return false;
+		}
 		String uri = obj.getId();
 		if (obj instanceof DimeBinary){
 			try {
