@@ -22,7 +22,7 @@ import org.springframework.stereotype.Service;
  * @author philipp 
  *
  */
-@Service
+//@Service
 public class StandaloneTorService {
 	private static final Logger logger = Logger.getLogger(StandaloneTorService.class);
 	

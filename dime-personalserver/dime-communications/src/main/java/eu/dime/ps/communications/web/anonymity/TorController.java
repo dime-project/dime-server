@@ -19,7 +19,7 @@ import eu.dime.ps.controllers.security.anonymity.StandaloneTorService;
 public class TorController {
 	private final static Logger logger = Logger.getLogger(TorController.class);
 	
-	@Autowired
+	//@Autowired
 	private StandaloneTorService standaloneTorService;
 		
 	@RequestMapping("/")
