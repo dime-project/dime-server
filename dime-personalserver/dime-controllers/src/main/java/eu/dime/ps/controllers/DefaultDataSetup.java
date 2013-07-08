@@ -251,13 +251,13 @@ private static final Logger logger = LoggerFactory.getLogger(DefaultDataSetup.cl
     					//test user 2 said 
     					else if (said.equals("aa99d9af-4c69-4388-94dc-c5fb9e9e2763"))
     					{
-    						person.setTrustLevel(0);
+    						person.setTrustLevel(0.0);
     						testuser2 = person;
     					}
     					//test user 3 said 
     					else if (said.equals("8192047a-177f-4486-9dff-1af650d65afd"))
     					{
-    						person.setTrustLevel(1);
+    						person.setTrustLevel(1.0);
     						testuser3 = person;
     					}
 					//add person to the group if not a test user
