@@ -15,6 +15,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.ontoware.rdf2go.model.Model;
@@ -36,6 +37,8 @@ import eu.dime.ps.controllers.infosphere.manager.PersonManager;
 import eu.dime.ps.controllers.infosphere.manager.SharingManager;
 import eu.dime.ps.dto.Resource;
 import eu.dime.ps.semantic.model.dao.Account;
+import eu.dime.ps.semantic.model.dlpo.LivePost;
+import eu.dime.ps.semantic.model.nfo.FileDataObject;
 import eu.dime.ps.semantic.model.pimo.Person;
 import eu.dime.ps.semantic.model.ppo.PrivacyPreference;
 import eu.dime.ps.semantic.privacy.PrivacyPreferenceType;
@@ -48,7 +51,7 @@ public class PSResourceControllerTestIt extends PSInfosphereControllerTestIt {
 
 	private static final String SAID = "juan";
 
-	
+
 	@Autowired
 	private FileManager fileManager;
 
@@ -60,9 +63,9 @@ public class PSResourceControllerTestIt extends PSInfosphereControllerTestIt {
 
 	@Autowired
 	private SharingManager sharingManager;
-	
+
 	private PSResourcesController controller;
-	
+
 	@Before
 	public void setUp() throws Exception {
 		super.setUp();
@@ -75,12 +78,22 @@ public class PSResourceControllerTestIt extends PSInfosphereControllerTestIt {
 		controller.setSharingManager(sharingManager);
 	}
 	
+	@After
+	public void tearDown() throws Exception {
+		Collection<FileDataObject> files = fileManager.getAll();
+		for (FileDataObject file: files){
+			fileManager.remove(file.asURI().toString());		
+		}
+		super.tearDown();
+			
+	}
+
 	private Collection<Map<String, Object>> buildIncludes(Account sender, Person...persons) {
 		Map<String, Object> include = new HashMap<String, Object>();
 		include.put("saidSender", sender.toString());
 		include.put("groups", Collections.EMPTY_LIST);
 		include.put("services", Collections.EMPTY_LIST);
-		
+
 		Collection<Map<String, Object>> personsArray = new ArrayList<Map<String, Object>>(persons.length);
 		for (Person person : persons) {
 			Map<String, Object> personMap = new HashMap<String, Object>();
@@ -94,16 +107,16 @@ public class PSResourceControllerTestIt extends PSInfosphereControllerTestIt {
 		includes.add(include);
 		return includes;
 	}
-	
-	
+
+
 	@Test
 	public void testCreateResourceWellFormedRDF() throws Exception {
 		Account sender = createAccount(pimoService.getUserUri());
 		Person person = createPerson("Ismael Rivera");
-		
-			
+
+
 		Resource file = new Resource();	
-		
+
 		file.put("guid", "garbage"); // on create, even if passed, this should be ignored
 		file.put("type", "resource");
 		file.put("created", 1338824999);
@@ -112,21 +125,21 @@ public class PSResourceControllerTestIt extends PSInfosphereControllerTestIt {
 		file.put("userId", "@me");			
 		file.put("nao:includes", buildIncludes(sender, person));		
 		file.put("nfo:fileOwner",person.asURI().toString());
-		
+
 		Request<Resource> request = buildRequest(file);
 		Response<Resource> response = controller.createResourceFromPersonById(SAID, request);
-		
+
 		assertNotNull(response);
 		assertEquals(1, response.getMessage().getData().getEntries().size());
-		
+
 		String guid = response.getMessage().getData().getEntries().iterator().next().get("guid").toString();
 		assertNotNull(guid);
-		
-		
+
+
 		URI uri = new URIImpl(guid);
 		org.ontoware.rdfreactor.schema.rdfs.Resource resource = pimoService.get(uri);
-		
-		
+
+
 		assertNotNull(resource);
 		//verify rdf Type is correct
 		assertTrue(resource.getModel().contains(resource,RDF.type, NFO.FileDataObject));
@@ -134,19 +147,21 @@ public class PSResourceControllerTestIt extends PSInfosphereControllerTestIt {
 		assertTrue(resource.getModel().contains(resource, NAO.created, new DatatypeLiteralImpl("1970-01-16T11:53:44.999Z", XSD._dateTime)));
 		assertTrue(resource.getModel().contains(resource, NAO.lastModified, new DatatypeLiteralImpl("1970-01-16T11:53:44.999Z", XSD._dateTime)));
 		assertTrue(resource.getModel().contains(resource, NAO.creator, fileManager.getMe()));
-		
-	// verify PrivacyPreference is created and metadata is correct
+
+		// verify PrivacyPreference is created and metadata is correct
 		PrivacyPreference pp = sharingManager.findPrivacyPreference(guid,  PrivacyPreferenceType.FILE);
 		assertNotNull(pp);
 		assertTrue(pp.getModel().contains(pp, RDFS.label, PrivacyPreferenceType.FILE.toString()));	
-	
-	
-		
+
+
+
 		// verify AccessSpace metadata (of PrivacyPreference) is correct
 		assertTrue(pp.getModel().contains(pp, PPO.hasAccessSpace, Variable.ANY));
 		URI accessSpace = ModelUtils.findObject(pp.getModel(), pp, PPO.hasAccessSpace).asURI();
 		assertTrue(pp.getModel().contains(accessSpace, NSO.sharedThrough, sender.asURI()));
 		assertTrue(pp.getModel().contains(accessSpace, NSO.includes, person.asURI()));
+
+
 	}
-	
+
 }

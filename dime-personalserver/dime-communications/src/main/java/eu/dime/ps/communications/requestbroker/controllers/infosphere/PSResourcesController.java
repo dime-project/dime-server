@@ -371,9 +371,10 @@ public class PSResourcesController extends PSSharingControllerBase implements AP
 	public Response deleteResourceFromPersonById(@PathParam("said") String said,
 			@PathParam("personID") String personID, @PathParam("resourceID") String resourceID) {
 
+		logger.info("called API method: DELETE /dime/rest/{said}/resource/{personID}/{groupID}");
 		try {
-			// TODO fix: it seems to be the wrong call
-			// infosphereManager.removePersonGroup(resourceID);
+			
+			fileManager.remove(resourceID);
 
 		} catch (IllegalArgumentException e) {
 			return Response.badRequest(e.getMessage(), e);
