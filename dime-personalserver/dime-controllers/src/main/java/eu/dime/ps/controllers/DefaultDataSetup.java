@@ -63,24 +63,24 @@ public class DefaultDataSetup implements BroadcastReceiver {
 	
 	private static final Map<String, String[]> CONTACTS = new HashMap<String, String[]>();
 	static {
-		CONTACTS.put("todo", new String[] { "Christian Knecht", "christian.knecht@email.com", "ismriv" });
+		CONTACTS.put("c8184790-7e63-4640-98b2-64319ea895b5", new String[] { "Christian Knecht", "christian.knecht@email.com", "Chris" });
 		CONTACTS.put("todo", new String[] { "Cristina Fra", "cristina.fra@email.com", "cfra" });
 		CONTACTS.put("todo", new String[] { "Fabian Hermann", "fabian.hermann@email.com", "fabian" });
-		CONTACTS.put("3f57e7e5-6cdc-4488-bfcb-d41de0b98a89", new String[] { "Ismael Rivera", "ismael.rivera@email.com", "ismriv" });
+		CONTACTS.put("todo", new String[] { "Ismael Rivera", "ismael.rivera@email.com", "ismriv" });
 		CONTACTS.put("todo", new String[] { "Marc Planaguma", "marc.planaguma@email.com", "marc" });
-		CONTACTS.put("todo", new String[] { "Marcel Heupel", "marcel.heupel@email.com", "mheupel" });
+		CONTACTS.put("429375b5-0380-47e8-b0f7-9d9ebda77a54", new String[] { "Marcel Heupel", "marcel.heupel@email.com", "mhpl" });
 		CONTACTS.put("todo", new String[] { "Massimo Valla ", "massimo.valla@email.com", "mvalla" });
 		CONTACTS.put("todo", new String[] { "Rafael Gimenez", "rafael.gimenez@email.com", "rgimenez" });
-		CONTACTS.put("b7b27244-4466-4f9b-9997-6799e31894de", new String[] { "Simon Scerri", "simon.scerri@email.com", "simsce" });
+		CONTACTS.put("bef98d62-b857-4321-930d-fa1f00792572", new String[] { "Simon Scerri", "simon.scerri@email.com", "irrecs" });
 		CONTACTS.put("todo", new String[] { "Simon Thiel", "simon.thiel@email.com", "sthiel" });
-		CONTACTS.put("todo", new String[] { "Sophie Wrobel", "sophie.wrobel@email.com", "wrobel" });
+		CONTACTS.put("b6f4cea6-83cf-4e38-912e-258fe9d18c26", new String[] { "Sophie Wrobel", "sophie.wrobel@email.com", "webmage" });
 		//new contacts - testusers
-		CONTACTS.put("todo", new String[] { "Test User1", "test.user1@email.com", "testuser1"});
-		CONTACTS.put("todo", new String[] { "Test User2", "test.user2@email.com", "testuser2"});
-		CONTACTS.put("todo", new String[] { "Test User3", "test.user3@email.com", "testuser3"});
+		CONTACTS.put("246879a0-5b58-4b3f-aedf-64d0335721f5", new String[] { "Test User1", "test.user1@email.com", "testuser1"});
+		CONTACTS.put("aa99d9af-4c69-4388-94dc-c5fb9e9e2763", new String[] { "Test User2", "test.user2@email.com", "testuser2"});
+		CONTACTS.put("8192047a-177f-4486-9dff-1af650d65afd", new String[] { "Test User3", "test.user3@email.com", "testuser3"});
 	}
 
-	private static final Logger logger = LoggerFactory.getLogger(DefaultDataSetup.class);
+private static final Logger logger = LoggerFactory.getLogger(DefaultDataSetup.class);
 
 	private final ModelFactory modelFactory = new ModelFactory();
 
@@ -190,11 +190,87 @@ public class DefaultDataSetup implements BroadcastReceiver {
 			logger.error("An error ocurred when creating pre-defined devices: " + e.getMessage(), e);
 		}
 
+		// old testuser assignment using method 
 		// creating pre-defined contacts
-		Person testuser1 = createPerson("Test", "User1", "testuser1", 0.5);
-		Person testuser2 = createPerson("Test", "User2", "testuser2", 0);
-		Person testuser3 = createPerson("Test", "User3", "testuser3", 1);
-
+		//Person testuser1 = createPerson("Test", "User1", "testuser1", 0.5);
+		//Person testuser2 = createPerson("Test", "User2", "testuser2", 0);
+		//Person testuser3 = createPerson("Test", "User3", "testuser3", 1);
+		
+		// new test user variables, the assignment takes place in the loop
+		Person testuser1 = null; 
+		Person testuser2 = null;
+		Person testuser3 = null;
+		
+		// adding contacts of the di.me consortium
+		List<Person> dimePeople = new ArrayList<Person>();
+		for (String said : CONTACTS.keySet()) {
+			
+			// skip contacts which do not have a real said
+			if (said == null || said.equals("") || said.equals("todo")) {
+				continue;
+			}
+			
+			String[] data = CONTACTS.get(said);
+			logger.info("Adding '" + data[0] + "' as a contact [said=" + said + "]");
+			
+			PersonContact profile = modelFactory.getNCOFactory().createPersonContact();
+			profile.setPrefLabel(data[0]);
+			
+			PersonName name = modelFactory.getNCOFactory().createPersonName();
+			name.setFullname(data[0]);
+			name.setNickname(data[2]);
+			profile.setPersonName(name);
+			profile.getModel().addAll(name.getModel().iterator());
+			
+			EmailAddress email = modelFactory.getNCOFactory().createEmailAddress();
+			email.setEmailAddress(data[1]);
+			profile.setEmailAddress(email);
+			profile.getModel().addAll(email.getModel().iterator());
+			
+			
+			//add default di.me people as contacts
+			URI accountUri = new URIImpl("urn:uuid:" + UUID.randomUUID());
+			try {
+				userManager.add(said, accountUri);
+				userManager.addProfile(accountUri, profile);
+				
+				Account account = accountManager.get(accountUri.toString());
+				if (account.hasCreator()) {
+					
+					//original person add call for adding default dime people as contacts
+					//dimePeople.add(personManager.get(account.getCreator().toString()));
+					
+					//new person add call + retrieval of test user accounts & trust level modification
+    					Person person = personManager.get(account.getCreator().toString());
+    					//test user 1 said 
+    					if (said.equals("246879a0-5b58-4b3f-aedf-64d0335721f5"))
+    					{
+    						person.setTrustLevel(0.5); 
+    						testuser1 = person;
+    					}
+    					//test user 2 said 
+    					else if (said.equals("aa99d9af-4c69-4388-94dc-c5fb9e9e2763"))
+    					{
+    						person.setTrustLevel(0);
+    						testuser2 = person;
+    					}
+    					//test user 3 said 
+    					else if (said.equals("8192047a-177f-4486-9dff-1af650d65afd"))
+    					{
+    						person.setTrustLevel(1);
+    						testuser3 = person;
+    					}
+					//add person to the group if not a test user
+					else dimePeople.add(person);					
+				} else {
+					logger.error("Contact account " + accountUri + " does not have a pimo:Person as creator.");
+				}
+			} catch (InfosphereException e) {
+				logger.error("Contact '" + data[0] + "' couldn't be added as a contact: " + e.getMessage(), e);
+			}
+		}
+		
+		
 		// creating pre-defined groups
 		PersonGroup businessGroup = createPersonGroup("Business Contacts", me, testuser1, testuser2);
 		PersonGroup colleaguesGroup = createPersonGroup("Colleagues", me, testuser1);
@@ -254,61 +330,6 @@ public class DefaultDataSetup implements BroadcastReceiver {
 		createSituation("Relaxing@Home", me);
 		createSituation("Social Event", me);
 		createSituation("Travelling", me);
-		
-		// adding contacts of the di.me consortium
-		List<Person> dimePeople = new ArrayList<Person>();
-		for (String said : CONTACTS.keySet()) {
-			
-			// skip contacts which do not have a real said
-			if (said == null || said.equals("") || said.equals("todo")) {
-				continue;
-			}
-			
-			String[] data = CONTACTS.get(said);
-			logger.info("Adding '" + data[0] + "' as a contact [said=" + said + "]");
-			
-			PersonContact profile = modelFactory.getNCOFactory().createPersonContact();
-			profile.setPrefLabel(data[0]);
-			
-			PersonName name = modelFactory.getNCOFactory().createPersonName();
-			name.setFullname(data[0]);
-			name.setNickname(data[2]);
-			profile.setPersonName(name);
-			profile.getModel().addAll(name.getModel().iterator());
-			
-			EmailAddress email = modelFactory.getNCOFactory().createEmailAddress();
-			email.setEmailAddress(data[1]);
-			profile.setEmailAddress(email);
-			profile.getModel().addAll(email.getModel().iterator());
-			
-			URI accountUri = new URIImpl("urn:uuid:" + UUID.randomUUID());
-			try {
-				userManager.add(said, accountUri);
-				userManager.addProfile(accountUri, profile);
-				
-				Account account = accountManager.get(accountUri.toString());
-				if (account.hasCreator()) {
-					
-					//original person add call for adding default dime people to dime group
-					//dimePeople.add(personManager.get(account.getCreator().toString()));
-					
-					//new person add call + retrieval of test user accounts & trust level modification
-    					Person person = personManager.get(account.getCreator().toString());
-    					//test user 1 said 
-    					//if (said.equals("todo")) then person.setTrustLevel(0.5);
-    					//test user 2 said 
-    					if (said.equals("3f57e7e5-6cdc-4488-bfcb-d41de0b98a89")) then person.setTrustLevel(0);
-    					//test user 3 said 
-    					else if (said.equals("b7b27244-4466-4f9b-9997-6799e31894de")) then person.setTrustLevel(1);
-					//add person to the group
-					dimePeople.add(person);					
-				} else {
-					logger.error("Contact account " + accountUri + " does not have a pimo:Person as creator.");
-				}
-			} catch (InfosphereException e) {
-				logger.error("Contact '" + data[0] + "' couldn't be added as a contact: " + e.getMessage(), e);
-			}
-		}
 		
 		// add all dime people in a group
 		createPersonGroup("di.me Project", me, dimePeople.toArray(new Person[dimePeople.size()]));
