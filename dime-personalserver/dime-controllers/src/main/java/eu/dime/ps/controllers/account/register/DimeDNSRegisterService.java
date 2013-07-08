@@ -53,7 +53,7 @@ public class DimeDNSRegisterService implements BroadcastReceiver {
     static Logger logger = Logger.getLogger(DimeDNSRegisterService.class);
     @Autowired
     protected PolicyManager policyManager;
-    String dns;
+    private String dns;
 
     public DimeDNSRegisterService() {
         BroadcastManager.getInstance().registerReceiver(this);
@@ -74,12 +74,12 @@ public class DimeDNSRegisterService implements BroadcastReceiver {
             String said = null;
             try {
                 Account account = (Account) event.getData();
+                dns = policyManager.getPolicyString("DIME_DNS", null);
 
                 if (account.getAccountType().equals(DimeServiceAdapter.NAME)) {
                     ServiceAccount sa = ServiceAccount.findAllByAccountUri(account.asURI().toString());
                     if (sa != null) { //if sa == null it is not an own account so no dns register neccessary
                         said = sa.getName();
-                        dns = policyManager.getPolicyString("DIME_DNS", null);
                         String resolvedSaid = DnsResolver.resolve(dns, said + ".dns.dime-project.eu");
                         if (resolvedSaid.equals("")) {
                             try {
@@ -109,10 +109,11 @@ public class DimeDNSRegisterService implements BroadcastReceiver {
     }
 
     public void registerSaid(String said) throws DNSRegisterFailedException {
-        String today = "", ip = "", pubKey = "", dns;
+        String today = "", ip = "", pubKey = "";
 
         ip = policyManager.getPolicyString("IPADDRESS", null);
         dns = policyManager.getPolicyString("DIME_DNS", null);
+
 
         today = String.valueOf(System.nanoTime()).substring(0, 6);
 
@@ -136,19 +137,22 @@ public class DimeDNSRegisterService implements BroadcastReceiver {
 
         String payloadString = JaxbJsonSerializer.jsonValue(payload);
         sendRegisterPost(payloadString, dns);
-        try {
-            //double check for successfull registration
-            String retrievedIP = new DimeIPResolver().resolveSaid(said);
-            if (!retrievedIP.equals(ip)){
-                String message = "DNS resolve delivered "+retrievedIP+" expected was "+ip+"! Resolving at " + dns + " failed!";
-                logger.error(message);
-                throw new DNSRegisterFailedException(message, new Exception());
-            }
-        } catch (NamingException ex) {
-            String message = "DNS resolve failed! Unable to resolve "+said+" at " + dns + "\n" + ex.getMessage();
-            logger.error(message, ex);
-            throw new DNSRegisterFailedException(message, ex);
-        }
+
+        //FIXME: double check fails even though registering was successful
+//        try {
+//            //double check for successfull registration
+//        	String retrievedIP = DnsResolver.resolve(dns, said+ ".dns.dime-project.eu");
+//            //String retrievedIP = new DimeIPResolver().resolveSaid(said);
+//            if (!retrievedIP.equals(ip)){
+//                String message = "DNS resolve delivered "+retrievedIP+" expected was "+ip+"! Resolving at " + dns + " failed!";
+//                logger.error(message);
+//                throw new DNSRegisterFailedException(message, new Exception());
+//            }
+//        } catch (NamingException ex) {
+//            String message = "DNS resolve failed! Unable to resolve "+said+" at " + dns + "\n" + ex.getMessage();
+//            logger.error(message, ex);
+//            throw new DNSRegisterFailedException(message, ex);
+//        }
 
 
     }
