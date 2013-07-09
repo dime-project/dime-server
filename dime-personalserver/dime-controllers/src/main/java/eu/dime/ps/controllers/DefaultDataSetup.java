@@ -197,9 +197,15 @@ private static final Logger logger = LoggerFactory.getLogger(DefaultDataSetup.cl
 		//Person testuser3 = createPerson("Test", "User3", "testuser3", 1);
 		
 		// new test user variables, the assignment takes place in the loop
-		Person testuser1 = null; 
-		Person testuser2 = null;
-		Person testuser3 = null;
+		//Person testuser1 = null; 
+		Person testuser1 = modelFactory.getPIMOFactory().createPerson();
+		testuser1.setTrustLevel(0.5); 
+		//Person testuser2 = null;
+		Person testuser2 = modelFactory.getPIMOFactory().createPerson();
+		testuser2.setTrustLevel(0.0); 
+		//Person testuser3 = null;
+		Person testuser3 = modelFactory.getPIMOFactory().createPerson();
+		testuser3.setTrustLevel(1.0); 
 		
 		// adding contacts of the di.me consortium
 		List<Person> dimePeople = new ArrayList<Person>();
