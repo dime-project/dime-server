@@ -234,9 +234,11 @@ public class PersonMatchingNotifier implements BroadcastReceiver {
 				if (sourceName == null) {
 					logger.error("User notifications (merge_recommendation) can't be send for any found match: source name is " +
 							"missing for " + person);
-				} //else {
-				  //temporary fix to discard notifications for test users
-				  else if ((!(sourceName.equals("Test User1"))) || (!(sourceName.equals("Test User2"))) || (!(sourceName.equals("Test User3"))) || (!(sourceName.equals("Test User1@dime"))) || (!(sourceName.equals("Test User2@dime"))) || (!(sourceName.equals("Test User3@dime")))) {
+				//temporary fix to discard notifications for test users
+				} else if ((!(sourceName.equals("Test User1"))) || (!(sourceName.equals("Test User2"))) || (!(sourceName.equals("Test User3"))) || (!(sourceName.equals("Test User1@dime"))) || (!(sourceName.equals("Test User2@dime"))) || (!(sourceName.equals("Test User3@dime")))) {
+				  	logger.error("User notification (merge_recommendation) omitted " +
+							"for test user " + person);
+				} else {
 					for (PersonMatch match : matchList) {
 						if (match.getSimilarityScore() > PersonMatchingConfiguration.THRESHOLD) {
 							
@@ -248,6 +250,11 @@ public class PersonMatchingNotifier implements BroadcastReceiver {
 									logger.error("User notification (merge_recommendation) can't be send: target name is missing " +
 											"for " + match.getTarget());
 									continue;
+								//temporary fix to discard notifications for test users
+								} else if ((!(targetName.equals("Test User1"))) || (!(targetName.equals("Test User2"))) || (!(targetName.equals("Test User3"))) || (!(targetName.equals("Test User1@dime"))) || (!(targetName.equals("Test User2@dime"))) || (!(targetName.equals("Test User3@dime")))) {
+									logger.error("User notification (merge_recommendation) omitted " +
+											"for test user " + match.getTarget());
+									continue;	
 								}
 							} catch (NotFoundException e) {
 								logger.error("User notification (merge_recommendation) can't be send: target id " + match.getTarget() +
