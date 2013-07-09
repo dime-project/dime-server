@@ -234,7 +234,9 @@ public class PersonMatchingNotifier implements BroadcastReceiver {
 				if (sourceName == null) {
 					logger.error("User notifications (merge_recommendation) can't be send for any found match: source name is " +
 							"missing for " + person);
-				} else {
+				} //else {
+				  //temporary fix to discard notifications for test users
+				  else if ((!(sourceName.equals("Test User1"))) || (!(sourceName.equals("Test User2"))) || (!(sourceName.equals("Test User3"))) || (!(sourceName.equals("Test User1@dime"))) || (!(sourceName.equals("Test User2@dime"))) || (!(sourceName.equals("Test User3@dime")))) {
 					for (PersonMatch match : matchList) {
 						if (match.getSimilarityScore() > PersonMatchingConfiguration.THRESHOLD) {
 							
