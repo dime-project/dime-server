@@ -77,17 +77,7 @@ public class PSResourceControllerTestIt extends PSInfosphereControllerTestIt {
 		controller.setFileManager(fileManager);
 		controller.setSharingManager(sharingManager);
 	}
-	
-	@After
-	public void tearDown() throws Exception {
-		Collection<FileDataObject> files = fileManager.getAll();
-		for (FileDataObject file: files){
-			fileManager.remove(file.asURI().toString());		
-		}
-		super.tearDown();
-			
-	}
-
+		
 	private Collection<Map<String, Object>> buildIncludes(Account sender, Person...persons) {
 		Map<String, Object> include = new HashMap<String, Object>();
 		include.put("saidSender", sender.toString());
