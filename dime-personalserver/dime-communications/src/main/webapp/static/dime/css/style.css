@@ -546,6 +546,11 @@ input[type="file"] {
    
 }
 
+#groupNavigation > #containerCaption{
+    text-decoration: underline;
+    cursor: pointer;
+}
+
 #containerCaption{
     float: left;
     width: 90%;

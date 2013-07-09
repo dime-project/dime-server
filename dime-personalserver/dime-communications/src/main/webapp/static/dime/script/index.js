@@ -808,12 +808,17 @@ DimeView = {
         if (event){
             event.stopPropagation();
         }
+
+        Dime.evaluation.createAndSendEvaluationItemForAction("action_editItem");
         var isEditable=(entry.userId==='@me');
 
         Dime.Dialog.showDetailItemModal(entry, isEditable, message);
     },
     
     editSelected: function(){
+
+        Dime.evaluation.createAndSendEvaluationItemForAction("action_editItem");
+
         var selectedItems = JSTool.getDefinedMembers(DimeView.selectedItems);
         if (selectedItems.length!==1){
             window.alert("Please select a single item.");
@@ -828,8 +833,13 @@ DimeView = {
     },
     
     removeSelected: function(){
+
+
         var mySelectedItems = JSTool.getDefinedMembers(DimeView.selectedItems);
         if (confirm("Are you sure, you want to delete "+mySelectedItems.length+" items?")){
+            
+            Dime.evaluation.createAndSendEvaluationItemForAction("action_removePerson");
+
             for (var i=0;i<mySelectedItems.length;i++){
                 var item = mySelectedItems[i];
                 Dime.REST.removeItem(item);
@@ -839,6 +849,8 @@ DimeView = {
            
     
     shareSelected: function(){
+        Dime.evaluation.createAndSendEvaluationItemForAction("action_share");
+
         var selectedItems = JSTool.getDefinedMembers(DimeView.selectedItems);
 
         var triggerDialog=function(response){
@@ -1128,6 +1140,10 @@ DimeView = {
         if (!viewType){
             viewType = DimeView.GROUP_CONTAINER_VIEW;
         }
+
+        //send some evaluation data
+        Dime.evaluation.updateViewStack(groupType, viewType);
+
         DimeView.currentView=viewType;
         DimeView.switchViewForViewType();
 
@@ -1231,7 +1247,10 @@ DimeView = {
         DimeView.switchViewForViewType();
 
         DimeView.currentGuid=guid;
-        
+
+        Dime.evaluation.updateViewStack("", DimeView.currentView);
+
+
         
         var updateProfileContainer=function(response){            
             
@@ -1305,91 +1324,89 @@ DimeView = {
             DimeView.bubble=null;
             return;
         }
+        var serverInfo = Dime.ps_configuration.serverInformation; //initially retrieved in main.js
 
 
-        var showInformation=function(serverInfo){
 
-            var loginbaselink=Dime.ps_configuration.getRealBasicUrlString()
-                +'/dime-communications/web/access/';
-            var githubLink='https://github.com/dime-project/meta/';
-            var loginFromServerSettings=serverInfo.baseUrl+'/dime-communications/web/access/login';
-            var questionaireLink = Dime.ps_configuration.getQuestionairePath();
+        var loginbaselink=Dime.ps_configuration.getRealBasicUrlString()
+        +'/dime-communications/web/access/';
+        var githubLink='https://github.com/dime-project/meta/';
+        var loginFromServerSettings=serverInfo.baseUrl+'/dime-communications/web/access/login';
+        var questionaireLink = Dime.ps_configuration.getQuestionairePath();
 
 
-            var bubbleBody = $('<div/>')
-                .append(
-                    $('<div/>')                        
-                        .append($('<h3/>').text('Getting started with di.me:')) 
-                        .append($('<p/>')
-                            .append($('<span/>').text('Please follow our')).css('margin-top','10px')
-                            .addHrefOpeningInNewWindow('/dime-communications/static/ui/dime/howto.html','Tutorial','orangeBubbleLink')
-                            .append($('<span/>').text('... and get the mobile App'))
-                            .addHrefOpeningInNewWindow('http://dimetrials.bdigital.org:8080/dimemobile.apk','for Android.','orangeBubbleLink')
-                            
-                            .css('margin-bottom','30px')
-                            .css('font-size','16px')
-                            
-                            )
-                        .append($('<h3/>').text('Please give us feedback to the concept on:'))
-                        .append($('<ul/>')
-                            .append($('<li/>').addHrefOpeningInNewWindow(questionaireLink+'?lang=en','di.me Questionnaire (English)','orangeBubbleLink'))
-                            .append($('<li/>').addHrefOpeningInNewWindow(questionaireLink+'?lang=de','di.me Fragebogen (German)','orangeBubbleLink'))
-                            )
+        var bubbleBody = $('<div/>')
+        .append(
+            $('<div/>')
+                .append($('<h3/>').text('Getting started with di.me:'))
+                .append($('<p/>')
+                    .append($('<span/>').text('Please follow our')).css('margin-top','10px')
+                    .addHrefOpeningInNewWindow('/dime-communications/static/ui/dime/howto.html','Tutorial','orangeBubbleLink')
+                    .append($('<span/>').text('... and get the mobile App'))
+                    .addHrefOpeningInNewWindow('http://dimetrials.bdigital.org:8080/dimemobile.apk','for Android.','orangeBubbleLink')
 
-                        .append($('<h3/>').text('This is a demonstration prototype'))
-                        .append($('<p/>')
-                            .append($('<span/>').text('.. so you will find many bugs and issues.'))
-                            .append($('<br/>')).append($('<span/>').text('Please report them on:'))
-                            .addHrefOpeningInNewWindow(githubLink+'issues',githubLink+'issues','orangeBubbleLink')
-                        )
-                        .append($('<h3/>').text('About'))
-                        .append($('<p/>')
-                            .append($('<span/>').text('The test trial homepage:'))
-                            .addHrefOpeningInNewWindow('http://dimetrials.bdigital.org:8080/dime','dimetrials.bdigital.org','orangeBubbleLink')
-                        )
-                        .append($('<p/>')
-                            .append($('<span/>').text('di.me open source: comming soon'))
-                            //.addHrefOpeningInNewWindow(githubLink,githubLink,'orangeBubbleLink')
-                        )
-                        .append($('<p/>')
-                            .append($('<span/>').text('The research project:'))
-                            .addHrefOpeningInNewWindow('http://www.di.me-project.eu','www.di.me-project.eu','orangeBubbleLink')
-                        )
-                        .append($('<p/>')
-                            .append($('<span/>').text('Your dime-server @ '+serverInfo.affiliation+":"))
-                            .addHrefOpeningInNewWindow(loginFromServerSettings,serverInfo.baseUrl+"/[..]/login",'orangeBubbleLink')
-                        )
-                        .append($('<table/>')
-                        .append($('<tr/>')
-                            .append($('<td/>')
-                              .addHrefOpeningInNewWindow(loginbaselink+"conditions",'Usage Conditions (EN)','orangeBubbleLink'))
-                            .append($('<td/>')
-                              .addHrefOpeningInNewWindow(loginbaselink+"conditions?lang=de",'Nutzungsbedingungen (DE)','orangeBubbleLink'))
-                         )
-                        .append($('<tr/>')
-                            .append($('<td/>')
-                                .addHrefOpeningInNewWindow(loginbaselink+"privacypolicy",'Privacy declaration (EN)','orangeBubbleLink'))
-                            .append($('<td/>')
-                                .addHrefOpeningInNewWindow(loginbaselink+"privacypolicy?lang=de",'Datenschutzerklärung (DE)','orangeBubbleLink'))
-                        )
-                        .append($('<tr/>')
-                            .append($('<td/>')
-                                .addHrefOpeningInNewWindow(loginbaselink+"about",'Imprint (EN)','orangeBubbleLink'))
-                            .append($('<td/>')
-                                .addHrefOpeningInNewWindow(loginbaselink+"about?lang=de",'Impressum (DE)','orangeBubbleLink'))
-                                
-                        ))
-                );
+                    .css('margin-bottom','30px')
+                    .css('font-size','16px')
 
-                DimeView.bubble = new DimeView.OrangeBubble(this,'Welcome and many thanks for trying out di.me!',  bubbleBody, function(){
-                    //dismiss handler
-                    DimeView.bubble=null;
-                });
-                DimeView.bubble.show();
-        };
+                    )
+                .append($('<h3/>').text('Please give us feedback to the concept on:'))
+                .append($('<ul/>')
+                    .append($('<li/>').addHrefOpeningInNewWindow(questionaireLink+'?lang=en','di.me Questionnaire (English)','orangeBubbleLink'))
+                    .append($('<li/>').addHrefOpeningInNewWindow(questionaireLink+'?lang=de','di.me Fragebogen (German)','orangeBubbleLink'))
+                    )
 
-        Dime.REST.getServerInformation(showInformation, this);
-        
+                .append($('<h3/>').text('This is a demonstration prototype'))
+                .append($('<p/>')
+                    .append($('<span/>').text('.. so you will find many bugs and issues.'))
+                    .append($('<br/>')).append($('<span/>').text('Please report them on:'))
+                    .addHrefOpeningInNewWindow(githubLink+'issues',githubLink+'issues','orangeBubbleLink')
+                )
+                .append($('<h3/>').text('About'))
+                .append($('<p/>')
+                    .append($('<span/>').text('The test trial homepage:'))
+                    .addHrefOpeningInNewWindow('http://dimetrials.bdigital.org:8080/dime','dimetrials.bdigital.org','orangeBubbleLink')
+                )
+                .append($('<p/>')
+                    .append($('<span/>').text('di.me open source: comming soon'))
+                    //.addHrefOpeningInNewWindow(githubLink,githubLink,'orangeBubbleLink')
+                )
+                .append($('<p/>')
+                    .append($('<span/>').text('The research project:'))
+                    .addHrefOpeningInNewWindow('http://www.di.me-project.eu','www.di.me-project.eu','orangeBubbleLink')
+                )
+                .append($('<p/>')
+                    .append($('<span/>').text('Your dime-server @ '+serverInfo.affiliation+":"))
+                    .addHrefOpeningInNewWindow(loginFromServerSettings,serverInfo.baseUrl+"/[..]/login",'orangeBubbleLink')
+                )
+                .append($('<table/>')
+                .append($('<tr/>')
+                    .append($('<td/>')
+                        .addHrefOpeningInNewWindow(loginbaselink+"conditions",'Usage Conditions (EN)','orangeBubbleLink'))
+                    .append($('<td/>')
+                        .addHrefOpeningInNewWindow(loginbaselink+"conditions?lang=de",'Nutzungsbedingungen (DE)','orangeBubbleLink'))
+                    )
+                .append($('<tr/>')
+                    .append($('<td/>')
+                        .addHrefOpeningInNewWindow(loginbaselink+"privacypolicy",'Privacy declaration (EN)','orangeBubbleLink'))
+                    .append($('<td/>')
+                        .addHrefOpeningInNewWindow(loginbaselink+"privacypolicy?lang=de",'Datenschutzerklärung (DE)','orangeBubbleLink'))
+                )
+                .append($('<tr/>')
+                    .append($('<td/>')
+                        .addHrefOpeningInNewWindow(loginbaselink+"about",'Imprint (EN)','orangeBubbleLink'))
+                    .append($('<td/>')
+                        .addHrefOpeningInNewWindow(loginbaselink+"about?lang=de",'Impressum (DE)','orangeBubbleLink'))
+
+                ))
+        );
+
+        DimeView.bubble = new DimeView.OrangeBubble(this,'Welcome and many thanks for trying out di.me!',  bubbleBody, function(){
+            //dismiss handler
+            DimeView.bubble=null;
+        });
+        DimeView.bubble.show();
+
+
     }//END DimeView.showAbout()
 };
 

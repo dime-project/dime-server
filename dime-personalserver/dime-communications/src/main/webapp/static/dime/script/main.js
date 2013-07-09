@@ -667,7 +667,6 @@ Dime.psMap = {
         SERVICEADAPTER: 'serviceadapter',
         DEVICE: 'device',
         CONTEXT: 'context',
-        EVALUATION: 'evaluation',
         PLACE: 'place',
         ACCOUNT: 'account',
         USERNOTIFICATION:'usernotification'
@@ -722,13 +721,12 @@ Dime.psMap.addToTypeMap(new Dime.PSMap(Dime.psMap.TYPE.LIVESTREAM, "livestream",
 Dime.psMap.addToTypeMap(new Dime.PSMap(Dime.psMap.TYPE.LIVEPOST, "livepost", Dime.psMap.TYPE.LIVESTREAM, 0, 'livepost.png', 'livepost', NO, YES, 'liveposts'));
 Dime.psMap.addToTypeMap(new Dime.PSMap(Dime.psMap.TYPE.NOTIFICATION, "notification", 0, 0,  'notification.png', 'notification', NO, YES, 'notification'));
 Dime.psMap.addToTypeMap(new Dime.PSMap(Dime.psMap.TYPE.PROFILE, "profile card", 0, Dime.psMap.TYPE.PROFILEATTRIBUTE, 'profileCard.png', 'profile', YES, YES, 'profile cards'));
-Dime.psMap.addToTypeMap(new Dime.PSMap(Dime.psMap.TYPE.PROFILEATTRIBUTE, "attribute", Dime.psMap.TYPE.PROFILE, 0, 'profileCard.png', 'profileattribute', YES, YES, 'attributes'));
+Dime.psMap.addToTypeMap(new Dime.PSMap(Dime.psMap.TYPE.PROFILEATTRIBUTE, "profile detail", Dime.psMap.TYPE.PROFILE, 0, 'profileCard.png', 'profileattribute', YES, YES, 'profile details'));
 Dime.psMap.addToTypeMap(new Dime.PSMap(Dime.psMap.TYPE.SITUATION, "situation", 0, 0,  'situation_general.png', 'situation', YES, YES, 'situations'));
 Dime.psMap.addToTypeMap(new Dime.PSMap(Dime.psMap.TYPE.EVENT, "calendar entry", 0, 0,  'resource.png', 'event', YES, YES, 'calendar entries'));
 Dime.psMap.addToTypeMap(new Dime.PSMap(Dime.psMap.TYPE.SERVICEADAPTER, "service", 0, 0,  'resource.png', 'serviceadapter', YES, YES, 'services'));
 Dime.psMap.addToTypeMap(new Dime.PSMap(Dime.psMap.TYPE.DEVICE, "device", 0, 0,  'resource.png', 'device', NO, YES, 'devices'));
 Dime.psMap.addToTypeMap(new Dime.PSMap(Dime.psMap.TYPE.CONTEXT, "context", 0, 0, 'resource.png', 'context', NO, NO, 'context'));
-Dime.psMap.addToTypeMap(new Dime.PSMap(Dime.psMap.TYPE.EVALUATION, "evaluation", 0, 0,  'resource.png', 'evaluation', NO, YES, 'evaluations'));
 Dime.psMap.addToTypeMap(new Dime.PSMap(Dime.psMap.TYPE.PLACE, "place", 0, 0, 'resource.png', 'place', NO, YES, 'places'));
 Dime.psMap.addToTypeMap(new Dime.PSMap(Dime.psMap.TYPE.ACCOUNT, "account", 0, 0, 'resource.png', 'account', NO, YES, 'accounts'));
 Dime.psMap.addToTypeMap(new Dime.PSMap(Dime.psMap.TYPE.USERNOTIFICATION, "notification", 0, 0, 'notification.png', 'usernotification', NO, YES, 'notifications'));
@@ -794,37 +792,49 @@ Dime.PA_CATEGORY_MAP = {
     PERSON_NAME: {
         name: "PersonName",
         caption: "Name",
-        keys: ["nameHonorificSuffix", "nameFamily", "nameHonorificPrefix", "nameAdditional", "nameGiven", "nickname", "fullname"]
+        keys: ["nameHonorificSuffix", "nameFamily", "nameHonorificPrefix", "nameAdditional", "nameGiven", "nickname", "fullname"],
+        keyCaptions: ["HonorificSuffix", "Family", "HonorificPrefix", "Additional", "Given", "Nickname", "Fullname"]
     },
+//    NAME: { //only internally
+//        name: "Name",
+//        caption: "Name",
+//        keys: ["nickname", "fullname"]
+//    },
     BIRTH_DATE: {
         name: "BirthDate",
         caption: "Birthday",
-        keys: ["birthDate"]
+        keys: ["birthDate"],
+        keyCaptions: ["birthDate"]
     },
     EMAIL_ADDRESS: {
         name: "EmailAddress",
         caption: "Email",
-        keys: ["emailAddress"]
+        keys: ["emailAddress"],
+        keyCaptions: ["emailAddress"]
     },
     PHONE_NUMBER: {
         name: "PhoneNumber",
         caption: "Phone",
-        keys: ["phoneNumber"]
+        keys: ["phoneNumber"],
+        keyCaptions: ["phoneNumber"]
     },
     POSTAL_CODE: {
         name: "PostalAddress",
         caption: "Address",
-        keys: ["region", "country", "extendedAddress", "addressLocation", "streetAddress", "postalcode", "locality", "pobox"]
+        keys: ["region", "country", "extendedAddress", "addressLocation", "streetAddress", "postalcode", "locality", "pobox"],
+        keyCaptions: ["region", "country", "extendedAddress", "addressLocation", "streetAddress", "postalcode", "locality", "pobox"]
     },
     AFFILIATION: {
         name: "Affiliation",
         caption: "Affiliation",
-        keys: ["department", "org", "title", "role"]
+        keys: ["department", "org", "title", "role"],
+        keyCaptions: ["Department", "Organisation", "Title", "Role"]
     },
     INTERESTS: {
-        name: "Interests",
-        caption: "Interests",
-        keys: ["interest"]
+        name: "Hobby",
+        caption: "Hobby",
+        keys: ["hobby"],
+        keyCaptions: ["Hobby"]
     }
     
 };
@@ -1146,6 +1156,94 @@ Dime.AdvisoryItem.prototype={
     }
 };
 
+Dime.evaluation={
+
+    getViewStackItemByGroupType: function(groupType, viewType){
+        //https://confluence.deri.ie:8443/display/digitalme/SET+%28Self+Evaluation+Tool%29+Specs#SET%28SelfEvaluationTool%29Specs-Viewstack
+        
+        if (viewType===DimeView.SETTINGS_VIEW){
+            return "Settings";
+        }
+        if (viewType===DimeView.PERSON_VIEW){
+            return "Person_Detail";
+        }
+        if (groupType===Dime.psMap.TYPE.GROUP){
+            return "People";
+        }else if (groupType===Dime.psMap.TYPE.DATABOX){
+            return "Data";
+        }else if (groupType===Dime.psMap.TYPE.PROFILE){
+            return "Myprofile";
+        }else if (groupType===Dime.psMap.TYPE.LIVESTREAM){
+            return "Communication";
+        }else if (groupType===Dime.psMap.TYPE.SITUATION){
+            return "Situations";
+        }else if (groupType===Dime.psMap.TYPE.PLACE){
+            return "Place";
+        }
+        return 'undefined';
+    },
+
+    createEmptyInvolvedItems: function(){
+          return {
+            "profile":0,
+            "profileattribute":0,
+            "person":0,
+            "group":0,
+            "databox":0,
+            "livepost":0,
+            "account":0
+        };
+    },
+
+    createInvolvedItems: function(profiles, profileattributes, persons,
+        groups, databoxes, liveposts, accounts){
+        return {  
+            "profile":profiles,
+            "profileattribute":profileattributes,
+            "person":persons,
+            "group":groups,
+            "databox":databoxes,
+            "livepost":liveposts,
+            "account":accounts
+        };
+    },
+
+    createViewStack: function(){
+        return [];
+    },
+
+
+   createEvaluationItem: function(evaluationId, viewStack, action, involvedItems){
+       return {
+            "guid": JSTool.randomGUID(),
+            "type": "evaluation",
+            "created": new Date().getTime(),
+            "tenantId": evaluationId, //evaluation id from user call
+            "clientId":"0.01",
+            "viewStack":viewStack,
+            "action": action,
+            "currPlace":"unknown",
+            "currSituationId":"unknown",
+            "involvedItems":involvedItems
+        };
+    },
+    updateViewStack: function(groupType, viewType){
+        if (!Dime.ps_configuration.viewStack){
+            Dime.ps_configuration.viewStack=this.createViewStack();
+            //store initial evaluation
+            var action = "navigate_search_web_UI";
+            this.createAndSendEvaluationItemForAction(action);
+        }
+        Dime.ps_configuration.viewStack.push(this.getViewStackItemByGroupType(groupType, viewType))
+    },
+
+    createAndSendEvaluationItemForAction: function(action){
+        var evaluationItem = this.createEvaluationItem(Dime.ps_configuration.userInformation.evaluationId,
+            Dime.ps_configuration.viewStack, action, this.createEmptyInvolvedItems());
+        Dime.REST.postEvaluation(evaluationItem);
+    }
+};
+
 
 //---------------------------------------------
 //#############################################
@@ -1268,6 +1366,8 @@ Dime.PsConfigurationClass = function(mainSaid, hostname, port, useHttps){
     this.serverPath = '/dime-communications/api/dime/rest';   
     this.deviceGuid = JSTool.randomGUID();
     this.startTime = new Date().getTime();
+    this.serverInformation={}; //will be set in the initRegister call
+    this.userInformation={};//will be set in the initRegister call
     
     //old config from segovia
     this.uiMainSite = '/dime-communications/static/ui/dime/index.html';
@@ -2338,7 +2438,8 @@ Dime.psHelper = {
             items:[]
         };
         
-        if (Dime.psHelper.isAgentType(type)){
+        // only persons are trustable if (Dime.psHelper.isAgentType(type)){
+        if (type===Dime.psMap.TYPE.PERSON){
             entry["nao:trustLevel"]=0.5;
         }else if (Dime.psHelper.isShareableType(type)){
             entry["nao:privacyLevel"]=1.0;
@@ -2975,6 +3076,17 @@ Dime.REST = {
         var request = Dime.psHelper.prepareRequest(userItem);
 
         $.postJSON(callPath, request, jointCallBack);
+    },
+    postEvaluation: function(evaluationItem){                     
+        var callPath = Dime.ps_configuration.getUserUrlString()+"/evaluation/@me";
+
+        var callback = function(response){
+            console.log(response);
+        };
+
+        var request = Dime.psHelper.prepareRequest(evaluationItem);
+
+        $.postJSON(callPath, request, callback);
     }
 
     
@@ -3308,26 +3420,42 @@ Dime.initProcessor.registerFunction( function(callback){
 });
 
 /*
- * handler of username 
+ * get server information
+ * handler of username
  */
 Dime.initProcessor.registerFunction( function(callback){
     
-    if (!Dime.ps_configuration.createNavigation){ //if no navigation needed skip this
-        callback();
-        return;
-    }
-
+ 
     var serverInfoCallBack=function(response){
-        var userString = Dime.ps_configuration.mainSaid+'@'+response.name;
-        $('#username').text(userString.substr(0, 27)).click(function(){
-            DimeView.showAbout.call(DimeView)
-        });
+
+        Dime.ps_configuration.serverInformation = response;
+
+        if (Dime.ps_configuration.createNavigation){
+            var userString = Dime.ps_configuration.mainSaid+'@'+response.name;
+            $('#username').text(userString.substr(0, 27)).click(function(){
+                DimeView.showAbout.call(DimeView)
+            });
+        }
+        callback();
     };
-    Dime.REST.getServerInformation(serverInfoCallBack)
+    Dime.REST.getServerInformation(serverInfoCallBack);
     
-    callback();
 });
 
+/*
+ * evaluation information
+ */
+Dime.initProcessor.registerFunction( function(callback){
+
+
+    var userCallBack=function(response){
+
+        Dime.ps_configuration.userInformation = response;
+        callback();
+    };
+    Dime.REST.getUser(userCallBack);
+
+});
 
 
 Dime.Navigation.registerCometCall = function(){    
@@ -3875,13 +4003,14 @@ Dime.DetailDialog.prototype = {
      
         for (var i=0; i<category.keys.length;i++){
             var key = category.keys[i];
+            var keyCaption = category.keyCaptions[i];
             
             if (!this.item.value[key]){
                 this.item.value[key]="";
             }
             
             ul.append($('<li class="DimeDetailDialogPAValueListItem" />')
-                .append($('<span class="DimeDetailDialogPAValueListItemKey"/>').text(key))
+                .append($('<span class="DimeDetailDialogPAValueListItemKey"/>').text(keyCaption))
                 .append($('<input class="DimeDetailDialogPAValueListItemValue" type="text"/>')
                     .attr('id',this.pAValueListItemValueIdPrefix+key)
                     .attr('value',this.item.value[key]))
@@ -4441,7 +4570,7 @@ Dime.ShareDialog = function(){
         .append($('<button type="button" class="close" data-dismiss="modal" aria-hidden="true" >x</button>')
             .clickExt(this, this.cancelHandler)
             )
-        .append($('<h3 id="myModalLabel">OK</h3>\n'))
+        .append($('<h3 id="myModalLabel">Share</h3>\n'))
         )
     //body
     .append(this.body)
@@ -4451,7 +4580,7 @@ Dime.ShareDialog = function(){
         .append($('<button class="YellowMenuButton" data-dismiss="modal" aria-hidden="true">Cancel</button>')
             .clickExt(this, this.cancelHandler)
             )
-        .append($('<button class="YellowMenuButton">Share</button>')
+        .append($('<button class="YellowMenuButton">OK</button>')
             .clickExt(this, this.okHandler)
             )   
         );             
