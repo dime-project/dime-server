@@ -6,6 +6,7 @@ import org.junit.Test;
 
 import eu.dime.commons.dto.Request;
 import eu.dime.commons.dto.Response;
+import eu.dime.commons.dto.SAccount;
 import eu.dime.commons.dto.SAdapter;
 import eu.dime.ps.communications.requestbroker.controllers.infosphere.PSAccountController;
 import eu.dime.ps.controllers.exception.InfosphereException;
@@ -25,7 +26,7 @@ public class PSAccountControllerTest extends PSInfoSphereControllerTest {
 	
 	
 	private static final String said= "juan";
-	private  Request<SAdapter> request;
+	private  Request<SAccount> request;
 	
 	public PSAccountControllerTest() throws ServiceNotAvailableException, ServiceAdapterNotSupportedException {
 		AccountManager mockedManager = buildAccountManager();
@@ -43,7 +44,7 @@ public class PSAccountControllerTest extends PSInfoSphereControllerTest {
 	@Test
 	public void testGetAllAccounts()  {
 		
-		Response<SAdapter> response = controller.getMyServiceAccounts();
+		Response<SAccount> response = controller.getMyServiceAccounts();
 		assertNotNull(response);
 		assertEquals("juan",response.getMessage().getData().entry.iterator().next().getName().toString());
 	}	
@@ -52,7 +53,7 @@ public class PSAccountControllerTest extends PSInfoSphereControllerTest {
 	@Test
 	public void testCreateAccount()  {			
 		
-		Response<SAdapter> response = controller.createServiceAccount(said,(Request<SAdapter>)request);
+		Response<SAccount> response = controller.createServiceAccount(said,(Request<SAccount>)request);
 		assertNotNull(response);
 		assertEquals("juan",response.getMessage().getData().entry.iterator().next().getName().toString());
 	}

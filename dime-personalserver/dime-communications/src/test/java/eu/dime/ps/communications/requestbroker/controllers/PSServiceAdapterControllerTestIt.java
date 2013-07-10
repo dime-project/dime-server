@@ -68,11 +68,10 @@ public class PSServiceAdapterControllerTestIt {
 			for (SAdapter jsonServiceAdapter : list) {
 				if(jsonServiceAdapter.getName().equals("linkedin")){
 					Assert.assertEquals("activeAdepter-id", jsonServiceAdapter.guid);
-					Assert.assertEquals("active", jsonServiceAdapter.getStatus());
+					
 				}
 				if(jsonServiceAdapter.getName().equals("twitter")){
-				    Assert.assertEquals("guid-twitter", jsonServiceAdapter.guid);
-					Assert.assertEquals("inactive", jsonServiceAdapter.getStatus());
+				    Assert.assertEquals("guid-twitter", jsonServiceAdapter.guid);					
 				}
 				
 			}
