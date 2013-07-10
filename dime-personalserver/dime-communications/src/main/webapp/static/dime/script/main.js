@@ -3432,7 +3432,7 @@ Dime.initProcessor.registerFunction( function(callback){
 
         if (Dime.ps_configuration.createNavigation){
             var userString = Dime.ps_configuration.mainSaid+'@'+response.name;
-            $('#username').text(userString.substr(0, 27)).click(function(){
+            $('#username').text(userString.substr(0, 21)).click(function(){
                 DimeView.showAbout.call(DimeView)
             });
         }

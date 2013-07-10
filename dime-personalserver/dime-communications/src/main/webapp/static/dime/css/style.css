@@ -1914,6 +1914,13 @@ input[type="checkbox"] {
     width: 98%;
 }
 
+#DimeDetailDialogSituation{
+    margin-top: 15px;
+    margin-right: 60px;
+    clear: both;
+    float: right;
+}
+
 .DimeDetailDialogText{
     float: left;
     clear: both;
