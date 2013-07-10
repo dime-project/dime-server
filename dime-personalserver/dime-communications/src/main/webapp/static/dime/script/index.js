@@ -1673,12 +1673,12 @@ Dime.Settings = {
 
         if(isNewAccount){
             callBack = function(response) {
-                console.log("NEW ACCOUNT: " + response);
+                console.log("NEW ACCOUNT: ", response);
             };
             Dime.REST.postNewItem(serviceAccount, callBack);
         }else{
             callBack = function(response) {
-                console.log("ACCOUNT UPDATED: " + response);
+                console.log("ACCOUNT UPDATED: ", response);
             };
             Dime.REST.updateItem(serviceAccount, callBack);
         }

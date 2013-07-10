@@ -272,7 +272,7 @@ public class PSAccountController implements APIController {
     public Response deleteAccount(@PathParam("said") String said,
             @PathParam("accountId") String accountId) {
 
-        logger.info("called API method: DELETE /dime/rest" + said + "account/@me/" + accountId);
+        logger.info("called API method: DELETE /dime/rest/" + said + "/account/@me/" + accountId);
 
         try {
             accountManager.remove(accountId);
