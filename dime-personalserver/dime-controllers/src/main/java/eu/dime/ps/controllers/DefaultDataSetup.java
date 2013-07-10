@@ -1,5 +1,6 @@
 package eu.dime.ps.controllers;
 
+import ie.deri.smile.vocabulary.NAO;
 import ie.deri.smile.vocabulary.NIE;
 import ie.deri.smile.vocabulary.NSO;
 import ie.deri.smile.vocabulary.PIMO;
@@ -50,6 +51,7 @@ import eu.dime.ps.semantic.model.pimo.PersonGroup;
 import eu.dime.ps.semantic.model.ppo.AccessSpace;
 import eu.dime.ps.semantic.model.ppo.PrivacyPreference;
 import eu.dime.ps.semantic.privacy.PrivacyPreferenceType;
+import eu.dime.ps.semantic.rdf.ResourceStore;
 
 /**
  * This creates and configures, by default, tenants for a pre-defined list of
@@ -341,6 +343,16 @@ private static final Logger logger = LoggerFactory.getLogger(DefaultDataSetup.cl
 		
 		// add all dime people in a group
 		createPersonGroup("di.me Project", me, dimePeople.toArray(new Person[dimePeople.size()]));
+		
+		setRelatedTo(photo, friendsGroup);
+		setRelatedTo(friendsGroup, photo);
+		try {
+			personGroupManager.update(friendsGroup);
+			fileManager.update(photo);
+		} catch (InfosphereException e) {
+			logger.warn("Could not update relatedTo. "+e);
+		}
+		
 
 		TenantContextHolder.clear();
 	}
@@ -393,6 +405,10 @@ private static final Logger logger = LoggerFactory.getLogger(DefaultDataSetup.cl
 		return group;
 	}
 
+	private void setRelatedTo(Resource a, Resource b){
+		a.getModel().addStatement(a, NAO.isRelated, b);
+	}
+	
 	private LivePost createLivePost(String text, Person creator, URI sharedBy, URI sharedWith) {
 		LivePost livePost = modelFactory.getDLPOFactory().createLivePost();
 		livePost.setTextualContent(text);
