@@ -1464,7 +1464,7 @@ Dime.Settings = {
                     $('<img></img>')                    
                     .attr("src", Dime.psHelper.guessLinkURL(item.imageUrl))                    
                    )
-                .append("<b>" + item.name.substring(0,25) + "</b></br>")
+                .append("<b>" + item.name.substr(0,17) + "</b></br>")
                 .append(
                     $("<span></span>")
                     .addClass("serviceActiveMessage")
