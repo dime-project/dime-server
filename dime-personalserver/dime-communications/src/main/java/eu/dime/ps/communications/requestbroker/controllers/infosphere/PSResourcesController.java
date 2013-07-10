@@ -240,7 +240,7 @@ public class PSResourcesController extends PSSharingControllerBase implements AP
 	@Path("@me/@all")
 	public Response<Resource> getAllMyResources(@PathParam("said") String said) {
 		Data<Resource> data = null;	
-		List<URI> properties = new ArrayList();
+		List<URI> properties = new ArrayList<URI>();
 		properties = Arrays.asList(payload);
 
 		try {
@@ -275,10 +275,12 @@ public class PSResourcesController extends PSSharingControllerBase implements AP
 			@PathParam("personID") String personID, @PathParam("profileID") String profileID) {
 
 		Data<Resource> data = null;
-
-		try {
-			Collection<FileDataObject> files = fileManager.getAllSharedBy(personID);
-
+		List<URI> properties = new ArrayList<URI>();
+		properties = Arrays.asList(payload);
+		
+		try {		
+		
+			Collection<FileDataObject> files = fileManager.getAllByCreator(personManager.get(personID),properties);
 			data = new Data<Resource>(0, files.size(), files.size());
 
 			for (FileDataObject file : files) {
