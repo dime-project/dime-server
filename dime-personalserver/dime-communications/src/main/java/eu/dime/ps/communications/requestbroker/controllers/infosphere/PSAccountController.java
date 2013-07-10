@@ -256,7 +256,7 @@ public class PSAccountController implements APIController {
             return Response.badRequest(e.getMessage(), e);
         }
 
-        return Response.ok();
+        return Response.ok(data);
     }
 
     /**
