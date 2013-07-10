@@ -76,9 +76,8 @@ public class ServiceGatewayImpl implements ServiceGateway {
 		this.loadedAdapters.putIfAbsent(DimeServiceAdapter.NAME, DimeServiceAdapter.class);
 		this.loadedAdapters.putIfAbsent(LocationServiceAdapter.adapterName, LocationServiceAdapter.class);
 		this.loadedAdapters.putIfAbsent(ProximityServiceAdapter.adapterName, ProximityServiceAdapter.class);
-		this.loadedAdapters.putIfAbsent(SocialRecommenderAdapter.adapterName, SocialRecommenderAdapter.class);
-                //FIXME - deactivated for github
-		//this.loadedAdapters.putIfAbsent(YMServiceAdapter.adapterName, YMServiceAdapter.class);
+		this.loadedAdapters.putIfAbsent(SocialRecommenderAdapter.adapterName, SocialRecommenderAdapter.class);                
+		this.loadedAdapters.putIfAbsent(YMServiceAdapter.adapterName, YMServiceAdapter.class);
 		
 		this.adapters = new ConcurrentHashMap<String, ServiceAdapter>();
 		this.supportedAdapters = new ConcurrentHashMap<String, ServiceMetadata>();
@@ -112,14 +111,20 @@ public class ServiceGatewayImpl implements ServiceGateway {
 
         @Override
         public ServiceAdapter makeServiceAdapter(String adapterName) throws Exception {
+            try{
 
 		if (supportedAdapters.containsKey(adapterName)){
+
 			ServiceAdapter adapter = (ServiceAdapter) this.loadedAdapters.get(adapterName).newInstance();
                         adapter.initFromMetaData(this.getServiceMetadata(adapterName, adapter.getIdentifier()));
                         return adapter;
 		} else {
 			return null;
 		}
+            }catch(NullPointerException ex){
+                logger.error("Cannot instantiate adapter with name: "+adapterName, ex);
+                return null;
+            }
 	}
 	
 	@Override
