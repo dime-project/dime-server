@@ -247,7 +247,7 @@ public class DimeServiceAdapter extends ServiceAdapterBase implements InternalSe
 	 */
 	public  BinaryFile getBinary(String receiverSAID, String senderSAID,
 			String resourceId) throws 	ServiceNotAvailableException {
-
+			
 		// Retrieve username & password to establish the connection 
 		String username = null;
 		String secret = null;
@@ -257,7 +257,7 @@ public class DimeServiceAdapter extends ServiceAdapterBase implements InternalSe
 		} catch (NoResultException e) {
 			throw new ServiceNotAvailableException("Could not find username & password from the credentials store", e);
 		}
-
+		logger.info("username: " + username + " secret: " + secret);
 		// Resolve IP for the receiver said and create proxy
 		HttpRestProxy proxy = null;
 		String targetSaidName = credentialStore.getNameSaid(receiverSAID);

@@ -429,20 +429,22 @@ public class PSResourcesController extends PSSharingControllerBase implements AP
 	// FileManager
 
 	@GET
-	@Path("/@me/shared/{saidReceiver}/{resourceID}")
-	public javax.ws.rs.core.Response getSharedBinaryFile(@PathParam("said") String said,
-			@PathParam("resourceID") String resourceID,@PathParam("saidReceiver") String saidReceiver) {
+	@Path("/@me/shared/{saidReceiver}/{saidSender}/{resourceID}")
+	public javax.ws.rs.core.Response getSharedBinaryFile(
+			@PathParam("said") String said,
+			@PathParam("saidSender") String saidSender,
+			@PathParam("saidReceiver") String saidReceiver,
+			@PathParam("resourceID") String resourceID) {
 
 		logger.info("Gettin binary file shared by: "+saidReceiver+" with URI= " + resourceID);		
 
 		DimeServiceAdapter adapter = null;
-		//obtain the saidFor the sender, this should be already in place since it is a shared resource		
+		//obtain the saidFor the receiver, this should be already in place since it is a shared resource		
 		String saidNameReceiver = credentialStore.getNameSaid(saidReceiver);
-		//TODO: specify sender (needs to come from UI or needs to be stored somewhere)
-		//String saidNameSender = credentialStore.getNameSaid(saidURISender);  <-- uncomment when saidURISender is available 
-		//FIXME: remove following "hack" -> might fail if there are be more than one connection between two persons
-		AccountCredentials ac = AccountCredentials.findAllByTargetUri(saidReceiver);
-		String saidURISender = ac.getSource().getAccountURI();
+		logger.info("saidNameReceiver for: "+saidReceiver+" is " + resourceID);	
+		//specify sender (needs to come from UI or needs to be stored somewhere)
+		String saidNameSender = credentialStore.getNameSaid(saidSender); 
+		logger.info("saidNameSender for: "+saidReceiver+" is " + resourceID);	
 
 		try {
 			adapter = (DimeServiceAdapter) serviceGateway.getDimeServiceAdapter(saidNameReceiver);				
@@ -452,10 +454,11 @@ public class PSResourcesController extends PSSharingControllerBase implements AP
 		}
 
 		BinaryFile binary = null;
+		
 		//get the binary from the other PS
 		try {
-			logger.info("retreaving the binary file "+resourceID+" with shared from: "+saidNameReceiver+" to "+said);	
-			binary = adapter.getBinary(saidReceiver,saidURISender, URLEncoder.encode(resourceID));		
+			logger.info("retreaving the binary file "+resourceID+" with shared from: "+saidNameReceiver+" to "+saidNameSender);	
+			binary = adapter.getBinary(saidReceiver,saidSender, URLEncoder.encode(resourceID));		
 		} catch (ServiceNotAvailableException e) {
 			logger.error("Resource cannot be retreived for trouble with the serviceAdapter: " + e.getMessage());
 			return javax.ws.rs.core.Response.serverError().build();
