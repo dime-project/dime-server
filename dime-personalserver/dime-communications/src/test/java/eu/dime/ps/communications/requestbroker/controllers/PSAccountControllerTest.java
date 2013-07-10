@@ -6,8 +6,8 @@ import org.junit.Test;
 
 import eu.dime.commons.dto.Request;
 import eu.dime.commons.dto.Response;
+import eu.dime.commons.dto.SAdapter;
 import eu.dime.ps.communications.requestbroker.controllers.infosphere.PSAccountController;
-import eu.dime.ps.communications.requestbroker.controllers.infosphere.SAdapterWrapper;
 import eu.dime.ps.controllers.exception.InfosphereException;
 import eu.dime.ps.controllers.infosphere.manager.AccountManager;
 import eu.dime.ps.gateway.ServiceGateway;
@@ -25,7 +25,7 @@ public class PSAccountControllerTest extends PSInfoSphereControllerTest {
 	
 	
 	private static final String said= "juan";
-	private  Request<SAdapterWrapper> request;
+	private  Request<SAdapter> request;
 	
 	public PSAccountControllerTest() throws ServiceNotAvailableException, ServiceAdapterNotSupportedException {
 		AccountManager mockedManager = buildAccountManager();
@@ -33,7 +33,7 @@ public class PSAccountControllerTest extends PSInfoSphereControllerTest {
 		controller.setAccountManager(mockedManager);
 		controller.setServiceGateway(serviceGateway);
 		try {
-			request= buildSARequest(mockedManager.get("juan"));
+                    request= buildSARequest(mockedManager.get("juan"));
 		} catch (InfosphereException e) {			
 			e.printStackTrace();
 		}
@@ -43,18 +43,18 @@ public class PSAccountControllerTest extends PSInfoSphereControllerTest {
 	@Test
 	public void testGetAllAccounts()  {
 		
-		Response<SAdapterWrapper> response = controller.getMyServiceAccounts();
+		Response<SAdapter> response = controller.getMyServiceAccounts();
 		assertNotNull(response);
-		assertEquals("juan",response.getMessage().getData().entry.iterator().next().get("name").toString());
+		assertEquals("juan",response.getMessage().getData().entry.iterator().next().getName().toString());
 	}	
 	
 	
 	@Test
 	public void testCreateAccount()  {			
 		
-		Response<SAdapterWrapper> response = controller.createServiceAccount(said,(Request<SAdapterWrapper>)request);
+		Response<SAdapter> response = controller.createServiceAccount(said,(Request<SAdapter>)request);
 		assertNotNull(response);
-		assertEquals("juan",response.getMessage().getData().entry.iterator().next().get("name").toString());
+		assertEquals("juan",response.getMessage().getData().entry.iterator().next().getName().toString());
 	}
 	
 	

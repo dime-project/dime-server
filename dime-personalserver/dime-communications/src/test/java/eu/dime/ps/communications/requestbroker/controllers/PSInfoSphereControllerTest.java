@@ -22,10 +22,10 @@ import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.model.node.impl.URIImpl;
 import org.semanticdesktop.aperture.vocabulary.NIE;
 
-import eu.dime.ps.communications.requestbroker.controllers.infosphere.SAdapterWrapper;
 import eu.dime.commons.dto.Data;
 import eu.dime.commons.dto.Message;
 import eu.dime.commons.dto.Request;
+import eu.dime.commons.dto.SAdapter;
 import eu.dime.commons.notifications.DimeInternalNotification;
 import eu.dime.commons.notifications.user.UserNotification;
 import eu.dime.commons.notifications.user.UserNotificationEntry;
@@ -113,14 +113,15 @@ public class PSInfoSphereControllerTest extends Assert {
 
 	}	
 
-	protected Request<SAdapterWrapper> buildSARequest(Account account){
+	protected Request<SAdapter> buildSARequest(Account account){
 
-		Request<SAdapterWrapper> request = new Request<SAdapterWrapper>();
-		Message<SAdapterWrapper> message = new Message<SAdapterWrapper>();
-		Data<SAdapterWrapper> data = new Data<SAdapterWrapper>();
-		SAdapterWrapper swrapper = new SAdapterWrapper(account, account.asURI());
-		swrapper.put("serviceadapterguid","di.me");
-		data.getEntries().add(swrapper);		  
+		Request<SAdapter> request = new Request<SAdapter>();
+		Message<SAdapter> message = new Message<SAdapter>();
+		Data<SAdapter> data = new Data<SAdapter>();
+		SAdapter adapter = new SAdapter();
+                adapter.setGuid(account.asURI().toString());
+		adapter.setServiceadapterguid("di.me");
+		data.getEntries().add(adapter);
 		message.setData(data);
 		request.setMessage(message);
 
