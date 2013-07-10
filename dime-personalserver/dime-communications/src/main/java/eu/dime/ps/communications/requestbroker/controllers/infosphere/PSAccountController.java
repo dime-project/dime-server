@@ -111,8 +111,6 @@ public class PSAccountController implements APIController {
 
             for (Account account : accounts) {
                 try {
-//					SAccountWrapper sAdapterWrapper = new SAccountWrapper(account,accountManager.getMe().asURI());
-//					sAdapterWrapper.setSettings(getSAccount(account).getSettings());
                     data.getEntries().add(getSAccount(account));
                 } catch (ServiceNotAvailableException e) {
                     logger.warn("Service is unavailable: " + e.getMessage());
@@ -185,6 +183,7 @@ public class PSAccountController implements APIController {
                     SAdapterSetting setting = iter.next();
                     sa.setSetting(setting.getName(), setting.getValue());
                 }
+
             }
 
 
@@ -192,9 +191,11 @@ public class PSAccountController implements APIController {
             accountManager.add(sa);
 
 
-            // Fix the GUID on the returned object
+            // Update the returned object
             newAccount.setGuid(sa.getIdentifier());
             newAccount.setSettings(sa.getSettings());
+            newAccount.setIsConfigurable(!sa.getSettings().isEmpty());
+
 
             data = new Data<SAccount>(0, 1, 1);
             data.getEntries().add(newAccount);

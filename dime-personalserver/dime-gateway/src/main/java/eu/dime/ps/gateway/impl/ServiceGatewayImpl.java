@@ -114,6 +114,7 @@ public class ServiceGatewayImpl implements ServiceGateway {
 
 		if (supportedAdapters.containsKey(adapterName)){
 			ServiceAdapter adapter = (ServiceAdapter) this.loadedAdapters.get(adapterName).newInstance();
+                        adapter.initFromMetaData(this.getServiceMetadata(adapterName, adapter.getIdentifier()));
                         return adapter;
 		} else {
 			return null;

@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlAccessType;
+import org.apache.log4j.Logger;
 
 @javax.xml.bind.annotation.XmlRootElement
 @javax.xml.bind.annotation.XmlAccessorType(XmlAccessType.FIELD)
@@ -22,6 +23,9 @@ public class SAdapter extends Entry {
     private String description;
     private String userId = "@me";
 
+
+    private static final Logger logger = Logger.getLogger(SAdapter.class);
+
     public SAdapter() {
         super();
 
@@ -34,7 +38,6 @@ public class SAdapter extends Entry {
         return type;
     }
 
-    @Deprecated
     public void setType(String type) {
         this.type = type;
     }
@@ -149,6 +152,7 @@ public class SAdapter extends Entry {
         }
         // We don't know what type it is, so default to string
         if (!updated) {
+            logger.warn("update call for unknown setting: (name/value) "+name+"/"+value+"\n using string type");
             this.settings.add(new SAdapterSetting(name, true, "string", value));
         }
 
