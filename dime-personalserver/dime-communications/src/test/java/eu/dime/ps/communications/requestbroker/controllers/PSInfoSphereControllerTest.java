@@ -25,7 +25,7 @@ import org.semanticdesktop.aperture.vocabulary.NIE;
 import eu.dime.commons.dto.Data;
 import eu.dime.commons.dto.Message;
 import eu.dime.commons.dto.Request;
-import eu.dime.commons.dto.SAdapter;
+import eu.dime.commons.dto.SAccount;
 import eu.dime.commons.notifications.DimeInternalNotification;
 import eu.dime.commons.notifications.user.UserNotification;
 import eu.dime.commons.notifications.user.UserNotificationEntry;
@@ -113,15 +113,15 @@ public class PSInfoSphereControllerTest extends Assert {
 
 	}	
 
-	protected Request<SAdapter> buildSARequest(Account account){
+	protected Request<SAccount> buildSARequest(Account account){
 
-		Request<SAdapter> request = new Request<SAdapter>();
-		Message<SAdapter> message = new Message<SAdapter>();
-		Data<SAdapter> data = new Data<SAdapter>();
-		SAdapter adapter = new SAdapter();
-                adapter.setGuid(account.asURI().toString());
-		adapter.setServiceadapterguid("di.me");
-		data.getEntries().add(adapter);
+		Request<SAccount> request = new Request<SAccount>();
+		Message<SAccount> message = new Message<SAccount>();
+		Data<SAccount> data = new Data<SAccount>();
+		SAccount myAccount = new SAccount();
+                myAccount.setGuid(account.asURI().toString());
+		myAccount.setServiceadapterguid("di.me");
+		data.getEntries().add(myAccount);
 		message.setData(data);
 		request.setMessage(message);
 

@@ -64,6 +64,7 @@ public abstract class ServiceAdapterBase implements ServiceAdapter {
 		this.callLog = new ArrayList<Long>();
 		this.sadapter = new SAdapter();
 		this.sadapter.setGuid(identifier);
+                this.sadapter.setName(identifier);
 		this.sadapter.setType(this.getAdapterName());
 	}
 
@@ -94,6 +95,7 @@ public abstract class ServiceAdapterBase implements ServiceAdapter {
 	public void setIdentifer(String identifier) { 
 		this.identifier = identifier;
 		this.sadapter.setGuid(identifier);
+                this.sadapter.setName(identifier);
 	}
 
 	// TODO what is this doing? it's not used by anything!!
