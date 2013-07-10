@@ -174,9 +174,11 @@ public class ServiceGatewayImpl implements ServiceGateway {
 		while (iter.hasNext()) {
 			String adapterName = iter.next();
 			if (!ArrayUtils.contains(this.hiddenAdapters, adapterName)) {
+                                logger.info("show adapter: "+adapterName);
 				adapters.put(adapterName, makeMetadata(adapterName, accountName));
 				this.supportedAdapters.put(adapterName, makeMetadata(adapterName, accountName));
 			} else {
+                                logger.info("hide adapter: "+adapterName);
 				this.supportedAdapters.remove(adapterName);
 			}
 		}
