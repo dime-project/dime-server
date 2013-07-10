@@ -25,6 +25,8 @@ public class SAdapter extends Entry {
 
 	@javax.xml.bind.annotation.XmlElement(name = "description")
 	private String description;
+
+        private String serviceadapterguid;
 	
 	public SAdapter() {
 		super(); 
@@ -165,5 +167,19 @@ public class SAdapter extends Entry {
 		}
 		return "";
 	}
+
+    /**
+     * @return the serviceadapterguid
+     */
+    public String getServiceadapterguid() {
+        return serviceadapterguid;
+    }
+
+    /**
+     * @param serviceadapterguid the serviceadapterguid to set
+     */
+    public void setServiceadapterguid(String serviceadapterguid) {
+        this.serviceadapterguid = serviceadapterguid;
+    }
 
 }

@@ -114,9 +114,7 @@ public class ServiceGatewayImpl implements ServiceGateway {
 
 		if (supportedAdapters.containsKey(adapterName)){
 			ServiceAdapter adapter = (ServiceAdapter) this.loadedAdapters.get(adapterName).newInstance();
-                        //set imageUrl
-			adapter.set("imageUrl", this.getServiceMetadata(adapter.getAdapterName(),adapter.getIdentifier()).getIcon());
-			return adapter;
+                        return adapter;
 		} else {
 			return null;
 		}
@@ -175,12 +173,10 @@ public class ServiceGatewayImpl implements ServiceGateway {
 		Iterator<String> iter = this.supportedAdapters.keySet().iterator();
 		while (iter.hasNext()) {
 			String adapterName = iter.next();
-			if (!ArrayUtils.contains(this.hiddenAdapters, adapterName)) {
-                                logger.info("show adapter: "+adapterName);
+			if (!ArrayUtils.contains(this.hiddenAdapters, adapterName)) {                                
 				adapters.put(adapterName, makeMetadata(adapterName, accountName));
 				this.supportedAdapters.put(adapterName, makeMetadata(adapterName, accountName));
-			} else {
-                                logger.info("hide adapter: "+adapterName);
+			} else {                                
 				this.supportedAdapters.remove(adapterName);
 			}
 		}

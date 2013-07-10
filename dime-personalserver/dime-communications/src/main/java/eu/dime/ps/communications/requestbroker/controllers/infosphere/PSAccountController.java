@@ -1,32 +1,11 @@
 package eu.dime.ps.communications.requestbroker.controllers.infosphere;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-
-import javax.ws.rs.DELETE;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.UriBuilder;
-
-import org.ontoware.rdf2go.model.node.URI;
-import org.ontoware.rdf2go.model.node.impl.URIImpl;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-
 import eu.dime.commons.dto.Data;
 import eu.dime.commons.dto.Request;
 import eu.dime.commons.dto.Response;
 import eu.dime.commons.dto.SAdapter;
 import eu.dime.commons.dto.SAdapterSetting;
 import eu.dime.commons.object.ServiceMetadata;
-import eu.dime.ps.controllers.TenantContextHolder;
 import eu.dime.ps.controllers.exception.InfosphereException;
 import eu.dime.ps.controllers.infosphere.manager.AccountManager;
 import eu.dime.ps.controllers.infosphere.manager.PersonManager;
@@ -37,6 +16,20 @@ import eu.dime.ps.gateway.exception.ServiceNotAvailableException;
 import eu.dime.ps.gateway.service.ServiceAdapter;
 import eu.dime.ps.semantic.model.dao.Account;
 import eu.dime.ps.semantic.model.pimo.Person;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 
 /**
  * Dime REST API Controller for a InfoSphere features
@@ -89,6 +82,7 @@ public class PSAccountController implements APIController {
 		jsonServiceAdapter.setImageUrl(sm.getIcon());
 		jsonServiceAdapter.setAuthUrl(sm.getAuthURL());
 		jsonServiceAdapter.setDescription(sm.getDescription());
+                jsonServiceAdapter.setServiceadapterguid(sa.getAdapterName());
 		if (sm.getSettings() != null && sm.getSettings().length() > 0) {
 			jsonServiceAdapter.setIsConfigurable(true);
 			jsonServiceAdapter.importSettings(sm.getSettings());
@@ -106,19 +100,19 @@ public class PSAccountController implements APIController {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
 	@Path("/@me/@all")
-	public Response<SAdapterWrapper> getMyServiceAccounts() {
+	public Response<SAdapter> getMyServiceAccounts() {
 
-		Data<SAdapterWrapper> data = null;
+		Data<SAdapter> data = null;
 
 		try {
 			Collection<Account> accounts = accountManager.getAllByCreator(accountManager.getMe());
-			data = new Data<SAdapterWrapper>(0, accounts.size(), accounts.size());
+			data = new Data<SAdapter>(0, accounts.size(), accounts.size());
 
 			for (Account account : accounts) {
 				try {
-					SAdapterWrapper sAdapterWrapper = new SAdapterWrapper(account,accountManager.getMe().asURI());
-					sAdapterWrapper.setSettings(getSAdapter(account).getSettings());
-					data.getEntries().add(sAdapterWrapper);
+//					SAdapterWrapper sAdapterWrapper = new SAdapterWrapper(account,accountManager.getMe().asURI());
+//					sAdapterWrapper.setSettings(getSAdapter(account).getSettings());
+					data.getEntries().add(getSAdapter(account));
 				} catch (ServiceNotAvailableException e) {
 					logger.warn("Service is unavailable: " + e.getMessage());
 				} catch (ServiceAdapterNotSupportedException e) {
@@ -166,29 +160,26 @@ public class PSAccountController implements APIController {
 	@POST
 	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
 	@Path("/@me")
-	public Response<SAdapterWrapper> createServiceAccount(
+	public Response<SAdapter> createServiceAccount(
 			@PathParam("said") String said,
-			Request<SAdapterWrapper> request) {
+			Request<SAdapter> request) {
 
-		Data<SAdapterWrapper> data;
+		Data<SAdapter> data;
 
 		try {
 			RequestValidator.validateRequest(request);
 
 			data = request.getMessage().getData();
-			SAdapterWrapper dto = data.getEntries().iterator().next();
+			SAdapter newAccount = data.getEntries().iterator().next();
 
-			// Handle account creation
-			// Remove guid because is a new object
-			dto.remove("guid");
-
+			
 			// Use Service Adapter Name to create the adapter
-			String serviceAdapterName = (String) dto.get("serviceadapterguid");
+			String serviceAdapterName = (String) newAccount.getServiceadapterguid();
 			ServiceAdapter sa = this.serviceGateway.makeServiceAdapter(serviceAdapterName);
 
 			// Set configuration
-			if (dto.getSettings() != null) {
-				Iterator<SAdapterSetting> iter = dto.getSettings().iterator();
+			if (newAccount.getSettings() != null) {
+				Iterator<SAdapterSetting> iter = newAccount.getSettings().iterator();
 				while (iter.hasNext()) {
 					SAdapterSetting setting = iter.next();
 					sa.setSetting(setting.getName(), setting.getValue());
@@ -201,11 +192,11 @@ public class PSAccountController implements APIController {
                         
 
 			// Fix the GUID on the returned object
-			dto.put("guid", sa.getIdentifier());
-			dto.setSettings(sa.getSettings());
-			Collection<SAdapterWrapper> entries = new ArrayList<SAdapterWrapper>();
-			entries.add(dto);
-			data.setEntry(entries);
+			newAccount.setGuid(sa.getIdentifier());
+			newAccount.setSettings(sa.getSettings());
+			
+			data = new Data<SAdapter>(0, 1, 1);
+                        data.getEntries().add(newAccount);
 
 		} catch (InfosphereException e) {
 			return Response.serverError(e.getMessage(), e);
@@ -231,37 +222,37 @@ public class PSAccountController implements APIController {
 	@POST
 	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
 	@Path("/@me/{accountId}")
-	public Response<SAdapterWrapper> updateServiceAccount(
+	public Response<SAdapter> updateServiceAccount(
 			@PathParam("said") String said,
-			Request<SAdapterWrapper> request) {
+			Request<SAdapter> request) {
 
-		Data<SAdapterWrapper> data, returnData;
+		Data<SAdapter> data, returnData;
 
 		try {
 			RequestValidator.validateRequest(request);
 
 			data = request.getMessage().getData();
-			SAdapterWrapper dto = data.getEntries().iterator().next();
+			SAdapter updatedAccount = data.getEntries().iterator().next();
 
 			// Set configuration
-			Account account = dto.asResource(Account.class,accountManager.getMe().asURI());
-			ServiceAdapter sa = this.serviceGateway.getServiceAdapter(account.asURI().toString());
-			if (dto.getSettings() != null) {
-				Iterator<SAdapterSetting> iter = dto.getSettings().iterator();
+			ServiceAdapter sa = this.serviceGateway.getServiceAdapter(updatedAccount.getGuid());
+			if (updatedAccount.getSettings() != null) {
+				Iterator<SAdapterSetting> iter = updatedAccount.getSettings().iterator();
 				while (iter.hasNext()) {
 					SAdapterSetting setting = iter.next();
 					sa.setSetting(setting.getName(), setting.getValue());
 				}
 			}
 
+			data = new Data<SAdapter>(0, 1, 1);
+                        data.getEntries().add(updatedAccount);
+
 		} catch (ServiceNotAvailableException e) {
 			return Response.serverError(e.getMessage(), e);
 		} catch (ServiceAdapterNotSupportedException e) {
 			return Response.badRequest(e.getMessage(), e);
 		} catch (ClassCastException e) {
-			return Response.badRequest(e.getMessage(), e);
-		} catch (InfosphereException e) {
-			return Response.serverError(e.getMessage(), e);
+			return Response.badRequest(e.getMessage(), e);		
 		}
 
 		return Response.ok();
