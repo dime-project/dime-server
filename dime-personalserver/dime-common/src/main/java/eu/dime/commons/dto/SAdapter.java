@@ -27,6 +27,8 @@ public class SAdapter extends Entry {
 	private String description;
 
         private String serviceadapterguid;
+
+        private String userId="@me";
 	
 	public SAdapter() {
 		super(); 
