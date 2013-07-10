@@ -13,8 +13,6 @@ public class SAdapter extends Entry {
 
     @javax.xml.bind.annotation.XmlElement(name = "authUrl")
     private String authUrl;
-    @javax.xml.bind.annotation.XmlElement(name = "status")
-    private String status;
     @javax.xml.bind.annotation.XmlElement(name = "isConfigurable")
     private boolean isConfigurable;
     @javax.xml.bind.annotation.XmlElement(name = "settings")
@@ -50,13 +48,6 @@ public class SAdapter extends Entry {
         this.authUrl = authUrl;
     }
 
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
 
     public boolean getIsConfigurable() {
         return this.isConfigurable;

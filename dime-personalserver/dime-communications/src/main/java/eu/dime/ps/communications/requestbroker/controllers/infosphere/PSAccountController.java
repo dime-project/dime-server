@@ -70,23 +70,21 @@ public class PSAccountController implements APIController {
      * @throws ServiceAdapterNotSupportedException
      */
     private SAccount getSAccount(Account account) throws ServiceNotAvailableException, ServiceAdapterNotSupportedException {
-        String said = account.asURI().toString();
-        ServiceAdapter sa = this.serviceGateway.getServiceAdapter(said);
+        String guid = account.asURI().toString();
+        ServiceAdapter sa = this.serviceGateway.getServiceAdapter(guid);
 
         // Create response for client
-        ServiceMetadata sm = this.serviceGateway.getServiceMetadata(sa.getAdapterName(), said);
+        ServiceMetadata sm = this.serviceGateway.getServiceMetadata(sa.getAdapterName(), guid);
         SAccount jsonServiceAdapter = new SAccount();
-        jsonServiceAdapter.setGuid(sm.getGuid());
-        jsonServiceAdapter.setStatus(sm.getStatus());
-        jsonServiceAdapter.setStatus(ServiceMetadata.STATUS_ACTIVE);
-        jsonServiceAdapter.setName(sm.getAdapterName());
+        jsonServiceAdapter.setGuid(guid);
+        jsonServiceAdapter.setName(account.getPrefLabel());
         jsonServiceAdapter.setImageUrl(sm.getIcon());
-        jsonServiceAdapter.setAuthUrl(sm.getAuthURL());
+        jsonServiceAdapter.setAuthUrl(null);
         jsonServiceAdapter.setDescription(sm.getDescription());
         jsonServiceAdapter.setServiceadapterguid(sa.getAdapterName());
-        if (sm.getSettings() != null && sm.getSettings().length() > 0) {
+        if (sa.getSettings() != null && (!sa.getSettings().isEmpty())) {
             jsonServiceAdapter.setIsConfigurable(true);
-            jsonServiceAdapter.importSettings(sm.getSettings());
+            jsonServiceAdapter.setSettings(sa.getSettings());
         } else {
             jsonServiceAdapter.setIsConfigurable(false);
         }
@@ -173,7 +171,7 @@ public class PSAccountController implements APIController {
 
 
             // Use Service Adapter Name to create the adapter
-            String serviceAdapterName = (String) newAccount.getServiceadapterguid();
+            String serviceAdapterName = newAccount.getServiceadapterguid();
             ServiceAdapter sa = this.serviceGateway.makeServiceAdapter(serviceAdapterName);
 
             // Set configuration

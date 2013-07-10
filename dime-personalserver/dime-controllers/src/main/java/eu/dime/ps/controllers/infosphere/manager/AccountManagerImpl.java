@@ -49,6 +49,8 @@ import eu.dime.ps.storage.entities.ServiceAccount;
 import eu.dime.ps.storage.entities.ServiceProvider;
 import eu.dime.ps.storage.entities.Tenant;
 import eu.dime.ps.storage.manager.EntityFactory;
+import java.util.logging.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Implements {@link AccountManager} using the RDF services offered by
@@ -57,6 +59,8 @@ import eu.dime.ps.storage.manager.EntityFactory;
  * @author Ismael Rivera
  */
 public class AccountManagerImpl extends InfoSphereManagerBase<Account> implements AccountManager {
+
+    	private final org.slf4j.Logger logger = LoggerFactory.getLogger(AccountManagerImpl.class);
 
 	private final DAOFactory daoFactory = (new ModelFactory()).getDAOFactory();
 	
@@ -214,7 +218,8 @@ public class AccountManagerImpl extends InfoSphereManagerBase<Account> implement
 		if (provider == null) {
 			throw new ServiceAdapterNotSupportedException("Service provider "+adapterName+" not found.");
 		}
-		
+
+                logger.info("create adapter with guid:"+serviceAdapter.getIdentifier());
 		// creating dao:Account object
 		Account account = daoFactory.createAccount(serviceAdapter.getIdentifier());
 		account.setAccountType(adapterName);

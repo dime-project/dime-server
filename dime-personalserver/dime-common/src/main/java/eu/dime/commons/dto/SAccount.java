@@ -8,6 +8,8 @@ public class SAccount extends SAdapter {
 
     private String serviceadapterguid = null;
 
+    private Boolean isActive=true;
+
     public SAccount() {
         super();
 
@@ -26,5 +28,19 @@ public class SAccount extends SAdapter {
      */
     public void setServiceadapterguid(String serviceadapterguid) {
         this.serviceadapterguid = serviceadapterguid;
+    }
+
+    /**
+     * @return the isActive
+     */
+    public Boolean getIsActive() {
+        return isActive;
+    }
+
+    /**
+     * @param isActive the isActive to set
+     */
+    public void setIsActive(Boolean isActive) {
+        this.isActive = isActive;
     }
 }
