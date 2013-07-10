@@ -99,6 +99,7 @@ public class PolicyManagerImpl implements PolicyManager {
 			logger.debug("Bootstraping service providers: "+this.globalPolicy.get("ENABLED"));
 
 			for (String providerName : enabled) {
+				providerName = providerName.trim();
 				ServiceProvider dbProvider = ServiceProvider.findByName(providerName);
 				
 				// create provider if it does not exist yet
@@ -111,13 +112,33 @@ public class PolicyManagerImpl implements PolicyManager {
 					key = this.getPolicyString("CONSUMER_KEY", providerName);
 					secret = this.getPolicyString("CONSUMER_SECRET", providerName);
 					
-					if (key == null || secret == null){
-						key = secret = "COULD NOT LOAD FROM PREFERENCES";
+					if (secret == null || secret.equals("")){
+						secret = "COULD NOT LOAD FROM PREFERENCES";
+					}					
+					if (key == null || key.equals("")){
+						key = "COULD NOT LOAD FROM PREFERENCES";
 					}
 					dbProvider.setConsumerKey(key);
 					dbProvider.setConsumerSecret(secret);
 					
 					dbProvider.persist();
+				} else {
+					//try to update keys
+					String key, secret;
+					key = this.getPolicyString("CONSUMER_KEY", providerName);
+					secret = this.getPolicyString("CONSUMER_SECRET", providerName);
+					
+					if (secret == null || secret.equals("")){
+						secret = "COULD NOT LOAD FROM PREFERENCES";
+					}					
+					if (key == null || key.equals("")){
+						key = "COULD NOT LOAD FROM PREFERENCES";
+					}
+					dbProvider.setConsumerKey(key);
+					dbProvider.setConsumerSecret(secret);
+					
+					dbProvider.merge();
+					dbProvider.flush();
 				}
 			}
 			
