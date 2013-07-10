@@ -78,6 +78,8 @@ public class DefaultDataSetup implements BroadcastReceiver {
 		CONTACTS.put("b6f4cea6-83cf-4e38-912e-258fe9d18c26", new String[] { "Sophie Wrobel", "sophie.wrobel@email.com", "webmage" });
 		CONTACTS.put("ab846174-5a48-4a05-adf5-382260c8c08a", new String[] { "Richard Wacker", "richard.wacker@email.com", "riwa" });
 		CONTACTS.put("3ec10478-9e2d-4b4b-a3ea-0ea3f1aca393", new String[] { "Borja Gorriz", "borja.gorriz@email.com", "bgorriz" });
+		CONTACTS.put("8985479a-b198-426f-acce-15704f310f32", new String[] { "Javier Vendrell", "javier.vendrell@email.com", "jvendrell" });
+		CONTACTS.put("23cb7481-0f16-485e-bb68-345f5f373d78", new String[] { "David Alonso", "david.alonso@email.com", "dalonso" });
 		//new contacts - testusers
 		CONTACTS.put("246879a0-5b58-4b3f-aedf-64d0335721f5", new String[] { "Test User1", "test.user1@email.com", "testuser1"});
 		CONTACTS.put("aa99d9af-4c69-4388-94dc-c5fb9e9e2763", new String[] { "Test User2", "test.user2@email.com", "testuser2"});
@@ -201,15 +203,15 @@ private static final Logger logger = LoggerFactory.getLogger(DefaultDataSetup.cl
 		//Person testuser3 = createPerson("Test", "User3", "testuser3", 1);
 		
 		// new test user variables, the assignment takes place in the loop
-		//Person testuser1 = null; 
-		Person testuser1 = modelFactory.getPIMOFactory().createPerson();
-		testuser1.setTrustLevel(0.5); 
-		//Person testuser2 = null;
-		Person testuser2 = modelFactory.getPIMOFactory().createPerson();
-		testuser2.setTrustLevel(0.0); 
-		//Person testuser3 = null;
-		Person testuser3 = modelFactory.getPIMOFactory().createPerson();
-		testuser3.setTrustLevel(1.0); 
+		Person testuser1 = null; 
+		//Person testuser1 = modelFactory.getPIMOFactory().createPerson();
+		//testuser1.setTrustLevel(0.5); 
+		Person testuser2 = null;
+		//Person testuser2 = modelFactory.getPIMOFactory().createPerson();
+		//testuser2.setTrustLevel(0.0); 
+		Person testuser3 = null;
+		//Person testuser3 = modelFactory.getPIMOFactory().createPerson();
+		//testuser3.setTrustLevel(1.0); 
 		
 		// adding contacts of the di.me consortium
 		List<Person> dimePeople = new ArrayList<Person>();
@@ -256,18 +258,21 @@ private static final Logger logger = LoggerFactory.getLogger(DefaultDataSetup.cl
     					if (said.equals("246879a0-5b58-4b3f-aedf-64d0335721f5"))
     					{
     						person.setTrustLevel(0.5); 
+    						personManager.update(person);
     						testuser1 = person;
     					}
     					//test user 2 said 
     					else if (said.equals("aa99d9af-4c69-4388-94dc-c5fb9e9e2763"))
     					{
     						person.setTrustLevel(0.0);
+    						personManager.update(person);
     						testuser2 = person;
     					}
     					//test user 3 said 
     					else if (said.equals("8192047a-177f-4486-9dff-1af650d65afd"))
     					{
     						person.setTrustLevel(1.0);
+    						personManager.update(person);
     						testuser3 = person;
     					}
 					//add person to the group if not a test user
