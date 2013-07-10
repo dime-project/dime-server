@@ -82,9 +82,9 @@ public class PSAccountController implements APIController {
         jsonServiceAdapter.setAuthUrl(null);
         jsonServiceAdapter.setDescription(sm.getDescription());
         jsonServiceAdapter.setServiceadapterguid(sa.getAdapterName());
-        if (sa.getSettings() != null && (!sa.getSettings().isEmpty())) {
+        if (sm.getSettings() != null && (sm.getSettings().length() > 0)) {
             jsonServiceAdapter.setIsConfigurable(true);
-            jsonServiceAdapter.setSettings(sa.getSettings());
+            jsonServiceAdapter.importSettings(sm.getSettings());
         } else {
             jsonServiceAdapter.setIsConfigurable(false);
         }

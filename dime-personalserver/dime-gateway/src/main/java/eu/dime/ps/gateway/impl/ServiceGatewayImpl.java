@@ -35,6 +35,7 @@ import eu.dime.ps.gateway.service.internal.DimeServiceAdapter;
 import eu.dime.ps.gateway.service.noauth.LocationServiceAdapter;
 import eu.dime.ps.gateway.service.noauth.ProximityServiceAdapter;
 import eu.dime.ps.gateway.service.noauth.SocialRecommenderAdapter;
+import eu.dime.ps.gateway.service.noauth.YMServiceAdapter;
 import eu.dime.ps.storage.entities.ServiceAccount;
 
 /**
@@ -125,9 +126,9 @@ public class ServiceGatewayImpl implements ServiceGateway {
 	public ServiceAdapter getServiceAdapter(String identifier) throws ServiceNotAvailableException,
 			ServiceAdapterNotSupportedException {
 	
-		if (identifier == null)
-			throw new ServiceNotAvailableException(
-					"Cannot find a service adapter if identifier is not specified.");
+                if (identifier == null) {
+                        throw new ServiceNotAvailableException("Cannot find a service adapter if identifier is not specified.");
+                }
 	
 		// the list of adapters is lazily initialized when the adapters are
 		// requested
@@ -267,9 +268,8 @@ public class ServiceGatewayImpl implements ServiceGateway {
 			adapter = new LocationServiceAdapter();
 		} else if (ProximityServiceAdapter.adapterName.equals(adapterName)) {
 			adapter = new ProximityServiceAdapter();
-                //FIXME - deactivated for github 
-//		} else if (YMServiceAdapter.adapterName.equals(adapterName)) {
-//			adapter = new YMServiceAdapter();
+		} else if (YMServiceAdapter.adapterName.equals(adapterName)) {
+			adapter = new YMServiceAdapter();
 		} else if (DimeServiceAdapter.NAME.equals(adapterName)) {
 			adapter = new DimeServiceAdapter(account.getName());
 		}

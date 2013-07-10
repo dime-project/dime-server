@@ -232,6 +232,7 @@ public class AccountManagerImpl extends InfoSphereManagerBase<Account> implement
 		dbAccount.setServiceProvider(provider);
 		dbAccount.setAccountURI(account.asURI().toString());
 		dbAccount.setName(null); // external accounts must have no name
+                
 		if (serviceAdapter instanceof OAuthServiceAdapter) {
 			OAuthServiceAdapter adapter = (OAuthServiceAdapter) serviceAdapter;
 			dbAccount.setAccessToken(adapter.getAccessToken().getToken());
