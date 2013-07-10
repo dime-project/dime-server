@@ -134,7 +134,7 @@ public class ServiceGatewayImpl implements ServiceGateway {
 		// requested
 		if (!this.adapters.containsKey(identifier)) {
 			ServiceAccount account = ServiceAccount.findAllByAccountUri(identifier);
-			ServiceAdapter adapter = buildAdapter(account);
+			ServiceAdapter adapter = buildAdapter(account, identifier);
 	
 			if (adapter == null)
 				throw new ServiceNotAvailableException(
@@ -241,7 +241,7 @@ public class ServiceGatewayImpl implements ServiceGateway {
 				+ this.policyManager.getPolicyString("AUTHSERVLET", adapterName);
 	}
 
-	private ServiceAdapter buildAdapter(ServiceAccount account)
+	private ServiceAdapter buildAdapter(ServiceAccount account, String guid)
 			throws ServiceNotAvailableException, ServiceAdapterNotSupportedException {
 		ServiceAdapter adapter = null;
 		if (account == null) {
@@ -250,6 +250,7 @@ public class ServiceGatewayImpl implements ServiceGateway {
 		}
 
 		String adapterName = account.getServiceProvider().getServiceName();
+
 
 		// instanciate the proper service adapter
 		if (LinkedInServiceAdapter.NAME.equals(adapterName)) {
@@ -279,6 +280,11 @@ public class ServiceGatewayImpl implements ServiceGateway {
 			throw new ServiceAdapterNotSupportedException(new Exception(adapterName
 					+ " is not a supported service."));
 		}
+                // set common attributes for any type of service adapter
+		adapter.setIdentifer(guid);
+                //init meta
+                ServiceMetadata meta = makeMetadata(adapterName, guid);
+                adapter.initFromMetaData(meta);
 
 		if (adapter instanceof OAuthServiceAdapter) {
 			// sets consumer token
@@ -292,8 +298,7 @@ public class ServiceGatewayImpl implements ServiceGateway {
 					account.getAccessSecret()));
 		}
 
-		// set common attributes for any type of service adapter
-		adapter.setIdentifer(account.getAccountURI());
+		
 
 		return adapter;
 	}

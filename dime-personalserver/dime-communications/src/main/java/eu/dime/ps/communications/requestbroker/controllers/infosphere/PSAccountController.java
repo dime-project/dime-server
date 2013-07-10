@@ -71,6 +71,9 @@ public class PSAccountController implements APIController {
      */
     private SAccount getSAccount(Account account) throws ServiceNotAvailableException, ServiceAdapterNotSupportedException {
         String guid = account.asURI().toString();
+
+        logger.info("build serviceadapter (account) for guid: " +guid);
+
         ServiceAdapter sa = this.serviceGateway.getServiceAdapter(guid);
 
         // Create response for client
@@ -82,9 +85,9 @@ public class PSAccountController implements APIController {
         jsonServiceAdapter.setAuthUrl(null);
         jsonServiceAdapter.setDescription(sm.getDescription());
         jsonServiceAdapter.setServiceadapterguid(sa.getAdapterName());
-        if (sm.getSettings() != null && (sm.getSettings().length() > 0)) {
+        if (sa.getSettings() != null && (!sa.getSettings().isEmpty())) {
             jsonServiceAdapter.setIsConfigurable(true);
-            jsonServiceAdapter.importSettings(sm.getSettings());
+            jsonServiceAdapter.setSettings(sa.getSettings());
         } else {
             jsonServiceAdapter.setIsConfigurable(false);
         }
@@ -169,7 +172,6 @@ public class PSAccountController implements APIController {
             data = request.getMessage().getData();
             SAccount newAccount = data.getEntries().iterator().next();
 
-
             // Use Service Adapter Name to create the adapter
             String serviceAdapterName = newAccount.getServiceadapterguid();
             ServiceAdapter sa = this.serviceGateway.makeServiceAdapter(serviceAdapterName);
@@ -181,9 +183,7 @@ public class PSAccountController implements APIController {
                     SAdapterSetting setting = iter.next();
                     sa.setSetting(setting.getName(), setting.getValue());
                 }
-
             }
-
 
             // Add account
             accountManager.add(sa);
