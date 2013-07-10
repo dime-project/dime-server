@@ -1,6 +1,7 @@
 package eu.dime.ps.controllers;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -289,12 +290,21 @@ public class UserManagerImpl implements UserManager {
 
     @Override 
     public User register(UserRegister userRegister) throws IllegalArgumentException, DNSRegisterFailedException, DimeException {
-       
-    	lock.lock(); // only one register at a time    
-    	
-    	validateUser(userRegister.getUsername(), userRegister.getPassword());  
-        User user;
-        try {
+        
+    	boolean unlocked;
+    	try {
+			unlocked = lock.tryLock(5L, TimeUnit.SECONDS);// only one register at a time  
+		} catch (InterruptedException e) {
+			throw new DNSRegisterFailedException("Register failed", e);
+		}  
+    	if (!unlocked) {
+    		logger.error("Could not aquire lock within 5 seconds. Returning without registering.");
+    		throw new DimeException("Could not register because thread locked.");
+    	}
+    	User user;
+	    try {
+	    	validateUser(userRegister.getUsername(), userRegister.getPassword());  
+	       
 			// TODO improve performance: register it asynchronously
 			// TODO improve robustness: what happens if this fails? rollback mechanism! Transaction.
 			//
@@ -327,7 +337,7 @@ public class UserManagerImpl implements UserManager {
 				tenant.remove();
 				throw new DimeException("Failed to publish public " +
 						"profile when registering. Aborting register.", e);
-
+	
 			}
 			try {
 				initModelForUser(profile, tenant);
@@ -342,8 +352,8 @@ public class UserManagerImpl implements UserManager {
 						"Failed to store semantic model when registering. Aborting register.",
 						e);
 			}
-		} catch (DimeException e) {
-			throw e;
+		} catch (Exception e) {
+			throw new DimeException(e);
 		} finally {
 			lock.unlock();
 		}
