@@ -4996,12 +4996,16 @@ Dime.ConfigurationDialog.prototype = {
                             case "account": //profile
 
                                 var profileDropdown=[];
-
                                 var appendTarget = $(this);
+                                var mySettings = serviceAccount.settings[i];
 
                                 //fill-in dropdown list with profiles
                                 var callback = function(response){
+                                    var caption = "Please select a profile:";
                                     $.each(response, function(index, value) {
+                                        if (mySettings.value && value.said===mySettings.value){
+                                            caption=value.name;
+                                        }
 
                                         var updateProfileOnClick=function(){
                                             dialogSelf.selectedProfile=value;
@@ -5012,7 +5016,9 @@ Dime.ConfigurationDialog.prototype = {
                                         }
                                         
                                     });
-                                    appendTarget.append(BSTool.createDropdown("Please select a profile:", profileDropdown, "btn-large"));
+
+
+                                    appendTarget.append(BSTool.createDropdown(caption, profileDropdown, "btn-large"));
                                 };
                                 Dime.REST.getAll(Dime.psMap.TYPE.PROFILE, callback);
                                 //at the end: setting focus on picked profile (for edit)
