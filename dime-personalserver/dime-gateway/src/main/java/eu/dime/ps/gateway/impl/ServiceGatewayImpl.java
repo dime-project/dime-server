@@ -109,11 +109,13 @@ public class ServiceGatewayImpl implements ServiceGateway {
 	}
 
 
-	public ServiceAdapter makeServiceAdapter(String adapterName) throws Exception {
+        @Override
+        public ServiceAdapter makeServiceAdapter(String adapterName) throws Exception {
 
 		if (supportedAdapters.containsKey(adapterName)){
 			ServiceAdapter adapter = (ServiceAdapter) this.loadedAdapters.get(adapterName).newInstance();
-
+                        //set imageUrl
+			adapter.set("imageUrl", this.getServiceMetadata(adapter.getAdapterName(),adapter.getIdentifier()).getIcon());
 			return adapter;
 		} else {
 			return null;

@@ -170,7 +170,7 @@ public class PSAccountController implements APIController {
 			@PathParam("said") String said,
 			Request<SAdapterWrapper> request) {
 
-		Data<SAdapterWrapper> data, returnData;
+		Data<SAdapterWrapper> data;
 
 		try {
 			RequestValidator.validateRequest(request);
@@ -194,10 +194,12 @@ public class PSAccountController implements APIController {
 					sa.setSetting(setting.getName(), setting.getValue());
 				}
 			}
+
 			
 			// Add account
 			accountManager.add(sa);
-			
+                        
+
 			// Fix the GUID on the returned object
 			dto.put("guid", sa.getIdentifier());
 			dto.setSettings(sa.getSettings());
