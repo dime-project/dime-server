@@ -65,6 +65,7 @@ import eu.dime.ps.controllers.infosphere.manager.PersonManager;
 import eu.dime.ps.controllers.infosphere.manager.SharingManager;
 import eu.dime.ps.controllers.trustengine.utils.AdvisoryConstants;
 import eu.dime.ps.dto.Include;
+import eu.dime.ps.dto.ProfileCard;
 import eu.dime.ps.dto.Resource;
 import eu.dime.ps.gateway.ServiceGateway;
 import eu.dime.ps.gateway.auth.CredentialStore;
@@ -320,6 +321,8 @@ public class PSResourcesController extends PSSharingControllerBase implements AP
 		return Response.ok(data);
 	}
 
+	
+	
 	@POST
 	@Path("{personID}/{resourceID}")
 	@Consumes(MediaType.APPLICATION_JSON + ";charset=UTF-8")
@@ -689,8 +692,49 @@ public class PSResourcesController extends PSSharingControllerBase implements AP
 		return javax.ws.rs.core.Response.ok().build();
 	}
 
+	
+	
+	//shared
+	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
+	@Path(value = "@me/@all/shared")
+	public Response<Resource> getProfileCardsSharedByQuery(
+			@PathParam("said") String said,
+			@QueryParam("sharedWithAgent") String agentId,
+			@QueryParam("sharedWithService") String serviceId) {
+		Data<Resource> data = null;
+
+		try {
+			Collection<FileDataObject> files = sharingManager.getSharedFiles(serviceId==null? agentId: serviceId);
+			data = new Data<Resource>(0, files.size(), files.size());
+			for (FileDataObject file : files) {				
+				Resource fileResource = new Resource(file,said,fileManager.getMe().asURI());
+				PrivacyPreference pp = sharingManager.findPrivacyPreference(file.asURI().toString(), PrivacyPreferenceType.FILE);
+				writeIncludes(fileResource,pp);
+				fileResource.remove("nao:creator");
+				resolveImageUrl(file, said, fileResource);
+				data.getEntries().add(fileResource);
+			}
+		} catch (IllegalArgumentException e) {
+			return Response.badRequest(e.getMessage(), e);
+		} catch (InfosphereException e) {
+			return Response.badRequest(e.getMessage(), e);
+		} catch (Exception e) {
+			return Response.serverError(e.getMessage(), e);
+		}
+
+		return Response.ok(data);
+	}
+	
 	// SharedTo
 
+	/**
+	 * 
+	 * @deprecated Do not use this method! 
+	 * 			   
+	 */
+	@Deprecated	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
 	@Path("@me/@sharedTo/{agentId}/@all")
@@ -736,55 +780,14 @@ public class PSResourcesController extends PSSharingControllerBase implements AP
 
 		return Response.ok(data);
 	}
+	
 
-	@GET
-	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
-	@Path(value = "@me/@all/shared")
-	public Response<SharedTo> getAllSharedResourcesByQuery(@PathParam("said") String said,
-			@QueryParam("sharedWithAgent") String agentId,
-			@QueryParam("sharedWithService") String serviceId) {
-
-		Data<SharedTo> data = null;
-
-		try {
-			Collection<FileDataObject> fileDataObjects = sharingManager.getSharedFiles(serviceId==null? agentId: serviceId);
-			data = new Data<SharedTo>(0, fileDataObjects.size(), fileDataObjects.size());
-
-			for (FileDataObject fileDataObject : fileDataObjects) {
-				SharedTo sharedTo = new SharedTo();
-
-				sharedTo.setGuid(UUID.randomUUID().toString());
-				sharedTo.setAgentId(serviceId==null? agentId: serviceId);
-				if(serviceId==null){
-					if (personManager.isPerson(agentId))
-						sharedTo.setAgentType("person");
-					if (personGroupManager.isPersonGroup(agentId))
-						sharedTo.setAgentType("group");
-				}
-				else{sharedTo.setAgentType("service");}
-
-				String itemUri = fileDataObject.asURI().toString();
-				if (itemUri.contains("/")) {
-					itemUri = StringUtils.substringAfterLast(itemUri, "/");
-				}
-				itemUri = URLDecoder.decode(itemUri, "UTF-8");
-
-				sharedTo.setItemId(itemUri);
-
-				sharedTo.setType("resource");
-
-				data.getEntries().add(sharedTo);
-			}
-
-		} catch (InfosphereException e) {
-			return Response.badRequest(e.getMessage(), e);
-		} catch (Exception e) {
-			return Response.serverError(e.getMessage(), e);
-		}
-
-		return Response.ok(data);
-	}
-
+	/**
+	 * 
+	 * @deprecated Do not use this method! 
+	 * 			   
+	 */
+	@Deprecated	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
 	@Path("@me/@sharedTo/{agentId}/{resourceId}")
@@ -814,6 +817,14 @@ public class PSResourcesController extends PSSharingControllerBase implements AP
 		return Response.ok();
 	}
 
+	
+	
+	/**
+	 * 
+	 * @deprecated Do not use this method! 
+	 * 			   
+	 */
+	@Deprecated
 	@POST
 	@Path("@me/@sharedTo/{agentId}/{resourceId}")
 	@Consumes(MediaType.APPLICATION_JSON + ";charset=UTF-8")

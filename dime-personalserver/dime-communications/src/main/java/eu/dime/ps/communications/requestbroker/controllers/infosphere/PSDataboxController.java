@@ -63,7 +63,7 @@ public class PSDataboxController extends PSSharingControllerBase implements APIC
 		RENAMING_RULES = new HashMap<URI, String>();
 		RENAMING_RULES.put(NIE.hasPart, "items");
 	}
-	
+
 	private DataboxManager databoxManager;
 	private AccountManager accountManager;
 	private PersonManager personManager;
@@ -104,7 +104,7 @@ public class PSDataboxController extends PSSharingControllerBase implements APIC
 	public PersonGroupManager getPersonGroupManager() {
 		return this.personGroupManager;
 	}
-	
+
 	/**
 	 * Retrieves all DB
 	 * 
@@ -115,7 +115,7 @@ public class PSDataboxController extends PSSharingControllerBase implements APIC
 	@Path("@all")
 	public Response<Resource> getAllDatabox() {
 		Data<Resource> data = null;	
-		
+
 		try {
 			Collection<DataContainer> databoxs = databoxManager.getAll();
 			data = new Data<Resource>(0, databoxs.size(), databoxs.size());
@@ -132,8 +132,8 @@ public class PSDataboxController extends PSSharingControllerBase implements APIC
 
 		return Response.ok(data);
 	}
-	
-		
+
+
 
 
 	/**
@@ -177,7 +177,7 @@ public class PSDataboxController extends PSSharingControllerBase implements APIC
 	@Path("{personID}/@all")
 	public Response<Resource> getAllMyDataboxesByPerson(@PathParam("said") String said,
 			@PathParam("personID") String personID) {
-		
+
 		Data<Resource> data = null;
 
 		try {
@@ -254,7 +254,7 @@ public class PSDataboxController extends PSSharingControllerBase implements APIC
 			data = request.getMessage().getData();
 
 			Databox dto = data.getEntries().iterator().next();
-			
+
 
 			// Remove guid because is a new object
 			dto.remove("guid");
@@ -302,13 +302,13 @@ public class PSDataboxController extends PSSharingControllerBase implements APIC
 
 			data = request.getMessage().getData();		
 			Resource resource = data.getEntries().iterator().next();			
-		
+
 			DataContainer databox = data.getEntries().iterator().next()
 					.asResource(new URIImpl(dbID), DataContainer.class,databoxManager.getMe().asURI());
-			
-			
+
+
 			databoxManager.update(databox);
-			
+
 			readIncludes(resource,databox);
 			DataContainer returnDatabox = databoxManager.get(dbID);
 			Databox returnResource = new Databox(returnDatabox,databoxManager.getMe().asURI());
@@ -324,7 +324,7 @@ public class PSDataboxController extends PSSharingControllerBase implements APIC
 		}
 	}
 
-	
+
 
 	/**
 	 * Remove DB
@@ -350,8 +350,8 @@ public class PSDataboxController extends PSSharingControllerBase implements APIC
 		return Response.ok();
 	}
 
-	
-	
+
+
 	////
 	//Method for reading the privacyPreferences of a databox
 	////
@@ -364,7 +364,7 @@ public class PSDataboxController extends PSSharingControllerBase implements APIC
 			//TODO manage the unsharing 
 			ArrayList<Include> shared = new ArrayList<Include>();
 			ArrayList<Include> excludes = new ArrayList<Include>(); 					
-			
+
 			for(Include include: includes){
 				for(String group : include.groups){	
 					sharingManager.shareDatabox(datacontainer.asURI().toString(), include.getSaidSender(),  new String[]{group});
@@ -385,9 +385,9 @@ public class PSDataboxController extends PSSharingControllerBase implements APIC
 		}
 		return includes;
 	}
-	
-	
-	
+
+
+
 	/**
 	 * 
 	 * @deprecated Do not use this method! 
@@ -437,43 +437,26 @@ public class PSDataboxController extends PSSharingControllerBase implements APIC
 
 		return Response.ok(data);
 	}
-	
+
 	@GET
 	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
 	@Path(value = "@me/@all/shared")
-	public Response<SharedTo> getAllSharedDataboxWithAgent(
+	public Response<Resource> getAllSharedDataboxWithAgent(
 			@QueryParam("sharedWithAgent") String agentId,
 			@QueryParam("sharedWithService") String serviceId) {
 
-		Data<SharedTo> data = null;
+		Data<Resource> data = null;
 
 		try {
 			Collection<PrivacyPreference> databoxes = sharingManager
 					.getSharedDataboxes(serviceId==null? agentId: serviceId);
-			data = new Data<SharedTo>(0, databoxes.size(), databoxes.size());
+			data = new Data<Resource>(0, databoxes.size(), databoxes.size());
 
-			for (PrivacyPreference databox : databoxes) {
-				SharedTo sharedTo = new SharedTo();
+			for (PrivacyPreference databox : databoxes) {	
 
-				sharedTo.setGuid(UUID.randomUUID().toString());
-				sharedTo.setAgentId(serviceId==null? agentId:serviceId);
-				if(serviceId==null){
-				if (personManager.isPerson(agentId))
-					sharedTo.setAgentType("person");
-				if (personGroupManager.isPersonGroup(agentId))
-					sharedTo.setAgentType("group");
-				}
-				else{sharedTo.setAgentType("service");}
-				String itemUri = databox.asURI().toString();
-				if (itemUri.contains("/"))
-					itemUri = StringUtils.substringAfterLast(itemUri, "/");
-				itemUri = URLDecoder.decode(itemUri, "UTF-8");
-
-				sharedTo.setItemId(itemUri);
-
-				sharedTo.setType("databox");
-
-				data.getEntries().add(sharedTo);
+				Resource resource =new Resource(databox,null,RENAMING_RULES,databoxManager.getMe().asURI());
+				writeIncludes(resource,databox);
+				data.getEntries().add(resource);				
 			}
 
 		} catch (InfosphereException e) {
@@ -484,7 +467,7 @@ public class PSDataboxController extends PSSharingControllerBase implements APIC
 
 		return Response.ok(data);
 	}
-	
+
 	/**
 	 * 
 	 * @deprecated Do not use this method! 
@@ -519,7 +502,7 @@ public class PSDataboxController extends PSSharingControllerBase implements APIC
 		return Response.ok();
 	}
 
-	
+
 	/**
 	 * 
 	 * @deprecated Do not use this method! 
@@ -590,6 +573,6 @@ public class PSDataboxController extends PSSharingControllerBase implements APIC
 
 	}
 
-	
+
 
 }

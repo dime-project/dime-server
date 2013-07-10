@@ -510,39 +510,21 @@ public class PSLivePostController extends PSSharingControllerBase implements API
 	@GET
 	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
 	@Path(value = "@me/@all/shared")
-	public Response<SharedTo> getAllSharedLivePostByQuery(
+	public Response<Resource> getAllSharedLivePostByQuery(
 			@QueryParam("sharedWithAgent") String agentId,
 			@QueryParam("sharedWithService") String serviceId) {
-		Data<SharedTo> data = null;
+		Data<Resource> data = null;
 
 		try {
 			Collection<LivePost> livePosts = sharingManager
 					.getSharedLivePost(serviceId==null? agentId: serviceId);
-			data = new Data<SharedTo>(0, livePosts.size(), livePosts.size());
+			data = new Data<Resource>(0, livePosts.size(), livePosts.size());
 
-			for (LivePost livePost : livePosts) {
-				SharedTo sharedTo = new SharedTo();
-				sharedTo.setGuid(UUID.randomUUID().toString());
-				sharedTo.setAgentId(serviceId==null? agentId: serviceId);
-
-				if(serviceId==null){
-					if (personManager.isPerson(agentId))
-						sharedTo.setAgentType("person");
-					if (personGroupManager.isPersonGroup(agentId))
-						sharedTo.setAgentType("group");
-				}
-				else{sharedTo.setAgentType("service");}
-
-				String itemUri = livePost.asURI().toString();
-				if (itemUri.contains("/")) {
-					itemUri = StringUtils.substringAfterLast(itemUri, "/");
-				}
-				itemUri = URLDecoder.decode(itemUri, "UTF-8");
-
-				sharedTo.setItemId(itemUri);
-				sharedTo.setType("livepost");
-
-				data.getEntries().add(sharedTo);
+			for (LivePost livepost : livePosts) {
+				Resource resource = new Resource(livepost,livePostManager.getMe().asURI());
+				PrivacyPreference pp = sharingManager.findPrivacyPreference(livepost.asURI().toString(), PrivacyPreferenceType.LIVEPOST);
+				writeIncludes(resource,pp);
+				data.getEntries().add(resource);
 			}
 		} catch (InfosphereException e) {
 			return Response.badRequest(e.getMessage(), e);
