@@ -18,6 +18,8 @@ import org.springframework.security.authentication.encoding.ShaPasswordEncoder;
 import eu.dime.commons.dto.AccountEntry;
 import eu.dime.commons.dto.UserRegister;
 import eu.dime.commons.exception.DimeException;
+import eu.dime.commons.notifications.DimeInternalNotification;
+import eu.dime.commons.notifications.system.SystemNotification;
 import eu.dime.ps.controllers.account.register.DNSRegisterFailedException;
 import eu.dime.ps.controllers.account.register.DimeDNSRegisterService;
 import eu.dime.ps.controllers.exception.InfosphereException;
@@ -26,6 +28,8 @@ import eu.dime.ps.controllers.infosphere.manager.AccountManager;
 import eu.dime.ps.controllers.infosphere.manager.PersonManager;
 import eu.dime.ps.controllers.infosphere.manager.ProfileCardManager;
 import eu.dime.ps.controllers.infosphere.manager.ProfileManager;
+import eu.dime.ps.controllers.notifier.NotifierManager;
+import eu.dime.ps.controllers.notifier.exception.NotifierException;
 import eu.dime.ps.controllers.security.utils.PasswordGenerator;
 import eu.dime.ps.gateway.ServiceGateway;
 import eu.dime.ps.gateway.exception.AttributeNotSupportedException;
@@ -80,6 +84,10 @@ public class UserManagerImpl implements UserManager {
     private ServiceGateway serviceGateway;
     private DimeDNSRegisterService dimeDNSRegisterService;
     private ShaPasswordEncoder dimePasswordEncoder;
+    
+    @Autowired
+    private NotifierManager notifierManager;
+
 
     public void setDimeDNSRegisterService(DimeDNSRegisterService dimeDNSRegisterService) {
         this.dimeDNSRegisterService = dimeDNSRegisterService;
@@ -611,6 +619,8 @@ public class UserManagerImpl implements UserManager {
         oldUser.setUiLanguage(accountEntry.getUiLanguage());
         oldUser.setUserStatusFlag(accountEntry.getUserStatusFlag());
 
+        sendNotification(oldUser);
+
         return oldUser;
     }
 
@@ -663,5 +673,17 @@ public class UserManagerImpl implements UserManager {
     public AccountEntry getUserAccount(String userName) {
         User user = getByUsername(userName);
         return populateAccountEntry(user);
+    }
+
+    private void sendNotification(User oldUser) {
+        Long t = TenantContextHolder.getTenant();
+        SystemNotification notification =
+            new SystemNotification(t, DimeInternalNotification.OP_UPDATE,
+                "@me", DimeInternalNotification.ITEM_TYPE_USER, "@me");
+        try {
+                notifierManager.pushInternalNotification(notification);
+        } catch (NotifierException e) {
+                logger.error(e.getMessage(),e);
+        }
     }
 }
