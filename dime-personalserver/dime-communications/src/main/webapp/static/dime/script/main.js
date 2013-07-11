@@ -4718,7 +4718,7 @@ Dime.ShareDialog.prototype={
                 
                 var entry = this;
                 
-                if (!entry.said || !entry.supportsSharing){
+                if (!entry.said || !entry.supportsSharing || !entry.editable){
                     return;
                 }
                 

@@ -361,6 +361,7 @@ DimeView = {
         if (type===Dime.psMap.TYPE.PROFILE){
             isInFilter = function(entry){
                 if ((entry.userId==='@me')
+                    && (entry.editable) //only di.me profile is editable and will therefore skipped out
                     &&(!entry.said || entry.said.length<1)){
                     return false; //skip this
                 }
