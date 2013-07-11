@@ -6,7 +6,7 @@ GLOBAL_ENABLED=di.me,PublicDimeUserDirectory
 # YellowMapPlaceService,LinkedIn,Twitter,Facebook,Fitbit,GooglePlus,SocialRecs,KML,LocationService,Doodle,ProximityService
 
 # Comma-separated list of adapters that can be enabled, but should not appear in the UI
-GLOBAL_HIDDEN=SocialRecs
+GLOBAL_HIDDEN=SocialRecs,di.me,PublicDimeUserDirectory
 
 # Where the server is reachable at - i.e. where the WAR file is reachable
 GLOBAL_AUTHSERVLET_PORT=8080
