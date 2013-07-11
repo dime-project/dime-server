@@ -14,4 +14,8 @@
 		class="eu.dime.ps.gateway.policy.PolicyManagerImpl">
 	</bean>
 		
+	<bean id="policyStore" class="eu.dime.ps.gateway.policy.PolicyStoreImpl">
+		<property name="entityFactory" ref="entityFactory"/>
+	</bean>
+		
 </beans>

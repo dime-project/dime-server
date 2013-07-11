@@ -23,4 +23,8 @@
 	
 	<bean id="policyManager" class="eu.dime.ps.gateway.policy.PolicyManagerImpl" factory-method="getInstance"></bean>
 
+	<bean id="policyStore" class="eu.dime.ps.gateway.policy.PolicyStoreImpl">
+			<property name="entityFactory" ref="entityFactory"/>
+	</bean>
+
 </beans>

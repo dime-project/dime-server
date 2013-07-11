@@ -13,6 +13,7 @@ import eu.dime.ps.storage.entities.ServiceAccount;
 import eu.dime.ps.storage.entities.ServiceProvider;
 import eu.dime.ps.storage.entities.Tenant;
 import eu.dime.ps.storage.entities.User;
+import eu.dime.ps.storage.entities.UserDefaults;
 
 /**
  * This is the entry point to use the dime-storage module. import
@@ -88,6 +89,10 @@ public class EntityFactory {
 
 	public AttributeMatch buildAttributeMatch() {
 		return new AttributeMatch();
+	}
+	
+	public UserDefaults buildUserDefaults(){
+		return new UserDefaults();
 	}
 
 }
