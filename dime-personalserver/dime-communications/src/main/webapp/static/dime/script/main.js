@@ -2538,9 +2538,14 @@ Dime.cache={
 Dime.REST = {
     
     clearCacheForType: function(type, userId){
-        
-        //@all
-        
+
+        //special case type===user
+        if (type==='user'){
+            Dime.cache.deleteEntry(Dime.ps_configuration.getUserUrlString()+"/user/@me");
+            return;
+        }
+
+        //@all        
         if (!userId || userId.length===0){
             userId=Dime.ps_static_configuration.ME_OWNER;
         }
@@ -3033,6 +3038,9 @@ Dime.REST = {
             var result=null;
             if (responseEntries && responseEntries.length>0){
                 result = responseEntries[0];
+                //update configuration entry
+                Dime.ps_configuration.userInformation=result;
+                //update cache
                 Dime.cache.put(callPath, result);
             }
             callBack.call(callerSelf, result);
@@ -3070,6 +3078,8 @@ Dime.REST = {
             var result=null;
             if (responseEntries && responseEntries.length>0){
                 result = responseEntries[0];
+                //update configuration entry
+                Dime.ps_configuration.userInformation=result;
                 //update cache
                 Dime.cache.put(callPath, result);
             }
@@ -3245,6 +3255,7 @@ Dime.Navigation = {
                 if (!Dime.Navigation.notificationPassesFilter(notification)){ //check for filter
                     continue;
                 }
+
                 if ((notification.element.type===Dime.psMap.TYPE.USERNOTIFICATION)
                     && (notification.operation==='create')){
                     usernotificationsNotifications.push(notification);                    

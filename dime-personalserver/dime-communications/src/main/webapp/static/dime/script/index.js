@@ -1593,6 +1593,7 @@ Dime.Settings = {
                     .click(function(){
                         //update user
                         user.evaluationDataCapturingEnabled=input.prop("checked");
+                        Dime.ps_configuration.userInformation = user; //direct update settings - will be refreshed from update user with the callback
                         Dime.REST.updateUser(user,Dime.Settings.updateSettings, Dime.Settings);
                     });
                     
@@ -1781,6 +1782,7 @@ Dime.Navigation.updateView = function(notifications){
     var refreshPlaces = false;
     var refreshServices = false;
     var refreshAccounts = false;
+    var refreshUserSettings=false;
     
     for (var i=0;i<notifications.length;i++){
         if (notifications[i].element){
@@ -1799,7 +1801,10 @@ Dime.Navigation.updateView = function(notifications){
                 refreshServices = true;
             } else if (notificationType === Dime.psMap.TYPE.ACCOUNT) {
                 refreshAccounts = true;
-            }            
+            }else if (notificationType==='user'){
+                refreshUserSettings=true;
+            }
+
         }
     }
     if (refreshSituations){
@@ -1815,7 +1820,9 @@ Dime.Navigation.updateView = function(notifications){
             DimeView.search();
         }
     }else if (DimeView.currentView===DimeView.SETTINGS_VIEW){
-        
+        if(refreshUserSettings){
+            Dime.Settings.updateSettings();
+        }
         if (refreshServices) {
             Dime.Settings.updateServices();
         }
