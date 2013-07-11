@@ -426,29 +426,6 @@ public class UserManagerImpl implements UserManager {
                     + " there's already another User with id " + user.getId());
         }
 
-//		String nickname = null;
-//		Node nNickname = ModelUtils.findObject(contact.getModel(), Variable.ANY, NCO.nickname);
-//		if (nNickname != null || nNickname instanceof Literal) {
-//			nickname = ((Literal) nNickname).getValue();
-//		} else {
-//			throw new InfosphereException("Contact couldn't be added: a nickname is required for the contact.");
-//		}
-        // TODO is nickname mandatory? or can we just use the prefLabel/name of the profile (PersonContact)?
-
-//		String name = contact.getPrefLabel();
-//			
-//		Account account = modelFactory.getDAOFactory().createAccount(accountUri);
-//		account.setAccountType(DimeServiceAdapter.NAME);
-//		account.setPrefLabel(name+"@"+DimeServiceAdapter.NAME);
-//
-//		contact.getModel().addStatement(contact, NIE.dataSource, account);
-//		contact.setPrefLabel(name+"@"+DimeServiceAdapter.NAME);
-//
-//		Person person = personManager.create(contact);
-//		
-//		account.setCreator(person);
-//		accountManager.add(account);
-
         try {
             // creating GUEST of the tenant
             // password is set to NULL, and the user is disabled until an item is shared with them

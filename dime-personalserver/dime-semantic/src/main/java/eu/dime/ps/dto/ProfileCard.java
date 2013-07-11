@@ -28,18 +28,20 @@ public class ProfileCard extends Resource {
 
 	public ProfileCard() {
 		super();
+                this.put("supportsSharing", true);
 	}
 
 	public ProfileCard(PrivacyPreference profileCard, String serviceAccountId,URI me) {
 		super();
 		addToMap(profileCard, RENAMING_RULES,me);
 		this.put("editable", true);
+                this.put("supportsSharing", true);
 		this.put("guid", "pc_" + profileCard.asURI().toString());
 		this.put("said",serviceAccountId);
 		// adding said 
 		
 		ArrayList<String> includes = new ArrayList<String>();
-    	ArrayList<String> excludes = new ArrayList<String>();
+                ArrayList<String> excludes = new ArrayList<String>();
 		ClosableIterator<Statement> iterator = profileCard.getModel()
 				.findStatements(profileCard, PPO.hasAccessSpace, Variable.ANY);
 		while (iterator.hasNext()) {
@@ -64,7 +66,7 @@ public class ProfileCard extends Resource {
 		}
 		iterator.close();
 		this.put("nao:includes", includes);
-    	this.put("nao:excludes", excludes);
+                this.put("nao:excludes", excludes);
 		
 
 	}

@@ -3,7 +3,6 @@ package eu.dime.ps.dto;
 import ie.deri.smile.rdf.util.ModelUtils;
 import ie.deri.smile.vocabulary.NAO;
 import ie.deri.smile.vocabulary.NCO;
-import ie.deri.smile.vocabulary.NSO;
 
 import java.util.Calendar;
 import java.util.LinkedList;
@@ -25,16 +24,8 @@ import org.ontoware.rdfreactor.runtime.converter.CalendarConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import eu.dime.commons.vocabulary.NIE;
-import eu.dime.ps.semantic.model.ModelFactory;
-import eu.dime.ps.semantic.model.NCOFactory;
-import eu.dime.ps.semantic.model.nco.EmailAddress;
 import eu.dime.ps.semantic.model.nco.PersonContact;
-import eu.dime.ps.semantic.model.nco.PersonName;
-import eu.dime.ps.semantic.model.nco.PhoneNumber;
-import eu.dime.ps.semantic.model.pimo.Person;
 import eu.dime.ps.semantic.rdf.URIGenerator;
-import eu.dime.ps.semantic.util.DateUtils;
 
 public class Profile extends Resource {
 
@@ -46,17 +37,20 @@ public class Profile extends Resource {
 	private static final Logger logger = LoggerFactory.getLogger(Profile.class);
 	public Profile() {
 		super();
+                this.put("supportsSharing", false);
 	}
 
 	public Profile(org.ontoware.rdfreactor.schema.rdfs.Resource resource,URI me) {
 		super();
-		put("type", "profile");	
+                put("type", "profile");
+                this.put("supportsSharing", false);
 		addToMap(resource,"",me);
 	}
 
 	public Profile(org.ontoware.rdfreactor.schema.rdfs.Resource resource, String serviceAccountId,URI me) {
 		super();
-		put("type", "profile");	
+		put("type", "profile");
+                this.put("supportsSharing", false);
 		addToMap(resource,serviceAccountId,me);
 	}
 

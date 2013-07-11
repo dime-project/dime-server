@@ -4722,7 +4722,7 @@ Dime.ShareDialog.prototype={
                 
                 var entry = this;
                 
-                if (!entry.said){
+                if (!entry.said || !entry.supportsSharing){
                     return;
                 }
                 
