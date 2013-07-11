@@ -98,4 +98,5 @@ public interface ServiceGateway {
 	 */
 	public ServiceAdapter makeServiceAdapter(String adapterName) throws Exception;
 
+        public boolean isHiddenServiceAdapter(String adapterName);
 }

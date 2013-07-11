@@ -112,7 +112,11 @@ public class PSAccountController implements APIController {
 
             for (Account account : accounts) {
                 try {
-                    data.getEntries().add(getSAccount(account));
+                    SAccount myAccount = getSAccount(account);
+                    //only return accounts for non-hidden adapters
+                    if (!this.serviceGateway.isHiddenServiceAdapter(myAccount.getServiceadapterguid())){
+                        data.getEntries().add(myAccount);
+                    }
                 } catch (ServiceNotAvailableException e) {
                     logger.warn("Service is unavailable: " + e.getMessage());
                 } catch (ServiceAdapterNotSupportedException e) {

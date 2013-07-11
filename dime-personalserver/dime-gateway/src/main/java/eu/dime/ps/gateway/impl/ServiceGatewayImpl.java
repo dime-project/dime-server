@@ -308,4 +308,9 @@ public class ServiceGatewayImpl implements ServiceGateway {
 		return adapter;
 	}
 
+    @Override
+    public boolean isHiddenServiceAdapter(String adapterName) {
+        return ArrayUtils.contains(this.hiddenAdapters, adapterName);
+    }
+
 }
