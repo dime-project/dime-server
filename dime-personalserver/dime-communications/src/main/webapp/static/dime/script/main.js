@@ -1140,9 +1140,9 @@ Dime.AdvisoryItem.prototype={
 
         var message;
         if (this.getWarningLevel() <= 0.5){
-            message = "It is not recommended to share ";
+            message = "Recommendation:<br/>"; //FIXME replace?
         }else{
-            message = "Warning: you better do not share ";
+            message = "Warning:<br/>";
         }
         
         message += this.WARNING_TYPES[this.getWarningType()].getMessage.call(this, attributes, selectedReceivers, selectedItems);
