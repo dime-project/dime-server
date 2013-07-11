@@ -1226,8 +1226,21 @@ input[type="file"] {
 }
 .settingsSettings > .YellowMenuButton{
     width: auto;
+    float: left;
 }
 
+.settingsPasswdField{
+    border: solid #5A9DD5 1px;
+    border-radius:5px;
+    height: auto;
+    float: left;
+    margin-left: 10px;
+    margin-top: 10px;
+}
+
+.settingsPasswdField > input{
+    margin: 2px;
+}
 
 input[type="checkbox"] {
     margin-left: 10px;	

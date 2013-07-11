@@ -72,7 +72,7 @@ public class DimeInternalNotification implements AbstractDimeObject {
 	public static final String ITEM_TYPE_CONTEXT = "context";
 	public static final String ITEM_TYPE_NOTIFICATION = "notification";
 	public static final String ITEM_TYPE_PLACE = "place";
-        public static final String ITEM_TYPE_USER = "user";
+        public static final String ITEM_TYPE_USER = "auth";
 
 	public final static String SENDER_ME =  "@me";
 	public final static String TARGET_ME =  "@me";

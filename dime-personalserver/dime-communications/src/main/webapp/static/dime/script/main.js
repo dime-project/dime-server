@@ -2539,8 +2539,8 @@ Dime.REST = {
     
     clearCacheForType: function(type, userId){
 
-        //special case type===user
-        if (type==='user'){
+        //special case type===auth
+        if (type==='auth'){
             Dime.cache.deleteEntry(Dime.ps_configuration.getUserUrlString()+"/user/@me");
             return;
         }

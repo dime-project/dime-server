@@ -614,6 +614,7 @@ public class UserManagerImpl implements UserManager {
         oldUser.setEvaluationDataCapturingEnabled(accountEntry.getEvaluationDataCapturingEnabled());
         if ((accountEntry.getPassword() != null)
                 && (accountEntry.getPassword().length() > 0)) { //only update password if given
+            logger.info("updating password for user: "+accountEntry.getUsername());
             String encodedPWD = dimePasswordEncoder.encodePassword(accountEntry.getPassword(), oldUser.getUsername());
             oldUser.setPassword(encodedPWD);
         }

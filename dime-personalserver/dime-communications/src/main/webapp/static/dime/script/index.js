@@ -1608,8 +1608,35 @@ Dime.Settings = {
             };
 
             var changePasswordButton=function(){
+                var myPass=null;
+                var myContainer = $(this);
                 var input= $('<button/>').addClass('YellowMenuButton').text("Change Password")
-                $(this).append(input);
+                    .click(function(){
+                        myContainer.append($('<div/>').addClass('settingsPasswdField')
+                            .append($('<input/>').attr('type','password').attr('placeholder','enter new password')
+                                .keyup(function(event){
+                                    if (event.keyCode == 13) {
+                                        if (!myPass){//first time
+                                            myPass=$(this).val();
+                                            $(this).attr('placeholder','enter password again').val("")
+                                        }else{ //retyped
+                                            var secondPass = $(this).val();
+                                            if (secondPass!==myPass){                                                
+                                                window.alert("Your passwords did't match - please try again!");
+                                            }else{
+                                                user.password=myPass;
+                                                Dime.REST.updateUser(user,Dime.Settings.updateSettings, Dime.Settings);
+                                                window.alert("Password updated successfully!");
+                                            }
+                                            myPass=null;
+                                            myContainer.find('.settingsPasswdField').remove();
+                                        }
+                                    }
+                                })
+                        )
+                        )
+                        });
+                myContainer.append(input);
             };
 
 
