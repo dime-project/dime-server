@@ -1047,54 +1047,50 @@ Dime.AdvisoryItem.prototype={
     
     WARNING_TYPES:{
         "untrusted":{
-            name: "Private data or untrusted recipient(s)!",
+            name: "Privacy risk!",
             getMessage:function(attributes, selectedReceivers, selectedItems){
-                return " " 
-                + this.getFormatedNamesOfGuids(attributes.privateResources, selectedItems)
-                + " with "
-                + this.getPrivacyLevelText(attributes.privacyValue) 
-                + " privacy level to " 
-                + this.getFormatedNamesOfGuids(attributes.untrustedAgents, selectedReceivers) 
-                + " with "
-                + this.getTrustLevelText(attributes.trustValue) +
-                " trust level!";
+                return this.getPrivacyLevelText(attributes.privacyValue)
+                    + " privacy: "
+                    + this.getFormatedNamesOfGuids(attributes.privateResources, selectedItems)
+                    + "<br/>"
+                    + this.getTrustLevelText(attributes.trustValue)
+                    + " trust: "
+                    + this.getFormatedNamesOfGuids(attributes.untrustedAgents, selectedReceivers);
             }
             
         }, 
         "disjunct_groups":{
-            name: "Sharing with disjunct groups!",
+            name: "Sharing outside usual group!",
             getMessage:function(attributes, selectedReceivers, selectedItems){
-                return " " + attributes.concernedResources 
-                + " to recipient "
+                return attributes.concernedResources 
+                + " previous recipients: "
                 +  this.getFormatedNamesOfGuids(attributes.concernedPersons, selectedReceivers) 
-                + " because the group context only matches slightly! "
-                + " Items were shared to " 
+                + ", "
                 +  this.getFormatedNamesOfGuids(attributes.previousSharedGroups, selectedReceivers) 
                 + " before!";
             }
         }, 
         "unshared_profile":{
-            name: "Profile was never shared to recipient!",
+            name: "Revealing profile!",
             getMessage:function(attributes, selectedReceivers, selectedItems){
-                return " via the selected profile because "
-                + this.getFormatedNamesOfGuids(attributes.personGuids, selectedReceivers)
-                + " will get access to the corresponding attributes for the first time! That may causes linkability with other profiles!";
+                return "The selected profile was never shared with: "
+                + this.getFormatedNamesOfGuids(attributes.personGuids, selectedReceivers);
             }
         }, 
         "too_many_resources":{
-            name: "Very high number of items!",
+            name: "Many items shared!",
             getMessage:function(attributes, selectedReceivers, selectedItems){
-                return " "
+                return "More then  "
                 + attributes.numberOfResources
-                + " items at once!";
+                + " items selected!";
             }
         }, 
         "too_many_receivers":{
-            name: "Very high number of recipients!",
+            name: "Many recipients selected!",
             getMessage:function(attributes, selectedReceivers, selectedItems){
-                return " the selected items to " 
+                return "More then "
                 + attributes.numberOfReceivers
-                + " recipients at once!";
+                + " recipients selected!";
             }
         }
     },
@@ -1119,7 +1115,7 @@ Dime.AdvisoryItem.prototype={
         var result = "";
         for (var i=0;i<guids.length;i++){
             if (i>0){
-                result+=" ,";
+                result+=", ";
             }
             jQuery.each(items, function(){
                 if (this.guid===guids[i]){
