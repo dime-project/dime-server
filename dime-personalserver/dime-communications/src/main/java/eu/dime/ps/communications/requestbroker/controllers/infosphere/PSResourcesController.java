@@ -440,11 +440,9 @@ public class PSResourcesController extends PSSharingControllerBase implements AP
 
 		DimeServiceAdapter adapter = null;
 		//obtain the saidFor the receiver, this should be already in place since it is a shared resource		
-		String saidNameReceiver = credentialStore.getNameSaid(saidReceiver);
-		logger.info("saidNameReceiver for: "+saidReceiver+" is " + resourceID);	
+		String saidNameReceiver = credentialStore.getNameSaid(saidReceiver);		
 		//specify sender (needs to come from UI or needs to be stored somewhere)
-		String saidNameSender = credentialStore.getNameSaid(saidSender); 
-		logger.info("saidNameSender for: "+saidReceiver+" is " + resourceID);	
+		String saidNameSender = credentialStore.getNameSaid(saidSender); 		
 
 		try {
 			adapter = (DimeServiceAdapter) serviceGateway.getDimeServiceAdapter(saidNameReceiver);				
@@ -457,7 +455,7 @@ public class PSResourcesController extends PSSharingControllerBase implements AP
 		
 		//get the binary from the other PS
 		try {
-			logger.info("retreaving the binary file "+resourceID+" with shared from: "+saidNameReceiver+" to "+saidNameSender);	
+			logger.info("retreaving the binary file "+resourceID+" shared from: "+saidNameReceiver+" to "+saidNameSender);	
 			binary = adapter.getBinary(saidReceiver,saidSender, URLEncoder.encode(resourceID));		
 		} catch (ServiceNotAvailableException e) {
 			logger.error("Resource cannot be retreived for trouble with the serviceAdapter: " + e.getMessage());
@@ -728,171 +726,7 @@ public class PSResourcesController extends PSSharingControllerBase implements AP
 		}
 
 		return Response.ok(data);
-	}
-	
-	// SharedTo
-
-	/**
-	 * 
-	 * @deprecated Do not use this method! 
-	 * 			   
-	 */
-	@Deprecated	
-	@GET
-	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
-	@Path("@me/@sharedTo/{agentId}/@all")
-	public Response<SharedTo> getAllSharedResources(@PathParam("said") String said,
-			@PathParam("agentId") String agentId) {
-
-		Data<SharedTo> data = null;
-
-		try {
-			Collection<FileDataObject> fileDataObjects = sharingManager.getSharedFiles(agentId);
-			data = new Data<SharedTo>(0, fileDataObjects.size(), fileDataObjects.size());
-
-			for (FileDataObject fileDataObject : fileDataObjects) {
-				SharedTo sharedTo = new SharedTo();
-
-				sharedTo.setGuid(UUID.randomUUID().toString());
-				sharedTo.setAgentId(agentId);
-				if (personManager.isPerson(agentId)) {
-					sharedTo.setAgentType("person");
-				}
-				if (personGroupManager.isPersonGroup(agentId)) {
-					sharedTo.setAgentType("group");
-				}
-
-				String itemUri = fileDataObject.asURI().toString();
-				if (itemUri.contains("/")) {
-					itemUri = StringUtils.substringAfterLast(itemUri, "/");
-				}
-				itemUri = URLDecoder.decode(itemUri, "UTF-8");
-
-				sharedTo.setItemId(itemUri);
-
-				sharedTo.setType("resource");
-
-				data.getEntries().add(sharedTo);
-			}
-
-		} catch (InfosphereException e) {
-			return Response.badRequest(e.getMessage(), e);
-		} catch (Exception e) {
-			return Response.serverError(e.getMessage(), e);
-		}
-
-		return Response.ok(data);
-	}
-	
-
-	/**
-	 * 
-	 * @deprecated Do not use this method! 
-	 * 			   
-	 */
-	@Deprecated	
-	@GET
-	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
-	@Path("@me/@sharedTo/{agentId}/{resourceId}")
-	public Response<Resource> hasAccessToResource(@PathParam("said") String said,
-			@PathParam("agentId") String agentId, @PathParam("resourceId") String resourceId) {
-
-		Boolean access;
-		Data<LinkedHashMap<String, Boolean>> returnData;
-
-
-		try {
-
-			access = sharingManager.hasAccessToFile(resourceId, agentId);
-
-			LinkedHashMap<String, Boolean> result = new LinkedHashMap<String, Boolean>();
-			result.put("access", access);
-			returnData = new Data<LinkedHashMap<String, Boolean>>(0, 1, result);
-
-		} catch (IllegalArgumentException e) {
-			return Response.badRequest(e.getMessage(), e);
-		} catch (InfosphereException e) {
-			return Response.badRequest(e.getMessage(), e);
-		} catch (Exception e) {
-			return Response.serverError(e.getMessage(), e);
-		}
-
-		return Response.ok();
-	}
-
-	
-	
-	/**
-	 * 
-	 * @deprecated Do not use this method! 
-	 * 			   
-	 */
-	@Deprecated
-	@POST
-	@Path("@me/@sharedTo/{agentId}/{resourceId}")
-	@Consumes(MediaType.APPLICATION_JSON + ";charset=UTF-8")
-	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
-	public Response<TrustEntry> postShareDatabox(
-			@PathParam("said") String said,
-			@PathParam("agentId") String agentId, 
-			@PathParam("resourceId") String resourceId,
-			@QueryParam("adapt") String adapt,
-			Request<SharedTo> request) {
-
-		// adapt values: privacy, trust, none or ""
-		if (adapt == null) {
-			adapt = "";
-		}
-		//
-		//	TrustRecommendation trustRecomendation = trustEngineInterface.processTrustForFiles(
-		//		resourceId, adapt, null);
-		//
-		//	trustRecomendation.getConflictMap();
-		//	trustRecomendation.getMessage();
-		//
-		//	if (trustRecomendation.updateModel()) {
-
-		Collection<SharedTo> entries = request.getMessage().getData().getEntries();
-
-		for (SharedTo sharedTo : entries){
-			try {
-				sharingManager.shareFile(resourceId, sharedTo.getSaidSender(), new String[]{agentId});								
-			} catch (IllegalArgumentException e) {
-				return Response.badRequest(e.getMessage(), e);
-			} catch (InfosphereException e) {
-				return Response.badRequest(e.getMessage(), e);
-			} catch (Exception e) {
-
-				return Response.serverError(e.getMessage(), e);
-			}
-		}
-
-		return Response.ok();
-
-		//} else {
-
-		//		Map<String, TrustConflict> conflictMap = trustRecomendation.getConflictMap();
-		//
-		//		Data<TrustEntry> data = new Data<TrustEntry>();
-		//
-		//		Set<String> keySet = conflictMap.keySet();
-		//		for (String key : keySet) {
-		//
-		//		TrustEntry jsonTrustConflict = new TrustEntry();
-		//		TrustConflict trustConflict = conflictMap.get(key);
-		//		jsonTrustConflict.setAgent_guid(trustConflict.getAgentId());
-		//		jsonTrustConflict.setThing_guid(trustConflict.getThingId());
-		//		jsonTrustConflict.setMessage(trustConflict.getMessage());
-		//		data.addEntry(jsonTrustConflict);
-		//
-		//		}
-		//		
-		//		return Response.ok(data);
-		//	}
-
-
-	}
-
+	}		
 
 	//-------------------------------------
 	//------- META for file-upload ---------
