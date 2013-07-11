@@ -793,7 +793,7 @@ Dime.PA_CATEGORY_MAP = {
         name: "PersonName",
         caption: "Name",
         keys: ["nameHonorificSuffix", "nameFamily", "nameHonorificPrefix", "nameAdditional", "nameGiven", "nickname", "fullname"],
-        keyCaptions: ["HonorificSuffix", "Family", "HonorificPrefix", "Additional", "Given", "Nickname", "Fullname"]
+        keyCaptions: ["Suffix", "Family Name", "Title", "Middle Name", "First Name", "Nickname", "Full Name"]
     },
 //    NAME: { //only internally
 //        name: "Name",
@@ -804,31 +804,31 @@ Dime.PA_CATEGORY_MAP = {
         name: "BirthDate",
         caption: "Birthday",
         keys: ["birthDate"],
-        keyCaptions: ["birthDate"]
+        keyCaptions: ["Date"]
     },
     EMAIL_ADDRESS: {
         name: "EmailAddress",
         caption: "Email",
         keys: ["emailAddress"],
-        keyCaptions: ["emailAddress"]
+        keyCaptions: ["Address"]
     },
     PHONE_NUMBER: {
         name: "PhoneNumber",
         caption: "Phone",
         keys: ["phoneNumber"],
-        keyCaptions: ["phoneNumber"]
+        keyCaptions: ["Number"]
     },
     POSTAL_CODE: {
         name: "PostalAddress",
         caption: "Address",
         keys: ["region", "country", "extendedAddress", "addressLocation", "streetAddress", "postalcode", "locality", "pobox"],
-        keyCaptions: ["region", "country", "extendedAddress", "addressLocation", "streetAddress", "postalcode", "locality", "pobox"]
+        keyCaptions: ["Region", "Country", "Addition to Address", "Location", "Street", "Postal Code", "Locality", "PO Box"]
     },
     AFFILIATION: {
         name: "Affiliation",
         caption: "Affiliation",
         keys: ["department", "org", "title", "role"],
-        keyCaptions: ["Department", "Organisation", "Title", "Role"]
+        keyCaptions: ["Department", "Organisation", "Job Description", "Role"]
     },
     INTERESTS: {
         name: "Hobby",
