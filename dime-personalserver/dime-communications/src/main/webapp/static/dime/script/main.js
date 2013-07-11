@@ -1238,9 +1238,12 @@ Dime.evaluation={
     },
 
     createAndSendEvaluationItemForAction: function(action){
-        var evaluationItem = this.createEvaluationItem(Dime.ps_configuration.userInformation.evaluationId,
-            Dime.ps_configuration.viewStack, action, this.createEmptyInvolvedItems());
-        Dime.REST.postEvaluation(evaluationItem);
+        //if evaluation is enabled
+        if (Dime.ps_configuration.userInformation.evaluationDataCapturingEnabled){
+            var evaluationItem = this.createEvaluationItem(Dime.ps_configuration.userInformation.evaluationId,
+                Dime.ps_configuration.viewStack, action, this.createEmptyInvolvedItems());
+            Dime.REST.postEvaluation(evaluationItem);
+        }
     }
 };
 

@@ -63,6 +63,7 @@ import eu.dime.ps.storage.util.QueryUtil;
  * @author mheupel
  * @author Ismael Rivera
  * @author mplanaguma
+ * @author Simon Thiel
  */
 public class UserManagerImpl implements UserManager {
 
