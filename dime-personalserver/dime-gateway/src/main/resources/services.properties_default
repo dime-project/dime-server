@@ -11,7 +11,7 @@ GLOBAL_HIDDEN=SocialRecs,di.me,PublicDimeUserDirectory
 # Where the server is reachable at - i.e. where the WAR file is reachable
 GLOBAL_AUTHSERVLET_PORT=8080
 GLOBAL_AUTHSERVLET_PORT_SECURE=8443
-GLOBAL_AUTHSERVLET_HOST=localhost 
+GLOBAL_AUTHSERVLET_HOST=localhost
 GLOBAL_AUTHSERVLET_PATH=/dime-communications/web
 GLOBAL_IPADDRESS=localhost
 
