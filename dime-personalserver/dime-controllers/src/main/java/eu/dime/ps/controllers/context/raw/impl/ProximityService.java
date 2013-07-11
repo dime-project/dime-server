@@ -108,7 +108,7 @@ public class ProximityService implements IProximityService, IContextListener {
 				logger.debug("Proximity Adapter account not found");
 				return null;
 			}
-			String accountId = this.policyManager.getPolicyString("accountId",adapterAccount.asURI().toString());
+			String accountId = this.policyManager.getPolicyString("accountId",adapterAccount.asURI().toString().replaceAll(":","-"));
 			//String accountId = "urn:uuid:j000071";
 			//String accountId = "urn:uuid:a000018";
 			if (accountId == null || accountId.equalsIgnoreCase("")) {
@@ -139,7 +139,9 @@ public class ProximityService implements IProximityService, IContextListener {
 				}
 				if (proxAccts != null && proxAccts.size() > 0) {
 					Iterator<Account> it = proxAccts.iterator();
-					return it.next();
+					Object[] accts = proxAccts.toArray();
+					return (Account)accts[accts.length-1];
+					//return it.next();
 				}
 		} 
 		return null;
@@ -342,7 +344,7 @@ public class ProximityService implements IProximityService, IContextListener {
 		try {
 			// TI note: commented line was used before service configuration was available
 			// response = this.proximityService.postRaw(proximityAccount.asURI().toString() + "/" + scope.getScopeAsString(),body);
-			response = this.proximityService.postRaw(scope.getScopeAsString(),body);
+			response = this.proximityService.postRaw(proximityAccount.asURI().toString() + "/" + scope.getScopeAsString(),body);
 		} catch (AttributeNotSupportedException e) {
 			logger.error(e.toString(),e);
 			return;
