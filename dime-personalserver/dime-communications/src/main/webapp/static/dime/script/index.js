@@ -1610,9 +1610,17 @@ Dime.Settings = {
 
             var changePasswordButton=function(){
                 var myPass=null;
+                var passDlgShown=false;
                 var myContainer = $(this);
                 var input= $('<button/>').addClass('YellowMenuButton').text("Change Password")
                     .click(function(){
+                        if (passDlgShown){
+                            myContainer.find('.settingsPasswdField').remove();
+                            passDlgShown=false;
+                            myPass=null;
+                            return;
+                        }//else
+                        passDlgShown=true;
                         myContainer.append($('<div/>').addClass('settingsPasswdField')
                             .append($('<input/>').attr('type','password').attr('placeholder','enter new password')
                                 .keyup(function(event){
