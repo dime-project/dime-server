@@ -140,6 +140,8 @@ public class ProximityService implements IProximityService, IContextListener {
 				if (proxAccts != null && proxAccts.size() > 0) {
 					Iterator<Account> it = proxAccts.iterator();
 					Object[] accts = proxAccts.toArray();
+					Account acc = it.next();
+					acc.getCreator().asURI().toString();
 					return (Account)accts[accts.length-1];
 					//return it.next();
 				}
