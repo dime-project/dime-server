@@ -229,8 +229,9 @@ public class ServiceGatewayImpl implements ServiceGateway {
 		String settings = this.policyManager.getPolicyString("SETTINGS", adapterName);
 		String description = this.policyManager.getPolicyString("DESCRIPTION", adapterName);
 		
-		if (this.policyManager.getPolicyString("SETTINGS", accountName) != null && this.policyManager.getPolicyString("SETTINGS", accountName).length() > 0)
-			settings = this.policyManager.getPolicyString("SETTINGS", accountName);
+		if (this.policyManager.getPolicyString("SETTINGS", accountName) != null && this.policyManager.getPolicyString("SETTINGS", accountName).length() > 0) {
+                    settings = this.policyManager.getPolicyString("SETTINGS", accountName);
+                }
 		
 		// Note: We set the GUID to adapterName so that client-side account creation can return this back to the server.
 		return new ServiceMetadata(adapterName, adapterName, description, this.getAuthServlet(
