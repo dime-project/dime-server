@@ -2690,6 +2690,7 @@ input[type="checkbox"] {
     margin-left: 12px;
 }
 
+
 .shareDlgWarn{
     cursor: pointer;  
     border: solid 1px lightgray;    
@@ -2706,6 +2707,12 @@ input[type="checkbox"] {
     border: solid 1px #5A9DD5;    
     border-radius: 5px 5px 5px 5px;
 }
+.shareDlgWarn > div{
+    
+    margin: 5px 5px 5px 5px;
+}
+
+
 
 .shareDlgWarn > div > .caret{
     float: right;
@@ -2720,6 +2727,11 @@ input[type="checkbox"] {
     color: black;
     font-weight: normal;
     background-color: #F1F1F1;
+}
+
+.shareDlgWarnText td:first-of-type{
+    font-style: italic;
+    padding-right: 4px;
 }
 
 .shareDlgWarnYellow{

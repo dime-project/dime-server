@@ -1047,33 +1047,37 @@ Dime.AdvisoryItem.prototype={
     
     WARNING_TYPES:{
         "untrusted":{
-            name: "Privacy risk!",
+            name: "Privacy risk!<br/>",
             getMessage:function(attributes, selectedReceivers, selectedItems){
-                return this.getPrivacyLevelText(attributes.privacyValue)
-                    + " privacy: "
+                return "<table><tr><td>"
+                    + this.getPrivacyLevelText(attributes.privacyValue)
+                    + " privacy:</td><td>"
                     + this.getFormatedNamesOfGuids(attributes.privateResources, selectedItems)
-                    + "<br/>"
+                    + "</td></tr><tr><td>"
                     + this.getTrustLevelText(attributes.trustValue)
-                    + " trust: "
-                    + this.getFormatedNamesOfGuids(attributes.untrustedAgents, selectedReceivers);
+                    + " trust:</td><td>"
+                    + this.getFormatedNamesOfGuids(attributes.untrustedAgents, selectedReceivers)
+                    + "</td></tr></table>";
             }
             
         }, 
         "disjunct_groups":{
-            name: "Sharing outside usual group!",
+            name: "Sharing outside usual group!<br/>",
             getMessage:function(attributes, selectedReceivers, selectedItems){
+                var personString = this.getFormatedNamesOfGuids(attributes.concernedPersons, selectedReceivers);
+                var groupString = this.getFormatedNamesOfGuids(attributes.previousSharedGroups, selectedReceivers);
                 return attributes.concernedResources 
                 + " previous recipients: "
-                +  this.getFormatedNamesOfGuids(attributes.concernedPersons, selectedReceivers) 
-                + ", "
-                +  this.getFormatedNamesOfGuids(attributes.previousSharedGroups, selectedReceivers) 
+                +  groupString
+                + ((groupString.length>0 && personString.length>0)?", ":"")
+                +  personString
                 + " before!";
             }
         }, 
         "unshared_profile":{
             name: "Revealing profile!",
             getMessage:function(attributes, selectedReceivers, selectedItems){
-                return "The selected profile was never shared with: "
+                return "The selected profile was never shared with:<br/>"
                 + this.getFormatedNamesOfGuids(attributes.personGuids, selectedReceivers);
             }
         }, 
@@ -1122,7 +1126,6 @@ Dime.AdvisoryItem.prototype={
                     result+=this.name;
                 }
             });
-            
         }
         return result;
     },
@@ -1140,9 +1143,9 @@ Dime.AdvisoryItem.prototype={
 
         var message;
         if (this.getWarningLevel() <= 0.5){
-            message = "Recommendation:<br/>"; //FIXME replace?
+            message = "<strong>Recommendation:</strong><br/>"; //FIXME replace?
         }else{
-            message = "Warning:<br/>";
+            message = "<strong>Warning:</strong><br/>";
         }
         
         message += this.WARNING_TYPES[this.getWarningType()].getMessage.call(this, attributes, selectedReceivers, selectedItems);
