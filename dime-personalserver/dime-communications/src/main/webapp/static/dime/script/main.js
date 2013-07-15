@@ -1137,17 +1137,28 @@ Dime.AdvisoryItem.prototype={
     getTrustLevelText: function(trustValue){
         return Dime.privacyTrust.getClassAndCaptionForPrivacyTrust(trustValue, false).caption;
     },
+
+    getIconForWarning: function(){
+        var result= $('<img/>');
+        if (this.getWarningLevel() <= 0.5){
+
+            result.attr('src','img/warn/share_state_severe.png');
+        }else{
+            result.attr('src','img/warn/share_state_critical.png');
+        }
+        return result;
+    },
     
     getTextForWarning: function(selectedReceivers, selectedItems) {
         var attributes = this.getAttributes();
 
-        var message;
-        if (this.getWarningLevel() <= 0.5){
-            message = "<strong>Recommendation:</strong><br/>"; //FIXME replace?
-        }else{
-            message = "<strong>Warning:</strong><br/>";
-        }
-        
+        var message="";
+//        if (this.getWarningLevel() <= 0.5){
+//            message = "<strong>Recommendation:</strong><br/>"; //FIXME replace?
+//        }else{
+//            message = "<strong>Warning:</strong><br/>";
+//        }
+//
         message += this.WARNING_TYPES[this.getWarningType()].getMessage.call(this, attributes, selectedReceivers, selectedItems);
         
        
@@ -4648,7 +4659,7 @@ Dime.ShareDialog.prototype={
         this.warnings.empty();
         
         if (!this.checkValidity()){
-            this.warnings.append($('<div>Please fill in the required fields ...</div>').addClass("shareDlgWarn"));
+            this.warnings.append($('<div>Please select sender, recipient and items ...</div>').addClass("shareDlgWarn"));
             
             this.warningsLabel.text("Warnings (0)");
             return;
@@ -4676,10 +4687,10 @@ Dime.ShareDialog.prototype={
                 }else{
                     firstEntry=false;
                 }
-                var warningClass=(this.warningLevel<=0.5)?"shareDlgWarnYellow":"shareDlgWarnRed";
                 
-                shareDlgRef.warnings.append($('<div></div>').addClass("shareDlgWarn").addClass(warningClass)
+                shareDlgRef.warnings.append($('<div></div>').addClass("shareDlgWarn")
                     .append($('<div/>')
+                        .append(advisory.getIconForWarning())
                         .append($('<span class="shareDlgWarnType">'+advisory.getTypeText()+'</div>'))                        
                         .append($('<span class="caret"></span>'))
                         ).click(function(){
@@ -4892,7 +4903,7 @@ Dime.ShareDialog.prototype={
         
         this.profile=this.getProfile();
        
-        this.receiversLabel=$('<span class="label">Receivers (0)</span>');
+        this.receiversLabel=$('<span class="label">Recipients (0)</span>');
         this.receivers=this.getReceivers();
         
         this.itemsLabel=$('<span class="label">Items (0)</span>');        
