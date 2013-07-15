@@ -60,7 +60,11 @@ public class DimeIPResolver {
 	}
 
         public String resolveSaid (String said) throws NamingException {
+            try{
 		return DnsResolver.resolve(dimeDns, said + ".dns.dime-project.eu");
+            }catch(NamingException ex){
+                throw new NamingException("DNS failure when trying to retrieve said: "+said+" at "+dimeDns+"\n"+ex.getExplanation());
+            }
 	}
 
         public String getDimeDns(){
