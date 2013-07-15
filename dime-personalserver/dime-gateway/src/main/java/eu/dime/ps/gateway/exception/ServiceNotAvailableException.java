@@ -14,7 +14,7 @@ public class ServiceNotAvailableException extends ServiceException {
 	}
 	
 	public ServiceNotAvailableException(Exception e) {
-		super("The service could not be reached. Details: " + e.getMessage(), CODE);
+		super("The service could not be reached. Details: " + e.getMessage(), CODE, e);
 	}
 
 	public ServiceNotAvailableException(String exceptionMessage) {
