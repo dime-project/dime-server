@@ -1075,7 +1075,7 @@ Dime.AdvisoryItem.prototype={
             }
         }, 
         "unshared_profile":{
-            name: "Revealing profile!",
+            name: "Revealing profile card!",
             getMessage:function(attributes, selectedReceivers, selectedItems){
                 return "The selected profile was never shared with:<br/>"
                 + this.getFormatedNamesOfGuids(attributes.personGuids, selectedReceivers);
