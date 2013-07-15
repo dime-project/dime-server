@@ -1034,6 +1034,38 @@ Dime.AdvisoryRequest=function(profileGuid, agentGuids, shareableItems){
     this.shareableItems=shareableItems;    
 };
 
+
+Dime.AllMyDataContainer=function(){
+};
+Dime.AllMyDataContainer.prototype={
+    callbackCounter:7,
+
+    loadForType: function(type){
+        var handleResult=function(response){
+            this[type]=response;
+
+            this.callbackCounter--;
+            if (this.callbackCounter===0){
+                this.callBack.call(this.callerRef);
+            }
+        };
+        Dime.REST.getAll(type, handleResult, "@me", this);
+    },
+
+    load:function(callBack, callerRef){
+        this.callBack = callBack;
+        this.callerRef = callerRef;
+
+        this.loadForType(Dime.psMap.TYPE.GROUP);
+        this.loadForType(Dime.psMap.TYPE.PERSON);
+        this.loadForType(Dime.psMap.TYPE.DATABOX);
+        this.loadForType(Dime.psMap.TYPE.RESOURCE);
+        this.loadForType(Dime.psMap.TYPE.LIVEPOST);
+        this.loadForType(Dime.psMap.TYPE.PROFILE);
+        this.loadForType(Dime.psMap.TYPE.PROFILEATTRIBUTE);
+    }
+};
+
 Dime.AdvisoryItem=function(item){
     if (!item){
         throw "item is required!"
@@ -1043,47 +1075,48 @@ Dime.AdvisoryItem=function(item){
     
 };
 
+
 Dime.AdvisoryItem.prototype={
     
     WARNING_TYPES:{
         "untrusted":{
             name: "Privacy risk!<br/>",
-            getMessage:function(attributes, selectedReceivers, selectedItems){
+            getMessage:function(attributes, selectedReceivers, selectedItems, allMyData){
                 return "<table><tr><td>"
                     + this.getPrivacyLevelText(attributes.privacyValue)
                     + " privacy:</td><td>"
-                    + this.getFormatedNamesOfGuids(attributes.privateResources, selectedItems)
+                    + this.getFormatedNamesOfGuids(attributes.privateResources, selectedItems, [Dime.psMap.TYPE.DATABOX, Dime.psMap.TYPE.RESOURCE], allMyData)
                     + "</td></tr><tr><td>"
                     + this.getTrustLevelText(attributes.trustValue)
                     + " trust:</td><td>"
-                    + this.getFormatedNamesOfGuids(attributes.untrustedAgents, selectedReceivers)
+                    + this.getFormatedNamesOfGuids(attributes.untrustedAgents, selectedReceivers, [Dime.psMap.TYPE.GROUP, Dime.psMap.TYPE.PERSON], allMyData)
                     + "</td></tr></table>";
             }
             
         }, 
         "disjunct_groups":{
             name: "Sharing outside usual group!<br/>",
-            getMessage:function(attributes, selectedReceivers, selectedItems){
-                var personString = this.getFormatedNamesOfGuids(attributes.concernedPersons, selectedReceivers);
-                var groupString = this.getFormatedNamesOfGuids(attributes.previousSharedGroups, selectedReceivers);
-                return attributes.concernedResources 
-                + " previous recipients: "
+            getMessage:function(attributes, selectedReceivers, selectedItems, allMyData){
+                var personString = this.getFormatedNamesOfGuids(attributes.concernedPersons, selectedReceivers, [Dime.psMap.TYPE.PERSON], allMyData);
+                var groupString = this.getFormatedNamesOfGuids(attributes.previousSharedGroups, selectedReceivers, [Dime.psMap.TYPE.GROUP], allMyData);
+                return "items: "
+                + this.getFormatedNamesOfGuids(attributes.concernedResources, selectedItems, [Dime.psMap.TYPE.DATABOX, Dime.psMap.TYPE.RESOURCE], allMyData)
+                + "<br/>previous recipients: "
                 +  groupString
-                + ((groupString.length>0 && personString.length>0)?", ":"")
-                +  personString
-                + " before!";
+                + ((groupString.length>0 && personString.length>0)?"<br/>":"")
+                +  personString;
             }
         }, 
         "unshared_profile":{
             name: "Revealing profile card!",
-            getMessage:function(attributes, selectedReceivers, selectedItems){
+            getMessage:function(attributes, selectedReceivers, selectedItems, allMyData){
                 return "The selected profile was never shared with:<br/>"
-                + this.getFormatedNamesOfGuids(attributes.personGuids, selectedReceivers);
+                + this.getFormatedNamesOfGuids(attributes.personGuids, selectedReceivers, [Dime.psMap.TYPE.GROUP, Dime.psMap.TYPE.PERSON], allMyData);
             }
         }, 
         "too_many_resources":{
             name: "Many items shared!",
-            getMessage:function(attributes, selectedReceivers, selectedItems){
+            getMessage:function(attributes, selectedReceivers, selectedItems, allMyData){
                 return "More then  "
                 + attributes.numberOfResources
                 + " items selected!";
@@ -1091,7 +1124,7 @@ Dime.AdvisoryItem.prototype={
         }, 
         "too_many_receivers":{
             name: "Many recipients selected!",
-            getMessage:function(attributes, selectedReceivers, selectedItems){
+            getMessage:function(attributes, selectedReceivers, selectedItems, allMyData){
                 return "More then "
                 + attributes.numberOfReceivers
                 + " recipients selected!";
@@ -1115,17 +1148,47 @@ Dime.AdvisoryItem.prototype={
         return this.WARNING_TYPES[this.getWarningType()].name;
     },
     
-    getFormatedNamesOfGuids: function(guids, items){
+    getFormatedNamesOfGuids: function(guids, items, types, allMyData){
+
         var result = "";
         for (var i=0;i<guids.length;i++){
-            if (i>0){
-                result+=", ";
-            }
+
+            var myName=null;
+            var inContainer=null;
             jQuery.each(items, function(){
                 if (this.guid===guids[i]){
-                    result+=this.name;
+                    myName=this.name;
+                }else if (this.items && this.items.length>0){
+                    for(var k=0;k<this.items.length;k++){
+                        if (this.items[k]===guids[i]){
+                            inContainer=this;
+                        }
+                    }
                 }
             });
+            if (!myName){//try all names and all types given
+                for (var j=0;j<types.length;j++){
+                    jQuery.each(allMyData[types[j]], function(){
+                        if (this.guid===guids[i]){
+                            myName=this.name;
+                        }
+                    });
+                }
+            }
+            
+            if(myName){
+                if (i>0){
+                    result+="<br/>";
+                }
+                result+=myName;
+                if (inContainer){
+                    result+=" in "+Dime.psHelper.getCaptionForItemType(inContainer.type)
+                            +" "+inContainer.name;
+                }
+            }else{
+                window.alert("Unable to find item with guid:"+guids[i]);
+            }
+
         }
         return result;
     },
@@ -1149,17 +1212,11 @@ Dime.AdvisoryItem.prototype={
         return result;
     },
     
-    getTextForWarning: function(selectedReceivers, selectedItems) {
+    getTextForWarning: function(selectedReceivers, selectedItems, allMyData) {
         var attributes = this.getAttributes();
 
-        var message="";
-//        if (this.getWarningLevel() <= 0.5){
-//            message = "<strong>Recommendation:</strong><br/>"; //FIXME replace?
-//        }else{
-//            message = "<strong>Warning:</strong><br/>";
-//        }
-//
-        message += this.WARNING_TYPES[this.getWarningType()].getMessage.call(this, attributes, selectedReceivers, selectedItems);
+        var message
+            = this.WARNING_TYPES[this.getWarningType()].getMessage.call(this, attributes, selectedReceivers, selectedItems, allMyData);
         
        
         return message;
@@ -3104,7 +3161,7 @@ Dime.REST = {
         var callPath = Dime.ps_configuration.getUserUrlString()+"/evaluation/@me";
 
         var callback = function(response){
-            console.log(response);
+            //console.log(response);
         };
 
         var request = Dime.psHelper.prepareRequest(evaluationItem);
@@ -4668,8 +4725,8 @@ Dime.ShareDialog.prototype={
         
         var shareDlgRef=this;
         
-        var updateWarningView = function(entries){
-                        
+        var updateWarningView = function(entries, allMyData){
+
             //sort
             entries = Dime.psHelper.sortWarningsByLevel(entries);
                         
@@ -4679,7 +4736,7 @@ Dime.ShareDialog.prototype={
                 var advisory = new Dime.AdvisoryItem(this);
                 
                 var warnText=$('<div class="shareDlgWarnText well">'
-                    +advisory.getTextForWarning(shareDlgRef.selectedReceivers, shareDlgRef.selectedItems)
+                    +advisory.getTextForWarning(shareDlgRef.selectedReceivers, shareDlgRef.selectedItems, allMyData)
                     +'</div>');
                 if (!firstEntry){
                     warnText.addClass("hidden");
@@ -4713,8 +4770,18 @@ Dime.ShareDialog.prototype={
         jQuery.each(this.selectedItems, function(){
             items.push(this.guid);
         });
-        
-        Dime.REST.postAdvisoryRequest(this.selectedProfile.guid, receivers, items, updateWarningView, this);
+
+        var getAllMyDataAndUpdateWarningView=function(advisory){
+            var allMyData=new Dime.AllMyDataContainer();
+
+            var loadingDone=function(){
+                updateWarningView(advisory, allMyData);
+            }
+
+            allMyData.load(loadingDone);
+        };
+
+        Dime.REST.postAdvisoryRequest(this.selectedProfile.guid, receivers, items, getAllMyDataAndUpdateWarningView, this);
     },
     
     getProfile: function(){
