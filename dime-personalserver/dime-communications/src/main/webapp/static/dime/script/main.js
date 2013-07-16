@@ -1101,7 +1101,7 @@ Dime.AdvisoryItem.prototype={
                 var groupString = this.getFormatedNamesOfGuids(attributes.previousSharedGroups, selectedReceivers, [Dime.psMap.TYPE.GROUP], allMyData);
                 return "items: "
                 + this.getFormatedNamesOfGuids(attributes.concernedResources, selectedItems, [Dime.psMap.TYPE.DATABOX, Dime.psMap.TYPE.RESOURCE], allMyData)
-                + "<br/>previous recipients: "
+                + "<br/>previous recipients:<br/>"
                 +  groupString
                 + ((groupString.length>0 && personString.length>0)?"<br/>":"")
                 +  personString;
@@ -1182,8 +1182,7 @@ Dime.AdvisoryItem.prototype={
                 }
                 result+=myName;
                 if (inContainer){
-                    result+=" in "+Dime.psHelper.getCaptionForItemType(inContainer.type)
-                            +" "+inContainer.name;
+                    result+= ' ('+inContainer.name+')';
                 }
             }else{
                 window.alert("Unable to find item with guid:"+guids[i]);
