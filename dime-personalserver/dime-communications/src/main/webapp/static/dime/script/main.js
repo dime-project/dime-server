@@ -1084,11 +1084,11 @@ Dime.AdvisoryItem.prototype={
             getMessage:function(attributes, selectedReceivers, selectedItems, allMyData){
                 return "<table><tr><td>"
                     + this.getPrivacyLevelText(attributes.privacyValue)
-                    + " privacy:</td><td>"
+                    + " privacy:</td></tr><tr><td>"
                     + this.getFormatedNamesOfGuids(attributes.privateResources, selectedItems, [Dime.psMap.TYPE.DATABOX, Dime.psMap.TYPE.RESOURCE], allMyData)
                     + "</td></tr><tr><td>"
                     + this.getTrustLevelText(attributes.trustValue)
-                    + " trust:</td><td>"
+                    + " trust:</td></tr><tr><td>"
                     + this.getFormatedNamesOfGuids(attributes.untrustedAgents, selectedReceivers, [Dime.psMap.TYPE.GROUP, Dime.psMap.TYPE.PERSON], allMyData)
                     + "</td></tr></table>";
             }
@@ -1099,19 +1099,21 @@ Dime.AdvisoryItem.prototype={
             getMessage:function(attributes, selectedReceivers, selectedItems, allMyData){
                 var personString = this.getFormatedNamesOfGuids(attributes.concernedPersons, selectedReceivers, [Dime.psMap.TYPE.PERSON], allMyData);
                 var groupString = this.getFormatedNamesOfGuids(attributes.previousSharedGroups, selectedReceivers, [Dime.psMap.TYPE.GROUP], allMyData);
-                return "items: "
+                return "<table><tr><td>items:</td></tr><tr><td>"
                 + this.getFormatedNamesOfGuids(attributes.concernedResources, selectedItems, [Dime.psMap.TYPE.DATABOX, Dime.psMap.TYPE.RESOURCE], allMyData)
-                + "<br/>previous recipients:<br/>"
+                + "</td></tr><tr><td>previous recipients:</td></tr><tr><td>"
                 +  groupString
-                + ((groupString.length>0 && personString.length>0)?"<br/>":"")
-                +  personString;
+                + ((groupString.length>0 && personString.length>0)?"</td></tr><tr><td>":"")
+                +  personString
+                + "</td></tr></table>";
             }
         }, 
         "unshared_profile":{
             name: "Revealing profile card!",
             getMessage:function(attributes, selectedReceivers, selectedItems, allMyData){
-                return "The selected profile was never shared with:<br/>"
-                + this.getFormatedNamesOfGuids(attributes.personGuids, selectedReceivers, [Dime.psMap.TYPE.GROUP, Dime.psMap.TYPE.PERSON], allMyData);
+                return "<table><tr><td>The selected profile was never shared with:</td></tr><tr><td>"
+                + this.getFormatedNamesOfGuids(attributes.personGuids, selectedReceivers, [Dime.psMap.TYPE.GROUP, Dime.psMap.TYPE.PERSON], allMyData)
+                + "</td></tr></table>";
             }
         }, 
         "too_many_resources":{
@@ -4534,7 +4536,7 @@ Dime.DetailDialog.prototype = {
         
         //memberSection clickable + newDialog
         var showAddMembersDlg = function(event, jQueryItem){
-            var newDialog = new Dime.SelectDialog("Add "+childCaption, childCaption+" to "+parentCaption, true);
+            var newDialog = new Dime.SelectDialog("Add "+childCaption, childCaption+" in the "+parentCaption, true);
             
             var memberLoadingFunction = function(){
                 var loadingHandler = function(response){

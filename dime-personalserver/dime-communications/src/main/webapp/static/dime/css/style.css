@@ -2076,8 +2076,9 @@ input[type="checkbox"] {
 }
 
 .selectDlgSearchInput[type="text"]{
-    width:90%;
+    width:98%;
 }
+
 
 .selectionDialogBodyList{
 
@@ -2087,11 +2088,12 @@ input[type="checkbox"] {
     border: solid lightgray 1px;
     border-radius: 5px;
     min-height: 59px;
-    margin-bottom: 16px;
+    max-height: 242px;
 }
 
 .selectionDialogBodyList:first-of-type{
     background-color: #F5F5F5;
+    max-height: 109px;
 }
 
 .loadImageListItem {
@@ -2619,6 +2621,7 @@ input[type="checkbox"] {
 .shareDlg {
     width: 850px;
     left: 40%;
+    overflow-x: hidden;
 }
 
 .shareDlg > .modal-body{
@@ -2628,6 +2631,8 @@ input[type="checkbox"] {
 
 
 .shareDlg > * >  .well{
+
+    overflow-y: auto;
     float: left;
     width: 40%;
     margin: 5px;

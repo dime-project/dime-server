@@ -1342,7 +1342,7 @@ DimeView = {
                 .append($('<h3/>').text('Getting started with di.me:'))
                 .append($('<p/>')
                     .append($('<span/>').text('Please follow our')).css('margin-top','10px')
-                    .addHrefOpeningInNewWindow('/dime-communications/static/ui/dime/howto.html','Tutorial','orangeBubbleLink')
+                    .addHrefOpeningInNewWindow('/dime-communications/static/ui/dime/howto.html','Guided Tour','orangeBubbleLink')
                     .append($('<span/>').text('... and get the mobile App'))
                     .addHrefOpeningInNewWindow('http://dimetrials.bdigital.org:8080/dimemobile.apk','for Android.','orangeBubbleLink')
 
