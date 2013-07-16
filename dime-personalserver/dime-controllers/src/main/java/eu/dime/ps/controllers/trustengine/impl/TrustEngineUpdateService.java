@@ -283,7 +283,7 @@ public class TrustEngineUpdateService implements BroadcastReceiver{
 			}
 		} else {
 			// iterate over persons...
-			Set <Person> personsToAdapt = new HashSet<Person>();
+			Set <URI> personsToAdapt = new HashSet<URI>();
 			for (Agent agent : agentsWithAccess) {
 				Collection<LivePost> liveposts = sharingManager.getSharedLivePost(agent.toString());
 				Collection<FileDataObject> files = sharingManager.getSharedFiles(agent.toString());
@@ -321,7 +321,7 @@ public class TrustEngineUpdateService implements BroadcastReceiver{
 				else if (targetTrustValue > person.getAllTrustLevel().next()){
 					//send notification
 					logger.debug("notify: trust level should increase");
-					personsToAdapt.add(person);
+					personsToAdapt.add(person.asURI());
 				}
 				
 			}
@@ -330,11 +330,19 @@ public class TrustEngineUpdateService implements BroadcastReceiver{
 		
 	}
 	
-	private void sendTrustNotifications(Set<Person> personsToAdapt) {
+	private void sendTrustNotifications(Set<URI> personsToAdapt) {
 		if (personsToAdapt.isEmpty()){
 			return;
 		} else {
-			for (Person person : personsToAdapt){
+			for (URI personUri : personsToAdapt){
+				Person person;
+				try {
+					person = resourceStore.get(personUri, Person.class);
+				} catch (NotFoundException e) {
+					logger.error("Could not send notification because Person not found.", e);
+					return;
+				}
+
 				notifyUI(UNRefToItem.OPERATION_INC_TRUST, UNRefToItem.TYPE_PERSON, person.asURI().toString(), person.getPrefLabel());
 			}
 		}
