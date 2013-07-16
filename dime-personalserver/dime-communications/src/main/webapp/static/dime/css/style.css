@@ -3003,10 +3003,10 @@ input[type="checkbox"] {
     -moz-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
     box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
 }
-#infoButtonLeft>span{
+#infoButtonLeft>img{
     position: relative;
-    top: 30px;
-    left: 12px;
+    top: 2px;
+    left: 3px;
 }
 
 .infoBoxIcon{

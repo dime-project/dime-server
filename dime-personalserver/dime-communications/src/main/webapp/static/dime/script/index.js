@@ -53,15 +53,21 @@ DimeView = {
         return result;
     },
     
-    actionMenuActivatedForItem: function(userId){
-        return (userId==='@me'); //TODO improve?
+    actionMenuActivatedForItem: function(entry){
+        var result = (entry.userId==='@me'); //TODO improve?
+        
+        if (entry.editable!==undefined && entry.editable!==null&&entry.editable===false){
+            result=false;
+        }
+
+        return result;
     },
     
 
     createMark: function(entry, className, isGroup){
         var result=$('<div/>').addClass('mark').addClass(className);
 
-        if (!DimeView.actionMenuActivatedForItem(entry.userId)){
+        if (!DimeView.actionMenuActivatedForItem(entry)){
             result.addClass('noActionMark');
             return result;
         }//else
@@ -1299,7 +1305,7 @@ DimeView = {
 
         var headerElement=
             $('<div></div>').addClass("modal-header")
-            .append($('<button type="button" class="close" data-dismiss="modal" aria-hidden="true" >x</button>')
+            .append($('<button type="button" class="close" data-dismiss="modal" aria-hidden="true" >&lt&lt</button>')
                 .click(function(){
                         bubbleSelf.dismiss.call(bubbleSelf);
                         dismissHandler.call(handlerSelf);
@@ -1339,22 +1345,23 @@ DimeView = {
         var bubbleBody = $('<div/>')
         .append(
             $('<div/>')
-                .append($('<h3/>').text('Getting started with di.me:'))
+                .append($('<h3/>').text('Your feedback to the concept of di.me is very important for us!').css('font-size','16px'))
                 .append($('<p/>')
                     .append($('<span/>').text('Please follow our')).css('margin-top','10px')
                     .addHrefOpeningInNewWindow('/dime-communications/static/ui/dime/howto.html','Guided Tour','orangeBubbleLink')
                     .append($('<span/>').text('... and get the mobile App'))
                     .addHrefOpeningInNewWindow('http://dimetrials.bdigital.org:8080/dimemobile.apk','for Android.','orangeBubbleLink')
 
-                    .css('margin-bottom','30px')
+                    
                     .css('font-size','16px')
 
                     )
-                .append($('<h3/>').text('Please give us feedback to the concept on:'))
-                .append($('<ul/>')
-                    .append($('<li/>').addHrefOpeningInNewWindow(questionaireLink+'?lang=en','di.me Questionnaire (English)','orangeBubbleLink'))
-                    .append($('<li/>').addHrefOpeningInNewWindow(questionaireLink+'?lang=de','di.me Fragebogen (German)','orangeBubbleLink'))
-                    )
+                .append($('<h3/>').text('Please fill out our brief questionaire:')
+                    .addHrefOpeningInNewWindow(questionaireLink+'?lang=en',' (English)','orangeBubbleLink')
+                    .addHrefOpeningInNewWindow(questionaireLink+'?lang=de','(German)','orangeBubbleLink')
+                    .css('font-size','16px').css('margin-bottom','30px')
+                )
+                
 
                 .append($('<h3/>').text('This is a demonstration prototype'))
                 .append($('<p/>')
