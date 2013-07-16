@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.ontoware.rdf2go.model.node.Node;
 import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdfreactor.schema.rdfs.Resource;
 import org.slf4j.Logger;
@@ -31,6 +32,8 @@ public class ProfileAccountUpdater extends AccountUpdaterBase implements Account
 
 	private final PimoService pimoService;
 	private final ProfileEnricher profileEnricher;
+
+	private final double DEFAULT_TRUST_VALUE = 0.5;
 	
 	public ProfileAccountUpdater(ResourceStore resourceStore, PimoService pimoService) throws DataMiningException {
 		super(resourceStore);
@@ -128,12 +131,17 @@ public class ProfileAccountUpdater extends AccountUpdaterBase implements Account
 
 			// links all resources to the account using nie:dataSource
 			contact.getModel().addStatement(contact.asResource(), NIE.dataSource, accountUri);
+
 			resourceStore.createOrUpdate(accountPathGraph, contact);
 			
 			person = pimoService.getOrCreatePersonForGroundingOccurrence(contact);
 			if (!accountGroup.getModel().contains(accountGroup, PIMO.hasMember, person)) {
 				accountGroup.getModel().addStatement(accountGroup, PIMO.hasMember, person);
 			}
+			if(!person.hasTrustLevel()){
+				person.setTrustLevel(DEFAULT_TRUST_VALUE);
+			}
+			pimoService.createOrUpdate(person);
 		}
 		tripleStore.touchGraph(accountPathGraph);
 
