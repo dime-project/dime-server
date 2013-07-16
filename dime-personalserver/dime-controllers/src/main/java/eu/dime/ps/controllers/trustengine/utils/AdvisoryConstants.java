@@ -37,5 +37,6 @@ public class AdvisoryConstants {
 	public final static double DEFAULT_PRIVACY_LEVEL = PV_HIGH;
 	public final static double DEFAULT_TRUST_VALUE = TV_MED;
 	public static final int RESOURCE_WARNING_TRIGGER = 5;
+	public static final double MIN_GROUP_DISTANCE = 0;
 	
 }

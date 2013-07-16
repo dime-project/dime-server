@@ -267,6 +267,16 @@ public class AdvisoryController {
 			HashedMap targetGroups = getGroupList(agentIDs);
 			MapIterator it = targetGroups.mapIterator();
 
+			while (it.hasNext()){
+				String element_key = (String) it.next();
+				PersonGroup groupA = (PersonGroup) getResourceStore().get(new URIImpl(element_key), PersonGroup.class);
+				List a = groupA.getAllIsRelated_as().asList();
+				if (a.contains(thing)){
+					//shared resource already related to target group
+					continue;
+				}
+			}
+			
 			while (it.hasNext()) {
 				String target_element_key = (String) it.next();
 				URI targetURI = new URIImpl(target_element_key);
@@ -278,16 +288,16 @@ public class AdvisoryController {
 								PersonGroup groupA = (PersonGroup) getResourceStore().get(groupRes.asURI(), PersonGroup.class);
 								PersonGroup groupB = (PersonGroup) getResourceStore().get(targetURI.asURI(), PersonGroup.class);
 								double distance = GroupDistanceProcessor.getGroupDistance(groupA, groupB);
-								if (distance > 0){ //TODO: which min distance?
+								if (distance > AdvisoryConstants.MIN_GROUP_DISTANCE){ //TODO: which min distance?
 									GroupDistanceWarning warning = new GroupDistanceWarning();
 									List<Agent> members = groupB.getAllMembers_as().asList();
-									for (Agent member : members) {
-										if (!thing.hasSharedWith(member)){
-											warning.addPerson(member.asURI().toString());
-										}
-										
-									}
-									warning.addGroup(targetURI.toString());
+//									for (Agent member : members) {
+//										if (!thing.hasSharedWith(member)){
+//											warning.addPerson(member.asURI().toString());
+//										}
+//										
+//									}
+									warning.addGroup(groupRes.toString());
 									warning.addResource(res_uri);
 									warning.setWarningLevel(distance);
 									warnings.add(warning);

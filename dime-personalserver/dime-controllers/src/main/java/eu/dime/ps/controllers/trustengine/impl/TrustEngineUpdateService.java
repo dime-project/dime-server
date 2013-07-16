@@ -79,6 +79,7 @@ public class TrustEngineUpdateService implements BroadcastReceiver{
 
 	@Override
 	public void onReceive(Event event) {
+		PimoService pimoService = null;
 		if (event.getAction().equals(Event.ACTION_RESOURCE_READ)){
 			return;
 		}
@@ -96,6 +97,7 @@ public class TrustEngineUpdateService implements BroadcastReceiver{
 		if (Event.ACTION_RESOURCE_MODIFY.equals(event.getAction())){
 			try {
 				ppoService = connectionProvider.getConnection(event.getTenant()).getPrivacyPreferenceService();
+				pimoService  = connectionProvider.getConnection(event.getTenant()).getPimoService();
 			} catch (RepositoryException e) {
 				logger.error("Could not load PrivacyPreferenceService.",e);
 				return;
@@ -107,7 +109,7 @@ public class TrustEngineUpdateService implements BroadcastReceiver{
 			} else if (event.is(NFO.FileDataObject) || event.is(NIE.DataObject)){
 				// data share
 				Resource resource = event.getData();			
-				processDataObject(resource, ppoService);
+				processDataObject(resource, ppoService, pimoService);
 				
 			} else if (event.is(PIMO.PersonGroup)){
 				//TODO: update things for group modifications
@@ -134,7 +136,7 @@ public class TrustEngineUpdateService implements BroadcastReceiver{
 				try {
 					if (getResourceStore().isTypedAs(res, NIE.DataObject) || 
 							getResourceStore().isTypedAs(res, NFO.FileDataObject)){
-							processDataObject(res, ppoService);
+							processDataObject(res, ppoService, pimoService);
 						} else if (getResourceStore().isTypedAs(res, DLPO.LivePost)){
 							processLivePost(res, ppoService);
 						} else if (getResourceStore().isTypedAs(res, PIMO.Person)){
@@ -206,10 +208,10 @@ public class TrustEngineUpdateService implements BroadcastReceiver{
 		}
 	}
 	
-	private void processDataObject(Node resource, PrivacyPreferenceService ppoService){
+	private void processDataObject(Node resource, PrivacyPreferenceService ppoService, PimoService pimoService){
 		DataObject dataObject = null;
 		try {
-			dataObject = getResourceStore().get(resource.asURI(), DataObject.class);
+			dataObject = pimoService.get(resource.asURI(), DataObject.class);			
 			PrivacyPreference pp = ppoService.getForDataObject(dataObject);
 			if (pp == null){
 				logger.debug("No PrivacyPreference found for Dataobject: "+dataObject);
