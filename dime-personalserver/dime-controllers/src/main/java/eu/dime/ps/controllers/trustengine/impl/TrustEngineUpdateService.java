@@ -1,6 +1,7 @@
 package eu.dime.ps.controllers.trustengine.impl;
 
 import ie.deri.smile.vocabulary.DLPO;
+import ie.deri.smile.vocabulary.NAO;
 import ie.deri.smile.vocabulary.NFO;
 import ie.deri.smile.vocabulary.NIE;
 import ie.deri.smile.vocabulary.PIMO;
@@ -187,7 +188,7 @@ public class TrustEngineUpdateService implements BroadcastReceiver{
 				return;
 			}
 			if (pp.hasAccessSpace()){
-				//updateRelatedTo(pp, livePost);
+				updateRelatedTo(pp, livePost);
 				processEvalData(DLPO.LivePost, pp, livePost);
 			}
 		} catch (ClassCastException e) {
@@ -216,7 +217,7 @@ public class TrustEngineUpdateService implements BroadcastReceiver{
 			}
 			
 			if (pp.hasAccessSpace()){
-				//updateRelatedTo(pp, dataObject);	
+				updateRelatedTo(pp, dataObject);	
 				processEvalData(NFO.FileDataObject, pp, dataObject);
 			}
 
@@ -236,7 +237,7 @@ public class TrustEngineUpdateService implements BroadcastReceiver{
 	}
 	
 	
-	private void updateRelatedTo(PrivacyPreference pp, RDFReactorThing livePost) throws NotFoundException{
+	private void updateRelatedTo(PrivacyPreference pp, RDFReactorThing resource) throws NotFoundException{
 		PimoService pimoService = null;
 		PrivacyPreferenceService ppService = null;
 		ResourceStore resourceStore = null;
@@ -249,7 +250,7 @@ public class TrustEngineUpdateService implements BroadcastReceiver{
 		}
 		ClosableIterator<AccessSpace> as_it = pp.getAllAccessSpace();
 		List<org.ontoware.rdfreactor.schema.rdfs.Resource> related_resources = 
-				livePost.getAllIsRelated_as().asList();
+				resource.getAllIsRelated_as().asList();
 
 		while (as_it.hasNext()) {
 			eu.dime.ps.semantic.model.nso.AccessSpace as = 
@@ -257,10 +258,8 @@ public class TrustEngineUpdateService implements BroadcastReceiver{
 			List<PersonGroup> groups = getGroupsFromAccesSpace(as, resourceStore);
 			for (PersonGroup personGroup : groups) {
 				if (!related_resources.contains(personGroup)){
-					personGroup.addIsRelated(livePost);
-					livePost.addIsRelated(personGroup);
-					resourceStore.update(personGroup, true);
-					resourceStore.update(livePost, true);
+					resourceStore.addValue(pimoService.getPimoUri(), personGroup, NAO.isRelated, resource);
+					resourceStore.addValue(pimoService.getPimoUri(), resource, NAO.isRelated, personGroup);
 				}							
 			}
 		}
