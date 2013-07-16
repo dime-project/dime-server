@@ -82,16 +82,17 @@ public class PolicyStoreImpl implements PolicyStore{
 		} else { 
 			ud = entityFactory.buildUserDefaults();
 		}
-		storeOrUpdate(key, value, "n/a", true, "n/a");
+		storeOrUpdate(key, value, "GLOBAL", true, "n/a");
 	}
 
 	@Override
 	public String getValue(String key) {
-		List<UserDefaults> ud_list = UserDefaults.findAllByName(key);
-		if (ud_list.isEmpty()){
-			return null;
-		} else {
-			return ud_list.get(0).getValue();
-		}
+		return getValueThatAppliesTo(key, "GLOBAL");
+	}
+	
+	@Override
+	public String getValueThatAppliesTo(String key, String appliesTo) {
+		UserDefaults ud = UserDefaults.findAllByNameAndAppliesTo(key, appliesTo);
+		return ud.getValue();
 	}
 }

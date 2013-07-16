@@ -60,9 +60,7 @@ public class PolicyStoreTestIt {
 	public void testStoreGlobal(){
 		
 		policyStore.storeOrUpdate("test", "12345");
-		List<UserDefaults> ud_list = UserDefaults.findAllByName("test");
-		assertNotNull(ud_list);
-		UserDefaults ud = ud_list.get(0);
+		UserDefaults ud = UserDefaults.findAllByNameAndAppliesTo("test", "GLOBAL");
 		assertNotNull(ud);
 		assertEquals("test", ud.getName());
 		assertEquals("12345", ud.getValue());
@@ -91,6 +89,7 @@ public class PolicyStoreTestIt {
 		UserDefaults ud = entityFactory.buildUserDefaults();
 		ud.setName("test-global");
 		ud.setValue("12345");
+		ud.setAppliesTo("GLOBAL");
 		ud.persist();
 		ud.flush();
 		

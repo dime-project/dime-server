@@ -59,4 +59,6 @@ public interface PolicyStore {
 	 */
 	void storeOrUpdate(String key, String value, String appliesTo,
 			Boolean allowOveride, String targetElement);
+
+	String getValueThatAppliesTo(String key, String appliesTo);
 }

@@ -197,4 +197,19 @@ public class UserDefaults {
         return QueryUtil.getSingleResultOrNull(q);
     }
 
+	public static UserDefaults findAllByNameAndAppliesTo(String name,
+			String appliesTo) {
+        if (name == null || name.length() == 0) {
+            throw new IllegalArgumentException("The name argument is required");
+        }
+        if (appliesTo == null || appliesTo.length() == 0) {
+            throw new IllegalArgumentException("The appliesTo argument is required");
+        }
+        EntityManager em = UserDefaults.entityManager();
+        TypedQuery<UserDefaults> q = em.createQuery("SELECT o FROM UserDefaults AS o WHERE o.name = :name AND o.appliesTo = :appliesTo", UserDefaults.class);
+        q.setParameter("name", name);
+        q.setParameter("appliesTo", appliesTo);
+        return QueryUtil.getSingleResultOrNull(q); 
+	}
+
 }
