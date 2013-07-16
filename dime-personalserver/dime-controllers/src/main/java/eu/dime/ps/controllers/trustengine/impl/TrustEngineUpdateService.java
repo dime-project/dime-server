@@ -246,7 +246,7 @@ public class TrustEngineUpdateService implements BroadcastReceiver{
 			ppService = getPrivPrefService();
 			resourceStore = getResourceStore();
 		} catch (RepositoryException e) {
-			logger.warn("Could not update retatedTo. Error in loading rdf services. TenantContext set?",e);
+			logger.warn("Could not update relatedTo. Error in loading rdf services. TenantContext set?",e);
 		}
 		ClosableIterator<AccessSpace> as_it = pp.getAllAccessSpace();
 		List<org.ontoware.rdfreactor.schema.rdfs.Resource> related_resources = 
