@@ -2,6 +2,8 @@ package eu.dime.ps.gateway.policy;
 
 import static junit.framework.Assert.*;
 
+import java.util.List;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -55,6 +57,19 @@ public class PolicyStoreTestIt {
 	
 	@Test
 	@Transactional
+	public void testStoreGlobal(){
+		
+		policyStore.storeOrUpdate("test", "12345");
+		List<UserDefaults> ud_list = UserDefaults.findAllByName("test");
+		assertNotNull(ud_list);
+		UserDefaults ud = ud_list.get(0);
+		assertNotNull(ud);
+		assertEquals("test", ud.getName());
+		assertEquals("12345", ud.getValue());
+	}
+	
+	@Test
+	@Transactional
 	public void testGet(){
 		createTenant();
 		Tenant t = Tenant.findByName("test-dummy");
@@ -67,6 +82,19 @@ public class PolicyStoreTestIt {
 		ud.flush();
 		
 		assertEquals("12345", policyStore.getValue("test", t.getId()));
+		
+	}
+	
+	@Test
+	@Transactional
+	public void testGetGlobal(){		
+		UserDefaults ud = entityFactory.buildUserDefaults();
+		ud.setName("test-global");
+		ud.setValue("12345");
+		ud.persist();
+		ud.flush();
+		
+		assertEquals("12345", policyStore.getValue("test-global"));
 		
 	}
 }

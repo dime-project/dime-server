@@ -15,6 +15,7 @@ import javax.persistence.Table;
 import javax.persistence.TypedQuery;
 import javax.persistence.UniqueConstraint;
 
+import org.hibernate.annotations.SQLUpdate;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,7 +38,7 @@ public class UserDefaults {
     @Column(name = "id")
     private Long id;
         
-    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = true)
     private Tenant tenant;
     
     private String name;

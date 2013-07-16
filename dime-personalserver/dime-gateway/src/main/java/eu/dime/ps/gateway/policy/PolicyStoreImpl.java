@@ -1,5 +1,7 @@
 package eu.dime.ps.gateway.policy;
 
+import java.util.List;
+
 import eu.dime.ps.storage.entities.Tenant;
 import eu.dime.ps.storage.entities.UserDefaults;
 import eu.dime.ps.storage.manager.EntityFactory;
@@ -9,7 +11,7 @@ import eu.dime.ps.storage.manager.EntityFactory;
  * @author marcel
  *
  */
-public class PolicyStoreImpl {
+public class PolicyStoreImpl implements PolicyStore{
 	
 	private EntityFactory entityFactory;
 
@@ -44,5 +46,52 @@ public class PolicyStoreImpl {
 	
 	public String getValue(String key, Long tenantId){
 		return UserDefaults.findAllByTenantAndName(Tenant.find(tenantId), key).getValue();
+	}
+
+	@Override
+	public void storeOrUpdate(String key, String value, String appliesTo, Boolean allowOveride, String targetElement) {
+		if (key == null || value == null){
+			throw new IllegalArgumentException("Parameters should not be null.");
+		}
+		List<UserDefaults> ud_list = UserDefaults.findAllByName(key);
+		//TODO: should be more than one allowed?
+		UserDefaults ud = null;
+		if (!ud_list.isEmpty()){
+			ud = ud_list.get(0);
+		} else { 
+			ud = entityFactory.buildUserDefaults();
+		}
+		ud.setName(key);
+		ud.setValue(value);
+		ud.setAppliesTo(appliesTo);
+		ud.setAllowOverride(allowOveride);
+		ud.setTargetElementName(targetElement);
+		ud.merge();
+	}
+	
+	@Override
+	public void storeOrUpdate(String key, String value) {
+		if (key == null || value == null){
+			throw new IllegalArgumentException("Parameters should not be null.");
+		}
+		List<UserDefaults> ud_list = UserDefaults.findAllByName(key);
+		//TODO: should be more than one allowed?
+		UserDefaults ud = null;
+		if (!ud_list.isEmpty()){
+			ud = ud_list.get(0);
+		} else { 
+			ud = entityFactory.buildUserDefaults();
+		}
+		storeOrUpdate(key, value, "n/a", true, "n/a");
+	}
+
+	@Override
+	public String getValue(String key) {
+		List<UserDefaults> ud_list = UserDefaults.findAllByName(key);
+		if (ud_list.isEmpty()){
+			return null;
+		} else {
+			return ud_list.get(0).getValue();
+		}
 	}
 }
