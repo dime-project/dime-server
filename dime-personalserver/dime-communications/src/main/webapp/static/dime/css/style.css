@@ -2071,6 +2071,10 @@ input[type="checkbox"] {
 
 /*Modal: Select Image*/
 
+.SelectDialog{
+    top:52%
+}
+
 .selectDlgSearchInput[type="text"]{
     width:90%;
 }
@@ -2649,6 +2653,17 @@ input[type="checkbox"] {
     min-height: 22px;
 }
 
+.shareDlgSection .dropdown-toggle{
+
+    width: 93%;
+    float: left;
+}
+
+.shareDlgSection .dropdown-toggle > span{
+
+    float: right;
+}
+
 .shareDlgSectionHover:hover{
     border: solid 1px #5A9DD5;    
     background-color: #5a9dd5;
@@ -2732,6 +2747,8 @@ input[type="checkbox"] {
 .shareDlgWarnText td:first-of-type{
     font-style: italic;
     padding-right: 4px;
+
+    vertical-align: top;
 }
 
 

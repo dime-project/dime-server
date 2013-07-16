@@ -3583,7 +3583,7 @@ Dime.Navigation.createNotificationIcon=function(){
 //#############################################
 //
 
-Dime.BasicDialog = function(title, caption, dialogId, bodyId, body, cancelHandler, okHandler, handlerSelf, okButtonLabel){ 
+Dime.BasicDialog = function(title, caption, dialogId, bodyId, body, cancelHandler, okHandler, handlerSelf, okButtonLabel, dialogClass){
     
     if (!okButtonLabel){
         okButtonLabel="Ok";
@@ -3608,6 +3608,9 @@ Dime.BasicDialog = function(title, caption, dialogId, bodyId, body, cancelHandle
         .clickExt(handlerSelf, cancelHandler))
     .append(okButton);
 
+    if (dialogClass){
+        $(this.dialog).addClass(dialogClass);
+    }
     
     $(this.dialog)
     //header
@@ -3702,7 +3705,7 @@ Dime.SelectDialog.prototype = {
         this.selectedList.children().detach();
         this.unselectedList.children().detach();
         
-        
+        //FIXME add list description selected /all
         
         for (var guid in this.entries){ 
             
@@ -3875,7 +3878,11 @@ Dime.SelectDialog.prototype = {
             this.dialogId,
             this.bodyId, 
             this.body,            
-            this.handleCancelClick, this.handleOKClick, this); 
+            this.handleCancelClick, this.handleOKClick,
+            this,
+            "OK",
+            "SelectDialog"
+        );
         
         this.removeSelectionDialog();
         
@@ -4884,7 +4891,7 @@ Dime.ShareDialog.prototype={
         
          
         var showAddReceiverDlg=function(event, jqueryItem){
-            var dialog = new Dime.SelectDialog("Share With", "Select Receivers", true);
+            var dialog = new Dime.SelectDialog("Share With", "Recipients for sharing", true);
        
             var itemLoadingFunction = function(){   
 
