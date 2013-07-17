@@ -2749,11 +2749,19 @@ input[type="checkbox"] {
     background-color: #F1F1F1;
 }
 
-.shareDlgWarnText td:first-of-type{
-    font-style: italic;
-    padding-right: 4px;
+.shareDlgWarnText td{
+    padding-left: 8px;
+}
 
-    vertical-align: top;
+
+
+.warningDlgAdvHeading{
+    font-weight: bold;
+    padding-left: 0px;
+    background: #DCDCDC;
+    width:400px;
+    border-radius: 5px;
+
 }
 
 

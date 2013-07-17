@@ -923,9 +923,9 @@ Dime.privacyTrust={
         tCaption:"medium",
         limit: 0.5,
         pClass: "orangePTColor",
-        tClass: "lightgreenPTColor",
+        tClass: "orangePTColor",
         pClassThin: "orangePTColorThin",
-        tClassThin: "lightgreenPTColorThin"
+        tClassThin: "orangePTColorThin"
     },
     {
         pCaption:"high",
@@ -1082,11 +1082,11 @@ Dime.AdvisoryItem.prototype={
         "untrusted":{
             name: "Privacy risk!<br/>",
             getMessage:function(attributes, selectedReceivers, selectedItems, allMyData){
-                return "<table><tr><td>"
+                return '<table><tr><td  class="warningDlgAdvHeading">'
                     + this.getPrivacyLevelText(attributes.privacyValue)
                     + " privacy:</td></tr><tr><td>"
                     + this.getFormatedNamesOfGuids(attributes.privateResources, selectedItems, [Dime.psMap.TYPE.DATABOX, Dime.psMap.TYPE.RESOURCE], allMyData)
-                    + "</td></tr><tr><td>"
+                    + '</td></tr><tr><td class="warningDlgAdvHeading">'
                     + this.getTrustLevelText(attributes.trustValue)
                     + " trust:</td></tr><tr><td>"
                     + this.getFormatedNamesOfGuids(attributes.untrustedAgents, selectedReceivers, [Dime.psMap.TYPE.GROUP, Dime.psMap.TYPE.PERSON], allMyData)
@@ -1099,9 +1099,9 @@ Dime.AdvisoryItem.prototype={
             getMessage:function(attributes, selectedReceivers, selectedItems, allMyData){
                 var personString = this.getFormatedNamesOfGuids(attributes.concernedPersons, selectedReceivers, [Dime.psMap.TYPE.PERSON], allMyData);
                 var groupString = this.getFormatedNamesOfGuids(attributes.previousSharedGroups, selectedReceivers, [Dime.psMap.TYPE.GROUP], allMyData);
-                return "<table><tr><td>items:</td></tr><tr><td>"
+                return '<table><tr><td class="warningDlgAdvHeading" >items:</td></tr><tr><td>'
                 + this.getFormatedNamesOfGuids(attributes.concernedResources, selectedItems, [Dime.psMap.TYPE.DATABOX, Dime.psMap.TYPE.RESOURCE], allMyData)
-                + "</td></tr><tr><td>previous recipients:</td></tr><tr><td>"
+                + '</td></tr><tr><td class="warningDlgAdvHeading">previous recipients:</td></tr><tr><td>'
                 +  groupString
                 + ((groupString.length>0 && personString.length>0)?"</td></tr><tr><td>":"")
                 +  personString
@@ -1111,7 +1111,7 @@ Dime.AdvisoryItem.prototype={
         "unshared_profile":{
             name: "Revealing profile card!",
             getMessage:function(attributes, selectedReceivers, selectedItems, allMyData){
-                return "<table><tr><td>The selected profile was never shared with:</td></tr><tr><td>"
+                return '<table><tr><td class="warningDlgAdvHeading">The profile card was never shared with:</td></tr><tr><td>'
                 + this.getFormatedNamesOfGuids(attributes.personGuids, selectedReceivers, [Dime.psMap.TYPE.GROUP, Dime.psMap.TYPE.PERSON], allMyData)
                 + "</td></tr></table>";
             }
