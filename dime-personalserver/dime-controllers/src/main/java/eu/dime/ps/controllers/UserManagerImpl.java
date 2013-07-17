@@ -365,7 +365,7 @@ public class UserManagerImpl implements UserManager {
 				initModelForUser(profile, tenant);
 				registerToUserResolverService(user, profile); //FIXME:<--- unfortunately, this requires an Account to be created, 
 																		//to rdf register needs to be done before (to be fixed)
-			} catch (DimeException e) {
+			} catch (Exception e) {
 				//FIXME: unregister at DNS
 				user.remove();
 				tenant.remove();
