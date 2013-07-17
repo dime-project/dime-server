@@ -30,9 +30,9 @@ import eu.dime.ps.gateway.service.AttributeMap;
 import eu.dime.ps.gateway.service.MediaType;
 import eu.dime.ps.gateway.service.ServiceAdapterBase;
 import eu.dime.ps.gateway.service.ServiceResponse;
+import eu.dime.ps.gateway.userresolver.client.IdemixClient;
+import eu.dime.ps.gateway.userresolver.client.ResolverClient;
 import eu.dime.ps.semantic.model.nco.PersonContact;
-import eu.dime.userresolver.client.IdemixClient;
-import eu.dime.userresolver.client.ResolverClient;
 
 /**
  * @author Sophie.Wrobel
