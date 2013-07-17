@@ -57,6 +57,10 @@ import eu.dime.ps.storage.entities.User;
 import eu.dime.ps.storage.exception.ReadOnlyValueChangedOnUpdate;
 import eu.dime.ps.storage.manager.EntityFactory;
 import eu.dime.ps.storage.util.QueryUtil;
+import java.io.IOException;
+import java.util.Properties;
+import org.springframework.core.io.support.PropertiesLoaderUtils;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 /**
  *
@@ -68,6 +72,15 @@ import eu.dime.ps.storage.util.QueryUtil;
 public class UserManagerImpl implements UserManager {
 
     private static final Logger logger = LoggerFactory.getLogger(UserManagerImpl.class);
+    
+    private static Properties properties = null;
+
+    private static Properties getProps() throws IOException {
+        if (properties == null) {
+            properties = PropertiesLoaderUtils.loadAllProperties("services.properties");
+        }
+        return properties;
+    }
     
     private EntityFactory entityFactory;
     private final ModelFactory modelFactory;
@@ -664,5 +677,44 @@ public class UserManagerImpl implements UserManager {
         } catch (NotifierException e) {
                 logger.error(e.getMessage(),e);
         }
+    }
+
+    @Override
+    public boolean validateUserCanLogEvaluationData(User user) {
+
+        if (user==null){
+            logger.error("user==null", new RuntimeException());
+            return false;
+        }
+
+        if (!user.getEvaluationDataCapturingEnabled()){
+            return false;
+        }
+        String filterPrefix=null;
+        try {
+            filterPrefix = getProps().getProperty("EVALUATION_FILTER_PREFIX", null);
+            if (filterPrefix!=null){
+                filterPrefix = filterPrefix.trim();
+            }
+        } catch (IOException ex) {
+            logger.error(ex.getMessage(), ex);
+        }
+        if ((filterPrefix!=null)
+                  && (filterPrefix.length()>0)
+                  && (user.getUsername().startsWith(filterPrefix))){
+            return false;
+        }
+
+        return true;
+
+    }
+
+     public User getCurrentUser() {
+
+        String username = SecurityContextHolder.getContext().getAuthentication().getName().toString();
+        String pw = SecurityContextHolder.getContext().getAuthentication().getCredentials().toString();
+        User user = getByUsernameAndPassword(username, pw);
+
+        return user;
     }
 }

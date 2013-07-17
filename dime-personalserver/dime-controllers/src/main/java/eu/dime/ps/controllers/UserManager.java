@@ -92,4 +92,9 @@ public interface UserManager {
             throws ReadOnlyValueChangedOnUpdate, UserNotFoundException;
 
     public AccountEntry getUserAccount(String userName);
+
+
+    public boolean validateUserCanLogEvaluationData(User user);
+
+    public User getCurrentUser();
 }
