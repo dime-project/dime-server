@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import eu.dime.commons.dto.SAdapterSetting;
 import eu.dime.commons.object.ServiceMetadata;
 import eu.dime.ps.gateway.ServiceGateway;
 import eu.dime.ps.gateway.auth.CredentialStore;
@@ -52,12 +53,14 @@ public class ServiceGatewayImpl implements ServiceGateway {
 	protected ConcurrentMap<String, ServiceAdapter> adapters;
 	protected ConcurrentMap<String, ServiceMetadata> supportedAdapters;
 	protected String[] hiddenAdapters;
+	
+	@Autowired
 	protected PolicyManager policyManager;
 	protected ConcurrentMap<String, Class> loadedAdapters;
-
-	private CredentialStore credentialStore;
-
+	
 	@Autowired
+	private CredentialStore credentialStore;
+	
 	public void setCredentialStore(CredentialStore credentialStore) {
 		this.credentialStore = credentialStore;
 	}
@@ -85,7 +88,8 @@ public class ServiceGatewayImpl implements ServiceGateway {
 		if (this.policyManager == null)
 			this.policyManager = new PolicyManagerImpl();
 
-		this.hiddenAdapters = this.policyManager.getPolicyString("HIDDEN", "").split(",");
+		if (this.policyManager.getPolicyString("HIDDEN", null) != null && this.policyManager.getPolicyString("HIDDEN", null).length() > 0)
+			this.hiddenAdapters = this.policyManager.getPolicyString("HIDDEN", null).split(",");
 		String policyStr = this.policyManager.getPolicyString("ENABLED", null);
 		if (policyStr == null) {
 			logger.error("Could not find property ENABLED");
@@ -288,6 +292,7 @@ public class ServiceGatewayImpl implements ServiceGateway {
 		}
                 // set common attributes for any type of service adapter
 		adapter.setIdentifer(guid);
+		
                 //init meta
                 ServiceMetadata meta = makeMetadata(adapterName, guid);
                 adapter.initFromMetaData(meta);
@@ -304,7 +309,12 @@ public class ServiceGatewayImpl implements ServiceGateway {
 					account.getAccessSecret()));
 		}
 
-		
+		// Initialize Settings
+		Iterator<SAdapterSetting> settingIterator = adapter.getSettings().iterator();
+		while (settingIterator.hasNext()) {
+			SAdapterSetting setting = settingIterator.next();
+			adapter.setSetting(setting.getName(), this.policyManager.getPolicyString(setting.getName(), adapter.getIdentifier()));
+		}
 
 		return adapter;
 	}

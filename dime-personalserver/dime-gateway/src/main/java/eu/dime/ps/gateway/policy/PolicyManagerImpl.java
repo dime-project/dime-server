@@ -13,6 +13,7 @@ import java.util.Properties;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
 
 import eu.dime.ps.gateway.service.ServiceAdapter;
@@ -53,6 +54,9 @@ public class PolicyManagerImpl implements PolicyManager {
 	private List<ServicePolicy> policyPlugins;
 	
 	private static final PolicyManagerImpl INSTANCE = new PolicyManagerImpl();
+	
+	@Autowired
+	private PolicyStore policyStore;
 
 	/**
 	 * Returns singleton instance.
@@ -62,6 +66,10 @@ public class PolicyManagerImpl implements PolicyManager {
 	public static PolicyManagerImpl getInstance() {
 		return INSTANCE;
 	}
+	
+	public void setPolicyStore(PolicyStore policyStore) {
+		this.policyStore = policyStore;
+	}
 
 	public PolicyManagerImpl() {
 
@@ -70,7 +78,7 @@ public class PolicyManagerImpl implements PolicyManager {
 		this.policyPlugins = new ArrayList<ServicePolicy>();
 		
 		try {
-			if (this.properties == null) {
+			if (this.properties == null || this.properties.size() == 0) {
 				this.properties = PropertiesLoaderUtils.loadAllProperties("services.properties");
 				Enumeration<?> iterator = this.properties.propertyNames();
 				while (iterator.hasMoreElements()) {
@@ -204,8 +212,11 @@ public class PolicyManagerImpl implements PolicyManager {
 		if (globalPolicy.get(policyName) != null) {
 			value = Integer.parseInt(globalPolicy.get(policyName));
 		}
-		if (adapterPolicy.get(adapterId + "_" + policyName) != null) {
+		if (adapterId != null && adapterPolicy.get(adapterId + "_" + policyName) != null) {
 			value = Integer.parseInt(adapterPolicy.get(adapterId + "_" + policyName));
+		}
+		if (adapterId != null && policyStore != null && policyStore.getValue(adapterId + "_" + policyName) != null && policyStore.getValue(adapterId + "_" + policyName).length()>0) {
+			value = Integer.parseInt(policyStore.getValue(adapterId + "_" + policyName));
 		}
 		return value;
 	}
@@ -223,6 +234,13 @@ public class PolicyManagerImpl implements PolicyManager {
 		String value = globalPolicy.get(policyName);
 		if (adapterId != null && adapterPolicy.get(adapterId + "_" + policyName) != null) {
 			value = adapterPolicy.get(adapterId + "_" + policyName);
+		}
+		try {
+			if (adapterId != null && policyStore != null && policyStore.getValue(adapterId + "_" + policyName) != null && policyStore.getValue(adapterId + "_" + policyName).length() > 0) {
+				value = policyStore.getValue(adapterId + "_" + policyName);
+			}
+		} catch (NullPointerException e) {
+			// Ignore - this happens if the key does not exist
 		}
 		return value;
 	}
@@ -243,6 +261,8 @@ public class PolicyManagerImpl implements PolicyManager {
 		if (this.properties != null) {
 			this.properties.setProperty(
 					GLOBAL_PREFIX + "_" + policyName, value.toString());
+			if (value.toString().length() > 0)
+				policyStore.storeOrUpdate(GLOBAL_PREFIX + "_" + policyName, value.toString());
 			try {
 				FileOutputStream fos = new FileOutputStream("services.properties");
 				this.properties.store(fos, null);
@@ -267,6 +287,7 @@ public class PolicyManagerImpl implements PolicyManager {
 		policyName = clean(policyName);
 		adapterId = clean(adapterId);
 		adapterPolicy.put(adapterId + "_" + policyName, value);
+		policyStore.storeOrUpdate(adapterId + "_" + policyName, value.toString());
 		
 		// Write changes to disk
 		if (this.properties != null) {
