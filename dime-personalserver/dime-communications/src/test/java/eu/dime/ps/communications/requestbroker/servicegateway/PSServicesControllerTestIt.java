@@ -58,7 +58,6 @@ import eu.dime.ps.storage.entities.Tenant;
 import eu.dime.ps.storage.manager.EntityFactory;
 import org.junit.Ignore;
 
-@Ignore
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath:spring-config/serviceController-tests-context.xml")
 public class PSServicesControllerTestIt extends Assert {
