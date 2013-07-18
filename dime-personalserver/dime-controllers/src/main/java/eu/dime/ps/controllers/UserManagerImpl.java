@@ -20,7 +20,7 @@ import eu.dime.commons.dto.UserRegister;
 import eu.dime.commons.exception.DimeException;
 import eu.dime.commons.notifications.DimeInternalNotification;
 import eu.dime.commons.notifications.system.SystemNotification;
-import eu.dime.ps.gateway.service.internal.DNSRegisterFailedException;
+import eu.dime.ps.gateway.service.internal.DimeDNSRegisterFailedException;
 import eu.dime.ps.controllers.account.register.DimeDNSRegisterService;
 import eu.dime.ps.controllers.exception.InfosphereException;
 import eu.dime.ps.controllers.exception.UserNotFoundException;
@@ -317,13 +317,13 @@ public class UserManagerImpl implements UserManager {
     }
 
     @Override 
-    public User register(UserRegister userRegister) throws IllegalArgumentException, DNSRegisterFailedException, DimeException {
+    public User register(UserRegister userRegister) throws IllegalArgumentException, DimeDNSRegisterFailedException, DimeException {
         
     	boolean unlocked;
     	try {
 			unlocked = lock.tryLock(5L, TimeUnit.SECONDS);// only one register at a time  
 		} catch (InterruptedException e) {
-			throw new DNSRegisterFailedException("Register failed", e);
+			throw new DimeDNSRegisterFailedException("Register failed", e);
 		}  
     	if (!unlocked) {
     		logger.error("Could not aquire lock within 5 seconds. Returning without registering.");

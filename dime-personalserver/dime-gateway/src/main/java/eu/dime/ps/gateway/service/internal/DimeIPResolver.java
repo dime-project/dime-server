@@ -64,6 +64,7 @@ public class DimeIPResolver {
         public String resolveSaid (String said) throws DimeDNSException {
             try{
 		return DnsResolver.resolve(dimeDns, said + ".dns.dime-project.eu");
+
             }catch (NameNotFoundException ex){
                 throw new DimeDNSCannotResolveException("DNS failure: unable to resolve said: "
                         +said+" at "+dimeDns+"\n"+ex.getExplanation(),ex);

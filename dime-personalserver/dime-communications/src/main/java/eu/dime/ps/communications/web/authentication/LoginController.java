@@ -1,6 +1,14 @@
 package eu.dime.ps.communications.web.authentication;
 
 import eu.dime.ps.communications.requestbroker.controllers.authentication.AuthenticationController;
+import eu.dime.ps.controllers.UserManager;
+import eu.dime.ps.gateway.service.internal.DimeDNSException;
+import eu.dime.ps.gateway.service.internal.DimeIPResolver;
+import eu.dime.ps.storage.entities.User;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.logging.Level;
+import javax.naming.NamingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,22 +16,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.ModelAndView;
-
-import eu.dime.ps.controllers.UserManager;
-import eu.dime.ps.gateway.service.MediaType;
-import eu.dime.ps.gateway.service.internal.DimeIPResolver;
-import eu.dime.ps.storage.entities.User;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.util.logging.Level;
-import javax.naming.NamingException;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 
 /**
  * Request mapping for login and logout calls
@@ -172,8 +166,10 @@ public class LoginController {
         try {
 
             modelAndView.addObject("result", "received from "+dir.getDimeDns()+": ip:"+dir.resolveSaid(said));
-        } catch (NamingException ex) {
-            modelAndView.addObject("result", "DNS resolve failed! Unable to resolve said: "+said+" at "+dir.getDimeDns());
+        } catch (DimeDNSException ex) {
+            modelAndView.addObject("result", "DNS resolve failed! Unable to resolve said: "+said+" at "+dir.getDimeDns()
+                    +"<br/>"+ex.getClass().getName()
+                    +"<br/>"+ex.getMessage());
         }
 
         return modelAndView;
