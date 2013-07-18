@@ -3358,6 +3358,8 @@ Dime.Navigation = {
         Dime.Navigation.updateButtonActiveStatus("navButtonEvent", buttonId);
         Dime.Navigation.updateButtonActiveStatus("navButtonSettings", buttonId);
         Dime.Navigation.updateButtonActiveStatus("notificationIcon", buttonId);
+        Dime.Navigation.updateButtonActiveStatus("currentPlace", buttonId);
+        Dime.Navigation.updateButtonActiveStatus("currentSituation", buttonId);
 
     
     },

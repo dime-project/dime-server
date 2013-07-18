@@ -48,6 +48,22 @@ body {
     color: white;    
 }
 
+#currentSituation.active{
+    background: none; 
+}
+
+#currentSituation.active > div{
+    background: #5a9dd5; 
+}
+
+#currentPlace.active{
+    background: none; 
+}
+
+#currentPlace.active > div{
+    background: #5a9dd5; 
+}
+
 .notificationBar {
     height: 31px;
     float: left;
