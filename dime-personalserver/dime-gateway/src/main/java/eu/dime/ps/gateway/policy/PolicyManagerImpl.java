@@ -287,11 +287,13 @@ public class PolicyManagerImpl implements PolicyManager {
 		policyName = clean(policyName);
 		adapterId = clean(adapterId);
 		adapterPolicy.put(adapterId + "_" + policyName, value);
-		policyStore.storeOrUpdate(adapterId + "_" + policyName, value.toString());
+		if (value != null)
+			policyStore.storeOrUpdate(adapterId + "_" + policyName, value.toString());
 		
 		// Write changes to disk
 		if (this.properties != null) {
-			this.properties.setProperty(
+			if (value != null)
+				this.properties.setProperty(
 					adapterId + "_" + policyName, value.toString());
 			try {
 				FileOutputStream fos = new FileOutputStream("services.properties");

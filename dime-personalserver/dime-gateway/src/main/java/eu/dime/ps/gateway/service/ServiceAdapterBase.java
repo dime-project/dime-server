@@ -121,7 +121,7 @@ public abstract class ServiceAdapterBase implements ServiceAdapter {
     public void setSetting(String name, String value) {
         this.policyManager.setAdapterPolicy(name, this.identifier, value);
         this.sadapter.updateSetting(name, value);
-        this.policyManager.setAdapterPolicy("SETTINGS", this.identifier, sadapter.exportSettings());
+        this.policyManager.setAdapterPolicy(name, this.identifier, value);
     }
 
     /**
