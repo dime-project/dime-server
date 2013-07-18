@@ -187,8 +187,11 @@ public class FileManagerTest extends InfoSphereManagerTest {
 	@AfterClass
 	public static void cleanUp() throws IOException{
 		// TODO:destroying of teststore should be optimized
-		String path = CMSInitHelper.getCMSFolder() + File.separator + "12345";
-		org.apache.commons.io.FileUtils.deleteDirectory(new File(path));	
+		String os = System.getProperty("os.name").toLowerCase();
+		if (!(os.indexOf("win") >= 0)){ //HACK: skip deletion of files on windows
+			String path = CMSInitHelper.getCMSFolder() + File.separator + "12345";
+			org.apache.commons.io.FileUtils.deleteDirectory(new File(path));	
+		}
 	}
 
 }
