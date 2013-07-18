@@ -20,7 +20,7 @@ import eu.dime.commons.dto.UserRegister;
 import eu.dime.commons.exception.DimeException;
 import eu.dime.commons.notifications.DimeInternalNotification;
 import eu.dime.commons.notifications.system.SystemNotification;
-import eu.dime.ps.controllers.account.register.DNSRegisterFailedException;
+import eu.dime.ps.gateway.service.internal.DNSRegisterFailedException;
 import eu.dime.ps.controllers.account.register.DimeDNSRegisterService;
 import eu.dime.ps.controllers.exception.InfosphereException;
 import eu.dime.ps.controllers.exception.UserNotFoundException;
@@ -37,6 +37,10 @@ import eu.dime.ps.gateway.exception.InvalidDataException;
 import eu.dime.ps.gateway.exception.ServiceNotAvailableException;
 import eu.dime.ps.gateway.service.AttributeMap;
 import eu.dime.ps.gateway.service.external.DimeUserResolverServiceAdapter;
+import eu.dime.ps.gateway.service.internal.DimeDNSCannotConnectException;
+import eu.dime.ps.gateway.service.internal.DimeDNSCannotResolveException;
+import eu.dime.ps.gateway.service.internal.DimeDNSException;
+import eu.dime.ps.gateway.service.internal.DimeIPResolver;
 import eu.dime.ps.gateway.service.internal.DimeServiceAdapter;
 import eu.dime.ps.semantic.BroadcastManager;
 import eu.dime.ps.semantic.Event;
@@ -59,6 +63,8 @@ import eu.dime.ps.storage.manager.EntityFactory;
 import eu.dime.ps.storage.util.QueryUtil;
 import java.io.IOException;
 import java.util.Properties;
+import java.util.logging.Level;
+import javax.naming.NamingException;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
 
@@ -716,5 +722,24 @@ public class UserManagerImpl implements UserManager {
         User user = getByUsernameAndPassword(username, pw);
 
         return user;
+    }
+
+    @Override
+    public boolean saidIsRegisteredAtDNS(String said) throws DimeDNSException{
+        try {
+            String  serverIP = new DimeIPResolver().resolveSaid(said);
+            if (!serverIP.isEmpty()){
+                return true;
+            }
+
+        } catch (DimeDNSCannotConnectException ex) {
+            throw ex;
+        } catch (DimeDNSCannotResolveException ex) {
+            return false;
+         } catch (DimeDNSException ex) {
+            throw ex;
+        }
+        return false;
+
     }
 }

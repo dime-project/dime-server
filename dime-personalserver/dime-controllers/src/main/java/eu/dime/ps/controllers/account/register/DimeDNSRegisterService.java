@@ -1,5 +1,6 @@
 package eu.dime.ps.controllers.account.register;
 
+import eu.dime.ps.gateway.service.internal.DNSRegisterFailedException;
 import java.io.FileNotFoundException;
 
 import java.io.IOException;
@@ -139,6 +140,7 @@ public class DimeDNSRegisterService implements BroadcastReceiver {
         sendRegisterPost(payloadString, dns);
 
         //FIXME: double check fails even though registering was successful
+        //TODO: have the register call on the di.me dns blocking until the dns entry was set
 //        try {
 //            //double check for successfull registration
 //        	String retrievedIP = DnsResolver.resolve(dns, said+ ".dns.dime-project.eu");

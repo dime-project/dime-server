@@ -11,8 +11,10 @@ import eu.dime.ps.controllers.UserManager;
 import eu.dime.ps.controllers.eventlogger.data.LogType;
 import eu.dime.ps.controllers.eventlogger.manager.LogEventManager;
 import eu.dime.ps.gateway.service.MediaType;
+import eu.dime.ps.gateway.service.internal.DimeDNSException;
 import eu.dime.ps.semantic.model.ModelFactory;
 import eu.dime.ps.storage.entities.User;
+import java.util.logging.Level;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -104,6 +106,14 @@ public class PSUserController implements APIController {
 
         if (!userRegister.getEmailAddress().contains("@")) {
             throw new InvalidRegisterCallException("Invalid email address: " + userRegister.getEmailAddress());
+        }
+        try {
+            if (userManager.saidIsRegisteredAtDNS(userRegister.getUsername())){
+                throw new InvalidRegisterCallException("Username was already registered at the dime.dns:" + userRegister.getUsername());
+            }
+        } catch (DimeDNSException ex) {
+            logger.error(ex.getMessage(),ex);
+            throw new InvalidRegisterCallException("Unable to access dime DNS server!");
         }
     }
 

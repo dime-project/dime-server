@@ -2,7 +2,7 @@ package eu.dime.ps.controllers;
 
 import eu.dime.commons.dto.UserRegister;
 import eu.dime.commons.exception.DimeException;
-import eu.dime.ps.controllers.account.register.DNSRegisterFailedException;
+import eu.dime.ps.gateway.service.internal.DNSRegisterFailedException;
 import java.util.Random;
 import java.util.UUID;
 
