@@ -552,11 +552,11 @@ private static final Logger logger = LoggerFactory.getLogger(DefaultDataSetup.cl
 		}
 	}
 
-	private FileDataObject createFile(String fileName, InputStream inputStream, double privacyLevel, Person fileOwner) {
+	private FileDataObject createFile(String fileName, InputStream inputStream, double privacyLevel, Person creator) {
 		FileDataObject file = modelFactory.getNFOFactory().createFileDataObject();
 		file.setFileName(fileName);
 		file.setPrivacyLevel(privacyLevel);
-		file.setFileOwner(fileOwner);
+		file.setCreator(creator);
 		
 		try {
 			fileManager.add(file, inputStream);
