@@ -150,13 +150,7 @@
 		</dependency>
 		
 		<!--  idemix library. due to licensing reasons has to be local and manually added -->
-		<dependency>
-    		<groupId>com.ibm.zurich</groupId>
-   			 <artifactId>idmx</artifactId>
-    		 <version>2-3-4</version>
-    		<scope>system</scope>
-    		<systemPath>${project.basedir}/src/main/resources/lib/com.ibm.zurich.idmx.2-3-4.jar</systemPath>
-		</dependency>
+
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
