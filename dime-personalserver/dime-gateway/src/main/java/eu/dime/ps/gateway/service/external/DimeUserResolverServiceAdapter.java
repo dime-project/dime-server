@@ -153,9 +153,12 @@ public class DimeUserResolverServiceAdapter extends ServiceAdapterBase implement
 				
 				ResolverClient resolverClient = new ResolverClient(
 						resolverEndpoint.toString(), authEndpoint.toString(), idemixClient);
-				this.masterSecret = idemixClient.generateMasterSecret();
-				// FIXME: Save idemix master secret in credential store
-
+				try {
+					this.masterSecret = idemixClient.generateMasterSecret();
+					// FIXME: Save idemix master secret in credential store
+				} catch (Throwable e){
+					logger.warn("could not generate master secret", e);
+				}
 				// Create idemix credential
 				Map<String, String> values = new HashMap<String, String>();
 				values.put("name", firstname);

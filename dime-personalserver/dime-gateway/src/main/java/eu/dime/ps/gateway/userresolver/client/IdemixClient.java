@@ -40,6 +40,7 @@ import org.w3c.dom.Text;
 import com.google.gson.Gson;
 import com.ibm.zurich.idmx.dm.Credential;
 import com.ibm.zurich.idmx.dm.DomNym;
+import com.ibm.zurich.idmx.dm.MasterSecret;
 import com.ibm.zurich.idmx.dm.Nym;
 import com.ibm.zurich.idmx.dm.Values;
 import com.ibm.zurich.idmx.issuance.IssuanceSpec;
@@ -52,7 +53,6 @@ import com.ibm.zurich.idmx.utils.Constants;
 import com.ibm.zurich.idmx.utils.Parser;
 import com.ibm.zurich.idmx.utils.XMLSerializer;
 
-import eu.dime.ps.gateway.userresolver.client.entities.MasterSecret;
 import eu.dime.ps.gateway.userresolver.client.entities.RoundTwoRequestData;
 import eu.dime.ps.gateway.userresolver.client.entities.RoundTwoResponseData;
 import eu.dime.ps.gateway.userresolver.client.entities.RoundZeroRequestData;
