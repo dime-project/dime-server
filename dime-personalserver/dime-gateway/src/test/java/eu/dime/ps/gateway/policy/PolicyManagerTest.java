@@ -4,17 +4,11 @@
 package eu.dime.ps.gateway.policy;
 
 import static org.junit.Assert.*;
-
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.transaction.annotation.Transactional;
-
-import eu.dime.ps.gateway.policy.PolicyManagerImpl;
-import eu.dime.ps.gateway.policy.ServicePolicy;
 
 /**
  * @author Sophie.Wrobel
@@ -28,6 +22,7 @@ public class PolicyManagerTest {
 	 * Test method for {@link eu.dime.ps.controllers.service.policy.PolicyManagerImpl#setAdapterPolicy(java.lang.String, java.lang.String, java.lang.String)}.
 	 * Test method for {@link eu.dime.ps.controllers.service.policy.PolicyManagerImpl#setGlobalPolicy(java.lang.String, java.lang.String)}.
 	 */
+        @Ignore
 	@Test
 	public void testPolicySettings() {
 		
