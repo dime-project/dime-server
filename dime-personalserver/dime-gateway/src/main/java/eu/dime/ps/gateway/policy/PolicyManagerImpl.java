@@ -55,7 +55,6 @@ public class PolicyManagerImpl implements PolicyManager {
 	
 	private static final PolicyManagerImpl INSTANCE = new PolicyManagerImpl();
 	
-	@Autowired
 	private PolicyStore policyStore;
 
 	/**

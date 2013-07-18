@@ -18,8 +18,13 @@
 	<bean id="transformer" 
 	    class="eu.dime.ps.gateway.transformer.impl.XSparqlTransformer"/>
 	
-	<bean id="policyManager" 
-	    class="eu.dime.ps.gateway.policy.PolicyManagerImpl"/>
+	<bean id="policyStore" class="eu.dime.ps.gateway.policy.PolicyStoreImpl">
+			<property name="entityFactory" ref="entityFactory"/>
+	</bean>
+	
+	<bean id="policyManager" class="eu.dime.ps.gateway.policy.PolicyManagerImpl" factory-method="getInstance">
+	    	<property name="policyStore" ref="policyStore"/>
+	</bean>
 	
 	<context:annotation-config/>
 		

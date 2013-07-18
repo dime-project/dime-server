@@ -96,6 +96,9 @@ public class PolicyStoreImpl implements PolicyStore{
 	@Override
 	public String getValueThatAppliesTo(String key, String appliesTo) {
 		UserDefaults ud = UserDefaults.findAllByNameAndAppliesTo(key, appliesTo);
+		if (ud == null){
+			return null;
+		}
 		return ud.getValue();
 	}
 }
