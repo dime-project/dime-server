@@ -2,7 +2,7 @@ package eu.dime.ps.controllers;
 
 import eu.dime.commons.dto.UserRegister;
 import eu.dime.commons.exception.DimeException;
-import eu.dime.ps.controllers.account.register.DNSRegisterFailedException;
+import eu.dime.ps.gateway.service.internal.DimeDNSRegisterFailedException;
 import java.util.Random;
 import java.util.UUID;
 
@@ -221,7 +221,7 @@ public class UserManagerTestIt extends InfoSphereManagerTest {
 
 
                     assertNotNull(userManager.register(userRegister));
-                } catch (DNSRegisterFailedException ex) {
+                } catch (DimeDNSRegisterFailedException ex) {
                     fail(ex.getMessage());
                 } catch (IllegalArgumentException e) {
                     fail("Illegal Argument Exception but arguments are ok");

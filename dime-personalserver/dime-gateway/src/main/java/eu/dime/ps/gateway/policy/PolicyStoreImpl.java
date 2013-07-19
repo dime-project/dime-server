@@ -2,6 +2,8 @@ package eu.dime.ps.gateway.policy;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import eu.dime.ps.storage.entities.Tenant;
 import eu.dime.ps.storage.entities.UserDefaults;
 import eu.dime.ps.storage.manager.EntityFactory;
@@ -13,6 +15,7 @@ import eu.dime.ps.storage.manager.EntityFactory;
  */
 public class PolicyStoreImpl implements PolicyStore{
 	
+	@Autowired
 	private EntityFactory entityFactory;
 
 	public void setEntityFactory(EntityFactory entityFactory) {
@@ -93,6 +96,9 @@ public class PolicyStoreImpl implements PolicyStore{
 	@Override
 	public String getValueThatAppliesTo(String key, String appliesTo) {
 		UserDefaults ud = UserDefaults.findAllByNameAndAppliesTo(key, appliesTo);
+		if (ud == null){
+			return null;
+		}
 		return ud.getValue();
 	}
 }

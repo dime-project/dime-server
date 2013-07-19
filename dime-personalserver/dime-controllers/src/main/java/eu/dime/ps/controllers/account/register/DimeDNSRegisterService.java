@@ -1,5 +1,6 @@
 package eu.dime.ps.controllers.account.register;
 
+import eu.dime.ps.gateway.service.internal.DimeDNSRegisterFailedException;
 import java.io.FileNotFoundException;
 
 import java.io.IOException;
@@ -29,6 +30,8 @@ import eu.dime.commons.util.HttpUtils;
 import eu.dime.commons.util.JaxbJsonSerializer;
 import eu.dime.ps.controllers.accesscontrol.utils.KeyStoreManager;
 import eu.dime.ps.gateway.policy.PolicyManager;
+import eu.dime.ps.gateway.service.internal.DimeDNSCannotResolveException;
+import eu.dime.ps.gateway.service.internal.DimeDNSException;
 import eu.dime.ps.gateway.service.internal.DimeIPResolver;
 import eu.dime.ps.gateway.service.internal.DimeServiceAdapter;
 import eu.dime.ps.gateway.util.DnsResolver;
@@ -73,42 +76,35 @@ public class DimeDNSRegisterService implements BroadcastReceiver {
         if (accountCreated && event.getAction().equals(Event.ACTION_RESOURCE_ADD)) {
             String said = null;
             try {
+                
                 Account account = (Account) event.getData();
-                dns = policyManager.getPolicyString("DIME_DNS", null);
 
                 if (account.getAccountType().equals(DimeServiceAdapter.NAME)) {
                     ServiceAccount sa = ServiceAccount.findAllByAccountUri(account.asURI().toString());
                     if (sa != null) { //if sa == null it is not an own account so no dns register neccessary
                         said = sa.getName();
-                        String resolvedSaid = DnsResolver.resolve(dns, said + ".dns.dime-project.eu");
-                        if (resolvedSaid.equals("")) {
+                        
+                        try {
+                            String resolvedSaid = new DimeIPResolver().resolveSaid(said);
+                        } catch (DimeDNSCannotResolveException ex){
                             try {
-                                //not resolved = not registered
                                 registerSaid(said);
-                            } catch (DNSRegisterFailedException ex) {
+                            } catch (DimeDNSRegisterFailedException ex1) {
                                 logger.error(ex.getMessage(), ex);
                             }
+                        } catch (DimeDNSException ex) {
+                            logger.error(ex.getMessage(), ex);
                         }
                     }
                 }
             } catch (ClassCastException e) {
                 logger.warn("Resource of type " + Account.RDFS_CLASS + " cannot be cast to Account", e);
-            } catch (NamingException e) {
-                //name not found
-                if (!said.equals("")) {
-                    try{
-                        registerSaid(said);
-                    } catch (DNSRegisterFailedException ex) {
-                        logger.error(ex.getMessage(), ex);
-                    }
-                }
-            }
-
+            } 
         }
 
     }
 
-    public void registerSaid(String said) throws DNSRegisterFailedException {
+    public void registerSaid(String said) throws DimeDNSRegisterFailedException {
         String today = "", ip = "", pubKey = "";
 
         ip = policyManager.getPolicyString("IPADDRESS", null);
@@ -139,25 +135,13 @@ public class DimeDNSRegisterService implements BroadcastReceiver {
         sendRegisterPost(payloadString, dns);
 
         //FIXME: double check fails even though registering was successful
-//        try {
-//            //double check for successfull registration
-//        	String retrievedIP = DnsResolver.resolve(dns, said+ ".dns.dime-project.eu");
-//            //String retrievedIP = new DimeIPResolver().resolveSaid(said);
-//            if (!retrievedIP.equals(ip)){
-//                String message = "DNS resolve delivered "+retrievedIP+" expected was "+ip+"! Resolving at " + dns + " failed!";
-//                logger.error(message);
-//                throw new DNSRegisterFailedException(message, new Exception());
-//            }
-//        } catch (NamingException ex) {
-//            String message = "DNS resolve failed! Unable to resolve "+said+" at " + dns + "\n" + ex.getMessage();
-//            logger.error(message, ex);
-//            throw new DNSRegisterFailedException(message, ex);
-//        }
+        //TODO: have the register call on the di.me dns blocking until the dns entry was set
+
 
 
     }
 
-    public static void sendRegisterPost(String payloadString, String dns) throws DNSRegisterFailedException {
+    public static void sendRegisterPost(String payloadString, String dns) throws DimeDNSRegisterFailedException {
 
         HttpClient httpClient = HttpUtils.createHttpClient();
         String dnsRegisterUrl = "http://" + dns + ":8080/dime_dns_registry/recordses";
@@ -176,13 +160,13 @@ public class DimeDNSRegisterService implements BroadcastReceiver {
 
         } catch (ClientProtocolException ex) {
             logger.error("Unable to register at" + dnsRegisterUrl + "\n" + ex.getMessage(), ex);
-            throw new DNSRegisterFailedException("Unable to register at" + dnsRegisterUrl + "\n" + ex.getMessage(), ex);
+            throw new DimeDNSRegisterFailedException("Unable to register at" + dnsRegisterUrl + "\n" + ex.getMessage(), ex);
         } catch (UnsupportedEncodingException ex) {
             logger.error("Unable to register at" + dnsRegisterUrl + "\n" + ex.getMessage(), ex);
-            throw new DNSRegisterFailedException("Unable to register at" + dnsRegisterUrl + "\n" + ex.getMessage(), ex);
+            throw new DimeDNSRegisterFailedException("Unable to register at" + dnsRegisterUrl + "\n" + ex.getMessage(), ex);
         } catch (IOException ex) {
             logger.error("Unable to register at" + dnsRegisterUrl + "\n" + ex.getMessage(), ex);
-            throw new DNSRegisterFailedException("Unable to register at" + dnsRegisterUrl + "\n" + ex.getMessage(), ex);
+            throw new DimeDNSRegisterFailedException("Unable to register at" + dnsRegisterUrl + "\n" + ex.getMessage(), ex);
         } finally {
             httpClient.getConnectionManager().shutdown();
         }

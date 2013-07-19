@@ -840,7 +840,10 @@ DimeView = {
     },
     
     removeSelected: function(){
-
+        if (mySelectedItems.length<1){
+            window.alert("Please select at least one item to be deleted!");
+            return;
+        }
 
         var mySelectedItems = JSTool.getDefinedMembers(DimeView.selectedItems);
         if (confirm("Are you sure, you want to delete "+mySelectedItems.length+" items?")){
@@ -1043,6 +1046,8 @@ DimeView = {
     },
 
     updateNewButton: function(groupType){
+        $('#actionButtonNew').removeClass('disabled');
+
         //populate new dialog
         var createMenuItem = function(type){
             var link= $('<a tabindex="-1" href="#" />')
@@ -1078,14 +1083,35 @@ DimeView = {
                 .append(createMenuItem(Dime.psMap.TYPE.SITUATION));
 
         } else if(groupType===Dime.psMap.TYPE.PLACE){
-            dropDownUl
-                .append(createMenuItem(Dime.psMap.TYPE.PLACE));
-        }
+            $('#actionButtonNew').addClass('disabled');
+        } 
 
     },
 
+    updateShareButton: function(groupType){
+        var shareBtn = $('#actionButtonShare');
+
+         if(groupType===Dime.psMap.TYPE.SITUATION){
+            shareBtn.addClass('disabled');
+        } else if(groupType===Dime.psMap.TYPE.PLACE){
+            shareBtn.addClass('disabled');
+        }else{
+            shareBtn.removeClass('disabled');
+        }
+    },
+
     updateMoreButton: function(groupType){
-        //populate new dialog
+        var moreButton = $('#actionButtonMore');
+
+         if(groupType===Dime.psMap.TYPE.SITUATION){
+            moreButton.addClass('disabled');
+        } else if(groupType===Dime.psMap.TYPE.PLACE){
+            moreButton.addClass('disabled');
+        }else{
+            moreButton.removeClass('disabled');
+        }
+
+        //populate more dialog
         var createMenuItem = function(caption, callBack){
             var link= $('<a tabindex="-1" href="#" />')
                 .text(caption)
@@ -1196,6 +1222,13 @@ DimeView = {
         }else if (DimeView.groupType===Dime.psMap.TYPE.USERNOTIFICATION){
             Dime.Navigation.setButtonsActive("notificationIcon");
             $('#searchText').attr('placeholder', 'find notifications');
+        }else if (DimeView.groupType===Dime.psMap.TYPE.SITUATION){
+            Dime.Navigation.setButtonsActive("currentSituation");
+            $('#searchText').attr('placeholder', 'find situations');
+        }else if (DimeView.groupType===Dime.psMap.TYPE.PLACE){
+            Dime.Navigation.setButtonsActive("currentPlace");
+            $('#searchText').attr('placeholder', 'find places');
+
         }
         
         //activate dropzone
@@ -1205,8 +1238,8 @@ DimeView = {
         }
 
         DimeView.updateNewButton(groupType);
+        DimeView.updateShareButton(groupType);
         DimeView.updateMoreButton(groupType);
-
 
         DimeView.updateMetaBar(groupType);
         DimeView.resetSearch();

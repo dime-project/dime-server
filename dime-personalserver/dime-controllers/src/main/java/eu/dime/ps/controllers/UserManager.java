@@ -3,9 +3,11 @@ package eu.dime.ps.controllers;
 import eu.dime.commons.dto.AccountEntry;
 import eu.dime.commons.dto.UserRegister;
 import eu.dime.commons.exception.DimeException;
-import eu.dime.ps.controllers.account.register.DNSRegisterFailedException;
+import eu.dime.ps.gateway.service.internal.DimeDNSRegisterFailedException;
 import eu.dime.ps.controllers.exception.InfosphereException;
 import eu.dime.ps.controllers.exception.UserNotFoundException;
+import eu.dime.ps.gateway.service.internal.DimeDNSCannotConnectException;
+import eu.dime.ps.gateway.service.internal.DimeDNSException;
 import eu.dime.ps.semantic.model.dao.Account;
 import eu.dime.ps.semantic.model.nco.PersonContact;
 import eu.dime.ps.storage.entities.User;
@@ -37,7 +39,7 @@ public interface UserManager {
      * @throws DimeException
      * @throws IllegalArgumentException
      */
-    public User register(UserRegister userRegister) throws IllegalArgumentException, DimeException, DNSRegisterFailedException;
+    public User register(UserRegister userRegister) throws IllegalArgumentException, DimeException, DimeDNSRegisterFailedException;
 
     /**
      * Adds a contact to the user's infosphere. It also sets a new guest user
@@ -92,4 +94,11 @@ public interface UserManager {
             throws ReadOnlyValueChangedOnUpdate, UserNotFoundException;
 
     public AccountEntry getUserAccount(String userName);
+
+
+    public boolean validateUserCanLogEvaluationData(User user);
+
+    public User getCurrentUser();
+
+    public boolean saidIsRegisteredAtDNS(String said) throws DimeDNSException;
 }

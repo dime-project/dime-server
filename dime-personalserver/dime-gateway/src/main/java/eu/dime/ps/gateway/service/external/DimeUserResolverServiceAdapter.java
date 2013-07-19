@@ -30,9 +30,9 @@ import eu.dime.ps.gateway.service.AttributeMap;
 import eu.dime.ps.gateway.service.MediaType;
 import eu.dime.ps.gateway.service.ServiceAdapterBase;
 import eu.dime.ps.gateway.service.ServiceResponse;
+import eu.dime.ps.gateway.userresolver.client.IdemixClient;
+import eu.dime.ps.gateway.userresolver.client.ResolverClient;
 import eu.dime.ps.semantic.model.nco.PersonContact;
-import eu.dime.userresolver.client.IdemixClient;
-import eu.dime.userresolver.client.ResolverClient;
 
 /**
  * @author Sophie.Wrobel
@@ -153,9 +153,12 @@ public class DimeUserResolverServiceAdapter extends ServiceAdapterBase implement
 				
 				ResolverClient resolverClient = new ResolverClient(
 						resolverEndpoint.toString(), authEndpoint.toString(), idemixClient);
-				this.masterSecret = idemixClient.generateMasterSecret();
-				// FIXME: Save idemix master secret in credential store
-
+				try {
+					this.masterSecret = idemixClient.generateMasterSecret();
+					// FIXME: Save idemix master secret in credential store
+				} catch (Throwable e){
+					logger.warn("could not generate master secret", e);
+				}
 				// Create idemix credential
 				Map<String, String> values = new HashMap<String, String>();
 				values.put("name", firstname);

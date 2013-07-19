@@ -258,8 +258,8 @@ public class AdvisoryController {
 		List <GroupDistanceWarning> warnings = new ArrayList<GroupDistanceWarning>();
 		for (String res_uri : sharedThingIDs) {
 			RDFReactorThing thing = getResource(new URIImpl(res_uri));
-			List<Resource> related_elements = thing.getAllIsRelated_as().asList();
-			if ((related_elements == null) || (related_elements.isEmpty())){
+			List<Resource> related_groups = thing.getAllIsRelated_as().asList();
+			if ((related_groups == null) || (related_groups.isEmpty())){
 				// nothing is related
 				//TODO: return new Warning "resource unshared"
 				continue;
@@ -270,41 +270,34 @@ public class AdvisoryController {
 			while (it.hasNext()){
 				String element_key = (String) it.next();
 				PersonGroup groupA = (PersonGroup) getResourceStore().get(new URIImpl(element_key), PersonGroup.class);
-				List a = groupA.getAllIsRelated_as().asList();
+				List<Resource> a = groupA.getAllIsRelated_as().asList();
 				if (a.contains(thing)){
 					//shared resource already related to target group
-					continue;
+					targetGroups.remove(element_key);
 				}
 			}
-			
-			while (it.hasNext()) {
-				String target_element_key = (String) it.next();
+			MapIterator it2 = targetGroups.mapIterator();
+			while (it2.hasNext()) {
+				String target_element_key = (String) it2.next();
 				URI targetURI = new URIImpl(target_element_key);
 				if (getResourceStore().isTypedAs(targetURI, PIMO.PersonGroup)){
-					if (!related_elements.contains(target_element_key)){
 						// resource is shared to an unrelated group
-						for (Resource groupRes: related_elements) {
-							if (getResourceStore().isTypedAs(groupRes, PIMO.PersonGroup)){
-								PersonGroup groupA = (PersonGroup) getResourceStore().get(groupRes.asURI(), PersonGroup.class);
-								PersonGroup groupB = (PersonGroup) getResourceStore().get(targetURI.asURI(), PersonGroup.class);
-								double distance = GroupDistanceProcessor.getGroupDistance(groupA, groupB);
-								if (distance > AdvisoryConstants.MIN_GROUP_DISTANCE){ //TODO: which min distance?
-									GroupDistanceWarning warning = new GroupDistanceWarning();
-									List<Agent> members = groupB.getAllMembers_as().asList();
-//									for (Agent member : members) {
-//										if (!thing.hasSharedWith(member)){
-//											warning.addPerson(member.asURI().toString());
-//										}
-//										
-//									}
-									warning.addGroup(groupRes.toString());
-									warning.addResource(res_uri);
-									warning.setWarningLevel(distance);
-									warnings.add(warning);
-								}
+					for (Resource groupRes: related_groups) {
+						if (getResourceStore().isTypedAs(groupRes, PIMO.PersonGroup)){
+							PersonGroup groupA = (PersonGroup) getResourceStore().get(groupRes.asURI(), PersonGroup.class);
+							PersonGroup groupB = (PersonGroup) getResourceStore().get(targetURI.asURI(), PersonGroup.class);
+							double distance = GroupDistanceProcessor.getGroupDistance(groupA, groupB);
+							if (distance > AdvisoryConstants.MIN_GROUP_DISTANCE){ //TODO: which min distance?
+								GroupDistanceWarning warning = new GroupDistanceWarning();
+								//List<Agent> members = groupB.getAllMembers_as().asList();
+								warning.addGroup(groupRes.toString());
+								warning.addResource(res_uri);
+								warning.setWarningLevel(distance);
+								warnings.add(warning);
 							}
 						}
 					}
+	
 				}
 			}
 			

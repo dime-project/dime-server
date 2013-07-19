@@ -20,7 +20,7 @@ import eu.dime.commons.dto.UserRegister;
 import eu.dime.commons.exception.DimeException;
 import eu.dime.commons.notifications.DimeInternalNotification;
 import eu.dime.commons.notifications.system.SystemNotification;
-import eu.dime.ps.controllers.account.register.DNSRegisterFailedException;
+import eu.dime.ps.gateway.service.internal.DimeDNSRegisterFailedException;
 import eu.dime.ps.controllers.account.register.DimeDNSRegisterService;
 import eu.dime.ps.controllers.exception.InfosphereException;
 import eu.dime.ps.controllers.exception.UserNotFoundException;
@@ -37,6 +37,10 @@ import eu.dime.ps.gateway.exception.InvalidDataException;
 import eu.dime.ps.gateway.exception.ServiceNotAvailableException;
 import eu.dime.ps.gateway.service.AttributeMap;
 import eu.dime.ps.gateway.service.external.DimeUserResolverServiceAdapter;
+import eu.dime.ps.gateway.service.internal.DimeDNSCannotConnectException;
+import eu.dime.ps.gateway.service.internal.DimeDNSCannotResolveException;
+import eu.dime.ps.gateway.service.internal.DimeDNSException;
+import eu.dime.ps.gateway.service.internal.DimeIPResolver;
 import eu.dime.ps.gateway.service.internal.DimeServiceAdapter;
 import eu.dime.ps.semantic.BroadcastManager;
 import eu.dime.ps.semantic.Event;
@@ -57,6 +61,12 @@ import eu.dime.ps.storage.entities.User;
 import eu.dime.ps.storage.exception.ReadOnlyValueChangedOnUpdate;
 import eu.dime.ps.storage.manager.EntityFactory;
 import eu.dime.ps.storage.util.QueryUtil;
+import java.io.IOException;
+import java.util.Properties;
+import java.util.logging.Level;
+import javax.naming.NamingException;
+import org.springframework.core.io.support.PropertiesLoaderUtils;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 /**
  *
@@ -68,6 +78,15 @@ import eu.dime.ps.storage.util.QueryUtil;
 public class UserManagerImpl implements UserManager {
 
     private static final Logger logger = LoggerFactory.getLogger(UserManagerImpl.class);
+    
+    private static Properties properties = null;
+
+    private static Properties getProps() throws IOException {
+        if (properties == null) {
+            properties = PropertiesLoaderUtils.loadAllProperties("services.properties");
+        }
+        return properties;
+    }
     
     private EntityFactory entityFactory;
     private final ModelFactory modelFactory;
@@ -298,75 +317,80 @@ public class UserManagerImpl implements UserManager {
     }
 
     @Override 
-    public User register(UserRegister userRegister) throws IllegalArgumentException, DNSRegisterFailedException, DimeException {
+    public User register(UserRegister userRegister) throws IllegalArgumentException, DimeDNSRegisterFailedException, DimeException {
         
     	boolean unlocked;
     	try {
-			unlocked = lock.tryLock(5L, TimeUnit.SECONDS);// only one register at a time  
-		} catch (InterruptedException e) {
-			throw new DNSRegisterFailedException("Register failed", e);
-		}  
+                unlocked = lock.tryLock(5L, TimeUnit.SECONDS);// only one register at a time
+        } catch (InterruptedException e) {
+                throw new DimeDNSRegisterFailedException("Register failed", e);
+        }
     	if (!unlocked) {
     		logger.error("Could not aquire lock within 5 seconds. Returning without registering.");
     		throw new DimeException("Could not register because thread locked.");
     	}
-    	User user;
-	    try {
-	    	validateUser(userRegister.getUsername(), userRegister.getPassword());  
-	       
-			// TODO improve performance: register it asynchronously
-			// TODO improve robustness: what happens if this fails? rollback mechanism! Transaction.
-			//
-			//EDIT by Simon: moved to the beginning of the registration process:
-			// we try first to register and hope that no one will try to connect before the rest is established
-			// so, we run into an exception in case the dns is not available
-			// better would be to somehow reserve a registration and enable it after the user was created
-			dimeDNSRegisterService.registerSaid(userRegister.getUsername());
-			user = createUser(userRegister);
-			user.persist();
-			user.flush();
-			logger.debug("Created new user [id=" + user.getId() + ", username="
-					+ user.getUsername() + ", role=" + user.getRole() + "]");
-			Tenant tenant = createTenant(userRegister.getUsername(), user);
-			PersonContact profile = null;
-			try {
-			} catch (Exception e1) {
-				//FIXME: unregister at DNS
-				user.remove();
-				tenant.remove();
-				throw new DimeException(
-						"Failed to create profile for user. Registering could not be completed. ",
-						e1);
-			}
-			try {
-				profile = buildProfile(userRegister);
-			} catch (Exception e) {
-				//FIXME: unregister at DNS
-				user.remove();
-				tenant.remove();
-				throw new DimeException("Failed to publish public " +
-						"profile when registering. Aborting register.", e);
-	
-			}
-			try {
-				initModelForUser(profile, tenant);
-				registerToUserResolverService(user, profile); //FIXME:<--- unfortunately, this requires an Account to be created, 
-																		//to rdf register needs to be done before (to be fixed)
-			} catch (DimeException e) {
-				//FIXME: unregister at DNS
-				user.remove();
-				tenant.remove();
-				//FIXME: remove profile from URS
-				throw new DimeException(
-						"Failed to store semantic model when registering. Aborting register.",
-						e);
-			}
-		} catch (Exception e) {
-			throw new DimeException(e);
-		} finally {
-			lock.unlock();
-		}
-		return user;
+    	User user=null;
+        Tenant tenant=null;
+        try {
+            validateUser(userRegister.getUsername(), userRegister.getPassword());
+
+            // TODO improve performance: register it asynchronously
+            // TODO improve robustness: what happens if this fails? rollback mechanism! Transaction.
+            //
+            //EDIT by Simon: moved to the beginning of the registration process:
+            // we try first to register and hope that no one will try to connect before the rest is established
+            // so, we run into an exception in case the dns is not available
+            // better would be to somehow reserve a registration and enable it after the user was created
+            dimeDNSRegisterService.registerSaid(userRegister.getUsername());
+            user = createUser(userRegister);
+            user.persist();
+            user.flush();
+            logger.debug("Creating new user [id=" + user.getId() + ", username="
+                + user.getUsername() + ", role=" + user.getRole() + "]");
+            tenant = createTenant(userRegister.getUsername(), user);
+            PersonContact profile = null;
+            try {
+            } catch (Exception e) {
+                throw new DimeException("Failed to create profile for user. Registration could not be completed.\n"
+                    +e.getClass().getName()+": "+e.getMessage(), e);
+            }
+            try {
+                profile = buildProfile(userRegister);
+            } catch (Exception e) {
+                throw new DimeException("Failed to publish public profile when registering. Aborting registration.\n"
+                    +e.getClass().getName()+": "+e.getMessage(), e);
+
+            }
+            try {
+                initModelForUser(profile, tenant);             
+            } catch (Exception e) {
+                throw new DimeException("Failed to store semantic model when registering. Aborting registration.\n"
+                    +e.getClass().getName()+": "+e.getMessage(), e);
+            }
+            try {
+                registerToUserResolverService(user, profile); //FIXME:<--- unfortunately, this requires an Account to be created,
+                                                            //to rdf register needs to be done before (to be fixed)
+            } catch (Exception e) {
+                throw new DimeException("Failed to register at dime user register service. Aborting registration.\n"
+                    +e.getClass().getName()+": "+e.getMessage(), e);
+            }
+        } catch (Exception e) {
+                //FIXME: unregister at DNS
+                if (user!=null){
+                    user.remove();
+                }
+                if (tenant!=null){
+                    tenant.remove();
+                }
+                //FIXME: remove profile from URS
+                //FIXME remove profile from rdf
+
+                logger.error(e.getClass().getName()+": "+e.getMessage(), e);
+                throw new DimeException(e.getClass().getName()+": "+e.getMessage(),e);
+        } finally {
+                lock.unlock();
+        }
+        return user;
     }
 
     private boolean existsOwnerByUsername(String username) {
@@ -664,5 +688,63 @@ public class UserManagerImpl implements UserManager {
         } catch (NotifierException e) {
                 logger.error(e.getMessage(),e);
         }
+    }
+
+    @Override
+    public boolean validateUserCanLogEvaluationData(User user) {
+
+        if (user==null){
+            logger.error("user==null", new RuntimeException());
+            return false;
+        }
+
+        if (!user.getEvaluationDataCapturingEnabled()){
+            return false;
+        }
+        String filterPrefix=null;
+        try {
+            filterPrefix = getProps().getProperty("EVALUATION_FILTER_PREFIX", null);
+            if (filterPrefix!=null){
+                filterPrefix = filterPrefix.trim();
+            }
+        } catch (IOException ex) {
+            logger.error(ex.getMessage(), ex);
+        }
+        if ((filterPrefix!=null)
+                  && (filterPrefix.length()>0)
+                  && (user.getUsername().startsWith(filterPrefix))){
+            return false;
+        }
+
+        return true;
+
+    }
+
+     public User getCurrentUser() {
+
+        String username = SecurityContextHolder.getContext().getAuthentication().getName().toString();
+        String pw = SecurityContextHolder.getContext().getAuthentication().getCredentials().toString();
+        User user = getByUsernameAndPassword(username, pw);
+
+        return user;
+    }
+
+    @Override
+    public boolean saidIsRegisteredAtDNS(String said) throws DimeDNSException{
+        try {
+            String  serverIP = new DimeIPResolver().resolveSaid(said);
+            if (!serverIP.isEmpty()){
+                return true;
+            }
+
+        } catch (DimeDNSCannotConnectException ex) {
+            throw ex;
+        } catch (DimeDNSCannotResolveException ex) {
+            return false;
+         } catch (DimeDNSException ex) {
+            throw ex;
+        }
+        return false;
+
     }
 }

@@ -27,6 +27,7 @@ import eu.dime.commons.notifications.user.UNRefToItem;
 import eu.dime.commons.notifications.user.UserNotification;
 import eu.dime.ps.controllers.TenantContextHolder;
 import eu.dime.ps.controllers.exception.InfosphereException;
+import eu.dime.ps.controllers.infosphere.manager.FileManager;
 import eu.dime.ps.controllers.infosphere.manager.SharingManager;
 import eu.dime.ps.controllers.notifier.NotifierManager;
 import eu.dime.ps.controllers.notifier.NotifyHistory;
@@ -70,6 +71,9 @@ public class TrustEngineUpdateService implements BroadcastReceiver{
 	
 	@Autowired
 	private NotifierManager notifierManager;
+	
+	@Autowired
+	FileManager filemanager;
 	
 	private ResourceStore resourceStore;
 		
@@ -211,7 +215,7 @@ public class TrustEngineUpdateService implements BroadcastReceiver{
 	private void processDataObject(Node resource, PrivacyPreferenceService ppoService, PimoService pimoService){
 		DataObject dataObject = null;
 		try {
-			dataObject = pimoService.get(resource.asURI(), DataObject.class);			
+			dataObject = getPimoService().get(resource.asURI(), DataObject.class);			
 			PrivacyPreference pp = ppoService.getForDataObject(dataObject);
 			if (pp == null){
 				logger.debug("No PrivacyPreference found for Dataobject: "+dataObject);

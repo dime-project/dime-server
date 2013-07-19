@@ -21,6 +21,9 @@ GLOBAL_SERVER_LOGO=/dime-communications/static/ui/dime/register/img/dummyInstitu
 GLOBAL_SERVER_AFFILIATION=di.me project
 GLOBAL_SERVER_BASEURL=https://localhost:8443
 
+#Evaluation specific settings
+EVALUATION_FILTER_PREFIX=dummy
+
 # Authentication Servlets
 # https://localhost:8443/dime-communications/services/{SAID}/AUTHSERVLET
 AMETICDummyAdapter_AUTHSERVLET=/ametic/connect?id=

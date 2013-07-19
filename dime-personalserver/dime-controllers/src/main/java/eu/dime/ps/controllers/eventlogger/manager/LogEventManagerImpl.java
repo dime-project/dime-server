@@ -15,41 +15,40 @@ import eu.dime.ps.storage.entities.EvaluationData;
 import eu.dime.ps.storage.manager.EntityFactory;
 
 public class LogEventManagerImpl implements LogEventManager {
-	
-	private static final Logger logger = LoggerFactory.getLogger(LogEventManagerImpl.class);
-	private EntityFactory entityFactory;
 
-	@Autowired
-	public void setEntityFactory(EntityFactory entityFactory) {
-		this.entityFactory = entityFactory;
-	}
+    private static final Logger logger = LoggerFactory.getLogger(LogEventManagerImpl.class);
+    private EntityFactory entityFactory;
 
-	@Override
-	@Transactional
-	public void setLog(LogType type, String message)
-			throws EventLoggerException {
+    @Autowired
+    public void setEntityFactory(EntityFactory entityFactory) {
+        this.entityFactory = entityFactory;
+    }
 
-		switch (type) {
-		case RESISTER:
-			
-			if(!StringUtils.isEmpty(message)){
-			 EvaluationData evaluationData = entityFactory.buildEvaluationData();
-			 
-			 evaluationData.setClientid(UserRegister.CLIENT_WEB);
-			 evaluationData.setEvaluationaction(EvaluationData.EVALUATIONDATA_ACTION_REGISTER);
-			 evaluationData.setEvaluationdate(new Date(System.currentTimeMillis()));
-			 evaluationData.setTenantId(message);
-			 evaluationData.persist();
-			 evaluationData.flush();
-			}else{
-				logger.error("Cannot save evaluation. Parameters tenantId, view and action cannot be null/empty");
-			}
-			 break;
+    @Override
+    @Transactional
+    public void setLog(LogType type, String evaluationId)
+            throws EventLoggerException {
 
-		default:
-			break;
-		}
-		
-	}
+        switch (type) {
+            case RESISTER:
 
+                if (!StringUtils.isEmpty(evaluationId)) {
+                    EvaluationData evaluationData = entityFactory.buildEvaluationData();
+
+                    evaluationData.setClientid(UserRegister.CLIENT_WEB);
+                    evaluationData.setEvaluationaction(EvaluationData.EVALUATIONDATA_ACTION_REGISTER);
+                    evaluationData.setEvaluationdate(new Date(System.currentTimeMillis()));
+                    evaluationData.setTenantId(evaluationId);
+                    evaluationData.persist();
+                    evaluationData.flush();
+                } else {
+                    logger.error("Cannot save evaluation. Parameters evaluationId, view and action cannot be null/empty");
+                }
+                break;
+
+            default:
+                break;
+        }
+
+    }
 }

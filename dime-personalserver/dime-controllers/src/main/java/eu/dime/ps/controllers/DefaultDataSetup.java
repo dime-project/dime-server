@@ -329,10 +329,10 @@ private static final Logger logger = LoggerFactory.getLogger(DefaultDataSetup.cl
 		}
 		
 		// creating pre-defined files
-		FileDataObject flyer = createFile("digital.me_project_flyer.pdf", DefaultDataSetup.class.getClassLoader().getResourceAsStream("default/digital.me_project_flyer.pdf"), 0.5);
-		FileDataObject logo = createFile("digital.me_logo.jpg", DefaultDataSetup.class.getClassLoader().getResourceAsStream("default/digital.me_logo.jpg"), 0);
-		FileDataObject trial = createFile("welcome_to_di.me_test.txt", DefaultDataSetup.class.getClassLoader().getResourceAsStream("default/welcome_to_di.me_test.txt"), 0);
-		FileDataObject photo = createFile("hiking.jpg", DefaultDataSetup.class.getClassLoader().getResourceAsStream("default/hiking.jpg"), 1);
+		FileDataObject flyer = createFile("digital.me_project_flyer.pdf", DefaultDataSetup.class.getClassLoader().getResourceAsStream("default/digital.me_project_flyer.pdf"), 0.5, me);
+		FileDataObject logo = createFile("digital.me_logo.jpg", DefaultDataSetup.class.getClassLoader().getResourceAsStream("default/digital.me_logo.jpg"), 0, me);
+		FileDataObject trial = createFile("welcome_to_di.me_test.txt", DefaultDataSetup.class.getClassLoader().getResourceAsStream("default/welcome_to_di.me_test.txt"), 0, me);
+		FileDataObject photo = createFile("hiking.jpg", DefaultDataSetup.class.getClassLoader().getResourceAsStream("default/hiking.jpg"), 1, me);
 
 		DataContainer databoxDime = createDatabox("di.me info", flyer, logo, trial);
 		DataContainer databoxFriends = createDatabox("FriendsBox", photo);
@@ -552,10 +552,11 @@ private static final Logger logger = LoggerFactory.getLogger(DefaultDataSetup.cl
 		}
 	}
 
-	private FileDataObject createFile(String fileName, InputStream inputStream, double privacyLevel) {
+	private FileDataObject createFile(String fileName, InputStream inputStream, double privacyLevel, Person creator) {
 		FileDataObject file = modelFactory.getNFOFactory().createFileDataObject();
 		file.setFileName(fileName);
 		file.setPrivacyLevel(privacyLevel);
+		file.setCreator(creator);
 		
 		try {
 			fileManager.add(file, inputStream);

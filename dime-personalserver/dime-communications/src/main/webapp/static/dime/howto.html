@@ -37,14 +37,22 @@
         <br>
 
         <div id="wrapper" class="container">
-
 <!-- START OF CONTENT -->
             <!-- h1 TITLE --><div class="container headline1">
                 <h1>Guided Tour</h1>
-    			<p>This tour will show you the prototype and demonstrate the main concepts of the di.me research project. You can either use your favourite Internet Browser, or the di.me Android App if you have an Android Smartphone:</p>
+				<p>This tour will show you the prototype and demonstrate the main concepts of the di.me research project.</p>
+				<p>If you have chosen and registed to a di.me servers, you can access it by the your favourite Internet Browser:</p></div>
+            <!-- Access  --><div class="container text faderContainer">
+                <div class="fader">Access your di.me server in your desktop browser<div class="arrow right"></div></div>
+                <div class="steps"> <!--Steps -->
+                    <ul>
+                        <li>On the desktop: Login to di.me on your server on the<a href="/dime-communications/web/access/login" class="push" target="_blank">login page</a></li>
+					</ul>
+                </div>
             </div>
+	 <div class="container text"><p>Or: Use di.me for Android smartphones:</p></div>	
             <!-- Install Android --><div class="container text faderContainer">
-                <div class="fader">Installing the di.me App for Android <div class="arrow right"></div></div>
+                <div class="fader">Install the di.me App on your Android smartphone<div class="arrow right"></div></div>
                 <div class="steps"> <!--Steps -->
                     <ul>
                         <li>On your smartphone: Download the app to your Android device:</li>
@@ -68,7 +76,7 @@
                 <div class="steps">
                     <ul> <!--Steps -->
                         <li>In di.me: Go to "Settings", select "General Settings" </li>
-						<li>The data is anonymous and does not contain any content, e.g. documents. Under "Further information", please read the details which evaluation data are collected.</li>
+<li>The data is anonymous and does not contain any content, e.g. documents. Under "Further information", please read the details which evaluation data are collected.</li>
                         <li>Activate the checkbox "Send anonymous click data"<!-- (xxx update UI done?) --></li>
                     </ul>
                 </div>
@@ -78,12 +86,14 @@
                 <h2>1. Social networking with different identities</h2>
                 <p>Central to di.me is the concept of using different identities: You can create <em>Profile Cards</em> and reveal different ones when sharing information with others.</p>
             </div>
-            <!-- Profile Cards --><div class="container text faderContainer">
-                <div class="fader">Take a look at your predefined Profile Cards<div class="arrow right"></div></div>
+            <!-- Predefined test Data --><div class="container text faderContainer">
+                <div class="fader">Take a look at the predefined test data<div class="arrow right"></div></div>
                 <div class="steps">
+						<p class="or">When you register to di.me, some data are <em>automatically added</em> to your empty di.me account: </p>
                     <ul> <!--Steps -->
-                        <li>Go to "My Profile Cards" <br>&nbsp;&nbsp;&#8594 Predefined Cards are shown.</li>
-                        <li>Click on "MyBusinessCard" <br>&nbsp;&nbsp;&#8594 The selected personal details are shown. <em>Please note:</em> When registering, your information is copied in some Profile Cards by default.</li>
+                        <li>When you go to "My Profile", predefined cards with information from the registration are shown (e.g. your name and email in "MyBusinessCard").<br>&nbsp;&nbsp;&#8594 <em>Please note:</em> The card "MyPublicCard" is special: This is the information published in the Dime User Directory. You can, however, not edit this information.</li>
+						<li>When you go to "People", test user accounts e.g. "TestUser1" are shown. These are not real users. In addition, a group of persons from the di.me project is automatically in your contact list.</li>
+                        <li>You will find also other predefined data, e.g. documents, a "DataBox", etc.</li>
                     </ul>
                 </div>
             </div>
@@ -95,7 +105,7 @@
                         <li>Select "digital.me_project_flyer.pdf" (browser: use the little box in the top-right corner)</li>
                         <li>Click "Share" (browser: bar on the right)</li>
                         <li>In the pop-up window: Click "Select Profile" and select "MyBusinessCard"</li>
-                        <li>Click "Receivers" and select "TestUser1" </li>
+                        <li>Click "Recipients" and select "TestUser1" </li>
                         <li>Click "OK"</li>
                     </ul>
                 </div>
@@ -106,16 +116,31 @@
                     <ul>
                         <li>As above: Select the file "digital.me_logo.jpg", and open the dialog "Share"</li>
                         <li>Click "Select Profile" and select "MyAnonymousCard"</li>
-                        <li>Select "TestUser3" as receiver and click "OK"</li>
+                        <li>Select "TestUser3" as recipient and click "OK"</li>
                     </ul>
                 </div>
             </div>
             <!-- Conclusion --><div class="container text">
                 <p>&#8594 </p> <p class="push block">The recepients get the different files. As senders, they see <em>different identities</em>: Testuser1 receives a file from a person showing the information in your "MyBusinessCard", whereas Testuser3 receives a file from a person showing the information in your "MyAnonymousCard".</p></div>
 
-			<!-- h2 PRIV RECOMMENDATIONS --><div class="container text">
+<!-- h2 PRIV RECOMMENDATIONS --><div class="container text">
                 <h2>2. Try out di.me’s privacy recommendations</h2>
-                <p>One of di.me’s research objectives is to give privacy recommendations. In di.me, documents have privacy levels, and persons have trust levels. Di.me gives suggestions based on both:</p>
+                <p>One of di.me’s research objectives is to give privacy recommendations: di.me warns in certain cases to share information to others. This is mainly based on privacy and trust levels: </p> 
+            </div>
+            <!-- Take a look at the people’s trust and the privacy of files --><div class="container text faderContainer">
+                <div class="fader">How do privacy recommendations work?<div class="arrow right"></div></div>
+                <div class="steps">
+                    <ul> <!--Steps -->
+                        <li>Any document gets a <em>privacy level</em>. When a document is uploaded, di.me sets the privacy level automatically to "high". This means, it is a personal or private document. You can change the privacy level (see below).</li>
+						<li>Any contact gets a <em>trust level</em>. When a contact is added, e.g. from the di.me user directory, di.me sets the trust level to "medium". This means a medium trusted person. You can change the trust level (see below).</li>
+						<li>di.me shows <em>warnings</em>, e.g. if you want to share a highly private document, and in other cases.</li>
+						<li>di.me does <em>not automatically share or give access to a document</em> because of the trust and privacy levels. It only shows warnings. You can share information to others with the action "share" (see below).</li>
+						<li>di.me will <em>suggest to change</em> trust or privacy values if you share private items several times to a person with low trust.</li>
+				</ul>
+                </div>
+            </div>
+			<div class="container text">
+                <p>Try it out with the test data:</p> 
             </div>
             <!-- Take a look at the people’s trust and the privacy of files --><div class="container text faderContainer">
                 <div class="fader">Take a look at person trust and file privacy levels<div class="arrow right"></div></div>
@@ -123,7 +148,7 @@
                     <ul> <!--Steps -->
                         <li>Go to "MyData", click on file "hiking.jpg" <br>&nbsp;&nbsp;&#8594 The details for the file are shown; its <em>privacy is set to "high"</em>. </li>
                         <li>Go to "People".</li>
-                        <li>Open "TestUser3" (browser: select the little box on "TestUser3", click "edit" in the bar on the right) <br>&nbsp;&nbsp;&#8594 The details for the person are shown; the <em>trust  level for this person is set to "high".</em></li>
+                        <li>Open "TestUser3" (browser: select the little box on "TestUser3", click "edit" in the bar on the right) <br>&nbsp;&nbsp;&#8594 The details for the person are shown; the <em>trust level for this person is set to "high".</em></li>
                     </ul>
                 </div>
             </div>
@@ -133,9 +158,9 @@
                     <ul> <!--Steps -->
                         <li>Go to "My Data"</li>
 						<li>Select the "FriendsBox" databox (browser: select the little box in the top-right corner)</li>
-                        <li>Share the databox with "Friends" (browser: click "Share" in the bar on the right, select any Profile Card and choose "Friends") 
-						<br>&#8594 di.me shows a <em>warning</em> because "hiking.jpg" is private and "TestUser1" has low trust.
-						<br>&#8594 di.me will suggest to change the trust or privacy values, if you share private items several times to a person with low trust.</li>
+                        <li>Share the databox with "Friends" (browser: click "Share" in the bar on the right, select any Profile Card and choose "Friends")
+<br>&#8594 di.me shows a <em>warning "Privacy risk"</em> because "hiking.jpg" is private and "TestUser1" has a medium trust level.
+<br>&#8594 di.me will suggest to change the trust or privacy level, if you share private items several times to a person with low trust level.</li>
                     </ul>
                     <!-- <p class="or"></p> -->
                     <!-- <p class="or"></p> -->
@@ -146,29 +171,28 @@
                 <div class="steps">
                     <ul> <!--Steps -->
                         <li>As above: Select the "FriendsBox", share it with "BusinessContacts"
-						<br>&#8594 di.me shows a warning because "FriendsBox" is being <em>shared outside the usual groups</em>. Since you shared it with "Friends" before, di.me warns that sharing it to another group could be unintended.</li>
+<br>&#8594 di.me shows a warning because "FriendsBox" is being <em>shared outside the usual groups</em>. Since you shared it with "Friends" before, di.me warns that sharing it to another group could be unintended.</li>
                     </ul>
-<!--                     <p class="or"></p> -->
+<!-- <p class="or"></p> -->
                 </div>
             </div>
             <!-- Conclusion --><div class="container text">
-                <p>&#8594 </p> <p class="push block">di.me shows recommendations based on file privacy, and contact trust levels. di.me will suggest to adapt them. <br>
-                    <em>Other recommendations</em> are shown when there is a potentially unintentional sharing of data, e.g. if a Profile Card is revealed for the first time, if many items are shared all at once, or if the user is sharing an item with a lot of people.</p></div>
+                <div class="container text"><p><em>Other recommendations</em> are shown when there is a potentially unintentional sharing of data, e.g. if a Profile Card is revealed for the first time, if many items are shared all at once, or if the user is sharing an item with a lot of people.</p><div>
 
-			<!-- h2 CONNECT --><div class="container text">
+<!-- h2 CONNECT --><div class="container text">
                 <h2>3. Connecting to other people</h2>
             </div>
             <!-- Search for di.me people, e.g. from the di.me project --><div class="container text faderContainer">
                 <div class="fader">Look for other people, e.g. from the di.me project<div class="arrow right"></div></div>
                 <div class="steps">
-					<!-- <p class="or">You can look for people in your <em>contact list</em> and in the <em>public di.me user directory</em>.</p>  -->
+<!-- <p class="or">You can look for people in your <em>contact list</em> and in the <em>public di.me user directory</em>.</p> -->
                     <ul> <!--Steps -->
-                        <li>Go to "People": 
-						<br>&nbsp;&nbsp;&#8594 A group of persons from the di.me project is automatically in your contact list.</li>
-						<!-- <li>Look who from the di.me project is already in your contact list.</li><br> -->
+                        <li>Go to "People":
+<br>&nbsp;&nbsp;&#8594 A group of persons from the di.me project is automatically in your contact list.</li>
+<!-- <li>Look who from the di.me project is already in your contact list.</li><br> -->
                         <br>
-						<li>Search in the public <em>di.me user directory</em> (browser: enter a name in the search field; <em>Please Note:</em> use e.g. "John" or "Doe", but not "John Doe", or "Jo", or "Do"). 
-						<br>&nbsp;&nbsp;&#8594 Search results obtained from your contact list and from the <em>public di.me user directory (bottom)</em> are shown.</li>
+<li>Search in the public <em>di.me user directory</em> (browser: enter a name in the search field; Android: use the action-icon on the top left; <em>Please Note:</em> use e.g. "John" or "Doe", but not "John Doe", or "Jo", or "Do").
+<br>&nbsp;&nbsp;&#8594 Search results obtained from your contact list and from the <em>public di.me user directory (bottom)</em> are shown.</li>
                         <li>Click "add" to add the desired person from the di.me user directory to your di.me contacts.</li>
                     </ul>
                 </div>
@@ -176,14 +200,14 @@
             <!-- Send messages --><div class="container text faderContainer">
                 <div class="fader">Send a message to someone<div class="arrow right"></div></div>
                 <div class="steps">
-					<p class="or">(browser: <em>Please note:</em> The steps for writing a message are currently quite inconvenient... a better flow is coming soon!)</p> <!-- xxx remove disclaimer after improvement-->
-					<ul>
+<p class="or">(browser: <em>Please note:</em> The steps for writing a message are currently quite inconvenient... a better flow is coming soon!)</p> <!-- xxx remove disclaimer after improvement-->
+<ul>
                         <li>Go to "liveposts" (browser: click the letter-icon in the top menu)</li>
                         <li>Click "new livepost" (browser: in the bar on the right) </li>
-						<li>Enter a message text, click "Submit" 
-						<br>&nbsp;&nbsp;&#8594 A new livepost appears in the list</li>
-						<li>As above: Select the livepost, click "Share", and select the recepients</li>
-					</ul>
+<li>Enter a message text, click "Submit"
+<br>&nbsp;&nbsp;&#8594 A new livepost appears in the list</li>
+<li>As above: Select the livepost, click "Share", and select the recepients</li>
+</ul>
                 </div>
             </div>
             <!-- Coming soon: Invite others to the trial<div class="container text faderContainer">
@@ -221,8 +245,8 @@
                         <li>Go to "Settings" </li>
                         <li>Click on "add a services", then select "Linkedin" or "Twitter"</li>
                         <li>Follow the instructions of the dialogs to connect to your accounts.
-						<br>&#8594 Contacts from Linkedin are shown in your di.me contact list. Di.me will also show suggestions to merge contacts to existing ones that you perhaps already have.
-						<br>&#8594 Your profile details from Linkedin or Twitter are imported to di.me. You can reuse these to  enrich your di.me profile cards.</li>
+<br>&#8594 Contacts from Linkedin are shown in your di.me contact list. Di.me will also show suggestions to merge contacts to existing ones that you perhaps already have.
+<br>&#8594 Your profile details from Linkedin or Twitter are imported to di.me. You can reuse these to enrich your di.me profile cards.</li>
                     </ul>
                     <!-- <p class="or"></p> -->
                     <!-- <li>xxx send via twitter senden</li> -->
@@ -231,95 +255,95 @@
             <!-- xxxtested? Add new information (atributes) to your profile card --><div class="container text faderContainer">
                 <div class="fader">Add new profile details<div class="arrow right"></div></div>
                 <div class="steps">
-					<p class="or">You can add or remove profile details e.g. from "MyBusinessCard"; if you have connected to Linkedin or Twitter, you can reuse these profile details from there. </p> <!-- xxx remove disclaimer after improvement-->
+<p class="or">You can add or remove profile details e.g. from "MyBusinessCard"; if you have connected to Linkedin or Twitter, you can reuse these profile details from there. </p> <!-- xxx remove disclaimer after improvement-->
                     <ul> <!--Steps -->
-                        <li>Go to "My Profile".</li> 
-						<li>Click on "MyBusinessCard".</li>
-						<li>Add or remove profile details (browser: Click on the profile details; in the popup window, click on the profile details to add or remove them from the Profile Card).</li>
+                        <li>Go to "My Profile".</li>
+<li>Click on "MyBusinessCard".</li>
+<li>Add or remove profile details (browser: Click on the profile details; in the popup window, click on the profile details to add or remove them from the Profile Card).</li>
                     </ul>
-					<p class="or">You can add new profile details.</p>
+<p class="or">You can add new profile details.</p>
                     <ul> <!--Steps -->
-                        <li>Go to "My Profile".</li> 
-						<li>Make a new profile detail(browser: click "New &gt; New profile detail" in the bar on the right)"</li>
-						<li>Select the category, e.g. "PhoneNumber", or "Interest".</li> 
-						<li>Add a descriptioin e.g. "Private mobile phone".</li>
-						<li>Add information, e.g. the phone number, or an interest, and click OK &#8594 After a while, the new profile detail shows up in the list.</li>
-						<li>As above: Now you can add this new profile detail to a Profile Card, e.g. "MyBusinessCard"</li>
+                        <li>Go to "My Profile".</li>
+<li>Make a new profile detail(browser: click "New &gt; New profile detail" in the bar on the right)"</li>
+<li>Select the category, e.g. "PhoneNumber", or "Interest".</li>
+<li>Add a descriptioin e.g. "Private mobile phone".</li>
+<li>Add information, e.g. the phone number, or an interest, and click OK &#8594 After a while, the new profile detail shows up in the list.</li>
+<li>As above: Now you can add this new profile detail to a Profile Card, e.g. "MyBusinessCard"</li>
                     </ul>
                 </div>
             </div>
-			<!-- xxxtested? Add a new profile card --><div class="container text faderContainer">
+<!-- xxxtested? Add a new profile card --><div class="container text faderContainer">
                 <div class="fader">Add a new profile card<div class="arrow right"></div></div>
                 <div class="steps">
                     <ul> <!--Steps -->
                         <li>Go to "My Profile".</li>
-						<li>Make a new Profile Card (browser: click "New &gt; New Profile Card" in the bar on the right)"</li>
-						<li>Enter a title for the Card, e.g. "MyCloseFriendsCard"</li>
-						<li>As above: Add or remove profile information (browser: Click on the list of attributes; in the popup window, click on the attributes to add or remove them from the Profile Card).</li>
+<li>Make a new Profile Card (browser: click "New &gt; New Profile Card" in the bar on the right)"</li>
+<li>Enter a title for the Card, e.g. "MyCloseFriendsCard"</li>
+<li>As above: Add or remove profile information (browser: Click on the list of attributes; in the popup window, click on the attributes to add or remove them from the Profile Card).</li>
                     </ul>
                 </div>
            </div>
 
-		   <!-- h2 SITUATION Test di.me's knowledge about situations, and who is nearby--><div class="container text">
+<!-- h2 SITUATION Test di.me's knowledge about situations, and who is nearby--><div class="container text">
                 <h2>5. di.me's context-awareness </h2>
                 <p>di.me is a context-aware system: You can try out the detection of locations, situations, people nearby, etc.:</p></div>
-			<!-- Prepare your di.me Android app for Context-Awareness--><div class="container text faderContainer">
+<!-- Prepare your di.me Android app for Context-Awareness--><div class="container text faderContainer">
                 <div class="fader">Prepare your di.me Android app: Send location and sensor data to your di.me server. <div class="arrow right"></div></div>
                 <div class="steps">
-					<p class="or">The context-aware functions in di.me need location and sensor data from your mobile phone. The data is stored on your di.me server and used by di.me services (see below).</p>
+<p class="or">The context-aware functions in di.me need location and sensor data from your mobile phone. The data is stored on your di.me server and used by di.me services (see below).</p>
                     <ul> <!--Steps -->
-						<li>On Android: Go to "Settings"</li>
-						<li>Click on "Store Android sensor data"</li>
-	                </ul>
+<li>On Android: Go to "Settings"</li>
+<li>Click on "Store Android sensor data"</li>
+</ul>
                 </div>
             </div>
             <!-- See what Situation di.me detects--><div class="container text faderContainer">
                 <div class="fader">See your situations, or add custom ones.<div class="arrow right"></div></div>
                 <div class="steps">
-					<p class="or">You can train di.me to recognize your siguations: If you train the system, di.me will recognize the situation according to your context.</p> 
+<p class="or">You can train di.me to recognize your siguations: If you train the system, di.me will recognize the situation according to your context.</p>
                     <ul> <!--Steps -->
-						<li>Click on the current situation (browser: in the top-right corner below your user-name; Android: on the start page) <br>&nbsp;&nbsp;&#8594 The list of situations provided by default is shown</li>
-					<li>click on "activate (browser: in the bar on the right) <br>&nbsp;&nbsp;&#8594 The selected situation is now active and the system learns that it is related to the current sensor data.
-												<br>&nbsp;&nbsp;&#8594 As you use and train di.me to recognise your situations, you will notice that the order of the stored situations will change according to your context.</li>
+<li>Click on the current situation (browser: in the top-right corner below your user-name; Android: on the start page) <br>&nbsp;&nbsp;&#8594 The list of situations provided by default is shown</li>
+<li>click on "activate (browser: in the bar on the right) <br>&nbsp;&nbsp;&#8594 The selected situation is now active and the system learns that it is related to the current sensor data.
+<br>&nbsp;&nbsp;&#8594 As you use and train di.me to recognise your situations, you will notice that the order of the stored situations will change according to your context.</li>
                         <li>Coming soon: Add custom situations</li>
                     </ul>
                 </div>
             </div>
             <!-- Coming soon: See di.me users who are nearby --><div class="container text faderContainer">
-				<div class="fader">Coming soon: See di.me users who are nearby.<div class="arrow right"></div></div>
-				<div class="steps">
+<div class="fader">Coming soon: See di.me users who are nearby.<div class="arrow right"></div></div>
+<div class="steps">
                     <ul> <!--Steps -->
-						<li>Connect to the <em>ProximityService</em>: Coming soon. <!--(As above: go to "Settings &gt; Services", add the service; Android app: use the Action button in the top-right corner)--></li>
+<li>Connect to the <em>ProximityService</em>: Coming soon. <!--(As above: go to "Settings &gt; Services", add the service; Android app: use the Action button in the top-right corner)--></li>
                     </ul>
-<!-- 					<p class="or">&nbsp;&nbsp;&#8594 The ProximityService is activated; It shows a "nearby-group" (di.me users nearby to you), and shows to other users that you are nearby. When you connect, you select the Profile Card that shall be given to other nearby users. Only if they know this ProfileCard already, you are shown in their "nearby-group". Uses the geo-location and other sensor data from your Android device (if you have activated the setting "Store Android sensor data on your server"). This service is provided as test service from the di.me project consortium.</p> 
- -->					
-				</div>
+<!-- <p class="or">&nbsp;&nbsp;&#8594 The ProximityService is activated; It shows a "nearby-group" (di.me users nearby to you), and shows to other users that you are nearby. When you connect, you select the Profile Card that shall be given to other nearby users. Only if they know this ProfileCard already, you are shown in their "nearby-group". Uses the geo-location and other sensor data from your Android device (if you have activated the setting "Store Android sensor data on your server"). This service is provided as test service from the di.me project consortium.</p>
+-->	
+</div>
             </div>
             <!-- Coming soon: Places --><div class="container text faderContainer">
                 <div class="fader">Coming soon: Show nearby Places <div class="arrow right"></div></div>
                 <div class="steps">
-                    <ul> 
-      					<li>Connect to the <em>YellowMapPlaceService</em>: Coming soon.<!--  (Android app: use the Action button in the top-right corner, select "Connect Service", choose "LocationService")
-							<br>&nbsp;&nbsp;&#8594 The LocationService is activated;  it determines the name (e.g. "Hotel Princess") of your current location. Uses the geo-location from your Android device (if the setting "Store Android sensor data" is active). This service is provided as test service from the di.me project consortium. --></li> 
-						<li>Connect to the <em>LocationService</em>: Coming soon. <!-- (Android app: use the Action button in the top-right corner, select "Connect Service", choose "LocationService")
-							<br>&nbsp;&nbsp;&#8594 The LocationService is activated;  it determines the name (e.g. "Hotel Princess") of your current location. Uses the geo-location from your Android device (if the setting "Store Android sensor data" is active). This service is provided as test service from the di.me project consortium.--></li> 							
+                    <ul>
+       <li>Connect to the <em>YellowMapPlaceService</em>: Coming soon.<!-- (Android app: use the Action button in the top-right corner, select "Connect Service", choose "LocationService")
+<br>&nbsp;&nbsp;&#8594 The LocationService is activated; it determines the name (e.g. "Hotel Princess") of your current location. Uses the geo-location from your Android device (if the setting "Store Android sensor data" is active). This service is provided as test service from the di.me project consortium. --></li>
+<li>Connect to the <em>LocationService</em>: Coming soon. <!-- (Android app: use the Action button in the top-right corner, select "Connect Service", choose "LocationService")
+<br>&nbsp;&nbsp;&#8594 The LocationService is activated; it determines the name (e.g. "Hotel Princess") of your current location. Uses the geo-location from your Android device (if the setting "Store Android sensor data" is active). This service is provided as test service from the di.me project consortium.--></li>
                     </ul>
                 </div>
-				</div>
+</div>
 
             <!--FOOTER-->
             <br>
             <div class="container">
                 <h2>Finally:</h2>
                 <h5>Please continue your di.me trial!</h5>
-              	<p>The trial will run in 2013, and will serve as a demonstration of the project results and the public open source di.me development. Therefore, we would like to invite you to use and test the demonstrator continuously, by connecting to others, <!-- importing your profiles, uploading your files, sharing your data --> and trying out the available features.</p>
+               <p>The trial will run in 2013, and will serve as a demonstration of the project results and the public open source di.me development. Therefore, we would like to invite you to use and test the demonstrator continuously, by connecting to others, <!-- importing your profiles, uploading your files, sharing your data --> and trying out the available features.</p>
 
-				<h5>Feedback is very much appreciated!</h5>
+<h5>Feedback is very much appreciated!</h5>
 
-				<p>Once you went through this tour and have familiarised yourself with the di.me demonstrator, please find some time to fill out our questionaire:</p>
-				
-				<p><a href="/dime-communications/web/access/questionaire?lang=en" class="push" target="_blank">questionnaire</a> (please login with your di.me account).<!-- <a href="/di/dime-communications/web/access/questionaire?lang=de" class="push" target="_blank">(German)</a>. --></p>
-				<br><br>
+<p>Once you went through this tour and have familiarised yourself with the di.me demonstrator, please find some time to fill out our questionaire:</p>
+
+<p><a href="/dime-communications/web/access/questionaire?lang=en" class="push" target="_blank">questionnaire</a> (please login with your di.me account).<!-- <a href="/di/dime-communications/web/access/questionaire?lang=de" class="push" target="_blank">(German)</a>. --></p>
+<br><br>
 
                 <!-- Invite others to the trial <div class="container text faderContainer">
 <div class="fader">Invite others to the trial<div class="arrow right"></div></div>
@@ -340,8 +364,9 @@
 
 
 
-
 <!-- END OF CONTENT -->
+
+
   <script src="/dime-communications/static/ui/dime/register/js/jquery-1.9.1.min.js" type="text/javascript"></script>
    <script src="/dime-communications/static/ui/dime/register/js/bootstrap.min.js" type="text/javascript"></script>
 

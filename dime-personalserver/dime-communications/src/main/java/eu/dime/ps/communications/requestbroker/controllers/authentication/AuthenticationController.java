@@ -24,15 +24,8 @@ import eu.dime.ps.controllers.accesscontrol.AccessControlManager;
 import eu.dime.ps.controllers.exception.UserNotFoundException;
 import eu.dime.ps.gateway.service.MediaType;
 import eu.dime.ps.storage.entities.Role;
-import eu.dime.ps.storage.entities.Tenant;
 import eu.dime.ps.storage.entities.User;
 import eu.dime.ps.storage.exception.ReadOnlyValueChangedOnUpdate;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.util.logging.Level;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.ModelAndView;
 
 /**
  * REST API for user management by the ADMIN users. The user should be
@@ -209,24 +202,12 @@ public class AuthenticationController {
         return SecurityContextHolder.getContext().getAuthentication().getName().toString();
     }
 
-    private User getCurrentUser() {
-        
-
-        String username = SecurityContextHolder.getContext().getAuthentication().getName().toString();
-        String pw = SecurityContextHolder.getContext().getAuthentication().getCredentials().toString();
-        User user = userManager.getByUsernameAndPassword(username, pw);
-
-        if (user != null) {
-            return user;
-        } else {
-            return null;
-        }
-    }
+    
 
     @GET
     @Path("/role")
     public String getCurrentRole() {
-        User user = getCurrentUser();
+        User user = userManager.getCurrentUser();
         if (user==null){
             return "Server error - getCurrentUser==null";
         }
@@ -304,7 +285,7 @@ public class AuthenticationController {
                 return currentUserName;
         }//else
         //only for admins
-        User user = getCurrentUser();
+        User user = userManager.getCurrentUser();
         if (!user.getRole().equals(Role.ADMIN)){
             throw new AccessDeniedException(userName);
         }

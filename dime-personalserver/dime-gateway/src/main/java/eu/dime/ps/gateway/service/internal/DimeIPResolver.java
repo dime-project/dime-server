@@ -10,6 +10,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
 
 import eu.dime.ps.gateway.util.DnsResolver;
+import javax.naming.CommunicationException;
+import javax.naming.NameNotFoundException;
 
 /**
  * THROW-AWAY CLASS
@@ -42,7 +44,7 @@ public class DimeIPResolver {
 		}
 	}
 	
-	public String resolve (String targetURI) throws NamingException {
+	public String resolve (String targetURI) throws DimeDNSException {
 		
 		/*
 		 * TODO: Generalize resolution for all possible paths, including 
@@ -59,12 +61,19 @@ public class DimeIPResolver {
                 return "https://" + resolveSaid(said) + ":" + this.port + "/dime-communications";
 	}
 
-        public String resolveSaid (String said) throws NamingException {
+        public String resolveSaid (String said) throws DimeDNSException {
             try{
 		return DnsResolver.resolve(dimeDns, said + ".dns.dime-project.eu");
+
+            }catch (NameNotFoundException ex){
+                throw new DimeDNSCannotResolveException("DNS failure: unable to resolve said: "
+                        +said+" at "+dimeDns+"\n"+ex.getExplanation(),ex);
+
+            }catch (CommunicationException ex){
+                 throw new DimeDNSCannotConnectException("DNS failure: CommunicationException, propably server not accessible: "
+                        +dimeDns+" (for said:"+said+")\n"+ex.getExplanation(),ex);
             }catch(NamingException ex){
-                throw new NamingException("DNS failure when trying to retrieve said: "+said+" at "+dimeDns+"\n"+ex.getExplanation());
-            }
+                throw new DimeDNSException("DNS failure when trying to retrieve said: "+said+" at "+dimeDns+"\n"+ex.getExplanation(), ex);            }
 	}
 
         public String getDimeDns(){

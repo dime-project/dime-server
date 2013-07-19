@@ -170,9 +170,11 @@ public class DimeServiceAdapter extends ServiceAdapterBase implements InternalSe
 		try {
 			proxy = prepareProxy(targetResolver.resolve(targetSaidName), username, secret);
 			proxy.authenticate(new UsernamePasswordAuthenticationToken(username, secret));
-		} catch (NamingException e) {
-			throw new ServiceNotAvailableException("Could not open connection to " + receiverSAID, e);
-		} catch (Exception e) {
+		} catch (DimeDNSCannotConnectException e) {
+			throw new ServiceNotAvailableException("Could not connect to dns for " + receiverSAID, e);
+                } catch (DimeDNSCannotResolveException e) {
+			throw new ServiceNotAvailableException("said not registered at dns: " + receiverSAID, e);
+		} catch (DimeDNSException e) {
 			throw new ServiceNotAvailableException("Unknown error occurred when trying to connect to " + 
 					receiverSAID + ": " + e.getMessage(), e);
 		}
@@ -264,10 +266,13 @@ public class DimeServiceAdapter extends ServiceAdapterBase implements InternalSe
 		try {
 			proxy = prepareProxy(targetResolver.resolve(targetSaidName), username, secret);
 			proxy.authenticate(new UsernamePasswordAuthenticationToken(username, secret));
-		} catch (NamingException e) {
-			throw new ServiceNotAvailableException("Could not open connection to " + receiverSAID, e);
-		} catch (Exception e) {
-			throw new ServiceNotAvailableException("Unknown error occurred when trying to connect to " + 
+
+                } catch (DimeDNSCannotConnectException e) {
+			throw new ServiceNotAvailableException("Could not connect to dns for " + receiverSAID, e);
+                } catch (DimeDNSCannotResolveException e) {
+			throw new ServiceNotAvailableException("said not registered at dns: " + receiverSAID, e);
+		} catch (DimeDNSException e) {
+			throw new ServiceNotAvailableException("Unknown error occurred when trying to connect to " +
 					receiverSAID + ": " + e.getMessage(), e);
 		}
 
@@ -341,8 +346,12 @@ public class DimeServiceAdapter extends ServiceAdapterBase implements InternalSe
 			if (response != 200) {
 				throw new ServiceNotAvailableException(response);
 			}
-		} catch (NamingException e) {
-			throw new ServiceNotAvailableException(e);
+		} catch (DimeDNSCannotConnectException e) {
+			throw new ServiceNotAvailableException("Could not connect to dns server" , e);
+                } catch (DimeDNSCannotResolveException e) {
+			throw new ServiceNotAvailableException("said not registered at dns: ", e);
+		} catch (DimeDNSException e) {
+			throw new ServiceNotAvailableException(e.getMessage(), e);
 		} finally {
 			if (proxy != null) {
 				proxy.close();
@@ -454,8 +463,13 @@ public class DimeServiceAdapter extends ServiceAdapterBase implements InternalSe
 			if (logger.isDebugEnabled()) {
 				logger.debug("Profile metadata for "+path+" response is:\n"+profile.getModel().serialize(Syntax.Turtle));
 			}
-		} catch (NamingException e) {
-			throw new ServiceNotAvailableException("Could not open connection to "+targetSaidName, e);
+                } catch (DimeDNSCannotConnectException e) {
+			throw new ServiceNotAvailableException("Could not connect to dns for " + targetSaidName, e);
+                } catch (DimeDNSCannotResolveException e) {
+			throw new ServiceNotAvailableException("said not registered at dns: " + targetSaidName, e);
+		} catch (DimeDNSException e) {
+			throw new ServiceNotAvailableException("Unknown error occurred when trying to connect to " + 
+					targetSaidName + ": " + e.getMessage(), e);
 		} catch (JsonParseException e) {
 			throw new ServiceNotAvailableException(
 					"Could not process response from "+path+", invalid JSON returned: "+e.getMessage(),
@@ -508,8 +522,12 @@ public class DimeServiceAdapter extends ServiceAdapterBase implements InternalSe
 
 		} catch (JSONException e) {
 			logger.info("ERROR in Response: it was not JSON.");
-		} catch (NamingException e) {
-			throw new ServiceNotAvailableException(e);
+		} catch (DimeDNSCannotConnectException e) {
+			throw new ServiceNotAvailableException(e.getMessage(), e);
+                } catch (DimeDNSCannotResolveException e) {
+			throw new ServiceNotAvailableException(e.getMessage(), e);
+		} catch (DimeDNSException e) {
+			throw new ServiceNotAvailableException(e.getMessage(), e);
 		} catch (ServiceNotAvailableException e) {
 			throw new ServiceNotAvailableException(e);
 		} finally {
@@ -530,10 +548,16 @@ public class DimeServiceAdapter extends ServiceAdapterBase implements InternalSe
 			// TODO empty POST??? can this be done in a bit nicer way???
 			status = proxy.post(path, "");
 		} catch (ServiceNotAvailableException e) {
-			logger.warn("Could not confirm token. System may be in a undefined state.", e);
+			logger.error("Could not confirm token. System may be in a undefined state.\n", e);
 			return false;
-		} catch (NamingException e) {
-			logger.warn("Could not confirm token. System may be in a undefined state.", e);
+                } catch (DimeDNSCannotConnectException e) {
+			logger.error("Could not confirm token. System may be in a undefined state.\n"+e.getMessage(), e);
+			return false;
+                } catch (DimeDNSCannotResolveException e) {
+			logger.error("Could not confirm token. System may be in a undefined state.\n"+e.getMessage(), e);
+			return false;
+		} catch (DimeDNSException e) {
+			logger.error("Could not confirm token. System may be in a undefined state.\n"+e.getMessage(), e);
 			return false;
 		} finally {
 			if (proxy != null) {

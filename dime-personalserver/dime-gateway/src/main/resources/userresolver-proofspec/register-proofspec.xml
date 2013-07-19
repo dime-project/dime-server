@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ProofSpecification xmlns="http://www.zurich.ibm.com/security/idemix"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.zurich.ibm.com/security/idemix ProofSpecification.xsd">
+
+	<Declaration>
+		<AttributeId name="id1" proofMode="revealed" type="string" />
+		<AttributeId name="id2" proofMode="revealed" type="string" />
+		<AttributeId name="id3" proofMode="revealed" type="string" />
+	</Declaration>
+
+	<Specification>
+    <Credentials>
+      <Credential issuerPublicKey="http://dime.itsec-siegen.info/issuer/api/issuer/structure/pub-key.xml"
+        credStruct="http://dime.itsec-siegen.info/issuer/api/issuer/structure/credential/dime-credential.xml"
+        name="rname">
+        <Attribute name="name">id1</Attribute>
+        <Attribute name="surname">id2</Attribute>
+        <Attribute name="nickname">id3</Attribute>
+      </Credential>
+    </Credentials>
+    
+    <EnumAttributes>
+      
+    </EnumAttributes>
+
+    <Inequalities>
+      
+    </Inequalities>
+
+    <Commitments/>
+
+    <Representations/>
+
+    <Pseudonyms/>
+
+    <VerifiableEncryptions/>
+
+    <Messages>
+      
+    </Messages>
+  </Specification>
+</ProofSpecification>
