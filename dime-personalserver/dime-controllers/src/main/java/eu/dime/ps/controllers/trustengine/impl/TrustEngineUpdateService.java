@@ -31,6 +31,7 @@ import eu.dime.ps.controllers.trustengine.utils.AdvisoryConstants;
 import eu.dime.ps.semantic.BroadcastManager;
 import eu.dime.ps.semantic.BroadcastReceiver;
 import eu.dime.ps.semantic.Event;
+import eu.dime.ps.semantic.connection.ConnectionProvider;
 import eu.dime.ps.semantic.exception.NotFoundException;
 import eu.dime.ps.semantic.model.RDFReactorThing;
 import eu.dime.ps.semantic.model.dlpo.LivePost;

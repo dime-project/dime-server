@@ -364,6 +364,7 @@
 	</bean>
 	
 	<bean id="trustEngineUpdateService" class="eu.dime.ps.controllers.trustengine.impl.TrustEngineUpdateService">
+			<property name="connectionProvider" ref="connectionProvider" />
 	</bean>
 	
 	<bean id="defaultDataSetup" class="eu.dime.ps.controllers.DefaultDataSetup"/>

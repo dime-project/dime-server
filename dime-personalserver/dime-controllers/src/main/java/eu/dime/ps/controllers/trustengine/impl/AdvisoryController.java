@@ -250,7 +250,18 @@ public class AdvisoryController extends AdvisoryBase {
 			throws NotFoundException, InfosphereException, RepositoryException, ClassCastException{
 		
 		List <GroupDistanceWarning> warnings = new ArrayList<GroupDistanceWarning>();
-		for (String res_uri : sharedThingIDs) {
+		
+		List <String> sharedSingleElements = new ArrayList<String>();
+		for (String res : sharedThingIDs){
+			URI resUri = new URIImpl(res);
+			if (getResourceStore().isTypedAs(resUri, PPO.PrivacyPreference)){
+				sharedSingleElements.addAll(getAllItemsInDataboxAsString(resUri));
+			} else {
+				sharedSingleElements.add(res);
+			}
+		}
+		
+		for (String res_uri : sharedSingleElements) {
 			RDFReactorThing thing = getResource(new URIImpl(res_uri));
 			List<Resource> related_groups = thing.getAllIsRelated_as().asList();
 			if ((related_groups == null) || (related_groups.isEmpty())){
