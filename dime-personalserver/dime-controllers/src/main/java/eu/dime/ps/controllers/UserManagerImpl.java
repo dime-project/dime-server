@@ -321,71 +321,76 @@ public class UserManagerImpl implements UserManager {
         
     	boolean unlocked;
     	try {
-			unlocked = lock.tryLock(5L, TimeUnit.SECONDS);// only one register at a time  
-		} catch (InterruptedException e) {
-			throw new DimeDNSRegisterFailedException("Register failed", e);
-		}  
+                unlocked = lock.tryLock(5L, TimeUnit.SECONDS);// only one register at a time
+        } catch (InterruptedException e) {
+                throw new DimeDNSRegisterFailedException("Register failed", e);
+        }
     	if (!unlocked) {
     		logger.error("Could not aquire lock within 5 seconds. Returning without registering.");
     		throw new DimeException("Could not register because thread locked.");
     	}
-    	User user;
-	    try {
-	    	validateUser(userRegister.getUsername(), userRegister.getPassword());  
-	       
-			// TODO improve performance: register it asynchronously
-			// TODO improve robustness: what happens if this fails? rollback mechanism! Transaction.
-			//
-			//EDIT by Simon: moved to the beginning of the registration process:
-			// we try first to register and hope that no one will try to connect before the rest is established
-			// so, we run into an exception in case the dns is not available
-			// better would be to somehow reserve a registration and enable it after the user was created
-			dimeDNSRegisterService.registerSaid(userRegister.getUsername());
-			user = createUser(userRegister);
-			user.persist();
-			user.flush();
-			logger.debug("Created new user [id=" + user.getId() + ", username="
-					+ user.getUsername() + ", role=" + user.getRole() + "]");
-			Tenant tenant = createTenant(userRegister.getUsername(), user);
-			PersonContact profile = null;
-			try {
-			} catch (Exception e1) {
-				//FIXME: unregister at DNS
-				user.remove();
-				tenant.remove();
-				throw new DimeException(
-						"Failed to create profile for user. Registering could not be completed. ",
-						e1);
-			}
-			try {
-				profile = buildProfile(userRegister);
-			} catch (Exception e) {
-				//FIXME: unregister at DNS
-				user.remove();
-				tenant.remove();
-				throw new DimeException("Failed to publish public " +
-						"profile when registering. Aborting register.", e);
-	
-			}
-			try {
-				initModelForUser(profile, tenant);
-				registerToUserResolverService(user, profile); //FIXME:<--- unfortunately, this requires an Account to be created, 
-																		//to rdf register needs to be done before (to be fixed)
-			} catch (Exception e) {
-				//FIXME: unregister at DNS
-				user.remove();
-				tenant.remove();
-				//FIXME: remove profile from URS
-				throw new DimeException(
-						"Failed to store semantic model when registering. Aborting register.",
-						e);
-			}
-		} catch (Exception e) {
-			throw new DimeException(e);
-		} finally {
-			lock.unlock();
-		}
-		return user;
+    	User user=null;
+        Tenant tenant=null;
+        try {
+            validateUser(userRegister.getUsername(), userRegister.getPassword());
+
+            // TODO improve performance: register it asynchronously
+            // TODO improve robustness: what happens if this fails? rollback mechanism! Transaction.
+            //
+            //EDIT by Simon: moved to the beginning of the registration process:
+            // we try first to register and hope that no one will try to connect before the rest is established
+            // so, we run into an exception in case the dns is not available
+            // better would be to somehow reserve a registration and enable it after the user was created
+            dimeDNSRegisterService.registerSaid(userRegister.getUsername());
+            user = createUser(userRegister);
+            user.persist();
+            user.flush();
+            logger.debug("Creating new user [id=" + user.getId() + ", username="
+                + user.getUsername() + ", role=" + user.getRole() + "]");
+            tenant = createTenant(userRegister.getUsername(), user);
+            PersonContact profile = null;
+            try {
+            } catch (Exception e) {
+                throw new DimeException("Failed to create profile for user. Registration could not be completed.\n"
+                    +e.getClass().getName()+": "+e.getMessage(), e);
+            }
+            try {
+                profile = buildProfile(userRegister);
+            } catch (Exception e) {
+                throw new DimeException("Failed to publish public profile when registering. Aborting registration.\n"
+                    +e.getClass().getName()+": "+e.getMessage(), e);
+
+            }
+            try {
+                initModelForUser(profile, tenant);             
+            } catch (Exception e) {
+                throw new DimeException("Failed to store semantic model when registering. Aborting registration.\n"
+                    +e.getClass().getName()+": "+e.getMessage(), e);
+            }
+            try {
+                registerToUserResolverService(user, profile); //FIXME:<--- unfortunately, this requires an Account to be created,
+                                                            //to rdf register needs to be done before (to be fixed)
+            } catch (Exception e) {
+                throw new DimeException("Failed to register at dime user register service. Aborting registration.\n"
+                    +e.getClass().getName()+": "+e.getMessage(), e);
+            }
+        } catch (Exception e) {
+                //FIXME: unregister at DNS
+                if (user!=null){
+                    user.remove();
+                }
+                if (tenant!=null){
+                    tenant.remove();
+                }
+                //FIXME: remove profile from URS
+                //FIXME remove profile from rdf
+
+                logger.error(e.getClass().getName()+": "+e.getMessage(), e);
+                throw new DimeException(e.getClass().getName()+": "+e.getMessage(),e);
+        } finally {
+                lock.unlock();
+        }
+        return user;
     }
 
     private boolean existsOwnerByUsername(String username) {
