@@ -117,7 +117,7 @@ public class ServiceGatewayImpl implements ServiceGateway {
         public ServiceAdapter makeServiceAdapter(String adapterName) throws Exception {
             try{
 
-		if (supportedAdapters.containsKey(adapterName)){
+		if (supportedAdapters.containsKey(adapterName) || isHiddenServiceAdapter(adapterName)){
 
 			ServiceAdapter adapter = (ServiceAdapter) this.loadedAdapters.get(adapterName).newInstance();
                         adapter.initFromMetaData(this.getServiceMetadata(adapterName, adapter.getIdentifier()));

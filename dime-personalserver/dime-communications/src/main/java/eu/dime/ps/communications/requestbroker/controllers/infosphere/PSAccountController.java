@@ -14,6 +14,8 @@ import eu.dime.ps.gateway.ServiceGateway;
 import eu.dime.ps.gateway.exception.ServiceAdapterNotSupportedException;
 import eu.dime.ps.gateway.exception.ServiceNotAvailableException;
 import eu.dime.ps.gateway.service.ServiceAdapter;
+import eu.dime.ps.gateway.service.noauth.PlaceServiceAdapter;
+import eu.dime.ps.gateway.service.noauth.SocialRecommenderAdapter;
 import eu.dime.ps.semantic.model.dao.Account;
 import eu.dime.ps.semantic.model.pimo.Person;
 import java.util.Collection;
@@ -191,7 +193,15 @@ public class PSAccountController implements APIController {
 
             // Add account
             accountManager.add(sa);
-
+            
+            // Add, if not exists, the service account for social recommender
+            if (serviceAdapterName.equalsIgnoreCase(PlaceServiceAdapter.adapterName)) {
+            	Collection<Account> sras = accountManager.getAllByType(SocialRecommenderAdapter.adapterName);
+            	if (sras.size() == 0) {
+            		ServiceAdapter sra = this.serviceGateway.makeServiceAdapter(SocialRecommenderAdapter.adapterName);
+            		accountManager.add(sra);
+            	}
+            }
 
             // Update the returned object
             newAccount.setGuid(sa.getIdentifier());
@@ -211,6 +221,7 @@ public class PSAccountController implements APIController {
         } catch (ClassCastException e) {
             return Response.badRequest(e.getMessage(), e);
         } catch (Exception e) {
+        	logger.error(e.toString(),e);
             return Response.serverError(e.getMessage(), e);
         }
 
