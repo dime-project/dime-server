@@ -327,7 +327,7 @@ public class UserManagerImpl implements UserManager {
         }
     	if (!unlocked) {
     		logger.error("Could not aquire lock within 5 seconds. Returning without registering.");
-    		throw new DimeException("Could not register because thread locked.");
+    		throw new DimeException("Could not register because the system is busy.");
     	}
     	User user=null;
         Tenant tenant=null;

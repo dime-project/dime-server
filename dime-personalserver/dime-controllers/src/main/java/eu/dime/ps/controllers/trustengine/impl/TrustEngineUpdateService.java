@@ -10,7 +10,6 @@ import ie.deri.smile.vocabulary.PPO;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -24,14 +23,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import eu.dime.commons.notifications.user.UNRefToItem;
-import eu.dime.commons.notifications.user.UserNotification;
 import eu.dime.ps.controllers.TenantContextHolder;
 import eu.dime.ps.controllers.exception.InfosphereException;
 import eu.dime.ps.controllers.infosphere.manager.FileManager;
 import eu.dime.ps.controllers.infosphere.manager.SharingManager;
-import eu.dime.ps.controllers.notifier.NotifierManager;
-import eu.dime.ps.controllers.notifier.NotifyHistory;
-import eu.dime.ps.controllers.notifier.exception.NotifierException;
 import eu.dime.ps.controllers.trustengine.utils.AdvisoryConstants;
 import eu.dime.ps.semantic.BroadcastManager;
 import eu.dime.ps.semantic.BroadcastReceiver;
@@ -56,21 +51,12 @@ import eu.dime.ps.semantic.service.impl.PimoService;
  * @author marcel
  *
  */
-public class TrustEngineUpdateService implements BroadcastReceiver{
+public class TrustEngineUpdateService extends AdvisoryBase implements BroadcastReceiver {
 
 	private static final Logger logger = LoggerFactory.getLogger(TrustEngineUpdateService.class);
-
-	@Autowired
-	private ConnectionProvider connectionProvider;
 	
 	@Autowired
 	private SharingManager sharingManager;
-	
-	@Autowired
-	private NotifyHistory notifyHistory;
-	
-	@Autowired
-	private NotifierManager notifierManager;
 	
 	@Autowired
 	FileManager filemanager;
@@ -158,6 +144,7 @@ public class TrustEngineUpdateService implements BroadcastReceiver{
 	}
 	
 	private void processDatabox(Resource resource, PrivacyPreferenceService ppoService) {
+		//TODO: enable
 //		try {
 //		PrivacyPreference databox = resourceStore.get(resource.asURI(), PrivacyPreference.class);
 //		List<org.ontoware.rdfreactor.schema.rdfs.Resource> related_resources = databox.getAllIsRelated_as().asList();
@@ -394,47 +381,15 @@ public class TrustEngineUpdateService implements BroadcastReceiver{
 		}
 		return new ArrayList<PersonGroup>(groups);
 	}
-	
-	private void notifyUI(String operation, String type, String guid, String name){
-		UNRefToItem refToItem = new UNRefToItem(guid, name, type,  "@me", operation);
-		UserNotification notification = new UserNotification(TenantContextHolder.getTenant(), refToItem);
-		try {
-			notifierManager.pushInternalNotification(notification);
-		} catch (NotifierException e) {
-			logger.warn("Failed to push UserNotificaton.", e);
-		}
-
-	}
-	
-	private ResourceStore getResourceStore() throws RepositoryException{
-		long tenant = TenantContextHolder.getTenant();
+		
+	@Override
+	protected ResourceStore getResourceStore() throws RepositoryException{
 		if (resourceStore != null) {
 			return resourceStore;
-		} else if (tenant > 0){
-			resourceStore =  connectionProvider.getConnection(String.valueOf(tenant)).getResourceStore();
+		} else {
+			resourceStore = super.getResourceStore();
 		}
 		return resourceStore;
 	}
 	
-	private PimoService getPimoService() throws RepositoryException {
-		long tenant = TenantContextHolder.getTenant();
-		if (tenant > 0){
-			return connectionProvider.getConnection(String.valueOf(tenant)).getPimoService();
-		}
-		return null;
-	}
-	
-
-	private PrivacyPreferenceService getPrivPrefService() throws RepositoryException {
-		long tenant = TenantContextHolder.getTenant();
-		if (tenant > 0){
-			return connectionProvider.getConnection(String.valueOf(tenant)).getPrivacyPreferenceService();
-		}
-		return null;
-	}
-
-	public void setNotifyManager(NotifierManager notifierManager) {
-		this.notifierManager = notifierManager;
-	}
-
 }

@@ -108,7 +108,7 @@ public class ProximityService implements IProximityService, IContextListener {
 				logger.debug("Proximity Adapter account not found");
 				return null;
 			}
-			String accountId = this.policyManager.getPolicyString("accountId",adapterAccount.asURI().toString());
+			String accountId = this.policyManager.getPolicyString("accountId",adapterAccount.asURI().toString().replaceAll(":","-"));
 			//String accountId = "urn:uuid:j000071";
 			//String accountId = "urn:uuid:a000018";
 			if (accountId == null || accountId.equalsIgnoreCase("")) {
@@ -140,6 +140,10 @@ public class ProximityService implements IProximityService, IContextListener {
 				if (proxAccts != null && proxAccts.size() > 0) {
 					Iterator<Account> it = proxAccts.iterator();
 					return it.next();
+					//Object[] accts = proxAccts.toArray();
+					//Account acc = it.next();
+					//acc.getCreator().asURI().toString();
+					//return (Account)accts[accts.length-1];
 				}
 		} 
 		return null;
@@ -193,11 +197,15 @@ public class ProximityService implements IProximityService, IContextListener {
 		
 		// sending notified raw data to ProximityService
 		postRawData(t,entity,dataset);
+		
+		Account proximityAccount = retrieveProximityAccount(t,entity);
+		if (proximityAccount == null) return;
 	
 		// retrieve proximity from ProximityService
 		IContextDataset proximities = IContextDataset.EMPTY_CONTEXT_DATASET;
 		try {
-			proximities = this.contextProcessor.getContext(t, entity, Factory.createScope(Constants.SCOPE_PROXIMITY), 
+			IEntity proxEntity = Factory.createEntity(proximityAccount.asURI().toString());
+			proximities = this.contextProcessor.getContext(t, proxEntity, Factory.createScope(Constants.SCOPE_PROXIMITY), 
 					Util.getDateTime(System.currentTimeMillis() - (duration * 1000)),
 					null);
 		} catch (ContextException e) {
@@ -342,7 +350,7 @@ public class ProximityService implements IProximityService, IContextListener {
 		try {
 			// TI note: commented line was used before service configuration was available
 			// response = this.proximityService.postRaw(proximityAccount.asURI().toString() + "/" + scope.getScopeAsString(),body);
-			response = this.proximityService.postRaw(scope.getScopeAsString(),body);
+			response = this.proximityService.postRaw(proximityAccount.asURI().toString() + "/" + scope.getScopeAsString(),body);
 		} catch (AttributeNotSupportedException e) {
 			logger.error(e.toString(),e);
 			return;

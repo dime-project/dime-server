@@ -359,11 +359,12 @@
 		<property name="personManager" ref="personManager"/>
 		<property name="trustEngine" ref="trustEngine" />
 		<property name="personGroupManager" ref="personGroupManager" />
-		<property name="connectionProvider" ref="connectionProvider"/>
-		<property name="shareableProfileManager" ref="shareableProfileManager" />	
+		<property name="connectionProvider" ref="connectionProvider" />
+		<property name="profileCardManager" ref="profileCardManager" />
 	</bean>
 	
 	<bean id="trustEngineUpdateService" class="eu.dime.ps.controllers.trustengine.impl.TrustEngineUpdateService">
+			<property name="connectionProvider" ref="connectionProvider" />
 	</bean>
 	
 	<bean id="defaultDataSetup" class="eu.dime.ps.controllers.DefaultDataSetup"/>

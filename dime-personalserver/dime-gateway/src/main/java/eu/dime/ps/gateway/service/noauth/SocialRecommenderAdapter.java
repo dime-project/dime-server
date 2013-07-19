@@ -23,9 +23,6 @@ public class SocialRecommenderAdapter extends ServiceAdapterBase implements Exte
 
 	private HttpRestProxy proxy;
 	public static String adapterName = "SocialRecs";
-	private String identifier;
-	
-	private PolicyManager policyManager;
 	
 	private String serviceURL = null;
 	private String username;
@@ -44,8 +41,6 @@ public class SocialRecommenderAdapter extends ServiceAdapterBase implements Exte
 			throws ServiceNotAvailableException {
 		
 		super();
-		this.identifier = "urn:account:"+UUID.randomUUID();
-		this.policyManager = PolicyManagerImpl.getInstance();
 		
 		try {
 			this.serviceURL = this.policyManager.getPolicyString("SERVICEURL", "SOCIALRECOMMENDER");
