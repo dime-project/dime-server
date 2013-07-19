@@ -31,10 +31,9 @@ import eu.dime.ps.controllers.TenantContextHolder;
 import eu.dime.ps.controllers.exception.InfosphereException;
 import eu.dime.ps.controllers.infosphere.manager.PersonGroupManager;
 import eu.dime.ps.controllers.infosphere.manager.PersonManager;
-import eu.dime.ps.controllers.infosphere.manager.ShareableProfileManager;
+import eu.dime.ps.controllers.infosphere.manager.ProfileCardManager;
 import eu.dime.ps.controllers.trustengine.TrustEngine;
 import eu.dime.ps.controllers.trustengine.utils.AdvisoryConstants;
-import eu.dime.ps.semantic.connection.ConnectionProvider;
 import eu.dime.ps.semantic.exception.NotFoundException;
 import eu.dime.ps.semantic.model.RDFReactorThing;
 import eu.dime.ps.semantic.model.dlpo.LivePost;
@@ -51,21 +50,16 @@ import eu.dime.ps.semantic.rdf.ResourceStore;
  * @author marcel
  *
  */
-public class AdvisoryController {
+public class AdvisoryController extends AdvisoryBase {
 
-	Logger logger = Logger.getLogger(TrustEngineImpl.class);
+	Logger logger = Logger.getLogger(AdvisoryController.class);
 	
 	private ResourceStore resourceStore;
 	private PersonManager personManager;
 	private PersonGroupManager personGroupManager;	
 	private TrustEngine trustEngine;	
-	private ConnectionProvider connectionProvider;
-	private ShareableProfileManager shareableProfileManager;
+	private ProfileCardManager profileCardManager;
 
-	public void setConnectionProvider(ConnectionProvider connectionProvider) {
-		this.connectionProvider = connectionProvider;
-	}
-	
 	public void setPersonManager(PersonManager personManager) {
 		this.personManager = personManager;
 	}
@@ -78,8 +72,8 @@ public class AdvisoryController {
 		this.trustEngine = trustEngine;
 	}
 	
-	public void setShareableProfileManager (ShareableProfileManager shareableProfileManager){
-		this.shareableProfileManager = shareableProfileManager;
+	public void setProfileCardManager(ProfileCardManager profileCardManager) {
+		this.profileCardManager = profileCardManager;
 	}
 	
 	public AdvisoryController(){
@@ -456,5 +450,5 @@ public class AdvisoryController {
 		}
 		return this.resourceStore;
 	}
-
+	
 }
