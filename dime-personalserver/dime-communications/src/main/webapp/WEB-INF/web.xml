@@ -153,11 +153,13 @@
    <filter-mapping>
         <filter-name>AccessFilter</filter-name>
         <url-pattern>/api/dime/rest/*</url-pattern>
+        <url-pattern>/push/*</url-pattern>
     </filter-mapping>
     
     <filter-mapping>
         <filter-name>TenantSetFilter</filter-name>
         <url-pattern>/api/dime/rest/*</url-pattern>
+        <url-pattern>/push/*</url-pattern>
     </filter-mapping>
     
     <filter-mapping>

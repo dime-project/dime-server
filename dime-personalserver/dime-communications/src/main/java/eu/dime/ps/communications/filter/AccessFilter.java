@@ -39,6 +39,8 @@ public class AccessFilter implements Filter {
     private static final Logger logger = LoggerFactory.getLogger(AccessFilter.class);
     private final static String API_PREFIX = "api/dime/rest/";
     private final static int API_PREFIX_LENGTH = API_PREFIX.length();
+    private final static String PUSH_PREFIX = "push/";
+    private final static int PUSH_PREFIX_LENGTH = PUSH_PREFIX.length();
 
     @Autowired
     private TenantManager tenantManager;
@@ -58,13 +60,30 @@ public class AccessFilter implements Filter {
 		logger.info("request: "+url);
 		
 		int index = url.indexOf("api/dime/rest/");
-		if ((index < 0) 
-                   || (url.length() <= (index + API_PREFIX_LENGTH+1))){
+		int index_push = url.indexOf("push/");
+		
+		if (	((index < 0) && (index_push < 0))
+				|| 
+				((url.length() <= (index + API_PREFIX_LENGTH+1)) && (url.length() <= (index + PUSH_PREFIX_LENGTH+1)))){
                     logger.error("Unable to handle url: "+ url);
-		} else {
+                    return;
+		} 
+		
+		
+		if((index > 0)){
 			index += API_PREFIX_LENGTH; // adds length of 'api/dime/rest/'
+			said = url.substring(index, url.indexOf("/", index));
+		}else 
+		if((index_push > 0)){
+			index_push += PUSH_PREFIX_LENGTH; // adds length of 'push/'
+			said = url.substring(index_push, url.indexOf("/", index_push));
+		}else{
+			logger.error("Unable to handle url: "+ url);
+            return;
+		}
+			
 			try {
-				said = url.substring(index, url.indexOf("/", index));
+				
 				tenant = tenantManager.getByAccountName(said);
 				String auth = req.getHeader("Authorization");
 				if (auth == null){
@@ -145,7 +164,6 @@ public class AccessFilter implements Filter {
 				logger.error("User not found: "+username);
 				throw new AccessControlException("Not authorized for requested ressources");
 			}
-		}//else		
 	}
 	
 	@Override

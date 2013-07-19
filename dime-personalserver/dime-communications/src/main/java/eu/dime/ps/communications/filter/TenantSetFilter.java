@@ -59,6 +59,25 @@ public class TenantSetFilter implements Filter {
 				logger.error("Couldn't find 'said' in the request URL "+url+": "+e.getMessage(), e);
 			}
 		}
+		
+		start = url.indexOf("push/");
+		if (start < 0) {
+			logger.error("Couldn't find 'said' in the request URL "+url+": the account identifier should be supplied as 'api/dime/rest/<said>'");
+		} else {
+			start += 5; // adds length of 'push/'
+			try {
+				said = url.substring(start, url.indexOf("/", start));
+				tenant = tenantManager.getByAccountName(said);
+				
+				logger.info("Request intercepted at {} - Setting request data: [tenant={}]", new Object[]{url, tenant.getId()});
+	
+				// setting tenant identifier
+				TenantContextHolder.setTenant(tenant.getId());
+				chain.doFilter(request, response);
+			} catch (IndexOutOfBoundsException e) {
+				logger.error("Couldn't find 'said' in the request URL "+url+": "+e.getMessage(), e);
+			}
+		}
 	}
 
 	@Override

@@ -1,5 +1,8 @@
 package eu.dime.ps.communications.requestbroker.pubsub;
 
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
+
 import javax.servlet.ServletContext;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -8,16 +11,18 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 
 import org.atmosphere.cpr.Broadcaster;
-import org.atmosphere.jersey.Broadcastable;
 import org.atmosphere.jersey.SuspendResponse;
-import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.context.support.XmlWebApplicationContext;
 
+import eu.dime.commons.dto.Response;
+import eu.dime.commons.util.JaxbJsonSerializer;
 import eu.dime.ps.communications.notifier.InternalNotifySchedule;
-import eu.dime.ps.communications.notifier.ExternalNotifySchedule;
+import eu.dime.ps.controllers.TenantContextHolder;
+import eu.dime.ps.storage.entities.Tenant;
+import eu.dime.ps.storage.entities.User;
 
 @Path("/{said}/{deviceGUID}/@comet")
 @Produces("application/json")
@@ -40,19 +45,39 @@ public class PSNotificationDispacher {
 
     @GET
     public SuspendResponse<String> subscribe(@Context ServletContext context, @PathParam("said") String said) {
+    	
+    	/*
+    	Long tenant = TenantContextHolder.getTenant();
+    	
+    	if(tenant == null){
+    		String json = JaxbJsonSerializer.jsonValue(Response.badRequest("Permission denied - No tenant ("+ tenant +") - Please log in! "));
+    		
+    		return new SuspendResponse.SuspendResponseBuilder<String>().period(20, TimeUnit.MILLISECONDS)
+    				.entity(json).outputComments(false).lastModified(new Date()).build();
+    	}
+    	
+    	
+    	if(!tenant.toString().equals(said)){
+    		logger.info("tenant: " + tenant + " said: " + said);
+    		String json = JaxbJsonSerializer.jsonValue(Response.badRequest("Permission denied with said: " + said + " and tenant: " + tenant));
+    		
+    		return new SuspendResponse.SuspendResponseBuilder<String>().period(20, TimeUnit.MILLISECONDS)
+    				.entity(json).outputComments(false).lastModified(new Date()).build();
+    	}
+    	*/
 
-	if (internalNotifySchedule == null) {
-	    XmlWebApplicationContext appContext = (XmlWebApplicationContext) context
-		    .getAttribute("org.springframework.web.context.WebApplicationContext.ROOT");
-
-	    internalNotifySchedule = (InternalNotifySchedule) appContext.getBean("internalNotifySchedule");
-	}
-
-	internalNotifySchedule.addBroadcaster(this, topic, said);
-
-	return new SuspendResponse.SuspendResponseBuilder<String>().broadcaster(topic)
-		.outputComments(true).addListener(new EventsLogger(internalNotifySchedule)).resumeOnBroadcast(true)
-		.build();
+		if (internalNotifySchedule == null) {
+		    XmlWebApplicationContext appContext = (XmlWebApplicationContext) context
+			    .getAttribute("org.springframework.web.context.WebApplicationContext.ROOT");
+	
+		    internalNotifySchedule = (InternalNotifySchedule) appContext.getBean("internalNotifySchedule");
+		}
+	
+		internalNotifySchedule.addBroadcaster(this, topic, said);
+	
+		return new SuspendResponse.SuspendResponseBuilder<String>().broadcaster(topic)
+			.outputComments(true).addListener(new EventsLogger(internalNotifySchedule)).resumeOnBroadcast(true)
+			.build();
     }
 
 	public boolean publishIntern(String json, Broadcaster topic) {

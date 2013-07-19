@@ -41,7 +41,9 @@ public class NotifyInternalScheduleTest {
 	@Mock TenantManager tenantManager;
 	
 	@Spy PSNotificationDispacher notificationDispacher =  new PSNotificationDispacher();
+	@Spy PSNotificationDispacher notificationDispacher2 =  new PSNotificationDispacher();
 	@Mock SimpleBroadcaster simpleBroadcaster;
+	@Mock SimpleBroadcaster simpleBroadcaster2;
 	
 	@Captor ArgumentCaptor<String> captor;
 	
@@ -81,15 +83,23 @@ public class NotifyInternalScheduleTest {
     @Test
     public void testDealNotifications() throws InterruptedException {
     	
-    	// Mocking
+    	// Mocking 1 said 2 sessions
+    	// -------------------------
+    	// session 1
 		notificationDispacher.setTopic(simpleBroadcaster);
 		notificationDispacher.setInternalNotifySchedule(internalNotifySchedule);
 		internalNotifySchedule.addBroadcaster(notificationDispacher,simpleBroadcaster, said);
+		// session 2
+		notificationDispacher2.setTopic(simpleBroadcaster2);
+		notificationDispacher2.setInternalNotifySchedule(internalNotifySchedule);
+		internalNotifySchedule.addBroadcaster(notificationDispacher2,simpleBroadcaster2, said);
 	
 		// Run
     	internalNotifySchedule.dealNotifications();
     	
     	// Asserts
+    	// --------
+    	// Response for session 1
     	Mockito.verify(notificationDispacher).publishIntern(captor.capture(), (Broadcaster) Mockito.anyObject());
     	
     	Mockito.verify(simpleBroadcaster).broadcast(Mockito.anyObject());
@@ -124,6 +134,40 @@ public class NotifyInternalScheduleTest {
     	org.junit.Assert.assertEquals("itemType", e2.get("type"));
     	org.junit.Assert.assertEquals("@me", e2.get("userId"));
     	
+    	// Response for session 2
+    	Mockito.verify(notificationDispacher2).publishIntern(captor.capture(), (Broadcaster) Mockito.anyObject());
+    	
+    	Mockito.verify(simpleBroadcaster2).broadcast(Mockito.anyObject());
+    	
+    	Mockito.verify(internalNotifySchedule).removeBroadcaster(simpleBroadcaster2);
+    	
+    	String json2 = captor.getValue();
+    	LinkedHashMap map2 = JaxbJsonSerializer.getMapFromJSON(json2);
+    	List entries2 = (ArrayList) ((LinkedHashMap)((LinkedHashMap)map2.get("response")).get("data")).get("entry");
+    	
+    	LinkedHashMap n1s2 = (LinkedHashMap) entries2.get(0);
+    	
+    	org.junit.Assert.assertTrue(n1s2.containsKey("guid"));
+    	org.junit.Assert.assertTrue(n1s2.containsKey("type"));
+    	org.junit.Assert.assertTrue(n1s2.containsKey("operation"));
+    	LinkedHashMap e1s2 = (LinkedHashMap) n1s2.get("element");
+    	org.junit.Assert.assertTrue(e1s2.containsKey("guid"));
+    	org.junit.Assert.assertTrue(e1s2.containsKey("type"));
+    	org.junit.Assert.assertTrue(e1s2.containsKey("userId"));
+    	org.junit.Assert.assertEquals("001", e1s2.get("guid"));
+    	org.junit.Assert.assertEquals("@me", e1s2.get("userId"));
+    	
+    	LinkedHashMap n2s2 = (LinkedHashMap) entries2.get(1);
+    	org.junit.Assert.assertTrue(n2s2.containsKey("guid"));
+    	org.junit.Assert.assertTrue(n2s2.containsKey("type"));
+    	org.junit.Assert.assertTrue(n2s2.containsKey("operation"));
+    	LinkedHashMap e2s2 = (LinkedHashMap) n2s2.get("element");
+    	org.junit.Assert.assertTrue(e2s2.containsKey("guid"));
+    	org.junit.Assert.assertTrue(e2s2.containsKey("type"));
+    	org.junit.Assert.assertTrue(e2s2.containsKey("userId"));
+    	org.junit.Assert.assertEquals("002", e2s2.get("guid"));
+    	org.junit.Assert.assertEquals("itemType", e2s2.get("type"));
+    	org.junit.Assert.assertEquals("@me", e2s2.get("userId"));
 
     }
 
