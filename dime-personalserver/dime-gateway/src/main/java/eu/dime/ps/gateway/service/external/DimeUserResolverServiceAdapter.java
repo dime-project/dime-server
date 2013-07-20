@@ -31,8 +31,8 @@ import eu.dime.ps.gateway.service.AttributeMap;
 import eu.dime.ps.gateway.service.MediaType;
 import eu.dime.ps.gateway.service.ServiceAdapterBase;
 import eu.dime.ps.gateway.service.ServiceResponse;
-import eu.dime.ps.gateway.userresolver.client.IdemixClient;
-import eu.dime.ps.gateway.userresolver.client.ResolverClient;
+import eu.dime.ps.gateway.userresolver.client.DimeResolver;
+import eu.dime.ps.gateway.userresolver.client.noauth.ResolverClient;
 import eu.dime.ps.semantic.model.nco.PersonContact;
 
 /**
@@ -140,45 +140,26 @@ public class DimeUserResolverServiceAdapter extends ServiceAdapterBase implement
 
 			try {
 				// Retrieve master secret
-				IdemixClient idemixClient;
 				String URS = policyManager.getPolicyString("URS", "DIME");
-				idemixClient = new IdemixClient(policyManager.getPolicyString("ISSUER", "DIME"));
 
 				StringBuilder resolverEndpoint = new StringBuilder();
 				resolverEndpoint.append(URS);
-				resolverEndpoint.append(policyManager.getPolicyString("RESOLVER_ENDPOINT", "DIME"));
-
-				StringBuilder authEndpoint = new StringBuilder();
-				authEndpoint.append(URS);
-				authEndpoint.append(policyManager.getPolicyString("AUTH_ENDPOINT", "DIME"));
+				resolverEndpoint.append(policyManager.getPolicyString("NOAUTH_RESOLVER_ENDPOINT", "DIME"));
 				
-				ResolverClient resolverClient = new ResolverClient(
-						resolverEndpoint.toString(), authEndpoint.toString(), idemixClient);
-				try {
-					this.masterSecret = idemixClient.generateMasterSecret();
-					// FIXME: Save idemix master secret in credential store
-				} catch (Throwable e){
-					logger.warn("could not generate master secret", e);
-				}
-				// Create idemix credential
+				DimeResolver resolverClient = new ResolverClient(resolverEndpoint.toString());
+
 				Map<String, String> values = new HashMap<String, String>();
 				values.put("name", firstname);
 				values.put("surname", surname);
 				values.put("nickname", nickname);
-				this.idemixCredential = idemixClient.getCredential(
-						masterSecret, "dime-credential", values);
-				// FIXME: Save idemix credential in credential store
 
 				// Register with user service
-				String scope = "register";
-				String token = resolverClient.getToken(scope, masterSecret,
-						idemixCredential);
-				resolverClient.register(token, firstname, surname, nickname,
+				resolverClient.register(firstname, surname, nickname,
 						this.getIdentifier());
 			} catch (IOException e) {
 				logger.error(e.toString(),e);
 				throw new ServiceNotAvailableException(
-						"Error retrieving idemix token. Registering to "
+						"Registering to "
 								+ attribute + " failed.");
 			}
 
