@@ -5505,14 +5505,16 @@ Dime.Dialog={
     showDetailItemModal: function(entry, isEditable, message){
         var caption
 
-        if (isEditable){
-            if (entry.type===Dime.psMap.TYPE.PROFILEATTRIBUTE){
-                caption = "Edit "+ Dime.PACategory.getCategoryByName(entry.category).caption+': '+entry.name;
-            }else{
-                caption = "Edit "+ Dime.psHelper.getCaptionForItemType(entry.type)+': '+entry.name;
-            }
+        
+        if (entry.type===Dime.psMap.TYPE.PROFILEATTRIBUTE){
+            caption = Dime.PACategory.getCategoryByName(entry.category).caption+': "'+entry.name+'"';
         }else{
-            caption = Dime.psHelper.getCaptionForItemType(entry.type)+': '+entry.name+' - (read only)';
+            caption = Dime.psHelper.getCaptionForItemType(entry.type)+': "'+entry.name+'"';
+        }
+        if (isEditable){
+            caption = "Edit "+ caption;        
+        }else{
+            caption = caption + ' - (read only)';
         }
         var dialog = new Dime.DetailDialog(caption, entry, false, true, isEditable, message, Dime.psMap.getInfoHtmlForType(entry.type));
         
@@ -5535,7 +5537,7 @@ Dime.Dialog={
         
         var caption;
         if (type===Dime.psMap.TYPE.PROFILEATTRIBUTE && newItem.category){
-            caption = "New "+Dime.PACategory.getCategoryByName(newItem.category)+' ...';
+            caption = "New "+Dime.PACategory.getCategoryByName(newItem.category).caption+' ...';
         }else{
             caption = "New "+ Dime.psHelper.getCaptionForItemType(type)+' ...';
         }
