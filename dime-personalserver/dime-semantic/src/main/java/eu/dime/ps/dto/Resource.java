@@ -394,7 +394,7 @@ public class Resource extends LinkedHashMap<String, Object> {
 		this.remove("said");	
 		// not needed in the RDF store
 		this.remove("downloadUrl");
-
+		this.remove("supportsSharing");
 
 		String type = null;
 		String category=null;

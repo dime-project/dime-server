@@ -192,7 +192,7 @@ public class ProfileAttribute extends Resource {
 		catch(ClassCastException e){
 			logger.debug("org paramater in Affiliation attribute "+resource.asURI().toString()+"is not an URI",e);
 			if(node instanceof Literal)
-				affiliation.put("role", node.asLiteral().getValue());
+				affiliation.put("org", node.asLiteral().getValue());
 		}
 		return affiliation;
 	}

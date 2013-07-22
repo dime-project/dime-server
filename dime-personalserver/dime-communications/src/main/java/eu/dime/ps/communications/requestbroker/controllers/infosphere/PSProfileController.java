@@ -367,29 +367,15 @@ public class PSProfileController extends PSSharingControllerBase implements APIC
 				PrivacyPreference profilecard = data.getEntries().iterator().next()
 						.asResource(PrivacyPreference.class,profileCardManager.getMe().asURI());
 				
-				
-				//create a di.me account related to the profile	card			
-				Account dimeAccount = modelFactory.getDAOFactory().createAccount();
-				dimeAccount.setAccountType(DimeServiceAdapter.NAME);
-				if(profilecard.getPrefLabel() != null)
-				dimeAccount.setPrefLabel(profilecard.getPrefLabel() + "@di.me");
-				else{
-					logger.warn("Profile card "+profilecard.asURI().toString()+" was created with no name");
-					dimeAccount.setPrefLabel(profilecard.asURI().toString() + "@di.me");
-				}
-				
-				// set di.me account as sharedThrough in the profile card's access space
-	            AccessSpace accessSpace = modelFactory.getNSOFactory().createAccessSpace();
-	            accessSpace.setSharedThrough(dimeAccount);
-	            profilecard.getModel().addAll(accessSpace.getModel().iterator());
-	            profilecard.setAccessSpace(accessSpace);
-	            
-	            accountManager.add(dimeAccount);
+				addAccessSpaceAndDimeAccount(profilecard);	                       
 				profileCardManager.add(profilecard);
+				
 				String serviceAccountId = findSaid(profilecard);
 				readIncludes(resource,profilecard);
 				returnData = new Data<eu.dime.ps.dto.Resource>(0, 1, new ProfileCard(profilecard,serviceAccountId,profileCardManager.getMe().asURI()));
 			} else {
+				// If it is a profile
+				
 				PersonContact profile =data.getEntries().iterator().next().asResource(PersonContact.class,profileManager.getMe().asURI());	 	
 				profileManager.add(profile);			
 
@@ -408,6 +394,29 @@ public class PSProfileController extends PSSharingControllerBase implements APIC
 		return Response.ok(returnData);
 
 	}
+
+	private void addAccessSpaceAndDimeAccount(PrivacyPreference profilecard) throws InfosphereException {
+		
+		//create a di.me account related to the profile	card			
+		Account dimeAccount = modelFactory.getDAOFactory().createAccount();
+		dimeAccount.setAccountType(DimeServiceAdapter.NAME);
+		if(profilecard.getPrefLabel() != null)
+		dimeAccount.setPrefLabel(profilecard.getPrefLabel() + "@di.me");
+		else{
+			logger.warn("Profile card "+profilecard.asURI().toString()+" was created with no name");
+			dimeAccount.setPrefLabel(profilecard.asURI().toString() + "@di.me");
+		}
+		 accountManager.add(dimeAccount);
+		 
+		// create an access space and set di.me account as sharedThrough
+        AccessSpace accessSpace = modelFactory.getNSOFactory().createAccessSpace();
+        accessSpace.setSharedThrough(dimeAccount);
+        profilecard.setAccessSpace(accessSpace);
+        profilecard.getModel().addAll(accessSpace.getModel().iterator());       
+		
+	}
+	
+	
 
 	/**
 	 * Update profile

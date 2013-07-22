@@ -31,7 +31,7 @@ public class Profile extends Resource {
 
 	//TODO add postalAdress and other attributes after revision
 	private static final URI[] ITEMS_PROPERTIES = new URI[] { NCO.hasPersonName, NCO.hasAffiliation,
-		NCO.hasEmailAddress, NCO.hasPhoneNumber, NCO.hasBirthDate};
+		NCO.hasEmailAddress, NCO.hasPhoneNumber, NCO.hasBirthDate,NCO.hasPostalAddress,NCO.hobby,NCO.hasLocation};
 
 	
 	private static final Logger logger = LoggerFactory.getLogger(Profile.class);
@@ -103,13 +103,14 @@ public class Profile extends Resource {
 					put("imageUrl", object.asURI().toString());
 			} 
 		
-			// adding said 
-			this.put("said",serviceAccountId);
+			
 			
 
 		}
 		it.close();
-
+		// adding said 
+		this.put("said",serviceAccountId);
+		
 		if (!containsKey("name")) {
 			put("name", "Profile " + resource.asURI().toString());
 		}
