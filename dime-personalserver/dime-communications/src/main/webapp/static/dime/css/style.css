@@ -1954,7 +1954,7 @@ input[type="checkbox"] {
     float: left;
     clear: both;
     width: 98%;
-    overflow-y: scroll;
+    overflow-y: auto;
     height: 90%;
 }
 
@@ -1973,7 +1973,7 @@ input[type="checkbox"] {
 .DetailDialogPrivTrustElem > span{    
     float: left;
     margin-top: 3px;
-    margin-left: 78px;
+/*    margin-left: 78px;*/
 }
 .DetailDialogPrivTrustElem > div{    
     float: left;
@@ -2933,6 +2933,66 @@ input[type="checkbox"] {
     border-radius: 5px;
     border: 1px solid silver;
 }
+
+.livePostSender, .livePostReceiver, .livePostName{
+    float:left;
+    clear: both;
+    margin-top: 5px;
+}
+
+.livePostName > *{
+    float: left;
+    clear: both;
+}
+
+.livePostSender > div{
+    width: 388px;
+    min-height: 20px;
+    border: 1px solid silver;
+    border-radius: 5px;
+}
+
+.livePostSender > div>a{
+    float: left;
+}
+
+.livePostReceiver > div{
+    width: 388px;
+    min-height: 20px;
+    border: 1px solid silver;
+    border-radius: 5px;
+    max-height: 80px;
+    overflow: auto;
+}
+
+.livePostReceiver > div:hover{
+    border: solid 1px #5A9DD5;
+    background-color: #5a9dd5;
+    cursor: pointer;
+}
+
+.livePostReceiver > button{
+    float:right;
+    border: 0px solid;
+    background-color: #D7D9D7;
+    background-image: none;
+    color: buttontext;
+    padding: 2px 6px 3px;
+    border-radius: 5px;
+}
+.livePostReceiver > button:hover{
+    background-image: none;
+    background-color: #8F8E8F;
+    color: #F9F9F9;
+    text-decoration: underline;
+}
+
+.livePostHint{
+    float: right;
+    margin-right: 10px;
+    margin-top: 11px;
+}
+
 
 .orangeBubble{
     background-color: #F6C200;
