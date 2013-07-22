@@ -1353,6 +1353,13 @@ input[type="checkbox"] {
     background-color: #9CC6E6;	
 }
 
+.newMenuItemGroupCaption{
+    color: darkgray;
+    border-bottom: 1px solid silver;
+    margin-top: 5px;
+    text-align: center;
+}
+
 .newScreenButton {
     float: right;
     margin-top: 100px;	

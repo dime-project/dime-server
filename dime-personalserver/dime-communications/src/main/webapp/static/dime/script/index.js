@@ -1053,10 +1053,32 @@ DimeView = {
     updateNewButton: function(groupType){
         $('#actionButtonNew').removeClass('disabled');
 
+        var createPAMenuItems=function(){
+            var result=[];
+            var type = Dime.psMap.TYPE.PROFILEATTRIBUTE;
+            var paCategories = Dime.PACategory.getListOfCategories();
+
+            jQuery.each(paCategories, function(){
+
+                var pACategory = this;
+                var link= $('<a tabindex="-1" href="#" />')
+                .text('New '+pACategory.caption+' ..')
+                .clickExt(Dime.Dialog,function(){
+                        var newItem = Dime.psHelper.createNewItem(type, "My "+pACategory.caption);
+                        newItem.category=pACategory.name;
+                        Dime.Dialog.showNewItemModal(type, null, newItem);
+                    });
+
+                result.push($('<li/>').attr('role','menuitem').append(link));
+            });
+
+            return result;
+        }
+
         //populate new dialog
         var createMenuItem = function(type){
             var link= $('<a tabindex="-1" href="#" />')
-                .text('new '+Dime.psHelper.getCaptionForItemType(type)+' ..')
+                .text('New '+Dime.psHelper.getCaptionForItemType(type)+' ..')
                 .clickExt(Dime.Dialog,
                     function(event, jElement, type){Dime.Dialog.showNewItemModal(type);}, type);
             return $('<li/>').attr('role','menuitem').append(link);
@@ -1081,7 +1103,15 @@ DimeView = {
         } else if(groupType===Dime.psMap.TYPE.PROFILE){
             dropDownUl
                 .append(createMenuItem(Dime.psMap.TYPE.PROFILE))
-                .append(createMenuItem(Dime.psMap.TYPE.PROFILEATTRIBUTE));
+                .append($('<li/>').attr('role','menuitem')
+                    .addClass('newMenuItemGroupCaption')
+                        .text('New '+Dime.psHelper.getCaptionForItemType(Dime.psMap.TYPE.PROFILEATTRIBUTE))
+                    );
+            
+            var paItems = createPAMenuItems();
+            for (var j=0;j<paItems.length;j++){
+                dropDownUl.append(paItems[j]);
+            }   
 
         } else if(groupType===Dime.psMap.TYPE.SITUATION){
             dropDownUl

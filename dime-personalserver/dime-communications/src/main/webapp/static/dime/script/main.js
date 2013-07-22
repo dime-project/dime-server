@@ -4158,8 +4158,8 @@ Dime.DetailDialog.prototype = {
             this.item.value = {};
         }
         
-        var element = $('<div id="'+this.pAValueId+'" class="h2ModalScreen well DimeDetailDialogPAValues">Values:</div>');
-        var ul = $('<ul></ul>');
+        var element =$('<div/>').attr('id',this.pAValueId).addClass('h2ModalScreen well DimeDetailDialogPAValues');
+        var ul = $('<ul/>');
         element.append(ul);
      
         for (var i=0; i<category.keys.length;i++){
@@ -4191,7 +4191,11 @@ Dime.DetailDialog.prototype = {
         }
     },
     
-    getPrivTrustElement: function(item){
+    getPrivTrustElement: function(item, readOnly){
+
+        if (!Dime.privacyTrust.hasPrivTrust(item)){
+            return $('<span/>');
+        }
         
         var createButtonLabel= function(privTrust){
             return '<span class="'+privTrust.thinClassString+'" >'+ privTrust.caption + '</span>';
@@ -4205,8 +4209,7 @@ Dime.DetailDialog.prototype = {
             var levelEntry=this;
             var updatePrivTrust=function(){
                 Dime.privacyTrust.updatePrivacyTrust(item, levelEntry.limit);
-            };
-            
+            };            
             
             dropDownElements.push(new BSTool.DropDownEntry(this, createButtonLabel(this), updatePrivTrust));
         });
@@ -4215,9 +4218,13 @@ Dime.DetailDialog.prototype = {
         
         var result=$('<div/>')
         .addClass("DetailDialogPrivTrustElem")
-        .append('<span >'+(currPrivTrust.isPrivacy?"privacy:":"trust:")+'</span>')
-        .append(BSTool.createDropdown(createButtonLabel(currPrivTrust),
-            dropDownElements, "btn"))
+        .append('<span >'+(currPrivTrust.isPrivacy?"How private is this:":"Trust:")+'</span>');
+        if (!readOnly){
+            result.append(BSTool.createDropdown(createButtonLabel(currPrivTrust),
+                dropDownElements, "btn"))
+        }else{
+            result.append(createButtonLabel(currPrivTrust));
+        }
                 
         ;
         return result;
@@ -4229,7 +4236,6 @@ Dime.DetailDialog.prototype = {
         var dialogSelf = this;
 
          this.body
-            .append(this.createIcon(item, false))
             .append(this.createNameInput(item));
 
 
@@ -4358,6 +4364,9 @@ Dime.DetailDialog.prototype = {
         };
 
         var checkAndUpdateSendOk=function(){
+            if (dialogRef.readonly){
+                return;
+            }
 
             if (fromSaid && fromSaid.length>0 && receivers.length>0){
                 dialogRef.dialog.okButton.removeClass("hidden");
@@ -4434,7 +4443,7 @@ Dime.DetailDialog.prototype = {
                 .append($('<span/>').text("Title:"))
                 .append(this.createNameInput(item))
             )
-            .append(this.getPrivTrustElement(item))
+            .append(this.getPrivTrustElement(item,this.readonly))
             .append(
                 $('<div/>').addClass('DimeDetailDialogText')
                 .append(
@@ -4461,7 +4470,7 @@ Dime.DetailDialog.prototype = {
             .append(this.createNameInput(item));
 
         if(item.type!==Dime.psMap.TYPE.GROUP){
-            this.body.append(this.getPrivTrustElement(item))
+            this.body.append(this.getPrivTrustElement(item,this.readonly))
         }
 
         var childType = Dime.psHelper.getChildType(item.type);
@@ -4499,7 +4508,7 @@ Dime.DetailDialog.prototype = {
         this.body
             .append(this.createIcon(item, false))
             .append(this.createNameInput(item))
-            .append(this.getPrivTrustElement(item));
+            .append(this.getPrivTrustElement(item,this.readonly));
 
         if (item.downloadUrl && item.downloadUrl.length>0){
             var innerHtml = '<a href="' + Dime.psHelper.guessLinkURL(item.downloadUrl) + '" target="_blank">open</a>';
@@ -5519,10 +5528,20 @@ Dime.Dialog={
         
     },
 
+    showNewItemModal: function(type, message, newItem){
+        if (!newItem){
+            newItem = Dime.psHelper.createNewItem(type, "");
+        }
+        
+        var caption;
+        if (type===Dime.psMap.TYPE.PROFILEATTRIBUTE && newItem.category){
+            caption = "New "+Dime.PACategory.getCategoryByName(newItem.category)+' ...';
+        }else{
+            caption = "New "+ Dime.psHelper.getCaptionForItemType(type)+' ...';
+        }
 
-    showNewItemModal: function(type, message){
-        var caption = "New "+ Dime.psHelper.getCaptionForItemType(type)+' ...';
-        var dialog = new Dime.DetailDialog(caption, Dime.psHelper.createNewItem(type, ""), true, true, true, message, Dime.psMap.getInfoHtmlForType(type));
+        
+        var dialog = new Dime.DetailDialog(caption, newItem, true, true, true, message, Dime.psMap.getInfoHtmlForType(type));
         
         var callbackFunction = function(item, isOk){
             
