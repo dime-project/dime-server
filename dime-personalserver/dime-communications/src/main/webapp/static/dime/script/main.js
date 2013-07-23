@@ -4830,7 +4830,10 @@ Dime.ShareDialog = function(){
     .attr("aria-labelledby", "Share Dialog");
     
     this.body = $('<div class="modal-body" id="'+this.bodyId+'" ></div>');
-    
+
+    this.okButton = $('<button class="YellowMenuButton">Share</button>')
+            .clickExt(this, this.okHandler).addClass('inactiveButton');
+
     this.dialog
     //header
     .append(
@@ -4848,10 +4851,8 @@ Dime.ShareDialog = function(){
         .append($('<button class="YellowMenuButton" data-dismiss="modal" aria-hidden="true">Cancel</button>')
             .clickExt(this, this.cancelHandler)
             )
-        .append($('<button class="YellowMenuButton">OK</button>')
-            .clickExt(this, this.okHandler)
-            )   
-        );             
+        .append(this.okButton)
+    );
             
     this.initBody();
 
@@ -5035,6 +5036,13 @@ Dime.ShareDialog.prototype={
         if(this.itemsLabel){
             this.itemsLabel.text("Items ("+this.selectedItems.length+")");
         }
+        //update share button
+        if(this.checkValidity()){
+            this.okButton.removeClass('inactiveButton');
+        }else{
+            this.okButton.addClass('inactiveButton');
+        }
+
         //update warnings
         this.updateWarnings();
     },
