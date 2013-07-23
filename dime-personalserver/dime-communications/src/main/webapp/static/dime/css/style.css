@@ -2198,9 +2198,8 @@ input[type="checkbox"] {
 .DimeDetailDialogPAValues {
     float: left;
     clear: both;
-    width: 81%;
-    margin-bottom: 10px;
-    padding-right: 66px;
+    width: 93%;
+    margin-bottom: 10px;    
 }
 
 
@@ -2230,8 +2229,13 @@ input[type="checkbox"] {
     float: right;
 }
 
-.DimeDetailDialogPAValueListItemValue{
+.DimeDetailDialogPAValueListItemKey{
+    float:right;
+}
+input[type="text"].DimeDetailDialogPAValueListItemValue{
     margin-left: 6px;
+    float:right;
+    width: 313px;
 }
 
 #informationKeyValue {

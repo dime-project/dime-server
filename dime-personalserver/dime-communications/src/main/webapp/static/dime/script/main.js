@@ -4170,11 +4170,11 @@ Dime.DetailDialog.prototype = {
                 this.item.value[key]="";
             }
             
-            ul.append($('<li class="DimeDetailDialogPAValueListItem" />')
-                .append($('<span class="DimeDetailDialogPAValueListItemKey"/>').text(keyCaption))
+            ul.append($('<li class="DimeDetailDialogPAValueListItem" />')                
                 .append($('<input class="DimeDetailDialogPAValueListItemValue" type="text"/>')
                     .attr('id',this.pAValueListItemValueIdPrefix+key)
                     .attr('value',this.item.value[key]))
+                .append($('<span class="DimeDetailDialogPAValueListItemKey"/>').text(keyCaption))
                 );
         }
              
