@@ -4369,13 +4369,16 @@ Dime.DetailDialog.prototype = {
             }
 
             if (fromSaid && fromSaid.length>0 && receivers.length>0){
-                dialogRef.dialog.okButton.removeClass("hidden");
+                dialogRef.dialog.okButton.removeClass('inactiveButton');
+                dialogRef.dialog.okButton.on('click');
                 dialogRef.dialog.okButton.text("Share");
                 //remove the hint
                 dialogRef.dialog.footerElement.find('.livePostHint').remove();
                 sendIsHidden=false;
             }else if (!sendIsHidden){
-                dialogRef.dialog.okButton.addClass("hidden");
+                dialogRef.dialog.okButton.addClass('inactiveButton');
+                dialogRef.dialog.okButton.off('click');
+                dialogRef.dialog.okButton.text("Share");
                 dialogRef.dialog.footerElement.append($('<span/>').addClass('livePostHint').text('Please select "From" and "Recipients" to share livepost!'))
                 sendIsHidden=true;
             }
@@ -4440,7 +4443,7 @@ Dime.DetailDialog.prototype = {
         }
         this.body
             .append($('<div/>').addClass('livePostName')
-                .append($('<span/>').text("Title:"))
+                .append($('<span/>').text("Subject:"))
                 .append(this.createNameInput(item))
             )
             .append(this.getPrivTrustElement(item,this.readonly))
