@@ -62,6 +62,7 @@ public class ProfileAttribute extends Resource {
 
 		node = ModelUtils.findObject(resource.getModel(), resource.asResource(), NCO.addressLocation);
 		if (node != null){
+			
 			try{
 				postalAddress.put("addressLocation", node.asURI().toString());
 			}
@@ -186,7 +187,7 @@ public class ProfileAttribute extends Resource {
 
 		node = ModelUtils.findObject(resource.getModel(), resource.asResource(), NCO.org);
 		if (node != null)
-			try{
+			try{			
 				affiliation.put("org", node.asURI().toString());
 			}
 		catch(ClassCastException e){
@@ -377,8 +378,8 @@ public class ProfileAttribute extends Resource {
 				this.put("name", nameNode.asLiteral().toString());
 			}
 			else{
-				//set a name if it has none
-				this.put("name", this.getCategory()+" "+resource.asURI().toString());
+				//set a blank name if it has none
+				this.put("name", "");
 			}
 			
 			// Uff, and this is even worse, the 'name' of the profile
@@ -476,8 +477,7 @@ public class ProfileAttribute extends Resource {
 				}
 				else if(!this.get("category").toString().equals("Hobby")){
 					//if it has no name set one 
-					rModel.addStatement(resourceUri, NAO.prefLabel,
-							new PlainLiteralImpl(this.get("category").toString()+" "+resourceUri.toString()));
+					rModel.addStatement(resourceUri, NAO.prefLabel,	new PlainLiteralImpl(""));
 				}
 
 		// Get the value of this ProfileAttribute
