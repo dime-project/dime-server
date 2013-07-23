@@ -204,19 +204,20 @@ public abstract class ShareableManagerBase<T extends Resource> extends Connectio
 	private void assertExistence(T resource, String accountId) throws NotFoundException, InfosphereException {
 		ResourceStore resourceStore = getResourceStore();
 
-		Account account = resourceStore.get(new URIImpl(accountId), Account.class);
+		URI accountUri = new URIImpl(accountId);
+		Account account = resourceStore.get(accountUri, Account.class);
 		Person person = resourceStore.find(Person.class)
 				.where(PIMO.occurrence).is(Query.X)
 				.where(Query.X, NIE.dataSource).is(account)
 				.first();
 
 		if (person == null) {
-			throw new InfosphereException("Cannot update resource "+resource+" for account "+accountId+": ");
+			throw new InfosphereException("Cannot update resource "+resource+" for account "+accountId+": there's no person associated with it.");
 		} else {
 			Resource sharedItem = resourceStore.get(resource);
-			if (!sharedItem.getModel().contains(resource, NSO.sharedBy, person)) {
+			if (!sharedItem.getModel().contains(resource, NSO.sharedBy, accountUri)) {
 				throw new InfosphereException("Cannot update resource "+resource+" for account "+accountId
-						+": this resource has not been shared previously.");
+						+": this resource has not been shared previously through that account.");
 			}
 		}
 	}

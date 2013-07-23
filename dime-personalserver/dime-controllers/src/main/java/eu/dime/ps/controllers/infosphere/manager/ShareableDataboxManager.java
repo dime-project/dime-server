@@ -71,7 +71,27 @@ public class ShareableDataboxManager extends ShareableManagerBase<DataContainer>
 	
 	@Override
 	public void add(DataContainer databox, String sharedBy, String sharedWith) throws InfosphereException {
+		// clean up databox metadata
+		cleanup(databox);
+		
+		// adding the databox
+		super.add(databox, sharedBy, sharedWith);
+	}
 
+	@Override
+	public void update(DataContainer databox, String sharedBy, String sharedWith) throws InfosphereException {
+		// clean up databox metadata
+		cleanup(databox);
+		
+		// adding the databox
+		super.update(databox, sharedBy, sharedWith);
+	}
+
+	/**
+	 * Removes metadata that shouldn't be there for a shared databox.
+	 * @param databox to be cleaned up
+	 */
+	private void cleanup(DataContainer databox) {
 		// force the type to be only nfo:DataContainer
 		databox.getModel().removeStatements(databox, RDF.type, Variable.ANY);
 		databox.getModel().addStatement(databox, RDF.type, NFO.DataContainer);
@@ -82,9 +102,6 @@ public class ShareableDataboxManager extends ShareableManagerBase<DataContainer>
 		databox.getModel().removeStatements(Variable.ANY, RDF.type, NSO.AccessSpace);
 		databox.getModel().removeStatements(Variable.ANY, NSO.includes, Variable.ANY);
 		databox.getModel().removeStatements(Variable.ANY, NSO.excludes, Variable.ANY);
-		
-		// adding the databox
-		super.add(databox, sharedBy, sharedWith);
 	}
 	
 }
