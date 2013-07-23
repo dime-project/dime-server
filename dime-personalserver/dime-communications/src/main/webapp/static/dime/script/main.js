@@ -3712,13 +3712,15 @@ Dime.SelectDialog = function(name, selectionName, multiSelect){
     this.selectedListId=this.dialogId+"_selList";
     
     this.lastSelectedElementGuid="";
-    this.selectedList=$('<ul id="'+this.selectedListId+'" class="selectionDialogBodyList" ></ul>');
-    this.unselectedList=$('<ul id="'+this.unselectedListId+'" class="selectionDialogBodyList" ></ul>');
+    this.selectedList= $('<ul/>').attr('id',this.selectedListId).addClass('selectionDialogBodyList');
+    this.unselectedList= $('<ul/>').attr('id',this.unselectedListId).addClass('selectionDialogBodyList');
     
     
     this.body = $('<div class="dimeDialogBody selectionDialogBody" ></div>')
     .append(this.searchElement)
+    .append($('<div/>').addClass('selectionDialogListCaption').text("Selected:"))
     .append(this.selectedList)
+    .append($('<div/>').addClass('selectionDialogListCaption').text("Other:"))
     .append(this.unselectedList);
       
 };
@@ -5077,7 +5079,7 @@ Dime.ShareDialog.prototype={
         
          
         var showAddReceiverDlg=function(event, jqueryItem){
-            var dialog = new Dime.SelectDialog("Share With", "Recipients for sharing", true);
+            var dialog = new Dime.SelectDialog("Share With", "recipients for sharing", true);
        
             var itemLoadingFunction = function(){   
 

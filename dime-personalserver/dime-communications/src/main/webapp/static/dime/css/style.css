@@ -2095,11 +2095,21 @@ input[type="checkbox"] {
 /*Modal: Select Image*/
 
 .SelectDialog{
-    top:52%
+    top:52%;
+    width: 718px;
+    left: 44%;
+}
+
+.SelectDialog > .modal-body{
+    max-height: 455px;
 }
 
 .selectDlgSearchInput[type="text"]{
     width:98%;
+}
+
+.selectionDialogListCaption{
+    margin-top: 7px;
 }
 
 
