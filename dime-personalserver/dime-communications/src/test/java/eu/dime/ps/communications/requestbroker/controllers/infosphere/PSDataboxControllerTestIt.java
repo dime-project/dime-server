@@ -45,6 +45,7 @@ import eu.dime.ps.semantic.model.nie.DataObject;
 import eu.dime.ps.semantic.model.pimo.Person;
 import eu.dime.ps.semantic.privacy.PrivacyPreferenceType;
 import eu.dime.ps.storage.jfix.util.Arrays;
+import org.junit.Ignore;
 
 public class PSDataboxControllerTestIt extends PSInfosphereControllerTestIt {
 
@@ -174,7 +175,7 @@ public class PSDataboxControllerTestIt extends PSInfosphereControllerTestIt {
 	}
 
 
-
+    @Ignore
 	@Test
 	public void testGetDataboxWellFormedJSON() throws Exception {
 
