@@ -457,11 +457,10 @@ public class AdvisoryController extends AdvisoryBase {
 		return map;
 	}
 	
+    @Override
 	public ResourceStore getResourceStore() throws RepositoryException {
-		if (this.resourceStore== null){
-			this.resourceStore = connectionProvider.getConnection(TenantContextHolder.getTenant().toString()).getResourceStore();
-		}
-		return this.resourceStore;
+		return connectionProvider.getConnection(TenantContextHolder.getTenant().toString()).getResourceStore();
+		
 	}
 	
 }

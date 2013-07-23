@@ -37,10 +37,11 @@ public class PSDumpController {
 		} catch (RepositoryException e) {
 			Response.serverError("Couldn't get connection to RDF services: " + e.getMessage(), e);
 		} finally {
-			if (connection != null)
-				try {
-					connection.close();
-				} catch (RepositoryException e) {}
+			if (connection != null) {
+                try {
+                    connection.close();
+                } catch (RepositoryException e) {}
+            }
 		}
 		
 		return Response.ok();

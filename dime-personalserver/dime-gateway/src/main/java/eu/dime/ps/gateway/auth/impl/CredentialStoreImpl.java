@@ -50,20 +50,7 @@ public class CredentialStoreImpl implements CredentialStore{
 		super();
 	}
 	
-	/**
-	 * get the resourcestore for a tenant. maybe not needed anymore?
-	 * @param accountId
-	 * @return
-	 * @throws RepositoryStorageException
-	 */
-	private ResourceStore getResourceStore(String accountId) throws RepositoryStorageException {
-		try {
-			String tenantId = getTenant(accountId).getId().toString();
-			return connectionProvider.getConnection(tenantId).getResourceStore();
-		} catch (RepositoryException e) {
-			throw new RepositoryStorageException("Cannot retrieve ResourceStore object: "+e.getMessage(), e);
-		}
-	}
+
 
 	private Tenant getTenant(String accountId) {
 		ServiceAccount sa = ServiceAccount.findAllByAccountUri(accountId.toString());

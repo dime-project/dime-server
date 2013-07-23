@@ -40,16 +40,16 @@ public abstract class AdvisoryBase {
 	}
 	
 	protected ResourceStore getResourceStore() throws RepositoryException{
-		long tenant = TenantContextHolder.getTenant();
-		if (tenant > 0){
+		Long tenant = TenantContextHolder.getTenant();
+		if (tenant != null){
 			return connectionProvider.getConnection(String.valueOf(tenant)).getResourceStore();
 		}
 		return null;
 	}
 	
 	protected PimoService getPimoService() throws RepositoryException {
-		long tenant = TenantContextHolder.getTenant();
-		if (tenant > 0){
+		Long tenant = TenantContextHolder.getTenant();
+		if (tenant != null){
 			return connectionProvider.getConnection(String.valueOf(tenant)).getPimoService();
 		}
 		return null;
@@ -57,8 +57,8 @@ public abstract class AdvisoryBase {
 	
 
 	protected PrivacyPreferenceService getPrivPrefService() throws RepositoryException {
-		long tenant = TenantContextHolder.getTenant();
-		if (tenant > 0){
+		Long tenant = TenantContextHolder.getTenant();
+		if (tenant != null){
 			return connectionProvider.getConnection(String.valueOf(tenant)).getPrivacyPreferenceService();
 		}
 		return null;

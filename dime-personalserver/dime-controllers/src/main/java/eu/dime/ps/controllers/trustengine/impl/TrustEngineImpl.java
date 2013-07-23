@@ -46,13 +46,12 @@ import eu.dime.ps.semantic.model.pimo.PersonGroup;
 import eu.dime.ps.semantic.model.ppo.PrivacyPreference;
 import eu.dime.ps.semantic.privacy.PrivacyPreferenceService;
 import eu.dime.ps.semantic.rdf.ResourceStore;
+import java.util.logging.Level;
 
 
 public class TrustEngineImpl implements TrustEngine {
 		
 	Logger logger = Logger.getLogger(TrustEngineImpl.class);
-	private ResourceStore resourceStore;
-	private PrivacyPreferenceService privacyPrefService;
 	private PersonManager personManager;
 	private ProfileAttributeManager profileAttributeManager;
 	private LivePostManager livePostManager;
@@ -998,25 +997,21 @@ public class TrustEngineImpl implements TrustEngine {
 	List<Resource> resolvedList = new ArrayList<Resource>();
 	
 	public ResourceStore getResourceStore() {
-		if (this.resourceStore== null){
-			try {
-				this.resourceStore = connectionProvider.getConnection(TenantContextHolder.getTenant().toString()).getResourceStore();
-			} catch (RepositoryException e) {
-				logger.error("Could not get ResourceStore", e);
-			}
-		}
-		return this.resourceStore;
+        try {
+            return connectionProvider.getConnection(TenantContextHolder.getTenant().toString()).getResourceStore();
+        } catch (RepositoryException ex) {
+            java.util.logging.Logger.getLogger(TrustEngineImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
 	}
 	
 	public PrivacyPreferenceService getPrivacyPreferenceService(){
-		if (this.privacyPrefService == null){
-			try {
-				this.privacyPrefService = connectionProvider.getConnection(TenantContextHolder.getTenant().toString()).getPrivacyPreferenceService();
-			} catch (RepositoryException e) {
-				logger.error("Could not get PrivacyPreferenceService", e);
-			}
-		}
-		return this.privacyPrefService;
+        try {
+            return connectionProvider.getConnection(TenantContextHolder.getTenant().toString()).getPrivacyPreferenceService();
+        } catch (RepositoryException ex) {
+            java.util.logging.Logger.getLogger(TrustEngineImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
 	}
 
 	
