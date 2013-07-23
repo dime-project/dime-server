@@ -2712,10 +2712,39 @@ input[type="text"].DimeDetailDialogPAValueListItemValue{
     cursor: pointer;
 }
 
+.shareDlgSection .metaDataShareProfile {
+    background-color: none;
+    border:none;
+    border-radius:5px;
+    float:left;
+    margin-left:4px;
+    width: 342px;
+    padding-bottom: 5px;
+
+}
+
+.shareDlgSection .metaDataShareItem {
+    background-color: none;
+    border:none;
+    border-radius:5px;
+    width: 323px;
+}
+
+
 .shareDlgItem{
 
-    width: 90%;
     float: left;
+    background-color: #D7D9D7;
+    border-radius: 5px;
+    margin-top: 1px;
+    
+
+    width: 326px;
+    margin-left: 3px;
+    
+
+    padding: 3px;
+
 }
 .shareDlgItem:hover{
     /* border: solid 1px #5A9DD5;*/
