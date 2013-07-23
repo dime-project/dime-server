@@ -1875,6 +1875,28 @@ Dime.initProcessor.registerFunction(function(callback){
     callback();
 });
 
+
+/**
+ * show info page on first login
+ *
+ * handler for URL-parameter
+ */
+Dime.initProcessor.registerFunction(function(callback){
+    var getUsernotificationCallback=function(userNotifications){
+        var unReadUNs=[];
+        jQuery.each(userNotifications, function(){
+           if (!this.read){
+               unReadUNs.push(this);
+           }
+        });
+        Dime.Navigation.updateNotificationBar(unReadUNs);
+
+    }
+    Dime.REST.getAll(Dime.psMap.TYPE.USERNOTIFICATION, getUsernotificationCallback, "@me", this);
+
+    callback();
+});
+
 //---------------------------------------------
 //#############################################
 //  Dime.initProcessor - END

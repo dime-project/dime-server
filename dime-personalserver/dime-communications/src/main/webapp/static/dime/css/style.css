@@ -2712,19 +2712,16 @@ input[type="text"].DimeDetailDialogPAValueListItemValue{
     cursor: pointer;
 }
 
-.shareDlgSection .metaDataShareProfile {
-    background-color: none;
+.shareDlgSection .metaDataShareProfile {    
     border:none;
     border-radius:5px;
     float:left;
     margin-left:4px;
     width: 342px;
     padding-bottom: 5px;
-
 }
 
-.shareDlgSection .metaDataShareItem {
-    background-color: none;
+.shareDlgSection .metaDataShareItem {    
     border:none;
     border-radius:5px;
     width: 323px;
@@ -2973,13 +2970,14 @@ input[type="text"].DimeDetailDialogPAValueListItemValue{
 
 
 .dimeDetailDialogMessage{
+    background-color: #F6E39B;
+    min-width: 438px;
     float:left;
     clear: both;
     margin-bottom: 10px;
     margin-left: 19px;
     font-weight: bold;
     padding: 3px;
-    background-color: #F6C200;
     border-radius: 5px;
     border: 1px solid silver;
 }
