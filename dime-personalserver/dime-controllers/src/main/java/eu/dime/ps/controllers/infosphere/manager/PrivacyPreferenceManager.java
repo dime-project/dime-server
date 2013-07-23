@@ -1,5 +1,7 @@
 package eu.dime.ps.controllers.infosphere.manager;
 
+import ie.deri.smile.rdf.TripleStore;
+import ie.deri.smile.vocabulary.NIE;
 import ie.deri.smile.vocabulary.NSO;
 import ie.deri.smile.vocabulary.PPO;
 
@@ -28,6 +30,7 @@ import eu.dime.ps.semantic.model.ppo.PrivacyPreference;
 import eu.dime.ps.semantic.privacy.PrivacyPreferenceType;
 import eu.dime.ps.semantic.query.Query;
 import eu.dime.ps.semantic.rdf.ResourceStore;
+import eu.dime.ps.semantic.service.impl.PimoService;
 
 /**
  * Base implementation of a manager for PrivacyPreference objects.
@@ -64,6 +67,8 @@ public abstract class PrivacyPreferenceManager<T extends Resource> extends InfoS
 	public void update(T privacyPreference) throws InfosphereException {
 		Person me = getMe();
 		Model model = privacyPreference.getModel();
+		TripleStore tripleStore = getTripleStore();
+		PimoService pimoService = getPimoService();
 
 		// if nso:hasPrivacyPreference is missing, we set the owner of the store
 		// but only for resources of type ppo:PrivacyPreference
@@ -72,9 +77,13 @@ public abstract class PrivacyPreferenceManager<T extends Resource> extends InfoS
 			model.addStatement(me, NSO.hasPrivacyPreference, privacyPreference);
 		}
 		
+		// remove all files from databox (to detect a databox is empty, etc.) 
+		tripleStore.removeStatements(pimoService.getPimoUri(), privacyPreference, NIE.hasPart, Variable.ANY);
+		tripleStore.removeStatements(pimoService.getPimoUri(), privacyPreference, PPO.appliesToResource, Variable.ANY);
+		
 		// save the PrivacyPreference instance
 		try {
-			getPimoService().update(privacyPreference);
+			pimoService.update(privacyPreference, true);
 		} catch (NotFoundException e) {
 			throw new InfosphereException("Could not update privacy preference: " + e.getMessage(), e);
 		}

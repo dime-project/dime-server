@@ -10,6 +10,7 @@ import java.util.List;
 
 import org.ontoware.aifbcommons.collection.ClosableIterator;
 import org.ontoware.rdf2go.model.node.URI;
+import org.ontoware.rdf2go.model.node.Variable;
 import org.ontoware.rdf2go.model.node.impl.URIImpl;
 import org.ontoware.rdf2go.vocabulary.RDF;
 import org.ontoware.rdfreactor.schema.rdfs.Resource;
@@ -174,6 +175,7 @@ public class DataboxManagerImpl extends PrivacyPreferenceManager<DataContainer> 
 			databox.setLabel(PrivacyPreferenceType.DATABOX.toString());
 			
 			// add all files (nie:hasPart) as ppo:appliesToResource
+			databox.getModel().removeStatements(databox, PPO.appliesToResource, Variable.ANY);
 			ClosableIterator<DataObject> parts = databox.getAllPart();
 			while (parts.hasNext()) {
 				databox.getModel().addStatement(databox, PPO.appliesToResource, parts.next());
