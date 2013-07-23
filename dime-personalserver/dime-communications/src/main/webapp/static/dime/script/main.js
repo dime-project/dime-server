@@ -4540,6 +4540,13 @@ Dime.DetailDialog.prototype = {
         this.assembleFunctions.push(updateSituation);
 
     },
+    initPerson: function(item){
+        this.body
+            .append(this.createIcon(item, true))
+            .append(this.createNameInput(item))
+            .append(this.getPrivTrustElement(item,this.readonly));
+
+    },
     
     initDetails: function(){
         
@@ -4551,6 +4558,9 @@ Dime.DetailDialog.prototype = {
         
         if (Dime.psHelper.isParentType(item.type)){
             this.initParentType(item);
+        }else if (item.type===Dime.psMap.TYPE.PERSON){
+           this.initPerson(item);
+
 
         }else if (item.type===Dime.psMap.TYPE.LIVEPOST){
            this.initLivePost(item);
