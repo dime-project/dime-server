@@ -54,12 +54,11 @@ public class AdvisoryController extends AdvisoryBase {
 
 	Logger logger = Logger.getLogger(AdvisoryController.class);
 	
-	private ResourceStore resourceStore;
 	private PersonManager personManager;
 	private PersonGroupManager personGroupManager;	
 	private TrustEngine trustEngine;	
 	private ProfileCardManager profileCardManager;
-
+	
 	public void setPersonManager(PersonManager personManager) {
 		this.personManager = personManager;
 	}
@@ -113,7 +112,12 @@ public class AdvisoryController extends AdvisoryBase {
 		for (String thingID : sharedThingIDs){
 			RDFReactorThing sharedThing;
 			try {
-				sharedThing = getResource(new URIImpl(thingID));
+
+                sharedThing = getResource(new URIImpl(thingID));
+
+            } catch (RepositoryException ex) {
+                logger.warn("Could not retrieve resource for URI: "+thingID, ex);
+				continue;
 			} catch (NotFoundException e) {
 				logger.warn("Could not retrieve resource for URI: "+thingID, e);
 				continue;
@@ -147,8 +151,9 @@ public class AdvisoryController extends AdvisoryBase {
 		return warnings;
 	}
 	
-	private RDFReactorThing getResource(URI resUri) throws NotFoundException {
+	private RDFReactorThing getResource(URI resUri) throws NotFoundException, RepositoryException {
 		RDFReactorThing resource = null;
+        ResourceStore resourceStore=getResourceStore();
 		if (resourceStore.isTypedAs(resUri, NIE.DataObject)){
 			resource = resourceStore.get(resUri, DataObject.class);
 		} else if (resourceStore.isTypedAs(resUri, DLPO.LivePost)){
@@ -187,6 +192,7 @@ public class AdvisoryController extends AdvisoryBase {
 		//TODO: get Profile object, get mySaid,
 		PrivacyPreference pc;
 		try {
+            ResourceStore resourceStore=getResourceStore();
 			pc = resourceStore.get(new URIImpl(profile), PrivacyPreference.class);
 			Set<Person> set = new HashSet<Person>();
 			if (pc.hasAccessSpace()){
