@@ -106,6 +106,7 @@ public class PrivacyAdvisoryController {
 			
 		} catch (Exception e) {
 			logger.error("Catched exception when calculating advisory", e);
+            return Response.serverError(e.getMessage(), e);
 		}
 		
 		return Response.ok(data);

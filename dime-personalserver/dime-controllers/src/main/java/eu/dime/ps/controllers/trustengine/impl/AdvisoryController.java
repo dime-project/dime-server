@@ -96,8 +96,10 @@ public class AdvisoryController extends AdvisoryBase {
 			warnings.addAll(getReceiverWarnings(persons, sharedThingIDs));
 		} catch (RepositoryException e) {
 			logger.error("Oups, something went wrong. ",e);
+            throw new InfosphereException(e.getMessage(), e);
 		} catch (ClassCastException e) {
 			logger.error("Oups, something went wrong. ",e);
+            throw new InfosphereException(e.getMessage(), e);
 		}
 		return warnings;
 
