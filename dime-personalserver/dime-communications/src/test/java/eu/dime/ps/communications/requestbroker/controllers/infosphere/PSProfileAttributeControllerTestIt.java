@@ -195,7 +195,7 @@ public class PSProfileAttributeControllerTestIt extends PSInfosphereControllerTe
 		URI uri = new URIImpl(guid);
 
 		assertTrue(pimo.contains(uri, RDF.type,NCO.PersonName));		
-		assertTrue(pimo.contains(uri, NAO.prefLabel,"PersonName "+guid));
+		assertTrue(pimo.contains(uri, NAO.prefLabel,""));
 		//assertTrue(pimo.contains(uri, NAO.created, new DatatypeLiteralImpl("1970-01-16T11:53:44.999Z", XSD._dateTime)));	
 		assertTrue(pimo.contains(uri, NCO.nameHonorificSuffix, ""));
 		assertTrue(pimo.contains(uri, NCO.nameFamily,"gomez"));
@@ -259,7 +259,7 @@ public class PSProfileAttributeControllerTestIt extends PSInfosphereControllerTe
 
 		assertTrue(pimo.contains(uri, RDF.type,NCO.PersonName));
 		assertTrue(pimo.contains(uri, NAO.creator,"urn:chuck:ChuckNorris"));
-		assertTrue(pimo.contains(uri, NAO.prefLabel,"PersonName "+guid));
+		assertTrue(pimo.contains(uri, NAO.prefLabel,""));
 		//assertTrue(pimo.contains(uri, NAO.created, new DatatypeLiteralImpl("1970-01-16T11:53:44.999Z", XSD._dateTime)));	
 		assertTrue(pimo.contains(uri, NCO.nameHonorificSuffix, ""));
 		assertTrue(pimo.contains(uri, NCO.nameFamily,"gomez"));
