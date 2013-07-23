@@ -1509,6 +1509,7 @@ DimeView.addToViewMap(new DimeView.viewMapEntry('personResourceNavigation', fals
 DimeView.addToViewMap(new DimeView.viewMapEntry('settingsNavigationContainer', false, true, false));
 //the following are deactivated by default and only shown when required
 DimeView.addToViewMap(new DimeView.viewMapEntry('dropzoneNavigation', false, false, false));
+DimeView.addToViewMap(new DimeView.viewMapEntry('globalItemNavigation', false, false, false));
 
 
 //---------------------------------------------
