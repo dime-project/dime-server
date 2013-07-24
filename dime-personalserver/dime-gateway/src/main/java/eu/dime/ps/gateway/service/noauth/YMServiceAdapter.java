@@ -14,6 +14,7 @@ import eu.dime.commons.dto.Place;
 import eu.dime.commons.dto.SAdapterSetting;
 import eu.dime.ps.gateway.exception.AttributeNotSupportedException;
 import eu.dime.ps.gateway.exception.InvalidLoginException;
+import eu.dime.ps.gateway.exception.ServiceException;
 import eu.dime.ps.gateway.exception.ServiceNotAvailableException;
 import eu.dime.ps.gateway.service.ServiceAdapterBase;
 import eu.dime.ps.gateway.service.ServiceResponse;
@@ -59,7 +60,7 @@ public class YMServiceAdapter extends ServiceAdapterBase implements /*ExternalSe
 	@Override
 	public ServiceResponse[] getRaw(String attribute)
 			throws AttributeNotSupportedException,
-			ServiceNotAvailableException, InvalidLoginException {
+			ServiceNotAvailableException, InvalidLoginException, ServiceException {
 
 		String response = null;
 
@@ -94,7 +95,7 @@ public class YMServiceAdapter extends ServiceAdapterBase implements /*ExternalSe
 	 * @throws ServiceNotAvailableException 
 	 * @throws UnsupportedEncodingException 
 	 */
-	public void updatePlace(Place place) throws UnsupportedEncodingException, ServiceNotAvailableException {
+	public void updatePlace(Place place) throws UnsupportedEncodingException, ServiceNotAvailableException, ServiceException {
 		this.ymServiceWrapper.updatePOI(place, this.sadapter.getSetting(YMServiceAdapter.USERNAME), this.sadapter.getSetting(YMServiceAdapter.PASSWORD));
 	}
 	

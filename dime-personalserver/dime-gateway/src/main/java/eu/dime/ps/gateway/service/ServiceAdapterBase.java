@@ -3,15 +3,11 @@ package eu.dime.ps.gateway.service;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 
 import org.ontoware.rdfreactor.schema.rdfs.Resource;
-import org.scribe.model.Token;
 
 import eu.dime.commons.dto.SAdapter;
 import eu.dime.commons.dto.SAdapterSetting;
@@ -20,6 +16,7 @@ import eu.dime.ps.gateway.exception.AttributeNotSupportedException;
 import eu.dime.ps.gateway.exception.InvalidDataException;
 import eu.dime.ps.gateway.exception.InvalidLoginException;
 import eu.dime.ps.gateway.exception.RateLimitException;
+import eu.dime.ps.gateway.exception.ServiceException;
 import eu.dime.ps.gateway.exception.ServiceNotAvailableException;
 import eu.dime.ps.gateway.policy.PolicyManager;
 import eu.dime.ps.gateway.policy.PolicyManagerImpl;
@@ -143,10 +140,10 @@ public abstract class ServiceAdapterBase implements ServiceAdapter {
      * @throws InvalidLoginException
      */
     public abstract ServiceResponse[] getRaw(String attribute)
-            throws AttributeNotSupportedException, ServiceNotAvailableException, InvalidLoginException;
+            throws AttributeNotSupportedException, ServiceNotAvailableException, InvalidLoginException, ServiceException;
 
     public <T extends Resource> Collection<T> get(String attribute, Class<T> returnType)
-            throws AttributeNotSupportedException, ServiceNotAvailableException, InvalidLoginException {
+            throws AttributeNotSupportedException, ServiceNotAvailableException, InvalidLoginException, ServiceException {
         this.checkRateLimit();
         this.policyManager.before_get(this, attribute, returnType);
         Collection<T> ret = this._get(attribute, returnType);
@@ -155,7 +152,7 @@ public abstract class ServiceAdapterBase implements ServiceAdapter {
     }
 
     protected <T extends Resource> Collection<T> _get(String attribute, Class<T> returnType)
-            throws AttributeNotSupportedException, ServiceNotAvailableException, InvalidLoginException {
+            throws AttributeNotSupportedException, ServiceNotAvailableException, InvalidLoginException, ServiceException {
         try {
             String xml = null;
             ServiceResponse response = this.getRaw(attribute)[0];
@@ -281,13 +278,13 @@ public abstract class ServiceAdapterBase implements ServiceAdapter {
     }
 
     public <T extends Resource> Collection<T> search(String attribute,
-            Resource values, Class<T> returnType) throws ServiceNotAvailableException {
+            Resource values, Class<T> returnType) throws ServiceNotAvailableException, ServiceException {
         // TODO Auto-generated method stub
         return null;
     }
 
     public <T extends Resource> Collection<T> search(Resource values,
-            Class<T> returnType) throws ServiceNotAvailableException {
+            Class<T> returnType) throws ServiceNotAvailableException, ServiceException {
         // TODO Auto-generated method stub
         return null;
     }

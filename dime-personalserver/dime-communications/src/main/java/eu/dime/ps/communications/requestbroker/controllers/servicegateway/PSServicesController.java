@@ -26,6 +26,7 @@ import eu.dime.commons.dto.Entry;
 import eu.dime.commons.dto.ExternalNotificationDTO;
 import eu.dime.commons.dto.Request;
 import eu.dime.commons.dto.Response;
+import eu.dime.commons.dto.Response.Status;
 import eu.dime.commons.notifications.DimeInternalNotification;
 import eu.dime.commons.notifications.user.UNRefToItem;
 import eu.dime.commons.notifications.user.UserNotification;
@@ -44,6 +45,7 @@ import eu.dime.ps.gateway.ServiceGateway;
 import eu.dime.ps.gateway.auth.CredentialStore;
 import eu.dime.ps.gateway.exception.AttributeNotSupportedException;
 import eu.dime.ps.gateway.exception.InvalidLoginException;
+import eu.dime.ps.gateway.exception.ServiceException;
 import eu.dime.ps.gateway.exception.ServiceNotAvailableException;
 import eu.dime.ps.gateway.service.ResourceAttributes;
 import eu.dime.ps.gateway.service.internal.DimeServiceAdapter;
@@ -276,6 +278,8 @@ public class PSServicesController {
 			logger.warn("Error obtaining the resources shared: "
 					+ e.getMessage());
 			return Response.serverError(e.getMessage(), e);
+		} catch (ServiceException e) {
+			return Response.status(Status.valueOf(e.getDetailCode()), e.getMessage(), e);
 		}
 
 		// Notify to UI
@@ -301,7 +305,7 @@ public class PSServicesController {
 			ExternalNotificationDTO jsonNotification, String saidUriSender,
 			String saidUriReceiver) throws UnsupportedEncodingException,
 			AttributeNotSupportedException, ServiceNotAvailableException,
-			InvalidLoginException, InfosphereException {
+			InvalidLoginException, InfosphereException, ServiceException {
 
 		String saidNameSender = jsonNotification.getSaidSender();
 		String objectSharedType = ResourceAttributes.ATTR_RESOURCE;
@@ -489,7 +493,7 @@ public class PSServicesController {
 	private String requestCredentialsAndProfile(String saidNameSender,
 			String saidNameReceiver, String saidUriReceiver)
 					throws RepositoryStorageException, InfosphereException,
-					AttributeNotSupportedException, ServiceNotAvailableException {
+					AttributeNotSupportedException, ServiceNotAvailableException, ServiceException {
 
 		String saidUriSender = null;
 		DimeServiceAdapter adapter = serviceGateway

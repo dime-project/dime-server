@@ -1,12 +1,9 @@
 package eu.dime.ps.gateway.proxy;
 
 import java.io.BufferedInputStream;
-
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -23,7 +20,6 @@ import javax.net.ssl.X509TrustManager;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.http.HttpEntity;
-import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.auth.AuthScope;
@@ -33,7 +29,6 @@ import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.conn.ClientConnectionManager;
-import org.apache.http.conn.params.ConnRoutePNames;
 import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
 import org.apache.http.conn.ssl.SSLSocketFactory;
@@ -48,6 +43,7 @@ import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
 import eu.dime.commons.util.HttpUtils;
+import eu.dime.ps.gateway.exception.ServiceException;
 import eu.dime.ps.gateway.exception.ServiceNotAvailableException;
 
 /**
@@ -55,7 +51,6 @@ import eu.dime.ps.gateway.exception.ServiceNotAvailableException;
  * 
  * @author Sophie.Wrobel
  * @author <a href="mailto:bourimi@wiwi.uni-siegen.de"> Mohamed Bourimi (mbourimi)</a>
- * @author Ismael Rivera
  */
 public class HttpRestProxy implements ServiceProxy {
 
@@ -125,7 +120,7 @@ public class HttpRestProxy implements ServiceProxy {
 	 * @see
 	 * eu.dime.ps.communications.services.ServiceProxy#query(java.lang.String)
 	 */
-	public String get(String query) throws ServiceNotAvailableException {
+	public String get(String query) throws ServiceNotAvailableException, ServiceException {
 		return get(query, new HashMap<String, String>(0));
 	}
 	
@@ -135,10 +130,11 @@ public class HttpRestProxy implements ServiceProxy {
 	 * @see
 	 * eu.dime.ps.communications.services.ServiceProxy#query(java.lang.String, java.util.Map)
 	 */
-	public String get(String query, Map<String, String> headers) throws ServiceNotAvailableException {
+	public String get(String query, Map<String, String> headers) throws ServiceNotAvailableException, ServiceException {
 
 		StringBuilder result = new StringBuilder();
 		this.client = this.getConnection(query);
+		int responseCode = -1;
 
 		// execute the GET
 		try {
@@ -156,7 +152,8 @@ public class HttpRestProxy implements ServiceProxy {
 			logger.info("Executing GET request: " + httpget.getRequestLine());
 			HttpResponse response = this.client.execute(httpget);
 			HttpEntity entity = response.getEntity();
-
+			responseCode = response.getStatusLine().getStatusCode();
+			
 			try {
 				char[] buffer = new char[4*1024];
 				int length;
@@ -177,6 +174,12 @@ public class HttpRestProxy implements ServiceProxy {
 		} finally {
 			// We don't want to shut down!
 			// this.client.getConnectionManager().shutdown();
+		}
+		
+		logger.debug("GET " + this.url + " returned: ["+responseCode+"] " + result.toString());
+		
+		if (responseCode >= 400) {
+			throw new ServiceException("GET " + this.url + " returned: " + result.toString(), Integer.toString(responseCode));
 		}
 
 		return result.toString();

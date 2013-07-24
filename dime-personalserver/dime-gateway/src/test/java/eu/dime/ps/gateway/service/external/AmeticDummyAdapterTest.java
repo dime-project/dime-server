@@ -12,11 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import eu.dime.ps.gateway.exception.AttributeNotSupportedException;
-import eu.dime.ps.gateway.exception.InvalidLoginException;
 import eu.dime.ps.gateway.exception.ServiceNotAvailableException;
 import eu.dime.ps.gateway.service.ServiceResponse;
-import eu.dime.ps.gateway.service.external.AMETICDummyAdapter;
 import eu.dime.ps.gateway.transformer.Transformer;
 import eu.dime.ps.semantic.model.ncal.Event;
 import eu.dime.ps.semantic.model.nco.PersonContact;
@@ -52,27 +49,16 @@ public class AmeticDummyAdapterTest {
 	 * Test method for {@link eu.dime.ps.controllers.service.ametic.AMETICDummyAdapter#get(java.lang.String)}.
 	 */
 	@Test
-	public void testGet() {
-		try {
-			AMETICDummyAdapter adapter = createAdapter();
-                        Collection<PersonContact> attendees = adapter.get("/event/@me/173/@all", PersonContact.class);
-			assertTrue (attendees.size() > 0);	                        
-                        
-                        Collection<Event> eventDetails = adapter.get("/event/@me/173", Event.class);
-			assertTrue (eventDetails.size() > 0);                       		
-                        
-                        Collection<Event> allEvents = adapter.get("/event/@all", Event.class);
-			assertTrue (allEvents.size() > 0);
-		} catch (ServiceNotAvailableException e) {
-			e.printStackTrace();
-			fail ("Service not available: "+e.getMessage());
-		} catch (AttributeNotSupportedException e) {
-			e.printStackTrace();
-			fail ("Attribute not supported: "+e.getMessage());
-		} catch (InvalidLoginException e) {
-			e.printStackTrace();
-			fail("Invalid credentials: " + e.getMessage());
-		}
+	public void testGet() throws Exception {
+		AMETICDummyAdapter adapter = createAdapter();
+                    Collection<PersonContact> attendees = adapter.get("/event/@me/173/@all", PersonContact.class);
+		assertTrue (attendees.size() > 0);	                        
+                    
+                    Collection<Event> eventDetails = adapter.get("/event/@me/173", Event.class);
+		assertTrue (eventDetails.size() > 0);                       		
+                    
+                    Collection<Event> allEvents = adapter.get("/event/@all", Event.class);
+		assertTrue (allEvents.size() > 0);
 	}
 	
 	/**

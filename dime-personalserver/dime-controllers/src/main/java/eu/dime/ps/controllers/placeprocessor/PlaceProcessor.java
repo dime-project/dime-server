@@ -1,8 +1,6 @@
 package eu.dime.ps.controllers.placeprocessor;
 
 import java.io.UnsupportedEncodingException;
-
-
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -14,8 +12,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import eu.dime.commons.dto.Place;
-import eu.dime.commons.notifications.system.SystemNotification;
 import eu.dime.commons.notifications.DimeInternalNotification;
+import eu.dime.commons.notifications.system.SystemNotification;
 import eu.dime.context.exceptions.ContextException;
 import eu.dime.context.model.Constants;
 import eu.dime.context.model.api.IContextDataset;
@@ -34,16 +32,17 @@ import eu.dime.ps.gateway.ServiceGateway;
 import eu.dime.ps.gateway.exception.AttributeNotSupportedException;
 import eu.dime.ps.gateway.exception.InvalidLoginException;
 import eu.dime.ps.gateway.exception.ServiceAdapterNotSupportedException;
+import eu.dime.ps.gateway.exception.ServiceException;
 import eu.dime.ps.gateway.exception.ServiceNotAvailableException;
 import eu.dime.ps.gateway.service.ServiceResponse;
 import eu.dime.ps.gateway.service.noauth.PlaceServiceAdapter;
 import eu.dime.ps.gateway.service.noauth.SocialRecommenderAdapter;
-//import eu.dime.ps.gateway.service.noauth.YMServiceAdapter;
-//import eu.dime.ps.gateway.service.noauth.YMUtils;
 import eu.dime.ps.semantic.model.ModelFactory;
 import eu.dime.ps.semantic.model.dao.Account;
 import eu.dime.ps.semantic.model.nfo.Placemark;
 import eu.dime.ps.storage.entities.Tenant;
+//import eu.dime.ps.gateway.service.noauth.YMServiceAdapter;
+//import eu.dime.ps.gateway.service.noauth.YMUtils;
 
 public class PlaceProcessor {
 	
@@ -253,6 +252,8 @@ public class PlaceProcessor {
 			logger.error(e.getMessage(), e);
 		} catch (UnsupportedEncodingException e) {
 			logger.error(e.getMessage(), e);
+		} catch (ServiceException e) {
+			logger.error(e.getMessage(), e);
 		}
 		
 		if(raw == null || raw.length < 1 || raw[0].getResponse() == null) {
@@ -291,6 +292,8 @@ public class PlaceProcessor {
 					logger.error(e.toString());
 				} catch (InvalidLoginException e) {
 					logger.error(e.toString());
+				} catch (ServiceException e) {
+					logger.error(e.getMessage(), e);
 				}
 				if (srResponses != null && srResponses.length > 0)
 					srPlaces = placeParser.parseSocialRecServiceResponse(srResponses[0].getResponse());
@@ -385,6 +388,8 @@ public class PlaceProcessor {
 					logger.error(e.toString());
 				} catch (InvalidLoginException e) {
 					logger.error(e.toString());
+				} catch (ServiceException e) {
+					logger.error(e.getMessage(), e);
 				}
 			}
 			
@@ -402,6 +407,8 @@ public class PlaceProcessor {
 				logger.error(e.getMessage(), e);
 			} catch (ServiceNotAvailableException e) {
 				logger.error(e.getMessage(), e);
+			} catch (ServiceException e) {
+				logger.error(e.getMessage(), e);
 			} 
 			
 		} else {
@@ -418,6 +425,8 @@ public class PlaceProcessor {
 			} catch (UnsupportedEncodingException e) {
 				logger.error(e.getMessage(), e);
 			} catch (ServiceNotAvailableException e) {
+				logger.error(e.getMessage(), e);
+			} catch (ServiceException e) {
 				logger.error(e.getMessage(), e);
 			}
 		}
@@ -484,6 +493,8 @@ public class PlaceProcessor {
 			logger.error(e1.getMessage(), e1);
 		} catch (UnsupportedEncodingException e1) {
 			logger.error(e1.getMessage(), e1);
+		} catch (ServiceException e) {
+			logger.error(e.getMessage(), e);
 		}
 		if(raw == null || raw.length < 1 || raw[0].getResponse() == null) {
 			return null;
@@ -517,6 +528,8 @@ public class PlaceProcessor {
 				logger.error(e.toString());
 			} catch (InvalidLoginException e) {
 				logger.error(e.toString());
+			} catch (ServiceException e) {
+				logger.error(e.getMessage(), e);
 			}
 			if (srResponses != null && srResponses.length > 0)
 				srPlace = placeParser.parseSocialRecServiceResponse(srResponses[0].getResponse());

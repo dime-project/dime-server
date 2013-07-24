@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import eu.dime.ps.gateway.exception.AttributeNotSupportedException;
+import eu.dime.ps.gateway.exception.ServiceException;
 import eu.dime.ps.gateway.exception.ServiceNotAvailableException;
 import eu.dime.ps.gateway.proxy.HttpRestProxy;
 import eu.dime.ps.gateway.service.AttributeMap;
@@ -68,7 +69,7 @@ public class AMETICDummyAdapter extends BasicAuthServiceAdapter implements Exter
 	 */
 	@Override
 	public ServiceResponse[] getRaw(String attribute)
-			throws AttributeNotSupportedException, ServiceNotAvailableException {
+			throws AttributeNotSupportedException, ServiceNotAvailableException, ServiceException {
 
 		if (!this.isConnected()) {
 			throw new ServiceNotAvailableException();

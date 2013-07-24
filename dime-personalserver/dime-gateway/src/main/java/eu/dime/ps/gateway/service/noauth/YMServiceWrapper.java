@@ -34,6 +34,7 @@ import org.xml.sax.SAXException;
 import eu.dime.commons.dto.Place;
 import eu.dime.ps.gateway.exception.AttributeNotSupportedException;
 import eu.dime.ps.gateway.exception.InvalidLoginException;
+import eu.dime.ps.gateway.exception.ServiceException;
 import eu.dime.ps.gateway.exception.ServiceNotAvailableException;
 import eu.dime.ps.gateway.policy.PolicyManager;
 import eu.dime.ps.gateway.proxy.HttpRestProxy;
@@ -160,7 +161,7 @@ public class YMServiceWrapper {
 	 * @throws TransformerException 
 	 * @throws ParserConfigurationException 
 	 */
-	public String getPlaces(String parameters, String user, String passwd) throws ServiceNotAvailableException, AttributeNotSupportedException, InvalidLoginException, ParserConfigurationException, TransformerException, IOException {
+	public String getPlaces(String parameters, String user, String passwd) throws ServiceNotAvailableException, AttributeNotSupportedException, InvalidLoginException, ParserConfigurationException, TransformerException, IOException, ServiceException {
 		
 		// Get the POIs for the given position
 		String query = URLEncoder.encode(this.staticParameter + parameters, "UTF-8");
@@ -195,7 +196,7 @@ public class YMServiceWrapper {
 	 * @throws ServiceNotAvailableException 
 	 * @throws UnsupportedEncodingException 
 	 */
-	public void updatePOI(Place place, String user, String passwd) throws UnsupportedEncodingException, ServiceNotAvailableException {
+	public void updatePOI(Place place, String user, String passwd) throws UnsupportedEncodingException, ServiceNotAvailableException, ServiceException {
 		String userID = getUserID(user, passwd);
 		
 		// The address list id
@@ -224,7 +225,7 @@ public class YMServiceWrapper {
 	// save rating
 	// userID= YM ID
 	// rating = YM Rating, e.g. [1..5]
-	private void setRating(String userID, String placeID, int rating) throws UnsupportedEncodingException, ServiceNotAvailableException {
+	private void setRating(String userID, String placeID, int rating) throws UnsupportedEncodingException, ServiceNotAvailableException, ServiceException {
 		String tmpPlaceID = placeID;
 
 		// Remove "ametic"-prefix
@@ -251,7 +252,7 @@ public class YMServiceWrapper {
 	 * @throws UnsupportedEncodingException
 	 * @throws ServiceNotAvailableException
 	 */
-	protected void setFavorite(String userID, String placeID) throws UnsupportedEncodingException, ServiceNotAvailableException {
+	protected void setFavorite(String userID, String placeID) throws UnsupportedEncodingException, ServiceNotAvailableException, ServiceException {
 		// 1. get categoryID of categry dime
 		// 2. save place as favorite of user in category di.me
 		String catID = "";
@@ -274,7 +275,7 @@ public class YMServiceWrapper {
 	
 	
 	// delete an address from the fav. list
-	private void deleteFavorite(String userID, String favPlaceListID) throws UnsupportedEncodingException, ServiceNotAvailableException {
+	private void deleteFavorite(String userID, String favPlaceListID) throws UnsupportedEncodingException, ServiceNotAvailableException, ServiceException {
 		String params = this.staticParameter + "&UserID=" + userID;
 
 		// delete place
@@ -287,7 +288,7 @@ public class YMServiceWrapper {
 
 	
 	// returns address ListIDs of favorite places of this user
-	private String getFavPlaceListID(String userID, String placeID) throws UnsupportedEncodingException, ServiceNotAvailableException {
+	private String getFavPlaceListID(String userID, String placeID) throws UnsupportedEncodingException, ServiceNotAvailableException, ServiceException {
 
 		NodeList favList;
 		String listID = "";
@@ -333,7 +334,7 @@ public class YMServiceWrapper {
 		return null;
 	}
 	
-	private String callService(HttpRestProxy proxy, String query) throws ServiceNotAvailableException {
+	private String callService(HttpRestProxy proxy, String query) throws ServiceNotAvailableException, ServiceException {
 		String result = proxy.get(query);
 		
 		// If the response is an error message  
@@ -353,7 +354,7 @@ public class YMServiceWrapper {
 	 * @throws UnsupportedEncodingException
 	 * @throws ServiceNotAvailableException
 	 */
-	private String getUserID(String username, String password) throws UnsupportedEncodingException, ServiceNotAvailableException {
+	private String getUserID(String username, String password) throws UnsupportedEncodingException, ServiceNotAvailableException, ServiceException {
 		String params = "&User=" + username
 			+ "&Password=" + password + "&Password2=" + password;
 
@@ -385,7 +386,7 @@ public class YMServiceWrapper {
 	 * @return The myYM userID
 	 * @throws UnsupportedEncodingException 
 	 */
-	private String createUser(String username, String password) throws AttributeNotSupportedException, ServiceNotAvailableException, InvalidLoginException, UnsupportedEncodingException {
+	private String createUser(String username, String password) throws AttributeNotSupportedException, ServiceNotAvailableException, InvalidLoginException, UnsupportedEncodingException, ServiceException {
 		// Create the account
 		String params = "&User=" + username
 			+ "&Password=" + password + "&Password2=" + password + "&eMail=" + username + "@mailinator.com&Title=Mr&Firstname=di&Surname=me&MobilPhoneNumber=0&PreferredActivationMethod=0";
@@ -430,7 +431,7 @@ public class YMServiceWrapper {
 	 * @throws InvalidLoginException
 	 * @throws UnsupportedEncodingException
 	 */
-	private List<String> getFavoritIDs(String userID) throws AttributeNotSupportedException, ServiceNotAvailableException, InvalidLoginException, UnsupportedEncodingException {
+	private List<String> getFavoritIDs(String userID) throws AttributeNotSupportedException, ServiceNotAvailableException, InvalidLoginException, UnsupportedEncodingException, ServiceException {
 
 		String listID = getFavoriteListID(userID);
 		
@@ -461,7 +462,7 @@ public class YMServiceWrapper {
 	 * @throws UnsupportedEncodingException 
 	 * @throws ServiceNotAvailableException 
 	 */
-	private NodeList getFavoriteNodes(String userID, String listID) throws UnsupportedEncodingException, ServiceNotAvailableException {
+	private NodeList getFavoriteNodes(String userID, String listID) throws UnsupportedEncodingException, ServiceNotAvailableException, ServiceException {
 		// Select the favorit list for dime
 		String params = "&UserID=" + userID + "&CategoryID=" + listID;
 		String query = MYYM_FAV_SELECT + this.staticParameter + params;
@@ -477,7 +478,7 @@ public class YMServiceWrapper {
 	 * @throws UnsupportedEncodingException
 	 * @throws ServiceNotAvailableException
 	 */
-	private String getFavoriteListID(String userID) throws UnsupportedEncodingException, ServiceNotAvailableException {
+	private String getFavoriteListID(String userID) throws UnsupportedEncodingException, ServiceNotAvailableException, ServiceException {
 		String params = "&UserID=" + userID;
 		String query = MYYM_LIST_SELECT + this.staticParameter + params;
 		String favoritesCatXML = callService(this.myymProxy, query);

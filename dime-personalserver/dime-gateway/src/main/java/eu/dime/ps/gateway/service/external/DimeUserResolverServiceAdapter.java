@@ -22,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import eu.dime.ps.gateway.exception.AttributeNotSupportedException;
 import eu.dime.ps.gateway.exception.InvalidDataException;
 import eu.dime.ps.gateway.exception.InvalidLoginException;
+import eu.dime.ps.gateway.exception.ServiceException;
 import eu.dime.ps.gateway.exception.ServiceNotAvailableException;
 import eu.dime.ps.gateway.policy.PolicyManager;
 import eu.dime.ps.gateway.policy.PolicyManagerImpl;
@@ -187,7 +188,7 @@ public class DimeUserResolverServiceAdapter extends ServiceAdapterBase implement
 		}
 	}
 
-	public JSONArray search(String value) throws ServiceNotAvailableException {
+	public JSONArray search(String value) throws ServiceNotAvailableException, ServiceException {
 
 		// Generate query
 		String query = "noauth/users/search?string=" + value;

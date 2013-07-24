@@ -2,16 +2,14 @@ package eu.dime.ps.gateway.service.noauth;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import eu.dime.ps.gateway.exception.AttributeNotSupportedException;
 import eu.dime.ps.gateway.exception.InvalidLoginException;
+import eu.dime.ps.gateway.exception.ServiceException;
 import eu.dime.ps.gateway.exception.ServiceNotAvailableException;
-import eu.dime.ps.gateway.policy.PolicyManager;
-import eu.dime.ps.gateway.policy.PolicyManagerImpl;
 import eu.dime.ps.gateway.proxy.HttpRestProxy;
 import eu.dime.ps.gateway.service.ServiceAdapterBase;
 import eu.dime.ps.gateway.service.ServiceResponse;
@@ -79,7 +77,7 @@ public class SocialRecommenderAdapter extends ServiceAdapterBase implements Exte
 	@Override
 	public ServiceResponse[] getRaw(String attribute)
 			throws AttributeNotSupportedException,
-			ServiceNotAvailableException, InvalidLoginException {
+			ServiceNotAvailableException, InvalidLoginException, ServiceException {
 		
 		String xml = this.proxy.get(attribute);
 		

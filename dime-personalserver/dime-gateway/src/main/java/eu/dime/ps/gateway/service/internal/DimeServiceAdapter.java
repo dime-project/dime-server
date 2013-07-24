@@ -1,7 +1,6 @@
 package eu.dime.ps.gateway.service.internal;
 
 
-import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -11,9 +10,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import javax.naming.NamingException;
 import javax.persistence.NoResultException;
-import javax.ws.rs.core.Response;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONException;
@@ -33,8 +30,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 
 import eu.dime.commons.dto.Data;
 import eu.dime.commons.dto.Entry;
-import eu.dime.commons.dto.Message;
 import eu.dime.commons.dto.ExternalNotificationDTO;
+import eu.dime.commons.dto.Message;
 import eu.dime.commons.dto.Request;
 import eu.dime.commons.notifications.DimeExternalNotification;
 import eu.dime.commons.util.JaxbJsonSerializer;
@@ -42,6 +39,7 @@ import eu.dime.ps.gateway.auth.CredentialStore;
 import eu.dime.ps.gateway.auth.impl.CredentialStoreImpl;
 import eu.dime.ps.gateway.exception.AttributeNotSupportedException;
 import eu.dime.ps.gateway.exception.InvalidLoginException;
+import eu.dime.ps.gateway.exception.ServiceException;
 import eu.dime.ps.gateway.exception.ServiceNotAvailableException;
 import eu.dime.ps.gateway.policy.PolicyManager;
 import eu.dime.ps.gateway.policy.PolicyManagerImpl;
@@ -63,9 +61,9 @@ import eu.dime.ps.semantic.model.nco.PersonName;
  * It is in charge of sending notifications between di.me PS's, fetching shared resources and
  * searching for contacts on user resolver/registry services.
  *  
- * @author Ismael Rivera
  * @author Marc Planagumà 
  * @author Sophie Wrobel
+ * @author Ismael Rivera
  */
 public class DimeServiceAdapter extends ServiceAdapterBase implements InternalServiceAdapter {
 
@@ -152,7 +150,7 @@ public class DimeServiceAdapter extends ServiceAdapterBase implements InternalSe
 	 */
 	public <T extends Resource> Collection<T> get(String receiverSAID, String senderSAID,
 			String attribute, Class<T> returnType) throws AttributeNotSupportedException, 
-			ServiceNotAvailableException, InvalidLoginException {
+			ServiceNotAvailableException, InvalidLoginException, ServiceException {
 
 		// Retrieve username & password to establish the connection 
 		String username = null;
@@ -189,7 +187,7 @@ public class DimeServiceAdapter extends ServiceAdapterBase implements InternalSe
 				|| ResourceAttributes.ATTR_RESOURCE.equals(resourceType)) {
 			path = SHARED_RESOURCE_PATH.replace(":type", resourceType).replace(":id", parts.getQueryObject());
 		}
-		// TODO [Isma] this should replace the method getProfile -- but I need to confirm what credentials
+		// TODO [Isma says] this should replace the method getProfile -- but I need to confirm what credentials
 		// I need to use (why getProfile only requires sender said and uses this.username/this.password
 		// as credentials???)
 		else if (parts.getResourceType().equals(ResourceAttributes.ATTR_PROFILE)) {
@@ -208,7 +206,7 @@ public class DimeServiceAdapter extends ServiceAdapterBase implements InternalSe
 			// Perform GET request
 			String response = proxy.get(path, headers("Accept", MediaType.APPLICATION_JSONLD));
 			logger.info("GET " + path + " returned: " + response);
-
+			
 			// Transform json+ld response to a Java object or collection
 			Object object = JSONLDUtils.deserialize(response, returnType);
 			if (object instanceof Resource) {
@@ -362,7 +360,7 @@ public class DimeServiceAdapter extends ServiceAdapterBase implements InternalSe
 	@Override
 	public <T extends Resource> Collection<T> search(String attribute,
 			Resource values, Class<T> returnType)
-					throws ServiceNotAvailableException {
+					throws ServiceNotAvailableException, ServiceException {
 
 		// Transform parameter 'values' into a PersonContact object
 		PersonContact contact = (PersonContact) values.castTo(PersonContact.class);
@@ -425,7 +423,7 @@ public class DimeServiceAdapter extends ServiceAdapterBase implements InternalSe
 
 	@Override
 	public <T extends Resource> Collection<T> search(Resource values,
-			Class<T> returnType) throws ServiceNotAvailableException {
+			Class<T> returnType) throws ServiceNotAvailableException, ServiceException {
 
 		// Search not supported.
 		throw new ServiceNotAvailableException("Unsupported search query."); 
@@ -487,7 +485,7 @@ public class DimeServiceAdapter extends ServiceAdapterBase implements InternalSe
 		return profile;
 	}
 
-	public Token getUserToken(String username) throws ServiceNotAvailableException {
+	public Token getUserToken(String username) throws ServiceNotAvailableException, ServiceException {
 		Token token = null;
 		HttpRestProxy proxy = null;
 

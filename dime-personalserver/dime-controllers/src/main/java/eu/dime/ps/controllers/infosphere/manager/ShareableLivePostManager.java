@@ -9,7 +9,9 @@ import java.util.List;
 
 import org.ontoware.rdf2go.model.node.URI;
 
+import eu.dime.ps.controllers.exception.ForbiddenException;
 import eu.dime.ps.controllers.exception.InfosphereException;
+import eu.dime.ps.semantic.exception.NotFoundException;
 import eu.dime.ps.semantic.model.dlpo.LivePost;
 
 /**
@@ -42,7 +44,7 @@ public class ShareableLivePostManager extends ShareableManagerBase<LivePost> imp
 	}
 
 	@Override
-	public LivePost get(String livePostId, String requesterId) throws InfosphereException {
+	public LivePost get(String livePostId, String requesterId) throws NotFoundException, ForbiddenException, InfosphereException {
 		LivePost livepost = livepostManager.get(livePostId, SHAREABLE_LIVEPOST_PROPERTIES);
 		checkAuthorized(livepost, requesterId);
 

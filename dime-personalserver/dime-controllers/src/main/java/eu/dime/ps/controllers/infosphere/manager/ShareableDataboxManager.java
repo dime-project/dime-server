@@ -14,7 +14,9 @@ import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.model.node.Variable;
 import org.ontoware.rdf2go.vocabulary.RDF;
 
+import eu.dime.ps.controllers.exception.ForbiddenException;
 import eu.dime.ps.controllers.exception.InfosphereException;
+import eu.dime.ps.semantic.exception.NotFoundException;
 import eu.dime.ps.semantic.model.nfo.DataContainer;
 
 /**
@@ -46,7 +48,7 @@ public class ShareableDataboxManager extends ShareableManagerBase<DataContainer>
 	}
 
 	@Override
-	public DataContainer get(String databoxId, String requesterId) throws InfosphereException {
+	public DataContainer get(String databoxId, String requesterId) throws NotFoundException, ForbiddenException, InfosphereException {
 		DataContainer databox = databoxManager.get(databoxId, SHAREABLE_DATABOX_PROPERTIES);
 		checkAuthorized(databox, requesterId);
 

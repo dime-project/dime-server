@@ -15,7 +15,9 @@ import org.springframework.stereotype.Controller;
 
 import eu.dime.commons.dto.Data;
 import eu.dime.commons.dto.Response;
+import eu.dime.commons.dto.Response.Status;
 import eu.dime.ps.gateway.ServiceGateway;
+import eu.dime.ps.gateway.exception.ServiceException;
 import eu.dime.ps.gateway.exception.ServiceNotAvailableException;
 import eu.dime.ps.gateway.service.MediaType;
 import eu.dime.ps.gateway.service.external.DimeUserResolverServiceAdapter;
@@ -58,6 +60,8 @@ public class PSSearchController implements APIController {
 
 		} catch (ServiceNotAvailableException e) {
 			return Response.serverError(e.getMessage(), e);
+		} catch (ServiceException e) {
+			return Response.status(Status.valueOf(e.getDetailCode()), e.getMessage(), e);
 		}
 
 	}

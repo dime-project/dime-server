@@ -9,7 +9,9 @@ import java.util.List;
 
 import org.ontoware.rdf2go.model.node.URI;
 
+import eu.dime.ps.controllers.exception.ForbiddenException;
 import eu.dime.ps.controllers.exception.InfosphereException;
+import eu.dime.ps.semantic.exception.NotFoundException;
 import eu.dime.ps.semantic.model.nfo.FileDataObject;
 
 /**
@@ -43,7 +45,7 @@ public class ShareableFileManager extends ShareableManagerBase<FileDataObject> i
 	}
 
 	@Override
-	public FileDataObject get(String fileId, String requesterId) throws InfosphereException {
+	public FileDataObject get(String fileId, String requesterId) throws NotFoundException, ForbiddenException, InfosphereException {
 		FileDataObject file = fileManager.get(fileId, SHAREABLE_FILE_PROPERTIES);
 		checkAuthorized(file, requesterId);
 

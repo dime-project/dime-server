@@ -10,6 +10,7 @@ import eu.dime.commons.object.ServiceMetadata;
 import eu.dime.ps.gateway.exception.AttributeNotSupportedException;
 import eu.dime.ps.gateway.exception.InvalidDataException;
 import eu.dime.ps.gateway.exception.InvalidLoginException;
+import eu.dime.ps.gateway.exception.ServiceException;
 import eu.dime.ps.gateway.exception.ServiceNotAvailableException;
 import eu.dime.ps.gateway.policy.PolicyManager;
 
@@ -70,7 +71,7 @@ public interface ServiceAdapter {
      * @throws InvalidLoginException
      */
     public <T extends Resource> Collection<T> get(String attribute, Class<T> returnType)
-            throws AttributeNotSupportedException, ServiceNotAvailableException, InvalidLoginException;
+            throws AttributeNotSupportedException, ServiceNotAvailableException, InvalidLoginException, ServiceException;
 
     /**
      * Updates an attribute. Does not propagate update to remote service. Not
@@ -109,7 +110,7 @@ public interface ServiceAdapter {
      * @return collection of Resources as provided by transformer
      * @throws ServiceNotAvailableException
      */
-    public <T extends Resource> Collection<T> search(String attribute, Resource values, Class<T> returnType) throws ServiceNotAvailableException;
+    public <T extends Resource> Collection<T> search(String attribute, Resource values, Class<T> returnType) throws ServiceNotAvailableException, ServiceException;
 
     /**
      * Searches all attributes for a particular set of values. This method will
@@ -125,7 +126,7 @@ public interface ServiceAdapter {
      * @throws InvalidLoginException
      * @throws AttributeNotSupportedException
      */
-    public <T extends Resource> Collection<T> search(Resource values, Class<T> returnType) throws ServiceNotAvailableException, AttributeNotSupportedException, InvalidLoginException;
+    public <T extends Resource> Collection<T> search(Resource values, Class<T> returnType) throws ServiceNotAvailableException, AttributeNotSupportedException, InvalidLoginException, ServiceException;
 
     /**
      * Processes an asynchronous response from a remote server. Not implemented

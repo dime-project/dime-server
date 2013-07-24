@@ -17,6 +17,7 @@ import eu.dime.ps.datamining.service.ServiceCrawler;
 import eu.dime.ps.datamining.service.api.exception.ExternalServiceException;
 import eu.dime.ps.gateway.exception.AttributeNotSupportedException;
 import eu.dime.ps.gateway.exception.InvalidLoginException;
+import eu.dime.ps.gateway.exception.ServiceException;
 import eu.dime.ps.gateway.exception.ServiceNotAvailableException;
 import eu.dime.ps.gateway.service.ServiceAdapter;
 
@@ -220,6 +221,9 @@ public class ServiceCrawlerImpl implements ServiceCrawler {
 			logger.debug("Problem crawling service {}", adapter.getAdapterName(), e);
 			fireError(e);
 		} catch (InvalidLoginException e) {
+			logger.debug("Problem crawling service {}", adapter.getAdapterName(), e);
+			fireError(e);
+		} catch (ServiceException e) {
 			logger.debug("Problem crawling service {}", adapter.getAdapterName(), e);
 			fireError(e);
 		}

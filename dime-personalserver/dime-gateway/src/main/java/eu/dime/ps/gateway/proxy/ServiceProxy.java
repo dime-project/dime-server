@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 
+import eu.dime.ps.gateway.exception.ServiceException;
 import eu.dime.ps.gateway.exception.ServiceNotAvailableException;
 
 /**
@@ -33,7 +34,7 @@ public interface ServiceProxy {
 	 * @return String with body of returned result
 	 * @throws ServiceNotAvailableException
 	 */
-	public String get(String query) throws ServiceNotAvailableException;
+	public String get(String query) throws ServiceNotAvailableException, ServiceException;
 	
 	/**
 	 * Same as {@link #get(String)}, except it also accepts the HTTP headers.
@@ -43,7 +44,7 @@ public interface ServiceProxy {
 	 * @return String with body of returned result
 	 * @throws ServiceNotAvailableException
 	 */
-	public String get(String query, Map<String, String> headers) throws ServiceNotAvailableException;
+	public String get(String query, Map<String, String> headers) throws ServiceNotAvailableException, ServiceException;
 	
 	/**
 	 * @param query - URI with query parameters (see API)

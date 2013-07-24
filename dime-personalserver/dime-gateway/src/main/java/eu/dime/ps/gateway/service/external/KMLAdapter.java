@@ -5,6 +5,7 @@ import java.net.URL;
 
 import eu.dime.ps.gateway.exception.AttributeNotSupportedException;
 import eu.dime.ps.gateway.exception.InvalidDataException;
+import eu.dime.ps.gateway.exception.ServiceException;
 import eu.dime.ps.gateway.exception.ServiceNotAvailableException;
 import eu.dime.ps.gateway.proxy.HttpRestProxy;
 import eu.dime.ps.gateway.service.AttributeMap;
@@ -52,7 +53,8 @@ public class KMLAdapter extends ServiceAdapterBase implements ExternalServiceAda
 	}
 
 	@Override
-	public ServiceResponse[] getRaw(String attribute) throws AttributeNotSupportedException, ServiceNotAvailableException {
+	public ServiceResponse[] getRaw(String attribute) throws AttributeNotSupportedException,
+			ServiceNotAvailableException, ServiceException {
 		AttributeMap attributeMap = new AttributeMap();
 		String genericAttribute = attributeMap.getAttribute(attribute);
 		

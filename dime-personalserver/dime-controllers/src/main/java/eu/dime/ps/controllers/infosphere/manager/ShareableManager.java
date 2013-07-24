@@ -4,7 +4,9 @@ import java.util.Collection;
 
 import org.ontoware.rdfreactor.schema.rdfs.Resource;
 
+import eu.dime.ps.controllers.exception.ForbiddenException;
 import eu.dime.ps.controllers.exception.InfosphereException;
+import eu.dime.ps.semantic.exception.NotFoundException;
 
 /**
  * Allows to:
@@ -36,7 +38,7 @@ public interface ShareableManager<T extends Resource> {
 	 * @return the resource object requested
 	 * @throws InfosphereException
 	 */
-	public T get(String resourceId, String requesterId) throws InfosphereException;
+	public T get(String resourceId, String requesterId) throws NotFoundException, ForbiddenException, InfosphereException;
 
 	/**
 	 * Retrieves all resources shared through a specific user account. As in {@link get(String, String)},

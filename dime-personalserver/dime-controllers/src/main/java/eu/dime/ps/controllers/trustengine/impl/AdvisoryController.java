@@ -15,6 +15,7 @@ import java.util.Set;
 import org.apache.commons.collections.MapIterator;
 import org.apache.commons.collections.map.HashedMap;
 import org.apache.log4j.Logger;
+import org.ontoware.rdf2go.model.Syntax;
 import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.model.node.impl.URIImpl;
 import org.ontoware.rdfreactor.runtime.RDFDataException;
@@ -129,7 +130,7 @@ public class AdvisoryController extends AdvisoryBase {
 			try {
 				privacyLevel = sharedThing.getAllPrivacyLevel().next();
 			} catch(RDFDataException e){
-				logger.warn("Privacy values are not retrievable. Wrong data format?", e);
+				logger.warn(sharedThing + " privacy level cannot be retrieved. RDF dump: " + sharedThing.getModel().serialize(Syntax.Turtle), e);
 				continue;
 			}
 			if (TrustProcessor.getRecipientThreahold(size, privacyLevel)){

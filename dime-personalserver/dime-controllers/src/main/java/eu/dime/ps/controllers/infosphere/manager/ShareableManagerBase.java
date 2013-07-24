@@ -20,6 +20,7 @@ import org.slf4j.LoggerFactory;
 import eu.dime.commons.notifications.user.UNRefToItem;
 import eu.dime.commons.notifications.user.UserNotification;
 import eu.dime.ps.controllers.TenantContextHolder;
+import eu.dime.ps.controllers.exception.ForbiddenException;
 import eu.dime.ps.controllers.exception.InfosphereException;
 import eu.dime.ps.controllers.notifier.NotifierManager;
 import eu.dime.ps.controllers.notifier.exception.NotifierException;
@@ -34,7 +35,6 @@ import eu.dime.ps.semantic.privacy.PrivacyPreferenceService;
 import eu.dime.ps.semantic.query.Query;
 import eu.dime.ps.semantic.rdf.ResourceStore;
 import eu.dime.ps.semantic.service.impl.PimoService;
-import ie.deri.smile.vocabulary.NFO;
 
 /**
  * Provides a base implementation of the methods add/update/delete for adding shared resources
@@ -229,7 +229,7 @@ public abstract class ShareableManagerBase<T extends Resource> extends Connectio
 	 * @param requesterId account identifier of the person accessing the resource
 	 * @throws InfosphereException
 	 */
-	protected void checkAuthorized(T resource, String requesterId) throws InfosphereException {
+	protected void checkAuthorized(T resource, String requesterId) throws NotFoundException, ForbiddenException, InfosphereException {
 		PimoService pimoService = getPimoService();
 		PrivacyPreferenceService privacyPreferenceService = getPrivacyPreferenceService();
 
@@ -237,10 +237,8 @@ public abstract class ShareableManagerBase<T extends Resource> extends Connectio
 			// privacy preference service can deal with just the account, checking if it belongs to a person, etc.
 			Account account = pimoService.get(new URIImpl(requesterId), Account.class);
 			if (!privacyPreferenceService.hasAccessTo(resource, account)) {
-				throw new InfosphereException(account+" is not authorized to access "+resource);
+				throw new ForbiddenException(account+" is not authorized to access "+resource);
 			}
-		} catch (NotFoundException e) {
-			throw new InfosphereException("Cannot check authorization [item="+resource+", agent="+requesterId+"]: "+e.getMessage(), e);
 		} catch (PrivacyPreferenceException e) {
 			throw new InfosphereException("Cannot check authorization [item="+resource+", agent="+requesterId+"]: "+e.getMessage(), e);
 		}
@@ -259,8 +257,14 @@ public abstract class ShareableManagerBase<T extends Resource> extends Connectio
 		for (T item : resources) {
 			try {
 				checkAuthorized(item, requesterId);
+			} catch (NotFoundException e) {
+				logger.debug("Filtering out resource "+item+", not accessible by account "+requesterId+": " + e.getMessage(), e);
+				continue; // skips rest of the logic if not authorized
+			} catch (ForbiddenException e) {
+				logger.debug("Filtering out resource "+item+", not accessible by account "+requesterId+": " + e.getMessage(), e);
+				continue; // skips rest of the logic if not authorized
 			} catch (InfosphereException e) {
-				logger.debug(item+" not accessible by account "+requesterId+": "+e.getMessage(), e);
+				logger.debug("Filtering out resource "+item+", not accessible by account "+requesterId+": " + e.getMessage(), e);
 				continue; // skips rest of the logic if not authorized
 			}
 			
