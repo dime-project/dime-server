@@ -1926,11 +1926,15 @@ Dime.psHelper = {
         return item;
     },
     
-    addAccessForItemAndUpdateServer: function(personGuids, groupGuids, serviceGuids, item, saidSender){
+    addAccessForItemAndUpdateServer: function(personGuids, groupGuids, serviceGuids, item, saidSender, callback){
          item = Dime.psHelper.addAccessForItem(personGuids, groupGuids, serviceGuids, item, saidSender);
         
         //POST update                      
-        Dime.REST.updateItem(item);
+        Dime.REST.updateItem(item, function(response){
+            if (callback){
+                callback(response);
+            }
+        });
     },
 
     sortAgents: function(agentsAndServices){
@@ -1954,14 +1958,29 @@ Dime.psHelper = {
         };
     },
 
-    addAgentAccessForItemsAndUpdateServer: function(agentsAndServices, items, saidSender){
+    addAgentAccessForItemsAndUpdateServer: function(agentsAndServices, items, saidSender, callback){
         var sortedA = Dime.psHelper.sortAgents(agentsAndServices);
-        Dime.psHelper.addAccessForItemsAndUpdateServer(sortedA.pAgents, sortedA.gAgents, sortedA.sAgents, items, saidSender);
+        Dime.psHelper.addAccessForItemsAndUpdateServer(sortedA.pAgents, sortedA.gAgents, sortedA.sAgents, items, saidSender, callback);
     },
 
-    addAccessForItemsAndUpdateServer: function(persons, groups, services, items, saidSender){
+    addAccessForItemsAndUpdateServer: function(persons, groups, services, items, saidSender, callback){
+        var callBackCounter = items.length;
+        var updateSuccessful=true;
+        var callBackHandler=function(response){
+            callBackCounter--;
+            if (!response || response.length<1){
+                updateSuccessful=false;
+            }
+
+            if (callBackCounter==0){
+                if (callback){
+                    callback(updateSuccessful);
+                }
+            }
+        };
+
         for (var i=0; i<items.length;i++){
-            Dime.psHelper.addAccessForItemAndUpdateServer(persons, groups, services, items[i], saidSender);
+            Dime.psHelper.addAccessForItemAndUpdateServer(persons, groups, services, items[i], saidSender, callBackHandler);
         }
     },
 
@@ -5526,7 +5545,7 @@ Dime.Dialog={
     },
 
     showDetailItemModal: function(entry, isEditable, message){
-        var caption
+        var caption;
 
         
         if (entry.type===Dime.psMap.TYPE.PROFILEATTRIBUTE){
@@ -5545,9 +5564,19 @@ Dime.Dialog={
             
             if (!isOk){ //cancel
                 return;
-            }            
+            }
+            var updateItemCallBack = function(response){
+                console.log("createItem response:", response);
+                if (!response|| response.length<1){
+                    (new Dime.Dialog.Toast("Updating of "+caption+" failed!")).showLong();
+                }else{
+                    (new Dime.Dialog.Toast(caption+ " updated successfully.")).showLong();
+                }
+            };
+
+
             //post the update
-            Dime.REST.updateItem(item);
+            Dime.REST.updateItem(item, updateItemCallBack, this);
         };
         dialog.showDetailDialog(callbackFunction);
         
@@ -5558,12 +5587,15 @@ Dime.Dialog={
             newItem = Dime.psHelper.createNewItem(type, "");
         }
         
+        var elementName;
+
         var caption;
         if (type===Dime.psMap.TYPE.PROFILEATTRIBUTE && newItem.category){
-            caption = "New "+Dime.PACategory.getCategoryByName(newItem.category).caption+' ...';
+            elementName = Dime.PACategory.getCategoryByName(newItem.category).caption;
         }else{
-            caption = "New "+ Dime.psHelper.getCaptionForItemType(type)+' ...';
+            elementName = Dime.psHelper.getCaptionForItemType(type);
         }
+        caption = "New "+ elementName+' ...';
 
         
         var dialog = new Dime.DetailDialog(caption, newItem, true, true, true, message, Dime.psMap.getInfoHtmlForType(type));
@@ -5575,6 +5607,12 @@ Dime.Dialog={
             }            
             var newItemCallBack = function(response){
                 console.log("createItem response:", response);
+                if (!response|| response.length<1){
+                    (new Dime.Dialog.Toast("Creation of "+elementName+" failed!")).showLong();
+                    
+                }else{
+                    (new Dime.Dialog.Toast(elementName+ " created successfully.")).showLong();
+                }
             };
             
             
@@ -5610,6 +5648,7 @@ Dime.Dialog={
             if (!success){
                 return;
             }
+
             if (!selectedProfile){
                 window.alert("No profile selected - please select a profile.");
                 return;
@@ -5622,7 +5661,13 @@ Dime.Dialog={
                 return;
             }
             //update items
-            Dime.psHelper.addAgentAccessForItemsAndUpdateServer(selectedReceivers, selectedItems, said);
+            Dime.psHelper.addAgentAccessForItemsAndUpdateServer(selectedReceivers, selectedItems, said, function(sharingSuccessful){
+                if(sharingSuccessful){
+                    (new Dime.Dialog.Toast("Sharing accomplished!")).showLong();
+                }else{
+                    (new Dime.Dialog.Toast("Sharing failed!")).showLong();
+                }
+            });
         };
        
         dialog.show(this, callback);
@@ -5661,9 +5706,45 @@ Dime.Dialog={
                 );
             return element;
         }
+    },
+    Toast: function(text){
+        this.id=JSTool.randomGUID();
+        this.text = text;
+        this.dialog = $('<div/>').addClass('dimeToast').attr('id',this.id)
+        .append(
+                $('<div/>').text(text)
+            );
     }
 };
 
+
+Dime.Dialog.Toast.prototype={
+    LONG: 3*1000,
+    SHORT: 1500,
+
+    showShort: function(){
+        this.show(this.SHORT);
+    },
+
+    showLong: function(){
+        this.show(this.LONG);
+    },
+    
+    show:function(delay){
+        if (!delay){
+            delay=this.SHORT;
+        }
+
+        var dialogRef = this;
+        var removeToast = function(){
+            $('#'+dialogRef.id).remove();
+        };
+
+        $('body').append(this.dialog);
+
+        window.setTimeout(removeToast, delay);
+    }
+};
 
 /**
  * initially load situations and places

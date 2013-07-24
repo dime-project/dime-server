@@ -1672,6 +1672,11 @@ Dime.Settings = {
                         user.evaluationDataCapturingEnabled=input.prop("checked");
                         Dime.ps_configuration.userInformation = user; //direct update settings - will be refreshed from update user with the callback
                         Dime.REST.updateUser(user,Dime.Settings.updateSettings, Dime.Settings);
+                        if (user.evaluationDataCapturingEnabled){
+                            (new Dime.Dialog.Toast("Send evaluation-data: activated")).show();
+                        }else{
+                            (new Dime.Dialog.Toast("Send evaluation-data: deactivated")).show();
+                        }
                     });
                     
                 $(this)
@@ -1706,12 +1711,12 @@ Dime.Settings = {
                                             $(this).attr('placeholder','enter password again').val("")
                                         }else{ //retyped
                                             var secondPass = $(this).val();
-                                            if (secondPass!==myPass){                                                
-                                                window.alert("Your passwords did't match - please try again!");
+                                            if (secondPass!==myPass){                                            
+                                                (new Dime.Dialog.Toast("Please try again! - Your passwords didn't match!")).showLong();
                                             }else{
                                                 user.password=myPass;
                                                 Dime.REST.updateUser(user,Dime.Settings.updateSettings, Dime.Settings);
-                                                window.alert("Password updated successfully!");
+                                                (new Dime.Dialog.Toast("Password updated successfully!")).show();
                                             }
                                             myPass=null;
                                             myContainer.find('.settingsPasswdField').remove();
@@ -1787,11 +1792,22 @@ Dime.Settings = {
         if(isNewAccount){
             callBack = function(response) {
                 console.log("NEW ACCOUNT: ", response);
+                if (!response|| response.length<1){
+
+                    (new Dime.Dialog.Toast("Creation of "+serviceAccount.name+" failed!")).show();
+                }else{
+                    (new Dime.Dialog.Toast(serviceAccount.name+ " created successfully.")).show();
+                }
             };
             Dime.REST.postNewItem(serviceAccount, callBack);
         }else{
             callBack = function(response) {
                 console.log("ACCOUNT UPDATED: ", response);
+                if (!response || response.length<1){
+                    (new Dime.Dialog.Toast("Updating "+serviceAccount.name+" failed!")).show();
+                }else{
+                    (new Dime.Dialog.Toast(serviceAccount.name+ " updated successfully.")).show();
+                }
             };
             Dime.REST.updateItem(serviceAccount, callBack);
         }
@@ -1889,11 +1905,11 @@ Dime.initProcessor.registerFunction(function(callback){
                unReadUNs.push(this);
            }
         });
-        Dime.Navigation.updateNotificationBar(unReadUNs);
-
+        Dime.Navigation.updateNotificationBar(unReadUNs);        
+        (new Dime.Dialog.Toast("di.me at your service...")).show();
     }
     Dime.REST.getAll(Dime.psMap.TYPE.USERNOTIFICATION, getUsernotificationCallback, "@me", this);
-
+    
     callback();
 });
 
@@ -2007,6 +2023,9 @@ Dime.Navigation.createNotificationIcon=function(){
 //#############################################
 //---------------------------------------------
 
+/**
+ * handle back button --- FIXME not working as intended
+ */
  window.onpopstate = function(event) {
      var viewState = event.state;
      if (viewState){

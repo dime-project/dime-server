@@ -3169,3 +3169,29 @@ input[type="text"].DimeDetailDialogPAValueListItemValue{
 .shareDlg .dimeDialogInfoBox{
     margin-left: -40px;
 }
+
+.dimeToast{
+    position: fixed;
+    top: 64%;
+    left: 39%;
+    min-width: 100px;
+    max-width: 220px;
+    min-height: 100px;
+    border-radius: 5px;
+    background:rgba(49,48,49,0.8);
+    color: white;
+    z-index: 1051;
+    padding: 20px;
+    display:table
+}
+
+
+.dimeToast > div{
+    display:table-cell;
+    font-size: 18px;
+    text-align: center;
+    width: 100%;
+    height:auto;
+    position: relative;
+    vertical-align: middle;
+}
