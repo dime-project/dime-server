@@ -50,12 +50,13 @@ import eu.dime.ps.semantic.exception.ResourceExistsException;
 import eu.dime.ps.semantic.model.ModelFactory;
 import eu.dime.ps.semantic.model.NAOFactory;
 import eu.dime.ps.semantic.model.NFOFactory;
-import eu.dime.ps.semantic.model.dao.Account;
 import eu.dime.ps.semantic.model.nao.Symbol;
 import eu.dime.ps.semantic.model.nfo.FileDataObject;
 import eu.dime.ps.semantic.model.pimo.Person;
+import eu.dime.ps.semantic.query.Query;
 import eu.dime.ps.semantic.query.impl.BasicQuery;
 import eu.dime.ps.semantic.rdf.ResourceStore;
+import eu.dime.ps.semantic.service.impl.PimoService;
 import eu.dime.ps.storage.datastore.DataStore;
 import eu.dime.ps.storage.datastore.impl.DataStoreProvider;
 
@@ -133,6 +134,31 @@ public class FileManagerImpl extends InfoSphereManagerBase<FileDataObject> imple
 				.select(properties.toArray(new URI[properties.size()]))
 				.where(RDF.type).isNot(NFO.Folder) // to filter out nfo:Folders
 				.results();
+	}
+
+	@Override
+	public Collection<FileDataObject> getAllByPerson(URI personId) throws InfosphereException {
+		return getAllByPerson(personId, new ArrayList<URI>(0));
+	}
+
+	@Override
+	public Collection<FileDataObject> getAllByPerson(URI personId, List<URI> properties) throws InfosphereException {
+		ResourceStore resourceStore = getResourceStore();
+		PimoService pimoService = getPimoService();
+		URI me = pimoService.getUserUri();
+		
+		Query<FileDataObject> query = resourceStore
+				.find(FileDataObject.class)
+				.distinct()
+				.select(properties.toArray(new URI[properties.size()]))
+				.where(RDF.type).isNot(NFO.Folder); // to filter out nfo:Folders
+		if (me.equals(personId)) {
+			query.where(NSO.sharedBy).isNull();
+		} else {
+			query.where(NSO.sharedBy).is(personId);
+		}
+
+		return query.results();
 	}
 
 	@Override

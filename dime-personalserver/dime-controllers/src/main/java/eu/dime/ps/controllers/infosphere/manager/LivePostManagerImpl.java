@@ -2,6 +2,7 @@ package eu.dime.ps.controllers.infosphere.manager;
 
 import ie.deri.smile.vocabulary.DLPO;
 import ie.deri.smile.vocabulary.NAO;
+import ie.deri.smile.vocabulary.NSO;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -19,6 +20,7 @@ import eu.dime.ps.semantic.connection.ConnectionProvider;
 import eu.dime.ps.semantic.exception.NotFoundException;
 import eu.dime.ps.semantic.exception.ResourceExistsException;
 import eu.dime.ps.semantic.model.dlpo.LivePost;
+import eu.dime.ps.semantic.query.Query;
 import eu.dime.ps.semantic.rdf.ResourceStore;
 import eu.dime.ps.semantic.service.impl.PimoService;
 
@@ -53,6 +55,30 @@ public class LivePostManagerImpl extends InfoSphereManagerBase<LivePost> impleme
 				.results();
 	}
 	
+	@Override
+	public Collection<LivePost> getAllByPerson(URI personId) throws InfosphereException {
+		return getAllByPerson(personId, new ArrayList<URI>(0));
+	}
+
+	@Override
+	public Collection<LivePost> getAllByPerson(URI personId, List<URI> properties) throws InfosphereException {
+		ResourceStore resourceStore = getResourceStore();
+		PimoService pimoService = getPimoService();
+		URI me = pimoService.getUserUri();
+		
+		Query<LivePost> query = resourceStore
+				.find(LivePost.class)
+				.distinct()
+				.select(properties.toArray(new URI[properties.size()]));
+		if (me.equals(personId)) {
+			query.where(NSO.sharedBy).isNull();
+		} else {
+			query.where(NSO.sharedBy).is(personId);
+		}
+
+		return query.results();
+	}
+
 	@Override
 	public Collection<LivePost> getAllByCreator(String creatorId)
 			throws InfosphereException {

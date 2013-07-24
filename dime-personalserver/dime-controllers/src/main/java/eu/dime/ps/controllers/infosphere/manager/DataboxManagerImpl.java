@@ -2,6 +2,7 @@ package eu.dime.ps.controllers.infosphere.manager;
 
 import ie.deri.smile.vocabulary.NAO;
 import ie.deri.smile.vocabulary.NIE;
+import ie.deri.smile.vocabulary.NSO;
 import ie.deri.smile.vocabulary.PPO;
 
 import java.util.ArrayList;
@@ -41,17 +42,49 @@ public class DataboxManagerImpl extends PrivacyPreferenceManager<DataContainer> 
 	public Collection<DataContainer> getAll() throws InfosphereException {
 		return getAllByCreator(null, new ArrayList<URI>(0));
 	}
-	
+
 	@Override
 	public Collection<DataContainer> getAll(List<URI> properties) throws InfosphereException {
 		return getAllByCreator(null, properties);
 	}
 	
+	@Override
+	public Collection<DataContainer> getAllByPerson(URI personId) throws InfosphereException {
+		return getAllByPerson(personId, new ArrayList<URI>(0));
+	}
+
+	@Override
+	public Collection<DataContainer> getAllByPerson(URI personId, List<URI> properties) throws InfosphereException {
+		ResourceStore resourceStore = getResourceStore();
+		PimoService pimoService = getPimoService();
+		URI me = pimoService.getUserUri();
+		
+		Query<DataContainer> query = resourceStore
+				.find(DataContainer.class)
+				.from(pimoService.getPimoUri())
+				.distinct()
+				.select(properties.toArray(new URI[properties.size()]));
+		if (me.equals(personId)) {
+			query.where(NSO.sharedBy).isNull();
+		} else {
+			query.where(NSO.sharedBy).is(personId);
+		}
+
+		Collection<DataContainer> databoxes = query.results();
+		for (DataContainer databox : databoxes) {
+			prefetchAccessSpace(databox);
+		}
+		
+		return databoxes;
+	}
+
+	@Override
 	public Collection<DataContainer> getAllByCreator(URI creatorId)
 			throws InfosphereException {
 		return getAllByCreator(creatorId, new ArrayList<URI>(0));
 	}
 
+	@Override
 	public Collection<DataContainer> getAllByCreator(URI creatorId, List<URI> properties)
 			throws InfosphereException {
 		URI pimGraph = getPimoService().getPimoUri();
@@ -83,12 +116,8 @@ public class DataboxManagerImpl extends PrivacyPreferenceManager<DataContainer> 
 	public DataContainer get(String databoxId, List<URI> properties) throws InfosphereException {
 		DataContainer databox = null;
 		
-//		databox = getPrivacyPreferenceService().get(new URIImpl(databoxId), properties.toArray(new URI[properties.size()]));
 		try {
 			databox = getPimoService().get(new URIImpl(databoxId), DataContainer.class, properties.toArray(new URI[properties.size()]));
-//			if (!CollectionUtils.contains(databox.getAllLabel(), PrivacyPreferenceType.DATABOX.toString())) {
-//				throw new InfosphereException("cannot get databox "+databoxId+": privacy preference not defined as databox.");
-//			}
 			prefetchAccessSpace(databox);
 		} catch (NotFoundException e) {
 			throw new InfosphereException("cannot get databox "+databoxId+": not found.", e);

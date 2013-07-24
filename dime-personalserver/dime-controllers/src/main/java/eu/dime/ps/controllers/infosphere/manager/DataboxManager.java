@@ -24,5 +24,10 @@ public interface DataboxManager extends InfoSphereManager<DataContainer> {
 
 	public Collection<DataObject> getDataboxItems(String databoxId)
 			throws InfosphereException;
+	
+	public Collection<DataContainer> getAllByPerson(URI personId) throws InfosphereException;
+
+	public Collection<DataContainer> getAllByPerson(URI personId, List<URI> properties)
+			throws InfosphereException;
 
 }

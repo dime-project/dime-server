@@ -8,7 +8,6 @@ import java.util.List;
 import org.ontoware.rdf2go.model.node.URI;
 
 import eu.dime.ps.controllers.exception.InfosphereException;
-import eu.dime.ps.semantic.model.dao.Account;
 import eu.dime.ps.semantic.model.nfo.FileDataObject;
 import eu.dime.ps.semantic.model.pimo.Person;
 
@@ -50,5 +49,9 @@ public interface FileManager extends InfoSphereManager<FileDataObject> {
 	Collection<FileDataObject> getAllByCreator(Person creator, List<URI> properties)
 			throws InfosphereException;
 	
+	Collection<FileDataObject> getAllByPerson(URI personId) throws InfosphereException;
+
+	Collection<FileDataObject> getAllByPerson(URI personId, List<URI> properties)
+			throws InfosphereException;
 
 }

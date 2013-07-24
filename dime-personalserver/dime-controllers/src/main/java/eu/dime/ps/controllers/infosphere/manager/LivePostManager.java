@@ -33,4 +33,9 @@ public interface LivePostManager extends InfoSphereManager<LivePost> {
 	<T extends LivePost> Collection<T> getAllByTypeAndByCreator(Class<T> returnType,
 			String creatorId, List<URI> properties) throws InfosphereException;
 
+	Collection<LivePost> getAllByPerson(URI personId) throws InfosphereException;
+
+	Collection<LivePost> getAllByPerson(URI personId, List<URI> properties)
+			throws InfosphereException;
+
 }
