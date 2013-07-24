@@ -3175,8 +3175,21 @@ input[type="text"].DimeDetailDialogPAValueListItemValue{
     top: 21%;
 }
 
+.evaluationInfoBox > div > span:first-child{
+    font-weight: bold;
+}
+
+.evaluationInfoBox > div > span:last-child{
+    font-style: italic;
+}
+
+
+
 .evaluationInfoBox li{
     margin-top:5px;
+    list-style-type: circle;
+    margin-left: 25px;
+    padding-right: 10px;
 }
 
 .evaluationInfoIcon{
