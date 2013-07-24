@@ -155,7 +155,7 @@ return
 		        construct
 		        {
 		        	_:org{data($orgId)} a nco:OrganizationContact;   
-         			nie:title {data($company)}.  
+         			nao:prefLabel {data($company)}.  
 		        }
 		        } 
 		          	

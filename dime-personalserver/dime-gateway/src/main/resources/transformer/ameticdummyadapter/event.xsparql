@@ -168,7 +168,7 @@ for $event in $events
 										construct
 										{
 											_:org{data($counter)} a nco:OrganizationContact;   
-											nie:title {data($company)}.  
+											nao:prefLabel {data($company)}.  
 										}
 									})
 									else ()
