@@ -4405,7 +4405,6 @@ Dime.DetailDialog.prototype = {
             if (fromSaid && fromSaid.length>0 && receivers.length>0){
                 dialogRef.dialog.okButton.removeClass('inactiveButton');
                 dialogRef.dialog.okButton.text("Share");
-                dialogRef.dialog.okButton.activateClickEvent();
                 //remove the hint
                 dialogRef.dialog.footerElement.find('.livePostHint').remove();
                 sendIsHidden=false;
