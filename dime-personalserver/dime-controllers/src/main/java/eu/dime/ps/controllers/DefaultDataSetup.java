@@ -1,5 +1,6 @@
 package eu.dime.ps.controllers;
 
+import ie.deri.smile.vocabulary.DDO;
 import ie.deri.smile.vocabulary.NAO;
 import ie.deri.smile.vocabulary.NIE;
 import ie.deri.smile.vocabulary.NSO;
@@ -186,9 +187,11 @@ private static final Logger logger = LoggerFactory.getLogger(DefaultDataSetup.cl
 		Device laptop = modelFactory.getDDOFactory().createDevice("http://www.semanticdesktop.org/ontologies/2011/10/05/ddo#Laptop");
 		laptop.setPrefLabel("My laptop");
 		laptop.setCreator(me);
+		laptop.getModel().addStatement(me, DDO.owns, laptop);
 		Device mobile = modelFactory.getDDOFactory().createDevice("http://www.semanticdesktop.org/ontologies/2011/10/05/ddo#Mobile");
 		mobile.setPrefLabel("My mobile phone");
 		mobile.setCreator(me);
+		mobile.getModel().addStatement(me, DDO.owns, mobile);
 		try {
 			deviceManager.add(laptop);
 			deviceManager.add(mobile);
