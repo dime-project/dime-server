@@ -220,10 +220,15 @@ public class ProfileCardManagerImpl extends PrivacyPreferenceManager<PrivacyPref
 		ClosableIterator<Node> accessSpaceIt = profileCard.getAllAccessSpace_asNode();
 		while (accessSpaceIt.hasNext()) {
 			URI accessSpace = accessSpaceIt.next().asURI();
+			
+			// query sharedThrough in the profileCard model or PIM (i.e. in case of updates)
 			Node sharedThrough = ModelUtils.findObject(profileCard.getModel(), accessSpace, NSO.sharedThrough);
 			if (sharedThrough == null) {
-				throw new InfosphereException("Profile card's access space " + accessSpace + " must specify a valid " +
-						"di.me account for nso:sharedThrough.");
+				sharedThrough = ModelUtils.findObject(pimoService.getUserPIM(), accessSpace, NSO.sharedThrough);
+				if (sharedThrough == null) {
+					throw new InfosphereException("Profile card's access space " + accessSpace + " must specify a valid " +
+							"di.me account for nso:sharedThrough.");
+				}
 			}
 			
 			Collection<org.ontoware.rdf2go.model.node.Resource> existing = pimoService.find(PrivacyPreference.class)
