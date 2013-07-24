@@ -176,7 +176,9 @@ jQuery.fn.extend({
 //#############################################
 //
 JSTool = {
-    
+
+ 
+
     isNumber: function(n) {
         return !isNaN(parseFloat(n)) && isFinite(n);
     },
@@ -3635,22 +3637,31 @@ Dime.Navigation.createNotificationIcon=function(){
 //
 
 Dime.BasicDialog = function(title, caption, dialogId, bodyId, body, cancelHandler, okHandler, handlerSelf, okButtonLabel, dialogClass){
-    
+
+    var dialogRef = this;
+
     if (!okButtonLabel){
         okButtonLabel="Ok";
     }
-    
+    this.inactiveButtonClass='inactiveButton';
     this.dialog = document.createElement("div");
     this.dialog.setAttribute("class", "modal");
     this.dialog.setAttribute("id", dialogId);
     this.dialog.setAttribute("role", "dialog");
     this.dialog.setAttribute("aria-labelledby", title);
 
-    this.okButton =$('<button class="YellowMenuButton">'+okButtonLabel+'</button>');
-    if(okHandler){
-        this.okButton.clickExt(handlerSelf, okHandler);
-    }else{
-        this.okButton.addClass('inactiveButton');
+    this.okButton =$('<button class="YellowMenuButton">'+okButtonLabel+'</button>')
+        .click(function(){
+            //skip for inactive buttons
+            if ($(this).hasClass(dialogRef.inactiveButtonClass)){
+                return;
+            }
+            okHandler.call(handlerSelf);
+        });
+
+    
+    if(!okHandler){
+        this.okButton.addClass(this.inactiveButtonClass);
     }
     
 
@@ -4384,6 +4395,8 @@ Dime.DetailDialog.prototype = {
             newDialog.show(itemLoadingFunction, handleResult, this);
         };
 
+
+
         var checkAndUpdateSendOk=function(){
             if (dialogRef.readonly){
                 return;
@@ -4391,14 +4404,13 @@ Dime.DetailDialog.prototype = {
 
             if (fromSaid && fromSaid.length>0 && receivers.length>0){
                 dialogRef.dialog.okButton.removeClass('inactiveButton');
-                dialogRef.dialog.okButton.on('click');
                 dialogRef.dialog.okButton.text("Share");
+                dialogRef.dialog.okButton.activateClickEvent();
                 //remove the hint
                 dialogRef.dialog.footerElement.find('.livePostHint').remove();
                 sendIsHidden=false;
             }else if (!sendIsHidden){
                 dialogRef.dialog.okButton.addClass('inactiveButton');
-                dialogRef.dialog.okButton.off('click');
                 dialogRef.dialog.okButton.text("Share");
                 dialogRef.dialog.footerElement.append($('<span/>').addClass('livePostHint').text('Please select "From" and "Recipients" to share livepost!'))
                 sendIsHidden=true;

@@ -1911,7 +1911,6 @@ Dime.initProcessor.registerFunction(function(callback){
            }
         });
         Dime.Navigation.updateNotificationBar(unReadUNs);        
-        (new Dime.Dialog.Toast("di.me at your service...")).show();
     }
     Dime.REST.getAll(Dime.psMap.TYPE.USERNOTIFICATION, getUsernotificationCallback, "@me", this);
     
