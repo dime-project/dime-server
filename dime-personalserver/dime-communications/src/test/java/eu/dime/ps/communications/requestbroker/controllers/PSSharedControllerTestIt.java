@@ -4,6 +4,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -185,6 +186,11 @@ public class PSSharedControllerTestIt extends Assert {
 		try {
 			if (dbTenant != null) dbTenant.remove();
 		} catch (Exception e) {}
+		Collection<DataContainer> databoxs = databoxManager.getAll();
+		for (DataContainer databox: databoxs){
+			databoxManager.remove(databox.asURI().toString());			
+		}
+		
 	}
 	
 	@Test

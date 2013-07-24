@@ -16,6 +16,7 @@ import java.util.Map;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.ontoware.aifbcommons.collection.ClosableIterator;
 import org.ontoware.rdf2go.model.Model;
@@ -69,6 +70,8 @@ public class PSDataboxControllerTestIt extends PSInfosphereControllerTestIt {
 
 	private PSDataboxController controller;
 
+	
+	
 	@Before
 	public void setUp() throws Exception {
 		super.setUp();
@@ -181,7 +184,7 @@ public class PSDataboxControllerTestIt extends PSInfosphereControllerTestIt {
 	}
 
 
-    @Ignore
+   
 	@Test
 	public void testGetDataboxWellFormedJSON() throws Exception {
 
