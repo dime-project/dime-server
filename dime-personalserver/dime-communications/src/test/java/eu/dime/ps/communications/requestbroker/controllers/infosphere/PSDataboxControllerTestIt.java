@@ -34,6 +34,7 @@ import eu.dime.commons.dto.Response;
 import eu.dime.ps.controllers.TenantContextHolder;
 import eu.dime.ps.controllers.infosphere.manager.AccountManager;
 import eu.dime.ps.controllers.infosphere.manager.DataboxManager;
+import eu.dime.ps.controllers.infosphere.manager.PersonGroupManager;
 import eu.dime.ps.controllers.infosphere.manager.PersonManager;
 import eu.dime.ps.controllers.infosphere.manager.SharingManager;
 import eu.dime.ps.dto.Databox;
@@ -62,6 +63,9 @@ public class PSDataboxControllerTestIt extends PSInfosphereControllerTestIt {
 
 	@Autowired
 	private SharingManager sharingManager;
+	
+	@Autowired
+	private PersonGroupManager personGroupManager;
 
 	private PSDataboxController controller;
 
@@ -75,6 +79,7 @@ public class PSDataboxControllerTestIt extends PSInfosphereControllerTestIt {
 		controller.setPersonManager(personManager);
 		controller.setDataboxManager(databoxManager);
 		controller.setSharingManager(sharingManager);
+		controller.setPersonGroupManager(personGroupManager);
 
 	}
 	
@@ -118,7 +123,8 @@ public class PSDataboxControllerTestIt extends PSInfosphereControllerTestIt {
 		databox.put("created", 1338824999);
 		databox.put("lastModified", 1338824999);
 		databox.put("name", "Test databox");
-		databox.put("userId", "@me");			
+		databox.put("userId", "@me");
+		
 		databox.put("nao:includes", buildIncludes(sender, person));		
 		databox.put("nao:privacyLevel", 0.5);		
 		databox.put("items", Arrays.asList(new String[]{f1.toString()}));

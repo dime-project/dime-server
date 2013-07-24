@@ -1,13 +1,10 @@
 package eu.dime.ps.communications.requestbroker.controllers.infosphere;
 
-import ie.deri.smile.rdf.TripleStore;
 import ie.deri.smile.rdf.util.ModelUtils;
 import ie.deri.smile.vocabulary.DLPO;
 import ie.deri.smile.vocabulary.NAO;
-import ie.deri.smile.vocabulary.NIE;
 import ie.deri.smile.vocabulary.NSO;
 import ie.deri.smile.vocabulary.PPO;
-
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -18,9 +15,6 @@ import java.util.Map;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.ontoware.aifbcommons.collection.ClosableIterator;
-import org.ontoware.rdf2go.model.Model;
-import org.ontoware.rdf2go.model.Statement;
 import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.model.node.Variable;
 import org.ontoware.rdf2go.model.node.impl.DatatypeLiteralImpl;
@@ -29,28 +23,22 @@ import org.ontoware.rdf2go.vocabulary.RDF;
 import org.ontoware.rdf2go.vocabulary.RDFS;
 import org.ontoware.rdf2go.vocabulary.XSD;
 import org.ontoware.rdfreactor.runtime.CardinalityException;
-
-
 import org.springframework.beans.factory.annotation.Autowired;
 
 import eu.dime.commons.dto.Request;
 import eu.dime.commons.dto.Response;
-import eu.dime.ps.controllers.TenantContextHolder;
 import eu.dime.ps.controllers.infosphere.manager.AccountManager;
 import eu.dime.ps.controllers.infosphere.manager.LivePostManager;
+import eu.dime.ps.controllers.infosphere.manager.PersonGroupManager;
 import eu.dime.ps.controllers.infosphere.manager.PersonManager;
 import eu.dime.ps.controllers.infosphere.manager.SharingManager;
-import eu.dime.ps.dto.Databox;
 import eu.dime.ps.dto.Resource;
 import eu.dime.ps.semantic.exception.ResourceExistsException;
 import eu.dime.ps.semantic.model.dao.Account;
 import eu.dime.ps.semantic.model.dlpo.LivePost;
-import eu.dime.ps.semantic.model.nfo.DataContainer;
-import eu.dime.ps.semantic.model.nie.DataObject;
 import eu.dime.ps.semantic.model.pimo.Person;
 import eu.dime.ps.semantic.model.ppo.PrivacyPreference;
 import eu.dime.ps.semantic.privacy.PrivacyPreferenceType;
-import eu.dime.ps.storage.jfix.util.Arrays;
 
 
 
@@ -70,6 +58,9 @@ public class PSLivePostControllerTestIt extends PSInfosphereControllerTestIt {
 
 	@Autowired
 	private SharingManager sharingManager;
+	
+	@Autowired
+	private PersonGroupManager personGroupManager;
 
 	private PSLivePostController controller;
 
@@ -83,6 +74,17 @@ public class PSLivePostControllerTestIt extends PSInfosphereControllerTestIt {
 		controller.setPersonManager(personManager);
 		controller.setLivePostManager(livePostManager);
 		controller.setSharingManager(sharingManager);
+		controller.setPersonGroupManager(personGroupManager);
+	}
+	
+	@After
+	public void tearDown() throws Exception {
+		Collection<LivePost> livePosts = livePostManager.getAll();
+		for (LivePost livePost: livePosts){
+			livePostManager.remove(livePost.asURI().toString());		
+		}
+		super.tearDown();
+			
 	}
 
 	private Collection<Map<String, Object>> buildIncludes(Account sender, Person...persons) {
@@ -105,15 +107,7 @@ public class PSLivePostControllerTestIt extends PSInfosphereControllerTestIt {
 		return includes;
 	}
 	
-	@After
-	public void tearDown() throws Exception {
-		Collection<LivePost> livePosts = livePostManager.getAll();
-		for (LivePost livePost: livePosts){
-			livePostManager.remove(livePost.asURI().toString());		
-		}
-		super.tearDown();
-			
-	}
+	
 
 
 	@Test
@@ -155,7 +149,7 @@ public class PSLivePostControllerTestIt extends PSInfosphereControllerTestIt {
 		assertTrue(resource.getModel().contains(resource, NAO.created, new DatatypeLiteralImpl("1970-01-16T11:53:44.999Z", XSD._dateTime)));
 		assertTrue(resource.getModel().contains(resource, NAO.lastModified, new DatatypeLiteralImpl("1970-01-16T11:53:44.999Z", XSD._dateTime)));
 		assertTrue(resource.getModel().contains(resource, DLPO.textualContent, "this is a test"));
-		assertTrue(resource.getModel().contains(resource, NAO.creator, livePostManager.getMe()));
+		
 
 
 		// verify PrivacyPreference is created and metadata isis correct

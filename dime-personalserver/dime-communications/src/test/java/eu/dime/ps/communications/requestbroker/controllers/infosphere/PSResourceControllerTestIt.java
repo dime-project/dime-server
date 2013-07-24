@@ -33,6 +33,7 @@ import eu.dime.commons.dto.Request;
 import eu.dime.commons.dto.Response;
 import eu.dime.ps.controllers.infosphere.manager.AccountManager;
 import eu.dime.ps.controllers.infosphere.manager.FileManager;
+import eu.dime.ps.controllers.infosphere.manager.PersonGroupManager;
 import eu.dime.ps.controllers.infosphere.manager.PersonManager;
 import eu.dime.ps.controllers.infosphere.manager.SharingManager;
 import eu.dime.ps.dto.Resource;
@@ -63,6 +64,9 @@ public class PSResourceControllerTestIt extends PSInfosphereControllerTestIt {
 
 	@Autowired
 	private SharingManager sharingManager;
+	
+	@Autowired
+	private PersonGroupManager personGroupManager;
 
 	private PSResourcesController controller;
 
@@ -76,6 +80,7 @@ public class PSResourceControllerTestIt extends PSInfosphereControllerTestIt {
 		controller.setPersonManager(personManager);
 		controller.setFileManager(fileManager);
 		controller.setSharingManager(sharingManager);
+		controller.setPersonGroupManager(personGroupManager);
 	}
 		
 	private Collection<Map<String, Object>> buildIncludes(Account sender, Person...persons) {
@@ -136,7 +141,7 @@ public class PSResourceControllerTestIt extends PSInfosphereControllerTestIt {
 		assertTrue(resource.getModel().contains(resource, NAO.prefLabel, "Test resource"));
 		assertTrue(resource.getModel().contains(resource, NAO.created, new DatatypeLiteralImpl("1970-01-16T11:53:44.999Z", XSD._dateTime)));
 		assertTrue(resource.getModel().contains(resource, NAO.lastModified, new DatatypeLiteralImpl("1970-01-16T11:53:44.999Z", XSD._dateTime)));
-		assertTrue(resource.getModel().contains(resource, NAO.creator, fileManager.getMe()));
+		
 
 		// verify PrivacyPreference is created and metadata is correct
 		PrivacyPreference pp = sharingManager.findPrivacyPreference(guid,  PrivacyPreferenceType.FILE);

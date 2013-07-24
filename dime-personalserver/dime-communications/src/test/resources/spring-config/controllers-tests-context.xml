@@ -63,6 +63,11 @@
 		class="eu.dime.ps.controllers.infosphere.manager.PersonManagerImpl">
 		<property name="connectionProvider" ref="connectionProviderMock"/>
 	</bean>
+	
+	<bean id="personGroupManager"
+		class="eu.dime.ps.controllers.infosphere.manager.PersonGroupManagerImpl">
+		<property name="connectionProvider" ref="connectionProviderMock"/>
+	</bean>
 
 	<bean id="profileAttributeManager"
 		class="eu.dime.ps.controllers.infosphere.manager.ProfileAttributeManagerImpl">
