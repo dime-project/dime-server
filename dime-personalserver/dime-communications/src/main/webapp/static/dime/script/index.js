@@ -1528,6 +1528,8 @@ DimeView.addToViewMap(new DimeView.viewMapEntry('globalItemNavigation', false, f
 
 
 Dime.Settings = {
+    evaluationInfoHtml:'The following data will be collected for evaluation:<br><ul><li>an anonymous identifyier which allows us to know what click data and questionaire answers come from the same account. No other identity information like your di.me username, nickname, real name, or email-address is sent. No location information is sent.</li><li>statistics about how many contacts, files, messages, and connected systems you use in your system. Only the number and time when created, but no information about names, content, or anything else is sent.</li><li>data about what type of pages you click in the system (e.g. a page „person“). This includes the time the page was clicked. No title, text, or other content of the pages are sent.</li></ul><br/>We do not use other click analysis (like e.g. Google Analytics). You can switch this off at any time on the page "Settings".',
+
     //in segovia some services have been hidden
     //hiddenServices: ['SocialRecommenderServiceAdapter', 'AMETICDummyAdapter', 'Facebook'],
     hiddenServices: [],
@@ -1656,9 +1658,10 @@ Dime.Settings = {
         Dime.Settings.updateAccounts();
     },
 
+
     updateSettings: function(){
        
-
+        var self = this;
         var handleUserSettings=function(user){
             var evaluationCheckbox=function(){
                 var checkboxId=JSTool.randomGUID();
@@ -1667,6 +1670,7 @@ Dime.Settings = {
                     .attr('id',checkboxId)
                     .attr('type','checkbox')
                     .prop("checked", user.evaluationDataCapturingEnabled)
+                    .css('clear', 'both')
                     .click(function(){
                         //update user
                         user.evaluationDataCapturingEnabled=input.prop("checked");
@@ -1680,12 +1684,13 @@ Dime.Settings = {
                     });
                     
                 $(this)
-                    .append($('<div/>').text("Evaluation:"))
+                    .append($('<div/>').text("Evaluation:").css('float', 'left'))
+                    .append(Dime.Dialog.Helper.getInfoBox(self.evaluationInfoHtml, "evaluationInfoBox", "evaluationInfoIcon"))
                     .append(input)
                     .append($('<label/>')
                         .attr('for',checkboxId)
                         .text('send evaluation-data')
-                        .css('width', '166px')
+                        .css('width', '186px').css('float', 'right')
                 );
             };
 

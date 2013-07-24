@@ -1239,6 +1239,10 @@ input[type="file"] {
 
 .settingsSettings{
     float: left;    
+    margin-left: 10px;
+    border-left: solid 1px silver;
+    padding: 10px;
+    height: 85px;
 }
 .settingsSettings > .YellowMenuButton{
     width: auto;
@@ -3164,6 +3168,19 @@ input[type="text"].DimeDetailDialogPAValueListItemValue{
     -moz-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
     box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
     z-index: 2000;
+}
+
+.evaluationInfoBox{
+    left: 47%;
+    top: 21%;
+}
+
+.evaluationInfoBox li{
+    margin-top:5px;
+}
+
+.evaluationInfoIcon{
+    margin-top:5px;
 }
 
 .shareDlg .dimeDialogInfoBox{
