@@ -1024,6 +1024,21 @@ DimeView = {
         DimeView.searchFilter = searchText.value;
 
         DimeView.cleanUpView();
+
+        if (DimeView.groupType===Dime.psMap.TYPE.PLACE ){
+            var continueSearch = true;
+            Dime.psHelper.canRetrievePlaces(function(connected){
+                if(!connected){
+                    //(new Dime.Dialog.Toast('To activate support for places, please connect to the YellowMapPlaceService in the settings tab!')).show(10*1000);
+                    //window.alert('To activate support for places, please connect to the YellowMapPlaceService in the settings tab!');
+                    (new Dime.Dialog.Alert('To activate support for places, please connect to the YellowMapPlaceService in the settings tab!')).show();
+                    continueSearch=false;
+                }
+            },this);
+            if (!continueSearch){
+                return;
+            }
+        }
         
         if (DimeView.groupType
             && (DimeView.groupType!==Dime.psMap.TYPE.LIVESTREAM) //HACK avoid call for unsupported livestream
@@ -1043,6 +1058,8 @@ DimeView = {
         }else if(DimeView.groupType===Dime.psMap.TYPE.LIVESTREAM){ //HACK avoid call for unsupported livestream
             $("#groupNavigation").addClass("hidden");
         }
+
+
         if (DimeView.itemType){ 
             DimeView.searchCallForType(DimeView.itemType);
         }

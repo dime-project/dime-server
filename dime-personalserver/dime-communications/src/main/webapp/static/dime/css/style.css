@@ -3225,3 +3225,13 @@ input[type="text"].DimeDetailDialogPAValueListItemValue{
     position: relative;
     vertical-align: middle;
 }
+
+.alert{
+    background-color: #9CC6E6;
+    position: absolute;
+    left: 20%;
+    top: 176px;
+    min-width: 700px;
+    color: white;
+    text-shadow: none;
+}

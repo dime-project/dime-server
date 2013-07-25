@@ -528,9 +528,6 @@ UITool = {
         var container = document.getElementById(containerId);
         UITool.removeAllChildElementsForContainer(container);
     }
-
-
-
 };
 
 
@@ -1701,6 +1698,21 @@ Dime.psHelper = {
         
         
         return Dime.ps_configuration.getBasicUrlString()+myPath;
+    },
+
+    canRetrievePlaces: function(callback, callerRef){
+        var handleAccountResult=function(response){
+            var result=false;
+            if (response && response.length>0){
+                jQuery.each(response, function(){
+                    result = result || (this.serviceadapterguid==='YellowMapPlaceService');
+                });
+
+            }
+            callback.call(callerRef, result);
+
+        };
+        Dime.REST.getAll(Dime.psMap.TYPE.ACCOUNT, handleAccountResult);
     },
     
     getURLparam: function(url) {
@@ -5738,7 +5750,19 @@ Dime.Dialog={
         .append(
                 $('<div/>').text(text)
             );
+    },
+    Alert: function(text){
+        this.id=JSTool.randomGUID();
+        this.text = text;
+        
+        this.dialog = $('<div/>').addClass('alert').attr('id',this.id)
+        .append($('<a/>').addClass('close').attr('data-dismiss','alert').text('×'))
+        .append($('<span/>').text(text));
+                
+        //        <div class="alert"><a class="close" data-dismiss="alert">×</a><span>'+message+'</span></div>')
+                        
     }
+
 };
 
 
@@ -5767,6 +5791,12 @@ Dime.Dialog.Toast.prototype={
         $('body').append(this.dialog);
 
         window.setTimeout(removeToast, delay);
+    }
+};
+
+Dime.Dialog.Alert.prototype={
+    show:function(delay){
+        $('body').append(this.dialog);
     }
 };
 
