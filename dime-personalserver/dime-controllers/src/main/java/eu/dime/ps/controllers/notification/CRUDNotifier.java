@@ -16,6 +16,7 @@ import eu.dime.commons.notifications.DimeInternalNotification;
 import eu.dime.commons.notifications.system.SystemNotification;
 import eu.dime.ps.controllers.notifier.NotifierManager;
 import eu.dime.ps.controllers.notifier.exception.NotifierException;
+import eu.dime.ps.dto.ProfileAttributeType;
 import eu.dime.ps.dto.Type;
 import eu.dime.ps.semantic.BroadcastManager;
 import eu.dime.ps.semantic.BroadcastReceiver;
@@ -69,13 +70,15 @@ public class CRUDNotifier implements BroadcastReceiver {
 		if (NOTIFY_ACTIONS.containsKey(action)) {
 			if (resource == null) {
 				logger.debug("Impossible to find type of resource (no metadata provided in the event), no notification will be sent [item="+itemId+", action="+action+"]");
-			} else {
-				Type itemType = Type.get(resource);
-				if (itemType == null) {
+			} else {				
+				Type itemType = Type.get(resource); //if Type is not found maybe it is a profile attribute TODO find a better way of handling this
+				ProfileAttributeType itemTypeProfileAttribute = ProfileAttributeType.get(resource);
+				if (itemType == null && itemTypeProfileAttribute ==null) {						
 					logger.debug("Type is undefined, no notification will be sent [item="+resource+", action="+action+"]");
 					return;
-				}
+					}				
 				
+				String type = (itemTypeProfileAttribute == null)? itemType.toString():"profileattribute";
 				String creatorId = null;
 				Node creator = ModelUtils.findObject(resource.getModel(), resource, NAO.creator);
 				if (creator != null) {
@@ -86,7 +89,7 @@ public class CRUDNotifier implements BroadcastReceiver {
 				String operation = NOTIFY_ACTIONS.get(action);
 				
 				// sends internal notifications (to UI)
-				SystemNotification notification = new SystemNotification(tenant, operation, itemId, itemType.toString(), creatorId);
+				SystemNotification notification = new SystemNotification(tenant, operation, itemId, type, creatorId);
 				try {
 					logger.debug("Pushing internal notification: "+notification.toString());
 					notifierManager.pushInternalNotification(notification);
