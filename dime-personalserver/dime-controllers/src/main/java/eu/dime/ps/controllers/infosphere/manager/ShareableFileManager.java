@@ -2,6 +2,7 @@ package eu.dime.ps.controllers.infosphere.manager;
 
 import ie.deri.smile.vocabulary.NAO;
 import ie.deri.smile.vocabulary.NFO;
+import ie.deri.smile.vocabulary.NIE;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -24,13 +25,14 @@ public class ShareableFileManager extends ShareableManagerBase<FileDataObject> i
 
 	public static final List<URI> SHAREABLE_FILE_PROPERTIES;
 	static {
-		SHAREABLE_FILE_PROPERTIES = new ArrayList<URI>(6);
+		SHAREABLE_FILE_PROPERTIES = new ArrayList<URI>(7);
 		SHAREABLE_FILE_PROPERTIES.add(NAO.created);
 		SHAREABLE_FILE_PROPERTIES.add(NAO.lastModified);
 		SHAREABLE_FILE_PROPERTIES.add(NAO.prefLabel);
 		SHAREABLE_FILE_PROPERTIES.add(NFO.fileName);
 		SHAREABLE_FILE_PROPERTIES.add(NFO.fileSize);
 		SHAREABLE_FILE_PROPERTIES.add(NFO.fileLastModified);
+		SHAREABLE_FILE_PROPERTIES.add(NIE.mimeType);
 	};
 
 	private FileManager fileManager;
