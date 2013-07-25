@@ -3157,7 +3157,7 @@ input[type="text"].DimeDetailDialogPAValueListItemValue{
 
 .dimeDialogInfoBox{
     position: fixed;
-    background-color: #F6F2E1;
+    background:rgba(49,48,49,0.9);
     left: 50%;
     width: 320px;
     margin-left: -150px;

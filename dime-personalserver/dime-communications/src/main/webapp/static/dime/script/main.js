@@ -4523,13 +4523,13 @@ Dime.DetailDialog.prototype = {
                 $("<div></div>")
                 .addClass("dimeDialogBody_editContainer")
                 //left container
-                .append($("<div></div>")
+                .append($("<div/>")
                     .addClass("dimeDialogBody_editContainerLeft")
                     .append($("<span class=label></span>")
                         .text(Dime.psHelper.getPluralCaptionForItemType(childType)))
                     .append(this.getChildTypeItems(item, childType)))
                 //right container
-                .append($("<div></div>")
+                .append($("<div>")
                     .addClass("dimeDialogBody_editContainerRight")
                     .append($("<span class=label></span>")
                         .text(item.type===Dime.psMap.TYPE.GROUP?"can access":"shared with"))
@@ -4658,7 +4658,10 @@ Dime.DetailDialog.prototype = {
         
         //FIXME interaction disabled
         //.clickExt(this, showAddItemsDlg);
-        .append(editDlgRef.itemsItemSection);
+            .click(function(){
+                (new Dime.Dialog.Toast('Function not yet available. Please use the "Share..." button for sharing.')).showLong();
+            })
+            .append(editDlgRef.itemsItemSection);
       
     },            
 
@@ -4674,7 +4677,7 @@ Dime.DetailDialog.prototype = {
                 //show undefined and null values in the browsers
                 //while empty string is allowed
                 value="undefined";
-            }else if (value.length>22){
+            }else if (value.length>22){getSharedToItems
                 value=value.substr(0, 20)+"..";
             }
 
@@ -4738,7 +4741,11 @@ Dime.DetailDialog.prototype = {
         };
 
         Dime.psHelper.getAllReceiversOfItem(item, handleGetAllReceivers);                                                                                                      
-        var agentsSection = $('<div class="shareDlgSection shareDlgSectionHover"></div>').append(editDlgRef.itemsItemSection);
+        var agentsSection = $('<div class="shareDlgSection shareDlgSectionHover"></div>')
+            .click(function(){
+                (new Dime.Dialog.Toast('Function not yet available. Please use the "Share..." button for sharing.')).showLong();
+            })
+            .append(editDlgRef.itemsItemSection);
 
         return agentsSection;
     },
@@ -4797,8 +4804,14 @@ Dime.DetailDialog.prototype = {
             };
             newDialog.show(memberLoadingFunction, handleResult, this);
         };
-        
-        memberSection.clickExt(this, showAddMembersDlg);
+        if (!this.readonly){
+            memberSection.clickExt(this, showAddMembersDlg);
+        }else{
+            memberSection.click(function(){
+                (new Dime.Dialog.Toast(editDlgRef.caption + " ... is readonly and can not be updated.")).showLong();
+            });
+
+        }
         
         return memberSection;
     },
