@@ -53,6 +53,7 @@ import org.ontoware.rdf2go.model.node.impl.URIImpl;
 import org.ontoware.rdf2go.vocabulary.RDF;
 import org.ontoware.rdf2go.vocabulary.RDFS;
 import org.ontoware.rdf2go.vocabulary.XSD;
+import org.ontoware.rdfreactor.runtime.INodeConverter;
 import org.ontoware.rdfreactor.runtime.RDFReactorRuntime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -121,6 +122,15 @@ public class Resource extends LinkedHashMap<String, Object> {
 		NIE.lastRefreshed, NIE.modified, NAO.created, NAO.lastModified, NAO.modified,
 		NFO.deletionDate, NFO.fileCreated, NFO.fileLastAccessed, NFO.fileLastModified,
 		DLPO.timestamp };
+	
+	// for properties that want to be forced to a specific type, a converter can be provided
+	private static final Map<URI, INodeConverter<?>> CONVERTERS = new HashMap<URI, INodeConverter<?>>();
+	static {
+		CONVERTERS.put(NAO.trustLevel, RDFReactorRuntime.getConverter(Double.class));
+		CONVERTERS.put(NAO.directTrust, RDFReactorRuntime.getConverter(Double.class));
+		CONVERTERS.put(NAO.networkTrust, RDFReactorRuntime.getConverter(Double.class));
+		CONVERTERS.put(NAO.privacyLevel, RDFReactorRuntime.getConverter(Double.class));
+	}
 
 	private String said = null;
 
@@ -541,6 +551,8 @@ public class Resource extends LinkedHashMap<String, Object> {
 				object = model.createPlainLiteral((String) value);
 				model.addStatement(rUri, property, object);
 			}
+		} else if (CONVERTERS.containsKey(property)) {
+			model.addStatement(rUri, property, CONVERTERS.get(property).toNode(model, value));
 		} else {
 			model.addStatement(rUri, property, RDFReactorRuntime.java2node(model, value));
 		}
