@@ -845,12 +845,13 @@ DimeView = {
     },
     
     removeSelected: function(){
+        var mySelectedItems = JSTool.getDefinedMembers(DimeView.selectedItems);
+        
         if (mySelectedItems.length<1){
             window.alert("Please select at least one item to be deleted!");
             return;
         }
 
-        var mySelectedItems = JSTool.getDefinedMembers(DimeView.selectedItems);
         if (confirm("Are you sure, you want to delete "+mySelectedItems.length+" items?")){
             
             Dime.evaluation.createAndSendEvaluationItemForAction("action_removePerson");
