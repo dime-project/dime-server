@@ -914,7 +914,7 @@ Dime.privacyTrust={
     LEVELS: [{
         pCaption:"low",
         tCaption:"low",
-        limit: 0,
+        limit: 0.0,
         pClass: "greenPTColor",
         tClass: "redPTColor",
         pClassThin: "greenPTColorThin",
@@ -932,7 +932,7 @@ Dime.privacyTrust={
     {
         pCaption:"high",
         tCaption:"high",
-        limit: 1,
+        limit: 1.0,
         pClass: "redPTColor",
         tClass: "greenPTColor",
         pClassThin: "redPTColorThin",
@@ -2563,7 +2563,7 @@ Dime.psHelper = {
         if (type===Dime.psMap.TYPE.PERSON){
             entry["nao:trustLevel"]=0.5;
         }else if (Dime.psHelper.isShareableType(type)){
-            entry["nao:privacyLevel"]=1.0;
+            entry["nao:privacyLevel"]=0.5;
         }
         if (type===Dime.psMap.TYPE.LIVEPOST){
             entry.created=entry.lastModified;
