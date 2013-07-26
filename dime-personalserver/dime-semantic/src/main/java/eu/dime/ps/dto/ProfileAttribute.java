@@ -42,13 +42,9 @@ public class ProfileAttribute extends Resource {
 
 
 	private HashMap<String, Object> extractPostalAddress(org.ontoware.rdfreactor.schema.rdfs.Resource resource){
-		HashMap<String, Object> postalAddress = new HashMap<String, Object>();
-
-		Node node = ModelUtils.findObject(resource.getModel(), resource.asResource(), NAO.prefLabel);
-		if (node != null)
-			postalAddress.put("nao:prefLabel", node.asLiteral().getValue());
-
-		node = ModelUtils.findObject(resource.getModel(), resource.asResource(), NCO.region);
+		HashMap<String, Object> postalAddress = new HashMap<String, Object>();		
+			
+		Node node = ModelUtils.findObject(resource.getModel(), resource.asResource(), NCO.region);
 		if (node != null)
 			postalAddress.put("region", node.asLiteral().getValue());
 
@@ -78,7 +74,7 @@ public class ProfileAttribute extends Resource {
 
 		node = ModelUtils.findObject(resource.getModel(), resource.asResource(), NCO.postalcode);
 		if (node != null)
-			postalAddress.put("postalcode", node.asLiteral().getValue());
+			postalAddress.put("postalCode", node.asLiteral().getValue());
 
 		node = ModelUtils.findObject(resource.getModel(), resource.asResource(), NCO.locality);
 		if (node != null)
