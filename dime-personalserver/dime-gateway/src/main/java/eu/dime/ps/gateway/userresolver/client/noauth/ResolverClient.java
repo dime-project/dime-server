@@ -1,26 +1,17 @@
 package eu.dime.ps.gateway.userresolver.client.noauth;
-import com.google.gson.Gson;
-import eu.dime.ps.gateway.exception.ServiceException;
-import eu.dime.ps.gateway.exception.ServiceNotAvailableException;
+import eu.dime.commons.util.HttpUtils;
 import eu.dime.ps.gateway.userresolver.client.DimeResolver;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import net.sf.json.JSONArray;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.utils.URIBuilder;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,7 +34,7 @@ public class ResolverClient implements DimeResolver {
      */
 	public ResolverClient(String serviceEndpoint) {
 		this.serviceEnpoint = serviceEndpoint;
-		httpClient = new DefaultHttpClient();
+		httpClient = HttpUtils.createHttpClient();
         logger.info("Created new resolverClient for endpoint: "+serviceEnpoint);
 	}
 
