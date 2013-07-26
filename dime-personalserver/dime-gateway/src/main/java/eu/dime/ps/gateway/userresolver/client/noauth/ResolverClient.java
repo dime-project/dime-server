@@ -1,5 +1,7 @@
 package eu.dime.ps.gateway.userresolver.client.noauth;
 import com.google.gson.Gson;
+import eu.dime.ps.gateway.exception.ServiceException;
+import eu.dime.ps.gateway.exception.ServiceNotAvailableException;
 import eu.dime.ps.gateway.userresolver.client.DimeResolver;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -8,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import net.sf.json.JSONArray;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -34,6 +37,10 @@ public class ResolverClient implements DimeResolver {
 	private final HttpClient httpClient;
 	private final String serviceEnpoint;
 
+    /**
+     * FIXME use proxy instead !!
+     * @param serviceEndpoint
+     */
 	public ResolverClient(String serviceEndpoint) {
 		this.serviceEnpoint = serviceEndpoint;
 		httpClient = new DefaultHttpClient();

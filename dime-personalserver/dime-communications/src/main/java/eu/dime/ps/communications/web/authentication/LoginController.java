@@ -2,11 +2,17 @@ package eu.dime.ps.communications.web.authentication;
 
 import eu.dime.ps.communications.requestbroker.controllers.authentication.AuthenticationController;
 import eu.dime.ps.controllers.UserManager;
+import eu.dime.ps.gateway.ServiceGateway;
+import eu.dime.ps.gateway.exception.ServiceNotAvailableException;
+import eu.dime.ps.gateway.service.AttributeMap;
+import eu.dime.ps.gateway.service.external.DimeUserResolverServiceAdapter;
 import eu.dime.ps.gateway.service.internal.DimeDNSException;
 import eu.dime.ps.gateway.service.internal.DimeIPResolver;
+import eu.dime.ps.semantic.model.nco.PersonContact;
 import eu.dime.ps.storage.entities.User;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.UUID;
 import java.util.logging.Level;
 import javax.naming.NamingException;
 import org.slf4j.Logger;
@@ -32,6 +38,9 @@ public class LoginController {
     private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
     @Autowired
     private UserManager userManager;
+
+    @Autowired
+    private ServiceGateway serviceGateway;
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public ModelAndView login() {
@@ -168,6 +177,26 @@ public class LoginController {
             modelAndView.addObject("result", "received from "+dir.getDimeDns()+": ip:"+dir.resolveSaid(said));
         } catch (DimeDNSException ex) {
             modelAndView.addObject("result", "DNS resolve failed! Unable to resolve said: "+said+" at "+dir.getDimeDns()
+                    +"<br/>"+ex.getClass().getName()
+                    +"<br/>"+ex.getMessage());
+        }
+
+        return modelAndView;
+    }
+
+
+    @RequestMapping(value = "/ursRegisterTest", method = RequestMethod.GET)
+    public ModelAndView ursRegisterTest() {
+
+         ModelAndView modelAndView = new ModelAndView("ajax_result");
+        try {
+            DimeUserResolverServiceAdapter userResolver =serviceGateway.getDimeUserResolverServiceAdapter();
+            String id = UUID.randomUUID().toString();
+            String result = userResolver.registerAtURS(id,"dummyUserTest"+id, "dummyUserTestfirstName", "dummyUserTestSurName" );
+            modelAndView.addObject("result",result);
+
+        } catch (Exception ex) {
+            modelAndView.addObject("result", "Exception occured:"
                     +"<br/>"+ex.getClass().getName()
                     +"<br/>"+ex.getMessage());
         }

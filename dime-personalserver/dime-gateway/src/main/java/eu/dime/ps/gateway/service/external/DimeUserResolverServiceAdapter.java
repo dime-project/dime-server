@@ -34,6 +34,7 @@ import eu.dime.ps.gateway.service.ServiceResponse;
 import eu.dime.ps.gateway.userresolver.client.DimeResolver;
 import eu.dime.ps.gateway.userresolver.client.noauth.ResolverClient;
 import eu.dime.ps.semantic.model.nco.PersonContact;
+import java.util.logging.Level;
 
 /**
  * @author Sophie.Wrobel
@@ -94,41 +95,22 @@ public class DimeUserResolverServiceAdapter extends ServiceAdapterBase implement
 		// Profiles
 		// Attribute: /profile/@me
 		if (AttributeMap.PROFILE_ME.equals(attribute)) {
-
-			// Prepare contact to register
-			// FIXME what if value is not a PersonContact object?? (now an ugly ClassCastException) 
-			// FIXME what if the contact has no PersonName?? (now a NullPointerException, not nice!)
-			PersonContact contact = (PersonContact) value;
-			String firstname = contact.getAllPersonName_as().firstValue()
-					.getNameGiven();
-			String surname = contact.getAllPersonName_as().firstValue()
-					.getNameFamily();
-			String nickname = contact.getAllPersonName_as().firstValue()
-					.getAllNickname().next().toString();
-
-			try {
-				// Retrieve master secret
-				String URS = policyManager.getPolicyString("URS", "DIME");
-
-				StringBuilder resolverEndpoint = new StringBuilder();
-				resolverEndpoint.append(URS);
-				resolverEndpoint.append(policyManager.getPolicyString("NOAUTH_RESOLVER_ENDPOINT", "DIME"));
-				
-				DimeResolver resolverClient = new ResolverClient(resolverEndpoint.toString());
-
-				Map<String, String> values = new HashMap<String, String>();
-				values.put("name", firstname);
-				values.put("surname", surname);
-				values.put("nickname", nickname);
-
-				// Register with user service //token currently not supported without idemix
-				resolverClient.register(null, firstname, surname, nickname,
-						this.getIdentifier());
-			} catch (IOException e) {
+            try {
+                // Prepare contact to registerAtURS
+                // FIXME what if value is not a PersonContact object?? (now an ugly ClassCastException)
+                // FIXME what if the contact has no PersonName?? (now a NullPointerException, not nice!)
+                PersonContact contact = (PersonContact) value;
+                String firstname = contact.getAllPersonName_as().firstValue()
+                        .getNameGiven();
+                String surname = contact.getAllPersonName_as().firstValue()
+                        .getNameFamily();
+                String nickname = contact.getAllPersonName_as().firstValue()
+                        .getAllNickname().next().toString();
+                registerAtURS(getIdentifier(), nickname, firstname, surname);
+            } catch (IOException e) {
 				logger.error(e.toString(),e);
 				throw new ServiceNotAvailableException(
-						"Registering to "
-								+ attribute + " failed.");
+						"Registering to "+ attribute + " failed.");
 			}
 
 		} else {
@@ -220,6 +202,29 @@ public class DimeUserResolverServiceAdapter extends ServiceAdapterBase implement
 	public Boolean isConnected() {
 		return this.proxy != null;
 	}
+
+    public String registerAtURS(String id, String nickname, String firstname, String surname) throws IOException  {
+
+
+        // Retrieve master secret
+        String URS = policyManager.getPolicyString("URS", "DIME");
+
+        StringBuilder resolverEndpoint = new StringBuilder();
+        resolverEndpoint.append(URS);
+        resolverEndpoint.append(policyManager.getPolicyString("NOAUTH_RESOLVER_ENDPOINT", "DIME"));
+
+        DimeResolver resolverClient = new ResolverClient(resolverEndpoint.toString());
+
+        Map<String, String> values = new HashMap<String, String>();
+        values.put("name", firstname);
+        values.put("surname", surname);
+        values.put("nickname", nickname);
+
+        // Register with user service //token currently not supported without idemix
+        return resolverClient.register(null, firstname, surname, nickname, id);
+
+
+    }
 
 
 
