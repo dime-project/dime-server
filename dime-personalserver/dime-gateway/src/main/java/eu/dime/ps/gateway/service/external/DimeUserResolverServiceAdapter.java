@@ -45,13 +45,6 @@ public class DimeUserResolverServiceAdapter extends ServiceAdapterBase implement
 
 	public final static String NAME = "PublicDimeUserDirectory";
 	
-	private String identifier;
-	private Token accessToken;
-	private String masterSecret;
-	private String idemixCredential;
-
-	@Autowired
-	private PolicyManager policyManager;
 
 	private HttpRestProxy proxy;
 	private HashMap<String, String> headers;
@@ -62,7 +55,7 @@ public class DimeUserResolverServiceAdapter extends ServiceAdapterBase implement
 	 * @throws ServiceNotAvailableException
 	 */
 	public DimeUserResolverServiceAdapter() throws ServiceNotAvailableException {
-		this("account:urn:" + UUID.randomUUID(), null, null);
+		this("account:urn:" + UUID.randomUUID());
 	}
 
 	/**
@@ -72,18 +65,7 @@ public class DimeUserResolverServiceAdapter extends ServiceAdapterBase implement
 	 * @throws ServiceNotAvailableException
 	 */
 	public DimeUserResolverServiceAdapter(String identifier)
-			throws ServiceNotAvailableException {
-		this(identifier, null, null);
-	}
-
-	/**
-	 * @param identifier
-	 *            The identifier URI to identify the service adapter
-	 * 
-	 * @throws ServiceNotAvailableException
-	 */
-	public DimeUserResolverServiceAdapter(String identifier, String username,
-			String password) throws ServiceNotAvailableException {
+			throws ServiceNotAvailableException {	
 		super();
 		this.identifier = identifier;
 		// this.policyManager = PolicyManagerImpl.getInstance();
@@ -99,27 +81,13 @@ public class DimeUserResolverServiceAdapter extends ServiceAdapterBase implement
 		}
 	}
 
-	@Override
-	public String getIdentifier() {
-		return this.identifier;
-	}
+	
+
+
+
 
 	@Override
-	public void setIdentifer(String identifier) {
-		this.identifier = identifier;
-	}
-
-	public Token getUserToken() {
-		return this.accessToken;
-	}
-
-	@Override
-	public void setPolicyManager(PolicyManager policyManager) {
-		this.policyManager = policyManager;
-	}
-
-	@Override
-	public void set(String attribute, Object value)
+	public void _set(String attribute, Object value)
 			throws AttributeNotSupportedException,
 			ServiceNotAvailableException, InvalidDataException {
 
@@ -153,8 +121,8 @@ public class DimeUserResolverServiceAdapter extends ServiceAdapterBase implement
 				values.put("surname", surname);
 				values.put("nickname", nickname);
 
-				// Register with user service
-				resolverClient.register(firstname, surname, nickname,
+				// Register with user service //token currently not supported without idemix
+				resolverClient.register(null, firstname, surname, nickname,
 						this.getIdentifier());
 			} catch (IOException e) {
 				logger.error(e.toString(),e);
@@ -227,7 +195,7 @@ public class DimeUserResolverServiceAdapter extends ServiceAdapterBase implement
 	}
 
 	@Override
-	public void delete(String attribute) throws ServiceNotAvailableException,
+	public void _delete(String attribute) throws ServiceNotAvailableException,
 			AttributeNotSupportedException {
 
 		// Remove not supported
@@ -253,9 +221,6 @@ public class DimeUserResolverServiceAdapter extends ServiceAdapterBase implement
 		return this.proxy != null;
 	}
 
-	@Override
-	public void setSetting(String name, String value) {
-		// Do nothing, since there are no settings for the Dime URS
-	}
+
 
 }
