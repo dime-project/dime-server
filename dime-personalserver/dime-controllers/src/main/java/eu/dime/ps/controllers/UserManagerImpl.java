@@ -375,6 +375,10 @@ public class UserManagerImpl implements UserManager {
                     +e.getClass().getName()+": "+e.getMessage(), e);
             }
         } catch (Exception e) {
+            logger.error(e.getClass().getName()+": "+e.getMessage(), e);
+            try{
+                //roll back
+
                 //FIXME: unregister at DNS
                 if (user!=null){
                     user.remove();
@@ -382,11 +386,13 @@ public class UserManagerImpl implements UserManager {
                 if (tenant!=null){
                     tenant.remove();
                 }
-                //FIXME: remove profile from URS
-                //FIXME remove profile from rdf
-
-                logger.error(e.getClass().getName()+": "+e.getMessage(), e);
-                throw new DimeException(e.getClass().getName()+": "+e.getMessage(),e);
+            }catch(Exception ex){
+                logger.warn("Error when trying to roll-back: "+ex.getMessage(),ex);
+            }
+            //FIXME: remove profile from URS
+            //FIXME remove profile from rdf
+            
+            throw new DimeException(e.getClass().getName()+": "+e.getMessage(),e);
         } finally {
                 lock.unlock();
         }
