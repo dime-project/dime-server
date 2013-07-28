@@ -1,7 +1,3 @@
-/*
- * Copyright (c) 2011 DERI, NUIG 
- */
-
 package eu.dime.ps.datamining;
 
 

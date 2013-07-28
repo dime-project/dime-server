@@ -1,6 +1,3 @@
-/*
- * Copyright (c) 2011 DERI, NUIG 
- */
 package eu.dime.ps.datamining.service.api.impl;
 
 import eu.dime.ps.datamining.service.AbstractCrawlerHandler;

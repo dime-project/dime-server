@@ -1,6 +1,3 @@
-/*
- * Copyright (c) 2011 DERI, NUIG 
- */
 package eu.dime.ps.datamining.service;
 
 import org.ontoware.rdfreactor.schema.rdfs.Resource;
