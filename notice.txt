@@ -180,25 +180,6 @@ This product includes the following third-party software:
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * ========================================================== */
-./dime-personalserver/dime-communications/target/dime-communications/static/dime/matching/assets/js/bootstrap-button.js: * Copyright 2012 Twitter, Inc.
-./dime-personalserver/dime-communications/target/dime-communications/static/dime/matching/assets/js/bootstrap.js: * Copyright 2012 Twitter, Inc.
-./dime-personalserver/dime-communications/target/dime-communications/static/dime/matching/assets/js/bootstrap-tab.js: * Copyright 2012 Twitter, Inc.
-./dime-personalserver/dime-communications/target/dime-communications/static/dime/matching/assets/js/bootstrap-modal.js: * Copyright 2012 Twitter, Inc.
-./dime-personalserver/dime-communications/target/dime-communications/static/dime/matching/assets/js/bootstrap-carousel.js: * Copyright 2012 Twitter, Inc.
-./dime-personalserver/dime-communications/target/dime-communications/static/dime/matching/assets/js/bootstrap-dropdown.js: * Copyright 2012 Twitter, Inc.
-./dime-personalserver/dime-communications/target/dime-communications/static/dime/matching/assets/js/bootstrap-transition.js: * Copyright 2012 Twitter, Inc.
-./dime-personalserver/dime-communications/target/dime-communications/static/dime/matching/assets/js/bootstrap-affix.js: * Copyright 2012 Twitter, Inc.
-./dime-personalserver/dime-communications/target/dime-communications/static/dime/matching/assets/js/bootstrap-scrollspy.js: * Copyright 2012 Twitter, Inc.
-./dime-personalserver/dime-communications/target/dime-communications/static/dime/matching/assets/js/bootstrap-alert.js: * Copyright 2012 Twitter, Inc.
-./dime-personalserver/dime-communications/target/dime-communications/static/dime/matching/assets/js/bootstrap-typeahead.js: * Copyright 2012 Twitter, Inc.
-./dime-personalserver/dime-communications/target/dime-communications/static/dime/matching/assets/js/bootstrap.min.js:* Copyright 2012 Twitter, Inc.
-./dime-personalserver/dime-communications/target/dime-communications/static/dime/matching/assets/js/bootstrap-tooltip.js: * Copyright 2012 Twitter, Inc.
-./dime-personalserver/dime-communications/target/dime-communications/static/dime/matching/assets/js/bootstrap-collapse.js: * Copyright 2012 Twitter, Inc.
-./dime-personalserver/dime-communications/target/dime-communications/static/dime/matching/assets/js/bootstrap-popover.js: * Copyright 2012 Twitter, Inc.
-./dime-personalserver/dime-communications/target/dime-communications/static/dime/register/js/bootstrap.js: * Copyright 2012 Twitter, Inc.
-./dime-personalserver/dime-communications/target/dime-communications/static/dime/register/js/bootstrap.min.js:* Copyright 2012 Twitter, Inc.
-./dime-personalserver/dime-communications/target/dime-communications/static/dime/script/bootstrap.js: * Copyright 2012 Twitter, Inc.
-./dime-personalserver/dime-communications/target/dime-communications/static/dime/script/bootstrap-modal.js: * Copyright 2012 Twitter, Inc.
 ./dime-personalserver/dime-communications/src/main/webapp/static/dime/matching/assets/js/bootstrap-button.js: * Copyright 2012 Twitter, Inc.
 ./dime-personalserver/dime-communications/src/main/webapp/static/dime/matching/assets/js/bootstrap.js: * Copyright 2012 Twitter, Inc.
 ./dime-personalserver/dime-communications/src/main/webapp/static/dime/matching/assets/js/bootstrap-tab.js: * Copyright 2012 Twitter, Inc.
@@ -233,8 +214,18 @@ This product includes the following third-party software:
  *
  * Date: 2013-2-4
  */
-./dime-personalserver/dime-communications/target/dime-communications/static/dime/matching/assets/js/jquery-1.9.1.js: * Copyright 2005, 2012 jQuery Foundation, Inc. and other contributors
 ./dime-personalserver/dime-communications/src/main/webapp/static/dime/matching/assets/js/jquery-1.9.1.js: * Copyright 2005, 2012 jQuery Foundation, Inc. and other contributors
+./dime-personalserver/dime-communications/src/main/webapp/static/dime/matching/assets/js/jquery.js:/*! jQuery v1.9.1 | (c) 2005, 2012 jQuery Foundation, Inc. | jquery.org/license
+./dime-personalserver/dime-communications/src/main/webapp/static/dime/register/js/jquery-1.9.1.min.js:/*! jQuery v1.9.1 | (c) 2005, 2012 jQuery Foundation, Inc. | jquery.org/license
+
+
+/*! Copyright (c) 2010 Brandon Aaron (http://brandonaaron.net)
+ * Licensed under the MIT License (LICENSE.txt).
+ *
+ */
+./dime-personalserver/dime-communications/src/main/webapp/static/dime/register/js/mousewheel.js:/*! Copyright (c) 2010 Brandon Aaron (http://brandonaaron.net)
+
+
 /**
  * http://github.com/Valums-File-Uploader/file-uploader
  *
@@ -251,3 +242,16 @@ This product includes the following third-party software:
  * Licensed under MIT license, GNU GPL 2 or later, GNU LGPL 2 or later, see license.txt.
  */
 dime-personalserver/dime-communications/src/main/webapp/static/dime/script/fileuploader.js
+
+
+
+/*
+
+Holder - 1.9 - client side image placeholders
+(c) 2012-2013 Ivan Malopinsky / http://imsky.co
+
+Provided under the Apache 2.0 License: http://www.apache.org/licenses/LICENSE-2.0
+Commercial use requires attribution.
+
+*/
+./dime-personalserver/dime-communications/src/main/webapp/static/dime/matching/assets/js/holder/holder.js:(c) 2012-2013 Ivan Malopinsky / http://imsky.co
