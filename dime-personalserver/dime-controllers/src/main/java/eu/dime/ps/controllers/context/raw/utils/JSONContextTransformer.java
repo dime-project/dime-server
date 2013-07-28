@@ -1,6 +1,3 @@
-/*
- * Copyright (c) 2011 Telecom Italia S.p.A.
- */
 package eu.dime.ps.controllers.context.raw.utils;
 
 import java.util.ArrayList;

@@ -1,7 +1,3 @@
-/*
- * Copyright (c) 2011 Telecom Italia S.p.A.
- */
-
 package eu.dime.context.model.ontology;
 
 /**
