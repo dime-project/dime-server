@@ -111,6 +111,9 @@ public class ContextProcessorImpl implements IContextProcessor, IProviderManager
 			for (int i=0; i<ctxElArr.length; i++){
 				// Ctx elements are resynchronized on current time
 				IContextElement currEl = Factory.cloneResynchdContextElement(ctxElArr[i], timeRef, now);
+				
+				if (currEl.getScope().getScopeAsString().equalsIgnoreCase(Constants.SCOPE_LOCATION_POSITION) &&
+						mobilePositionAvailable(tenant, currEl)) continue;
 
 				logger.debug("Storing " + currEl.getScope().getScopeAsString() + " in cache");
 				storage.storeContextElement(tenant,currEl);
@@ -125,6 +128,32 @@ public class ContextProcessorImpl implements IContextProcessor, IProviderManager
 			throw new ContextException("contextUpdate exception: " + e.getMessage(),e);
 		}
 		
+	}
+	
+	private boolean mobilePositionAvailable(Tenant tenant, IContextElement newPosition) {
+		
+		// if new position comes from mobile crawler it's normally updated
+		if (newPosition.getSource().equalsIgnoreCase("mobile-crawler")) return false;
+		
+		try {
+			IContextDataset dataset = getContext(tenant,newPosition.getEntity(),newPosition.getScope());
+			if (dataset == IContextDataset.EMPTY_CONTEXT_DATASET) {
+				logger.debug("No position available in context cache");
+				return false;
+			}
+			IContextElement position = dataset.getCurrentContextElement(newPosition.getEntity(), newPosition.getScope());
+			if (position == null) {
+				logger.debug("No valid position available in context cache");
+				return false;
+			} else {
+				if (position.getSource().equalsIgnoreCase("mobile-crawler")) {
+					logger.debug("Valid mobile position available in context cache, desktop position ignored!");
+					return true;
+				} else return false;
+			}
+		} catch (ContextException e) {
+			return false;
+		}
 	}
 
 	public IContextDataset getContext(Tenant tenant, IEntity entity, IScope scope)
