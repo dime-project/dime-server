@@ -40,7 +40,7 @@ import eu.dime.ps.storage.entities.ServiceAccount;
 import eu.dime.ps.storage.entities.ServiceProvider;
 import eu.dime.ps.storage.entities.Tenant;
 import eu.dime.ps.storage.entities.User;
-import eu.dime.ps.storage.jfix.util.Arrays;
+import eu.dime.jfix.util.Arrays;
 import eu.dime.ps.storage.manager.EntityFactory;
 
 /**

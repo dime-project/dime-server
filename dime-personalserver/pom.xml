@@ -132,6 +132,11 @@
 				<checksumPolicy>fail</checksumPolicy>
 			</snapshots>
 		</repository>
+			
+		<repository>
+			<id>hci.iao.fraunhofer</id>
+			<url>http://dime.hci.iao.fraunhofer.de/maven-repository</url>			
+		</repository>
 	</repositories>
 
 	<pluginRepositories>
@@ -472,6 +477,12 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-beans</artifactId>
 			<version>${spring.version}</version>
+		</dependency>
+		<!-- JEASE -->
+		<dependency>
+			  <groupId>eu.dime</groupId>
+			  <artifactId>jfix-utils</artifactId>
+			  <version>1.0.1</version>
 		</dependency>
 	</dependencies>
 

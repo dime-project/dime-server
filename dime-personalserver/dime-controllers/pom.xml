@@ -68,6 +68,7 @@
 			<version>0.0.1-SNAPSHOT</version>
 			<type>jar</type>
 		</dependency>
+		
 
 		<!-- REST dependencies -->
 		<dependency>

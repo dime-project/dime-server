@@ -41,7 +41,7 @@ import eu.dime.ps.semantic.privacy.PrivacyPreferenceType;
 import eu.dime.ps.semantic.query.impl.BasicQuery;
 import eu.dime.ps.semantic.rdf.ResourceStore;
 import eu.dime.ps.semantic.service.impl.PimoService;
-import eu.dime.ps.storage.jfix.util.Arrays;
+import eu.dime.jfix.util.Arrays;
 
 /**
  * 

@@ -64,7 +64,7 @@ import eu.dime.ps.semantic.query.Query;
 import eu.dime.ps.semantic.rdf.ResourceStore;
 import eu.dime.ps.semantic.service.impl.PimoService;
 import eu.dime.ps.dto.Type;
-import eu.dime.ps.storage.jfix.util.Arrays;
+import eu.dime.jfix.util.Arrays;
 
 /**
  * Deals with the generation of notifications for sharing resources between di.me

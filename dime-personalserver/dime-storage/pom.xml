@@ -44,10 +44,6 @@
 			<id>source.db4o</id>
 			<url>http://source.db4o.com/maven</url>
 		</repository>	
-		<repository>
-			<id>hci.dime.eu</id>
-			<url>http://dime.hci.iao.fraunhofer.de/maven-repository</url>			
-		</repository>	
 		
 	</repositories>
 	<pluginRepositories>
@@ -428,12 +424,6 @@
 			<artifactId>xstream</artifactId>
 			<version>1.4.2</version>
 		</dependency>
-		<!-- <dependency> -->
-		<!-- <groupId>jease</groupId> -->
-		<!-- <artifactId>jfix</artifactId> -->
-		<!-- <version>1.0</version> -->
-		<!-- </dependency> -->
-
 		<dependency>
 			<groupId>javax.mail</groupId>
 			<artifactId>mail</artifactId>
@@ -444,11 +434,6 @@
 			<artifactId>db4o-full-java5</artifactId>
 			<version>8.0-SNAPSHOT</version>
 		</dependency>
-		<dependency>
-			  <groupId>eu.dime</groupId>
-			  <artifactId>jfix-utils</artifactId>
-			  <version>1.0.1</version>
-	      </dependency>
 		<!-- <dependency> <groupId>org.apache.tika</groupId> <artifactId>tika-core</artifactId> <version>1.1</version> </dependency> -->
 	</dependencies>
 
