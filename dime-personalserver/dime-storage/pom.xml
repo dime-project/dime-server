@@ -45,7 +45,7 @@
 			<url>http://source.db4o.com/maven</url>
 		</repository>	
 		<repository>
-			<id>dime.hci</id>
+			<id>hci.dime.eu</id>
 			<url>http://dime.hci.iao.fraunhofer.de/maven-repository</url>			
 		</repository>	
 		
@@ -446,7 +446,7 @@
 		</dependency>
 		<dependency>
 			  <groupId>eu.dime</groupId>
-			  <artifactId>jfix</artifactId>
+			  <artifactId>jfix-utils</artifactId>
 			  <version>1.0.1</version>
 	      </dependency>
 		<!-- <dependency> <groupId>org.apache.tika</groupId> <artifactId>tika-core</artifactId> <version>1.1</version> </dependency> -->
