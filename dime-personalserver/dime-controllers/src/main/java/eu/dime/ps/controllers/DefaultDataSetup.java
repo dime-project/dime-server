@@ -81,12 +81,12 @@ public class DefaultDataSetup implements BroadcastReceiver {
 	private static final Map<String, String[]> CONTACTS = new HashMap<String, String[]>();
 	static {
 		CONTACTS.put("c8184790-7e63-4640-98b2-64319ea895b5", new String[] { "Christian Knecht", "christian.knecht@iao.fraunhofer.de", "Chris" });
-		CONTACTS.put("todo", new String[] { "Cristina Fra", "cristina.fra@email.com", "cfra" });
+		CONTACTS.put("47a53168-d836-4f5d-acbc-3c541ee5ceea", new String[] { "Cristina Fra", "cristina.fra@telecomitalia.it", "cristina" });
 		CONTACTS.put("03baf7e3-eb8f-4c90-8643-63f579c2d88c", new String[] { "Fabian Hermann", "fabian.hermann@iao.fraunhofer.de", "FHermann" });
 		CONTACTS.put("todo", new String[] { "Ismael Rivera", "ismael.rivera@email.com", "ismriv" });
 		CONTACTS.put("todo", new String[] { "Marc Planaguma", "marc.planaguma@email.com", "marc" });
 		CONTACTS.put("429375b5-0380-47e8-b0f7-9d9ebda77a54", new String[] { "Marcel Heupel", "heupel@wiwi.uni-siegen.de", "mhpl" });
-		CONTACTS.put("todo", new String[] { "Massimo Valla ", "massimo.valla@email.com", "mvalla" });
+		CONTACTS.put("a8f4fa70-8cd6-468e-9340-26a8849b08be", new String[] { "Massimo Valla ", "massi.tilab@gmail.com", "massitilab" });
 		CONTACTS.put("3a5782da-4881-4eba-924f-de1d5506e47b", new String[] { "Rafael Gimenez", "rgimenez@bdigital.org", "rgimenez" });
 		CONTACTS.put("bef98d62-b857-4321-930d-fa1f00792572", new String[] { "Simon Scerri", "simon.scerri@deri.org", "irrecs" });
 		CONTACTS.put("cc51d3c8-c0d8-459b-adc3-0014ec7bc642", new String[] { "Simon Thiel", "simon.thiel@iao.fraunhofer.de", "Simon" });
