@@ -2433,6 +2433,10 @@ input[type="text"].DimeDetailDialogPAValueListItemValue{
     height: 80px !important;   
 }
 
+.qq-upload-list{
+    width: 750px;
+}
+
 #dropzoneNavigation input{
     width: 100%
 }

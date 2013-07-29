@@ -1959,9 +1959,6 @@ Dime.initProcessor.registerFunction(function(callback){
 //  Dime.Navigation - override
 //#############################################
 //---------------------------------------------
-
-
-
 Dime.Navigation.updateView = function(notifications){
     var refreshContainer = false;
     var refreshSituations = false;
@@ -2016,10 +2013,6 @@ Dime.Navigation.updateView = function(notifications){
             Dime.Settings.updateAccounts();
         }
     }
-
-
-
-   
 };
 
 Dime.Navigation.createMenuLiButton=function(id, caption, containerGroupType){
