@@ -62,7 +62,7 @@ public class ServiceCrawlerConfigurator {
 		// FIXME on the staging server (linux) the config XML files are not found, now setting the config programmatically
 		// and will fix later
 		config.put("Facebook", new ArrayList<JobConfiguration>());
-		config.get("Facebook").add(new JobConfiguration("/person/@me/@all", eu.dime.ps.semantic.model.nco.PersonContact.class, "0 0/30 * * * ?"));
+		config.get("Facebook").add(new JobConfiguration("/person/@me/@all", eu.dime.ps.semantic.model.nco.PersonContact.class, "0 0/30 1 1 * ?"));
 		config.get("Facebook").add(new JobConfiguration("/profile/@me/@all", eu.dime.ps.semantic.model.nco.PersonContact.class, "0 0/30 * * * ?"));
 //		config.get("Facebook").add(new JobConfiguration("/livepost/@me/@all", eu.dime.ps.semantic.model.dlpo.LivePost.class, "0 0/5 * * * ?"));
 		config.put("Fitbit", new ArrayList<JobConfiguration>());
@@ -73,7 +73,7 @@ public class ServiceCrawlerConfigurator {
 		config.get("GooglePlus").add(new JobConfiguration("/profile/@me/@all", eu.dime.ps.semantic.model.nco.PersonContact.class, "0 0/30 * * * ?"));
 //		config.get("GooglePlus").add(new JobConfiguration("/livepost/@me/@all", eu.dime.ps.semantic.model.dlpo.LivePost.class, "0 0/5 * * * ?"));
 		config.put("LinkedIn", new ArrayList<JobConfiguration>());
-		config.get("LinkedIn").add(new JobConfiguration("/person/@me/@all", eu.dime.ps.semantic.model.nco.PersonContact.class, "0 0/30 * * * ?"));
+		config.get("LinkedIn").add(new JobConfiguration("/person/@me/@all", eu.dime.ps.semantic.model.nco.PersonContact.class, "0 0/30 1 1 * ?"));
 		config.get("LinkedIn").add(new JobConfiguration("/profile/@me/@all", eu.dime.ps.semantic.model.nco.PersonContact.class, "0 0/30 * * * ?"));
 //		config.get("LinkedIn").add(new JobConfiguration("/livepost/@me/@all", eu.dime.ps.semantic.model.dlpo.LivePost.class, "0 0/5 * * * ?"));
 //		config.get("LinkedIn").add(new JobConfiguration("/livepost/@all", eu.dime.ps.semantic.model.dlpo.LivePost.class, "0 0/5 * * * ?"));
