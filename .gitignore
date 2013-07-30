@@ -26,3 +26,4 @@ dime-personalserver/logs/
 
 # Local properties
 dime-personalserver/dime-gateway/services.properties
+/nbproject/private/

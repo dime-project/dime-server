@@ -174,7 +174,7 @@ DimeView = {
             entry.read=true;
             Dime.REST.updateItem(entry);
             jChildItem.addClass('userNotificationWasRead');
-        }
+        };
 
 
         //classes
@@ -278,11 +278,8 @@ DimeView = {
         //innerChild - name
         var entryName = DimeView.getShortName(entry.name);
         
-        
-        if (entry.type!==Dime.psMap.TYPE.USERNOTIFICATION){
-            jChildItem.append('<h4>'+ entryName + '</h4>');
-        }
-          
+        jChildItem.append('<h4>'+ entryName + '</h4>');
+                  
         //innerChild - type specific fields
         if (entry.type===Dime.psMap.TYPE.LIVEPOST && entry.text){
             jChildItem.append(
@@ -353,12 +350,12 @@ DimeView = {
         }
 
         var isSubString=function(fullString, subString){
-            return (subString.toLowerCase().indexOf(fullString.toLowerCase())!==-1)
-        }
+            return (subString.toLowerCase().indexOf(fullString.toLowerCase())!==-1);
+        };
 
         var isInFilter = function(entry){
             return isSubString(DimeView.searchFilter, entry.name);
-        }
+        };
 
         //special search when searching on usernotifications
         if (type===Dime.psMap.TYPE.USERNOTIFICATION){
@@ -375,7 +372,7 @@ DimeView = {
                 ;
 
                 return result;
-            }
+            };
         }
 
         //for @me profiles we skip profiles with no said
@@ -388,7 +385,7 @@ DimeView = {
                 }
                 return isSubString(DimeView.searchFilter, entry.name);
                 //TODO - also search in attributes
-            }
+            };
 
         }
 
@@ -649,7 +646,7 @@ DimeView = {
         for (var i=0;i<mySelectedItems.length;i++){
             var updateInformationViewContainer = function(response){
                 informationViewContainer.append(DimeView.createMetaBarListItemForItem(response));
-            }
+            };
             Dime.REST.getItem(mySelectedItems[i].guid, mySelectedItems[i].type, updateInformationViewContainer,
                 mySelectedItems[i].userId, this);
         }
@@ -820,7 +817,7 @@ DimeView = {
 
         var updateGroupMembers = function(response){
             this.updateItemContainerFromArray(response, groupEntry.name);
-        }
+        };
 
         Dime.REST.getItems(groupEntry.items,Dime.psHelper.getChildType(groupEntry.type), updateGroupMembers, groupEntry.userId, this);
                     
@@ -1035,7 +1032,7 @@ DimeView = {
     search: function(){
 
         var searchText = document.getElementById('searchText');
-        console.log('search:', searchText.value);    
+        //console.log('search:', searchText.value);    
         DimeView.searchFilter = searchText.value;
 
         DimeView.cleanUpView();
@@ -1105,7 +1102,7 @@ DimeView = {
             });
 
             return result;
-        }
+        };
 
         //populate new dialog
         var createMenuItem = function(type){
@@ -1212,7 +1209,6 @@ DimeView = {
     },
 
     //VIEW_MAP
-
     GROUP_CONTAINER_VIEW: 1,
     SETTINGS_VIEW: 2,
     PERSON_VIEW: 3,
@@ -1231,6 +1227,8 @@ DimeView = {
     addToViewMap: function(viewMapEntry){
         DimeView.viewMap[viewMapEntry.id]=viewMapEntry;
     },
+            
+            
     /**
      *
      *
@@ -1247,29 +1245,24 @@ DimeView = {
         DimeView.currentView=viewType;
         DimeView.switchViewForViewType();
 
-        if (groupType && !avoidPushingHistory){ //FIXME add support for settings by furhter url parameters --> refactoring required!
-            window.history.pushState({groupType:groupType, viewType:viewType}, "", "index.html?type="+groupType);
+        if (!avoidPushingHistory){ //FIXME add support for settings by furhter url parameters --> refactoring required!
+            if (!groupType){
+                console.log("grouptype not set - using default: GROUP");
+                groupType=Dime.psMap.TYPE.GROUP;
+            }
+            window.history.pushState({groupType:groupType, viewType:viewType}, "", "index.html?type="+groupType+"&viewType="+viewType);
         }
 
         if (viewType===DimeView.SETTINGS_VIEW){
-            Dime.Navigation.setButtonsActive("navButtonSettings");
+            Dime.Navigation.setButtonsActive("navButtonSettings");   
             Dime.Settings.updateView();
             return;
-
-        }
-
-        if (!groupType){
-            //GO on with viewType===PERSON_VIEW and viewType===GROUP_CONTAINER_VIEW
-            console.log("grouptype not set - using default: GROUP");
-            groupType = Dime.psMap.TYPE.GROUP;
         }
         
         //update grouptype and itemtype
         DimeView.groupType = groupType;        
         DimeView.itemType =  Dime.psHelper.getChildType(DimeView.groupType);
 
-        
-        
         //update navigation button shown
         if (DimeView.groupType===Dime.psMap.TYPE.DATABOX){
             Dime.Navigation.setButtonsActive("navButtonData");
@@ -1315,7 +1308,7 @@ DimeView = {
     switchViewForViewType: function(){
         var viewType=DimeView.currentView;
 
-        jQuery.each(DimeView.viewMap,function(){
+        jQuery.each(DimeView.viewMap, function(){
             //viewMapEntry: id, groupActive, settingsActive, personViewActive
             var displayMe=false;
             if (viewType===DimeView.GROUP_CONTAINER_VIEW){
@@ -1649,7 +1642,7 @@ Dime.Settings = {
         var serviceAdapterCallback=function(serviceAdapter){
             var dialog = new Dime.ConfigurationDialog(this, this.configurationSubmitHandler);
             dialog.show(serviceAdapter.name,serviceAdapter.description, item, false);
-        }
+        };
 
         Dime.Settings.getAdapterByGUID(item.serviceadapterguid, serviceAdapterCallback);
         
@@ -1745,7 +1738,7 @@ Dime.Settings = {
                                     if (event.keyCode == 13) {
                                         if (!myPass){//first time
                                             myPass=$(this).val();
-                                            $(this).attr('placeholder','enter password again').val("")
+                                            $(this).attr('placeholder','enter password again').val("");
                                         }else{ //retyped
                                             var secondPass = $(this).val();
                                             if (secondPass!==myPass){                                            
@@ -1761,7 +1754,7 @@ Dime.Settings = {
                                     }
                                 })
                         )
-                        )
+                        );
                         });
                 myContainer.append(input);
             };
@@ -1885,20 +1878,27 @@ Dime.initProcessor.registerFunction(function(callback){
     
     //set grouptype
     var groupType = Dime.psHelper.getURLparam("type");
+    var viewType = Dime.psHelper.getURLparam("viewType");
     var guid = Dime.psHelper.getURLparam("guid");
     var dItemType = Dime.psHelper.getURLparam("dItemType");
     var userId = Dime.psHelper.getURLparam("userId");
     var message = Dime.psHelper.getURLparam("msg");
     
     //update view
-    DimeView.updateView(groupType, DimeView.GROUP_CONTAINER_VIEW);
+    if(viewType==DimeView.GROUP_CONTAINER_VIEW){
+        DimeView.updateView(groupType, DimeView.GROUP_CONTAINER_VIEW, true);
+    }else if(viewType==DimeView.SETTINGS_VIEW){
+        DimeView.updateView(groupType, DimeView.SETTINGS_VIEW, true);
+    }else{
+        DimeView.updateView(groupType, DimeView.PERSON_VIEW, true);
+    }
     
     if (guid && guid.length>0 && userId && userId.length>0 ){
         var showDialog = function (response){
             if (response){
                 DimeView.editItem(null, null, response, message);
             }
-        }
+        };
         Dime.REST.getItem(guid, dItemType, showDialog, userId, DimeView);
 
     }
@@ -1922,7 +1922,7 @@ Dime.initProcessor.registerFunction(function(callback){
             Dime.REST.updateUser(response);
             DimeView.showAbout();
         }
-    }
+    };
     Dime.REST.getUser(getUserCallback, DimeView);
 
     callback();
@@ -1943,7 +1943,7 @@ Dime.initProcessor.registerFunction(function(callback){
            }
         });
         Dime.Navigation.updateNotificationBar(unReadUNs);        
-    }
+    };
     Dime.REST.getAll(Dime.psMap.TYPE.USERNOTIFICATION, getUsernotificationCallback, "@me", this);
     
     callback();
@@ -2060,6 +2060,4 @@ Dime.Navigation.createNotificationIcon=function(){
      if (viewState){
          DimeView.updateView(viewState.groupType, viewState.viewType, true);
      }
-
-  
 };
