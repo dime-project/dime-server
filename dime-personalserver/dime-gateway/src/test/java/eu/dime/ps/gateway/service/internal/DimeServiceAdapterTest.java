@@ -49,6 +49,7 @@ import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.model.node.impl.URIImpl;
 import org.ontoware.rdf2go.vocabulary.RDF;
 import org.scribe.model.Token;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -64,8 +65,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 //@PrepareForTest({DimeServiceAdapter.class, DimeIPResolver.class})
 public class DimeServiceAdapterTest extends Assert {
 
-
-	@Mock EntityFactory entityFactory;
+    @Autowired
+	EntityFactory entityFactory;
 
     Tenant tenant1;
 
