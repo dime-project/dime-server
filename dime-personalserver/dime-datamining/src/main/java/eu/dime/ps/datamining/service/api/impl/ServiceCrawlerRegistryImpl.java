@@ -358,7 +358,7 @@ public class ServiceCrawlerRegistryImpl implements ServiceCrawlerRegistry {
 		// get the adapter from the gateway 
 		ServiceAdapter adapter = null;
 		try {
-			adapter = serviceGateway.getServiceAdapter(accountIdentifier);
+			adapter = serviceGateway.getServiceAdapter(accountIdentifier, tenant);
 		} catch (ServiceNotAvailableException e) {
 			throw new IllegalArgumentException("Adapter is not available for account "+accountIdentifier, e);
 		} catch (ServiceAdapterNotSupportedException e) {
