@@ -69,6 +69,7 @@ import eu.dime.ps.gateway.util.JSONLDUtils;
 import eu.dime.ps.semantic.model.NCOFactory;
 import eu.dime.ps.semantic.model.nco.PersonContact;
 import eu.dime.ps.semantic.model.nco.PersonName;
+import eu.dime.ps.storage.entities.Tenant;
 
 /**
  * Service adapter in charge of communication between di.me personal servers (PS).
@@ -154,41 +155,47 @@ public class DimeServiceAdapter extends ServiceAdapterBase implements InternalSe
 	/**
 	 * get Method for di.me service adapter with additional SAID parameter
 	 * 
-	 * @param receiverSAID
-	 * @param attribute
+     * @param <T>
+     * @param remotePSSaid remote PS
+     * @param localPSSaid localPS
+     * @param attribute
 	 * @param returnType
-	 * @return
+     * @param localTenant
+     * @return
 	 * @throws AttributeNotSupportedException
 	 * @throws ServiceNotAvailableException
 	 * @throws InvalidLoginException
 	 */
-	public <T extends Resource> Collection<T> get(String receiverSAID, String senderSAID,
-			String attribute, Class<T> returnType) throws AttributeNotSupportedException, 
+	public <T extends Resource> Collection<T> get(String remotePSSaid, String localPSSaid,
+			String attribute, Class<T> returnType, Tenant localTenant
+            ) throws AttributeNotSupportedException,
 			ServiceNotAvailableException, InvalidLoginException, ServiceException {
+
+
 
 		// Retrieve username & password to establish the connection 
 		String username = null;
 		String secret = null;
 		try {
-			username = credentialStore.getUsername(senderSAID, receiverSAID);
-			secret = credentialStore.getPassword(senderSAID, receiverSAID);
+			username = credentialStore.getUsername(localPSSaid, remotePSSaid, localTenant);
+			secret = credentialStore.getPassword(localPSSaid, remotePSSaid, localTenant);
 		} catch (NoResultException e) {
 			throw new ServiceNotAvailableException("Could not find username & password from the credentials store", e);
 		}
 
 		// Resolve IP for the receiver said and create proxy
 		HttpRestProxy proxy = null;
-		String targetSaidName = credentialStore.getNameSaid(receiverSAID);
+		String targetSaidName = credentialStore.getNameSaid(remotePSSaid, localTenant);
 		try {
 			proxy = prepareProxy(targetResolver.resolve(targetSaidName), username, secret);
 			proxy.authenticate(new UsernamePasswordAuthenticationToken(username, secret));
 		} catch (DimeDNSCannotConnectException e) {
-			throw new ServiceNotAvailableException("Could not connect to dns for " + receiverSAID, e);
+			throw new ServiceNotAvailableException("Could not connect to dns for " + remotePSSaid, e);
                 } catch (DimeDNSCannotResolveException e) {
-			throw new ServiceNotAvailableException("said not registered at dns: " + receiverSAID, e);
+			throw new ServiceNotAvailableException("said not registered at dns: " + remotePSSaid, e);
 		} catch (DimeDNSException e) {
 			throw new ServiceNotAvailableException("Unknown error occurred when trying to connect to " + 
-					receiverSAID + ": " + e.getMessage(), e);
+					remotePSSaid + ": " + e.getMessage(), e);
 		}
 
 		// Prepare URL path to request/fetch the shared item
@@ -251,7 +258,7 @@ public class DimeServiceAdapter extends ServiceAdapterBase implements InternalSe
 	}
 
 	/**
-	 * get Method for di.me service adapterto retreive a Binary file from a ResourceId
+	 * get Method for di.me service adapter retrieve a Binary file from a ResourceId
 	 * 
 	 * @param receiverSAID
 	 * @param senderSAID
@@ -260,21 +267,21 @@ public class DimeServiceAdapter extends ServiceAdapterBase implements InternalSe
 	 * @throws ServiceNotAvailableException	
 	 */
 	public  BinaryFile getBinary(String receiverSAID, String senderSAID,
-			String resourceId) throws 	ServiceNotAvailableException {
+			String resourceId, Tenant localTenant) throws 	ServiceNotAvailableException {
 			
 		// Retrieve username & password to establish the connection 
 		String username = null;
 		String secret = null;
 		try {
-			username = credentialStore.getUsername(senderSAID, receiverSAID);
-			secret = credentialStore.getPassword(senderSAID, receiverSAID);
+			username = credentialStore.getUsername(senderSAID, receiverSAID, localTenant);
+			secret = credentialStore.getPassword(senderSAID, receiverSAID, localTenant);
 		} catch (NoResultException e) {
 			throw new ServiceNotAvailableException("Could not find username & password from the credentials store", e);
 		}
 		logger.info("username: " + username + " secret: " + secret);
 		// Resolve IP for the receiver said and create proxy
 		HttpRestProxy proxy = null;
-		String targetSaidName = credentialStore.getNameSaid(receiverSAID);
+		String targetSaidName = credentialStore.getNameSaid(receiverSAID, localTenant);
 		try {
 			proxy = prepareProxy(targetResolver.resolve(targetSaidName), username, secret);
 			proxy.authenticate(new UsernamePasswordAuthenticationToken(username, secret));

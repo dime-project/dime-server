@@ -427,13 +427,13 @@ public class UserManagerImpl implements UserManager {
      * @throws InfosphereException
      */
     @Override
-    public Account addProfile(URI accountUri, PersonContact contact) throws InfosphereException {
+    public Account addProfile(URI accountUri, PersonContact contact, Tenant localTenant) throws InfosphereException {
         Long tenantId = TenantContextHolder.getTenant();
         Tenant tenant = Tenant.find(tenantId);
         if (tenant == null) {
             throw new InfosphereException("Cannot add profile/account'" + accountUri.toString() + "': tenant '" + tenantId + "' not found.");
         }
-        User user = User.findByAccountUri(accountUri.toString());
+        User user = User.findByAccountUri(accountUri.toString(),localTenant);
         if (user == null) {
             throw new InfosphereException("Could not add profile/account. User with uri: " + accountUri + " does not exist.");
         }

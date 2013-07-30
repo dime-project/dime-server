@@ -48,6 +48,7 @@ import eu.dime.ps.controllers.exception.InfosphereException;
 import eu.dime.ps.controllers.infosphere.manager.PersonManager;
 import eu.dime.ps.controllers.infosphere.manager.SharingManager;
 import eu.dime.ps.controllers.trustengine.utils.AdvisoryConstants;
+import eu.dime.ps.controllers.util.TenantHelper;
 import eu.dime.ps.dto.Resource;
 import eu.dime.ps.semantic.model.NCOFactory;
 import eu.dime.ps.semantic.model.nco.PersonContact;
@@ -365,7 +366,7 @@ public class PSPersonController implements APIController {
 				String accountSaid = (String)jsonObject.get("said");
 				URI accountUri = new URIImpl("urn:uuid:"+UUID.randomUUID());
 				userManager.add(accountSaid, accountUri);
-				userManager.addProfile(accountUri, personContact);
+				userManager.addProfile(accountUri, personContact, TenantHelper.getCurrentTenant());
 
 				returnData.addEntry(jsonObject);
 			}

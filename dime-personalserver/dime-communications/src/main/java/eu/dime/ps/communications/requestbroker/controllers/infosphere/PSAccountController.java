@@ -23,6 +23,7 @@ import eu.dime.commons.object.ServiceMetadata;
 import eu.dime.ps.controllers.exception.InfosphereException;
 import eu.dime.ps.controllers.infosphere.manager.AccountManager;
 import eu.dime.ps.controllers.infosphere.manager.PersonManager;
+import eu.dime.ps.controllers.util.TenantHelper;
 import eu.dime.ps.dto.Resource;
 import eu.dime.ps.gateway.ServiceGateway;
 import eu.dime.ps.gateway.exception.ServiceAdapterNotSupportedException;
@@ -90,7 +91,7 @@ public class PSAccountController implements APIController {
 
         logger.info("build serviceadapter (account) for guid: " +guid);
 
-        ServiceAdapter sa = this.serviceGateway.getServiceAdapter(guid);
+        ServiceAdapter sa = this.serviceGateway.getServiceAdapter(guid, TenantHelper.getCurrentTenant());
 
         // Create response for client
         ServiceMetadata sm = this.serviceGateway.getServiceMetadata(sa.getAdapterName(), guid);
@@ -265,7 +266,7 @@ public class PSAccountController implements APIController {
             SAccount updatedAccount = data.getEntries().iterator().next();
 
             // Set configuration
-            ServiceAdapter sa = this.serviceGateway.getServiceAdapter(updatedAccount.getGuid());
+            ServiceAdapter sa = this.serviceGateway.getServiceAdapter(updatedAccount.getGuid(), TenantHelper.getCurrentTenant());
             if (updatedAccount.getSettings() != null) {
                 Iterator<SAdapterSetting> iter = updatedAccount.getSettings().iterator();
                 while (iter.hasNext()) {

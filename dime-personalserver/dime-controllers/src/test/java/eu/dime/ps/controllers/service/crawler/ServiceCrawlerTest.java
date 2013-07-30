@@ -43,6 +43,9 @@ import eu.dime.ps.gateway.auth.CredentialStore;
 import eu.dime.ps.gateway.service.external.oauth.LinkedInServiceAdapter;
 import eu.dime.ps.semantic.model.dlpo.Status;
 import eu.dime.ps.semantic.model.nco.PersonContact;
+import eu.dime.ps.storage.entities.Tenant;
+import eu.dime.ps.storage.manager.EntityFactory;
+import org.mockito.Mock;
 
 /**
  *
@@ -74,17 +77,31 @@ public class ServiceCrawlerTest extends Assert {
     @Before
     public void setUp() throws Exception {  }
 
+    @Mock EntityFactory entityFactory;
+
+    Tenant tenant1;
+
+	@Before
+	public void setupTenant() {
+		tenant1 = entityFactory.buildTenant();
+		tenant1.setName("juan");
+		tenant1.setId(new Long(1));
+		tenant1.persist();
+
+	}
+
     @After
     public void tearDown() throws Exception {  }
-    
+
+
     /**
      * Can only be unignored when credentials are stored.. 
      */
     @Ignore
     @Test
     public void testLinkedInCrawl() throws Exception {
-// FIXME constructor has changed...        LinkedInServiceAdapter adapter = new LinkedInServiceAdapter(accountManager, credentialStore);
-        LinkedInServiceAdapter adapter = new LinkedInServiceAdapter();
+        // FIXME constructor has changed...        LinkedInServiceAdapter adapter = new LinkedInServiceAdapter(accountManager, credentialStore);
+        LinkedInServiceAdapter adapter = new LinkedInServiceAdapter(tenant1);
         //Hack for the moment as its not possible to automate tests at the moment
         //even with credentials stored in services.properties with the current
         //api design of the service adapters/gateway.

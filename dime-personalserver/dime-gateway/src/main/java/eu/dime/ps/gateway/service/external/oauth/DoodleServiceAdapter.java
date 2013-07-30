@@ -27,6 +27,7 @@ import eu.dime.ps.gateway.exception.ServiceNotAvailableException;
 import eu.dime.ps.gateway.service.AttributeMap;
 import eu.dime.ps.gateway.service.ServiceResponse;
 import eu.dime.ps.gateway.service.external.ExternalServiceAdapter;
+import eu.dime.ps.storage.entities.Tenant;
 
 /**
  * Service adapter enabling the access to the Doodle API.
@@ -47,8 +48,8 @@ public class DoodleServiceAdapter extends OAuthServiceAdapter implements Externa
 	/**
 	 * @throws ServiceNotAvailableException
 	 */
-	public DoodleServiceAdapter() throws ServiceNotAvailableException {
-		super(DoodleApi.class);
+	public DoodleServiceAdapter(Tenant localTenant) throws ServiceNotAvailableException {
+		super(DoodleApi.class, localTenant);
 	}
 	
 	@Override

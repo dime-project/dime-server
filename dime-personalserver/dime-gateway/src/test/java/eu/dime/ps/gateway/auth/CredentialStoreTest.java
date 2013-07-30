@@ -30,6 +30,7 @@ import org.openrdf.repository.RepositoryException;
 import eu.dime.ps.gateway.auth.impl.CredentialStoreImpl;
 import eu.dime.ps.semantic.connection.Connection;
 import eu.dime.ps.semantic.connection.ConnectionProvider;
+import eu.dime.ps.storage.entities.Tenant;
 import eu.dime.ps.storage.manager.EntityFactory;
 
 /**
@@ -45,7 +46,8 @@ public class CredentialStoreTest {
 	@Mock EntityFactory entityFactory;
 	
 	@Mock Connection connection;
-	
+
+	Tenant tenant1;
 	
 	@Before
 	public void setup() throws Exception{
@@ -57,10 +59,20 @@ public class CredentialStoreTest {
 		
 		credentialStore.setEntityFactory(entityFactory);
 		credentialStore.setConnectionProvider(connectionProvider);
+        setupTenant();
 	}
+
+    private void setupTenant() {
+		tenant1 = entityFactory.buildTenant();
+		tenant1.setName("juan");
+		tenant1.setId(new Long(1));
+		tenant1.persist();
+
+	}
+
 	@Test
 	public void testGetPassword() {
-		String password = credentialStore.getPassword("sender", "receiver");
+		String password = credentialStore.getPassword("sender", "receiver", tenant1);
 	}
 	
 	@Test

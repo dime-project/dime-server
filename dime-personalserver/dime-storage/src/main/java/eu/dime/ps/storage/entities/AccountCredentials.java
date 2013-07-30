@@ -260,10 +260,10 @@ public class AccountCredentials {
 		return q.getResultList();
 	}
 
-	public static AccountCredentials findAllByTargetUri(String targetUri) {
+	public static AccountCredentials findAllByTargetUri(String targetUri, Tenant localTenant) {
 		EntityManager em = AccountCredentials.entityManager();
 		TypedQuery<AccountCredentials> q = em.createQuery(
-				"SELECT o FROM AccountCredentials AS o WHERE o.targetUri = :targetUri",
+				"SELECT o FROM AccountCredentials AS o WHERE o.tenant = :localTenant AND o.targetUri = :targetUri",
 				AccountCredentials.class);
 		q.setParameter("targetUri", targetUri);
 		return QueryUtil.getSingleResultOrNull(q);

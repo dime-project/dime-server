@@ -27,6 +27,7 @@ import eu.dime.ps.gateway.service.external.DimeUserResolverServiceAdapter;
 import eu.dime.ps.gateway.service.internal.DimeServiceAdapter;
 import eu.dime.ps.semantic.exception.NotFoundException;
 import eu.dime.ps.semantic.exception.RepositoryStorageException;
+import eu.dime.ps.storage.entities.Tenant;
 
 public interface ServiceGateway {
 
@@ -49,7 +50,7 @@ public interface ServiceGateway {
 	 *            user
 	 * @return ServiceAdapter
 	 */
-	public ServiceAdapter getServiceAdapter(String identifier)
+	public ServiceAdapter getServiceAdapter(String identifier, Tenant localTenant)
 			throws ServiceNotAvailableException, ServiceAdapterNotSupportedException;
 	
 	/**
@@ -58,7 +59,6 @@ public interface ServiceGateway {
 	 * 
 	 * @return
 	 * @throws ServiceNotAvailableException
-	 * @throws ServiceAdapterNotSupportedException
 	 */
 	public DimeUserResolverServiceAdapter getDimeUserResolverServiceAdapter() throws ServiceNotAvailableException ;
 	
@@ -66,14 +66,10 @@ public interface ServiceGateway {
 	/**
 	 * Creates a dime service adapter.
 	 * 
-	 * @param senderURI
-	 * @param receiverURI
-	 * @param isAuthenticated
-	 * @return
-	 * @throws RepositoryStorageException 
-	 * @throws NotFoundException 
+     * @param identifier
+     * @param localTenant
+     * @return
 	 * @throws ServiceNotAvailableException 
-	 * @throws NamingException 
 	 */
 	public DimeServiceAdapter getDimeServiceAdapter(String identifier) throws ServiceNotAvailableException;
 

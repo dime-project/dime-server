@@ -27,6 +27,7 @@ import eu.dime.ps.gateway.exception.ServiceNotAvailableException;
 import eu.dime.ps.gateway.service.AttributeMap;
 import eu.dime.ps.gateway.service.ServiceResponse;
 import eu.dime.ps.gateway.service.external.ExternalServiceAdapter;
+import eu.dime.ps.storage.entities.Tenant;
 
 /**
  * Service adapter enabling the access to the Fitbit API.
@@ -42,8 +43,8 @@ public class FitbitServiceAdapter extends OAuthServiceAdapter implements Externa
 	/**
 	 * @throws ServiceNotAvailableException
 	 */
-	public FitbitServiceAdapter() throws ServiceNotAvailableException {
-		super(FitbitApi.class);
+	public FitbitServiceAdapter(Tenant localTenant) throws ServiceNotAvailableException {
+		super(FitbitApi.class, localTenant);
 	}
 	
 	@Override

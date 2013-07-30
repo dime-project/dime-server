@@ -78,6 +78,7 @@ import eu.dime.ps.controllers.infosphere.manager.PersonGroupManager;
 import eu.dime.ps.controllers.infosphere.manager.PersonManager;
 import eu.dime.ps.controllers.infosphere.manager.SharingManager;
 import eu.dime.ps.controllers.trustengine.utils.AdvisoryConstants;
+import eu.dime.ps.controllers.util.TenantHelper;
 import eu.dime.ps.dto.Include;
 import eu.dime.ps.dto.ProfileCard;
 import eu.dime.ps.dto.Resource;
@@ -96,6 +97,7 @@ import eu.dime.ps.semantic.model.nfo.FileDataObject;
 import eu.dime.ps.semantic.model.ppo.PrivacyPreference;
 import eu.dime.ps.semantic.privacy.PrivacyPreferenceType;
 import eu.dime.ps.storage.entities.AccountCredentials;
+import eu.dime.ps.storage.entities.Tenant;
 
 /**
  * Dime REST API Controller about a Resources features
@@ -452,11 +454,12 @@ public class PSResourcesController extends PSSharingControllerBase implements AP
 
 		logger.info("Gettin binary file shared by: "+saidReceiver+" with URI= " + resourceID);		
 
+        Tenant tenant = TenantHelper.getCurrentTenant();
 		DimeServiceAdapter adapter = null;
 		//obtain the saidFor the receiver, this should be already in place since it is a shared resource		
-		String saidNameReceiver = credentialStore.getNameSaid(saidReceiver);		
+		String saidNameReceiver = credentialStore.getNameSaid(saidReceiver, tenant);
 		//specify sender (needs to come from UI or needs to be stored somewhere)
-		String saidNameSender = credentialStore.getNameSaid(saidSender); 		
+		String saidNameSender = credentialStore.getNameSaid(saidSender, tenant);
 
 		try {
 			adapter = (DimeServiceAdapter) serviceGateway.getDimeServiceAdapter(saidNameReceiver);				
@@ -470,7 +473,7 @@ public class PSResourcesController extends PSSharingControllerBase implements AP
 		//get the binary from the other PS
 		try {
 			logger.info("retreaving the binary file "+resourceID+" shared from: "+saidNameReceiver+" to "+saidNameSender);	
-			binary = adapter.getBinary(saidReceiver,saidSender, URLEncoder.encode(resourceID));		
+			binary = adapter.getBinary(saidReceiver,saidSender, URLEncoder.encode(resourceID), tenant);
 		} catch (ServiceNotAvailableException e) {
 			logger.error("Resource cannot be retreived for trouble with the serviceAdapter: " + e.getMessage());
 			return javax.ws.rs.core.Response.serverError().build();

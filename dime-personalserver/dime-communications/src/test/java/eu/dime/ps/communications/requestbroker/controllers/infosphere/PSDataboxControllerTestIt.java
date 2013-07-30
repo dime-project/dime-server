@@ -60,7 +60,7 @@ import eu.dime.ps.semantic.model.nfo.DataContainer;
 import eu.dime.ps.semantic.model.nie.DataObject;
 import eu.dime.ps.semantic.model.pimo.Person;
 import eu.dime.ps.semantic.privacy.PrivacyPreferenceType;
-import eu.dime.ps.storage.jfix.util.Arrays;
+import eu.dime.jfix.util.Arrays;
 import org.junit.Ignore;
 
 public class PSDataboxControllerTestIt extends PSInfosphereControllerTestIt {

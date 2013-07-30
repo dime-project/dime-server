@@ -126,31 +126,31 @@ public class CredentialStoreTestIt {
 	
 	@Test
 	public void testGetPassword() {
-		String password = credentialStore.getPassword(REMOTE_SAID, LOCAL_SAID);
+		String password = credentialStore.getPassword(REMOTE_SAID, LOCAL_SAID, tenant1);
 		Assert.assertEquals(PASSWORD, password);
 	}
 	
 	@Test
 	public void testGetUsername() {
-		String username = credentialStore.getUsername(REMOTE_SAID, LOCAL_SAID);
+		String username = credentialStore.getUsername(REMOTE_SAID, LOCAL_SAID, tenant1);
 		Assert.assertEquals(USERNAME, username);
 	}
 	
 	@Test
 	public void testGetNameSaid() {
-		String name = credentialStore.getNameSaid(ACCOUNT_JUAN);
+		String name = credentialStore.getNameSaid(ACCOUNT_JUAN, tenant1);
 		Assert.assertEquals("juan", name);
 	}
 	
 	@Test
 	public void testGetProviderName() {
-		String name = credentialStore.getProviderName(ACCOUNT_JUAN);
+		String name = credentialStore.getProviderName(ACCOUNT_JUAN, tenant1);
 		Assert.assertEquals("di.me", name);
 	}
 	
 	@Test
 	public void testGetAccessToken() {
-		String token = credentialStore.getAccessSecret(ACCOUNT_JUAN);
+		String token = credentialStore.getAccessSecret(ACCOUNT_JUAN, tenant1);
 		Assert.assertEquals("none", token);
 	}
 

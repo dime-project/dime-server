@@ -14,37 +14,34 @@
 
 package eu.dime.ps.gateway.service.external;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
+import eu.dime.ps.gateway.exception.ServiceNotAvailableException;
+import eu.dime.ps.gateway.policy.PolicyManager;
+import eu.dime.ps.gateway.service.ServiceResponse;
+import eu.dime.ps.gateway.service.external.oauth.LinkedInServiceAdapter;
+import eu.dime.ps.gateway.transformer.Transformer;
+import eu.dime.ps.storage.entities.Tenant;
+import eu.dime.ps.storage.manager.EntityFactory;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.Properties;
-
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.scribe.model.Token;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
-import eu.dime.ps.gateway.exception.AttributeNotSupportedException;
-import eu.dime.ps.gateway.exception.InvalidLoginException;
-import eu.dime.ps.gateway.exception.ServiceNotAvailableException;
-import eu.dime.ps.gateway.policy.PolicyManager;
-import eu.dime.ps.gateway.service.ServiceResponse;
-import eu.dime.ps.gateway.service.external.oauth.FacebookServiceAdapter;
-import eu.dime.ps.gateway.service.external.oauth.LinkedInServiceAdapter;
-import eu.dime.ps.gateway.transformer.Transformer;
 
 /**
  * Note: Please put in your developer keys before enabling this test!
@@ -83,6 +80,20 @@ public class LinkedInAdapterTest {
 		
 	}
 
+
+	@Mock EntityFactory entityFactory;
+
+    Tenant tenant1;
+
+	@Before
+	public void setupTenant() {
+		tenant1 = entityFactory.buildTenant();
+		tenant1.setName("juan");
+		tenant1.setId(new Long(1));
+		tenant1.persist();
+
+	}
+
 	/**
 	 * Test method for
 	 * {@link eu.dime.ps.controllers.service.ametic.AMETICDummyAdapter#get(java.lang.String)}
@@ -96,7 +107,7 @@ public class LinkedInAdapterTest {
 	// After doing that you can remove the Ignore annotation.
 	private LinkedInServiceAdapter initAdapter()
 			throws ServiceNotAvailableException, FileNotFoundException, IOException, AdapterNotEnabledException {
-		LinkedInServiceAdapter adapter = new LinkedInServiceAdapter();
+		LinkedInServiceAdapter adapter = new LinkedInServiceAdapter(tenant1);
 		adapter.setConsumerToken(new Token(APPID, APPSECRET));
 		adapter.setTransformer(transformer);
 		

@@ -20,10 +20,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import eu.dime.commons.notifications.DimeExternalNotification;
 import eu.dime.ps.controllers.notifier.NotifierManager;
+import eu.dime.ps.controllers.util.TenantHelper;
 import eu.dime.ps.gateway.ServiceGateway;
 import eu.dime.ps.gateway.auth.CredentialStore;
 import eu.dime.ps.gateway.exception.ServiceNotAvailableException;
 import eu.dime.ps.gateway.service.internal.DimeServiceAdapter;
+import eu.dime.ps.storage.entities.Tenant;
 
 public class ExternalNotifySchedule {
 
@@ -64,7 +66,7 @@ public class ExternalNotifySchedule {
 	    DimeExternalNotification tmpNotification;
 	    String senderURI = externalNotififcation.getSender();
 	    String targetURI = externalNotififcation.getTarget();
-	    
+	    Tenant tenant = TenantHelper.getTenant(externalNotififcation.getTenant());
 	    try {
 					
 			adapter = (DimeServiceAdapter) serviceGateway.getDimeServiceAdapter(senderURI);
@@ -77,8 +79,8 @@ public class ExternalNotifySchedule {
 		    + externalNotififcation.toString() + ")");
 	    
 	    try {
-			String senderName = credentialStore.getNameSaid(senderURI); 
-			String targetName = credentialStore.getNameSaid(targetURI); 
+			String senderName = credentialStore.getNameSaid(senderURI, tenant);
+			String targetName = credentialStore.getNameSaid(targetURI, tenant);
 			
 			// Notification to be sended (without tenant)
 			tmpNotification = new DimeExternalNotification(

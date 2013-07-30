@@ -54,6 +54,7 @@ import eu.dime.ps.controllers.infosphere.manager.ShareableDataboxManager;
 import eu.dime.ps.controllers.infosphere.manager.ShareableFileManager;
 import eu.dime.ps.controllers.infosphere.manager.ShareableLivePostManager;
 import eu.dime.ps.controllers.infosphere.manager.ShareableProfileManager;
+import eu.dime.ps.controllers.util.TenantHelper;
 import eu.dime.ps.dto.ProfileCard;
 import eu.dime.ps.gateway.ServiceGateway;
 import eu.dime.ps.gateway.auth.CredentialStore;
@@ -226,7 +227,7 @@ public class PSServicesController {
 		if (saidUriSender != null) {
 			try {
 				tmpPassw = credentialStore.getPassword(saidUriReceiver,
-						saidUriSender);
+						saidUriSender, TenantHelper.getCurrentTenant());
 
 			} catch (NoResultException e) {
 				logger.info("Could not load Password for " + saidUriReceiver
@@ -382,7 +383,7 @@ public class PSServicesController {
 
 			// Sending the call to obtain the Resource
 			Collection<org.ontoware.rdfreactor.schema.rdfs.Resource> semanticResources = adapter
-					.get(saidUriSender, saidUriReceiver, attributes, returnType);
+					.get(saidUriSender, saidUriReceiver, attributes, returnType, TenantHelper.getCurrentTenant());
 			logger.info("Results received: " + semanticResources.size());
 
 			// Saving the Resource
@@ -403,7 +404,7 @@ public class PSServicesController {
 						attributes = "/resource/" + saidNameSender + "/" + fileIDBase64Encoded;
 						Collection<FileDataObject> dbFiles = adapter.get(
 								saidUriSender, saidUriReceiver, attributes,
-								FileDataObject.class);
+								FileDataObject.class, TenantHelper.getCurrentTenant());
 
 						fileResources.addAll(dbFiles);
 					}
@@ -493,7 +494,7 @@ public class PSServicesController {
 			PersonContact profile = adapter.getProfile(saidNameSender,
 					this.token);
 			if (profile != null) {
-				userManager.addProfile(new URIImpl(saidUriSender), profile);
+				userManager.addProfile(new URIImpl(saidUriSender), profile, TenantHelper.getCurrentTenant());
 				return profile;
 			} else {
 				logger.warn("failed to add Profile for User " + saidNameSender
@@ -533,7 +534,7 @@ public class PSServicesController {
 						saidNameReceiver, saidNameSender);
 			}
 			credentialStore.updateCredentialsForAccount(saidUriReceiver,
-					saidUriSender, saidNameSender, token.getSecret());
+					saidUriSender, saidNameSender, token.getSecret(), TenantHelper.getCurrentTenant());
 		}
 
 		Account account = null;

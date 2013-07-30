@@ -47,6 +47,7 @@ import eu.dime.ps.controllers.infosphere.manager.PersonManager;
 import eu.dime.ps.controllers.infosphere.manager.ProfileCardManager;
 import eu.dime.ps.controllers.infosphere.manager.ProfileManager;
 import eu.dime.ps.controllers.infosphere.manager.SituationManager;
+import eu.dime.ps.controllers.util.TenantHelper;
 import eu.dime.ps.gateway.service.internal.DimeServiceAdapter;
 import eu.dime.ps.semantic.BroadcastManager;
 import eu.dime.ps.semantic.BroadcastReceiver;
@@ -249,7 +250,7 @@ private static final Logger logger = LoggerFactory.getLogger(DefaultDataSetup.cl
 			name.setFullname(data[0]);
 			name.setNickname(data[2]);
 			profile.setPersonName(name);
-			profile.getModel().addAll(name.getModel().iterator());
+		profile.getModel().addAll(name.getModel().iterator());
 			
 			EmailAddress email = modelFactory.getNCOFactory().createEmailAddress();
 			email.setEmailAddress(data[1]);
@@ -261,7 +262,7 @@ private static final Logger logger = LoggerFactory.getLogger(DefaultDataSetup.cl
 			URI accountUri = new URIImpl("urn:uuid:" + UUID.randomUUID());
 			try {
 				userManager.add(said, accountUri);
-				userManager.addProfile(accountUri, profile);
+				userManager.addProfile(accountUri, profile, TenantHelper.getTenant(tenant));
 				
 				Account account = accountManager.get(accountUri.toString());
 				if (account.hasCreator()) {

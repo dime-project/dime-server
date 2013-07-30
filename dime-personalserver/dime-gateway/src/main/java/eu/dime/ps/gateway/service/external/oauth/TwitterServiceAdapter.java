@@ -58,6 +58,7 @@ import eu.dime.ps.gateway.service.external.ExternalServiceAdapter;
 import eu.dime.ps.gateway.transformer.FormatUtils;
 import eu.dime.ps.gateway.transformer.TransformerException;
 import eu.dime.ps.semantic.model.dlpo.Status;
+import eu.dime.ps.storage.entities.Tenant;
 
 /**
  * @author Sophie.Wrobel
@@ -78,9 +79,9 @@ public class TwitterServiceAdapter extends OAuthServiceAdapter implements Extern
 	/**
 	 * @throws ServiceNotAvailableException
 	 */
-	public TwitterServiceAdapter()
+	public TwitterServiceAdapter(Tenant localTenant)
 			throws ServiceNotAvailableException {
-		super(TwitterApi.class);
+		super(TwitterApi.class, localTenant);
 		this.apiUrl = this.policyManager.getPolicyString("resourceUrl", TwitterServiceAdapter.NAME);
 		this.MAX_RATE_LIMIT = TWITTER_MAX_RATE_LIMIT;
 		this.rateLimit = MAX_RATE_LIMIT;

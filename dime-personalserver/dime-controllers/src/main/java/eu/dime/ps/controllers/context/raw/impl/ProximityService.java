@@ -163,9 +163,9 @@ public class ProximityService implements IProximityService, IContextListener {
 		return null;
 	}
 	
-	private void setServiceReference(Account account) {
+	private void setServiceReference(Account account, Tenant localTenant) {
 		try {
-			this.proximityService = (ProximityServiceAdapter)this.serviceGateway.getServiceAdapter(account.asURI().toString());
+			this.proximityService = (ProximityServiceAdapter)this.serviceGateway.getServiceAdapter(account.asURI().toString(), localTenant);
 		} catch (ServiceNotAvailableException e) {
 			logger.error(e.getMessage(),e);
 			this.proximityService = null;
@@ -281,7 +281,7 @@ public class ProximityService implements IProximityService, IContextListener {
 		
 		Account adapterAccount = retrieveAdapterAccount(t);
 		if (adapterAccount != null) {
-			setServiceReference(adapterAccount);
+			setServiceReference(adapterAccount, t);
 		} else {
 			logger.debug("No adapter account found for " + ProximityServiceAdapter.adapterName + " service");
 			TenantContextHolder.unset();
@@ -524,7 +524,7 @@ public class ProximityService implements IProximityService, IContextListener {
 		
 		Account adapterAccount = retrieveAdapterAccount(t);
 		if (adapterAccount != null) {
-			setServiceReference(adapterAccount);
+			setServiceReference(adapterAccount, t);
 		} else {
 			logger.debug("No adapter account found for " + ProximityServiceAdapter.adapterName + " service");
 			return IContextDataset.EMPTY_CONTEXT_DATASET;

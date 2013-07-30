@@ -154,7 +154,7 @@ public class PeersContextUpdater implements LiveContextUpdater, IContextListener
 							StringTokenizer tok = new StringTokenizer(saidsNearby,",");
 							while (tok.hasMoreTokens()) {
 								String said = tok.nextToken();
-								ServiceAccount sa = ServiceAccount.findAllByAccountUri(said);
+								ServiceAccount sa = ServiceAccount.findAllByAccountUri(said, t);
 								String username = sa.getName();
 								User u = User.findByTenantAndByUsername(t, username);
 								if (u != null) {

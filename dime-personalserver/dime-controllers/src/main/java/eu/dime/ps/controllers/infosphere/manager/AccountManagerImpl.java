@@ -29,6 +29,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import eu.dime.ps.controllers.TenantContextHolder;
 import eu.dime.ps.controllers.exception.InfosphereException;
+import eu.dime.ps.controllers.util.TenantHelper;
 import eu.dime.ps.datamining.account.AccountUpdaterService;
 import eu.dime.ps.datamining.account.AccountUpdaterServiceImpl;
 import eu.dime.ps.datamining.account.ProfileAccountUpdater;
@@ -282,7 +283,7 @@ public class AccountManagerImpl extends InfoSphereManagerBase<Account> implement
         }
 
         // removes entry from the DB
-        ServiceAccount account = ServiceAccount.findAllByAccountUri(accountId);
+        ServiceAccount account = ServiceAccount.findAllByAccountUri(accountId, TenantHelper.getCurrentTenant());
         if (account != null) {
             // FIXME throws a 'deleted entity passed to persist' exception
 //			account.remove();

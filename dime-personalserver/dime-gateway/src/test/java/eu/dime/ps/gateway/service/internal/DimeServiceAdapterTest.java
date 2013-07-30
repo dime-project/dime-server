@@ -14,33 +14,10 @@
 
 package eu.dime.ps.gateway.service.internal;
 
-import ie.deri.smile.rdf.util.ModelUtils;
-import ie.deri.smile.vocabulary.DLPO;
-import ie.deri.smile.vocabulary.NAO;
-import ie.deri.smile.vocabulary.NCO;
-import ie.deri.smile.vocabulary.NFO;
-
-import java.net.URL;
-import java.util.Collection;
-import java.util.LinkedList;
-
-import org.apache.commons.codec.binary.Base64;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mockito;
-import org.ontoware.rdf2go.model.Model;
-import org.ontoware.rdf2go.model.node.URI;
-import org.ontoware.rdf2go.model.node.impl.URIImpl;
-import org.ontoware.rdf2go.vocabulary.RDF;
-import org.scribe.model.Token;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
 import eu.dime.commons.dto.Data;
 import eu.dime.commons.dto.Entry;
-import eu.dime.commons.dto.Message;
 import eu.dime.commons.dto.ExternalNotificationDTO;
+import eu.dime.commons.dto.Message;
 import eu.dime.commons.dto.Request;
 import eu.dime.commons.notifications.DimeExternalNotification;
 import eu.dime.commons.util.JaxbJsonSerializer;
@@ -50,6 +27,30 @@ import eu.dime.ps.gateway.proxy.ProxyFactory;
 import eu.dime.ps.semantic.model.dlpo.LivePost;
 import eu.dime.ps.semantic.model.nco.PersonContact;
 import eu.dime.ps.semantic.model.nfo.FileDataObject;
+import eu.dime.ps.storage.entities.Tenant;
+import eu.dime.ps.storage.manager.EntityFactory;
+import ie.deri.smile.rdf.util.ModelUtils;
+import ie.deri.smile.vocabulary.DLPO;
+import ie.deri.smile.vocabulary.NAO;
+import ie.deri.smile.vocabulary.NCO;
+import ie.deri.smile.vocabulary.NFO;
+import java.net.URL;
+import java.util.Collection;
+import java.util.LinkedList;
+import org.apache.commons.codec.binary.Base64;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.ontoware.rdf2go.model.Model;
+import org.ontoware.rdf2go.model.node.URI;
+import org.ontoware.rdf2go.model.node.impl.URIImpl;
+import org.ontoware.rdf2go.vocabulary.RDF;
+import org.scribe.model.Token;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 /**
  * Tests for {@link DimeServiceAdapter}.
@@ -62,6 +63,20 @@ import eu.dime.ps.semantic.model.nfo.FileDataObject;
 //@RunWith(PowerMockRunner.class)
 //@PrepareForTest({DimeServiceAdapter.class, DimeIPResolver.class})
 public class DimeServiceAdapterTest extends Assert {
+
+
+	@Mock EntityFactory entityFactory;
+
+    Tenant tenant1;
+
+	@Before
+	public void setupTenant() {
+		tenant1 = entityFactory.buildTenant();
+		tenant1.setName("juan");
+		tenant1.setId(new Long(1));
+		tenant1.persist();
+
+	}
 
 	@Test
 	public void testGetAdapterName() throws Exception {
@@ -108,7 +123,7 @@ public class DimeServiceAdapterTest extends Assert {
 		Mockito.when(mockFactory.createProxy(Mockito.eq(baseUrl), Mockito.anyInt(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString())).thenReturn(mockProxy);
 
 		CredentialStore mockStore = Mockito.mock(CredentialStore.class);
-		Mockito.when(mockStore.getNameSaid(receiver)).thenReturn(senderSAID);
+		Mockito.when(mockStore.getNameSaid(receiver, tenant1)).thenReturn(senderSAID);
 
 		DimeServiceAdapter adapter = new DimeServiceAdapter("1");
 		adapter.setProxyFactory(mockFactory);
@@ -117,7 +132,7 @@ public class DimeServiceAdapterTest extends Assert {
 	
 		// calling the method to test
 		String attribute = "/livepost/" + encodedUri;
-		Collection<LivePost> liveposts = adapter.get(receiver, sender, attribute, LivePost.class);
+		Collection<LivePost> liveposts = adapter.get(receiver, sender, attribute, LivePost.class, tenant1);
 		
 		// verifying metadata for response
 		assertEquals(1, liveposts.size());
@@ -154,7 +169,7 @@ public class DimeServiceAdapterTest extends Assert {
 		Mockito.when(mockFactory.createProxy(Mockito.eq(baseUrl), Mockito.anyInt(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString())).thenReturn(mockProxy);
 
 		CredentialStore mockStore = Mockito.mock(CredentialStore.class);
-		Mockito.when(mockStore.getNameSaid(receiver)).thenReturn(senderSAID);
+		Mockito.when(mockStore.getNameSaid(receiver, tenant1)).thenReturn(senderSAID);
 
 		DimeServiceAdapter adapter = new DimeServiceAdapter("1");
 		adapter.setProxyFactory(mockFactory);
@@ -163,7 +178,7 @@ public class DimeServiceAdapterTest extends Assert {
 	
 		// calling the method to test
 		String attribute = "/resource/" + encodedUri;
-		Collection<FileDataObject> files = adapter.get(receiver, sender, attribute, FileDataObject.class);
+		Collection<FileDataObject> files = adapter.get(receiver, sender, attribute, FileDataObject.class, tenant1);
 		
 		// verifying metadata for response
 		assertEquals(1, files.size());

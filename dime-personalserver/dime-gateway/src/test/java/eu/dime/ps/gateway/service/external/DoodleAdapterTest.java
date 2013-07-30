@@ -40,6 +40,10 @@ import eu.dime.ps.gateway.service.ServiceResponse;
 import eu.dime.ps.gateway.service.external.FacebookAdapterTest.AdapterNotEnabledException;
 import eu.dime.ps.gateway.service.external.oauth.DoodleServiceAdapter;
 import eu.dime.ps.gateway.transformer.Transformer;
+import eu.dime.ps.storage.entities.Tenant;
+import eu.dime.ps.storage.manager.EntityFactory;
+import org.junit.Before;
+import org.mockito.Mock;
 
 /**
  * @author Sophie.Wrobel
@@ -62,13 +66,28 @@ public class DoodleAdapterTest {
 	@Autowired
 	private PolicyManager policyManager;
 
+
+	@Mock EntityFactory entityFactory;
+
+    Tenant tenant1;
+
 	final Logger logger = LoggerFactory.getLogger(LinkedInAdapterTest.class);
 	class AdapterNotEnabledException extends Exception {
 		
 	}
 
+
+	@Before
+	public void setupTenant() {
+		tenant1 = entityFactory.buildTenant();
+		tenant1.setName("juan");
+		tenant1.setId(new Long(1));
+		tenant1.persist();
+
+	}
+
 	private DoodleServiceAdapter initAdapter() throws ServiceNotAvailableException, MalformedURLException, IOException, AdapterNotEnabledException {
-		DoodleServiceAdapter adapter = new DoodleServiceAdapter();
+		DoodleServiceAdapter adapter = new DoodleServiceAdapter(tenant1);
 		adapter.setConsumerToken(new Token(APP_ID, APP_SECRET));
 		//adapter.setTransformer(transformer);
 		

@@ -247,18 +247,20 @@ public class UserManagerTestIt extends InfoSphereManagerTest {
 		assertNull(user2); //should never go there...
 	}
 
+
+
 	@Test
 	@Transactional
 	public void testAddAndRemove() throws Exception {
 		TenantContextHolder.setTenant(one.getId());
-		PersonContact profile = buildProfile("newname", "anna@mail.com", "555-12345");
+ 		PersonContact profile = buildProfile("newname", "anna@mail.com", "555-12345");
 		URIImpl uri = new URIImpl("urn:uuid:" + UUID.randomUUID());
 		User tmp = userManager.add("someGuestSAID", uri);
 		assertNotNull(tmp);
-		Account account = userManager.addProfile(uri, profile);
+		Account account = userManager.addProfile(uri, profile, one);
 		assertNotNull(account);
 
-		User user = User.findByAccountUri(uri.toString());
+		User user = User.findByAccountUri(uri.toString(), one);
 		if (user != null) {
 			String userId = user.getId().toString();
 			userManager.remove(userId);

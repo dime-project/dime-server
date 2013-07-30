@@ -14,15 +14,6 @@
 
 package eu.dime.ps.controllers.context.raw.impl;
 
-import java.util.Collection;
-
-import java.util.Iterator;
-
-import org.apache.log4j.Logger;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import eu.dime.context.exceptions.ContextException;
 import eu.dime.context.model.Constants;
 import eu.dime.context.model.api.IContextDataset;
@@ -41,9 +32,14 @@ import eu.dime.ps.gateway.ServiceGateway;
 import eu.dime.ps.gateway.exception.ServiceAdapterNotSupportedException;
 import eu.dime.ps.gateway.exception.ServiceNotAvailableException;
 import eu.dime.ps.gateway.service.noauth.LocationServiceAdapter;
-import eu.dime.ps.gateway.service.noauth.SocialRecommenderAdapter;
 import eu.dime.ps.semantic.model.dao.Account;
 import eu.dime.ps.storage.entities.Tenant;
+import java.util.Collection;
+import java.util.Iterator;
+import org.apache.log4j.Logger;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class LocationService implements ILocationService {
 	
@@ -84,10 +80,10 @@ public class LocationService implements ILocationService {
 		return null;
 	}
 	
-	private void setServiceReference(Account account, String serviceName) {
+	private void setServiceReference(Account account, String serviceName, Tenant localTenant) {
 		if (serviceName.equalsIgnoreCase(LocationServiceAdapter.adapterName)) {
 			try {
-				this.locationService = (LocationServiceAdapter)this.serviceGateway.getServiceAdapter(account.asURI().toString());
+				this.locationService = (LocationServiceAdapter)this.serviceGateway.getServiceAdapter(account.asURI().toString(), localTenant);
 			} catch (ServiceNotAvailableException e) {
 				logger.error(e.getMessage(),e);
 				this.locationService = null;
@@ -106,7 +102,7 @@ public class LocationService implements ILocationService {
 		
 		Account locationAccount = retrieveAccount(t,LocationServiceAdapter.adapterName);
 		if (locationAccount != null) {
-			setServiceReference(locationAccount, LocationServiceAdapter.adapterName);
+			setServiceReference(locationAccount, LocationServiceAdapter.adapterName, t);
 		}
 		
 		if (this.locationService != null) {

@@ -188,13 +188,13 @@ public class PSServicesControllerTestIt extends Assert {
 		//FIXME mocking credential store
 		when(credentialStore.getUriForName(RECEIVER)).thenReturn(RECEIVER_URI);	
 		when(credentialStore.getUriForAccountName(RECEIVER, SENDER)).thenReturn(SENDER_URI);
-		when(credentialStore.getPassword(RECEIVER_URI, SENDER_URI)).thenReturn(PASS);
+		when(credentialStore.getPassword(RECEIVER_URI, SENDER_URI, tenant)).thenReturn(PASS);
 
 		//mocking DimeServiceAdapter
 		Vector<LivePost> liveposts = new Vector<LivePost>();						
 		liveposts.add(livepost);		
 
-		when(dimeServiceAdapter.get(Mockito.anyString(),Mockito.anyString(),Mockito.anyString(), Mockito.any(Class.class))).thenReturn(liveposts);
+		when(dimeServiceAdapter.get(Mockito.anyString(),Mockito.anyString(),Mockito.anyString(), Mockito.any(Class.class), tenant)).thenReturn(liveposts);
 
 		//FIXME mocking servicegateway
 		when(serviceGateway.getDimeServiceAdapter(SENDER)).thenReturn(dimeServiceAdapter);
