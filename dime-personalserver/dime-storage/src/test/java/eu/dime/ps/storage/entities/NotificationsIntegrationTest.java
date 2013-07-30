@@ -30,7 +30,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath:/META-INF/spring/ps-db-applicationContext.xml")
 @Transactional
-@Ignore
+//@Ignore
 @RooIntegrationTest(findAll=false, entity = Notification.class)
 public class NotificationsIntegrationTest {
 

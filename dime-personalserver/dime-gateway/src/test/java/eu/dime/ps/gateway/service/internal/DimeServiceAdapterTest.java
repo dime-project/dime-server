@@ -40,6 +40,7 @@ import java.util.LinkedList;
 import org.apache.commons.codec.binary.Base64;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -61,6 +62,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:spring-config/storage-loading-tests-context.xml")
+//@Ignore
 //@RunWith(PowerMockRunner.class)
 //@PrepareForTest({DimeServiceAdapter.class, DimeIPResolver.class})
 public class DimeServiceAdapterTest extends Assert {
