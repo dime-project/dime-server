@@ -153,7 +153,7 @@ public class PSServicesControllerTest {
 		// CredentialStore
 		when(credentialStore.getUriForName(RECEIVER)).thenReturn(RECEIVER_URI);
 		when(credentialStore.getUriForAccountName(RECEIVER, SENDER)).thenReturn(SENDER_URI);
-		when(credentialStore.getPassword(RECEIVER, SENDER)).thenReturn(PASSWORD);
+		when(credentialStore.getPassword(RECEIVER, SENDER, tenant)).thenReturn(PASSWORD);
 		
 		// Mocking: DimeServiceAdapter
 		Token token = new Token("token", "secret");	
@@ -173,13 +173,13 @@ public class PSServicesControllerTest {
 		
 		user.setAccountUri(SENDER_URI_ON_DEMAND);
 		when(userManager.add(Mockito.eq(SENDER), Mockito.any(URI.class))).thenReturn(user);
-		when(userManager.addProfile(Mockito.eq(new URIImpl(SENDER_URI_ON_DEMAND)), Mockito.eq(profile))).thenReturn(account);
+		when(userManager.addProfile(Mockito.eq(new URIImpl(SENDER_URI_ON_DEMAND)), Mockito.eq(profile), tenant)).thenReturn(account);
 
 		//ServiceGateway			
 		Vector<LivePost> liveposts = new Vector<LivePost>();
 		livepost =  modelFactory.getDLPOFactory().createLivePost();	
 		liveposts.add(livepost);
-		when(mockDimeServiceAdapter.get(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.any(Class.class))).thenReturn(liveposts);
+		when(mockDimeServiceAdapter.get(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.any(Class.class), tenant)).thenReturn(liveposts);
 		when(serviceGateway.getDimeServiceAdapter(RECEIVER_URI)).thenReturn(mockDimeServiceAdapter); 
 		
 	}
@@ -195,7 +195,7 @@ public class PSServicesControllerTest {
 		// CredentialStore
 		when(credentialStore.getUriForName(RECEIVER)).thenReturn(RECEIVER_URI);
 		when(credentialStore.getUriForAccountName(RECEIVER, SENDER)).thenReturn(null);
-		when(credentialStore.getPassword(RECEIVER, SENDER)).thenReturn(null);
+		when(credentialStore.getPassword(RECEIVER, SENDER, tenant)).thenReturn(null);
 		
 		// Mocking: DimeServiceAdapter
 		Token token = new Token("token", "secret");	
@@ -215,13 +215,13 @@ public class PSServicesControllerTest {
 		
 		user.setAccountUri(SENDER_URI_ON_DEMAND);
 		when(userManager.add(Mockito.eq(SENDER), Mockito.any(URI.class))).thenReturn(user);
-		when(userManager.addProfile(Mockito.eq(new URIImpl(SENDER_URI_ON_DEMAND)), Mockito.eq(profile))).thenReturn(account);
+		when(userManager.addProfile(Mockito.eq(new URIImpl(SENDER_URI_ON_DEMAND)), Mockito.eq(profile), tenant)).thenReturn(account);
 
 		//ServiceGateway			
 		Vector<LivePost> liveposts = new Vector<LivePost>();
 		livepost =  modelFactory.getDLPOFactory().createLivePost();	
 		liveposts.add(livepost);
-		when(mockDimeServiceAdapter.get(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.any(Class.class))).thenReturn(liveposts);
+		when(mockDimeServiceAdapter.get(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.any(Class.class), tenant)).thenReturn(liveposts);
 		when(serviceGateway.getDimeServiceAdapter(RECEIVER_URI)).thenReturn(mockDimeServiceAdapter); 
 		
 	}

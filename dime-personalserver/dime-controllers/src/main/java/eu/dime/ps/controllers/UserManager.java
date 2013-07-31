@@ -24,6 +24,7 @@ import eu.dime.ps.gateway.service.internal.DimeDNSCannotConnectException;
 import eu.dime.ps.gateway.service.internal.DimeDNSException;
 import eu.dime.ps.semantic.model.dao.Account;
 import eu.dime.ps.semantic.model.nco.PersonContact;
+import eu.dime.ps.storage.entities.Tenant;
 import eu.dime.ps.storage.entities.User;
 import eu.dime.ps.storage.exception.ReadOnlyValueChangedOnUpdate;
 import java.util.List;
@@ -102,7 +103,7 @@ public interface UserManager {
 
     public User generatePassword(Long id);
 
-    Account addProfile(URI accountUri, PersonContact contact) throws InfosphereException;
+    Account addProfile(URI accountUri, PersonContact contact, Tenant localTenant) throws InfosphereException;
 
     public AccountEntry updateUserByAccount(AccountEntry accountUpdate)
             throws ReadOnlyValueChangedOnUpdate, UserNotFoundException;

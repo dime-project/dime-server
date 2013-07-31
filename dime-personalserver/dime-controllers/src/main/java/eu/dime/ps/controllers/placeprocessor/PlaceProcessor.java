@@ -42,6 +42,7 @@ import eu.dime.ps.controllers.infosphere.manager.AccountManager;
 import eu.dime.ps.controllers.infosphere.manager.PlacemarkManager;
 import eu.dime.ps.controllers.notifier.NotifierManager;
 import eu.dime.ps.controllers.notifier.exception.NotifierException;
+import eu.dime.ps.controllers.util.TenantHelper;
 import eu.dime.ps.gateway.ServiceGateway;
 import eu.dime.ps.gateway.exception.AttributeNotSupportedException;
 import eu.dime.ps.gateway.exception.InvalidLoginException;
@@ -141,10 +142,10 @@ public class PlaceProcessor {
 		return null;
 	}
 	
-	private void setServiceReference(Account account, String serviceName) {
+	private void setServiceReference(Account account, String serviceName, Tenant localTenant) {
 		if (serviceName.equalsIgnoreCase(SocialRecommenderAdapter.adapterName)) {
 			try {
-				this.socialRecService = (SocialRecommenderAdapter) this.serviceGateway.getServiceAdapter(account.asURI().toString());
+				this.socialRecService = (SocialRecommenderAdapter) this.serviceGateway.getServiceAdapter(account.asURI().toString(), localTenant);
 			} catch (ServiceNotAvailableException e) {
 				logger.error(e.getMessage(),e);
 				this.socialRecService = null;
@@ -161,7 +162,7 @@ public class PlaceProcessor {
 		// TODO @Roman: correct? 
 		else if (serviceName.equalsIgnoreCase(PlaceServiceAdapter.adapterName)) {
 			try {
-				this.placeServiceAdapter = (PlaceServiceAdapter) this.serviceGateway.getServiceAdapter(account.asURI().toString());
+				this.placeServiceAdapter = (PlaceServiceAdapter) this.serviceGateway.getServiceAdapter(account.asURI().toString(), localTenant);
 				if(placeServiceAdapter == null) {
 					throw new ServiceNotAvailableException("Check if the service adapter YellowMap has been registered.");
 				}
@@ -180,24 +181,26 @@ public class PlaceProcessor {
 	}
 	
 	
-	public List<Place> getPlaces(String tenant, double latitude, double longitude,
+	public List<Place> getPlaces(String mainSaid, double latitude, double longitude,
 			double radius, List<String> categories) throws ServiceNotAvailableException {
 		
 		logger.debug("Get places request received");
-		
+
+        Tenant tenant = TenantHelper.getCurrentTenant();
+
 		List<Place> places = new ArrayList<Place>();
                 
 		
 		Account srAccount = retrieveAccount(SocialRecommenderAdapter.adapterName);
 		if (srAccount != null) {
-			setServiceReference(srAccount, SocialRecommenderAdapter.adapterName);
+			setServiceReference(srAccount, SocialRecommenderAdapter.adapterName, tenant);
 		}
 		
 		// TODO @YM retrieve account and set service reference of YMAdapter
 		// TODO from Roman: is this correct?
 		Account ymAccount = retrieveAccount(PlaceServiceAdapter.adapterName);
 		if (ymAccount != null) {
-			setServiceReference(ymAccount, PlaceServiceAdapter.adapterName);
+			setServiceReference(ymAccount, PlaceServiceAdapter.adapterName, tenant);
 		}
 		
 		// Note: [TI] has been decided that no default position will be used if the API is called without 
@@ -211,14 +214,12 @@ public class PlaceProcessor {
 		if ((latitude == 0) && (longitude == 0)) {
 			// If called without parameters:
 			// 1. try to retrieve user's position from raw context
-			Tenant t = new Tenant();
-			t.setName(tenant);
-			t.setId(TenantContextHolder.getTenant());
-			IEntity entity = Factory.createEntity(tenant);
+			
+			IEntity entity = Factory.createEntity(mainSaid);
 			IContextDataset position = null;
 			
 			try {
-				position = contextProcessor.getContext(t, entity, positionScope);
+				position = contextProcessor.getContext(tenant, entity, positionScope);
 			} catch (ContextException e) {
 				logger.error(e.toString(),e);
 			}
@@ -257,7 +258,7 @@ public class PlaceProcessor {
 			// TODO @YM, tenant should be removed from the signature after proper Adapter connection. Proper service account URI should be used..
 			// TODO @Roman proper account: pending due to missing UI elements
 			// TODO @Roman categories
-			this.placeServiceAdapter.setCredentials(tenant);
+			this.placeServiceAdapter.setCredentials(mainSaid);
 
 			raw = this.placeServiceAdapter.getRaw(placeServiceAdapter.getPlacesParameters(longitude, latitude, new Double(radius).intValue()));
 		} catch (AttributeNotSupportedException e) {
@@ -334,17 +335,19 @@ public class PlaceProcessor {
 	}
 
 	public void createPlacemarkResources(List<Place> places) {
+        Long tenantId = TenantHelper.getCurrentTenantId();
 		Iterator<Place> it = places.iterator();
 		while (it.hasNext()) {
 			Place p = it.next();
 			Placemark pmk = createPlacemarkFromPlace(p);
-			if (pmk != null)
-				try {
-					this.placemarkManager.add(pmk);
-					RDFPlaceReferences.put(new PlaceKey(TenantContextHolder.getTenant(),p.getGuid()),pmk.asURI().toString());
-				} catch (InfosphereException e) {
-					logger.debug(e.toString());
-				}
+			if (pmk != null) {
+                try {
+                    this.placemarkManager.add(pmk);
+                    RDFPlaceReferences.put(new PlaceKey(tenantId, p.getGuid()), pmk.asURI().toString());
+                } catch (InfosphereException e) {
+                    logger.error(e.toString());
+                }
+            }
 		}
 	}
 
@@ -360,17 +363,17 @@ public class PlaceProcessor {
 	}
 
 	// TODO @YM, tenant should be removed from the signature after proper Adapter connection. Proper service account URI should be used..
-	public Place updatePlace(String tenant, String placeId, Place place) throws ServiceNotAvailableException {
+	public Place updatePlace(String mainSaid, String placeId, Place place) throws ServiceNotAvailableException {
 		
 		Account srAccount = retrieveAccount(SocialRecommenderAdapter.adapterName);
 		if (srAccount != null) {
-			setServiceReference(srAccount, SocialRecommenderAdapter.adapterName);
+			setServiceReference(srAccount, SocialRecommenderAdapter.adapterName, TenantHelper.getCurrentTenant());
 		}
 		// TODO @YM retrieve account and set service reference of YMAdapter
 		// TODO from Roman: is this correct?
 		Account ymAccount = retrieveAccount(PlaceServiceAdapter.adapterName);
 		if (ymAccount != null) {
-			setServiceReference(ymAccount, PlaceServiceAdapter.adapterName);
+			setServiceReference(ymAccount, PlaceServiceAdapter.adapterName, TenantHelper.getCurrentTenant());
 		}
 		
 		if (place.userRating != NO_VOTE) {
@@ -414,7 +417,7 @@ public class PlaceProcessor {
 					throw new ServiceNotAvailableException("Check if the service adapter YellowMap has been registered.");
 				}
 				// TODO @Roman proper account: pending due to missing UI elements
-				this.placeServiceAdapter.setCredentials(tenant);
+				this.placeServiceAdapter.setCredentials(mainSaid);
 
 				this.placeServiceAdapter.updatePlace(place);
 			} catch (UnsupportedEncodingException e) {
@@ -433,7 +436,7 @@ public class PlaceProcessor {
 					throw new ServiceNotAvailableException("Check if the service adapter YellowMap has been registered.");
 				}
 				// TODO @Roman proper account: pending due to missing UI elements
-				this.placeServiceAdapter.setCredentials(tenant);
+				this.placeServiceAdapter.setCredentials(mainSaid);
 
 				this.placeServiceAdapter.updatePlace(place);
 			} catch (UnsupportedEncodingException e) {
@@ -451,7 +454,7 @@ public class PlaceProcessor {
 	}
 	
 	private void notifyPlaceUpdate(Place place) {
-		Long t = TenantContextHolder.getTenant();
+		Long t = TenantHelper.getCurrentTenantId();
 		SystemNotification notification = 
 				new SystemNotification(t, DimeInternalNotification.OP_UPDATE, 
 						place.guid, DimeInternalNotification.ITEM_TYPE_PLACE, null);
@@ -475,14 +478,14 @@ public class PlaceProcessor {
 		
 		Account srAccount = retrieveAccount(SocialRecommenderAdapter.adapterName);
 		if (srAccount != null) {
-			setServiceReference(srAccount, SocialRecommenderAdapter.adapterName);
+			setServiceReference(srAccount, SocialRecommenderAdapter.adapterName, TenantHelper.getCurrentTenant());
 		}
 		
 		// TODO @YM retrieve account and set service reference of YMAdapter
 		// TODO from Roman: is this correct?
 		Account ymAccount = retrieveAccount(PlaceServiceAdapter.adapterName);
 		if (ymAccount != null) {
-			setServiceReference(ymAccount, PlaceServiceAdapter.adapterName);
+			setServiceReference(ymAccount, PlaceServiceAdapter.adapterName, TenantHelper.getCurrentTenant());
 		}
 
 		// Step 1: invoke YM service adapter to retrieve places info 

@@ -17,34 +17,26 @@
  */
 package eu.dime.ps.gateway.service.external;
 
-import static org.junit.Assert.*;
-
+import eu.dime.ps.gateway.exception.ServiceNotAvailableException;
+import eu.dime.ps.gateway.service.ServiceResponse;
+import eu.dime.ps.gateway.service.external.oauth.FacebookServiceAdapter;
+import eu.dime.ps.storage.entities.Tenant;
+import eu.dime.ps.storage.manager.EntityFactory;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.Properties;
-import java.util.Scanner;
-import org.slf4j.Logger;
-
+import static org.junit.Assert.*;
+import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.scribe.model.Token;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
-import net.sf.json.JSONObject;
-import net.sf.json.JSONSerializer;
-
-import eu.dime.ps.gateway.exception.AttributeNotSupportedException;
-import eu.dime.ps.gateway.exception.InvalidLoginException;
-import eu.dime.ps.gateway.exception.ServiceNotAvailableException;
-import eu.dime.ps.gateway.service.ServiceResponse;
-import eu.dime.ps.gateway.service.external.LinkedInAdapterTest.AdapterNotEnabledException;
-import eu.dime.ps.gateway.service.external.oauth.FacebookServiceAdapter;
 
 /**
  * Note: Please put in your developer keys before enabling this test!
@@ -78,8 +70,22 @@ public class FacebookAdapterTest {
 		
 	}
 
+
+	@Mock EntityFactory entityFactory;
+
+    Tenant tenant1;
+
+	@Before
+	public void setupTenant() {
+		tenant1 = entityFactory.buildTenant();
+		tenant1.setName("juan");
+		tenant1.setId(new Long(1));
+		tenant1.persist();
+
+	}
+
 	private FacebookServiceAdapter initAdapter() throws ServiceNotAvailableException, MalformedURLException, IOException, AdapterNotEnabledException {
-		FacebookServiceAdapter adapter = new FacebookServiceAdapter();
+		FacebookServiceAdapter adapter = new FacebookServiceAdapter(tenant1);
 		adapter.setConsumerToken(new Token(APPID, APPSECRET));
 		adapter.setAccessToken(new Token(id, access_token));
 		

@@ -109,7 +109,7 @@ public class ServiceCrawlerRegistryImplTestCase extends Assert{
         replay(adapter);
         
         //now setup the gateway to return the adapter bridge mock object
-        expect(gateway.getServiceAdapter(accountIdentifier)).andReturn(adapter).anyTimes();
+        expect(gateway.getServiceAdapter(accountIdentifier, tenant)).andReturn(adapter).anyTimes();
         
         // Setup is finished need to activate the mock
         replay(gateway);

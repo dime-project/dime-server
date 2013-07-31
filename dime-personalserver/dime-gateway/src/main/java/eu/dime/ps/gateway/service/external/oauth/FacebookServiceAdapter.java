@@ -14,16 +14,6 @@
 
 package eu.dime.ps.gateway.service.external.oauth;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-
-import org.scribe.builder.api.FacebookApi;
-import org.scribe.exceptions.OAuthException;
-import org.scribe.model.Response;
-import org.scribe.model.Verb;
-
 import eu.dime.ps.gateway.exception.AttributeNotSupportedException;
 import eu.dime.ps.gateway.exception.InvalidDataException;
 import eu.dime.ps.gateway.exception.InvalidLoginException;
@@ -33,6 +23,15 @@ import eu.dime.ps.gateway.service.ResourceAttributes;
 import eu.dime.ps.gateway.service.ServiceResponse;
 import eu.dime.ps.gateway.service.external.ExternalServiceAdapter;
 import eu.dime.ps.semantic.model.dlpo.Status;
+import eu.dime.ps.storage.entities.Tenant;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import org.scribe.builder.api.FacebookApi;
+import org.scribe.exceptions.OAuthException;
+import org.scribe.model.Response;
+import org.scribe.model.Verb;
 
 /**
  * @author Sophie.Wrobel
@@ -42,8 +41,8 @@ public class FacebookServiceAdapter extends OAuthServiceAdapter implements Exter
 	public static final String NAME = "Facebook";
 	private static final String RESOURCE_URL = "https://graph.facebook.com";
 	
-	public FacebookServiceAdapter() throws ServiceNotAvailableException {
-		super(FacebookApi.class);
+	public FacebookServiceAdapter(Tenant localTenant) throws ServiceNotAvailableException {
+		super(FacebookApi.class, localTenant);
 	}
 
 	@Override

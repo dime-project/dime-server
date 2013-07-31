@@ -20,6 +20,7 @@ import org.ontoware.rdf2go.model.node.URI;
 
 import eu.dime.ps.controllers.TenantContextHolder;
 import eu.dime.ps.controllers.exception.InfosphereException;
+import eu.dime.ps.controllers.util.TenantHelper;
 import eu.dime.ps.storage.entities.PersonMatch;
 import eu.dime.ps.storage.entities.Tenant;
 
@@ -30,8 +31,8 @@ public class PersonMatchManagerImpl implements PersonMatchManager {
 	
 	@Override
 	public List<PersonMatch> getAll() throws InfosphereException {
-		Long tenantId = TenantContextHolder.getTenant();
-		Tenant tenant = Tenant.find(tenantId);
+		
+		Tenant tenant = TenantHelper.getCurrentTenant();
 			
 		try {
 			return PersonMatch.findAllByTenantAndByTechniqueAndByThreshold(tenant, DEFAULT_TECHNIQUE, THRESHOLD);
@@ -42,8 +43,8 @@ public class PersonMatchManagerImpl implements PersonMatchManager {
 	
 	@Override
 	public List<PersonMatch> getAllByThreshold(double threshold) throws InfosphereException {
-		Long tenantId = TenantContextHolder.getTenant();
-		Tenant tenant = Tenant.find(tenantId);
+		
+		Tenant tenant = TenantHelper.getCurrentTenant();
 		
 		try {
 			return PersonMatch.findAllByTenantAndByTechniqueAndByThreshold(tenant, DEFAULT_TECHNIQUE, threshold);
@@ -54,8 +55,8 @@ public class PersonMatchManagerImpl implements PersonMatchManager {
 	
 	@Override
 	public List<PersonMatch> getAllByStatus(String status) throws InfosphereException {
-		Long tenantId = TenantContextHolder.getTenant();
-		Tenant tenant = Tenant.find(tenantId);
+		
+		Tenant tenant = TenantHelper.getCurrentTenant();
 		
 		try {
 			return PersonMatch.findAllByTenantAndByTechniqueAndByStatusAndByThreshold(tenant, DEFAULT_TECHNIQUE, status, THRESHOLD);
@@ -66,8 +67,7 @@ public class PersonMatchManagerImpl implements PersonMatchManager {
 	
 	@Override
 	public List<PersonMatch> getAllByPerson(URI person) throws InfosphereException {
-		Long tenantId = TenantContextHolder.getTenant();
-		Tenant tenant = Tenant.find(tenantId);
+		Tenant tenant = TenantHelper.getCurrentTenant();
 	
 		try {
 			return PersonMatch.findAllByTenantAndByTechniqueAndBySourceAndByThreshold(tenant, DEFAULT_TECHNIQUE, person.asURI().toString(), THRESHOLD);
@@ -78,8 +78,7 @@ public class PersonMatchManagerImpl implements PersonMatchManager {
 
 	@Override
 	public List<PersonMatch> getAllByPersonAndByStatus(URI person, String status) throws InfosphereException {
-		Long tenantId = TenantContextHolder.getTenant();
-		Tenant tenant = Tenant.find(tenantId);
+		Tenant tenant = TenantHelper.getCurrentTenant();
 	
 		try {
 			return PersonMatch.findAllByTenantAndByTechniqueAndBySourceAndByStatusAndByThreshold(tenant, DEFAULT_TECHNIQUE, person.asURI().toString(), status, THRESHOLD);

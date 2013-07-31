@@ -65,6 +65,8 @@ import eu.dime.ps.semantic.rdf.ResourceStore;
 import eu.dime.ps.semantic.service.impl.PimoService;
 import eu.dime.ps.dto.Type;
 import eu.dime.jfix.util.Arrays;
+import eu.dime.ps.controllers.util.TenantHelper;
+import eu.dime.ps.storage.entities.Tenant;
 
 /**
  * Deals with the generation of notifications for sharing resources between di.me
@@ -114,6 +116,8 @@ public class SharingNotifier implements BroadcastReceiver {
 		ResourceStore resourceStore = null;
 		PimoService pimoService = null;
 		PrivacyPreferenceService ppoService = null;
+
+        Tenant localTenant = TenantHelper.getTenant(event.getTenantId());
 		
 		try {
 			// reject events with no data (resource's metadata)
@@ -162,7 +166,7 @@ public class SharingNotifier implements BroadcastReceiver {
 					return;
 				}
 				
-				sendNotifications(connection, preference, sharedItem, true);
+				sendNotifications(connection, preference, sharedItem, true, localTenant);
 			} else if (event.is(PPO.PrivacyPreference)
 					&& Event.ACTION_RESOURCE_DELETE.equals(event.getAction())) {
 				
@@ -179,7 +183,7 @@ public class SharingNotifier implements BroadcastReceiver {
 					
 					// if no privacy preference is found = livepost has not been shared yet 
 					if (preference != null) {
-						sendNotifications(connection, preference, livePost, true);
+						sendNotifications(connection, preference, livePost, true, localTenant);
 					}
 				} catch (NotFoundException e) {
 					logger.error("A 'resource modified' event was received for " + resource.asURI() + 
@@ -196,7 +200,7 @@ public class SharingNotifier implements BroadcastReceiver {
 					
 					// if no privacy preference is found = data object has not been shared yet 
 					if (preference != null) {
-						sendNotifications(connection, preference, dataObject, true);
+						sendNotifications(connection, preference, dataObject, true, localTenant);
 					}
 				} catch (NotFoundException e) {
 					logger.error("A 'resource modified' event was received for " + resource.asURI() + 
@@ -226,7 +230,7 @@ public class SharingNotifier implements BroadcastReceiver {
 						return;
 					}
 					
-					sendNotifications(connection, preference, sharedItem, false);
+					sendNotifications(connection, preference, sharedItem, false, localTenant);
 				}
 			}
 			
@@ -300,7 +304,8 @@ public class SharingNotifier implements BroadcastReceiver {
 	}
 
 	private void sendNotifications(Connection connection, PrivacyPreference preference, 
-			org.ontoware.rdfreactor.schema.rdfs.Resource sharedItem, boolean notifyAll) throws RepositoryException {
+			org.ontoware.rdfreactor.schema.rdfs.Resource sharedItem, boolean notifyAll,
+            Tenant localTenant) throws RepositoryException {
 		PimoService pimoService = connection.getPimoService();
 		PrivacyPreferenceService ppoService = connection.getPrivacyPreferenceService();
 
@@ -374,7 +379,7 @@ public class SharingNotifier implements BroadcastReceiver {
 						}
 						
 						try {
-							ServiceAdapter serviceAdapter = serviceGateway.getServiceAdapter(account.asURI().toString());
+							ServiceAdapter serviceAdapter = serviceGateway.getServiceAdapter(account.asURI().toString(), localTenant);
 							if (sharedItem instanceof PersonContact) {
 								serviceAdapter.set(AttributeMap.PROFILE_MYDETAILS, sharedItem);
 							} else if (sharedItem instanceof LivePost) {

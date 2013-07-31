@@ -48,6 +48,7 @@ import eu.dime.ps.controllers.trustengine.TrustRecommendation;
 import eu.dime.ps.controllers.trustengine.exception.PrivacyValueNotValidException;
 import eu.dime.ps.controllers.trustengine.exception.TrustValueNotValidException;
 import eu.dime.ps.controllers.trustengine.utils.AdvisoryConstants;
+import eu.dime.ps.controllers.util.TenantHelper;
 import eu.dime.ps.semantic.connection.ConnectionProvider;
 import eu.dime.ps.semantic.exception.NotFoundException;
 import eu.dime.ps.semantic.model.RDFReactorThing;
@@ -1012,7 +1013,7 @@ public class TrustEngineImpl implements TrustEngine {
 	
 	public ResourceStore getResourceStore() {
         try {
-            return connectionProvider.getConnection(TenantContextHolder.getTenant().toString()).getResourceStore();
+            return connectionProvider.getConnection(TenantHelper.getCurrentTenantId().toString()).getResourceStore();
         } catch (RepositoryException ex) {
             java.util.logging.Logger.getLogger(TrustEngineImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -1021,7 +1022,7 @@ public class TrustEngineImpl implements TrustEngine {
 	
 	public PrivacyPreferenceService getPrivacyPreferenceService(){
         try {
-            return connectionProvider.getConnection(TenantContextHolder.getTenant().toString()).getPrivacyPreferenceService();
+            return connectionProvider.getConnection(TenantHelper.getCurrentTenantId().toString()).getPrivacyPreferenceService();
         } catch (RepositoryException ex) {
             java.util.logging.Logger.getLogger(TrustEngineImpl.class.getName()).log(Level.SEVERE, null, ex);
         }

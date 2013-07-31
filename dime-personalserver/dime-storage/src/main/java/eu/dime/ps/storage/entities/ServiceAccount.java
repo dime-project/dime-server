@@ -218,14 +218,18 @@ public class ServiceAccount {
 		this.tenant = tenant;
 	}
 
-	public static ServiceAccount findAllByAccountUri(String accountUri) {
+	public static ServiceAccount findAllByAccountUri(String accountUri, Tenant localTenant) {
+        if (localTenant==null){
+            throw new IllegalArgumentException("localTenant must not be null!");
+        }
 		if (accountUri == null || accountUri.length() == 0)
 			throw new IllegalArgumentException("The accountUri argument is required");
 		EntityManager em = ServiceAccount.entityManager();
 		TypedQuery<ServiceAccount> q = em.createQuery(
-				"SELECT o FROM ServiceAccount AS o WHERE o.accountUri = :accountUri",
+				"SELECT o FROM ServiceAccount AS o WHERE o.tenant = :tenant AND o.accountUri = :accountUri",
 				ServiceAccount.class);
 		q.setParameter("accountUri", accountUri);
+        q.setParameter("tenant", localTenant);
 		return QueryUtil.getSingleResultOrNull(q);
 	}
 

@@ -12,6 +12,7 @@
 * See the Licence for the specific language governing permissions and limitations under the Licence.
 */
 
+
 package eu.dime.ps.gateway.service.internal;
 
 
@@ -69,6 +70,7 @@ import eu.dime.ps.gateway.util.JSONLDUtils;
 import eu.dime.ps.semantic.model.NCOFactory;
 import eu.dime.ps.semantic.model.nco.PersonContact;
 import eu.dime.ps.semantic.model.nco.PersonName;
+import eu.dime.ps.storage.entities.Tenant;
 
 /**
  * Service adapter in charge of communication between di.me personal servers (PS).
@@ -154,32 +156,35 @@ public class DimeServiceAdapter extends ServiceAdapterBase implements InternalSe
 	/**
 	 * get Method for di.me service adapter with additional SAID parameter
 	 * 
-	 * @param receiverSAID GET request should go to this SAID
+     * @param <T>
+     * @param receiverSAID GET request should go to this SAID
 	 * @param senderSAID Generated GET request is being sent from this SAID using their credentials to access information
 	 * @param attribute
 	 * @param returnType
-	 * @return
+     * @param localTenant
+     * @return
 	 * @throws AttributeNotSupportedException
 	 * @throws ServiceNotAvailableException
-	 * @throws InvalidLoginException
+     * @throws InvalidLoginException
+     * @throws ServiceException 
 	 */
 	public <T extends Resource> Collection<T> get(String receiverSAID, String senderSAID,
-			String attribute, Class<T> returnType) throws AttributeNotSupportedException, 
+			String attribute, Class<T> returnType, Tenant localTenant) throws AttributeNotSupportedException,
 			ServiceNotAvailableException, InvalidLoginException, ServiceException {
 
 		// Retrieve username & password to establish the connection 
 		String username = null;
 		String secret = null;
 		try {
-			username = credentialStore.getUsername(senderSAID, receiverSAID);
-			secret = credentialStore.getPassword(senderSAID, receiverSAID);
+			username = credentialStore.getUsername(senderSAID, receiverSAID, localTenant);
+			secret = credentialStore.getPassword(senderSAID, receiverSAID, localTenant);
 		} catch (NoResultException e) {
 			throw new ServiceNotAvailableException("Could not find username & password from the credentials store", e);
 		}
 
 		// Resolve IP for the receiver said and create proxy
 		HttpRestProxy proxy = null;
-		String targetSaidName = credentialStore.getNameSaid(receiverSAID);
+		String targetSaidName = credentialStore.getNameSaid(receiverSAID, localTenant);
 		try {
 			proxy = prepareProxy(targetResolver.resolve(targetSaidName), username, secret);
 			proxy.authenticate(new UsernamePasswordAuthenticationToken(username, secret));
@@ -252,30 +257,31 @@ public class DimeServiceAdapter extends ServiceAdapterBase implements InternalSe
 	}
 
 	/**
-	 * get Method for di.me service adapterto retreive a Binary file from a ResourceId
+	 * get Method for di.me service adapter retrieve a Binary file from a ResourceId
 	 * 
 	 * @param receiverSAID
 	 * @param senderSAID
 	 * @param resourceId
-	 * @return BinaryFile	
+     * @param localTenant
+     * @return BinaryFile
 	 * @throws ServiceNotAvailableException	
 	 */
 	public  BinaryFile getBinary(String receiverSAID, String senderSAID,
-			String resourceId) throws 	ServiceNotAvailableException {
+			String resourceId, Tenant localTenant) throws 	ServiceNotAvailableException {
 			
 		// Retrieve username & password to establish the connection 
 		String username = null;
 		String secret = null;
 		try {
-			username = credentialStore.getUsername(senderSAID, receiverSAID);
-			secret = credentialStore.getPassword(senderSAID, receiverSAID);
+			username = credentialStore.getUsername(senderSAID, receiverSAID, localTenant);
+			secret = credentialStore.getPassword(senderSAID, receiverSAID, localTenant);
 		} catch (NoResultException e) {
 			throw new ServiceNotAvailableException("Could not find username & password from the credentials store", e);
 		}
 		logger.info("username: " + username + " secret: " + secret);
 		// Resolve IP for the receiver said and create proxy
 		HttpRestProxy proxy = null;
-		String targetSaidName = credentialStore.getNameSaid(receiverSAID);
+		String targetSaidName = credentialStore.getNameSaid(receiverSAID, localTenant);
 		try {
 			proxy = prepareProxy(targetResolver.resolve(targetSaidName), username, secret);
 			proxy.authenticate(new UsernamePasswordAuthenticationToken(username, secret));

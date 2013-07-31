@@ -38,6 +38,7 @@ import eu.dime.ps.controllers.exception.ForbiddenException;
 import eu.dime.ps.controllers.exception.InfosphereException;
 import eu.dime.ps.controllers.notifier.NotifierManager;
 import eu.dime.ps.controllers.notifier.exception.NotifierException;
+import eu.dime.ps.controllers.util.TenantHelper;
 import eu.dime.ps.dto.Type;
 import eu.dime.ps.semantic.exception.NotFoundException;
 import eu.dime.ps.semantic.exception.PrivacyPreferenceException;
@@ -91,9 +92,7 @@ public abstract class ShareableManagerBase<T extends Resource> extends Connectio
 	 * @param operation operation occurred to the item
 	 */
 	private void sendUserNotification(T resource, String operation) {
-		Long tenant = TenantContextHolder.getTenant();
-
-                
+		Long tenant = TenantHelper.getCurrentTenantId();
 
 		Type type = Type.get(resource);
 		if (type == null) {

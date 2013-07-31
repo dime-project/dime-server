@@ -143,7 +143,7 @@ public class JPAPersistenceManagerTestCase extends AbstractJUnit4SpringContextTe
 		replay(adapter);
 
 		// now setup the gateway to return the adapter bridge mock object
-		expect(gateway.getServiceAdapter(accountIdentifier)).andReturn(adapter).anyTimes();
+		expect(gateway.getServiceAdapter(accountIdentifier, tenant)).andReturn(adapter).anyTimes();
 
 		// Setup is finished need to activate the mock
 		replay(gateway);
@@ -222,7 +222,7 @@ public class JPAPersistenceManagerTestCase extends AbstractJUnit4SpringContextTe
 		Set<CrawlerHandler> handlers = new HashSet<CrawlerHandler>();
 		handlers.add(new MockCrawlerHandler());
 
-		ServiceCrawler crawler = new ServiceCrawlerImpl(tenant.getId(), gateway.getServiceAdapter(accountIdentifier), cron, dummyPath, handlers);
+		ServiceCrawler crawler = new ServiceCrawlerImpl(tenant.getId(), gateway.getServiceAdapter(accountIdentifier, tenant), cron, dummyPath, handlers);
 
 		persistence.crawlerAdded(crawler);
 

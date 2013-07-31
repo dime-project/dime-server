@@ -1315,7 +1315,7 @@ Dime.evaluation={
             var action = "navigate_search_web_UI";
             this.createAndSendEvaluationItemForAction(action);
         }
-        Dime.ps_configuration.viewStack.push(this.getViewStackItemByGroupType(groupType, viewType));
+        Dime.ps_configuration.viewStack.push(this.getViewStackItemByGroupType(groupType, viewType))
     },
 
     createAndSendEvaluationItemForAction: function(action){
@@ -3372,7 +3372,7 @@ Dime.Navigation = {
             
             for (var i=0; i<usernotificationsNotifications.length;i++){
                 var myGuid = usernotificationsNotifications[i].element.guid;
-                var operation = usernotificationsNotifications[i].operation;
+                var operation = usernotificationsNotifications[i].operation
                 for (var j=0; j<response.length;j++){
                     if ((response[j].guid===myGuid)
                         && (!response[j].read)){
@@ -3382,7 +3382,7 @@ Dime.Navigation = {
                 }
             }
             Dime.Navigation.updateNotificationBar(usernotifications);
-        };         
+        }         
 
          
         Dime.REST.getAll(Dime.psMap.TYPE.USERNOTIFICATION, handleResponse); 
@@ -3593,7 +3593,7 @@ Dime.initProcessor.registerFunction( function(callback){
         if (Dime.ps_configuration.createNavigation){
             var userString = Dime.ps_configuration.mainSaid+'@'+response.name;
             $('#username').text(userString.substr(0, 21)).click(function(){
-                DimeView.showAbout.call(DimeView);
+                DimeView.showAbout.call(DimeView)
             });
         }
         callback();
@@ -3640,14 +3640,15 @@ Dime.Navigation.registerCometCall();
 
 //overwrite to update view on notifications incoming
 Dime.Navigation.createMenuLiButton=function(id, caption, containerGroupType){
-    // overridden by index.js //FIXME move navigation to index.html
-};
 
+    var linkText = 'index.html?type='+ containerGroupType ;
+    return $('<li/>').attr('id',id).append($('<a/>').attr('href',linkText).text(caption));
+};
 //overwrite to update view on notifications incoming
 Dime.Navigation.createMenuLiButtonSettings=function(){
-    // overridden by index.js //FIXME move navigation to index.html
-};
+    return $('<li/>').attr('id','navButtonSettings').append($('<a/>').attr('href','settings.html').text('Settings'));
 
+};
 //overwrite to update view on notifications incoming
 Dime.Navigation.createNotificationIcon=function(){
     return $('<div/>').addClass('notificationIcon').attr('id','notificationIcon')
@@ -4076,7 +4077,7 @@ Dime.DetailDialog.prototype = {
             );
         this.body.append(profilePic);
         //activate thumbNail Click
-        thumbNail.addClass('itemDetailPicImageActive').clickExt(dialogRef, dialogRef.toggleImageEdit);
+        thumbNail.addClass('itemDetailPicImageActive').clickExt(dialogRef, dialogRef.toggleImageEdit)
 
         this.initUploader();
 
@@ -4436,7 +4437,7 @@ Dime.DetailDialog.prototype = {
             }else if (!sendIsHidden){
                 dialogRef.dialog.okButton.addClass('inactiveButton');
                 dialogRef.dialog.okButton.text("Share");
-                dialogRef.dialog.footerElement.append($('<span/>').addClass('livePostHint').text('Please select "From" and "Recipients" to share livepost!'));
+                dialogRef.dialog.footerElement.append($('<span/>').addClass('livePostHint').text('Please select "From" and "Recipients" to share livepost!'))
                 sendIsHidden=true;
             }
         };
@@ -4463,7 +4464,7 @@ Dime.DetailDialog.prototype = {
             });
 
             senderDropdown = BSTool.createDropdown("Select Profile Card", profileDropdown, "btn-large");
-            livePostSender.append(senderDropdown);
+            livePostSender.append(senderDropdown)
         };
 
 
@@ -4478,7 +4479,7 @@ Dime.DetailDialog.prototype = {
                 //update items
                 Dime.psHelper.addAccessForItem(sortedAgents.pAgents, sortedAgents.gAgents, sortedAgents.sAgents, item, fromSaid);
             }
-        };
+        }
 
         var receiverList= $('<div/>').addClass('livePostReceiverList').click(addRemoveClick);
 
@@ -4530,7 +4531,7 @@ Dime.DetailDialog.prototype = {
             .append(this.createNameInput(item));
 
         if(item.type!==Dime.psMap.TYPE.GROUP){
-            this.body.append(this.getPrivTrustElement(item,this.readonly));
+            this.body.append(this.getPrivTrustElement(item,this.readonly))
         }
 
         var childType = Dime.psHelper.getChildType(item.type);
@@ -5382,7 +5383,6 @@ Dime.ConfigurationDialog.prototype = {
                                     name: serviceAccount.settings[i].name,
                                     mandatory: serviceAccount.settings[i].mandatory,
                                     value: function(){
-                                        //TODO null
                                         return dialogSelf.selectedProfile.said;
                                     },
                                     validation: function(){

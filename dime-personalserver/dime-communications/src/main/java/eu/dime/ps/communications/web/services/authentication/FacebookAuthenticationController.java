@@ -35,6 +35,7 @@ import org.springframework.web.servlet.ModelAndView;
 import eu.dime.ps.communications.web.services.authentication.OAuthAuthenticationController.ServiceAdapterHolder;
 import eu.dime.ps.controllers.TenantContextHolder;
 import eu.dime.ps.controllers.exception.InfosphereException;
+import eu.dime.ps.controllers.util.TenantHelper;
 import eu.dime.ps.gateway.exception.ServiceAdapterNotSupportedException;
 import eu.dime.ps.gateway.exception.ServiceNotAvailableException;
 import eu.dime.ps.gateway.service.external.oauth.FacebookServiceAdapter;
@@ -61,10 +62,10 @@ public class FacebookAuthenticationController extends OAuthAuthenticationControl
 			error = UNKNOWN_TENANT_ERROR;
 		} else {
 			try {
-				FacebookServiceAdapter serviceAdapter = new FacebookServiceAdapter();
+				FacebookServiceAdapter serviceAdapter = new FacebookServiceAdapter(TenantHelper.getCurrentTenant());
 				try {
 
-				Long tenantId = TenantContextHolder.getTenant();
+				Long tenantId = TenantHelper.getCurrentTenantId();
 				String adapterId = UUID.randomUUID().toString();
 
 				// Create callback URL

@@ -27,6 +27,7 @@ import org.ontoware.rdf2go.model.node.impl.URIImpl;
 import eu.dime.ps.controllers.TenantContextHolder;
 import eu.dime.ps.controllers.exception.InfosphereException;
 import eu.dime.ps.controllers.trustengine.utils.AdvisoryConstants;
+import eu.dime.ps.controllers.util.TenantHelper;
 import eu.dime.ps.semantic.connection.ConnectionProvider;
 import eu.dime.ps.semantic.exception.NotFoundException;
 import eu.dime.ps.semantic.exception.ResourceExistsException;
@@ -225,7 +226,7 @@ public class PersonManagerImpl extends InfoSphereManagerBase<Person> implements 
 	@Override
 	public Person merge(URI master, URI... targets) throws InfosphereException {
 		PimoService pimoService = getPimoService();
-		Tenant tenant = Tenant.find(TenantContextHolder.getTenant());
+		Tenant tenant = TenantHelper.getCurrentTenant();
 		try {
 			Person mergedPerson = pimoService.merge(master, targets);
 			// flag matches as 'accepted' 

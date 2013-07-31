@@ -435,7 +435,7 @@ public class PSInfoSphereControllerTest extends Assert {
 		DimeServiceAdapter sa = mock(DimeServiceAdapter.class);
 		when(sa.getAdapterName()).thenReturn("di.me");
 		ServiceMetadata serviceMeta = new ServiceMetadata("guid", "dimeAdapter", "description", "authURL", "status", null, "settings");		
-		when(mockedServiceGateway.getServiceAdapter(anyString())).thenReturn(sa);
+		when(mockedServiceGateway.getServiceAdapter(anyString(), tenant)).thenReturn(sa);
 		when(mockedServiceGateway.getServiceMetadata(anyString(),anyString())).thenReturn(serviceMeta);
 
 		return mockedServiceGateway;		

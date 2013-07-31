@@ -27,6 +27,7 @@ import eu.dime.ps.gateway.exception.ServiceNotAvailableException;
 import eu.dime.ps.gateway.service.AttributeMap;
 import eu.dime.ps.gateway.service.ServiceResponse;
 import eu.dime.ps.gateway.service.external.ExternalServiceAdapter;
+import eu.dime.ps.storage.entities.Tenant;
 
 /**
  * Responsible for implementing the concrete LinkedIn adapter
@@ -42,8 +43,8 @@ public class LinkedInServiceAdapter extends OAuthServiceAdapter implements Exter
 	/**
 	 * @throws ServiceNotAvailableException
 	 */
-	public LinkedInServiceAdapter() throws ServiceNotAvailableException {
-		super(LinkedInApi.class);
+	public LinkedInServiceAdapter(Tenant localTenant) throws ServiceNotAvailableException {
+		super(LinkedInApi.class, localTenant);
 	}
 	
 	/*

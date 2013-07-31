@@ -205,4 +205,7 @@ public class Event {
 		return tenantId;
 	}
 
+    public Long getTenantId(){
+		return new Long(tenantId);
+    }
 }

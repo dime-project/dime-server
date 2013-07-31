@@ -52,6 +52,7 @@ import eu.dime.ps.gateway.service.noauth.ProximityServiceAdapter;
 import eu.dime.ps.gateway.service.noauth.SocialRecommenderAdapter;
 import eu.dime.ps.gateway.service.noauth.YMServiceAdapter;
 import eu.dime.ps.storage.entities.ServiceAccount;
+import eu.dime.ps.storage.entities.Tenant;
 
 /**
  * Constructs and configure the various service adapters for communicating with
@@ -146,7 +147,7 @@ public class ServiceGatewayImpl implements ServiceGateway {
 	}
 	
 	@Override
-	public ServiceAdapter getServiceAdapter(String identifier) throws ServiceNotAvailableException,
+	public ServiceAdapter getServiceAdapter(String identifier, Tenant localTenant) throws ServiceNotAvailableException,
 			ServiceAdapterNotSupportedException {
 	
                 if (identifier == null) {
@@ -156,8 +157,8 @@ public class ServiceGatewayImpl implements ServiceGateway {
 		// the list of adapters is lazily initialized when the adapters are
 		// requested
 		if (!this.adapters.containsKey(identifier)) {
-			ServiceAccount account = ServiceAccount.findAllByAccountUri(identifier);
-			ServiceAdapter adapter = buildAdapter(account, identifier);
+			ServiceAccount account = ServiceAccount.findAllByAccountUri(identifier, localTenant);
+			ServiceAdapter adapter = buildAdapter(account, identifier, localTenant);
 	
 			if (adapter == null)
 				throw new ServiceNotAvailableException(
@@ -265,7 +266,7 @@ public class ServiceGatewayImpl implements ServiceGateway {
 				+ this.policyManager.getPolicyString("AUTHSERVLET", adapterName);
 	}
 
-	private ServiceAdapter buildAdapter(ServiceAccount account, String guid)
+	private ServiceAdapter buildAdapter(ServiceAccount account, String guid, Tenant localTenant)
 			throws ServiceNotAvailableException, ServiceAdapterNotSupportedException {
 		ServiceAdapter adapter = null;
 		if (account == null) {
@@ -278,15 +279,15 @@ public class ServiceGatewayImpl implements ServiceGateway {
 
 		// instanciate the proper service adapter
 		if (LinkedInServiceAdapter.NAME.equals(adapterName)) {
-			adapter = new LinkedInServiceAdapter();
+			adapter = new LinkedInServiceAdapter(localTenant);
 		} else if (TwitterServiceAdapter.NAME.equals(adapterName)) {
-			adapter = new TwitterServiceAdapter();
+			adapter = new TwitterServiceAdapter(localTenant);
 		} else if (FacebookServiceAdapter.NAME.equals(adapterName)) {
-			adapter = new FacebookServiceAdapter();
+			adapter = new FacebookServiceAdapter(localTenant);
 		} else if (FitbitServiceAdapter.NAME.equals(adapterName)) {
-			adapter = new FitbitServiceAdapter();
+			adapter = new FitbitServiceAdapter(localTenant);
 		} else if (GooglePlusServiceAdapter.NAME.equals(adapterName)) {
-			adapter = new GooglePlusServiceAdapter();
+			adapter = new GooglePlusServiceAdapter(localTenant);
 		} else if (SocialRecommenderAdapter.adapterName.equals(adapterName)) {
 			adapter = new SocialRecommenderAdapter();
 		} else if (LocationServiceAdapter.adapterName.equals(adapterName)) {

@@ -40,6 +40,7 @@ import eu.dime.ps.controllers.TenantContextHolder;
 import eu.dime.ps.controllers.TenantManager;
 import eu.dime.ps.controllers.notifier.NotifierManager;
 import eu.dime.ps.controllers.notifier.exception.NotifierException;
+import eu.dime.ps.controllers.util.TenantHelper;
 import eu.dime.ps.storage.entities.Tenant;
 
 /**
@@ -235,7 +236,7 @@ public class PSUserNotificationsController implements APIController {
 		unr.setType(UNRefToItem.TYPE_DATABOX);
 		unr.setUserID("juan");
 		
-		DimeInternalNotification userNotification = new UserNotification(TenantContextHolder.getTenant(),unr);
+		DimeInternalNotification userNotification = new UserNotification(TenantHelper.getCurrentTenantId(),unr);
 		
 		notifierManager.pushInternalNotification(userNotification);
 

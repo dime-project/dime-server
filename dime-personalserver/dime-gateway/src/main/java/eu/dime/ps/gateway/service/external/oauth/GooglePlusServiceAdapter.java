@@ -28,6 +28,7 @@ import eu.dime.ps.gateway.service.AttributeMap;
 import eu.dime.ps.gateway.service.ServiceResponse;
 import eu.dime.ps.gateway.service.external.ExternalServiceAdapter;
 import eu.dime.ps.gateway.transformer.FormatUtils;
+import eu.dime.ps.storage.entities.Tenant;
 
 /**
  * Service adapter enabling the access to the Google+ API.
@@ -43,8 +44,8 @@ public class GooglePlusServiceAdapter extends OAuthServiceAdapter implements Ext
 	/**
 	 * @throws ServiceNotAvailableException
 	 */
-	public GooglePlusServiceAdapter() throws ServiceNotAvailableException {
-		super(GoogleApi.class);
+	public GooglePlusServiceAdapter(Tenant localTenant) throws ServiceNotAvailableException {
+		super(GoogleApi.class, localTenant);
 	}
 	
 	@Override

@@ -57,6 +57,7 @@ import eu.dime.ps.semantic.model.nco.PersonName;
 import eu.dime.ps.semantic.model.nco.PhoneNumber;
 import eu.dime.ps.semantic.model.pimo.Person;
 import eu.dime.ps.semantic.privacy.PrivacyPreferenceType;
+import eu.dime.jfix.util.Arrays;
 
 
 public class PSProfileControllerTestIt extends PSInfosphereControllerTestIt {
