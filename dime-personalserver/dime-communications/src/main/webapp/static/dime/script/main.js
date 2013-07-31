@@ -5383,7 +5383,6 @@ Dime.ConfigurationDialog.prototype = {
                                     name: serviceAccount.settings[i].name,
                                     mandatory: serviceAccount.settings[i].mandatory,
                                     value: function(){
-                                        //TODO null
                                         return dialogSelf.selectedProfile.said;
                                     },
                                     validation: function(){

@@ -36,6 +36,7 @@ import eu.dime.ps.controllers.TenantContextHolder;
 import eu.dime.ps.controllers.TenantManager;
 import eu.dime.ps.controllers.exception.InfosphereException;
 import eu.dime.ps.controllers.infosphere.manager.AccountManager;
+import eu.dime.ps.controllers.util.TenantHelper;
 import eu.dime.ps.gateway.auth.CredentialStore;
 import eu.dime.ps.gateway.exception.ServiceAdapterNotSupportedException;
 import eu.dime.ps.gateway.policy.PolicyManager;
@@ -99,7 +100,7 @@ public abstract class OAuthAuthenticationController<T extends OAuthServiceAdapte
 				T serviceAdapter = adapterClass.getConstructor().newInstance();
 				try {
 
-				Long tenantId = TenantContextHolder.getTenant();
+				Long tenantId = TenantHelper.getCurrentTenantId();
 				String adapterId = UUID.randomUUID().toString();
 
 				// Create callback URL

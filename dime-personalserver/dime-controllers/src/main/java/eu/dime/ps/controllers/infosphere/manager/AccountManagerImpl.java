@@ -187,7 +187,7 @@ public class AccountManagerImpl extends InfoSphereManagerBase<Account> implement
             super.add(account);
             return;
         }
-        Tenant tenant = Tenant.find(TenantContextHolder.getTenant());
+        Tenant tenant = TenantHelper.getCurrentTenant();
         ServiceAccount serviceAccount = entityFactory.buildServiceAccount();
 
         serviceAccount.setServiceProvider(serviceProvider);
@@ -205,7 +205,7 @@ public class AccountManagerImpl extends InfoSphereManagerBase<Account> implement
     @Override
     public void add(ServiceAdapter serviceAdapter) throws InfosphereException, ServiceAdapterNotSupportedException {
 
-        Tenant tenant = Tenant.find(TenantContextHolder.getTenant());
+        Tenant tenant = TenantHelper.getCurrentTenant();
 
         String adapterName = serviceAdapter.getAdapterName();
         ServiceProvider provider = ServiceProvider.findByName(adapterName);

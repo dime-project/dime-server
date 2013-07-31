@@ -20,6 +20,8 @@ import org.openrdf.repository.RepositoryException;
 
 import eu.dime.ps.controllers.TenantContextHolder;
 import eu.dime.ps.controllers.exception.InfosphereException;
+import eu.dime.ps.controllers.util.TenantHelper;
+import eu.dime.ps.controllers.util.TenantNotFoundException;
 import eu.dime.ps.semantic.connection.Connection;
 import eu.dime.ps.semantic.connection.ConnectionProvider;
 import eu.dime.ps.semantic.privacy.PrivacyPreferenceService;
@@ -41,9 +43,12 @@ public abstract class ConnectionBase {
 	}
 	
 	private Connection getConnection() throws InfosphereException, RepositoryException {
-		Long tenantId = TenantContextHolder.getTenant();
-		if (tenantId == null) {
-			throw new InfosphereException("No tenant identifier was found in TenantContextHolder: the connection could not be established");
+		Long tenantId;
+		try{
+            tenantId=TenantHelper.getCurrentTenantId();
+        }catch(TenantNotFoundException ex){
+
+			throw new InfosphereException("No tenant identifier was found in TenantContextHolder: the connection could not be established\n"+ex.getMessage(),ex);
 		}
 		return connectionProvider.getConnection(tenantId.toString());
 	}

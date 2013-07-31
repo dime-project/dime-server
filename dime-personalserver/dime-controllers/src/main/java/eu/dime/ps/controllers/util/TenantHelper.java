@@ -42,7 +42,7 @@ public class TenantHelper {
         return getTenant(getCurrentTenantId());
     }
 
-    private static Long getCurrentTenantId() {
+    public static Long getCurrentTenantId() {
         Long result = TenantContextHolder.getTenant();
         if (result==null){
             throw new TenantNotFoundException("Tenant id is not set in TenantContextHolder!");

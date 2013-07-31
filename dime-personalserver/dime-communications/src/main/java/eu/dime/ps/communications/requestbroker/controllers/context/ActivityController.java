@@ -43,6 +43,7 @@ import eu.dime.commons.dto.Data;
 import eu.dime.commons.dto.Entry;
 import eu.dime.commons.dto.Response;
 import eu.dime.ps.controllers.TenantContextHolder;
+import eu.dime.ps.controllers.util.TenantHelper;
 import eu.dime.ps.semantic.connection.Connection;
 import eu.dime.ps.semantic.connection.ConnectionProvider;
 import eu.dime.ps.semantic.model.dcon.State;
@@ -71,7 +72,7 @@ public class ActivityController {
 	public Response<Activity> getMeAll() {
 
 		try {
-			Connection connection = connectionProvider.getConnection(TenantContextHolder.getTenant().toString());
+			Connection connection = connectionProvider.getConnection(TenantHelper.getCurrentTenantId().toString());
 			LiveContextService liveContextService = connection.getLiveContextService();
 		
 			List<Activity> entries = new ArrayList<Activity>();

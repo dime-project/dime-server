@@ -38,6 +38,7 @@ import eu.dime.context.exceptions.ContextException;
 import eu.dime.context.model.Constants;
 import eu.dime.ps.controllers.TenantContextHolder;
 import eu.dime.ps.controllers.context.raw.ifc.RawContextManager;
+import eu.dime.ps.controllers.util.TenantHelper;
 import eu.dime.ps.semantic.connection.Connection;
 import eu.dime.ps.semantic.connection.ConnectionProvider;
 
@@ -135,7 +136,7 @@ public class PSContextController {
 		Connection connection = null;
 		
 		try {
-			connection = connectionProvider.getConnection(TenantContextHolder.getTenant().toString());
+			connection = connectionProvider.getConnection(TenantHelper.getCurrentTenantId().toString());
 			System.out.println(connection.getLiveContextService().getLiveContext().serialize(Syntax.Trig));
 		} catch (RepositoryException e) {
 			Response.serverError("Couldn't get connection to RDF services: " + e.getMessage(), e);

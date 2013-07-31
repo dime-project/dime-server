@@ -57,6 +57,7 @@ import eu.dime.commons.util.FileUtils;
 import eu.dime.ps.controllers.TenantContextHolder;
 import eu.dime.ps.controllers.exception.InfosphereException;
 import eu.dime.ps.controllers.util.ImageUtils;
+import eu.dime.ps.controllers.util.TenantHelper;
 import eu.dime.ps.datamining.FileDataMining;
 import eu.dime.ps.datamining.exceptions.DataMiningException;
 import eu.dime.ps.semantic.exception.NotFoundException;
@@ -114,10 +115,9 @@ public class FileManagerImpl extends InfoSphereManagerBase<FileDataObject> imple
 	}
 	
 	public DataStore getDataStore() {
-		//if (dataStore == null){
-			return dataStoreProvider.getTenantStore(TenantContextHolder.getTenant().longValue());
-		//}
-		//return dataStore;
+		
+        return dataStoreProvider.getTenantStore(TenantHelper.getCurrentTenantId().longValue());
+		
 	}
 
 	@Override

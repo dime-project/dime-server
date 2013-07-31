@@ -49,6 +49,7 @@ import eu.dime.ps.controllers.infosphere.manager.PersonManager;
 import eu.dime.ps.controllers.infosphere.manager.ProfileCardManager;
 import eu.dime.ps.controllers.trustengine.TrustEngine;
 import eu.dime.ps.controllers.trustengine.utils.AdvisoryConstants;
+import eu.dime.ps.controllers.util.TenantHelper;
 import eu.dime.ps.semantic.exception.NotFoundException;
 import eu.dime.ps.semantic.model.RDFReactorThing;
 import eu.dime.ps.semantic.model.dlpo.LivePost;
@@ -480,7 +481,7 @@ public class AdvisoryController extends AdvisoryBase {
 	
     @Override
 	public ResourceStore getResourceStore() throws RepositoryException {
-		return connectionProvider.getConnection(TenantContextHolder.getTenant().toString()).getResourceStore();
+		return connectionProvider.getConnection(TenantHelper.getCurrentTenantId().toString()).getResourceStore();
 		
 	}
 	

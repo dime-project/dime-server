@@ -65,7 +65,7 @@ public class FacebookAuthenticationController extends OAuthAuthenticationControl
 				FacebookServiceAdapter serviceAdapter = new FacebookServiceAdapter(TenantHelper.getCurrentTenant());
 				try {
 
-				Long tenantId = TenantContextHolder.getTenant();
+				Long tenantId = TenantHelper.getCurrentTenantId();
 				String adapterId = UUID.randomUUID().toString();
 
 				// Create callback URL

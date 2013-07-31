@@ -45,6 +45,8 @@ import eu.dime.ps.controllers.infosphere.manager.ProfileManager;
 import eu.dime.ps.controllers.notifier.NotifierManager;
 import eu.dime.ps.controllers.notifier.exception.NotifierException;
 import eu.dime.ps.controllers.security.utils.PasswordGenerator;
+import eu.dime.ps.controllers.util.TenantHelper;
+import eu.dime.ps.controllers.util.TenantNotFoundException;
 import eu.dime.ps.gateway.ServiceGateway;
 import eu.dime.ps.gateway.exception.AttributeNotSupportedException;
 import eu.dime.ps.gateway.exception.InvalidDataException;
@@ -174,7 +176,7 @@ public class UserManagerImpl implements UserManager {
 
     @Override
     public User getByUsername(String username) {
-        Long tenantId = TenantContextHolder.getTenant();
+        Long tenantId = TenantHelper.getCurrentTenantId();
         List<User> userList = User.findAllByUsername(username);
         for (User user : userList) {
             if (user.getTenant().getId().equals(tenantId)) {
@@ -423,16 +425,13 @@ public class UserManagerImpl implements UserManager {
      *
      * @param accountUri
      * @param contact
+     * @param localTenant 
      * @return
      * @throws InfosphereException
      */
     @Override
     public Account addProfile(URI accountUri, PersonContact contact, Tenant localTenant) throws InfosphereException {
-        Long tenantId = TenantContextHolder.getTenant();
-        Tenant tenant = Tenant.find(tenantId);
-        if (tenant == null) {
-            throw new InfosphereException("Cannot add profile/account'" + accountUri.toString() + "': tenant '" + tenantId + "' not found.");
-        }
+        
         User user = User.findByAccountUri(accountUri.toString(),localTenant);
         if (user == null) {
             throw new InfosphereException("Could not add profile/account. User with uri: " + accountUri + " does not exist.");
@@ -458,15 +457,16 @@ public class UserManagerImpl implements UserManager {
 
     @Override
     public User add(String said, URI accountUri) throws InfosphereException {
-        Long tenantId = TenantContextHolder.getTenant();
-        Tenant tenant = Tenant.find(tenantId);
-        if (tenant == null) {
-            throw new InfosphereException("Cannot add contact with said '" + said + "': tenant '" + tenantId + "' not found.");
+        Tenant tenant;
+        try{
+            tenant = TenantHelper.getCurrentTenant();
+        }catch(TenantNotFoundException ex){
+            throw new InfosphereException("Cannot add contact with said '" + said + "': tenant not found.\n"+ex.getMessage(), ex);
         }
 
         User user = User.findByTenantAndByUsername(tenant, said);
         if (user != null) {
-            throw new InfosphereException("Cannot add contact with said '" + said + "' [tenant=" + tenantId + "]:"
+            throw new InfosphereException("Cannot add contact with said '" + said + "' [tenant=" + tenant.getId() + "]:"
                     + " there's already another User with id " + user.getId());
         }
 
@@ -699,7 +699,7 @@ public class UserManagerImpl implements UserManager {
     }
 
     private void sendNotification(User oldUser) {
-        Long t = TenantContextHolder.getTenant();
+        Long t = TenantHelper.getCurrentTenantId();
         SystemNotification notification =
             new SystemNotification(t, DimeInternalNotification.OP_UPDATE,
                 "@me", DimeInternalNotification.ITEM_TYPE_USER, "@me");

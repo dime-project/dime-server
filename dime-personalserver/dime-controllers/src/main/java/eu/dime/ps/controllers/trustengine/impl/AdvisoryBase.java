@@ -25,9 +25,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import eu.dime.commons.notifications.user.UNRefToItem;
 import eu.dime.commons.notifications.user.UserNotification;
-import eu.dime.ps.controllers.TenantContextHolder;
 import eu.dime.ps.controllers.notifier.NotifierManager;
 import eu.dime.ps.controllers.notifier.exception.NotifierException;
+import eu.dime.ps.controllers.util.TenantHelper;
 import eu.dime.ps.semantic.connection.ConnectionProvider;
 import eu.dime.ps.semantic.exception.NotFoundException;
 import eu.dime.ps.semantic.model.nie.DataObject;
@@ -54,33 +54,28 @@ public abstract class AdvisoryBase {
 	}
 	
 	protected ResourceStore getResourceStore() throws RepositoryException{
-		Long tenant = TenantContextHolder.getTenant();
-		if (tenant != null){
-			return connectionProvider.getConnection(String.valueOf(tenant)).getResourceStore();
-		}
-		return null;
+		Long tenant = TenantHelper.getCurrentTenantId();
+		
+        return connectionProvider.getConnection(String.valueOf(tenant)).getResourceStore();
+		
 	}
 	
 	protected PimoService getPimoService() throws RepositoryException {
-		Long tenant = TenantContextHolder.getTenant();
-		if (tenant != null){
-			return connectionProvider.getConnection(String.valueOf(tenant)).getPimoService();
-		}
-		return null;
+		Long tenant = TenantHelper.getCurrentTenantId();		
+        return connectionProvider.getConnection(String.valueOf(tenant)).getPimoService();
+		
 	}
 	
 
 	protected PrivacyPreferenceService getPrivPrefService() throws RepositoryException {
-		Long tenant = TenantContextHolder.getTenant();
-		if (tenant != null){
-			return connectionProvider.getConnection(String.valueOf(tenant)).getPrivacyPreferenceService();
-		}
-		return null;
+		Long tenant = TenantHelper.getCurrentTenantId();
+        return connectionProvider.getConnection(String.valueOf(tenant)).getPrivacyPreferenceService();
+		
 	}
 	
 	protected void notifyUI(String operation, String type, String guid, String name){
 		UNRefToItem refToItem = new UNRefToItem(guid, name, type,  "@me", operation);
-		UserNotification notification = new UserNotification(TenantContextHolder.getTenant(), refToItem);
+		UserNotification notification = new UserNotification(TenantHelper.getCurrentTenantId(), refToItem);
 		try {
 			notifierManager.pushInternalNotification(notification);
 		} catch (NotifierException e) {

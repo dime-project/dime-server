@@ -26,6 +26,7 @@ import org.springframework.stereotype.Controller;
 
 import eu.dime.commons.dto.Response;
 import eu.dime.ps.controllers.TenantContextHolder;
+import eu.dime.ps.controllers.util.TenantHelper;
 import eu.dime.ps.semantic.connection.Connection;
 import eu.dime.ps.semantic.connection.ConnectionProvider;
 
@@ -46,7 +47,7 @@ public class PSDumpController {
 		Connection connection = null;
 		
 		try {
-			connection = connectionProvider.getConnection(TenantContextHolder.getTenant().toString());
+			connection = connectionProvider.getConnection(TenantHelper.getCurrentTenantId().toString());
 			System.out.println(connection.getTripleStore().serialize(Syntax.Trig));
 		} catch (RepositoryException e) {
 			Response.serverError("Couldn't get connection to RDF services: " + e.getMessage(), e);

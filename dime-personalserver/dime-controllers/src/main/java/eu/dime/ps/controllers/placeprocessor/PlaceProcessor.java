@@ -186,9 +186,7 @@ public class PlaceProcessor {
 		
 		logger.debug("Get places request received");
 
-        Tenant tenant = new Tenant();
-        tenant.setName(mainSaid);
-        tenant.setId(TenantContextHolder.getTenant());
+        Tenant tenant = TenantHelper.getCurrentTenant();
 
 		List<Place> places = new ArrayList<Place>();
                 
@@ -337,17 +335,19 @@ public class PlaceProcessor {
 	}
 
 	public void createPlacemarkResources(List<Place> places) {
+        Long tenantId = TenantHelper.getCurrentTenantId();
 		Iterator<Place> it = places.iterator();
 		while (it.hasNext()) {
 			Place p = it.next();
 			Placemark pmk = createPlacemarkFromPlace(p);
-			if (pmk != null)
-				try {
-					this.placemarkManager.add(pmk);
-					RDFPlaceReferences.put(new PlaceKey(TenantContextHolder.getTenant(),p.getGuid()),pmk.asURI().toString());
-				} catch (InfosphereException e) {
-					logger.debug(e.toString());
-				}
+			if (pmk != null) {
+                try {
+                    this.placemarkManager.add(pmk);
+                    RDFPlaceReferences.put(new PlaceKey(tenantId, p.getGuid()), pmk.asURI().toString());
+                } catch (InfosphereException e) {
+                    logger.error(e.toString());
+                }
+            }
 		}
 	}
 
@@ -454,7 +454,7 @@ public class PlaceProcessor {
 	}
 	
 	private void notifyPlaceUpdate(Place place) {
-		Long t = TenantContextHolder.getTenant();
+		Long t = TenantHelper.getCurrentTenantId();
 		SystemNotification notification = 
 				new SystemNotification(t, DimeInternalNotification.OP_UPDATE, 
 						place.guid, DimeInternalNotification.ITEM_TYPE_PLACE, null);

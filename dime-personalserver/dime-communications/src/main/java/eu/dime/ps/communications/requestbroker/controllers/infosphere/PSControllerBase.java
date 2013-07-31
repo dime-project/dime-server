@@ -27,6 +27,8 @@ import eu.dime.ps.controllers.TenantContextHolder;
 import eu.dime.ps.controllers.exception.ForbiddenException;
 import eu.dime.ps.controllers.exception.InfosphereException;
 import eu.dime.ps.controllers.infosphere.manager.ShareableManager;
+import eu.dime.ps.controllers.util.TenantHelper;
+import eu.dime.ps.controllers.util.TenantNotFoundException;
 import eu.dime.ps.gateway.util.JSONLDUtils;
 import eu.dime.ps.semantic.exception.NotFoundException;
 import eu.dime.ps.storage.entities.ServiceAccount;
@@ -97,12 +99,14 @@ public abstract class PSControllerBase {
 	}
 
 	protected final String getRequesterAccount() {
-		Long tenantId = TenantContextHolder.getTenant();
 		String requester = getRequester();
 
-		Tenant tenant = Tenant.find(tenantId);
-		if (tenant == null)
-			throw new IllegalArgumentException("Tenant '"+TenantContextHolder.getTenant()+"' not found.");
+        Tenant tenant;
+		try{
+            tenant = TenantHelper.getCurrentTenant();
+        }catch(TenantNotFoundException ex){
+            throw new IllegalArgumentException("Tenant not found.\n"+ex.getMessage(), ex);
+        }
 
 		User user = User.findByTenantAndByUsername(tenant, requester);
 		if (user == null || user.getAccountUri() == null)
