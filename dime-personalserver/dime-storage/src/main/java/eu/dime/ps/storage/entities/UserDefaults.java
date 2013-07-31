@@ -194,7 +194,14 @@ public class UserDefaults {
     }
     
     public static List<UserDefaults> findAllByName(String name) {
-        return entityManager().createQuery("SELECT o FROM UserDefaults o", UserDefaults.class).getResultList();
+        if (name == null || name.length() == 0) {
+        	return entityManager().createQuery("SELECT o FROM UserDefaults o", UserDefaults.class).getResultList();
+        } else {
+	        EntityManager em = UserDefaults.entityManager();
+	        TypedQuery<UserDefaults> q = em.createQuery("SELECT o FROM UserDefaults AS o WHERE o.name = :name", UserDefaults.class);
+	        q.setParameter("name", name);
+	        return q.getResultList();
+        }
     }
     
     public static UserDefaults findAllByTenantAndName(Tenant tenant, String name) {

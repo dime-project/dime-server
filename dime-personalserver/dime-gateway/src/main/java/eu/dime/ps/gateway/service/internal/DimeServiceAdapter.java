@@ -154,7 +154,8 @@ public class DimeServiceAdapter extends ServiceAdapterBase implements InternalSe
 	/**
 	 * get Method for di.me service adapter with additional SAID parameter
 	 * 
-	 * @param receiverSAID
+	 * @param receiverSAID GET request should go to this SAID
+	 * @param senderSAID Generated GET request is being sent from this SAID using their credentials to access information
 	 * @param attribute
 	 * @param returnType
 	 * @return
