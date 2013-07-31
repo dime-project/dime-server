@@ -41,6 +41,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import eu.dime.commons.dto.Request;
 import eu.dime.commons.dto.Response;
+import eu.dime.jfix.util.Arrays;
 import eu.dime.ps.controllers.exception.InfosphereException;
 import eu.dime.ps.controllers.infosphere.manager.AccountManager;
 import eu.dime.ps.controllers.infosphere.manager.PersonManager;
@@ -56,7 +57,6 @@ import eu.dime.ps.semantic.model.nco.PersonName;
 import eu.dime.ps.semantic.model.nco.PhoneNumber;
 import eu.dime.ps.semantic.model.pimo.Person;
 import eu.dime.ps.semantic.privacy.PrivacyPreferenceType;
-import eu.dime.ps.storage.jfix.util.Arrays;
 
 
 public class PSProfileControllerTestIt extends PSInfosphereControllerTestIt {

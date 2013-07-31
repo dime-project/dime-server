@@ -1,16 +1,16 @@
 /*
-* Copyright 2013 by the digital.me project (http:\\www.dime-project.eu).
-*
-* Licensed under the EUPL, Version 1.1 only (the "Licence");
-* You may not use this work except in compliance with the Licence.
-* You may obtain a copy of the Licence at:
-*
-* http://joinup.ec.europa.eu/software/page/eupl/licence-eupl
-*
-* Unless required by applicable law or agreed to in writing, software distributed under the Licence is distributed on an "AS IS" basis,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-* See the Licence for the specific language governing permissions and limitations under the Licence.
-*/
+ * Copyright 2013 by the digital.me project (http:\\www.dime-project.eu).
+ *
+ * Licensed under the EUPL, Version 1.1 only (the "Licence");
+ * You may not use this work except in compliance with the Licence.
+ * You may obtain a copy of the Licence at:
+ *
+ * http://joinup.ec.europa.eu/software/page/eupl/licence-eupl
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the Licence is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the Licence for the specific language governing permissions and limitations under the Licence.
+ */
 
 package eu.dime.ps.dto;
 
@@ -136,7 +136,7 @@ public class Resource extends LinkedHashMap<String, Object> {
 		NIE.lastRefreshed, NIE.modified, NAO.created, NAO.lastModified, NAO.modified,
 		NFO.deletionDate, NFO.fileCreated, NFO.fileLastAccessed, NFO.fileLastModified,
 		DLPO.timestamp };
-	
+
 	// for properties that want to be forced to a specific type, a converter can be provided
 	private static final Map<URI, INodeConverter<?>> CONVERTERS = new HashMap<URI, INodeConverter<?>>();
 	static {
@@ -264,7 +264,7 @@ public class Resource extends LinkedHashMap<String, Object> {
 			if (renamingRules.containsKey(predicate)) {
 				key = renamingRules.get(predicate);
 				if(key.equals("defProfile") && 
-					!value.toString().startsWith("p_"))
+						!value.toString().startsWith("p_"))
 					value="p_"+value;
 
 			} else {
@@ -294,23 +294,7 @@ public class Resource extends LinkedHashMap<String, Object> {
 
 
 		//set userId
-		// userId is the person who shared the item, or '@me' if it was created
-		// by
-		//the owner of the PS or one of her accounts/devices
-		Node creator = ModelUtils.findObject(resource.getModel(), resource, NAO.creator);
-		if (creator != null){
-			if (creator instanceof  Literal){
-				this.put("userId", creator.asLiteral().toString().equals(me.toString()) ? "@me" : creator.asLiteral().toString());
-			}
-			else{
-				this.put("userId", creator.asResource().toString().equals(me.toString()) ? "@me" : creator.asResource().toString());
-
-			}
-		}else{ //FIXME HACK - in case the creator is null assume @me
-			logger.debug("creator is null for item: "+ this.get("guid")+ " ("+this.get("type")+") searching for the field sharedBy or set to \"@me\"");
-			Node sharedBy = ModelUtils.findObject(resource.getModel(), resource, NSO.sharedBy);
-			this.put("userId", sharedBy == null ? "@me" : sharedBy.asResource().toString());
-		}
+		setUserId(resource,me.toString());
 
 		// ensure always 'name' and 'imageUrl' is returned
 		if (!this.containsKey("name")) {
@@ -372,6 +356,32 @@ public class Resource extends LinkedHashMap<String, Object> {
 			}
 			//TODO add the url from files not shared that are not in the CMS
 		}
+	}
+
+	private void setUserId(org.ontoware.rdfreactor.schema.rdfs.Resource resource,String me) {
+
+		Node sharedBy = ModelUtils.findObject(resource.getModel(), resource,  NSO.sharedBy);
+		Node creator = ModelUtils.findObject(resource.getModel(), resource, NAO.creator);
+		
+		if (sharedBy != null)
+			writeUserId(sharedBy, me);						
+		else if (creator != null)
+			writeUserId(creator, me);	
+		else{ 
+			this.put("userId","@me" );
+		}
+
+	}
+
+	private void writeUserId(Node node, String me) {
+		if (node instanceof  Literal){
+			this.put("userId", node.asLiteral().toString().equals(me) ? "@me" : node.asLiteral().toString());
+		}
+		else{
+			this.put("userId", node.asResource().toString().equals(me) ? "@me" : node.asResource().toString());
+
+		}
+
 	}
 
 	protected String collapse(String property) {

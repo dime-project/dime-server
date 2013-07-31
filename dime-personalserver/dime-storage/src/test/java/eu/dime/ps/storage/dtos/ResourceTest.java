@@ -154,7 +154,7 @@ public class ResourceTest extends TestCase {
 
 		Resource resource = new Resource(file,"fakeSAID",new URIImpl("urn:jose"));
 		assertEquals(1319892317123L, resource.get("nfo:fileLastModified"));
-		assertEquals("urn:ismael",resource.get("userId"));
+		assertEquals("urn:ismaelaccount",resource.get("userId"));
 		assertEquals("/dime-communications/api/dime/rest/fakeSAID/resource/@me/shared/urn:ismaelaccount/urn:annaccount/"+file.asURI().toString(),resource.get("downloadUrl"));
 
 		FileDataObject localFile = (new ModelFactory()).getNFOFactory().createFileDataObject();

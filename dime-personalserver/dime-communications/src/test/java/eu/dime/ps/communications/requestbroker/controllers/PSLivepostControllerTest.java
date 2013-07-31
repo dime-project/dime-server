@@ -81,7 +81,7 @@ public class PSLivepostControllerTest extends PSInfoSphereControllerTest {
 	@Test
 	public void testGetAllLiveposts()  {
 		
-		Response<Resource> response = controller.getAllLivePosts();
+		Response<Resource> response = controller.getAllLivePosts(said);
 		assertNotNull(response);
 		assertEquals("Juan",response.getMessage().getData().entry.iterator().next().get("name").toString());
 	}
@@ -89,7 +89,7 @@ public class PSLivepostControllerTest extends PSInfoSphereControllerTest {
 	@Test
 	public void testGetAllLivepostsByMe()  {
 		
-		Response<Resource> response = controller.getAllMyLivePosts();
+		Response<Resource> response = controller.getAllLivePostsByPerson("@me", said);
 		assertNotNull(response);
 		assertEquals("Juan",response.getMessage().getData().entry.iterator().next().get("name").toString());
 	}
@@ -98,7 +98,7 @@ public class PSLivepostControllerTest extends PSInfoSphereControllerTest {
 	@Test
 	public void testGetById()  {
 		
-		Response<Resource> response = controller.getLivePosts(said,"juan");
+		Response<Resource> response = controller.getLivePosts(said,"juan", "juan");
 		assertNotNull(response);
 		assertEquals("Juan",response.getMessage().getData().entry.iterator().next().get("name").toString());
 	}
@@ -116,7 +116,7 @@ public class PSLivepostControllerTest extends PSInfoSphereControllerTest {
 		Response<Resource> response = null;
 		
 			try {
-				response = controller.updateLivePost(request,said,mockedManager.get("juan",properties).asURI().toString());
+				response = controller.updateLivePost(request,said,"juan",mockedManager.get("juan",properties).asURI().toString());
 			} catch (ClassCastException e) {				
 				e.printStackTrace();
 			} catch (InfosphereException e) {				
@@ -130,7 +130,7 @@ public class PSLivepostControllerTest extends PSInfoSphereControllerTest {
 	
 	@Test
 	public void testDeleteLivepost()  {
-		Response response= controller.deleteLivePost(said, "group1");
+		Response response= controller.deleteLivePost(said,"juan","group1");
 		assertNotNull(response);
 	}
 	

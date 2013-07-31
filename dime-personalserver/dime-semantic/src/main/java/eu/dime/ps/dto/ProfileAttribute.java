@@ -196,15 +196,18 @@ public class ProfileAttribute extends Resource {
 			affiliation.put("role", node.asLiteral().getValue());
 
 		node = ModelUtils.findObject(resource.getModel(), resource.asResource(), NCO.org);
-		if (node != null)
-			try{			
+		if (node != null){ 
+		
+		 Node contact = ModelUtils.findObject(resource.getModel(), node.asResource(), NCO.Contact);
+			try{
+				affiliation.put("org", contact.asURI().toString());
 				affiliation.put("org", node.asURI().toString());
 			}
 		catch(ClassCastException e){
 			logger.debug("org paramater in Affiliation attribute "+resource.asURI().toString()+"is not an URI",e);
 			if(node instanceof Literal)
 				affiliation.put("org", node.asLiteral().getValue());
-		}
+		}}
 		return affiliation;
 	}
 

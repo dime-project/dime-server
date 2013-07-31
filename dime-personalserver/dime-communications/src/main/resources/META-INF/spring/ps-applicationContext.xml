@@ -136,7 +136,7 @@
 	<bean id="psPersonController"
 		class="eu.dime.ps.communications.requestbroker.controllers.infosphere.PSPersonController">
 		<property name="personManager" ref="personManager"></property>
-		<property name="sharingManager" ref="sharingManager"></property>
+		<property name="userManager" ref="userManager"></property>		
 	</bean>
 	
 	<bean id="psGroupController"

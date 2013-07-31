@@ -77,4 +77,10 @@ public interface PersonManager extends InfoSphereManager<Person> {
 	 */
 	Person merge(URI master, URI... targets) throws InfosphereException;
 
+	Collection<Person> getAllByProfile(PersonContact profile)
+			throws InfosphereException;
+
+	Collection<Person> getAllByProfile(PersonContact profile,
+			List<URI> properties) throws InfosphereException;
+
 }

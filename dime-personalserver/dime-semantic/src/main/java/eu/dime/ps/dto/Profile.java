@@ -71,26 +71,7 @@ public class Profile extends Resource {
 	protected void addToMap(org.ontoware.rdfreactor.schema.rdfs.Resource resource, String serviceAccountId,URI me) {
 		put("guid", "p_"+resource.asURI().toString());
 
-
-		//set userId
-		// userId is the person who shared the item, or '@me' if it was created
-		// by
-		//the owner of the PS or one of her accounts/devices
-		Node creator = ModelUtils.findObject(resource.getModel(), resource, NAO.creator);
-		if (creator != null){
-			if (creator instanceof  Literal){
-				this.put("userId", creator.asLiteral().toString().equals(me.toString()) ? "@me" : creator.asLiteral().toString());
-			}
-			else{
-				this.put("userId", creator.asResource().toString().equals(me.toString()) ? "@me" : creator.asResource().toString());
-
-			}
-		}else{ //FIXME HACK - in case the creator is null assume @me
-			logger.debug("creator is null for item: "+ this.get("guid")+ " ("+this.get("type")+") searching for the field sharedBy or set to \"@me\"");					
-			this.put("userId", "@me");
-		}
 		
-
 		List<String> items = new LinkedList<String>();
 		put("items", items);
 		ClosableIterator<Statement> it = resource.getModel().findStatements(resource.asResource(),
@@ -123,17 +104,16 @@ public class Profile extends Resource {
 		}
 		it.close();
 		// adding said 
-		this.put("said",serviceAccountId);
+		this.put("said",serviceAccountId);		
+		// Adding said 
+				if (!containsKey("said")) {
+					put("said", "");
+				}
 		
 		if (!containsKey("name")) {
 			put("name", "Profile " + resource.asURI().toString());
 		}
-
-		// Adding said 
-		if (!containsKey("said")) {
-			put("said", "");
-		}
-
+		
 		//adding editable attribute	
 		//editable when it is di.me profile(name ends with @di.me),
 		//not editable when it is external profile
@@ -196,6 +176,13 @@ public class Profile extends Resource {
 		}
 
 		return result;
+	}
+	
+	
+	public void setUserId(org.ontoware.rdfreactor.schema.rdfs.Resource resource,String personId) {	
+		
+		if(personId.equals("@me")) this.put("userId", "@me");
+		else this.put("userId", personId);
 	}
 
 }

@@ -144,6 +144,25 @@ public class PersonManagerImpl extends InfoSphereManagerBase<Person> implements 
 	}
 	
 	@Override
+	public Collection<Person> getAllByProfile(PersonContact profile)
+			throws InfosphereException {
+		return getAllByProfile(profile, new ArrayList<URI>(0));
+	}
+	
+	@Override
+	public Collection<Person> getAllByProfile(PersonContact profile, List<URI> properties)
+			throws InfosphereException {
+		PimoService pimoService = getPimoService();
+		Collection<Person> people =
+			pimoService.find(Person.class)
+				.distinct()
+				.select(properties.toArray(new URI[properties.size()]))
+				.where(PIMO.occurrence).is(profile)
+				.results();
+		return people;
+	}
+	
+	@Override
 	public Collection<Person> getAllByGroup(PersonGroup group)
 			throws InfosphereException {
 		return getAllByGroup(group, new ArrayList<URI>(0));

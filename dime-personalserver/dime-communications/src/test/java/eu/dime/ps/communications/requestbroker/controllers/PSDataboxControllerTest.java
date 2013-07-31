@@ -16,60 +16,33 @@ package eu.dime.ps.communications.requestbroker.controllers;
 
 
 import java.io.IOException;
-import java.util.ArrayList;
 
-import org.junit.Ignore;
+import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.junit.Test;
 
 import eu.dime.commons.dto.Data;
-import eu.dime.commons.dto.Entry;
 import eu.dime.commons.dto.Message;
 import eu.dime.commons.dto.Request;
 import eu.dime.commons.dto.Response;
 import eu.dime.commons.util.JaxbJsonSerializer;
 import eu.dime.ps.communications.requestbroker.controllers.infosphere.PSDataboxController;
-import eu.dime.ps.controllers.exception.InfosphereException;
 import eu.dime.ps.controllers.infosphere.manager.DataboxManager;
 import eu.dime.ps.dto.Databox;
-import eu.dime.ps.dto.Include;
 import eu.dime.ps.dto.Resource;
 import eu.dime.ps.semantic.model.nfo.DataContainer;
-
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.map.JsonMappingException;
-import org.codehaus.jackson.map.ObjectMapper;
-
-import org.ontoware.rdf2go.model.node.impl.URIImpl;
 
 
 
 public class PSDataboxControllerTest extends PSInfoSphereControllerTest {
 
 	private PSDataboxController controller = new PSDataboxController();
-	private  Request<Databox> request;
-	private  Request<Resource> requestUpdate;
 	private static final String said= "juan";
 	
 	public PSDataboxControllerTest() {
 		DataboxManager mockedManager = buildDataboxManager();
-		controller.setDataboxManager(mockedManager);
-		try {
-			request= buildRequestdatabox(mockedManager.get("juan"));
-			try {
-				requestUpdate = buildRequestInclude();
-			} catch (JsonParseException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (JsonMappingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		} catch (InfosphereException e) {			
-			e.printStackTrace();
-		}
+		controller.setDataboxManager(mockedManager);		
 	}
 
 	
@@ -108,7 +81,7 @@ public class PSDataboxControllerTest extends PSInfoSphereControllerTest {
 	@Test
 	public void testGetAllDataboxes()  {
 		
-		Response<Resource> response = controller.getAllMyDataboxes(said);
+		Response<Resource> response = controller.getAllDatabox(said);
 		assertNotNull(response);
 		assertEquals("juan",response.getMessage().getData().entry.iterator().next().get("name").toString());
 	}
@@ -116,38 +89,10 @@ public class PSDataboxControllerTest extends PSInfoSphereControllerTest {
 	@Test
 	public void testGetById()  {
 		
-		Response<Resource> response = controller.getMyDataboxById(said,"juan");
+		Response<Resource> response = controller.getAllDataboxesByPerson(said,"@me");
 		assertNotNull(response);
 		assertEquals("juan",response.getMessage().getData().entry.iterator().next().get("name").toString());
-	}
-	
-	@Ignore
-	@Test
-	public void testCreateDatabox()  {
-		Response<Databox> response = controller.postCreateMyDatabox(said,request);
-		assertNotNull(response);
-		assertEquals("juan",response.getMessage().getData().entry.iterator().next().get("name").toString());
-		
-	}
-	
-
-	@Test
-	public void testUpdateDatabox()  {
-		//TODO 
-		//Response<Resource> response = controller.postUpdateMyDataboxById(said, requestUpdate, "juan");
-		//assertNotNull(response);
-		//assertEquals("juan",response.getMessage().getData().entry.iterator().next().get("name").toString());
-		
-	}
-	@Ignore
-	@Test
-	public void testUpdateSharingDatabox()  {
-		
-		Response<Resource> response = controller.postUpdateMyDataboxById(said, requestUpdate, "juan");
-		assertNotNull(response);
-		assertEquals("juan",response.getMessage().getData().entry.iterator().next().get("name").toString());
-		
-	}
+	}	
 	
 	
 	@Test

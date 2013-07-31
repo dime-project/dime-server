@@ -14,11 +14,11 @@
 
 package eu.dime.ps.communications.requestbroker.controllers;
 
+import static org.mockito.Matchers.anyListOf;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Matchers.anyListOf;
-
 import ie.deri.smile.vocabulary.DLPO;
 import ie.deri.smile.vocabulary.NAO;
 import ie.deri.smile.vocabulary.NSO;
@@ -29,8 +29,8 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
-import org.junit.BeforeClass;
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.mockito.Mockito;
 import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.model.node.impl.URIImpl;
@@ -62,8 +62,6 @@ import eu.dime.ps.dto.Resource;
 import eu.dime.ps.gateway.ServiceGateway;
 import eu.dime.ps.gateway.exception.ServiceAdapterNotSupportedException;
 import eu.dime.ps.gateway.exception.ServiceNotAvailableException;
-import eu.dime.ps.gateway.service.ServiceAdapter;
-import eu.dime.ps.gateway.service.ServiceAdapterBase;
 import eu.dime.ps.gateway.service.internal.DimeServiceAdapter;
 import eu.dime.ps.semantic.model.ModelFactory;
 import eu.dime.ps.semantic.model.dao.Account;
@@ -153,6 +151,7 @@ public class PSInfoSphereControllerTest extends Assert {
 		//Ç
 		try {
 			when(mockedManager.getMe()).thenReturn(juan);
+			when(mockedManager.getAllByProfile(any(PersonContact.class))).thenReturn(persons);
 			when(mockedManager.getAll()).thenReturn(persons);
 			when(mockedManager.get(anyString())).thenReturn(juan);
 		} catch (InfosphereException e) {				
@@ -198,8 +197,7 @@ public class PSInfoSphereControllerTest extends Assert {
 			when(mockedManager.getAllByCreator(juan)).thenReturn(accounts);
 			when(mockedManager.get("juan")).thenReturn(account);					
 
-		} catch (InfosphereException e) {
-			// TODO Auto-generated catch block
+		} catch (InfosphereException e) {			
 			e.printStackTrace();
 		}
 		return mockedManager;			
@@ -214,13 +212,13 @@ public class PSInfoSphereControllerTest extends Assert {
 		Collection<DataContainer> databoxes = new ArrayList<DataContainer>();
 		databoxes.add(databox);
 		DataboxManager mockedManager = mock(DataboxManager.class);
-		//Ç
+		//
 		try {
 			when(mockedManager.getMe()).thenReturn(juan);
-			when(mockedManager.getAllByCreator(juan.asURI())).thenReturn(databoxes);
+			when(mockedManager.getAll()).thenReturn(databoxes);
+			when(mockedManager.getAllByPerson(juan.asURI())).thenReturn(databoxes);
 			when(mockedManager.get(anyString())).thenReturn(databox);
-		} catch (InfosphereException e) {
-			// TODO Auto-generated catch block
+		} catch (InfosphereException e) {			
 			e.printStackTrace();
 		}
 		return mockedManager;			
@@ -240,8 +238,7 @@ public class PSInfoSphereControllerTest extends Assert {
 			when(mockedManager.getMe()).thenReturn(juan);
 			when(mockedManager.getAll()).thenReturn(databoxes);
 			when(mockedManager.get("juan")).thenReturn(databox);
-		} catch (InfosphereException e) {
-			// TODO Auto-generated catch block
+		} catch (InfosphereException e) {		
 			e.printStackTrace();
 		}
 		return mockedManager;			
@@ -266,10 +263,9 @@ public class PSInfoSphereControllerTest extends Assert {
 		try {
 			when(mockedManager.getMe()).thenReturn(juan);
 			when(mockedManager.getAllByType(Status.class,properties)).thenReturn(statuses);				
-			when(mockedManager.getAllByCreator(juan.asURI().toString(),properties)).thenReturn(liveposts);
+			when(mockedManager.getAllByPerson(juan.asURI(),properties)).thenReturn(liveposts);
 			when(mockedManager.get("juan",properties)).thenReturn(livepost);
-		} catch (InfosphereException e) {
-			// TODO Auto-generated catch block
+		} catch (InfosphereException e) {		
 			e.printStackTrace();
 		}
 		return mockedManager;			
@@ -355,8 +351,7 @@ public class PSInfoSphereControllerTest extends Assert {
 			when(mockedManager.getAll()).thenReturn(attributes);
 			when(mockedManager.getAllByContainer(profileId)).thenReturn(attributes);
 			when(mockedManager.get("juan")).thenReturn(juanAttribute);
-		} catch (InfosphereException e) {
-			// TODO Auto-generated catch block
+		} catch (InfosphereException e) {			
 			e.printStackTrace();
 		}			
 		return mockedManager;			

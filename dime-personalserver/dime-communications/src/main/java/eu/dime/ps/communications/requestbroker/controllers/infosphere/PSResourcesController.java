@@ -1,16 +1,16 @@
 /*
-* Copyright 2013 by the digital.me project (http:\\www.dime-project.eu).
-*
-* Licensed under the EUPL, Version 1.1 only (the "Licence");
-* You may not use this work except in compliance with the Licence.
-* You may obtain a copy of the Licence at:
-*
-* http://joinup.ec.europa.eu/software/page/eupl/licence-eupl
-*
-* Unless required by applicable law or agreed to in writing, software distributed under the Licence is distributed on an "AS IS" basis,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-* See the Licence for the specific language governing permissions and limitations under the Licence.
-*/
+ * Copyright 2013 by the digital.me project (http:\\www.dime-project.eu).
+ *
+ * Licensed under the EUPL, Version 1.1 only (the "Licence");
+ * You may not use this work except in compliance with the Licence.
+ * You may obtain a copy of the Licence at:
+ *
+ * http://joinup.ec.europa.eu/software/page/eupl/licence-eupl
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the Licence is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the Licence for the specific language governing permissions and limitations under the Licence.
+ */
 
 package eu.dime.ps.communications.requestbroker.controllers.infosphere;
 
@@ -20,7 +20,6 @@ import ie.deri.smile.vocabulary.NFO;
 import ie.deri.smile.vocabulary.NSO;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
@@ -33,11 +32,9 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.UUID;
 
-import javax.activation.MimeType;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.Encoded;
@@ -51,7 +48,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.StringUtils;
 import org.ontoware.rdf2go.exception.ModelRuntimeException;
 import org.ontoware.rdf2go.model.Syntax;
 import org.ontoware.rdf2go.model.node.Node;
@@ -69,8 +65,6 @@ import com.sun.jersey.multipart.FormDataParam;
 import eu.dime.commons.dto.Data;
 import eu.dime.commons.dto.Request;
 import eu.dime.commons.dto.Response;
-import eu.dime.commons.dto.SharedTo;
-import eu.dime.commons.dto.TrustEntry;
 import eu.dime.ps.controllers.exception.InfosphereException;
 import eu.dime.ps.controllers.infosphere.manager.AccountManager;
 import eu.dime.ps.controllers.infosphere.manager.FileManager;
@@ -79,12 +73,9 @@ import eu.dime.ps.controllers.infosphere.manager.PersonManager;
 import eu.dime.ps.controllers.infosphere.manager.SharingManager;
 import eu.dime.ps.controllers.trustengine.utils.AdvisoryConstants;
 import eu.dime.ps.dto.Include;
-import eu.dime.ps.dto.ProfileCard;
 import eu.dime.ps.dto.Resource;
 import eu.dime.ps.gateway.ServiceGateway;
 import eu.dime.ps.gateway.auth.CredentialStore;
-import eu.dime.ps.gateway.exception.AttributeNotSupportedException;
-import eu.dime.ps.gateway.exception.InvalidLoginException;
 import eu.dime.ps.gateway.exception.ServiceNotAvailableException;
 import eu.dime.ps.gateway.proxy.BinaryFile;
 import eu.dime.ps.gateway.service.MediaType;
@@ -93,9 +84,9 @@ import eu.dime.ps.gateway.util.JSONLDUtils;
 import eu.dime.ps.semantic.model.ModelFactory;
 import eu.dime.ps.semantic.model.NFOFactory;
 import eu.dime.ps.semantic.model.nfo.FileDataObject;
+import eu.dime.ps.semantic.model.pimo.Person;
 import eu.dime.ps.semantic.model.ppo.PrivacyPreference;
 import eu.dime.ps.semantic.privacy.PrivacyPreferenceType;
-import eu.dime.ps.storage.entities.AccountCredentials;
 
 /**
  * Dime REST API Controller about a Resources features
@@ -172,6 +163,8 @@ public class PSResourcesController extends PSSharingControllerBase implements AP
 	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
 	@Path("@all")
 	public Response<Resource> getAllResources(@PathParam("said") String said) {
+
+		logger.info("called API method: GET /dime/rest/" + said + "/resource/@all");
 		Data<Resource> data = null;
 		List<URI> properties = new ArrayList<URI>();
 		properties = Arrays.asList(payload);
@@ -196,6 +189,43 @@ public class PSResourcesController extends PSSharingControllerBase implements AP
 		return Response.ok(data);
 	}
 
+	@GET
+	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
+	@Path("{personId}/@all")
+	public Response<Resource> getAllResourcesByPerson(@PathParam("said") String said,
+			@PathParam("personId") String personId) {
+
+		logger.info("called API method: GET /dime/rest/" + said + "/resource/"+personId+"/@all");
+
+		Data<Resource> data = null;
+		List<URI> properties = new ArrayList<URI>();
+		properties = Arrays.asList(payload);
+
+		try {		
+			Person person ="@me".equals(personId) ? personManager.getMe()
+					: personManager.get(personId);
+
+			Collection<FileDataObject> files = fileManager.getAllByPerson(person.asURI(),properties);
+			data = new Data<Resource>(0, files.size(), files.size());
+
+			for (FileDataObject file : files) {
+				Resource fileResource = new Resource(file, said,fileManager.getMe().asURI());
+				PrivacyPreference pp = sharingManager.findPrivacyPreference(file.asURI().toString(), PrivacyPreferenceType.FILE);
+				writeIncludes(fileResource,pp);
+				fileResource.remove("nao:creator");
+				resolveImageUrl(file, said, fileResource);
+				data.getEntries().add(fileResource);
+			}
+		} catch (InfosphereException e) {
+			return Response.badRequest(e.getMessage(), e);
+		} catch (Exception e) {
+			return Response.serverError(e.getMessage(), e);
+		}
+
+		return Response.ok(data);
+	}
+
+
 	/**
 	 * Create resource
 	 * 
@@ -210,6 +240,8 @@ public class PSResourcesController extends PSSharingControllerBase implements AP
 			Request<Resource> request) {
 
 		Data<Resource> data, returnData;
+		
+		logger.info("called API method: POST /dime/rest/" + said + "/resource/@me");
 
 		try {
 			RequestValidator.validateRequest(request);
@@ -248,81 +280,18 @@ public class PSResourcesController extends PSSharingControllerBase implements AP
 		return Response.ok(returnData);
 	}
 
-
-
-	@GET
-	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
-	@Path("@me/@all")
-	public Response<Resource> getAllMyResources(@PathParam("said") String said) {
-		Data<Resource> data = null;	
-		List<URI> properties = new ArrayList<URI>();
-		properties = Arrays.asList(payload);
-
-		try {
-			Collection<FileDataObject> files = fileManager.getAll(properties);
-
-			data = new Data<Resource>(0, 0, 0);
-			for (FileDataObject file : files) {
-				Resource fileResource = new Resource(file, said,fileManager.getMe().asURI());
-				//FIXME workaround to return only the resources created by the user
-				// a call to the manager would be a better approach
-				if (fileResource.get("userId").equals("@me")){
-					PrivacyPreference pp = sharingManager.findPrivacyPreference(file.asURI().toString(), PrivacyPreferenceType.FILE);
-					writeIncludes(fileResource,pp);
-					fileResource.remove("nao:creator");
-					resolveImageUrl(file, said, fileResource);
-					data.addEntry(fileResource);
-				}
-			}
-		} catch (InfosphereException e) {
-			return Response.badRequest(e.getMessage(), e);
-		} catch (Exception e) {
-			return Response.serverError(e.getMessage(), e);
-		}
-
-		return Response.ok(data);
-	}
-
-	@GET
-	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
-	@Path("{personID}/@all")
-	public Response<Resource> getAllResourcesFromPersonById(@PathParam("said") String said,
-			@PathParam("personID") String personID, @PathParam("profileID") String profileID) {
-
-		Data<Resource> data = null;
-		List<URI> properties = new ArrayList<URI>();
-		properties = Arrays.asList(payload);
-		
-		try {		
-		
-			Collection<FileDataObject> files = fileManager.getAllByCreator(personManager.get(personID),properties);
-			data = new Data<Resource>(0, files.size(), files.size());
-
-			for (FileDataObject file : files) {
-				Resource fileResource = new Resource(file, said,fileManager.getMe().asURI());
-				PrivacyPreference pp = sharingManager.findPrivacyPreference(file.asURI().toString(), PrivacyPreferenceType.FILE);
-				writeIncludes(fileResource,pp);
-				fileResource.remove("nao:creator");
-				resolveImageUrl(file, said, fileResource);
-				data.getEntries().add(fileResource);
-			}
-		} catch (InfosphereException e) {
-			return Response.badRequest(e.getMessage(), e);
-		} catch (Exception e) {
-			return Response.serverError(e.getMessage(), e);
-		}
-
-		return Response.ok(data);
-	}
-
-	// TODO personID is not used
+	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
 	@Path("{personID}/{resourceID}")
-	public Response<Resource> getResourceFromPersonById(@PathParam("said") String said,
-			@PathParam("personID") String personID, @PathParam("resourceID") String resourceID) {
+	public Response<Resource> getResourceFromPersonById(
+			@PathParam("said") String said,
+			@PathParam("personID") String personID,
+			@PathParam("resourceID") String resourceID) {
 
-		Data<Resource> data;
+		Data<Resource> data;		
+		logger.info("called API method: GET /dime/rest/" + said + "/resource/"+personID+"/"+resourceID);
+		
 		try {
 
 			data = getResource(said, resourceID);
@@ -335,8 +304,7 @@ public class PSResourcesController extends PSSharingControllerBase implements AP
 		return Response.ok(data);
 	}
 
-	
-	
+
 	@POST
 	@Path("{personID}/{resourceID}")
 	@Consumes(MediaType.APPLICATION_JSON + ";charset=UTF-8")
@@ -346,7 +314,8 @@ public class PSResourcesController extends PSSharingControllerBase implements AP
 			@PathParam("resourceID") String resourceID) {
 
 		Data<Resource> data, returnData;
-
+		
+		logger.info("called API method: UPDATE /dime/rest/" + said + "/resource/"+personID+"/"+resourceID);
 		try {
 			RequestValidator.validateRequest(request);
 
@@ -392,7 +361,7 @@ public class PSResourcesController extends PSSharingControllerBase implements AP
 
 		logger.info("called API method: DELETE /dime/rest/{said}/resource/{personID}/{groupID}");
 		try {
-			
+
 			fileManager.remove(resourceID);
 
 		} catch (IllegalArgumentException e) {
@@ -466,7 +435,7 @@ public class PSResourcesController extends PSSharingControllerBase implements AP
 		}
 
 		BinaryFile binary = null;
-		
+
 		//get the binary from the other PS
 		try {
 			logger.info("retreaving the binary file "+resourceID+" shared from: "+saidNameReceiver+" to "+saidNameSender);	
@@ -707,10 +676,10 @@ public class PSResourcesController extends PSSharingControllerBase implements AP
 		return javax.ws.rs.core.Response.ok().build();
 	}
 
-	
-	
+
+
 	//shared
-	
+
 	@GET
 	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
 	@Path(value = "@me/@all/shared")

@@ -46,6 +46,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import eu.dime.commons.dto.Request;
 import eu.dime.commons.dto.Response;
+import eu.dime.jfix.util.Arrays;
 import eu.dime.ps.controllers.TenantContextHolder;
 import eu.dime.ps.controllers.infosphere.manager.AccountManager;
 import eu.dime.ps.controllers.infosphere.manager.DataboxManager;
@@ -60,7 +61,6 @@ import eu.dime.ps.semantic.model.nfo.DataContainer;
 import eu.dime.ps.semantic.model.nie.DataObject;
 import eu.dime.ps.semantic.model.pimo.Person;
 import eu.dime.ps.semantic.privacy.PrivacyPreferenceType;
-import eu.dime.ps.storage.jfix.util.Arrays;
 import org.junit.Ignore;
 
 public class PSDataboxControllerTestIt extends PSInfosphereControllerTestIt {
@@ -209,7 +209,7 @@ public class PSDataboxControllerTestIt extends PSInfosphereControllerTestIt {
 		Request<Databox> request = buildDataboxRequest(databox);
 		Response<Databox> resp = controller.postCreateMyDatabox(SAID, request);
 	
-		Response<Resource> response = controller.getAllDatabox();
+		Response<Resource> response = controller.getAllDatabox(SAID);
 
 		assertNotNull(response);
 		assertEquals(1, response.getMessage().getData().getEntries().size());		 
@@ -245,10 +245,11 @@ public class PSDataboxControllerTestIt extends PSInfosphereControllerTestIt {
 		DataObject f1 = createDataObject();
 		Databox databox =  createDataboxJSON(sender,person,f1);
 		databox.put("userId", person.asURI().toString());
+		databox.put("nso:sharedBy", person.asURI().toString());
 		Request<Databox> request = buildDataboxRequest(databox);
 		Response<Databox> resp = controller.postCreateMyDatabox(SAID, request);
 	
-		Response<Resource> response = controller.getAllMyDataboxesByPerson(SAID, person.asURI().toString());
+		Response<Resource> response = controller.getAllDataboxesByPerson(SAID, person.asURI().toString());
 
 		assertNotNull(response);
 		assertEquals(1, response.getMessage().getData().getEntries().size());		 
@@ -280,7 +281,7 @@ public class PSDataboxControllerTestIt extends PSInfosphereControllerTestIt {
 	public void testGetEmptySharedDataboxWellFormedJSON() throws Exception {
 		
 		Person person = createPerson("Ismael Rivera");			
-		Response<Resource> response = controller.getAllMyDataboxesByPerson(SAID, person.asURI().toString());
+		Response<Resource> response = controller.getAllDataboxesByPerson(SAID, person.asURI().toString());
 		assertNotNull(response);
 		assertEquals(0, response.getMessage().getData().getEntries().size());
 		assertEquals(Integer.toString(200), response.getMessage().getMeta().getCode().toString());

@@ -190,7 +190,7 @@ public class PSLivePostControllerTestIt extends PSInfosphereControllerTestIt {
 		LivePost livepost =  createLivePost(pimoService.getUserUri());
 		livePostManager.add(livepost);
 	
-		Response<Resource> response = controller.getAllLivePosts();
+		Response<Resource> response = controller.getAllLivePosts("juan");
 
 		assertNotNull(response);
 		assertEquals(1, response.getMessage().getData().getEntries().size());		 
@@ -221,7 +221,7 @@ public class PSLivePostControllerTestIt extends PSInfosphereControllerTestIt {
 		livepost.setSharedBy(sender);
 		livePostManager.add(livepost);
 	
-		Response<Resource> response = controller.getAllLivePosts();
+		Response<Resource> response = controller.getAllLivePosts("juan");
 
 		assertNotNull(response);
 		assertEquals(1, response.getMessage().getData().getEntries().size());		 

@@ -156,7 +156,10 @@ public class PSProfileController extends PSSharingControllerBase implements APIC
 			//add all the profiles to the response
 			for (PersonContact profile : profiles) {
 				String serviceAccountId = findSaid(profile);
-				data.addEntry(new Profile(profile, serviceAccountId,me.asURI()));
+				Profile profileDTO = new Profile(profile, serviceAccountId,me.asURI());
+				String personId = findPersonId(profile,me);
+				profileDTO.setUserId(profile,personId);
+				data.addEntry(profileDTO);
 			}
 			//add all the profile cards to the response						
 			for (PrivacyPreference card : cards) {
@@ -173,6 +176,15 @@ public class PSProfileController extends PSSharingControllerBase implements APIC
 		}
 
 		return Response.ok(data);
+	}
+
+	private String findPersonId(PersonContact profile, Person me) throws InfosphereException {
+		
+		Collection<Person> persons = personManager.getAllByProfile(profile);
+		for (Person person : persons)
+			if(person.equals(me)) return "@me";
+			else return person.asURI().toString();
+		throw new InfosphereException("profile "+profile.asURI()+" has no Person as PIMO.occurence");
 	}
 
 	/**
@@ -197,7 +209,9 @@ public class PSProfileController extends PSSharingControllerBase implements APIC
 					profiles.size() + cards.size());
 			for (PersonContact profile : profiles) {
 				String serviceAccountId = findSaid(profile);
-				data.getEntries().add(new Profile(profile,serviceAccountId,me.asURI()));
+				Profile profileDTO = new Profile(profile, serviceAccountId,profileManager.getMe().asURI());
+				profileDTO.setUserId(profile,"@me");
+				data.getEntries().add(profileDTO);
 			}
 
 			for (PrivacyPreference card : cards) {
@@ -239,7 +253,9 @@ public class PSProfileController extends PSSharingControllerBase implements APIC
 					profiles.size() + cards.size());
 			for (PersonContact profile : profiles) {
 				String serviceAccountId = findSaid(profile);
-				data.getEntries().add(new Profile(profile,serviceAccountId,profileManager.getMe().asURI()));
+				Profile profileDTO = new Profile(profile, serviceAccountId,profileManager.getMe().asURI());
+				profileDTO.setUserId(profile,personId);
+				data.getEntries().add(profileDTO);
 			}
 			for (PrivacyPreference card : cards) {
 				String serviceAccountId = findSaid(card);				
@@ -280,7 +296,9 @@ public class PSProfileController extends PSSharingControllerBase implements APIC
 				profileID = profileID.replaceFirst("p_", "");
 				PersonContact profile = profileManager.get(profileID);
 				String serviceAccountId = findSaid(profile);
-				data.getEntries().add(new Profile(profile,serviceAccountId,profileManager.getMe().asURI()));		
+				Profile profileDTO = new Profile(profile, serviceAccountId,profileManager.getMe().asURI());
+				profileDTO.setUserId(profile,"@me");
+				data.getEntries().add(profileDTO);		
 			} else if (profileID.startsWith("pc_")) {
 				profileID = profileID.replaceFirst("pc_", "");
 				PrivacyPreference card = profileCardManager.get(profileID);
@@ -327,7 +345,9 @@ public class PSProfileController extends PSSharingControllerBase implements APIC
 				for (PersonContact profile : profileManager.getAllByPerson(person)) {
 					if (profile.asURI().toString().equals(profileID)) {
 						String serviceAccountId = findSaid(profile);
-						data.getEntries().add(new Profile(profile,serviceAccountId,profileManager.getMe().asURI()));
+						Profile profileDTO = new Profile(profile, serviceAccountId,profileManager.getMe().asURI());
+						profileDTO.setUserId(profile,personID);
+						data.getEntries().add(profileDTO);
 					}
 				}
 				if (data.getEntries() == null)
@@ -393,8 +413,10 @@ public class PSProfileController extends PSSharingControllerBase implements APIC
 				PersonContact profile =data.getEntries().iterator().next().asResource(PersonContact.class,profileManager.getMe().asURI());	 	
 				profileManager.add(profile);			
 
-				String serviceAccountId = findSaid(profile);		
-				returnData = new Data<eu.dime.ps.dto.Resource>(0, 1, new Profile(profile,serviceAccountId,profileManager.getMe().asURI()));
+				String serviceAccountId = findSaid(profile);
+				Profile profileDTO = new Profile(profile, serviceAccountId,profileManager.getMe().asURI());
+				profileDTO.setUserId(profile,"@me");
+				returnData = new Data<eu.dime.ps.dto.Resource>(0, 1,profileDTO);
 
 			}
 		} catch (InfosphereException e) {
@@ -475,7 +497,9 @@ public class PSProfileController extends PSSharingControllerBase implements APIC
 						.asResource(new URIImpl(profileID), PersonContact.class,profileManager.getMe().asURI());
 				profileManager.update(profile);
 				String serviceAccountId = findSaid(profile);
-				returnData = new Data<eu.dime.ps.dto.Resource>(0, 1, new Profile(profile,serviceAccountId,profileManager.getMe().asURI()));
+				Profile profileDTO = new Profile(profile, serviceAccountId,profileManager.getMe().asURI());
+				profileDTO.setUserId(profile,personID);
+				returnData = new Data<eu.dime.ps.dto.Resource>(0, 1,profileDTO);
 			} else {
 				throw new InfosphereException("profile or Profile Card with Id: " + profileID
 						+ " has not been found.");
@@ -534,7 +558,9 @@ public class PSProfileController extends PSSharingControllerBase implements APIC
 						.asResource(new URIImpl(profileID), PersonContact.class,profileManager.getMe().asURI());
 				profileManager.update(profile);
 				String serviceAccountId = findSaid(profile);
-				returnData = new Data<eu.dime.ps.dto.Resource>(0, 1, new Profile(profile,serviceAccountId,profileManager.getMe().asURI()));
+				Profile profileDTO = new Profile(profile, serviceAccountId,profileManager.getMe().asURI());
+				profileDTO.setUserId(profile,"@me");
+				returnData = new Data<eu.dime.ps.dto.Resource>(0, 1, profileDTO);
 			} else {
 				throw new InfosphereException("profile or Profile Card with Id: " + profileID
 						+ " has not been found.");

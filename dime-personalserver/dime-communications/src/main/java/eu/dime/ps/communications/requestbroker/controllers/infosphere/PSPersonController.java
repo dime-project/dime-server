@@ -74,9 +74,7 @@ public class PSPersonController implements APIController {
 		RENAMING_RULES.put(PIMO.groundingOccurrence, "defProfile");
 	}
 	
-	private PersonManager personManager;
-
-	private SharingManager sharingManager;
+	private PersonManager personManager;	
 
 	private UserManager userManager;
 		
@@ -85,12 +83,7 @@ public class PSPersonController implements APIController {
 	public void setPersonManager(PersonManager personManager) {
 		this.personManager = personManager;
 	}
-
-	@Autowired
-	public void setSharingManager(SharingManager sharingManager) {
-		this.sharingManager = sharingManager;
-	}
-
+	
 	@Autowired
 	public void setUserManager(UserManager userManager) {
 		this.userManager = userManager;

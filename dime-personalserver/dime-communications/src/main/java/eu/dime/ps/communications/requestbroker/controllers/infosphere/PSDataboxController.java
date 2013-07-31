@@ -57,6 +57,7 @@ import eu.dime.ps.dto.Include;
 import eu.dime.ps.dto.Resource;
 import eu.dime.ps.gateway.service.MediaType;
 import eu.dime.ps.semantic.model.nfo.DataContainer;
+import eu.dime.ps.semantic.model.pimo.Person;
 import eu.dime.ps.semantic.model.ppo.PrivacyPreference;
 
 /**
@@ -127,9 +128,10 @@ public class PSDataboxController extends PSSharingControllerBase implements APIC
 	@GET
 	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
 	@Path("@all")
-	public Response<Resource> getAllDatabox() {
+	public Response<Resource> getAllDatabox(@PathParam("said") String said) {
 		Data<Resource> data = null;	
-
+		logger.info("called API method: GET /dime/rest/" + said + "/databox/@all");
+		
 		try {
 			Collection<DataContainer> databoxs = databoxManager.getAll();
 			data = new Data<Resource>(0, databoxs.size(), databoxs.size());
@@ -148,8 +150,6 @@ public class PSDataboxController extends PSSharingControllerBase implements APIC
 	}
 
 
-
-
 	/**
 	 * Return Collection of DB from one person
 	 * 
@@ -157,14 +157,18 @@ public class PSDataboxController extends PSSharingControllerBase implements APIC
 	 */
 	@GET
 	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
-	@Path("@me/@all")
-	public Response<Resource> getAllMyDataboxes(@PathParam("said") String said) {
+	@Path("{personId}/@all")
+	public Response<Resource> getAllDataboxesByPerson(@PathParam("said") String said,
+			@PathParam("personId") String personId) {
 
 		Data<Resource> data = null;
-
-		try {
+		logger.info("called API method: GET /dime/rest/" + said + "/databox/"+personId+"/@all");
+		try {				
+			Person person ="@me".equals(personId) ? databoxManager.getMe()
+					: personManager.get(personId);
+			
 			Collection<DataContainer> databoxes = databoxManager
-					.getAllByCreator(databoxManager.getMe().asURI());
+					.getAllByPerson(person.asURI());
 
 			data = new Data<Resource>(0, databoxes.size(), databoxes.size());
 			for (DataContainer databox : databoxes) {
@@ -181,37 +185,6 @@ public class PSDataboxController extends PSSharingControllerBase implements APIC
 		return Response.ok(data);
 	}
 
-	/**
-	 * Return Collection of DB from one person
-	 * 
-	 * @return
-	 */
-	@GET
-	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
-	@Path("{personID}/@all")
-	public Response<Resource> getAllMyDataboxesByPerson(@PathParam("said") String said,
-			@PathParam("personID") String personID) {
-
-		Data<Resource> data = null;
-
-		try {
-			Collection<DataContainer> databoxes = databoxManager
-					.getAllByCreator(personManager.get(personID).asURI());
-
-			data = new Data<Resource>(0, databoxes.size(), databoxes.size());
-			for (DataContainer databox : databoxes) {
-				Resource resource =new Resource(databox,null,RENAMING_RULES,databoxManager.getMe().asURI());
-				writeIncludes(resource,databox);
-				data.getEntries().add(resource);
-			}
-		} catch (InfosphereException e) {
-			return Response.badRequest(e.getMessage(), e);
-		} catch (Exception e) {
-			return Response.serverError(e.getMessage(), e);
-		}
-
-		return Response.ok(data);
-	}
 
 	/**
 	 * Return DB
@@ -221,11 +194,12 @@ public class PSDataboxController extends PSSharingControllerBase implements APIC
 	 */
 	@GET
 	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
-	@Path("@me/{dbID}")
+	@Path("{personId}/{dbId}")
 	public Response<Resource> getMyDataboxById(@PathParam("said") String said,
-			@PathParam("dbID") String dbID) {
+			@PathParam("dbId") String dbID,@PathParam("personId") String personId) {
 
 		Data<Resource> data = null;
+		logger.info("called API method: GET /dime/rest/" + said + "/databox/"+personId+"/"+dbID);
 
 		try {
 			DataContainer databox = databoxManager.get(dbID);

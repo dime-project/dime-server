@@ -1,16 +1,16 @@
 /*
-* Copyright 2013 by the digital.me project (http:\\www.dime-project.eu).
-*
-* Licensed under the EUPL, Version 1.1 only (the "Licence");
-* You may not use this work except in compliance with the Licence.
-* You may obtain a copy of the Licence at:
-*
-* http://joinup.ec.europa.eu/software/page/eupl/licence-eupl
-*
-* Unless required by applicable law or agreed to in writing, software distributed under the Licence is distributed on an "AS IS" basis,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-* See the Licence for the specific language governing permissions and limitations under the Licence.
-*/
+ * Copyright 2013 by the digital.me project (http:\\www.dime-project.eu).
+ *
+ * Licensed under the EUPL, Version 1.1 only (the "Licence");
+ * You may not use this work except in compliance with the Licence.
+ * You may obtain a copy of the Licence at:
+ *
+ * http://joinup.ec.europa.eu/software/page/eupl/licence-eupl
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the Licence is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the Licence for the specific language governing permissions and limitations under the Licence.
+ */
 
 package eu.dime.ps.communications.requestbroker.controllers.infosphere;
 
@@ -132,8 +132,9 @@ public class PSLivePostController extends PSSharingControllerBase implements API
 	@GET
 	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
 	@Path("@all")
-	public Response<Resource> getAllLivePosts() {
+	public Response<Resource> getAllLivePosts(@PathParam("said") String said) {
 		Data<Resource> data = null;
+		logger.info("called API method: POST /dime/rest/" + said + "/livepost/@all");
 		List<URI> properties = new ArrayList<URI>();
 		properties = Arrays.asList(payload);
 
@@ -156,63 +157,31 @@ public class PSLivePostController extends PSSharingControllerBase implements API
 		return Response.ok(data);
 	}
 
-	/**
-	 * Retrieves all live posts create by me
-	 * 
-	 * @return collection containing all live posts of me
-	 */
-	@GET
-	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
-	@Path("@me/@all")
-	public Response<Resource> getAllMyLivePosts() {
-
-		Data<Resource> data = null;
-		List<URI> properties = new ArrayList<URI>();
-		properties = Arrays.asList(payload);
-
-		try {
-
-			Collection<LivePost> liveposts = livePostManager.getAllByCreator(
-					livePostManager.getMe().asURI().toString(), properties);
-
-			data = new Data<Resource>(0, liveposts.size(), liveposts.size());
-			for (LivePost livepost : liveposts) {
-				Resource resource = new Resource(livepost,livePostManager.getMe().asURI());
-				PrivacyPreference pp = sharingManager.findPrivacyPreference(livepost.asURI().toString(), PrivacyPreferenceType.LIVEPOST);
-				writeIncludes(resource,pp);
-				data.getEntries().add(resource);
-			}
-		} catch (InfosphereException e) {
-			return Response.badRequest(e.getMessage(), e);
-		} catch (Exception e) {
-			return Response.serverError(e.getMessage(), e);
-		}
-
-		return Response.ok(data);
-	}
 
 	/**
-	 * Retrieves all live posts create by the user or a given person.
+	 * Retrieves all live posts create by  a given person.
 	 * 
-	 * @return collection containing all live posts of a given person
+	 * @return collection containing all live posts of a given person.
+	 * 
 	 */
 	@GET
 	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
 	@Path("{personId}/@all")
-	public Response<Resource> getAllLivePosts(
-			@PathParam("personId") String personId) {
+	public Response<Resource> getAllLivePostsByPerson(
+			@PathParam("personId") String personId,@PathParam("said") String said) {		
+		logger.info("called API method: POST /dime/rest/" + said + "/livepost/"+personId+"/@all");		
 		Data<Resource> data = null;
 		List<URI> properties = new ArrayList<URI>();
 		properties = Arrays.asList(payload);
 
 		try {
-			Person person = personManager.get(personId);
+			Person person ="@me".equals(personId) ? livePostManager.getMe()
+					: personManager.get(personId); 
 
-			Collection<LivePost> liveposts = livePostManager.getAllByCreator(
-					person.asURI().toString(), properties);
+			Collection<LivePost> liveposts = livePostManager.getAllByPerson(
+					person.asURI(), properties);
 
 			data = new Data<Resource>(0, liveposts.size(), liveposts.size());
-
 			for (LivePost livepost : liveposts) {
 				Resource resource = new Resource(livepost,livePostManager.getMe().asURI());
 				PrivacyPreference pp = sharingManager.findPrivacyPreference(livepost.asURI().toString(), PrivacyPreferenceType.LIVEPOST);
@@ -227,6 +196,7 @@ public class PSLivePostController extends PSSharingControllerBase implements API
 
 		return Response.ok(data);
 	}
+
 
 	/**
 	 * Retrieves a specific live post.
@@ -241,16 +211,17 @@ public class PSLivePostController extends PSSharingControllerBase implements API
 	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
 	@Path("{personId}/{livePostId}")
 	public Response<Resource> getLivePosts(
+			@PathParam("said") String said,
 			@PathParam("personId") String personId,
 			@PathParam("livePostId") String livePostId) {
+		logger.info("called API method: POST /dime/rest/" + said + "/livepost/"+personId+"/"+livePostId);	
+
 		Data<Resource> data = null;
 		List<URI> properties = new ArrayList<URI>();
 		properties = Arrays.asList(payload);
 
-		try {
-			// if ("@me".equals(personId)) {
-			// personId = livePostManager.getMe().asURI().toString();
-			// }
+
+		try {			
 			LivePost livepost = livePostManager.get(livePostId, properties);
 			Resource resource = new Resource(livepost,livePostManager.getMe().asURI());
 			PrivacyPreference pp = sharingManager.findPrivacyPreference(livepost.asURI().toString(), PrivacyPreferenceType.LIVEPOST);
@@ -267,8 +238,9 @@ public class PSLivePostController extends PSSharingControllerBase implements API
 		return Response.ok(data);
 	}
 
-	
-	
+
+
+
 	/**
 	 * Creates a new live post.
 	 * 
@@ -277,20 +249,17 @@ public class PSLivePostController extends PSSharingControllerBase implements API
 	 * @return an OK response with the live post created, or an error message
 	 */
 	@POST
-	@Path("{personId}")
+	@Path("@me")
 	@Consumes(MediaType.APPLICATION_JSON + ";charset=UTF-8")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
 	public Response<Resource> createLivePost(Request<Resource> request,
-			@PathParam("personId") String personId) {
+			@PathParam("said") String said) {
 		Data<Resource> data, returnData;
-
+		logger.info("called API method: POST /dime/rest/" + said + "/livepost/@me");
 		try {
 			RequestValidator.validateRequest(request);
 
-			data = request.getMessage().getData();
-
-			Person person = "@me".equals(personId) ? livePostManager.getMe()
-					: personManager.get(personId);
+			data = request.getMessage().getData();		
 
 			Resource dto = data.getEntries().iterator().next();
 			//check for int
@@ -338,19 +307,19 @@ public class PSLivePostController extends PSSharingControllerBase implements API
 	@Path("{personId}/{livePostId}")
 	@Consumes(MediaType.APPLICATION_JSON + ";charset=UTF-8")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
-	public Response<Resource> updateLivePost(Request<Resource> request,
+	public Response<Resource> updateLivePost(
+			Request<Resource> request,
+			@PathParam("said") String said,
 			@PathParam("personId") String personId,
 			@PathParam("livePostId") String livePostId) {
 		Data<Resource> data, returnData;
+		logger.info("called API method: UPDATE /dime/rest/" + said + "/livepost/"+personId+"/"+livePostId);
 
 		try {
 			RequestValidator.validateRequest(request);
-
-
 			data = request.getMessage().getData();
-			
 			Resource dto = data.getEntries().iterator().next();
-			
+
 			//check for int values (semantic engine will crash)
 			if (dto.containsKey("nao:privacyLevel")){
 				try {
@@ -360,7 +329,6 @@ public class PSLivePostController extends PSSharingControllerBase implements API
 					//value already double
 				}	
 			}
-
 			LivePost livepost = dto
 					.asResource(new URIImpl(livePostId), LivePost.class,livePostManager.getMe().asURI());
 			livePostManager.update(livepost);
@@ -381,9 +349,11 @@ public class PSLivePostController extends PSSharingControllerBase implements API
 	@DELETE
 	@Path("{personId}/{livePostId}")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
-	public Response deleteLivePost(@PathParam("personId") String personId,
+	public Response deleteLivePost(
+			@PathParam("said") String said,
+			@PathParam("personId") String personId,
 			@PathParam("livePostId") String livePostId) {
-
+		logger.info("called API method: POST /dime/rest/" + said + "/livepost/@me");
 		try {
 			livePostManager.remove(livePostId);
 
@@ -398,129 +368,42 @@ public class PSLivePostController extends PSSharingControllerBase implements API
 		return Response.ok();
 	}
 
-	
-		////
-		//Method for reading the privacyPreferences of a livepost
-		////
-		@Override
-		public List<Include> readIncludes(eu.dime.ps.dto.Resource resource,eu.dime.ps.semantic.model.RDFReactorThing livepost)
-				throws InfosphereException {			
 
-			List<Include> includes = buildIncludesFromMap(resource);
-			if (!includes.isEmpty()){
-				//TODO manage the unsharing 
-				ArrayList<Include> shared = new ArrayList<Include>();
-				ArrayList<Include> excludes = new ArrayList<Include>(); 						
-				
-				for(Include include: includes){
-					for(String group : include.groups){	
-						sharingManager.shareLivePost(livepost.asURI().toString(), include.getSaidSender(),  new String[]{group});
-					}
-					for(String service: include.services){	
-						sharingManager.shareLivePost(livepost.asURI().toString(), include.getSaidSender(),  new String[]{service});						
-					}
-					for (HashMap<String, String> person : include.persons){
-						if(person.get("saidReceiver") == null){						
-							sharingManager.shareLivePost(livepost.asURI().toString(), include.getSaidSender(),  new String[]{person.get("personId")});	
-						}
-						else{	
-							sharingManager.shareLivePost(livepost.asURI().toString(), include.getSaidSender(),  new String[]{person.get("saidReceiver")});	
-						}					
-					}
+	////
+	//Method for reading the privacyPreferences of a livepost
+	////
+	@Override
+	public List<Include> readIncludes(eu.dime.ps.dto.Resource resource,eu.dime.ps.semantic.model.RDFReactorThing livepost)
+			throws InfosphereException {			
 
+		List<Include> includes = buildIncludesFromMap(resource);
+		if (!includes.isEmpty()){
+			//TODO manage the unsharing 
+			ArrayList<Include> shared = new ArrayList<Include>();
+			ArrayList<Include> excludes = new ArrayList<Include>(); 						
+
+			for(Include include: includes){
+				for(String group : include.groups){	
+					sharingManager.shareLivePost(livepost.asURI().toString(), include.getSaidSender(),  new String[]{group});
 				}
+				for(String service: include.services){	
+					sharingManager.shareLivePost(livepost.asURI().toString(), include.getSaidSender(),  new String[]{service});						
+				}
+				for (HashMap<String, String> person : include.persons){
+					if(person.get("saidReceiver") == null){						
+						sharingManager.shareLivePost(livepost.asURI().toString(), include.getSaidSender(),  new String[]{person.get("personId")});	
+					}
+					else{	
+						sharingManager.shareLivePost(livepost.asURI().toString(), include.getSaidSender(),  new String[]{person.get("saidReceiver")});	
+					}					
+				}
+
 			}
-			return includes;
 		}
-	
-	
-	/**
-	 * 
-	 * @deprecated Do not use this method! 
-	 * 			   Sharing is done by Posting/Updating a databox
-	 */
-	@Deprecated
-	@GET
-	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
-	@Path("@me/@sharedTo/{agentId}/{livePostId}")
-	public Response<Resource> hasAccessToLivePost(
-			@PathParam("agentId") String agentId,
-			@PathParam("livePostId") String livePostId) {
-
-		Boolean access;
-		Data<HashMap<String, Boolean>> returnData;
-
-		try {
-			access = sharingManager.hasAccessToLivePost(livePostId, agentId);
-
-			HashMap<String, Boolean> result = new HashMap<String, Boolean>();
-			result.put("access", access);
-			returnData = new Data<HashMap<String, Boolean>>(0, 1, result);
-
-		} catch (IllegalArgumentException e) {
-			return Response.badRequest(e.getMessage(), e);
-		} catch (InfosphereException e) {
-			return Response.badRequest(e.getMessage(), e);
-		} catch (Exception e) {
-			return Response.serverError(e.getMessage(), e);
-		}
-
-		return Response.ok();
+		return includes;
 	}
 
-	
-	/**
-	 * 
-	 * @deprecated Do not use this method! 
-	 * 			   Sharing is done by Posting/Updating a databox
-	 */
-	@Deprecated
-	@GET
-	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
-	@Path("@me/@sharedTo/{agentId}/@all")
-	public Response<SharedTo> getAllSharedLivePost(
-			@PathParam("agentId") String agentId) {
 
-		Data<SharedTo> data = null;
-
-		try {
-			Collection<LivePost> livePosts = sharingManager
-					.getSharedLivePost(agentId);
-			data = new Data<SharedTo>(0, livePosts.size(), livePosts.size());
-
-			for (LivePost livePost : livePosts) {
-				SharedTo sharedTo = new SharedTo();
-				sharedTo.setGuid(UUID.randomUUID().toString());
-				sharedTo.setAgentId(agentId);
-				if (personManager.isPerson(agentId)) {
-					sharedTo.setAgentType("person");
-				}
-				if (personGroupManager.isPersonGroup(agentId)) {
-					sharedTo.setAgentType("group");
-				}
-
-				String itemUri = livePost.asURI().toString();
-				if (itemUri.contains("/")) {
-					itemUri = StringUtils.substringAfterLast(itemUri, "/");
-				}
-				itemUri = URLDecoder.decode(itemUri, "UTF-8");
-
-				sharedTo.setItemId(itemUri);
-				sharedTo.setType("livepost");
-
-				data.getEntries().add(sharedTo);
-			}
-		} catch (InfosphereException e) {
-			return Response.badRequest(e.getMessage(), e);
-		} catch (Exception e) {
-			return Response.serverError(e.getMessage(), e);
-		}
-
-		return Response.ok(data);
-
-	}
-
-	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
 	@Path(value = "@me/@all/shared")
@@ -551,76 +434,6 @@ public class PSLivePostController extends PSSharingControllerBase implements API
 	}
 
 
-	/**
-	 * 
-	 * @deprecated Do not use this method! 
-	 * 			   Sharing is done by Posting/Updating a livepost
-	 */
-	@Deprecated
-	@POST
-	@Path("@me/@sharedTo/{agentId}/{livePostId}")
-	@Consumes(MediaType.APPLICATION_JSON + ";charset=UTF-8")
-	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
-	public Response<TrustEntry> postShareDatabox(
-			@PathParam("agentId") String agentId,
-			@PathParam("livePostId") String livePostId,
-			@QueryParam("adapt") String adapt, Request<SharedTo> request) {
 
-		// adapt values: privacy, trust, none or ""
-		// if (adapt == null) {
-		// adapt = "";
-		// }
-
-		// TrustRecommendation trustRecomendation =
-		// trustEngineInterface.processTrustForLivepost(
-		// livePostId, agentId, adapt, null);
-		//
-		// trustRecomendation.getConflictMap();
-		// trustRecomendation.getMessage();
-		//
-		// if (trustRecomendation.updateModel()) {
-
-		Collection<SharedTo> entries = request.getMessage().getData()
-				.getEntries();
-
-		for (SharedTo sharedTo : entries) {
-			try {
-				sharingManager.shareLivePost(livePostId,
-						sharedTo.getSaidSender(), new String[]{agentId});
-			} catch (IllegalArgumentException e) {
-				return Response.badRequest(e.getMessage(), e);
-			} catch (InfosphereException e) {
-				return Response.badRequest(e.getMessage(), e);
-			} catch (Exception e) {
-
-				return Response.serverError(e.getMessage(), e);
-			}
-		}
-
-		return Response.ok();
-
-		// } else {
-		//
-		// Map<String, TrustConflict> conflictMap =
-		// trustRecomendation.getConflictMap();
-		//
-		// Data<TrustEntry> data = new Data<TrustEntry>();
-		//
-		// Set<String> keySet = conflictMap.keySet();
-		// for (String key : keySet) {
-		//
-		// TrustEntry jsonTrustConflict = new TrustEntry();
-		// TrustConflict trustConflict = conflictMap.get(key);
-		// jsonTrustConflict.setAgent_guid(trustConflict.getAgentId());
-		// jsonTrustConflict.setThing_guid(trustConflict.getThingId());
-		// jsonTrustConflict.setMessage(trustConflict.getMessage());
-		// data.addEntry(jsonTrustConflict);
-		//
-		// }
-
-		// return Response.ok(data);
-		// }
-
-	}
 
 }

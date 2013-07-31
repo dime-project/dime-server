@@ -22,6 +22,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import eu.dime.ps.controllers.exception.InfosphereException;
 import eu.dime.ps.controllers.infosphere.manager.PersonGroupManager;
 import eu.dime.ps.controllers.infosphere.manager.PersonManagerImpl;
+import eu.dime.ps.controllers.infosphere.manager.ProfileManager;
+import eu.dime.ps.semantic.model.nco.PersonContact;
 import eu.dime.ps.semantic.model.pimo.Person;
 import eu.dime.ps.semantic.model.pimo.PersonGroup;
 
@@ -37,6 +39,9 @@ public class PersonManagerTest extends InfoSphereManagerTest {
 	
 	@Autowired
 	private PersonGroupManager personGroupManager;
+	
+	@Autowired
+	private ProfileManager profileManager;
 
 	@Test
 	public void testGetMe() throws Exception {
@@ -161,6 +166,25 @@ public class PersonManagerTest extends InfoSphereManagerTest {
 		assertEquals(2, results.size());
 		assertTrue(results.contains(ismael));
 		assertTrue(results.contains(mark));
+	}
+	
+	@Test
+	public void testGetAllByProfile() throws Exception {
+		Person ismael = buildPerson("Ismael Rivera");
+		Person mark = buildPerson("Mark Doe");
+		personManager.add(ismael);
+		personManager.add(mark);
+
+		PersonContact ismaProfile = buildProfile("IsmaelProfile", "", "");
+		PersonContact markProfile = buildProfile("MarkProfile", "", "");
+		
+		profileManager.add(ismael,ismaProfile);
+		profileManager.add(mark,markProfile);
+		
+		Collection<Person> results = personManager.getAllByProfile(ismaProfile);
+		assertEquals(1, results.size());
+		assertTrue(results.contains(ismael));
+		assertTrue(!results.contains(mark));
 	}
 
 }
