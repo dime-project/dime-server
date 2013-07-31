@@ -266,9 +266,10 @@ public class AccountCredentials {
         }
 		EntityManager em = AccountCredentials.entityManager();
 		TypedQuery<AccountCredentials> q = em.createQuery(
-				"SELECT o FROM AccountCredentials AS o WHERE o.tenant = :localTenant AND o.targetUri = :targetUri",
+				"SELECT o FROM AccountCredentials AS o WHERE o.tenant = :tenant AND o.targetUri = :targetUri",
 				AccountCredentials.class);
 		q.setParameter("targetUri", targetUri);
+        q.setParameter("tenant", localTenant);
 		return QueryUtil.getSingleResultOrNull(q);
 	}
 	

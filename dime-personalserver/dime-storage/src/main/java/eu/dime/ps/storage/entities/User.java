@@ -351,15 +351,13 @@ public class User {
     }
 
     public static User findByAccountUri(String accountUri, Tenant localTenant) {
-        if (localTenant==null){
-            throw new IllegalArgumentException("localTenant must not be null!");
-        }
         if (accountUri == null || accountUri.length() == 0) {
             throw new IllegalArgumentException("The accountUri argument is required");
         }
         EntityManager em = User.entityManager();
-        TypedQuery<User> q = em.createQuery("SELECT o FROM User AS o WHERE o.tenant = :localTenant AND o.accountUri = :accountUri", User.class);
+        TypedQuery<User> q = em.createQuery("SELECT o FROM User AS o WHERE o.tenant = :tenant AND o.accountUri = :accountUri", User.class);
         q.setParameter("accountUri", accountUri);
+        q.setParameter("tenant", localTenant);
         return QueryUtil.getSingleResultOrNull(q);
     }
 
