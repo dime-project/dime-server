@@ -219,6 +219,9 @@ public class ServiceAccount {
 	}
 
 	public static ServiceAccount findAllByAccountUri(String accountUri, Tenant localTenant) {
+        if (localTenant==null){
+            throw new IllegalArgumentException("localTenant must not be null!");
+        }
 		if (accountUri == null || accountUri.length() == 0)
 			throw new IllegalArgumentException("The accountUri argument is required");
 		EntityManager em = ServiceAccount.entityManager();

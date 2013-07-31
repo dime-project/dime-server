@@ -351,6 +351,9 @@ public class User {
     }
 
     public static User findByAccountUri(String accountUri, Tenant localTenant) {
+        if (localTenant==null){
+            throw new IllegalArgumentException("localTenant must not be null!");
+        }
         if (accountUri == null || accountUri.length() == 0) {
             throw new IllegalArgumentException("The accountUri argument is required");
         }

@@ -261,6 +261,9 @@ public class AccountCredentials {
 	}
 
 	public static AccountCredentials findAllByTargetUri(String targetUri, Tenant localTenant) {
+        if (localTenant==null){
+            throw new IllegalArgumentException("localTenant must not be null!");
+        }
 		EntityManager em = AccountCredentials.entityManager();
 		TypedQuery<AccountCredentials> q = em.createQuery(
 				"SELECT o FROM AccountCredentials AS o WHERE o.tenant = :localTenant AND o.targetUri = :targetUri",
