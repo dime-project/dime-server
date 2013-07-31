@@ -31,7 +31,11 @@ public class TenantHelper {
      * @return
      */
     public static  Tenant getTenant(Long tenantId){
-        return Tenant.find(tenantId);
+        Tenant result = Tenant.find(tenantId);
+        if (result==null){
+            throw new TenantNotFoundException("Unable to find tenant with id: "+tenantId+" in database!");
+        }
+        return result;
     }
 
     public static Tenant getCurrentTenant(){
@@ -39,7 +43,11 @@ public class TenantHelper {
     }
 
     private static Long getCurrentTenantId() {
-        return TenantContextHolder.getTenant();
+        Long result = TenantContextHolder.getTenant();
+        if (result==null){
+            throw new TenantNotFoundException("Tenant id is not set in TenantContextHolder!");
+        }
+        return result;
     }
 
 }
