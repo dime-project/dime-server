@@ -1,8 +1,0 @@
-{
-	<urn:dime:local:userconfig> a <http://ont.semanticdesktop.org/ontologies/2007/01/16/server-conf#User> ;
-		<http://ont.semanticdesktop.org/ontologies/2007/01/16/server-conf#userNamespace> <urn:uuid:> ;
-		<http://ont.semanticdesktop.org/ontologies/2007/01/16/server-conf#userUri> <urn:uuid:n000240> ;
-		<http://ont.semanticdesktop.org/ontologies/2007/01/16/server-conf#userPimoUri> <urn:uuid:n000264> ;
-		<http://ont.semanticdesktop.org/ontologies/2007/01/16/server-conf#userEmailAddress> "norbert@example.com" ;
-		<http://ont.semanticdesktop.org/ontologies/2007/01/16/server-conf#userName> "Norbert Drancourt" .
-}

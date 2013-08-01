@@ -54,9 +54,6 @@
 		</property>
 	</bean>
 	
-	<!-- bean added by maven profiles using filters -->
-	${ps.config.init.poc.data}
-	
 	<bean id="tenantManager"
 		class="eu.dime.ps.controllers.TenantManagerImpl">
 		<property name="connectionProvider" ref="connectionProvider"/>
