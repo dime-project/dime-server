@@ -87,7 +87,8 @@ public class LivePostManagerImpl extends InfoSphereManagerBase<LivePost> impleme
 		if (me.equals(personId)) {
 			query.where(NSO.sharedBy).isNull();
 		} else {
-			query.where(NSO.sharedBy).is(personId);
+			query.where(NSO.sharedBy).is(Query.X);
+			query.where(Query.X, NAO.creator).is(personId);
 		}
 
 		return query.results();

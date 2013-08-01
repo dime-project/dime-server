@@ -25,9 +25,10 @@ import java.util.UUID;
 
 import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.model.node.impl.URIImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import eu.dime.ps.controllers.TenantContextHolder;
 import eu.dime.ps.controllers.exception.InfosphereException;
 import eu.dime.ps.controllers.util.TenantHelper;
 import eu.dime.ps.datamining.account.AccountUpdaterService;
@@ -64,8 +65,6 @@ import eu.dime.ps.storage.entities.ServiceAccount;
 import eu.dime.ps.storage.entities.ServiceProvider;
 import eu.dime.ps.storage.entities.Tenant;
 import eu.dime.ps.storage.manager.EntityFactory;
-import java.util.logging.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Implements {@link AccountManager} using the RDF services offered by
@@ -75,7 +74,8 @@ import org.slf4j.LoggerFactory;
  */
 public class AccountManagerImpl extends InfoSphereManagerBase<Account> implements AccountManager {
 
-    private final org.slf4j.Logger logger = LoggerFactory.getLogger(AccountManagerImpl.class);
+    private final Logger logger = LoggerFactory.getLogger(AccountManagerImpl.class);
+    
     private final DAOFactory daoFactory = (new ModelFactory()).getDAOFactory();
     private EntityFactory entityFactory;
     private ServiceGateway serviceGateway;

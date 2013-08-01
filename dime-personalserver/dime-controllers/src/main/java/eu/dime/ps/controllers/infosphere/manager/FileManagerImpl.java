@@ -54,7 +54,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import eu.dime.commons.util.FileUtils;
-import eu.dime.ps.controllers.TenantContextHolder;
 import eu.dime.ps.controllers.exception.InfosphereException;
 import eu.dime.ps.controllers.util.ImageUtils;
 import eu.dime.ps.controllers.util.TenantHelper;
@@ -96,8 +95,6 @@ public class FileManagerImpl extends InfoSphereManagerBase<FileDataObject> imple
 	
 	private FileDataMining fileDataMining;
 	
-	//private DataStore dataStore;
-		
 	@Autowired
 	private DataStoreProvider dataStoreProvider;
 	
@@ -114,10 +111,8 @@ public class FileManagerImpl extends InfoSphereManagerBase<FileDataObject> imple
 		this.fileDataMining = fileDataMining;
 	}
 	
-	public DataStore getDataStore() {
-		
+	protected DataStore getDataStore() {
         return dataStoreProvider.getTenantStore(TenantHelper.getCurrentTenantId().longValue());
-		
 	}
 
 	@Override
@@ -169,7 +164,8 @@ public class FileManagerImpl extends InfoSphereManagerBase<FileDataObject> imple
 		if (me.equals(personId)) {
 			query.where(NSO.sharedBy).isNull();
 		} else {
-			query.where(NSO.sharedBy).is(personId);
+			query.where(NSO.sharedBy).is(Query.X);
+			query.where(Query.X, NAO.creator).is(personId);
 		}
 
 		return query.results();
