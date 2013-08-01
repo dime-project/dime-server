@@ -181,7 +181,8 @@ public class PSResourcesController extends PSSharingControllerBase implements AP
 				PrivacyPreference pp = sharingManager.findPrivacyPreference(file.asURI().toString(), PrivacyPreferenceType.FILE);
 				writeIncludes(fileResource,pp);
 				fileResource.remove("nao:creator");
-				resolveImageUrl(file, said, fileResource);				
+				resolveImageUrl(file, said, fileResource);
+				setUserId(fileResource);
 				data.getEntries().add(fileResource);
 			}
 		} catch (InfosphereException e) {
@@ -205,11 +206,12 @@ public class PSResourcesController extends PSSharingControllerBase implements AP
 		List<URI> properties = new ArrayList<URI>();
 		properties = Arrays.asList(payload);
 
-		try {		
-			Person person ="@me".equals(personId) ? personManager.getMe()
-					: personManager.get(personId);
+		try {
+			
+			URI person ="@me".equals(personId) ? personManager.getMe().asURI()
+					: new URIImpl(personId); 
 
-			Collection<FileDataObject> files = fileManager.getAllByPerson(person.asURI(),properties);
+			Collection<FileDataObject> files = fileManager.getAllByPerson(person,properties);
 			data = new Data<Resource>(0, files.size(), files.size());
 
 			for (FileDataObject file : files) {
@@ -218,6 +220,7 @@ public class PSResourcesController extends PSSharingControllerBase implements AP
 				writeIncludes(fileResource,pp);
 				fileResource.remove("nao:creator");
 				resolveImageUrl(file, said, fileResource);
+				setUserId(fileResource);
 				data.getEntries().add(fileResource);
 			}
 		} catch (InfosphereException e) {
@@ -271,6 +274,7 @@ public class PSResourcesController extends PSSharingControllerBase implements AP
 			Resource fileResource = new Resource(fileDataObject, said,fileManager.getMe().asURI());
 			fileResource.remove("nao:creator");
 			resolveImageUrl(fileDataObject, said, fileResource);
+			setUserId(fileResource);
 			returnData = new Data<Resource>(0, 1, fileResource);
 
 		} catch (IllegalArgumentException e) {
@@ -299,6 +303,7 @@ public class PSResourcesController extends PSSharingControllerBase implements AP
 		try {
 
 			data = getResource(said, resourceID);
+			
 		} catch (InfosphereException e) {
 			return Response.badRequest(e.getMessage(), e);
 		} catch (Exception e) {
@@ -344,7 +349,7 @@ public class PSResourcesController extends PSSharingControllerBase implements AP
 			readIncludes(resource,fileDataObject);
 			Resource fileResource = new Resource(fileDataObject, said,fileManager.getMe().asURI());
 			fileResource.remove("nao:creator");
-
+			setUserId(fileResource);
 			returnData = new Data<Resource>(0, 1,fileResource);
 		} catch (IllegalArgumentException e) {
 			return Response.badRequest(e.getMessage(), e);
@@ -812,6 +817,7 @@ public class PSResourcesController extends PSSharingControllerBase implements AP
 		writeIncludes(fileResource,pp);
 		resolveImageUrl(file, said, fileResource);
 		fileResource.remove("nao:creator");
+		setUserId(fileResource);
 		result = new Data<Resource>(0, 1, fileResource);
 		return result;
 	}

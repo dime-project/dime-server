@@ -234,7 +234,7 @@ public class PSLivePostControllerTestIt extends PSInfosphereControllerTestIt {
 		assertNotNull(resource);
 		assertEquals(resource.get("guid"),livepost.asURI().toString());
 		assertEquals(resource.get("name"),"Test livepost" );		
-		assertEquals(resource.get("userId"),sender.asURI().toString());
+		assertEquals(resource.get("userId"),"urn:uuid:test");
 		assertEquals(resource.get("type"),"livepost" );
 		assertEquals(resource.get("created"),1338824999L);
 		assertEquals(resource.get("lastModified"),1338824999L);

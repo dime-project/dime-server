@@ -58,6 +58,8 @@ import eu.dime.ps.controllers.trustengine.utils.AdvisoryConstants;
 import eu.dime.ps.dto.Include;
 import eu.dime.ps.dto.Resource;
 import eu.dime.ps.gateway.service.MediaType;
+import eu.dime.ps.gateway.service.internal.DimeServiceAdapter;
+import eu.dime.ps.semantic.model.dao.Account;
 import eu.dime.ps.semantic.model.dlpo.LivePost;
 import eu.dime.ps.semantic.model.dlpo.Status;
 import eu.dime.ps.semantic.model.pimo.Person;
@@ -146,6 +148,7 @@ public class PSLivePostController extends PSSharingControllerBase implements API
 				Resource resource = new Resource(livepost,livePostManager.getMe().asURI());
 				PrivacyPreference pp = sharingManager.findPrivacyPreference(livepost.asURI().toString(), PrivacyPreferenceType.LIVEPOST);
 				writeIncludes(resource,pp);
+				setUserId(resource);
 				data.getEntries().add(resource);
 			}
 		} catch (InfosphereException e) {
@@ -175,17 +178,20 @@ public class PSLivePostController extends PSSharingControllerBase implements API
 		properties = Arrays.asList(payload);
 
 		try {
-			Person person ="@me".equals(personId) ? livePostManager.getMe()
-					: personManager.get(personId); 
+			
+			
+			URI personURI ="@me".equals(personId) ? livePostManager.getMe().asURI()
+					: new URIImpl(personId); 
 
 			Collection<LivePost> liveposts = livePostManager.getAllByPerson(
-					person.asURI(), properties);
+					personURI, properties);
 
 			data = new Data<Resource>(0, liveposts.size(), liveposts.size());
 			for (LivePost livepost : liveposts) {
 				Resource resource = new Resource(livepost,livePostManager.getMe().asURI());
 				PrivacyPreference pp = sharingManager.findPrivacyPreference(livepost.asURI().toString(), PrivacyPreferenceType.LIVEPOST);
 				writeIncludes(resource,pp);
+				setUserId(resource);
 				data.getEntries().add(resource);
 			}
 		} catch (InfosphereException e) {
@@ -196,7 +202,7 @@ public class PSLivePostController extends PSSharingControllerBase implements API
 
 		return Response.ok(data);
 	}
-
+	
 
 	/**
 	 * Retrieves a specific live post.
@@ -226,7 +232,7 @@ public class PSLivePostController extends PSSharingControllerBase implements API
 			Resource resource = new Resource(livepost,livePostManager.getMe().asURI());
 			PrivacyPreference pp = sharingManager.findPrivacyPreference(livepost.asURI().toString(), PrivacyPreferenceType.LIVEPOST);
 			writeIncludes(resource,pp);	
-
+			setUserId(resource);
 			data = new Data<Resource>(0, 1,resource );
 
 		} catch (InfosphereException e) {

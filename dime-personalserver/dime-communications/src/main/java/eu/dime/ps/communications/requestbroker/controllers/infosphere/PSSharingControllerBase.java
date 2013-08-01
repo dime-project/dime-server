@@ -1,16 +1,16 @@
 /*
-* Copyright 2013 by the digital.me project (http:\\www.dime-project.eu).
-*
-* Licensed under the EUPL, Version 1.1 only (the "Licence");
-* You may not use this work except in compliance with the Licence.
-* You may obtain a copy of the Licence at:
-*
-* http://joinup.ec.europa.eu/software/page/eupl/licence-eupl
-*
-* Unless required by applicable law or agreed to in writing, software distributed under the Licence is distributed on an "AS IS" basis,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-* See the Licence for the specific language governing permissions and limitations under the Licence.
-*/
+ * Copyright 2013 by the digital.me project (http:\\www.dime-project.eu).
+ *
+ * Licensed under the EUPL, Version 1.1 only (the "Licence");
+ * You may not use this work except in compliance with the Licence.
+ * You may obtain a copy of the Licence at:
+ *
+ * http://joinup.ec.europa.eu/software/page/eupl/licence-eupl
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the Licence is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the Licence for the specific language governing permissions and limitations under the Licence.
+ */
 
 package eu.dime.ps.communications.requestbroker.controllers.infosphere;
 
@@ -36,8 +36,11 @@ import eu.dime.ps.controllers.infosphere.manager.AccountManager;
 import eu.dime.ps.controllers.infosphere.manager.PersonGroupManager;
 import eu.dime.ps.controllers.infosphere.manager.PersonManager;
 import eu.dime.ps.dto.Include;
+import eu.dime.ps.dto.Resource;
 import eu.dime.ps.gateway.service.internal.DimeServiceAdapter;
 import eu.dime.ps.semantic.model.RDFReactorThing;
+import eu.dime.ps.semantic.model.dao.Account;
+import eu.dime.ps.semantic.model.nfo.DataContainer;
 
 public abstract class PSSharingControllerBase extends PSControllerBase {
 
@@ -55,7 +58,7 @@ public abstract class PSSharingControllerBase extends PSControllerBase {
 	////
 	//Method for injecting the privacyPreferences 
 	////  
-	
+
 	public void writeIncludes(eu.dime.ps.dto.Resource resource,RDFReactorThing privPref)
 			throws ClassCastException, InfosphereException {
 		ArrayList<Include> includes = new ArrayList<Include>();
@@ -153,13 +156,13 @@ public abstract class PSSharingControllerBase extends PSControllerBase {
 
 	}
 
-	
+
 	////
 	//Method for reading the nao:includes and sharing (implemented in each controller)
 	////
 
 	abstract public List<Include> readIncludes(eu.dime.ps.dto.Resource resource,eu.dime.ps.semantic.model.RDFReactorThing modelObject) throws InfosphereException;
-		
+
 
 	//----------------------------------------------------------------------------
 	//method for adding the sharedThrough and the include agents to an accessSpace
@@ -200,6 +203,19 @@ public abstract class PSSharingControllerBase extends PSControllerBase {
 
 		return includes;
 
+	}
+
+	//If the userId is retreived from sharedBy, it is pointing to an account
+	// and the creator of that account should be set as the userId instead.
+	protected void setUserId(Resource resource) {
+
+		try {
+			Account account = getAccountManager().get(resource.get("userId").toString());
+			if (account != null)
+			resource.put("userId", account.getCreator_asNode().toString());
+		} catch (Exception e) {
+			return;
+		}
 	}
 
 }

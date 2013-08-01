@@ -28,6 +28,7 @@ import eu.dime.commons.dto.Request;
 import eu.dime.commons.dto.Response;
 import eu.dime.commons.util.JaxbJsonSerializer;
 import eu.dime.ps.communications.requestbroker.controllers.infosphere.PSDataboxController;
+import eu.dime.ps.controllers.infosphere.manager.AccountManager;
 import eu.dime.ps.controllers.infosphere.manager.DataboxManager;
 import eu.dime.ps.dto.Databox;
 import eu.dime.ps.dto.Resource;
@@ -42,7 +43,9 @@ public class PSDataboxControllerTest extends PSInfoSphereControllerTest {
 	
 	public PSDataboxControllerTest() {
 		DataboxManager mockedManager = buildDataboxManager();
-		controller.setDataboxManager(mockedManager);		
+		AccountManager mockedAccountManager = buildAccountManager();
+		controller.setDataboxManager(mockedManager);	
+		controller.setAccountManager(mockedAccountManager);
 	}
 
 	

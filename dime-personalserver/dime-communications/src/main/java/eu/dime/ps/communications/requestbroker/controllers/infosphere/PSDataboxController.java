@@ -56,6 +56,7 @@ import eu.dime.ps.dto.Databox;
 import eu.dime.ps.dto.Include;
 import eu.dime.ps.dto.Resource;
 import eu.dime.ps.gateway.service.MediaType;
+import eu.dime.ps.semantic.model.dao.Account;
 import eu.dime.ps.semantic.model.nfo.DataContainer;
 import eu.dime.ps.semantic.model.pimo.Person;
 import eu.dime.ps.semantic.model.ppo.PrivacyPreference;
@@ -138,6 +139,7 @@ public class PSDataboxController extends PSSharingControllerBase implements APIC
 			for (DataContainer databox : databoxs) {				
 				Resource resource =new Resource(databox,null,RENAMING_RULES,databoxManager.getMe().asURI());
 				writeIncludes(resource,databox);
+				setUserId(resource);
 				data.getEntries().add(resource);
 			}
 		} catch (InfosphereException e) {
@@ -163,9 +165,10 @@ public class PSDataboxController extends PSSharingControllerBase implements APIC
 
 		Data<Resource> data = null;
 		logger.info("called API method: GET /dime/rest/" + said + "/databox/"+personId+"/@all");
-		try {				
+		try {	
+			
 			Person person ="@me".equals(personId) ? databoxManager.getMe()
-					: personManager.get(personId);
+					: personManager.get(personId); 
 			
 			Collection<DataContainer> databoxes = databoxManager
 					.getAllByPerson(person.asURI());
@@ -174,6 +177,7 @@ public class PSDataboxController extends PSSharingControllerBase implements APIC
 			for (DataContainer databox : databoxes) {
 				Resource resource =new Resource(databox,null,RENAMING_RULES,databoxManager.getMe().asURI());
 				writeIncludes(resource,databox);
+				setUserId(resource);
 				data.getEntries().add(resource);
 			}
 		} catch (InfosphereException e) {
@@ -207,6 +211,7 @@ public class PSDataboxController extends PSSharingControllerBase implements APIC
 			data = new Data<Resource>(0, 1, 1);
 			Resource resource =new Resource(databox,null,RENAMING_RULES,databoxManager.getMe().asURI());
 			writeIncludes(resource,databox);
+			setUserId(resource);
 			data.getEntries().add(resource);
 		} catch (InfosphereException e) {
 			return Response.badRequest(e.getMessage(), e);
@@ -255,6 +260,7 @@ public class PSDataboxController extends PSSharingControllerBase implements APIC
 					.toString());
 			Databox resource = new Databox(returnDatabox,databoxManager.getMe().asURI());
 			writeIncludes(resource,returnDatabox);
+			setUserId(resource);
 			returnData = new Data<Databox>(0, 1,resource);
 
 		} catch (IllegalArgumentException e) {
@@ -301,6 +307,7 @@ public class PSDataboxController extends PSSharingControllerBase implements APIC
 			DataContainer returnDatabox = databoxManager.get(dbID);
 			Databox returnResource = new Databox(returnDatabox,databoxManager.getMe().asURI());
 			writeIncludes(returnResource,returnDatabox);
+			setUserId(returnResource);
 			returnData = new Data<Resource>(0, 1, returnResource);
 			return Response.ok(returnData);
 		} catch (IllegalArgumentException e) {

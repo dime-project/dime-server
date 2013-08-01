@@ -14,7 +14,6 @@
 
 package eu.dime.ps.communications.requestbroker.controllers;
 
-import ie.deri.smile.vocabulary.DLPO;
 import ie.deri.smile.vocabulary.NAO;
 import ie.deri.smile.vocabulary.NFO;
 import ie.deri.smile.vocabulary.NSO;
@@ -23,11 +22,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.ontoware.rdf2go.model.node.URI;
 import org.semanticdesktop.aperture.vocabulary.NIE;
-
 
 import eu.dime.commons.dto.Data;
 import eu.dime.commons.dto.Message;
@@ -36,13 +33,12 @@ import eu.dime.commons.dto.Response;
 import eu.dime.commons.util.JaxbJsonSerializer;
 import eu.dime.ps.communications.requestbroker.controllers.infosphere.PSResourcesController;
 import eu.dime.ps.controllers.exception.InfosphereException;
+import eu.dime.ps.controllers.infosphere.manager.AccountManager;
 import eu.dime.ps.controllers.infosphere.manager.FileManager;
-import eu.dime.ps.controllers.infosphere.manager.PersonManager;
 import eu.dime.ps.controllers.infosphere.manager.SharingManager;
 import eu.dime.ps.dto.Include;
 import eu.dime.ps.dto.Resource;
 import eu.dime.ps.semantic.model.ModelFactory;
-import eu.dime.ps.semantic.model.dlpo.LivePost;
 import eu.dime.ps.semantic.model.nfo.FileDataObject;
 import eu.dime.ps.semantic.model.pimo.Person;
 
@@ -55,7 +51,7 @@ public class PSResourceControllerTest extends PSInfoSphereControllerTest {
 	protected ModelFactory modelFactory = new ModelFactory();
 	
 	private SharingManager SharingmockedManager ;
-	
+	private AccountManager AccountManagerMocked ;
 	
 	  private static final URI[] payload = new URI[] {
 	    	NAO.prefSymbol, NFO.wordCount, NFO.pageNumber, NAO.privacyLevel,
@@ -71,8 +67,10 @@ public class PSResourceControllerTest extends PSInfoSphereControllerTest {
 	public PSResourceControllerTest() throws Exception {
 		properties = Arrays.asList(payload);
 		SharingmockedManager= buildResourceSharingManager(file,creator);
+		AccountManagerMocked = buildAccountManager();
 		controller.setFileManager(mockedManager);
 		controller.setSharingManager(SharingmockedManager);
+		controller.setAccountManager(AccountManagerMocked);
 		try {
 			request= buildRequest(mockedManager.get("juan",properties));
 		} catch (InfosphereException e) {			

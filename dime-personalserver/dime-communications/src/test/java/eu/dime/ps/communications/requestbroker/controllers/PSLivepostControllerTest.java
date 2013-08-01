@@ -16,10 +16,6 @@ package eu.dime.ps.communications.requestbroker.controllers;
 
 
 
-import org.junit.Test;
-import org.ontoware.rdf2go.model.node.URI;
-import org.semanticdesktop.aperture.vocabulary.NIE;
-
 import ie.deri.smile.vocabulary.DLPO;
 import ie.deri.smile.vocabulary.NAO;
 import ie.deri.smile.vocabulary.NSO;
@@ -28,6 +24,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.junit.Test;
+import org.ontoware.rdf2go.model.node.URI;
+import org.semanticdesktop.aperture.vocabulary.NIE;
 
 import eu.dime.commons.dto.Data;
 import eu.dime.commons.dto.Message;
@@ -36,6 +35,7 @@ import eu.dime.commons.dto.Response;
 import eu.dime.commons.util.JaxbJsonSerializer;
 import eu.dime.ps.communications.requestbroker.controllers.infosphere.PSLivePostController;
 import eu.dime.ps.controllers.exception.InfosphereException;
+import eu.dime.ps.controllers.infosphere.manager.AccountManager;
 import eu.dime.ps.controllers.infosphere.manager.LivePostManager;
 import eu.dime.ps.controllers.infosphere.manager.SharingManager;
 import eu.dime.ps.dto.Include;
@@ -57,6 +57,8 @@ public class PSLivepostControllerTest extends PSInfoSphereControllerTest {
 	LivePost livePost = buildLivePost("Hello sharing!", creator);
 	
 	private SharingManager SharingmockedManager ;
+	private AccountManager mockedAccountManager ;
+	
 	private PSLivePostController controller = new PSLivePostController();
 	private LivePostManager mockedManager = buildLivepostManager(payload);
 	private Request<Resource> request;
@@ -67,9 +69,11 @@ public class PSLivepostControllerTest extends PSInfoSphereControllerTest {
 	
 	public PSLivepostControllerTest() throws Exception {	
 		SharingmockedManager= buildSharingManager(livePost,creator);
+		mockedAccountManager = buildAccountManager();
 		properties = Arrays.asList(payload);
 		controller.setLivePostManager(mockedManager);
 		controller.setSharingManager(SharingmockedManager);
+		controller.setAccountManager(mockedAccountManager);
 		try {
 			request= buildRequest(mockedManager.get("juan",properties));
 		} catch (InfosphereException e) {			
