@@ -358,7 +358,6 @@ h5{
 .linkToAbout_DE,
 .linkToUsageTerms_DE,
 .linkToPrivacyPolicy_DE,
-.linkToRegister,
 .linkToLogin,
 .linkToHowto,
 .linkToFeedback,
@@ -369,6 +368,11 @@ h5{
     text-decoration: none;
 }
 
+/* register fix */
+.linkToRegister{
+    color: #FFFFFF;
+    text-decoration: none;
+}
 
 .linkToAbout_DE:hover,
 .linkToUsageTerms_DE:hover,
@@ -382,6 +386,13 @@ h5{
 .linkToPrivacyPolicy:hover{
     cursor: pointer;
     text-decoration: underline;
+    text-decoration-color: white;
+}
+
+/* register fix */
+.linkToRegister:hover{
+    cursor: pointer;
+    text-decoration: none;
     text-decoration-color: white;
 }
 
