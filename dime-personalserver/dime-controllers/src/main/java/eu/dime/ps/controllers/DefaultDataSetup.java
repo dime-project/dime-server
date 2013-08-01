@@ -67,7 +67,6 @@ import eu.dime.ps.semantic.model.pimo.PersonGroup;
 import eu.dime.ps.semantic.model.ppo.AccessSpace;
 import eu.dime.ps.semantic.model.ppo.PrivacyPreference;
 import eu.dime.ps.semantic.privacy.PrivacyPreferenceType;
-import eu.dime.ps.semantic.rdf.ResourceStore;
 
 /**
  * This creates and configures, by default, tenants for a pre-defined list of
@@ -214,25 +213,10 @@ private static final Logger logger = LoggerFactory.getLogger(DefaultDataSetup.cl
 			logger.error("An error ocurred when creating pre-defined devices: " + e.getMessage(), e);
 		}
 
-		// old testuser assignment using method 
-		// creating pre-defined contacts
-		//Person testuser1 = createPerson("Test", "User1", "testuser1", 0.5);
-		//Person testuser2 = createPerson("Test", "User2", "testuser2", 0);
-		//Person testuser3 = createPerson("Test", "User3", "testuser3", 1);
-		
-		// new test user variables, the assignment takes place in the loop
-		Person testuser1 = null; 
-		//Person testuser1 = modelFactory.getPIMOFactory().createPerson();
-		//testuser1.setTrustLevel(0.5); 
-		Person testuser2 = null;
-		//Person testuser2 = modelFactory.getPIMOFactory().createPerson();
-		//testuser2.setTrustLevel(0.0); 
-		Person testuser3 = null;
-		//Person testuser3 = modelFactory.getPIMOFactory().createPerson();
-		//testuser3.setTrustLevel(1.0); 
-		
-		// adding contacts of the di.me consortium
+		// creating pre-defined contacts & contacts of the di.me consortium
+		Person testuser1 = null, testuser2 = null, testuser3 = null;
 		List<Person> dimePeople = new ArrayList<Person>();
+		List<Account> contactsAccounts = new ArrayList<Account>();
 		for (String said : CONTACTS.keySet()) {
 			
 			// skip contacts which do not have a real said
@@ -250,51 +234,40 @@ private static final Logger logger = LoggerFactory.getLogger(DefaultDataSetup.cl
 			name.setFullname(data[0]);
 			name.setNickname(data[2]);
 			profile.setPersonName(name);
-		profile.getModel().addAll(name.getModel().iterator());
+			profile.getModel().addAll(name.getModel().iterator());
 			
 			EmailAddress email = modelFactory.getNCOFactory().createEmailAddress();
 			email.setEmailAddress(data[1]);
 			profile.setEmailAddress(email);
 			profile.getModel().addAll(email.getModel().iterator());
 			
-			
-			//add default di.me people as contacts
 			URI accountUri = new URIImpl("urn:uuid:" + UUID.randomUUID());
 			try {
 				userManager.add(said, accountUri);
 				userManager.addProfile(accountUri, profile, TenantHelper.getTenant(tenant));
 				
 				Account account = accountManager.get(accountUri.toString());
+				contactsAccounts.add(account);
+				
 				if (account.hasCreator()) {
+					Person person = personManager.get(account.getCreator().toString());
 					
-					//original person add call for adding default dime people as contacts
-					//dimePeople.add(personManager.get(account.getCreator().toString()));
-					
-					//new person add call + retrieval of test user accounts & trust level modification
-    					Person person = personManager.get(account.getCreator().toString());
-    					//test user 1 said 
-    					if (said.equals("246879a0-5b58-4b3f-aedf-64d0335721f5"))
-    					{
-    						person.setTrustLevel(0.5); 
-    						personManager.update(person);
-    						testuser1 = person;
-    					}
-    					//test user 2 said 
-    					else if (said.equals("aa99d9af-4c69-4388-94dc-c5fb9e9e2763"))
-    					{
-    						person.setTrustLevel(0.0);
-    						personManager.update(person);
-    						testuser2 = person;
-    					}
-    					//test user 3 said 
-    					else if (said.equals("8192047a-177f-4486-9dff-1af650d65afd"))
-    					{
-    						person.setTrustLevel(1.0);
-    						personManager.update(person);
-    						testuser3 = person;
-    					}
-					//add person to the group if not a test user
-					else dimePeople.add(person);					
+					if (said.equals("246879a0-5b58-4b3f-aedf-64d0335721f5")) { // testuser1 said
+						person.setTrustLevel(0.5); 
+						personManager.update(person);
+						testuser1 = person;
+					} else if (said.equals("aa99d9af-4c69-4388-94dc-c5fb9e9e2763")) { // testuser2 said
+						person.setTrustLevel(0.0);
+						personManager.update(person);
+						testuser2 = person;
+					} else if (said.equals("8192047a-177f-4486-9dff-1af650d65afd")) { // testuser3 said
+						person.setTrustLevel(1.0);
+						personManager.update(person);
+						testuser3 = person;
+					} else {
+						// if not a test user, then it's a di.me contact
+						dimePeople.add(person);
+					}
 				} else {
 					logger.error("Contact account " + accountUri + " does not have a pimo:Person as creator.");
 				}
@@ -302,7 +275,6 @@ private static final Logger logger = LoggerFactory.getLogger(DefaultDataSetup.cl
 				logger.error("Contact '" + data[0] + "' couldn't be added as a contact: " + e.getMessage(), e);
 			}
 		}
-		
 		
 		// creating pre-defined groups
 		PersonGroup businessGroup = createPersonGroup("Business Contacts", me, testuser1, testuser2);
@@ -333,6 +305,16 @@ private static final Logger logger = LoggerFactory.getLogger(DefaultDataSetup.cl
 		
 		privateCard = createProfileCard("MyPrivateCard", attributes);
 		
+		// set the public card as shared with all contacts' accounts
+		try {
+			for (Account account : contactsAccounts) {
+				publicCard.addSharedWith(account);
+			}
+			profileCardManager.update(publicCard);
+		} catch (InfosphereException e) {
+			logger.error("An error ocurred when flagging public card as shared with all contacts.", e);
+		}
+
 		// creating welcome livepost
 		AccessSpace accessSpace = publicCard.getAllAccessSpace().next();
 		Account publicAccount = null, testuser3Account = null;
@@ -343,7 +325,7 @@ private static final Logger logger = LoggerFactory.getLogger(DefaultDataSetup.cl
 			String text = "Welcome to the di.me Test Trial 2013! Please try out the prototype and give us feedback! Visit the trial page: http://dimetrials.bdigital.org:8080/dime or our project page: http://www.di.me-project.eu";
 			createLivePost(text, testuser3, testuser3Account.asURI(), publicAccount.asURI());
 		} catch (Exception e) {
-			logger.error("An error ocurred when creating the pre-defined profile cards.", e);
+			logger.error("An error ocurred when creating the pre-defined liveposts.", e);
 		}
 		
 		// creating pre-defined files
