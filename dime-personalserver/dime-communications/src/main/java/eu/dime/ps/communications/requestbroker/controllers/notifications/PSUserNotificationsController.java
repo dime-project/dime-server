@@ -67,8 +67,7 @@ public class PSUserNotificationsController implements APIController {
 	public void setTenantManager(TenantManager tenantManager) {
 		this.tenantManager = tenantManager;
 	}
-
-	// User Notifications
+	
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
@@ -108,7 +107,7 @@ public class PSUserNotificationsController implements APIController {
 
 		List<UserNotificationDTO> dtos = UserNotificationDTO.dINToUNDTOs(list);
 
-		Data<UserNotificationDTO> data = new Data<UserNotificationDTO>();
+		Data<UserNotificationDTO> data = new Data<UserNotificationDTO>(0,dtos.size(),dtos.size());
 		data.setEntry(dtos);
 
 		return Response.ok(data);
@@ -152,14 +151,13 @@ public class PSUserNotificationsController implements APIController {
 
 		List<UserNotificationDTO> dtos = UserNotificationDTO.dINToUNDTOs(list);
 
-		Data<UserNotificationDTO> data = new Data<UserNotificationDTO>();
+		Data<UserNotificationDTO> data = new Data<UserNotificationDTO>(0,dtos.size(),dtos.size());
 		data.setEntry(dtos);
 
 		return Response.ok(data);
 		
 	}
-			
-
+		
 	@GET
 	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
 	@Path("/@me/{notificationID}")
