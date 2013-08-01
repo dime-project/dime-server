@@ -18,7 +18,6 @@ import java.util.List;
 
 import org.ontoware.rdf2go.model.node.URI;
 
-import eu.dime.ps.controllers.TenantContextHolder;
 import eu.dime.ps.controllers.exception.InfosphereException;
 import eu.dime.ps.controllers.util.TenantHelper;
 import eu.dime.ps.storage.entities.PersonMatch;
