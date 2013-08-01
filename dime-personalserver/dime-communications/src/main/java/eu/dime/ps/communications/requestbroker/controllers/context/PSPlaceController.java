@@ -1,16 +1,16 @@
 /*
-* Copyright 2013 by the digital.me project (http:\\www.dime-project.eu).
-*
-* Licensed under the EUPL, Version 1.1 only (the "Licence");
-* You may not use this work except in compliance with the Licence.
-* You may obtain a copy of the Licence at:
-*
-* http://joinup.ec.europa.eu/software/page/eupl/licence-eupl
-*
-* Unless required by applicable law or agreed to in writing, software distributed under the Licence is distributed on an "AS IS" basis,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-* See the Licence for the specific language governing permissions and limitations under the Licence.
-*/
+ * Copyright 2013 by the digital.me project (http:\\www.dime-project.eu).
+ *
+ * Licensed under the EUPL, Version 1.1 only (the "Licence");
+ * You may not use this work except in compliance with the Licence.
+ * You may obtain a copy of the Licence at:
+ *
+ * http://joinup.ec.europa.eu/software/page/eupl/licence-eupl
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the Licence is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the Licence for the specific language governing permissions and limitations under the Licence.
+ */
 
 package eu.dime.ps.communications.requestbroker.controllers.context;
 
@@ -59,108 +59,108 @@ public class PSPlaceController {
 
 	private PlaceProcessor placeProcessor;
 
-	
+
 	public void setPlaceProcessor(PlaceProcessor placeProcessor) {
 		this.placeProcessor = placeProcessor;
 	}
 
-    // /place/
 
-    @GET
-    @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
-    @Path("/@me/{placeId}")
-    public Response<Entry> getPlace(@PathParam("said") String said, @PathParam("placeId") String placeId) throws DimeException {
-	 
-    	
-    	Data<Entry> data = new Data<Entry>(0, 1, 1);
-		
-		//This is a mockup response
-		//LinkedHashMap<String, Object> payload = new LinkedHashMap<String, Object>();		
-		//String json = "{\"guid\": \"PlaceProviderPrefix:placeId\", \"lastUpdate\": null,\"userId\": \"@me\",\"name\": \"Summer-School Campus\",\"imageUrl\": \"imageUrl\",\"type\": \"place\" ,\"items\": [],\"position\":\"+31.33+32.23\",\"distance\":532,\"address\":{\"formatted\":\"Some Street 5, SomeCity (SomeRegion), 20122 - SomeCountry\",\"streetAddress\":\"Some Street 5\",\"locality\":\"SomeCity\",\"region\":\"SomeStateOrRegion\",\"postalCode\":\"20122\",\"country\":\"SomeCountry\"},\"tags\":[\"category:restaurant\",\"category:POI\",\"expensive\",\"nice view\"],\"phone\":\"+391112224444\",\"url\":\"http://some.url.net/\", \"information\":\"arbitrary description text\",\"YMRating\":0.6, \"socialRecRating\":0.5, \"userRating\":0.2, \"favorite\":true}";
-		//payload = JaxbJsonSerializer.getMapFromJSON(json);
-		
-		Place place = placeProcessor.getPlace(said, placeId);
-		
-		data.addEntry(place);
-		
-		return Response.ok(data);
-    }
+	@GET
+	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
+	@Path("/@me/@all")
+	public Response<Place> getAllPlacesAround(@PathParam("said") String said, 
+			@QueryParam("lat") double latitude,
+			@QueryParam("lon") double longitude,
+			@QueryParam("rad") double radius,
+			@QueryParam("cat") List<String> categories){
 
-    @DELETE
-    @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
-    @Path("@me/{placeId}")
-    public Response deletePlaceById(@PathParam("said") String said, @PathParam("placeId") String placeId){
-    	
-    	// TODO contextManager.removePlace(placeId);
-		// TODO delete place (currently not needed)
-    	return Response.ok();
-    }
-    
-    @POST
-    @Path("/@me")
-    @Consumes(MediaType.APPLICATION_JSON + ";charset=UTF-8")
-    @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
-    public Response<Place> createPlace(@PathParam("said") String said, Request<Place> request){
-    	
-    	Data<Place> data, returnData;
-    	
-    	RequestValidator.validateRequest(request);
-    	
-    	data = request.getMessage().getData();
-    	
-    	Place place = (Place) data.getEntries().iterator().next();
-    	
-    	// TODO Convert DTO into Domain Object
-    	// TODO contextManager.addPlace(place);
-    	
-    	returnData = new Data<Place>(0, 1, place);
-    	
-    	return Response.ok(returnData);
-    }
-    
- 
-    @GET
-    @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
-    @Path("/@me/@all")
-    public Response<Place> getAllPlacesAround(@PathParam("said") String said, 
-    											 @QueryParam("lat") double latitude,
-    											 @QueryParam("lon") double longitude,
-    											 @QueryParam("rad") double radius,
-    											 @QueryParam("cat") List<String> categories){
-    	
-    	Data<Place> returnData = new Data<Place>();
-    	
-	try{
-	  List<Place> places = this.placeProcessor.getPlaces(said, latitude, longitude, radius, categories);
-	  Iterator<Place> it = places.iterator();
-	  while (it.hasNext()) {
-		  returnData.addEntry(it.next());
-	  }
-	} catch (eu.dime.ps.gateway.exception.ServiceNotAvailableException ex){
-	      logger.error("Service Not Available:" + ex.getMessage());
+		logger.info("called API method: GET /dime/rest/" + said + "/place/@me/@all");
+
+		Data<Place> returnData = new Data<Place>();
+
+		try{
+			List<Place> places = this.placeProcessor.getPlaces(said, latitude, longitude, radius, categories);
+			Iterator<Place> it = places.iterator();
+			while (it.hasNext()) {
+				Place place = it.next();
+				place.setUserId("@me");
+				returnData.addEntry(place);
+			}
+		} catch (eu.dime.ps.gateway.exception.ServiceNotAvailableException ex){
+			logger.error("Service Not Available:" + ex.getMessage());
+		}
+		return Response.ok(returnData);
 	}
-    	return Response.ok(returnData);
-    }
-    
-    
-    @POST
-    @Path("/@me/{placeId}")
-    @Consumes(MediaType.APPLICATION_JSON + ";charset=UTF-8")
-    @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
-    public Response<Place> updatePlace(@PathParam("said") String said, @PathParam("placeId") String placeId, Request<Place> request) throws ServiceNotAvailableException{
-    	
-    	Data<Place> data, returnData;
-    	
-    	RequestValidator.validateRequest(request);
-    	
-    	data = request.getMessage().getData();
-    	Place place = (Place) data.getEntries().iterator().next();
-    	
-    	Place updatedPlace = this.placeProcessor.updatePlace(said, placeId, place);
-    	
-    	returnData = new Data<Place>(0, 1, updatedPlace);
-    	
-    	return Response.ok(returnData);
-    }
+
+
+
+	@GET
+	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
+	@Path("/@me/{placeId}")
+	public Response<Entry> getPlace(@PathParam("said") String said, @PathParam("placeId") String placeId) throws DimeException {
+
+		logger.info("called API method: GET /dime/rest/" + said + "/place/@me/"+placeId);
+
+		Data<Entry> data = new Data<Entry>(0, 1, 1);	
+
+		Place place = placeProcessor.getPlace(said, placeId);
+		place.setUserId("@me");
+		data.addEntry(place);
+
+		return Response.ok(data);
+	}
+
+	@DELETE
+	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
+	@Path("@me/{placeId}")
+	public Response deletePlaceById(@PathParam("said") String said, @PathParam("placeId") String placeId){
+
+		// TODO contextManager.removePlace(placeId);
+		// TODO delete place (currently not needed)
+		return Response.ok();
+	}
+
+	@POST
+	@Path("/@me")
+	@Consumes(MediaType.APPLICATION_JSON + ";charset=UTF-8")
+	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
+	public Response<Place> createPlace(@PathParam("said") String said, Request<Place> request){
+
+		Data<Place> data, returnData;
+
+		RequestValidator.validateRequest(request);
+
+		data = request.getMessage().getData();
+
+		Place place = (Place) data.getEntries().iterator().next();
+
+		// TODO Convert DTO into Domain Object
+		// TODO contextManager.addPlace(place);
+
+		returnData = new Data<Place>(0, 1, place);
+
+		return Response.ok(returnData);
+	}    
+
+
+	@POST
+	@Path("/@me/{placeId}")
+	@Consumes(MediaType.APPLICATION_JSON + ";charset=UTF-8")
+	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
+	public Response<Place> updatePlace(@PathParam("said") String said, @PathParam("placeId") String placeId, Request<Place> request) throws ServiceNotAvailableException{
+
+		Data<Place> data, returnData;
+
+		RequestValidator.validateRequest(request);
+
+		data = request.getMessage().getData();
+		Place place = (Place) data.getEntries().iterator().next();
+
+		Place updatedPlace = this.placeProcessor.updatePlace(said, placeId, place);
+		updatedPlace.setUserId("@me");
+		returnData = new Data<Place>(0, 1, updatedPlace);
+
+		return Response.ok(returnData);
+	}
 
 }
