@@ -191,7 +191,7 @@ jQuery.fn.extend({
 //
 JSTool = {
 
- 
+    
 
     isNumber: function(n) {
         return !isNaN(parseFloat(n)) && isFinite(n);
@@ -351,7 +351,7 @@ JSTool = {
         if (onClick){
             var self=this;            
             result.onclick = function(e) {
-                onClick.call(self, e, $(this))
+                onClick.call(self, e, $(this));
             };
         }
         
@@ -484,11 +484,11 @@ BSTool={
             };
             
             
-            entryElem.clickExt(entry.handlerSelf, myCallback)
+            entryElem.clickExt(entry.handlerSelf, myCallback);
             
             
             var li = $("<li></li>").append(entryElem);
-            ul.append(li)
+            ul.append(li);
         });
         
         if (buttonClass){
@@ -1308,6 +1308,7 @@ Dime.evaluation={
             "involvedItems":involvedItems
         };
     },
+            
     updateViewStack: function(groupType, viewType){
         if (!Dime.ps_configuration.viewStack){
             Dime.ps_configuration.viewStack=this.createViewStack();
@@ -1315,7 +1316,7 @@ Dime.evaluation={
             var action = "navigate_search_web_UI";
             this.createAndSendEvaluationItemForAction(action);
         }
-        Dime.ps_configuration.viewStack.push(this.getViewStackItemByGroupType(groupType, viewType))
+        Dime.ps_configuration.viewStack.push(this.getViewStackItemByGroupType(groupType, viewType));
     },
 
     createAndSendEvaluationItemForAction: function(action){
@@ -2559,7 +2560,45 @@ Dime.psHelper = {
         myReq.json();
         myReq.send();
 
+    },
+            
+    postCurrentContext: function(latitude, longitude, accuracy){
 
+        var path = Dime.ps_configuration.getUserUrlString()+"/context/@me";
+        
+        var expireMinutes = 240;
+        var locMode = accuracy>30000?"GPS":"NET";
+        
+        var entry ={
+                    "guid": JSTool.randomGUID(),
+                    "type": "context",
+                    //TODO: time format
+                    "timestamp": "2013-08-01T18:58:27+02:00",
+                    "expires": "2013-08-01T18:58:27+02:00", 
+                    "scope": "position",
+                    "entity": {
+                        "id": "@me",
+                        "type": "username"
+                    },
+                    "source": {
+                        "id": "desktop-crawler",
+                        "v": "0.9"
+                    },
+                    "dataPart": {
+                        "latitude": latitude,
+                        "longitude": longitude,
+                        "accuracy": accuracy,
+                        "locMode": locMode
+                    }
+        };
+        
+        var callback = function(response){
+            console.log("POST Success!");
+        };
+        
+        var request = Dime.psHelper.prepareRequest(entry);
+        $.postJSON(path, request, callback);
+        
     },
     
     /*
@@ -4024,7 +4063,7 @@ Dime.DetailDialog = function(caption, item, createNewItem, changeImageUrl, isEdi
     
 
     this.body = $('<div class="dimeDialogBody detailDialogBody" style="clear:both; float:left"></div>');
-    this.body.append(Dime.Dialog.Helper.getInfoBox(infoHtml, "detailDialogInfoBox", "detailDialogInfoIcon"))
+    this.body.append(Dime.Dialog.Helper.getInfoBox(infoHtml, "detailDialogInfoBox", "detailDialogInfoIcon"));
     if (message && message.length>0){
         this.body.append($('<div/>').addClass('dimeDetailDialogMessage').text(message));
     }
@@ -4077,7 +4116,7 @@ Dime.DetailDialog.prototype = {
             );
         this.body.append(profilePic);
         //activate thumbNail Click
-        thumbNail.addClass('itemDetailPicImageActive').clickExt(dialogRef, dialogRef.toggleImageEdit)
+        thumbNail.addClass('itemDetailPicImageActive').clickExt(dialogRef, dialogRef.toggleImageEdit);
 
         this.initUploader();
 

@@ -1165,7 +1165,7 @@ DimeView = {
         }else{
             shareBtn.removeClass('disabled');
         }
-    },
+    },       
 
     updateMoreButton: function(groupType){
         var moreButton = $('#actionButtonMore');
@@ -1200,6 +1200,32 @@ DimeView = {
                     window.alert("Create new rule for selected currently not supported!");
                 }));
 
+    },
+            
+    updateAddRemoveButton: function(groupType){
+        var addRmvBtn = $('#actionButtonAddRemove');
+        
+        if(groupType===Dime.psMap.TYPE.PLACE){
+            addRmvBtn
+                    .empty()
+                    .text("Get location...")
+                    .removeClass("disabled")
+                    .click(function(){
+                        if (navigator.geolocation) {
+                            //getCurrentPosition() fires once - watchPosition() fires continuosly
+                            //maybe: https://github.com/estebanav/javascript-mobile-desktop-geolocation
+                            navigator.geolocation.getCurrentPosition(function(position) {                       
+                                var lat = position.coords.latitude;
+                                var lon = position.coords.longitude;
+                                var acc = position.coords.accuracy;
+                                Dime.psHelper.postCurrentContext(lat, lon, acc);
+                                console.log("Current position: " + lat + ", " + lon + ", " + acc);
+                            }); 
+                        }else{
+                            alert("Geolocation services are not supported by your browser.");
+                        };
+                    });
+        }
     },
 
     updateMetaBar: function(groupType){
@@ -1299,7 +1325,6 @@ DimeView = {
         }else if (DimeView.groupType===Dime.psMap.TYPE.PLACE){
             Dime.Navigation.setButtonsActive("currentPlace");
             $('#searchText').attr('placeholder', 'find places');
-
         }
         
         //activate dropzone
@@ -1314,6 +1339,9 @@ DimeView = {
 
         DimeView.updateMetaBar(groupType);
         DimeView.resetSearch();
+        
+        //set to this position for avoiding "disabled"-class
+        DimeView.updateAddRemoveButton(groupType);
     },
 
     switchViewForViewType: function(){
