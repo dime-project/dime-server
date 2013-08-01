@@ -878,7 +878,7 @@ Dime.PACategory={
         }
         return null;
     }
-}
+};
 
 /*
  *
@@ -912,7 +912,7 @@ Dime.ExtendedACLPackage=function(){
     this.services= [], //GUIDs of accessing services
     this.groupItems=[], //group objects
     this.personItems=[], //person objects
-    this.serviceItems= [] // account objects ?? //TODO - recheck!
+    this.serviceItems= []; // account objects ?? //TODO - recheck!
 };
 
 
@@ -2671,7 +2671,7 @@ Dime.cache={
             delete Dime.cache.history[key];
         }       
     }
-}
+};
 
 //---------------------------------------------
 //#############################################
@@ -3641,7 +3641,7 @@ Dime.Navigation.registerCometCall();
 //overwrite to update view on notifications incoming
 Dime.Navigation.createMenuLiButton=function(id, caption, containerGroupType){
 
-    var linkText = 'index.html?type='+ containerGroupType ;
+    var linkText = 'index.html?type='+ containerGroupType;
     return $('<li/>').attr('id',id).append($('<a/>').attr('href',linkText).text(caption));
 };
 //overwrite to update view on notifications incoming
