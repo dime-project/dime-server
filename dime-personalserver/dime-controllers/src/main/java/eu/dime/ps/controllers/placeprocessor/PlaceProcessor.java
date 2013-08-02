@@ -34,6 +34,7 @@ import eu.dime.context.model.api.IContextDataset;
 import eu.dime.context.model.api.IContextElement;
 import eu.dime.context.model.api.IEntity;
 import eu.dime.context.model.api.IScope;
+import eu.dime.context.model.impl.ContextValueMap;
 import eu.dime.context.model.impl.Factory;
 import eu.dime.ps.contextprocessor.IContextProcessor;
 import eu.dime.ps.controllers.TenantContextHolder;
@@ -220,6 +221,7 @@ public class PlaceProcessor {
 			
 			try {
 				position = contextProcessor.getContext(tenant, entity, positionScope);
+                                
 			} catch (ContextException e) {
 				logger.error(e.toString(),e);
 			}
@@ -231,22 +233,24 @@ public class PlaceProcessor {
 					IContextElement ce = ces[0];
 					latitude = (Double)ce.getContextData().getContextValue(latitudeScope).getValue().getValue();
 					longitude = (Double)ce.getContextData().getContextValue(longitudeScope).getValue().getValue();
-				} /*else {
+				} else {
 					// 2. set default location ???
 					if (latitude==0) latitude = defaultLat;
 					if (longitude==0) longitude = defaultLon;
 					if (radius==0) radius = defaultRad;
 					if (categories.isEmpty()) categories.add("DIME");
-				}*/
-			} /*else {
+				}
+			} else {
 				// 2. set default location ???
 				if (latitude==0) latitude = defaultLat;
 				if (longitude==0) longitude = defaultLon;
 				if (radius==0) radius = defaultRad;
 				if (categories.isEmpty()) categories.add("DIME");
-			}*/
+			}
 		}
-	
+                  
+                
+                
 		String placeList = "";
 		
 		// Step 1: invoke YM service adapter to retrieve places info 
