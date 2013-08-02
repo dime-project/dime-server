@@ -97,10 +97,10 @@ public abstract class OAuthAuthenticationController<T extends OAuthServiceAdapte
 			error = UNKNOWN_TENANT_ERROR;
 		} else {
 			try {
-				T serviceAdapter = adapterClass.getConstructor().newInstance();
+				T serviceAdapter = adapterClass.getConstructor(new Class[] {Tenant.class}).newInstance(tenant);
+				
 				try {
-
-				Long tenantId = TenantHelper.getCurrentTenantId();
+				Long tenantId = tenant.getId();
 				String adapterId = UUID.randomUUID().toString();
 
 				// Create callback URL
