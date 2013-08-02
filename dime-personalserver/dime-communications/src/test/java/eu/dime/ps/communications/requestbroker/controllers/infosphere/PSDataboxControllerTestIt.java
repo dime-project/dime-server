@@ -240,17 +240,19 @@ public class PSDataboxControllerTestIt extends PSInfosphereControllerTestIt {
 	
 	@Test
 	public void testGetSharedDataboxWellFormedJSON() throws Exception {
-
-		Account sender = createAccount(pimoService.getUserUri());
-		Person person = createPerson("Ismael Rivera");
+		
+		
+		Person person = createPerson("urn:uuid:test");		
+		Account sender = createAccount(person.asURI());		
+		
 		DataObject f1 = createDataObject();
 		Databox databox =  createDataboxJSON(sender,person,f1);
 		databox.put("userId", person.asURI().toString());
-		databox.put("nso:sharedBy", person.asURI().toString());
+		databox.put("nso:sharedBy",sender.asURI().toString());
 		Request<Databox> request = buildDataboxRequest(databox);
 		Response<Databox> resp = controller.postCreateMyDatabox(SAID, request);
 	
-		Response<Resource> response = controller.getAllDataboxesByPerson(SAID, person.asURI().toString());
+		Response<Resource> response = controller.getAllDataboxesByPerson(SAID, resp.getMessage().getData().getEntries().iterator().next().get("userId").toString());
 
 		assertNotNull(response);
 		assertEquals(1, response.getMessage().getData().getEntries().size());		 
