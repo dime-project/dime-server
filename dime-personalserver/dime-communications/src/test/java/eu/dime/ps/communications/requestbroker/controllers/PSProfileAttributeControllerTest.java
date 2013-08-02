@@ -35,23 +35,25 @@ public class PSProfileAttributeControllerTest extends PSInfoSphereControllerTest
 			
 	private static final String said= "juan";
 	private ProfileManager profileMockedManager;
+	private PersonManager mockedPersonManager;
 	private ProfileAttributeManager mockedManager;
 	private ProfileCardManager profileCardMockedManager;
-	private PersonManager mockedPersonManager = buildPersonManager();
-	
 	
 	
 	public PSProfileAttributeControllerTest() {				
 	
 		try {
+			mockedPersonManager = buildPersonManager();
 			profileMockedManager = buildProfileManager(mockedPersonManager.get(said));			
-			mockedManager = buildProfileAttributeManager(profileMockedManager.get("juan").asURI().toString());
+			mockedManager = buildProfileAttributeManager(profileMockedManager.get("juan").asURI().toString());			
 			profileCardMockedManager = buildProfileCardManager();
+			
 		} catch (ClassCastException e) {			
 			e.printStackTrace();
 		} catch (InfosphereException e) {			
 			e.printStackTrace();
 		}
+		controller.setPersonManager(mockedPersonManager);
 		controller.setProfileAttributeManager(mockedManager);
 		controller.setProfileManager(profileMockedManager);
 		controller.setProfileCardManager(profileCardMockedManager);
@@ -62,7 +64,7 @@ public class PSProfileAttributeControllerTest extends PSInfoSphereControllerTest
 	@Test
 	public void testGetAllProfileAttributes()  {
 		
-		Response<ProfileAttribute> response = controller.getAllProfileAttributes(said);
+		Response<ProfileAttribute> response = controller.getAllProfileAttributes(said,"@me");
 		assertNotNull(response);
 		assertEquals("Juan",response.getMessage().getData().entry.iterator().next().get("name").toString());
 	}
@@ -72,6 +74,7 @@ public class PSProfileAttributeControllerTest extends PSInfoSphereControllerTest
 		
 		Response<ProfileAttribute> response = controller.getProfileAttribute(said,"juan");
 		assertNotNull(response);
+		
 		assertEquals("Juan",response.getMessage().getData().entry.iterator().next().get("name").toString());
 	}
 	

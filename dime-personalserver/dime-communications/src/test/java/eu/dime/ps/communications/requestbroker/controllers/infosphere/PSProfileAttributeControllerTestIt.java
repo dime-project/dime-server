@@ -271,10 +271,8 @@ public class PSProfileAttributeControllerTestIt extends PSInfosphereControllerTe
 
 		URI uri = new URIImpl(guid);
 
-		assertTrue(pimo.contains(uri, RDF.type,NCO.PersonName));
-		assertTrue(pimo.contains(uri, NAO.creator,"urn:chuck:ChuckNorris"));
-		assertTrue(pimo.contains(uri, NAO.prefLabel,""));
-		//assertTrue(pimo.contains(uri, NAO.created, new DatatypeLiteralImpl("1970-01-16T11:53:44.999Z", XSD._dateTime)));	
+		assertTrue(pimo.contains(uri, RDF.type,NCO.PersonName));		
+		assertTrue(pimo.contains(uri, NAO.prefLabel,""));	
 		assertTrue(pimo.contains(uri, NCO.nameHonorificSuffix, ""));
 		assertTrue(pimo.contains(uri, NCO.nameFamily,"gomez"));
 		assertTrue(pimo.contains(uri, NCO.nameHonorificPrefix,"Sr"));
@@ -1716,7 +1714,7 @@ public class PSProfileAttributeControllerTestIt extends PSInfosphereControllerTe
 		profileManager.update(profile);
 
 
-		Response<ProfileAttribute> response = controller.getAllProfileAttributes(SAID);
+		Response<ProfileAttribute> response = controller.getAllProfileAttributes(SAID,"@me");
 
 		assertNotNull(response);
 		assertEquals(6, response.getMessage().getData().getEntries().size());
@@ -1730,6 +1728,7 @@ public class PSProfileAttributeControllerTestIt extends PSInfosphereControllerTe
 
 		//set profilecard		
 		PrivacyPreference profileCard = buildProfileCard("John profile");
+		profileCard.setCreator(this.personManager.getMe());
 		profileCardManager.add(profileCard);
 		Person me = profileManager.getMe();
 		me.addPrivacyPreference(profileCard);
@@ -1765,7 +1764,7 @@ public class PSProfileAttributeControllerTestIt extends PSInfosphereControllerTe
 		profileCardManager.update(profileCard);
 
 
-		Response<ProfileAttribute> response = controller.getAllProfileAttributes(SAID);
+		Response<ProfileAttribute> response = controller.getAllProfileAttributes(SAID,"@me");
 
 		assertNotNull(response);
 		assertEquals(3, response.getMessage().getData().getEntries().size());

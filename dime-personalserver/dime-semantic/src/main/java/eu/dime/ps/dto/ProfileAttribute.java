@@ -47,11 +47,11 @@ public class ProfileAttribute extends Resource {
 		super();
 	}
 
-	public ProfileAttribute(org.ontoware.rdfreactor.schema.rdfs.Resource resource,URI me)
+	public ProfileAttribute(org.ontoware.rdfreactor.schema.rdfs.Resource resource,String userId)
 			throws BadFormedException {
 		super();
 		this.put("type", "profileattribute");
-		addToMap(resource,me);
+		addToMap(resource,userId);
 	}
 
 
@@ -197,10 +197,7 @@ public class ProfileAttribute extends Resource {
 
 		node = ModelUtils.findObject(resource.getModel(), resource.asResource(), NCO.org);
 		if (node != null){ 
-		
-		 Node contact = ModelUtils.findObject(resource.getModel(), node.asResource(), NCO.Contact);
-			try{
-				affiliation.put("org", contact.asURI().toString());
+				try{				
 				affiliation.put("org", node.asURI().toString());
 			}
 		catch(ClassCastException e){
@@ -323,7 +320,7 @@ public class ProfileAttribute extends Resource {
 		return location;
 	}
 
-	protected void addToMap(org.ontoware.rdfreactor.schema.rdfs.Resource resource,URI me)
+	protected void addToMap(org.ontoware.rdfreactor.schema.rdfs.Resource resource,String userId)
 			throws BadFormedException {
 
 		
@@ -368,22 +365,9 @@ public class ProfileAttribute extends Resource {
 				this.put("category", collapse(type.toString()).replaceFirst("nco:", "")); 
 				}
 
-			// UserID is set to "@me" for all profile attributes
-			//created by the owner of the PS
-			Node creator = ModelUtils.findObject(resource.getModel(), resource.asResource(), NAO.creator);			
-			if (creator != null){
-				if (creator instanceof  Literal){
-					this.put("userId", creator.asLiteral().toString().equals(me.toString()) ? "@me" : creator.asLiteral().toString());
-				}
-				else{
-					this.put("userId", creator.asResource().toString().equals(me.toString()) ? "@me" : creator.asResource().toString());
-				}
-			}
-			else{
-				//FIXME HACK - in case the creator is null assume @me
-				logger.debug("creator is null for item: "+ this.get("guid")+ " ("+this.get("type")+")  set to \"@me\"");
-				this.put("userId", "@me");				
-			}
+			//set the userId which is the userId of the container
+			this.put("userId", userId);
+				
 
 			//set name
 			Node nameNode = ModelUtils.findObject(resource.getModel(), resource.asResource(), NAO.prefLabel);
@@ -471,18 +455,7 @@ public class ProfileAttribute extends Resource {
 		Model rModel = RDF2Go.getModelFactory().createModel().open();
 		resource = new org.ontoware.rdfreactor.schema.rdfs.Resource(rModel, resourceUri, false);
 
-		//set the creator
-		if(this.containsKey("userId")){
-			Object creator = this.get("userId");
-			if( creator.toString().equals("@me"))  rModel.addStatement(resourceUri, NAO.creator, me.toString());
-			else rModel.addStatement(resourceUri, NAO.creator, creator.toString());
-		}
-		else{
-			//FIXME hack -in case there is no userId in the payload, asume "@me"
-			logger.debug("there is no userId in the payload of: "+ resourceUri.toString()+ "  \"@me\" assumed");
-			rModel.addStatement(resourceUri, NAO.creator, me.toString());
-		}
-		
+			
 		//set the prefLabel
 				if(this.containsKey("name") && !this.get("category").toString().equals("Hobby")){		
 					Object name = this.get("name");

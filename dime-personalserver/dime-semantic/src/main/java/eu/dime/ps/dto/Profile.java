@@ -180,9 +180,7 @@ public class Profile extends Resource {
 	
 	
 	public void setUserId(org.ontoware.rdfreactor.schema.rdfs.Resource resource,String personId) {	
-		
-		if(personId.equals("@me")) this.put("userId", "@me");
-		else this.put("userId", personId);
+			this.put("userId", personId);
 	}
 
 }
