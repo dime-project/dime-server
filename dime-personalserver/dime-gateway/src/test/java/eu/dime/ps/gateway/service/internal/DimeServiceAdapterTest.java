@@ -77,8 +77,6 @@ public class DimeServiceAdapterTest extends Assert {
 		tenant1 = entityFactory.buildTenant();
 		tenant1.setName("juan");
 		tenant1.setId(new Long(1));
-		tenant1.persist();
-
 	}
 
 	@Test
