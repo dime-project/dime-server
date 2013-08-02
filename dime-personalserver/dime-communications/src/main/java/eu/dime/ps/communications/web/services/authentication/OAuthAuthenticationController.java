@@ -36,7 +36,6 @@ import eu.dime.ps.controllers.TenantContextHolder;
 import eu.dime.ps.controllers.TenantManager;
 import eu.dime.ps.controllers.exception.InfosphereException;
 import eu.dime.ps.controllers.infosphere.manager.AccountManager;
-import eu.dime.ps.controllers.util.TenantHelper;
 import eu.dime.ps.gateway.auth.CredentialStore;
 import eu.dime.ps.gateway.exception.ServiceAdapterNotSupportedException;
 import eu.dime.ps.gateway.policy.PolicyManager;
@@ -98,35 +97,33 @@ public abstract class OAuthAuthenticationController<T extends OAuthServiceAdapte
 		} else {
 			try {
 				T serviceAdapter = adapterClass.getConstructor(new Class[] {Tenant.class}).newInstance(tenant);
-				
 				try {
-				Long tenantId = tenant.getId();
-				String adapterId = UUID.randomUUID().toString();
-
-				// Create callback URL
-				ServletRequestAttributes requestAttributes = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes());
-				requestAttributes.setAttribute("adapter_id", adapterId, ServletRequestAttributes.SCOPE_REQUEST);
-				StringBuilder callbackURL = new StringBuilder("https://");
-				callbackURL.append(this.policyManager.getPolicyString("AUTHSERVLET_HOST", null));
-				callbackURL.append(":");
-				callbackURL.append(this.policyManager.getPolicyString("AUTHSERVLET_PORT_SECURE", null));
-				callbackURL.append("/");
-				callbackURL.append(this.policyManager.getPolicyString("AUTHSERVLET_PATH", null));
-				callbackURL.append("/services/");
-				callbackURL.append(said);
-				callbackURL.append(this.policyManager.getPolicyString("callbackURL", serviceAdapter.getAdapterName()));
-				callbackURL.append(adapterId);
-				serviceAdapter.setCallbackURL(callbackURL.toString());
-
-				// Call oAuth Service
-				OAuthService oAuthService = serviceAdapter.getOAuthService();
-				Token requestToken = oAuthService.getRequestToken();
-				pending.putIfAbsent(adapterId, new ServiceAdapterHolder(tenantId, serviceAdapter, oAuthService, requestToken));
-				requestAttributes.setAttribute("request_token", requestToken, ServletRequestAttributes.SCOPE_REQUEST);
-				// This never gets used! 
-				// session.setAttribute("scope", "user_about_me,friends_about_me,email");
-				
-				return new ModelAndView("redirect:" + oAuthService.getAuthorizationUrl(requestToken));
+					String adapterId = UUID.randomUUID().toString();
+	
+					// Create callback URL
+					ServletRequestAttributes requestAttributes = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes());
+					requestAttributes.setAttribute("adapter_id", adapterId, ServletRequestAttributes.SCOPE_REQUEST);
+					StringBuilder callbackURL = new StringBuilder("https://");
+					callbackURL.append(this.policyManager.getPolicyString("AUTHSERVLET_HOST", null));
+					callbackURL.append(":");
+					callbackURL.append(this.policyManager.getPolicyString("AUTHSERVLET_PORT_SECURE", null));
+					callbackURL.append("/");
+					callbackURL.append(this.policyManager.getPolicyString("AUTHSERVLET_PATH", null));
+					callbackURL.append("/services/");
+					callbackURL.append(said);
+					callbackURL.append(this.policyManager.getPolicyString("callbackURL", serviceAdapter.getAdapterName()));
+					callbackURL.append(adapterId);
+					serviceAdapter.setCallbackURL(callbackURL.toString());
+	
+					// Call oAuth Service
+					OAuthService oAuthService = serviceAdapter.getOAuthService();
+					Token requestToken = oAuthService.getRequestToken();
+					pending.putIfAbsent(adapterId, new ServiceAdapterHolder(tenant.getId(), serviceAdapter, oAuthService, requestToken));
+					requestAttributes.setAttribute("request_token", requestToken, ServletRequestAttributes.SCOPE_REQUEST);
+					// This never gets used! 
+					// session.setAttribute("scope", "user_about_me,friends_about_me,email");
+					
+					return new ModelAndView("redirect:" + oAuthService.getAuthorizationUrl(requestToken));
 				} catch (IllegalArgumentException e) {
 				    error = "Could not connect to "+serviceAdapter.getAdapterName() + ". Details: " + e.getMessage();
 					logger.error("Could not instantiate service" + e.getMessage(), e);
@@ -152,9 +149,9 @@ public abstract class OAuthAuthenticationController<T extends OAuthServiceAdapte
 				error = "Could not reach service. Details: " + e.getMessage();
 				Throwable target = e.getTargetException();
 				// add exception message if exception was thrown and wrapped from the constructor
-				if (target != null) 
+				if (target != null) {
 				    error += ": " + target.getMessage();
-				e.printStackTrace();
+				}
 				logger.error(error, e);
 			}
 
@@ -162,6 +159,7 @@ public abstract class OAuthAuthenticationController<T extends OAuthServiceAdapte
 			modelAndView = new ModelAndView("ajax_result");
 			modelAndView.addObject("result", error);
 		}
+		
 		return modelAndView;
 	}
 
@@ -186,16 +184,21 @@ public abstract class OAuthAuthenticationController<T extends OAuthServiceAdapte
 				T serviceAdapter = holder.getAdapter();
 				serviceAdapter.setAccessToken(accessToken);
 
-				// AccountManager reads the tenant from the TenantContextHolder
-				TenantContextHolder.setTenant(tenantManager.getByAccountName(said).getId());
+				Tenant tenant = tenantManager.getByAccountName(said);
+				if (tenant == null) {
+					error = UNKNOWN_TENANT_ERROR;
+				} else {
+					// AccountManager reads the tenant from the TenantContextHolder
+					TenantContextHolder.setTenant(tenant.getId());
 
-				// creating account for this service adapter
-				accountManager.add(serviceAdapter);
-
-				// remove from pending list once authentication flow is completed
-				this.pending.remove(adapterId, serviceAdapter);
-
-				return new ModelAndView("close_window");
+					// creating account for this service adapter
+					accountManager.add(serviceAdapter);
+	
+					// remove from pending list once authentication flow is completed
+					this.pending.remove(adapterId, serviceAdapter);
+	
+					return new ModelAndView("close_window");
+				}
 			}
 		} catch (OAuthException e) {
 			error = "Authentication error. OAuthException: " + e.getMessage();

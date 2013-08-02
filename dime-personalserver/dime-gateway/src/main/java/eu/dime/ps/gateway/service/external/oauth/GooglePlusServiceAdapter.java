@@ -44,8 +44,8 @@ public class GooglePlusServiceAdapter extends OAuthServiceAdapter implements Ext
 	/**
 	 * @throws ServiceNotAvailableException
 	 */
-	public GooglePlusServiceAdapter(Tenant localTenant) throws ServiceNotAvailableException {
-		super(GoogleApi.class, localTenant);
+	public GooglePlusServiceAdapter(Tenant tenant) throws ServiceNotAvailableException {
+		super(GoogleApi.class, tenant);
 	}
 	
 	@Override

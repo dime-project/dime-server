@@ -43,8 +43,8 @@ public class LinkedInServiceAdapter extends OAuthServiceAdapter implements Exter
 	/**
 	 * @throws ServiceNotAvailableException
 	 */
-	public LinkedInServiceAdapter(Tenant localTenant) throws ServiceNotAvailableException {
-		super(LinkedInApi.class, localTenant);
+	public LinkedInServiceAdapter(Tenant tenant) throws ServiceNotAvailableException {
+		super(LinkedInApi.class, tenant);
 	}
 	
 	/*

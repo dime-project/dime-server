@@ -43,8 +43,8 @@ public class FitbitServiceAdapter extends OAuthServiceAdapter implements Externa
 	/**
 	 * @throws ServiceNotAvailableException
 	 */
-	public FitbitServiceAdapter(Tenant localTenant) throws ServiceNotAvailableException {
-		super(FitbitApi.class, localTenant);
+	public FitbitServiceAdapter(Tenant tenant) throws ServiceNotAvailableException {
+		super(FitbitApi.class, tenant);
 	}
 	
 	@Override

@@ -41,8 +41,8 @@ public class FacebookServiceAdapter extends OAuthServiceAdapter implements Exter
 	public static final String NAME = "Facebook";
 	private static final String RESOURCE_URL = "https://graph.facebook.com";
 	
-	public FacebookServiceAdapter(Tenant localTenant) throws ServiceNotAvailableException {
-		super(FacebookApi.class, localTenant);
+	public FacebookServiceAdapter(Tenant tenant) throws ServiceNotAvailableException {
+		super(FacebookApi.class, tenant);
 	}
 
 	@Override

@@ -61,7 +61,7 @@ public abstract class OAuthServiceAdapter extends ServiceAdapterBase {
      * @param identifier
 	 * @throws ServiceNotAvailableException
 	 */
-	public OAuthServiceAdapter(Class<? extends Api> provider, Tenant localTenant) throws ServiceNotAvailableException {
+	public OAuthServiceAdapter(Class<? extends Api> provider, Tenant tenant) throws ServiceNotAvailableException {
 		super();
 		this.provider = provider;
 		this.scope = this.policyManager.getPolicyString("SCOPE", this.getAdapterName());
@@ -71,12 +71,11 @@ public abstract class OAuthServiceAdapter extends ServiceAdapterBase {
 		this.consumerToken = new Token (this.credentialStore.getConsumerKey(this.getAdapterName()),
 				this.credentialStore.getConsumerSecret(this.getAdapterName()));
 		try {
-			this.accessToken = new Token (this.credentialStore.getAccessToken(this.getIdentifier(), localTenant),
-					this.credentialStore.getAccessSecret(this.getIdentifier(), localTenant));
+			this.accessToken = new Token (this.credentialStore.getAccessToken(this.getIdentifier(), tenant),
+					this.credentialStore.getAccessSecret(this.getIdentifier(), tenant));
 		} catch (NoResultException e) {
 			this.accessToken = null;
 		}
-
 	}
 	
 	/**

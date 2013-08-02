@@ -48,8 +48,8 @@ public class DoodleServiceAdapter extends OAuthServiceAdapter implements Externa
 	/**
 	 * @throws ServiceNotAvailableException
 	 */
-	public DoodleServiceAdapter(Tenant localTenant) throws ServiceNotAvailableException {
-		super(DoodleApi.class, localTenant);
+	public DoodleServiceAdapter(Tenant tenant) throws ServiceNotAvailableException {
+		super(DoodleApi.class, tenant);
 	}
 	
 	@Override
