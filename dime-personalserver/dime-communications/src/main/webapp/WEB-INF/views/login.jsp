@@ -213,7 +213,7 @@
                                 <h6>The username is your master-identity in di.me It is not shown to other people</h6>
                                 <input type="password" class="required" id="registrationPassword" placeholder="Choose Password">
                                 <input type="password" class="required" id="registrationPassword2" placeholder="Retype Password">
-                                <h6>Please enter a valid email</h6>
+                                <h6>Pleae enter a valid e-mail address. We use your email only for important notifications about this demonstration (e.g. if we need to reset your user account for technical reasons).</h6>
                                 <input type="text" class="required" id="registrationEmail" placeholder="me@my-email.com">
 
                             </div>
@@ -227,7 +227,7 @@
                         <h3>2. Connect to other users via the DimeUserDirectory</h3>
                         <div class="control-group">
                             <div class="controls">
-                                <p>To use di.me, you should publish a public mini-profile on the DimeUserDirectory. This directory is public for all di.me users, so that you can get contacted by others in the network. You can use a nickname, or also your real name.</p>
+                                <p>To use di.me, you should publish a a public mini-Profile ("MyPublicCard") on the DimeUserDirectory. This directory is public for all di.me users, so that you can get contacted by others in the network. You can use a nickname, or also your real name.</p>
                                 <input type="text" id="prsNickname" placeholder="public nickname">
                                 <input type="text" id="prsFirstname" placeholder="Firstname">
                                 <input type="text" id="prsLastname" placeholder="Lastname">
