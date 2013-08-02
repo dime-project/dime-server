@@ -127,7 +127,7 @@ public class PSUserController implements APIController {
             }
         } catch (DimeDNSException ex) {
             logger.error(ex.getMessage(),ex);
-            throw new InvalidRegisterCallException("Unable to access dime DNS server!");
+            throw new InvalidRegisterCallException("Unable to access dime DNS server! Details: "+ex.getMessage());
         }
     }
 
