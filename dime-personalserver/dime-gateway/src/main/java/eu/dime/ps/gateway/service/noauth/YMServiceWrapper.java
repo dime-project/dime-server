@@ -175,7 +175,7 @@ public class YMServiceWrapper {
 	 * @throws TransformerException 
 	 * @throws ParserConfigurationException 
 	 */
-	public String getPlaces(String parameters, String user, String passwd) throws ServiceNotAvailableException, AttributeNotSupportedException, InvalidLoginException, ParserConfigurationException, TransformerException, IOException, ServiceException {
+	public String getPlaces(String parameters, String user, String passwd, String firstname, String lastname) throws ServiceNotAvailableException, AttributeNotSupportedException, InvalidLoginException, ParserConfigurationException, TransformerException, IOException, ServiceException {
 		
 		// Get the POIs for the given position
 		String query = URLEncoder.encode(this.staticParameter + parameters, "UTF-8");
@@ -188,7 +188,7 @@ public class YMServiceWrapper {
 		
 		// If no user ID retrieved create new user
 		if(userID == null) {
-			userID = createUser(user, passwd);
+			userID = createUser(user, passwd,firstname,lastname);
 		}
 
 		// Get the favorites of the user
@@ -400,10 +400,10 @@ public class YMServiceWrapper {
 	 * @return The myYM userID
 	 * @throws UnsupportedEncodingException 
 	 */
-	private String createUser(String username, String password) throws AttributeNotSupportedException, ServiceNotAvailableException, InvalidLoginException, UnsupportedEncodingException, ServiceException {
+	private String createUser(String username, String password, String firstname, String lastname) throws AttributeNotSupportedException, ServiceNotAvailableException, InvalidLoginException, UnsupportedEncodingException, ServiceException {
 		// Create the account
 		String params = "&User=" + username
-			+ "&Password=" + password + "&Password2=" + password + "&eMail=" + username + "@mailinator.com&Title=Mr&Firstname=di&Surname=me&MobilPhoneNumber=0&PreferredActivationMethod=0";
+			+ "&Password=" + password + "&Password2=" + password + "&eMail=" + username +"&Title=Mr&Firstname="+firstname+"&Surname="+lastname+"&MobilPhoneNumber=0&PreferredActivationMethod=0";
 		
 		
 		String query = MYYM_LOGIN_CREATE + this.staticParameter + params;

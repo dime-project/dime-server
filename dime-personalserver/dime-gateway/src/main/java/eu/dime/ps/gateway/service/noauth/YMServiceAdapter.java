@@ -41,13 +41,24 @@ public class YMServiceAdapter extends ServiceAdapterBase implements /*ExternalSe
 	private static final String USERNAME = "username";
 	private static final String PASSWORD = "password";
 	private static final String AGREEDTC = "agreedTC";
+ 
+        // additional optional parameters (see services.properties)
+        private static final String FIRSTNAME ="firstname";
+        private static final String LASTNAME ="firstname";
+        
 	
 	private YMServiceWrapper ymServiceWrapper;
 	
 	public YMServiceAdapter() throws ServiceNotAvailableException {
 		super();
 		
-		this.sadapter.addSetting(new SAdapterSetting(YMServiceAdapter.AGREEDTC, true, SAdapterSetting.BOOLEAN, "false"));
+ 
+                // additional optional parameters 
+                this.sadapter.addSetting(new SAdapterSetting(YMServiceAdapter.FIRSTNAME, false, SAdapterSetting.STRING, ""));
+                this.sadapter.addSetting(new SAdapterSetting(YMServiceAdapter.LASTNAME, false, SAdapterSetting.STRING, ""));
+                
+                // known parameters
+                this.sadapter.addSetting(new SAdapterSetting(YMServiceAdapter.AGREEDTC, true, SAdapterSetting.BOOLEAN, "false"));
 		this.sadapter.addSetting(new SAdapterSetting(YMServiceAdapter.USERNAME, false, SAdapterSetting.STRING, ""));
 		this.sadapter.addSetting(new SAdapterSetting(YMServiceAdapter.PASSWORD, false, SAdapterSetting.PASSWORD, ""));
 		
@@ -82,7 +93,7 @@ public class YMServiceAdapter extends ServiceAdapterBase implements /*ExternalSe
 		if(attribute.startsWith("&QT=10&DetailInfoView=1&Ebinr=") ||
 				attribute.contains("&LocX=") && attribute.contains("&LocY=") && attribute.contains("&BC=")) {
 			try {
-				response = this.ymServiceWrapper.getPlaces(attribute, this.sadapter.getSetting(YMServiceAdapter.USERNAME), this.sadapter.getSetting(YMServiceAdapter.PASSWORD));
+				response = this.ymServiceWrapper.getPlaces(attribute, this.sadapter.getSetting(YMServiceAdapter.USERNAME), this.sadapter.getSetting(YMServiceAdapter.PASSWORD),this.sadapter.getSetting(YMServiceAdapter.FIRSTNAME),this.sadapter.getSetting(YMServiceAdapter.LASTNAME));
 			} catch (ParserConfigurationException e) {
 				logger.error(e.getMessage(), e);
 			} catch (TransformerException e) {
@@ -101,6 +112,9 @@ public class YMServiceAdapter extends ServiceAdapterBase implements /*ExternalSe
 		// The my yellowmap user
 		this.sadapter.updateSetting(YMServiceAdapter.USERNAME, user);
 		this.sadapter.updateSetting(YMServiceAdapter.PASSWORD, YMUtils.USR_PWD);
+                // additional optional parameters
+                this.sadapter.getSetting(YMServiceAdapter.FIRSTNAME);
+                this.sadapter.getSetting(YMServiceAdapter.LASTNAME);
 	}
 	
 	/**
