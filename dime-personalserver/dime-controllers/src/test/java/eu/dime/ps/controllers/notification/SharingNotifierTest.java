@@ -24,17 +24,20 @@ import java.util.Set;
 
 import junit.framework.TestCase;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.ontoware.rdf2go.model.node.URI;
+import org.openrdf.repository.Repository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import eu.dime.commons.notifications.DimeExternalNotification;
 import eu.dime.ps.controllers.SingleConnectionProviderMock;
+import eu.dime.ps.dto.Type;
 import eu.dime.ps.gateway.service.internal.DimeServiceAdapter;
 import eu.dime.ps.semantic.Event;
 import eu.dime.ps.semantic.connection.Connection;
@@ -50,7 +53,7 @@ import eu.dime.ps.semantic.model.pimo.PersonGroup;
 import eu.dime.ps.semantic.model.ppo.PrivacyPreference;
 import eu.dime.ps.semantic.privacy.PrivacyPreferenceType;
 import eu.dime.ps.semantic.service.impl.PimoService;
-import eu.dime.ps.dto.Type;
+import eu.dime.ps.storage.entities.Tenant;
 
 @ContextConfiguration(locations = { "classpath*:**/applicationContext-infosphere-test.xml" })
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -58,9 +61,12 @@ public class SharingNotifierTest extends TestCase {
 
 	private ModelFactory modelFactory = new ModelFactory();
 	
+	private Tenant tenant;
+
 	@Autowired
-	private Connection connection;
+	private Repository repository;
 	
+	private Connection connection;
 	private SingleConnectionProviderMock connectionProvider = new SingleConnectionProviderMock();
 	private NotifierManagerMock notifierManager = new NotifierManagerMock();
 	
@@ -85,6 +91,11 @@ public class SharingNotifierTest extends TestCase {
 
 	@Before
 	public void setUp() throws Exception {
+		tenant = new Tenant(Long.toString(System.currentTimeMillis()));
+		tenant.persist();
+		
+		connection = new Connection(Long.toString(tenant.getId()), repository);
+		
 		connectionProvider.setConnection(connection);
 		notifierManager.external.clear();
 		
@@ -103,6 +114,13 @@ public class SharingNotifierTest extends TestCase {
 		personR2 = createPerson("Fabrizio Lepardi");
 		accountR2 = createAccount("fabb@di.me", personR2);
 		profileR2 = createPersonContact("Fabrizio Lepardi", personR2, accountR2);
+	}
+	
+	@After
+	public void tearDown() throws Exception {
+		if (tenant != null) {
+			tenant.remove();
+		}
 	}
 	
 	@Test

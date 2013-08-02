@@ -103,7 +103,7 @@ public class TimePeriodUpdaterTest extends TestCase {
 		liveContextService = this.connection.getLiveContextService();
 		
 		List<Tenant> tenantList = new ArrayList<Tenant>();
-		Tenant tenant = new Tenant("12345", null);
+		Tenant tenant = new Tenant("12345");
 		tenant.setId(12345L);
 		tenantList.add(tenant);
 		tenantManager = Mockito.mock(TenantManager.class);

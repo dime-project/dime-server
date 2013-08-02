@@ -22,7 +22,6 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityManager;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -66,7 +65,14 @@ public class Tenant {
 	
 	public Tenant() {}
 	
+	public Tenant(String name) {
+		this.name = name;
+	}
+
 	public Tenant(String name, User user) {
+		if (user == null) {
+			throw new IllegalArgumentException("The argument 'user' is required");
+		}
 		this.name = name;
 		this.users.add(user);
 	}

@@ -73,7 +73,7 @@ public class ScheduleUpdaterTest extends TestCase {
 		Mockito.when(connectionProvider.getConnection("12345")).thenReturn(connection);
 		
 		List<Tenant> tenantList = new ArrayList<Tenant>();
-		Tenant tenant = new Tenant("12345", null);
+		Tenant tenant = new Tenant("12345");
 		tenant.setId(12345L);
 		tenantList.add(tenant);
 		TenantManager tenantManager = Mockito.mock(TenantManager.class);

@@ -105,20 +105,21 @@ public class SharingNotifier implements BroadcastReceiver {
 	
 	@Override
 	public void onReceive(Event event) {
+		
 		// do nothing if notification manager was not set
 		if (notifierManager == null) {
-			logger.warn("Notifier manager bean not set for SharingNotifier: " +
-					"notifications for sharing actions won't be sent");
+			logger.warn("NotifierManager bean not set for SharingNotifier: " +
+					"notifications for sharing actions won't be sent!");
 			return;
 		}
 		
+        Tenant tenant = TenantHelper.getTenant(event.getTenantId());
+
 		Connection connection = null;
 		ResourceStore resourceStore = null;
 		PimoService pimoService = null;
 		PrivacyPreferenceService ppoService = null;
 
-        Tenant localTenant = TenantHelper.getTenant(event.getTenantId());
-		
 		try {
 			// reject events with no data (resource's metadata)
 			org.ontoware.rdfreactor.schema.rdfs.Resource resource = event.getData();
@@ -166,7 +167,7 @@ public class SharingNotifier implements BroadcastReceiver {
 					return;
 				}
 				
-				sendNotifications(connection, preference, sharedItem, true, localTenant);
+				sendNotifications(connection, preference, sharedItem, true, tenant);
 			} else if (event.is(PPO.PrivacyPreference)
 					&& Event.ACTION_RESOURCE_DELETE.equals(event.getAction())) {
 				
@@ -183,7 +184,7 @@ public class SharingNotifier implements BroadcastReceiver {
 					
 					// if no privacy preference is found = livepost has not been shared yet 
 					if (preference != null) {
-						sendNotifications(connection, preference, livePost, true, localTenant);
+						sendNotifications(connection, preference, livePost, true, tenant);
 					}
 				} catch (NotFoundException e) {
 					logger.error("A 'resource modified' event was received for " + resource.asURI() + 
@@ -200,7 +201,7 @@ public class SharingNotifier implements BroadcastReceiver {
 					
 					// if no privacy preference is found = data object has not been shared yet 
 					if (preference != null) {
-						sendNotifications(connection, preference, dataObject, true, localTenant);
+						sendNotifications(connection, preference, dataObject, true, tenant);
 					}
 				} catch (NotFoundException e) {
 					logger.error("A 'resource modified' event was received for " + resource.asURI() + 
@@ -230,7 +231,7 @@ public class SharingNotifier implements BroadcastReceiver {
 						return;
 					}
 					
-					sendNotifications(connection, preference, sharedItem, false, localTenant);
+					sendNotifications(connection, preference, sharedItem, false, tenant);
 				}
 			}
 			
