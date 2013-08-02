@@ -69,6 +69,8 @@ public class PolicyManagerImpl implements PolicyManager {
 	
 	private static final PolicyManagerImpl INSTANCE = new PolicyManagerImpl();
 	
+
+	@Autowired
 	private PolicyStore policyStore;
 
 	/**
@@ -225,10 +227,14 @@ public class PolicyManagerImpl implements PolicyManager {
 		if (globalPolicy.get(policyName) != null) {
 			value = Integer.parseInt(globalPolicy.get(policyName));
 		}
-		if (adapterId != null && adapterPolicy.get(adapterId + "_" + policyName) != null) {
+		if (adapterId != null 
+				&& adapterPolicy.get(adapterId + "_" + policyName) != null
+				&& adapterPolicy.get(adapterId + "_" + policyName).length() > 0) {
 			value = Integer.parseInt(adapterPolicy.get(adapterId + "_" + policyName));
 		}
-		if (adapterId != null && policyStore != null && policyStore.getValue(adapterId + "_" + policyName) != null && policyStore.getValue(adapterId + "_" + policyName).length()>0) {
+		if (adapterId != null && policyStore != null 
+				&& policyStore.getValue(adapterId + "_" + policyName) != null 
+				&& policyStore.getValue(adapterId + "_" + policyName).length() > 0) {
 			value = Integer.parseInt(policyStore.getValue(adapterId + "_" + policyName));
 		}
 		return value;
@@ -245,11 +251,15 @@ public class PolicyManagerImpl implements PolicyManager {
 		policyName = clean(policyName);
 		adapterId = clean(adapterId);
 		String value = globalPolicy.get(policyName);
-		if (adapterId != null && adapterPolicy.get(adapterId + "_" + policyName) != null) {
+		if (adapterId != null 
+				&& adapterPolicy.get(adapterId + "_" + policyName) != null 
+				&& adapterPolicy.get(adapterId + "_" + policyName).length() > 0) {
 			value = adapterPolicy.get(adapterId + "_" + policyName);
 		}
 		try {
-			if (adapterId != null && policyStore != null && policyStore.getValue(adapterId + "_" + policyName) != null && policyStore.getValue(adapterId + "_" + policyName).length() > 0) {
+			if (adapterId != null && policyStore != null 
+					&& policyStore.getValue(adapterId + "_" + policyName) != null 
+					&& policyStore.getValue(adapterId + "_" + policyName).length() > 0) {
 				value = policyStore.getValue(adapterId + "_" + policyName);
 			}
 		} catch (NullPointerException e) {
@@ -299,15 +309,17 @@ public class PolicyManagerImpl implements PolicyManager {
 			String value) {
 		policyName = clean(policyName);
 		adapterId = clean(adapterId);
+
+		// Note: PolicyStore does not allow deleting, so we set an empty string
+		if (value == null)
+			value = "";
 		adapterPolicy.put(adapterId + "_" + policyName, value);
-		if (value != null)
-			policyStore.storeOrUpdate(adapterId + "_" + policyName, value.toString());
+		policyStore.storeOrUpdate(adapterId + "_" + policyName, value.toString());
 		
 		// Write changes to disk
 		if (this.properties != null) {
-			if (value != null)
-				this.properties.setProperty(
-					adapterId + "_" + policyName, value.toString());
+			this.properties.setProperty(
+				adapterId + "_" + policyName, value.toString());
 			try {
 				FileOutputStream fos = new FileOutputStream("services.properties");
 				this.properties.store(fos, null);

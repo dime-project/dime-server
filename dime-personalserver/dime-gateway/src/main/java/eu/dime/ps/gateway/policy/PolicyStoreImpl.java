@@ -88,8 +88,11 @@ public class PolicyStoreImpl implements PolicyStore{
 	
 	@Override
 	public void storeOrUpdate(String key, String value) {
-		if (key == null || value == null){
-			throw new IllegalArgumentException("Parameters should not be null.");
+		if (key == null){
+			throw new IllegalArgumentException("Key should not be null.");
+		}
+		if (value == null) {
+			value = "";
 		}
 		List<UserDefaults> ud_list = UserDefaults.findAllByName(key);
 		//TODO: should be more than one allowed?

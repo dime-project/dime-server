@@ -51,6 +51,8 @@ public class PolicyManagerTest {
 		// Set global policy
 		policyManager.setGlobalPolicy("TESTINT", "123");
 		policyManager.setGlobalPolicy("TESTSTRING", "TestString");
+		policyManager.setAdapterPolicy("TESTINT", "ADAPTERTEST", null);
+		policyManager.setAdapterPolicy("TESTSTRING", "ADAPTERTEST", null);
 		assertTrue("Testing global policy: getPolicyInteger(param, null): incorrect value detected.", 
 				policyManager.getPolicyInteger("TESTINT", null).intValue() == 123);
 		assertTrue("Testing global policy: getPolicyString(param, null): incorrect value detected.", 

@@ -81,13 +81,13 @@ public class DimeIPResolver {
 
             }catch (NameNotFoundException ex){
                 throw new DimeDNSCannotResolveException("DNS failure: unable to resolve said: "
-                        +said+" at "+dimeDns+"\n"+ex.getExplanation(),ex);
+                        +said+" at "+dimeDns+"\nDetails: "+ex.getExplanation(),ex);
 
             }catch (CommunicationException ex){
                  throw new DimeDNSCannotConnectException("DNS failure: CommunicationException, propably server not accessible: "
-                        +dimeDns+" (for said:"+said+")\n"+ex.getExplanation(),ex);
+                        +dimeDns+" (for said:"+said+")\nDetails: "+ex.getExplanation(),ex);
             }catch(NamingException ex){
-                throw new DimeDNSException("DNS failure when trying to retrieve said: "+said+" at "+dimeDns+"\n"+ex.getExplanation(), ex);            }
+                throw new DimeDNSException("DNS failure when trying to retrieve said: "+said+" at "+dimeDns+"\nDetails: " + ex.getExplanation(), ex);            }
 	}
 
         public String getDimeDns(){
