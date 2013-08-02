@@ -1,3 +1,113 @@
+/* Smartphones (portrait and landscape) ----------- */
+@media only screen and (min-device-width : 320px) and (max-device-width : 480px) {
+/* Styles */
+
+	#register_push{
+	}
+
+	#qr{
+		display: none;
+		width: 100%;
+		height: 50px;
+		}
+
+	.bumper{
+		height: 0px;
+		}
+
+	.logo{
+		display:none;
+	}
+	.dime_logo_small{
+		display:block;
+	}
+
+	.nav > li > .linkToLogin{
+		margin-left: 0px;
+	} 
+
+
+
+
+
+}
+
+/* Smartphones (landscape) ----------- */
+@media only screen and (min-width : 321px) {
+/* Styles */
+
+
+}
+
+/* Smartphones (portrait) ----------- */
+@media only screen and (max-width : 320px) {
+/* Styles */
+
+
+}
+
+/* iPads (portrait and landscape) ----------- */
+@media only screen and (min-device-width : 768px) and (max-device-width : 1024px) {
+/* Styles */
+
+}
+
+/* iPads (landscape) ----------- */
+@media only screen and (min-device-width : 768px) and (max-device-width : 1024px) and (orientation : landscape) {
+/* Styles */
+
+}
+
+/* iPads (portrait) ----------- */
+@media only screen and (min-device-width : 768px) and (max-device-width : 1024px) and (orientation : portrait) {
+/* Styles */
+
+	.span3{
+	height: 310px;
+	}
+}
+
+/* Desktops and laptops ----------- */
+@media only screen and (min-width : 1224px) {
+/* Styles */
+
+}
+
+/* Large screens ----------- */
+@media only screen and (min-width : 1824px) {
+/* Styles */
+
+}
+
+/* iPhone 4 ----------- */
+@media only screen and (-webkit-min-device-pixel-ratio : 1.5), only screen and (min-device-pixel-ratio : 1.5) {
+/* Styles */
+	#qr{
+		display: none;
+		width: 100%;
+		height: 50px;
+		}
+
+	.bumper{
+		height: 0px;
+		}
+
+	.logo{
+		display:none;
+	}
+	.dime_logo_small{
+		display:block;
+	}
+
+	.nav > li > .linkToLogin{
+		margin-left: 0px;
+	} 
+
+}
+
+/*old css*/
+
+
 @media (max-width: 1200px) {
 
 
@@ -6,10 +116,7 @@
 	height: 310px;
 	}
 	
-	.iao-logo{
-		width:250px;
-	}
-	
+
 	
 
 
@@ -17,20 +124,9 @@
 	
 	@media (max-width: 720px) {
 	
-		.iao-logo{
-		width:220px;
-	}
 	
 	
-	
-		.span3{
-	font-size: 15px;
-	height: auto;
-	}
-	
-		.span6{
-		height:auto;
-		}
+
 		
 		
 		h1{
@@ -53,101 +149,77 @@
 		}
 	
 		
-		#video{
+	#video{
 		width: 100%;
 		height:300px;
 		}
 	
 	
-		#qr{
-		visibility: hidden;
-		width: 100%;
-		height: 50px;
-		}
+
 		
-		#download{
+	#download{
 		width:200px;
 	
 		}
-		#start_server{
+	#start_server{
 		width:200px;
 		
 		}
-		.headerlogo{
+	.headerlogo{
 		width:70px;
 		height:70px;
 		
 		
 
 		}
-		
-		
-
-			
-		
 	}
+
+
 		
-		@media (max-width: 979px) {
-		
-		.span6{
-	   height:auto;
-		}
-	
+@media (max-width: 979px) {
+			
 	.name{
 		visibility: visible;
 		}
 		
-		.logo{
+	.logo{
 		display: none;
 		width:0px;
 		}
 		
-		.nav > li > .linkToLogin{
-		margin-left: 1px;
-		}
 		
-		.dime_logo_small{
+	.dime_logo_small{
 		display: block;
 		}
 		
-		.bumper{
+	.bumper{
 		height:0px;
 		}
 		
-		.headerlogo{
+	.headerlogo{
 		
-		float: left;
-		visibility: visible;
-		width: 90px;
-		height:90px;
+	float: left;
+	visibility: visible;
+	width: 90px;
+	height:90px;
 		}
 		
-			#push{
-			
-			margin-left: 0px;
+	#push{
+		margin-left: 0px;
 		
 		}
 		
-			#header1{
-	margin-top: -30px;
-		}
-		
-			#register_push{
-		margin-bottom: 90px;
-		}
-		
-		#headfloat{
-		float: left;
-		}
-		
-		.iao-logo{
-	
-		position: relative;
+	#header1{
 
+		margin-top: -30px;
 		}
 		
-	
-	
+
+		
+	#headfloat{
+		float: left;
+	}	
+
 	}
 	
 
