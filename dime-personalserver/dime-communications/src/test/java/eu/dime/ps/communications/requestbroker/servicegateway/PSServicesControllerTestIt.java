@@ -1,16 +1,16 @@
 /*
-* Copyright 2013 by the digital.me project (http://www.dime-project.eu).
-*
-* Licensed under the EUPL, Version 1.1 only (the "Licence");
-* You may not use this work except in compliance with the Licence.
-* You may obtain a copy of the Licence at:
-*
-* http://joinup.ec.europa.eu/software/page/eupl/licence-eupl
-*
-* Unless required by applicable law or agreed to in writing, software distributed under the Licence is distributed on an "AS IS" basis,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-* See the Licence for the specific language governing permissions and limitations under the Licence.
-*/
+ * Copyright 2013 by the digital.me project (http://www.dime-project.eu).
+ *
+ * Licensed under the EUPL, Version 1.1 only (the "Licence");
+ * You may not use this work except in compliance with the Licence.
+ * You may obtain a copy of the Licence at:
+ *
+ * http://joinup.ec.europa.eu/software/page/eupl/licence-eupl
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the Licence is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the Licence for the specific language governing permissions and limitations under the Licence.
+ */
 
 package eu.dime.ps.communications.requestbroker.servicegateway;
 
@@ -23,8 +23,11 @@ import ie.deri.smile.vocabulary.NSO;
 import java.io.UnsupportedEncodingException;
 import java.util.Vector;
 
+import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -36,6 +39,8 @@ import org.ontoware.rdf2go.vocabulary.XSD;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.transaction.TransactionConfiguration;
+import org.springframework.transaction.annotation.Transactional;
 
 import eu.dime.commons.dto.Data;
 import eu.dime.commons.dto.Entry;
@@ -47,7 +52,9 @@ import eu.dime.commons.notifications.DimeInternalNotification;
 import eu.dime.ps.communications.requestbroker.controllers.servicegateway.PSServicesController;
 import eu.dime.ps.controllers.TenantContextHolder;
 import eu.dime.ps.controllers.TenantManager;
+import eu.dime.ps.controllers.TenantManagerImpl;
 import eu.dime.ps.controllers.UserManager;
+import eu.dime.ps.controllers.UserManagerImpl;
 import eu.dime.ps.controllers.exception.InfosphereException;
 import eu.dime.ps.controllers.infosphere.manager.AccountManager;
 import eu.dime.ps.controllers.infosphere.manager.ShareableDataboxManager;
@@ -70,10 +77,11 @@ import eu.dime.ps.semantic.rdf.ResourceStore;
 import eu.dime.ps.semantic.service.impl.PimoService;
 import eu.dime.ps.storage.entities.Tenant;
 import eu.dime.ps.storage.manager.EntityFactory;
-import org.junit.Ignore;
+
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath:spring-config/serviceController-tests-context.xml")
+@TransactionConfiguration(defaultRollback = true)
 public class PSServicesControllerTestIt extends Assert {
 
 	private PSServicesController servicesController = new PSServicesController();
@@ -112,11 +120,14 @@ public class PSServicesControllerTestIt extends Assert {
 	@Mock //FIXME
 	private ServiceGateway serviceGateway;
 
-	@Mock //FIXME
+	@Autowired
 	private TenantManager tenantManager;
 
 	@Mock //FIXME
 	private CredentialStore credentialStore;
+
+	@Autowired
+	private EntityFactory entityFactory;
 
 	@Mock
 	private DimeServiceAdapter dimeServiceAdapter;	
@@ -139,19 +150,36 @@ public class PSServicesControllerTestIt extends Assert {
 	@Mock //FIXME
 	private UserManager userManager;
 
+	@BeforeClass
+	public static void setUpClass() throws Exception {
+		// disabling org.openrdf.rdf2go.RepositoryModel warnings
+		org.apache.log4j.Logger.getLogger("org.openrdf.rdf2go").setLevel(org.apache.log4j.Level.OFF);        
+		java.util.logging.Logger.getLogger("org.openrdf.rdf2go").setLevel(java.util.logging.Level.OFF);
+	}
+
+	@Before
+	@Transactional
+	public void setupDB() {
+
+		tenant = entityFactory.buildTenant();
+		tenant.setName(RECEIVER);		
+		tenant.persist();
+		tenant.flush();
+	}
+
+	@After
+	@Transactional
+	public void tearDown() {		
+		tenant.remove();		
+	}
+
 	@Before
 	public void init() throws Exception {
 
 		// All dependencies Mocked
 		MockitoAnnotations.initMocks(this);
-
-		// set up tenant data in the thread local holders
-		TenantContextHolder.setTenant(Long.parseLong(connection.getName()));
-
-		//FIXME mocking tenant manager
-		tenant = EntityFactory.getInstance().buildTenant();
-		tenant.setId(Long.parseLong(connection.getName()));
-		when(tenantManager.getByAccountName(RECEIVER)).thenReturn(tenant);
+		
+		
 
 		//set up sender person, account and profile		
 		senderPerson = modelFactory.getPIMOFactory().createPerson();
@@ -182,9 +210,6 @@ public class PSServicesControllerTestIt extends Assert {
 		SENDER_URI= senderAccount.asURI().toString();		
 
 
-		// mocking connection provider
-		when(connectionProvider.getConnection(connection.getName())).thenReturn(connection);	
-
 		//FIXME mocking credential store
 		when(credentialStore.getUriForName(RECEIVER)).thenReturn(RECEIVER_URI);	
 		when(credentialStore.getUriForAccountName(RECEIVER, SENDER)).thenReturn(SENDER_URI);
@@ -194,7 +219,7 @@ public class PSServicesControllerTestIt extends Assert {
 		Vector<LivePost> liveposts = new Vector<LivePost>();						
 		liveposts.add(livepost);		
 
-		when(dimeServiceAdapter.get(Mockito.anyString(),Mockito.anyString(),Mockito.anyString(), Mockito.any(Class.class), tenant)).thenReturn(liveposts);
+		when(dimeServiceAdapter.get(Mockito.anyString(),Mockito.anyString(),Mockito.anyString(), Mockito.any(Class.class), Mockito.any(Tenant.class))).thenReturn(liveposts);
 
 		//FIXME mocking servicegateway
 		when(serviceGateway.getDimeServiceAdapter(SENDER)).thenReturn(dimeServiceAdapter);
@@ -214,11 +239,17 @@ public class PSServicesControllerTestIt extends Assert {
 	}
 
 	@Test
+	@Transactional
 	public void testSetNotification() throws UnsupportedEncodingException, InfosphereException, RepositoryStorageException, ClassCastException, NotFoundException {
 
+		// set up tenant data in the thread local holders
+		TenantContextHolder.setTenant(tenant.getId());
+		
 		Request <ExternalNotificationDTO> NotificationRequest = buildMockNotification();
 		Response response = servicesController.setNotification(NotificationRequest, RECEIVER);
 
+		
+	
 		//verify response is 200 OK
 		assertEquals("OK", response.getMessage().getMeta().getStatus());
 
@@ -229,7 +260,7 @@ public class PSServicesControllerTestIt extends Assert {
 		assertTrue(tripleStore.containsStatements(Variable.ANY, livepost, NSO.sharedWith, receiverAccount));
 		assertTrue(tripleStore.containsStatements(Variable.ANY, livepost, NAO.created, new DatatypeLiteralImpl("1970-01-16T11:53:44.999Z", XSD._dateTime)));
 		assertTrue(tripleStore.containsStatements(Variable.ANY, livepost, NAO.lastModified, new DatatypeLiteralImpl("1970-01-16T11:53:44.999Z", XSD._dateTime)));
-	
+
 	}
 
 	private Request <ExternalNotificationDTO> buildMockNotification(){	

@@ -1,17 +1,17 @@
 /*
 
-* Copyright 2013 by the digital.me project (http://www.dime-project.eu).
-*
-* Licensed under the EUPL, Version 1.1 only (the "Licence");
-* You may not use this work except in compliance with the Licence.
-* You may obtain a copy of the Licence at:
-*
-* http://joinup.ec.europa.eu/software/page/eupl/licence-eupl
-*
-* Unless required by applicable law or agreed to in writing, software distributed under the Licence is distributed on an "AS IS" basis,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-* See the Licence for the specific language governing permissions and limitations under the Licence.
-*/
+ * Copyright 2013 by the digital.me project (http://www.dime-project.eu).
+ *
+ * Licensed under the EUPL, Version 1.1 only (the "Licence");
+ * You may not use this work except in compliance with the Licence.
+ * You may obtain a copy of the Licence at:
+ *
+ * http://joinup.ec.europa.eu/software/page/eupl/licence-eupl
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the Licence is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the Licence for the specific language governing permissions and limitations under the Licence.
+ */
 
 package eu.dime.ps.communications.requestbroker.controllers.infosphere;
 
@@ -162,7 +162,7 @@ public class PSProfileAttributeController implements APIController {
 		return Response.ok(data);
 	}
 
-	
+
 	@GET
 	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
 	@Path("/@me/{profileAttributeID}")
@@ -193,30 +193,37 @@ public class PSProfileAttributeController implements APIController {
 	/**
 	 * Return profile attribute
 	 * 
-	 * @param profileID
+	 * @param profileOrPersonID 
 	 * @param profileAttributeID
 	 * @return
 	 */
 	@GET
 	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
-	@Path("/{profileID}/{profileAttributeID}")
+	@Path("/{profileOrPersonID}/{profileAttributeID}")
 	public Response<ProfileAttribute> getProfileAttribute(
 			@PathParam("said") String said,
-			@PathParam("profileID") String profileID,
+			@PathParam("profileOrPersonID") String profileOrPersonID,
 			@PathParam("profileAttributeID") String profileAttributeID) {
 
 		logger.info("called API method: GET /dime/rest/" + said
 				+ "/profileattribute/{profileID}/{profileAttributeID}");
 
 		Data<ProfileAttribute> data = null;
-
+		ProfileAttribute pAttribute = null;
 		try {
 			org.ontoware.rdfreactor.schema.rdfs.Resource attribute = profileAttributeManager
 					.get(profileAttributeID);
 
-			Resource profile = findProfileOrProfileCard (profileID);
+			if(profileOrPersonID.startsWith("p_") ||profileOrPersonID.startsWith("pc_"))
+			{
+				Resource profile = findProfileOrProfileCard (profileOrPersonID);
+				pAttribute = createProfileAttribute(profile,attribute);
+			}
+			else {
+				Resource profile = findProfileByPerson(profileOrPersonID,profileAttributeID);
+				pAttribute = createProfileAttribute(profile,attribute);
+			}
 
-			ProfileAttribute pAttribute = createProfileAttribute(profile,attribute);
 
 			data = new Data<ProfileAttribute>(0, 1, pAttribute);
 		} catch (IllegalArgumentException e) {
@@ -228,6 +235,24 @@ public class PSProfileAttributeController implements APIController {
 		}
 
 		return Response.ok(data);
+	}
+
+
+
+
+	private Resource findProfileByPerson(String personId,
+			String profileAttributeID) throws InfosphereException {
+		Person person = personManager.get(personId);
+		for (PersonContact profile : profileManager.getAllByPerson(person)) {
+			if(belongsTo(profileAttributeID,profile.asURI().toString()))
+				return profile;		
+		}
+		for (PrivacyPreference profilecard : profileCardManager.getAllByPerson(person)) {
+			if(belongsTo(profileAttributeID,profilecard.asURI().toString()))
+				return profilecard;		
+		}
+		throw new InfosphereException("The user: "+personId+ 
+				" has no profile containing the profile attribute: "+profileAttributeID);	
 	}
 
 	private Resource findProfileOrProfileCard(String profileID) throws InfosphereException {
@@ -345,7 +370,7 @@ public class PSProfileAttributeController implements APIController {
 				linkProfileToAttribute(profile, attribute, entry.getCategory());
 				profileManager.update(profile);				
 				ProfileAttribute pAttribute =  createProfileAttribute(profile,attribute);
-				
+
 				returnData = new Data<ProfileAttribute>(0, 1,pAttribute);
 			}
 			else if(profileCard != null){
@@ -421,7 +446,7 @@ public class PSProfileAttributeController implements APIController {
 	}
 
 	/*
-	 * UPDATE profileAttribute by profileID
+	 * UPDATE profileAttribute by profileID 
 	 */
 
 	@POST
@@ -435,7 +460,7 @@ public class PSProfileAttributeController implements APIController {
 			@PathParam("profileAttributeID") String profileAttributeID) {
 
 		Data<ProfileAttribute> data, returnData;
-		
+
 		try {
 			RequestValidator.validateRequest(request);
 			if (belongsTo(profileAttributeID, profileID)) {
@@ -452,7 +477,7 @@ public class PSProfileAttributeController implements APIController {
 				Resource profile = findProfileOrProfileCard (profileID);
 				ProfileAttribute pAttribute = createProfileAttribute(profile,returnAttribute);
 				returnData = new Data<ProfileAttribute>(0, 1, pAttribute);				
-				
+
 			} else {
 				return Response.badRequest("the profile attribute: "
 						+ profileAttributeID
@@ -526,15 +551,15 @@ public class PSProfileAttributeController implements APIController {
 
 	private boolean belongsTo(String profileAttributeID, String ID)
 			throws InfosphereException {
-		
-		// Remove the p_ form the UI
-				if (ID.startsWith("pc")) {
-					ID = ID.replaceFirst("pc_", "");
 
-				} else if (ID.startsWith("p_")) {
-					ID = ID.replaceFirst("p_", "");
-				}
-		
+		// Remove the p_ form the UI
+		if (ID.startsWith("pc")) {
+			ID = ID.replaceFirst("pc_", "");
+
+		} else if (ID.startsWith("p_")) {
+			ID = ID.replaceFirst("p_", "");
+		}
+
 		if ("@me".equals(ID)) {
 			PersonContact profile = profileManager.getDefault();
 			for (org.ontoware.rdfreactor.schema.rdfs.Resource attribute : profileAttributeManager
@@ -558,7 +583,7 @@ public class PSProfileAttributeController implements APIController {
 
 		return false;
 	}
-	
+
 	private void addAttributeToData(Data<ProfileAttribute> data,
 			Resource attribute, org.ontoware.rdfreactor.schema.rdfs.Resource profile) throws BadFormedException, InfosphereException {
 
@@ -582,8 +607,8 @@ public class PSProfileAttributeController implements APIController {
 
 	private String findUserIdFromProfileCard(PrivacyPreference profileCard) throws InfosphereException {
 		if(profileCard.getCreator_asNode() != null){
-		String creator = profileCard.getCreator_asNode().asURI().toString();
-		return creator.equals(personManager.getMe())?  "@me" : creator;
+			String creator = profileCard.getCreator_asNode().asURI().toString();
+			return creator.equals(personManager.getMe())?  "@me" : creator;
 		}
 		else return "@me";
 	}
