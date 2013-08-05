@@ -178,3 +178,25 @@ Commercial use requires attribution.
 
 */
 ./dime-personalserver/dime-communications/src/main/webapp/static/dime/matching/assets/js/holder/holder.js:(c) 2012-2013 Ivan Malopinsky / http://imsky.co
+
+
+
+/**
+ * https://github.com/wbotelhos/raty
+ *
+ * jQuery Raty is a plugin that generates a customizable star rating.
+ *
+ * @version        2.5.2
+ * @since          2010.06.11
+ * @author         Washington Botelho
+ * @documentation  wbotelhos.com/raty
+ * @twitter        twitter.com/wbotelhos
+ *
+ * Licensed under The MIT License
+ */
+dime-personalserver/dime-communications/src/main/webapp/static/dime/img/rating/cancel-off.png
+dime-personalserver/dime-communications/src/main/webapp/static/dime/img/rating/cancel-on.png
+dime-personalserver/dime-communications/src/main/webapp/static/dime/img/rating/star-half.png
+dime-personalserver/dime-communications/src/main/webapp/static/dime/img/rating/star-off.png
+dime-personalserver/dime-communications/src/main/webapp/static/dime/img/rating/star-on.png
+dime-personalserver/dime-communications/src/main/webapp/static/dime/script/jquery.raty.min.js
