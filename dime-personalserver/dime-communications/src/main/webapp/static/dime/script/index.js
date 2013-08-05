@@ -1894,11 +1894,12 @@ Dime.Settings = {
     dropdownOnClick: function(event, jqueryItem, serviceAdapter) {
         
         if (serviceAdapter.authUrl) {
-            window.open(serviceAdapter.authUrl, "_blank", "");
+            //showing service description before open in new window
+            var dialog = new Dime.ConfigurationDialog(this, this.configurationSubmitHandler);
+            dialog.showAuth(serviceAdapter.name, serviceAdapter.description, serviceAdapter.authUrl);
         } else {
             //create account item
             var newAccountItem = Dime.Settings.createAccount(serviceAdapter);
-
             var dialog = new Dime.ConfigurationDialog(this, this.configurationSubmitHandler);
             dialog.show(serviceAdapter.name, serviceAdapter.description, newAccountItem, true);
         }
