@@ -2565,19 +2565,23 @@ Dime.psHelper = {
         var expireMinutes = 240;
         var locMode = accuracy<15000?"GPS":"NET";
         
+        //timestamp date
+        var timestamp = new Date();
+        timestamp.setMilliseconds(0);
+        
         //expires date (midnight)
         var date = new Date();
-        date.setDate(date.getDay()+5);
-        date.setHours(0);
-        date.setMinutes(0);
-        date.setSeconds(0);
+        date.setHours(23);
+        date.setMinutes(59);
+        date.setSeconds(59);
+        date.setMilliseconds(0);
         
         var entry ={
                     "guid": JSTool.randomGUID(),
                     "type": "context",
                     //TODO: time format
-                    "timestamp": new Date().toISOString(),
-                    "expires": date.toISOString(), 
+                    "timestamp": timestamp.toISOString().replace("Z","+02:00").replace(".000",""),
+                    "expires": date.toISOString().replace("Z","+02:00").replace(".000",""), 
                     "scope": "position",
                     "entity": {
                         "id": "@me",
