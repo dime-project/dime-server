@@ -397,6 +397,7 @@ DimeView = {
     },
     
     handleSearchResultForContainer: function(type, entries, jContainerElement, isGroupContainer){
+
         if (!entries || entries.length===0){
             jContainerElement.addClass('hidden');
             return;
@@ -1360,7 +1361,8 @@ DimeView = {
             $('#searchText').attr('placeholder', 'find my profile cards');
         }else if (DimeView.groupType===Dime.psMap.TYPE.GROUP){
             Dime.Navigation.setButtonsActive("navButtonPeople");
-            $('#searchText').attr('placeholder', 'find persons and groups (single search-word, avoid incomplete names)');
+            //$('#searchText').attr('placeholder', 'find persons and groups (single search-word, avoid incomplete names)');
+            $('#searchText').attr('placeholder', 'search in your contacts and Di.me User directory');
         }else if (DimeView.groupType===Dime.psMap.TYPE.LIVESTREAM){
             Dime.Navigation.setButtonsActive("navButtonMessages");
             $('#searchText').attr('placeholder', 'find liveposts');

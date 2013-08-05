@@ -2557,7 +2557,7 @@ Dime.psHelper = {
         myReq.send();
 
     },
-            
+     
     postCurrentContext: function(latitude, longitude, accuracy){
 
         var path = Dime.ps_configuration.getUserUrlString()+"/context/@me";
@@ -2565,12 +2565,19 @@ Dime.psHelper = {
         var expireMinutes = 240;
         var locMode = accuracy<15000?"GPS":"NET";
         
+        //expires date (midnight)
+        var date = new Date();
+        date.setDate(date.getDay()+5);
+        date.setHours(0);
+        date.setMinutes(0);
+        date.setSeconds(0);
+        
         var entry ={
                     "guid": JSTool.randomGUID(),
                     "type": "context",
                     //TODO: time format
-                    "timestamp": "2013-08-01T18:58:27+02:00",
-                    "expires": "2014-08-01T18:58:27+02:00", 
+                    "timestamp": new Date().toISOString(),
+                    "expires": date.toISOString(), 
                     "scope": "position",
                     "entity": {
                         "id": "@me",
