@@ -9,30 +9,18 @@
 	<import resource="classpath*:spring-config/ps-storage-applicationContext.xml" />
 	<context:annotation-config/>
 	
-	<bean id="connection"
-	    class="eu.dime.ps.semantic.connection.Connection">
- 		<constructor-arg value="12345"/>
-	    <constructor-arg><ref bean="repository"/></constructor-arg>
-	</bean>
-	
-	<bean id="connectionProviderMock"
-	    class="org.mockito.Mockito" factory-method="mock">
-		<constructor-arg value="eu.dime.ps.semantic.connection.ConnectionProvider" />
-	</bean>	
-	
 	<bean id="entityFactory"
-	    class="eu.dime.ps.storage.manager.EntityFactory" factory-method="getInstance" lazy-init="false" scope="singleton"/>
-		
-	
+	    class="eu.dime.ps.storage.manager.EntityFactory" factory-method="getInstance" lazy-init="false" scope="singleton"/>	
+	  	
 	<bean id="repositoryFactory"
 		class="eu.dime.ps.semantic.rdf.impl.SesameMemoryRepositoryFactory"/>
-
- 	<bean id="repository"
+	    
+	<bean id="repository"
  		factory-bean="repositoryFactory"
  		factory-method="get">
  		<constructor-arg value="12345"/>
  	</bean>
-		
+ 	 		
 	<bean id="modelFactory"
 		class="eu.dime.ps.semantic.model.ModelFactory">
 	</bean>
@@ -47,7 +35,25 @@
 		<constructor-arg value="12345"/>
 		<constructor-arg><ref bean="repository"/></constructor-arg>
 	</bean>
-
+ 	
+ 	<bean id="connection"
+	    class="eu.dime.ps.semantic.connection.Connection">
+ 		<constructor-arg value="12345"/>
+	    <constructor-arg><ref bean="repository"/></constructor-arg>
+	</bean>
+	
+	<bean id="connectionProvider"
+		class="eu.dime.ps.communications.SingleConnectionProviderMock">
+		<property name="connection" ref="connection"/>
+	</bean>	
+	
+	<!-- 
+	<bean id="connectionProviderMock"
+	    class="org.mockito.Mockito" factory-method="mock">
+		<constructor-arg value="eu.dime.ps.semantic.connection.ConnectionProvider" />
+	</bean>	 -->
+	 
+	
 	<bean id="pimoService"
 		class="eu.dime.ps.semantic.service.impl.PimoService">
 		<constructor-arg><value>default-config.trig</value></constructor-arg>
@@ -58,33 +64,33 @@
 	
 	<bean id="accountManager"
 		class="eu.dime.ps.controllers.infosphere.manager.AccountManagerImpl">
-		<property name="connectionProvider" ref="connectionProviderMock"/>
+		<property name="connectionProvider" ref="connectionProvider"/>
 	</bean>
 	
 	<bean id="databoxManager"
 		class="eu.dime.ps.controllers.infosphere.manager.DataboxManagerImpl">
-		<property name="connectionProvider" ref="connectionProviderMock"/>
+		<property name="connectionProvider" ref="connectionProvider"/>
 	</bean>
 
 	
 	<bean id="personManager"
 		class="eu.dime.ps.controllers.infosphere.manager.PersonManagerImpl">
-		<property name="connectionProvider" ref="connectionProviderMock"/>
+		<property name="connectionProvider" ref="connectionProvider"/>
 	</bean>
 
 	<bean id="profileAttributeManager"
 		class="eu.dime.ps.controllers.infosphere.manager.ProfileAttributeManagerImpl">
-		<property name="connectionProvider" ref="connectionProviderMock"/>
+		<property name="connectionProvider" ref="connectionProvider"/>
 	</bean>
 
 	<bean id="profileCardManager"
 		class="eu.dime.ps.controllers.infosphere.manager.ProfileCardManagerImpl">
-		<property name="connectionProvider" ref="connectionProviderMock"/>
+		<property name="connectionProvider" ref="connectionProvider"/>
 	</bean>
 
 	<bean id="livePostManager"
 		class="eu.dime.ps.controllers.infosphere.manager.LivePostManagerImpl">
-		<property name="connectionProvider" ref="connectionProviderMock"/>
+		<property name="connectionProvider" ref="connectionProvider"/>
 	</bean>
 	
 	<bean id="fileDataMiningMock"
@@ -94,45 +100,47 @@
 
 	<bean id="fileManager"
 		class="eu.dime.ps.controllers.infosphere.manager.FileManagerImpl">
-		<property name="connectionProvider" ref="connectionProviderMock"/>
+		<property name="connectionProvider" ref="connectionProvider"/>
 		<property name="fileDataMining" ref="fileDataMiningMock"/>
 	</bean>
 
 	<bean id="shareableDataboxManager"
 		class="eu.dime.ps.controllers.infosphere.manager.ShareableDataboxManager">
-		<property name="connectionProvider" ref="connectionProviderMock"/>
+		<property name="connectionProvider" ref="connectionProvider"/>
 		<property name="databoxManager" ref="databoxManager"/>
 	</bean>
 
 	<bean id="shareableFileManager"
 		class="eu.dime.ps.controllers.infosphere.manager.ShareableFileManager">
-		<property name="connectionProvider" ref="connectionProviderMock"/>
+		<property name="connectionProvider" ref="connectionProvider"/>
 		<property name="fileManager" ref="fileManager"/>
 	</bean>
 
 	<bean id="shareableLivePostManager"
 		class="eu.dime.ps.controllers.infosphere.manager.ShareableLivePostManager">
-		<property name="connectionProvider" ref="connectionProviderMock"/>
+		<property name="connectionProvider" ref="connectionProvider"/>
 		<property name="livePostManager" ref="livePostManager"/>
 		<property name="notifierManager" ref="notifierManager"/>
 	</bean>
 	
 	<bean id="shareableProfileManager"
 		class="eu.dime.ps.controllers.infosphere.manager.ShareableProfileManager">
-		<property name="connectionProvider" ref="connectionProviderMock"/>
+		<property name="connectionProvider" ref="connectionProvider"/>
 		<property name="profileCardManager" ref="profileCardManager"/>
 	</bean>
 		
 	
 	<bean id="tenantManager"
 		class="eu.dime.ps.controllers.TenantManagerImpl">
-		<property name="connectionProvider" ref="connectionProviderMock"/>
+		<property name="connectionProvider" ref="connectionProvider"/>
+		<property name="entityFactory" ref="entityFactory"/>
+		
 	</bean>	
 	
 	
 	<bean id="profileManager"
 		class="eu.dime.ps.controllers.infosphere.manager.ProfileManagerImpl">
-		<property name="connectionProvider" ref="connectionProviderMock"/>
+		<property name="connectionProvider" ref="connectionProvider"/>
 	</bean>
 	
 	
@@ -152,12 +160,12 @@
 	
 	<bean id="deviceManager"
 		class="eu.dime.ps.controllers.infosphere.manager.DeviceManagerImpl">
-		<property name="connectionProvider" ref="connectionProviderMock"/>
+		<property name="connectionProvider" ref="connectionProvider"/>
 	</bean>
 	
 	<bean id="situationManager"
 		class="eu.dime.ps.controllers.infosphere.manager.SituationManagerImpl">
-		<property name="connectionProvider" ref="connectionProviderMock"/>
+		<property name="connectionProvider" ref="connectionProvider"/>
 	</bean>	
 	
 	<bean id="serviceGateway"
@@ -165,13 +173,20 @@
 		<property name="credentialStore" ref="credentialStore" />
 	</bean>
 	
-	<bean id="policyManager"
-		class="eu.dime.ps.gateway.policy.PolicyManagerImpl">
+	
+	<bean id="policyStore" class="eu.dime.ps.gateway.policy.PolicyStoreImpl">
+			<property name="entityFactory" ref="entityFactory"/>
 	</bean>
+	
+	<bean id="policyManager" class="eu.dime.ps.gateway.policy.PolicyManagerImpl" factory-method="getInstance">
+	    	<property name="policyStore" ref="policyStore"/>
+	</bean>
+	
+	
 	
 	<bean id="credentialStore" class="eu.dime.ps.gateway.auth.impl.CredentialStoreImpl" factory-method="getInstance">
 		<property name="entityFactory" ref="entityFactory"/>
-		<property name="connectionProvider" ref="connectionProviderMock"></property>
+		<property name="connectionProvider" ref="connectionProvider"></property>
 	</bean>
 	
 </beans>
