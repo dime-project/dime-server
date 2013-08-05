@@ -227,10 +227,10 @@
                         <h3>2. Connect to other users via the DimeUserDirectory</h3>
                         <div class="control-group">
                             <div class="controls">
-                                <p>To use di.me, you should publish a a public mini-Profile ("MyPublicCard") on the DimeUserDirectory. This directory is public for all di.me users, so that you can get contacted by others in the network. You can use a nickname, or also your real name.</p>
-                                <input type="text" id="prsNickname" placeholder="public nickname">
-                                <input type="text" id="prsFirstname" placeholder="Firstname">
-                                <input type="text" id="prsLastname" placeholder="Lastname">
+                                <p>To use di.me, you need to publish a a public mini-Profile ("MyPublicCard") on the DimeUserDirectory. This directory is public for all di.me users, so that you can get contacted by others in the network. You can use a nickname and also your real name.</p>
+                                <input type="text" id="prsNickname" placeholder="public nickname" class="required">
+                                <input type="text" id="prsFirstname" placeholder="Firstname" class="required">
+                                <input type="text" id="prsLastname" placeholder="Lastname" class="required">
                                 <p>To change this later go to the page "Settings".</p>
 
                             </div>
@@ -281,8 +281,8 @@
                     <br>
                     <div class="control-group white-well">
                         <div class="controls">
-                            <input class="radio_1" type="radio" id ="registerAgreeYes" name="registerAgree" value="yes" checked> I agree </input>
-                            <input class="radio_1"  type="radio" name="registerAgree" value="no"> I don't agree</input>
+                            <input class="radio_1" type="radio" id ="registerAgreeYes" name="registerAgree" value="yes" checked/><label for="registerAgreeYes" style="display: inline">I agree</label>
+                            <input class="radio_1"  type="radio" id="registerAgreeNo" name="registerAgree" value="no"/><label for="registerAgreeNo" style="display: inline">I don't agree</label>
                         </div>
                     </div>
                 </div>

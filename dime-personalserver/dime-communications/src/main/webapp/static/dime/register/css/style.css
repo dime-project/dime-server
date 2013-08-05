@@ -500,4 +500,8 @@ h5{
     border: 8px solid #D1D1D1;
 }
 
+.validateFalse {
+      /* background-color: #FFD8D8 !important; */
+      border: 1px solid #FF4141 !important;
+}
 

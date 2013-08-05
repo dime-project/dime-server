@@ -193,6 +193,8 @@ Dime.register={
         $('#registerSubmitButton').click(function(){
             Dime.register.sendRegistrationForm();
         });
+        
+        
 
         //finally show containerId set from jsp if any
         if (initialContainerId){            
@@ -256,30 +258,62 @@ Dime.register={
         'registrationPassword':{
             caption:'Please fill in a password!'
         },
+        'registrationPassword2':{
+            caption:'Please confirm your password!'
+        },
         'registrationEmail':{
             caption:'Please enter a valid email address!'
+        },
+        'prsNickname':{
+            caption:'Please fill in a nickname!'
+        },
+        'prsFirstname':{
+            caption:'Please fill in a firstname!'
+        },
+        'prsLastname':{
+            caption:'Please fill in a lastname!'
         }
     },
 
     validateReform: function(){
+        $('#registerErrorMessage').empty();
         var warnStr ="";
         var result=true;
         jQuery.each(this.REGISTRATION_REQUIRED_FIELDS, function(fieldId){
             if ((!$('#'+fieldId).val())||$('#'+fieldId).val().length===0){
                 result=false;
-                warnStr+="\n" + this.caption;
+                warnStr+="Registration failed: " + this.caption + "</br>";
+                $('#'+fieldId)
+                        .addClass("validateFalse")
+                        .on('input',function(){
+                            if($(this).val().length===0){
+                                $(this).addClass("validateFalse");
+                            }else{
+                                $(this).removeClass("validateFalse");
+                            }
+                        });
             }
         });
 
         if (!result){
-            warnStr = "No all required fields ar provided."+ warnStr;
-            window.alert(warnStr);
+            //warnStr = "No all required fields are provided."+ warnStr;
+            //window.alert(warnStr);
+            $('#registerErrorMessage').append(warnStr);
             return false;
         }
 
 
         if($('#registrationPassword').val()!==$('#registrationPassword2').val()){
-            window.alert("The given passwords are not equal. Please try again.");
+            $('#registerErrorMessage').text("Registration failed: The given passwords are not equal. Please try again.");
+            $('#registrationPassword2')
+                        .addClass("validateFalse")
+                        .on('input',function(){
+                            if($(this).val().length===0){
+                                $(this).addClass("validateFalse");
+                            }else{
+                                $(this).removeClass("validateFalse");
+                            }
+                        });
             return false;
         }
 
@@ -327,6 +361,8 @@ Dime.register={
         var request= this.getRegFormEntry();
 
         var callback=function(response){
+            
+            console.log(response);
             Dime.register.toggleWaitModal(false);
             if (!response){
                 $('#registerErrorMessage').text('Registration failed for unknown reason!');
@@ -340,6 +376,15 @@ Dime.register={
             }
             if(response.meta.status.toLowerCase()!=="ok"){
                 $('#registerErrorMessage').text('Registration failed: '+response.meta.msg);
+                $('#registrationEmail')
+                        .addClass("validateFalse")
+                        .on('input',function(){
+                            if($(this).val().length===0){
+                                $(this).addClass("validateFalse");
+                            }else{
+                                $(this).removeClass("validateFalse");
+                            }
+                        });
                 return;
             }
             if (!response.data||!response.data.entry||!response.data.entry[0].username){
