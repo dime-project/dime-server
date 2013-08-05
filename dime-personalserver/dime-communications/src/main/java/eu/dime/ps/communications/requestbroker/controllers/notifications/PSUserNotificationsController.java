@@ -216,7 +216,14 @@ public class PSUserNotificationsController implements APIController {
 			return Response.serverError("No marked as read for: ", e);
 		}
 		
-		return Response.okEmpty();
+		DimeInternalNotification dimeNotification = notifierManager
+				.getNotificationById(id);		
+		UserNotificationDTO dto = UserNotificationDTO.dINToUNDTO(dimeNotification);
+		Data<UserNotificationDTO> data = new Data<UserNotificationDTO>();
+
+		data.addEntry(dto);
+
+		return Response.ok(data);
 
 	}
 	
