@@ -233,6 +233,8 @@ public class PlaceProcessor {
 					IContextElement ce = ces[0];
 					latitude = (Double)ce.getContextData().getContextValue(latitudeScope).getValue().getValue();
 					longitude = (Double)ce.getContextData().getContextValue(longitudeScope).getValue().getValue();
+                                        radius = defaultRad;
+                                        //categories.add("DIME");
 				} else {
 					// 2. set default location ???
 					if (latitude==0) latitude = defaultLat;
