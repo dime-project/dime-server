@@ -17,13 +17,10 @@ package eu.dime.ps.gateway.service.noauth;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -34,7 +31,6 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -43,10 +39,8 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
-
 import eu.dime.commons.dto.Place;
 import eu.dime.commons.dto.PlaceAddress;
-
 
 public class YMUtils {
 
@@ -124,10 +118,25 @@ public class YMUtils {
 		NodeList placeNodes = doc.getElementsByTagName(XML_PLACE);
 		
 		for(int i = 0; i < placeNodes.getLength(); i++) {
-			pList.add(getPlace(doc, (Element) placeNodes.item(i)));
+			try {
+				pList.add(getPlace(doc, (Element) placeNodes.item(i)));
+			} catch (Exception e) {
+				logger.info("Could not add place " + ((Element) placeNodes.item(i)).getElementsByTagName(XML_SNAME).item(0).getTextContent() + " from YMServiceAdapter response!");
+			}
 		}
 		
 		return pList;
+	}
+	
+	
+	private static String getElementsByTagName(Element element, String name) {
+		String result = "";
+		try {
+			result = element.getElementsByTagName(name).item(0).getTextContent();
+		} catch (NullPointerException e) {
+			logger.info("Could not extract " + name + " from YMServiceAdapter response.");
+		}
+		return result;
 	}
 
 	/**
@@ -136,82 +145,48 @@ public class YMUtils {
 	 * @param element
 	 * @return
 	 */
-	private static Place getPlace (Document doc, Element element) {
+	private static Place getPlace (Document doc, Element element) throws Exception {
 		Place p = new Place();
-
-		String value = "ametic:" + element.getElementsByTagName(XML_ID).item(0).getTextContent();
-		p.setGuid(value);
-
-		value = element.getElementsByTagName(XML_SCORE).item(0).getTextContent();
+		p.setGuid("ametic:" + getElementsByTagName(element, XML_ID));
+		String value = getElementsByTagName(element, XML_SCORE);
 		try {
 			p.setYMRating(Double.parseDouble(value));
 		} catch(NumberFormatException e) {
 			logger.error("Could not extract rating from YMServiceAdapter response.", e);
 		}
-
-		value = element.getElementsByTagName(XML_SNAME).item(0).getTextContent();
-		p.setName(value);
-		
-		value = element.getElementsByTagName(XML_DIST).item(0).getTextContent();
+		p.setName(getElementsByTagName(element, XML_SNAME));
+		value = getElementsByTagName(element, XML_DIST);
 		try {
 			p.setDistance(Double.parseDouble(value));
 		} catch(NumberFormatException e) {
 			logger.error("Could not extract distance from YMServiceAdapter response.", e);
 		}
-		
 		DecimalFormatSymbols decimalFormat = new DecimalFormatSymbols();
 		decimalFormat.setDecimalSeparator('.');
 		DecimalFormat latFormat = new DecimalFormat("+00.0000;-00.0000",decimalFormat);
 		DecimalFormat lonFormat = new DecimalFormat("+000.0000;-000.0000",decimalFormat);
-		value = element.getElementsByTagName(XML_LAT).item(0).getTextContent();
+		value = getElementsByTagName(element, XML_LAT);
 		String value2 = element.getElementsByTagName(XML_LONG).item(0).getTextContent();
 		try {
 			p.setPosition(latFormat.format(Float.parseFloat(value)) +" "+ lonFormat.format(Float.parseFloat(value2)) + "/");
 		} catch(NumberFormatException e) {
 			logger.error("Could not extract position (longitude and latitide) from YMServiceAdapter response.", e);
 		}
-	
 		PlaceAddress address = new eu.dime.commons.dto.PlaceAddress();
-		
-		value = element.getElementsByTagName(XML_STREETADDRESS).item(0).getTextContent();
-		address.setStreetAddress(value);
-		
+		address.setStreetAddress(getElementsByTagName(element, XML_STREETADDRESS));
 //		address.setRegion(parseDescr(pm, "Region"));
-
-		value = element.getElementsByTagName(XML_LOCALITY).item(0).getTextContent();
-		address.setLocality(value);
-		
-		value = element.getElementsByTagName(XML_POSTAL).item(0).getTextContent();
-		address.setPostalCode(value);
-		
-		value = element.getElementsByTagName(XML_COUNTRY).item(0).getTextContent();
-		address.setCountry(value);
-		
+		address.setLocality(getElementsByTagName(element, XML_LOCALITY));
+		address.setPostalCode(getElementsByTagName(element, XML_POSTAL));
+		address.setCountry(getElementsByTagName(element, XML_COUNTRY));
 		address.setFormatted(address.getStreetAddress() + ", " + address.getLocality() + ", " + address.getPostalCode() + ", " + address.getCountry());
 		p.setAddress(address);
-
-		value = element.getElementsByTagName(XML_URL).item(0).getTextContent();
-		p.setUrl(value);
-		
-		value = element.getElementsByTagName(XML_IMG_URL).item(0).getTextContent();
-		p.setImageUrl(value);
-		
-		value = element.getElementsByTagName(XML_DESCR).item(0).getTextContent();
-		p.setInformation(value);
-		
+		p.setUrl(getElementsByTagName(element, XML_URL));
+		p.setImageUrl(getElementsByTagName(element, XML_IMG_URL));
+		p.setInformation(getElementsByTagName(element, XML_DESCR));
 		value = element.getElementsByTagName(XML_FAV).item(0).getTextContent();
-		if(value.equals(XML_VAL_TRUE))
-		{
-			p.setFavorite(true);
-		}
-		else
-		{
-			p.setFavorite(false);
-		}
-		
+		p.setFavorite((value.equals(XML_VAL_TRUE)));
 		p.setUserRating(NO_SCORE);
 		p.setSocialRecRating(NO_SCORE);
-	
 		return p;
 	}
 	
@@ -232,17 +207,18 @@ public class YMUtils {
 			try {
 				DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
 				DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
-	
 				// root elements
 				Document doc = docBuilder.newDocument();
 				Element rootElement = doc.createElement("Places");
 				doc.appendChild(rootElement);
-	
 				// adds each place
 				for(int i = 0; i < places.getLength(); i++) {
-					addPlace(doc, rootElement, (Element)places.item(i), favorites);
+					try {
+						addPlace(doc, rootElement, (Element)places.item(i), favorites);
+					} catch (Exception e) {
+						logger.info("Could not add place " + ((Element) places.item(i)).getElementsByTagName("SName").item(0).getTextContent() + " from YMServiceAdapter response!");
+					}
 				}
-				
 				// generates the string representation (XML)
 				TransformerFactory factory = TransformerFactory.newInstance();
 				Transformer transformer = factory.newTransformer();
@@ -263,7 +239,6 @@ public class YMUtils {
 				logger.error(e.getMessage(), e);
 				throw e;
 			}
-			
 		}
 		return null;
 	}
@@ -278,119 +253,33 @@ public class YMUtils {
 	private static void addPlace(Document doc, Element rootElement, Element poiElm, List<String> favorites) {
 		Element placeElm = doc.createElement(XML_PLACE);
 		rootElement.appendChild(placeElm);
-		
-		addElement(doc, placeElm, XML_SNAME, poiElm.getElementsByTagName("SName").item(0)
-				.getTextContent());
-		
-		String street = "";
-		String hNo = "";
-		String zip = "";
-		String twn = "";
-		String ct = "";
-		String www = "";
-		String phone = "";
-		String txtDyn = "";
+		addElement(doc, placeElm, XML_SNAME, poiElm.getElementsByTagName("SName").item(0).getTextContent());
+		String street = getElementsByTagName(poiElm, "Str");
+		String hNo = getElementsByTagName(poiElm, "HNo");
+		String zip = getElementsByTagName(poiElm, "Zip");
+		String twn = getElementsByTagName(poiElm, "Twn");
+		String ct = getElementsByTagName(poiElm, "Ct");
+		String www = getElementsByTagName(poiElm, "Www");
+		String phone = getElementsByTagName(poiElm, "Phone");
+		String txtDyn = getElementsByTagName(poiElm, "TxtDyn");
 		String dist = "0";
-		String rating = "";
-
+		String rating = getElementsByTagName(poiElm, "Rating");
 		NamedNodeMap poiAttrMap = null;
-
-		// read all values
+		String value = getElementsByTagName(poiElm, "Dist");
+		dist = value.length() > 0 ? value : "0";
 		try {
-
-			street = poiElm.getElementsByTagName("Str").item(0)
-					.getTextContent();
+			poiAttrMap = poiElm.getElementsByTagName("AdrV21").item(0).getAttributes();
 		} catch (Exception e) {
-			logger.error(e.getMessage(), e);
+			logger.error(e.getMessage(), e.getMessage());
 		}
-
-		try {
-
-			hNo = poiElm.getElementsByTagName("HNo").item(0).getTextContent();
-
-		} catch (Exception e) {
-			logger.error(e.getMessage(), e);
-		}
-
-		try {
-
-			zip = poiElm.getElementsByTagName("Zip").item(0).getTextContent();
-		} catch (Exception e) {
-			logger.error(e.getMessage(), e);
-		}
-
-		try {
-
-			twn = poiElm.getElementsByTagName("Twn").item(0).getTextContent();
-		} catch (Exception e) {
-			logger.error(e.getMessage(), e);
-		}
-
-		try {
-
-			ct = poiElm.getElementsByTagName("Ct").item(0).getTextContent();
-		} catch (Exception e) {
-			logger.error(e.getMessage(), e);
-		}
-
-		try {
-			www = poiElm.getElementsByTagName("Www").item(0).getTextContent();
-		} catch (Exception e) {
-			logger.error(e.getMessage(), e);
-		}
-
-		try {
-			phone = poiElm.getElementsByTagName("Phone").item(0)
-					.getTextContent();
-		} catch (Exception e) {
-			logger.error(e.getMessage(), e);
-		}
-
-		try {
-			txtDyn = poiElm.getElementsByTagName("TxtDyn").item(0)
-					.getTextContent();
-		} catch (Exception e) {
-			logger.error(e.getMessage(), e);
-		}
-
-		try {
-			dist = poiElm.getElementsByTagName("Dist").item(0)
-							.getTextContent().trim();
-		} catch (Exception e) {
-			dist = "0";
-			logger.error(e.getMessage(), e);
-		}
-
-		try {
-			rating = poiElm.getElementsByTagName("Rating").item(0)
-					.getTextContent();
-		} catch (Exception e) {
-			logger.error(e.getMessage(), e);
-		}
-
-		try {
-			poiAttrMap = poiElm.getElementsByTagName("AdrV21").item(0)
-					.getAttributes();
-		} catch (Exception e) {
-			logger.error(e.getMessage(), e);
-		}
-		
-		
 		// assign values
 		addElement(doc, placeElm, XML_STREETADDRESS, street + " " + hNo);
-
 		addElement(doc, placeElm, XML_POSTAL, zip);
-
 		addElement(doc, placeElm, XML_LOCALITY, twn);
-
 		addElement(doc, placeElm, XML_COUNTRY, ct);
-
 		addElement(doc, placeElm, XML_URL, www);
-
 		addElement(doc, placeElm, XML_PHONE, phone);
-
 		addElement(doc, placeElm, XML_DESCR, txtDyn);
-
 		addElement(doc, placeElm, XML_DIST, dist);
 		
 		// if there is no score saved at YM, the tag is missing in the result
@@ -400,16 +289,13 @@ public class YMUtils {
 			addElement(doc, placeElm, XML_SCORE, Float.valueOf(temp[0]).floatValue() / 5 + "");
 		} catch (Exception e) {
 			addElement(doc, placeElm, XML_SCORE, NO_SCORE + "");
-			logger.error(e.getMessage(), e);
+			logger.info("Could not extract " + XML_SCORE + " from YMServiceAdapter response.");
 		}
 
 		try {
 			// convert to WGS84
-			addElement(doc, placeElm, XML_LAT, Float
-					.valueOf(poiAttrMap.getNamedItem("Y").getNodeValue())
-					.floatValue() / 100000 + "");
-			addElement(doc, placeElm, XML_LONG, Float.valueOf(
-					poiAttrMap.getNamedItem("X").getNodeValue()).floatValue() / 100000 + "");
+			addElement(doc, placeElm, XML_LAT, Float.valueOf(poiAttrMap.getNamedItem("Y").getNodeValue()).floatValue() / 100000 + "");
+			addElement(doc, placeElm, XML_LONG, Float.valueOf(poiAttrMap.getNamedItem("X").getNodeValue()).floatValue() / 100000 + "");
 		} catch (Exception e) {
 			addElement(doc, placeElm, XML_LAT, (float) 0 + "");
 			addElement(doc, placeElm, XML_LONG, (float) 0 + "");
@@ -419,15 +305,17 @@ public class YMUtils {
 		try {
 			String id = poiAttrMap.getNamedItem("ID").getNodeValue();
 			addElement(doc, placeElm, XML_ID, id);
-
-			if(favorites != null && favorites.contains(id))
+			if(favorites != null && favorites.contains(id)) {
 				addElement(doc, placeElm, XML_FAV, XML_VAL_TRUE);
-			else
+			} else {
 				addElement(doc, placeElm, XML_FAV, XML_VAL_FALSE);
-				
+			}
+		} catch (Exception e) {
+			logger.info("Could not extract " + XML_ID + " from YMServiceAdapter response.");
+		}	
+		try {
 			// add ImageUrl, if Image exists
-			int CustID = Integer.parseInt(poiAttrMap.getNamedItem("CustID")
-					.getNodeValue());
+			int CustID = Integer.parseInt(poiAttrMap.getNamedItem("CustID").getNodeValue());
 
 			switch (CustID) {
 			case 8:
@@ -436,14 +324,12 @@ public class YMUtils {
 				break;
 			}
 			default: {
-				addElement(doc, placeElm, XML_IMG_URL, "http://www.uni-siegen.de/fb5/itsec/projekte/dime/ym-pictures/"
-						+ poiAttrMap.getNamedItem("CustID").getNodeValue()
-						+ ".jpg");
+				addElement(doc, placeElm, XML_IMG_URL, "http://www.uni-siegen.de/fb5/itsec/projekte/dime/ym-pictures/" + poiAttrMap.getNamedItem("CustID").getNodeValue() + ".jpg");
 				break;
 			}
 			}
 		} catch (Exception e) {
-			logger.error(e.getMessage(), e);
+			logger.info("Could not extract " + "CustID" + " from YMServiceAdapter response.");
 		}
 	}
 	
@@ -459,4 +345,5 @@ public class YMUtils {
 		element.appendChild(doc.createTextNode(value));
 		parentElement.appendChild(element);
 	}
+	
 }
