@@ -153,6 +153,7 @@ public class NotifyHistoryImpl implements NotifyHistory {
 			}
 
 			n = new UserNotification(notification.getTenant().getId(), unEntry);
+			n.setIsRead(notification.getIsRead());
 
 		} else {
 

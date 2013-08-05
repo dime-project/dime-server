@@ -166,7 +166,7 @@ public class UserNotificationDTO {
 		nDTO.setUnType((String) dim.getUnEntry().get(
 				UserNotificationEntry.UNTYPE_LABEL));
 		nDTO.setUnEntry(dim.getUnEntry());
-	
+		nDTO.setRead(dim.getIsRead());
 		return nDTO;
 	
 	}

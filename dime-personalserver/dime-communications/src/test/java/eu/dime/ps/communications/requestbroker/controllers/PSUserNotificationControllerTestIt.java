@@ -230,18 +230,23 @@ public class PSUserNotificationControllerTestIt {
 		
 		String idToread = response.getMessage().getData().getEntries().iterator().next().getGuid();
 		
+		response = controller.getUserNotificationById(said, idToread);
+		assertEquals(200, response.getMessage().getMeta().getCode().intValue());
+		assertEquals(false,response.getMessage().getData().getEntries().iterator().next().getRead());
+		
 		// mark as read
 		controller.postNotificationMarkAsRead(idToread);
 		
 		response = controller.getUserNotificationById(said, idToread);
 		assertEquals(200, response.getMessage().getMeta().getCode().intValue());
+		assertEquals(true,response.getMessage().getData().getEntries().iterator().next().getRead());
 		
 		response = controller.getMyUserNotificationsUnread(said, "0", "0");
 		assertEquals(99, response.getMessage().getData().getEntries().size());
 		
 		response = controller.getMyUserNotifications(said, null, null, "0", "0");
-		assertEquals(100, response.getMessage().getData().getEntries().size());
-
+		assertEquals(100, response.getMessage().getData().getEntries().size());		
+		
 	}
 
 }
