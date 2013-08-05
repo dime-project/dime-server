@@ -2637,8 +2637,58 @@ input[type="text"].DimeDetailDialogPAValueListItemValue{
     display: none;
 }
 
-/*Privacy Level*/
+/*Privacy/Trust Level*/
 
+.trustLevelLow {
+    border-bottom: 5px solid #ec1e32;
+}
+
+.trustLevelMedium {
+    border-bottom: 5px solid #ebe104;
+}
+
+.trustLevelHigh {
+    border-bottom: 5px solid #649614;
+}
+
+.privacyLevelLow {
+    border-bottom: 5px solid #e3c3d2;
+}
+
+.privacyLevelMedium {
+    border-bottom: 5px solid #cb588b;
+}
+
+.privacyLevelHigh {
+    border-bottom: 5px solid #843559;
+}
+
+.trustLevelLowThin {
+    border-bottom: 1px solid #ec1e32;
+}
+
+.trustLevelMediumThin {
+    border-bottom: 1px solid #ebe104;
+}
+
+.trustLevelHighThin {
+    border-bottom: 1px solid #649614;
+}
+
+.privacyLevelLowThin {
+    border-bottom: 1px solid #e3c3d2;
+}
+
+.privacyLevelMediumThin {
+    border-bottom: 1px solid #cb588b;
+}
+
+.privacyLevelHighThin {
+    border-bottom: 1px solid #843559;
+}
+
+/* -------------------------- */
+/*
 .greenPTColor {
     border-bottom: 5px solid #14a301;
 }
@@ -2670,7 +2720,7 @@ input[type="text"].DimeDetailDialogPAValueListItemValue{
 .orangePTColorThin {
     border-bottom: 1px solid #f69c00;
 }
-
+*/
 
 .shareDlg {
     width: 850px;

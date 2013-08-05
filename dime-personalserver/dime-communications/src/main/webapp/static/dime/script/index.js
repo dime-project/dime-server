@@ -1275,8 +1275,8 @@ DimeView = {
                         };
                     });
         }else{
-            //default
-            addRmvBtn.empty().click();
+            //remove the click event
+            addRmvBtn.empty().unbind("click");
         }
     },
 
@@ -1911,7 +1911,6 @@ Dime.Settings = {
             callBack = function(response) {
                 console.log("NEW ACCOUNT: ", response);
                 if (!response|| response.length<1){
-
                     (new Dime.Dialog.Toast("Creation of "+serviceAccount.name+" failed!")).show();
                 }else{
                     (new Dime.Dialog.Toast(serviceAccount.name+ " created successfully.")).show();

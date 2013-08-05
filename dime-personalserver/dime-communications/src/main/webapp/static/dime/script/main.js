@@ -926,28 +926,28 @@ Dime.privacyTrust={
         pCaption:"low",
         tCaption:"low",
         limit: 0.0,
-        pClass: "greenPTColor",
-        tClass: "redPTColor",
-        pClassThin: "greenPTColorThin",
-        tClassThin: "redPTColorThin"
+        pClass: "privacyLevelLow",
+        tClass: "trustLevelLow",
+        pClassThin: "privacyLevelLowThin",
+        tClassThin: "trustLevelLowThin"
     },
     {
         pCaption:"medium",
         tCaption:"medium",
         limit: 0.5,
-        pClass: "orangePTColor",
-        tClass: "orangePTColor",
-        pClassThin: "orangePTColorThin",
-        tClassThin: "orangePTColorThin"
+        pClass: "privacyLevelMedium",
+        tClass: "trustLevelMedium",
+        pClassThin: "privacyLevelMediumThin",
+        tClassThin: "trustLevelMediumThin"
     },
     {
         pCaption:"high",
         tCaption:"high",
         limit: 1.0,
-        pClass: "redPTColor",
-        tClass: "greenPTColor",
-        pClassThin: "redPTColorThin",
-        tClassThin: "greenPTColorThin"
+        pClass: "privacyLevelHigh",
+        tClass: "trustLevelHigh",
+        pClassThin: "privacyLevelHighThin",
+        tClassThin: "trustLevelHighThin"
     }
     ],
     
@@ -2589,7 +2589,7 @@ Dime.psHelper = {
         };
         
         var callback = function(response){
-            console.log("POST Success!");
+            console.log(response);
         };
         
         var request = Dime.psHelper.prepareRequest(entry);
@@ -4308,7 +4308,7 @@ Dime.DetailDialog.prototype = {
         .append('<span >'+(currPrivTrust.isPrivacy?"How private is this:":"Trust:")+'</span>');
         if (!readOnly){
             result.append(BSTool.createDropdown(createButtonLabel(currPrivTrust),
-                dropDownElements, "btn"))
+                dropDownElements, "btn"));
         }else{
             result.append(createButtonLabel(currPrivTrust));
         }
