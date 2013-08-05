@@ -107,7 +107,6 @@ public abstract class OAuthAuthenticationController<T extends OAuthServiceAdapte
 					callbackURL.append(this.policyManager.getPolicyString("AUTHSERVLET_HOST", null));
 					callbackURL.append(":");
 					callbackURL.append(this.policyManager.getPolicyString("AUTHSERVLET_PORT_SECURE", null));
-					callbackURL.append("/");
 					callbackURL.append(this.policyManager.getPolicyString("AUTHSERVLET_PATH", null));
 					callbackURL.append("/services/");
 					callbackURL.append(said);
