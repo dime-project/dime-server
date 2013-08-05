@@ -92,11 +92,8 @@ DimeView = {
     
     setActionAttributeForElements: function(entry, jElement, isGroupItem, showEditOnClick){
        
-        
         jElement.mouseoverExt(DimeView, DimeView.showMouseOver, entry, isGroupItem);
         jElement.mouseoutExt(DimeView, DimeView.hideMouseOver, entry);
-            
-        
 
         if(isGroupItem){
             jElement.clickExt(DimeView, DimeView.showGroupMembers, entry);
@@ -106,7 +103,6 @@ DimeView = {
         }else if(showEditOnClick){
             jElement.clickExt(DimeView, DimeView.editItem, entry);
         }
-        
         
     },
    
@@ -235,6 +231,59 @@ DimeView = {
 
 
     },
+            
+    createLocationItemJElement: function(entry){
+        
+        var idSocial = "#" + entry.guid + "Social";
+        var idOwn = "#" + entry.guid + "Own";
+        var fav = entry.favorite?"favorite":false;
+        var jChildItem = $("<div/>");
+        var itemClass = entry.type + "Item childItem";
+        
+        jChildItem.addClass(itemClass);
+        jChildItem.append('<img src="'+ Dime.psHelper.guessLinkURL(entry.imageUrl)+ '" />');
+        jChildItem.append(DimeView.createMark(entry, "", false));
+        jChildItem.append('<h4>'+ DimeView.getShortName(entry.name) + '</h4>');
+        if(fav){
+            jChildItem.append('<p>' + fav + '</p>');
+        }
+        
+        jChildItem.append(
+                $("<div></div>")
+                    .addClass("ratingContainerSocial")
+                    .append(
+                        $("<div></div>")
+                            .addClass("ratingStarsSocial")
+                            .text("Social Rating: ")
+                            .raty({
+                                width: 175,
+                                half: true,
+                                readOnly: true,
+                                score: entry.socialRecRating*5
+                            })
+                    )
+        );
+        
+        jChildItem.append(
+                $("<div></div>")
+                    .addClass("ratingContainerOwn")
+                    .append(
+                        $("<div></div>")
+                            .addClass("ratingStarsOwn")
+                            .text("Your Rating: ")
+                            .raty({
+                                width: 175,
+                                half: true,
+                                readOnly: true,
+                                score: entry.userRating*5
+                            })
+                    )
+        );
+        
+        jChildItem.append('<div class="ratingContainerOwn"><div class="rateStarsOwn" id="' + entry.guid + 'Own"></div></div>');
+        DimeView.setActionAttributeForElements(entry, jChildItem, false, entry.type);
+        return jChildItem;
+    },
     
     createItemJElement: function(entry){
         //handle profileattributes separately
@@ -242,7 +291,8 @@ DimeView = {
             return DimeView.createAttributeItemJElement(entry);
         }else if (entry.type===Dime.psMap.TYPE.USERNOTIFICATION) {
             return DimeView.createUserNotification(entry);
-
+        }else if (entry.type===Dime.psMap.TYPE.PLACE){
+            return DimeView.createLocationItemJElement(entry);
         }
         
         var showEditOnClick = (entry.type===Dime.psMap.TYPE.SITUATION)
@@ -1219,12 +1269,14 @@ DimeView = {
                                 var lon = position.coords.longitude;
                                 var acc = position.coords.accuracy;
                                 Dime.psHelper.postCurrentContext(lat, lon, acc);
-                                console.log("Current position: " + lat + ", " + lon + ", " + acc);
                             }); 
                         }else{
                             alert("Geolocation services are not supported by your browser.");
                         };
                     });
+        }else{
+            //default
+            addRmvBtn.empty().click();
         }
     },
 
@@ -1238,7 +1290,6 @@ DimeView = {
     },
 
     //VIEW_MAP
-
     GROUP_CONTAINER_VIEW: 1,
     SETTINGS_VIEW: 2,
     PERSON_VIEW: 3,
@@ -1324,7 +1375,7 @@ DimeView = {
             $('#searchText').attr('placeholder', 'find situations');
         }else if (DimeView.groupType===Dime.psMap.TYPE.PLACE){
             Dime.Navigation.setButtonsActive("currentPlace");
-            $('#searchText').attr('placeholder', 'find places');
+            $('#searchText').attr('placeholder', 'find places');         
         }
         
         //activate dropzone
@@ -1340,7 +1391,7 @@ DimeView = {
         DimeView.updateMetaBar(groupType);
         DimeView.resetSearch();
         
-        //set to this position for avoiding "disabled"-class
+        //in order to avoid "disabled"-class
         DimeView.updateAddRemoveButton(groupType);
     },
 
@@ -2057,7 +2108,6 @@ Dime.Navigation.createMenuLiButton=function(id, caption, containerGroupType){
 
     return $('<li/>').attr('id',id).append($('<a/>')
         .click(function(){
-
             //update view
             DimeView.updateView.call(DimeView, containerGroupType, DimeView.GROUP_CONTAINER_VIEW);
         })

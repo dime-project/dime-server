@@ -1890,9 +1890,6 @@ Dime.psHelper = {
             
         
     },
-    
-   
-
 
     getAllSharedItems: function(agent, callback){        
         //lookup all sharable items for this agent
@@ -2068,10 +2065,9 @@ Dime.psHelper = {
             //{mainSaId}/advisory/
             return result+"advisory/@request";
         }
-        
          
         result += Dime.psHelper.getPathForItemType(itemType)+'/';
-    
+   
         if (callType === Dime.psMap.CALLTYPE.AT_ALL_ALL_GET){                
             return result + '@all';
         }
@@ -2567,14 +2563,14 @@ Dime.psHelper = {
         var path = Dime.ps_configuration.getUserUrlString()+"/context/@me";
         
         var expireMinutes = 240;
-        var locMode = accuracy>30000?"GPS":"NET";
+        var locMode = accuracy<15000?"GPS":"NET";
         
         var entry ={
                     "guid": JSTool.randomGUID(),
                     "type": "context",
                     //TODO: time format
                     "timestamp": "2013-08-01T18:58:27+02:00",
-                    "expires": "2013-08-01T18:58:27+02:00", 
+                    "expires": "2014-08-01T18:58:27+02:00", 
                     "scope": "position",
                     "entity": {
                         "id": "@me",
@@ -2598,7 +2594,6 @@ Dime.psHelper = {
         
         var request = Dime.psHelper.prepareRequest(entry);
         $.postJSON(path, request, callback);
-        
     },
     
     /*
@@ -2834,8 +2829,6 @@ Dime.REST = {
      * @param callerSelf reference to the calling object - will be used as this target when calling the callBack - optional
      */
     getItem: function(itemGuid, itemType, callBack, userId, callerSelf){
-        
-        
         
         if (!userId || userId.length===0){
             userId=Dime.ps_static_configuration.ME_OWNER;
@@ -3095,12 +3088,11 @@ Dime.REST = {
     },
     
     getCurrentPlaceGuidAndName: function(callBack){
-        //https://localhost:8443/dime-communications/api/dime/rest/<said>/context/@me        
+        //https://localhost:8443/dime-communications/api/dime/rest/<said>/context/@me
         var path = Dime.ps_configuration.getRealBasicUrlString() 
         + "/dime-communications/api/dime/rest/"
         + encodeURIComponent(Dime.ps_configuration.mainSaid)
-        + "/context/@me/currentPlace";
-        
+        + "/context/@me/currentPlace";        
         
         if (!callBack){
             callBack = function(response){
@@ -3122,6 +3114,7 @@ Dime.REST = {
         
         $.getJSON(path, "", metaCallBack);
     },
+    
     getSharedTo: function(itemType, agentId, callBack){
 
         var callPath = Dime.psHelper.generateRestPath( itemType,
@@ -3146,9 +3139,6 @@ Dime.REST = {
             $.getJSON(callPath, "", jointCallBack);
         }  
     },
-
-
-   
     
     postAdvisoryRequest: function(profileGuid, receivers, items, callBack, callerSelf){
         
@@ -3715,7 +3705,7 @@ Dime.BasicDialog = function(title, caption, dialogId, bodyId, body, cancelHandle
     this.dialog.setAttribute("role", "dialog");
     this.dialog.setAttribute("aria-labelledby", title);
 
-    this.okButton =$('<button class="YellowMenuButton">'+okButtonLabel+'</button>')
+    this.okButton = $('<button class="YellowMenuButton">'+okButtonLabel+'</button>')
         .click(function(){
             //skip for inactive buttons
             if ($(this).hasClass(dialogRef.inactiveButtonClass)){
@@ -4356,8 +4346,10 @@ Dime.DetailDialog.prototype = {
         this.updateProfileAttributeValueElement(category);
     },
 
-    createKeyValueInput: function(key, itemValueBase, defaultValue, id, isTextArea){
+    createKeyValueInput: function(key, itemValueBase, defaultValue, id, isTextArea, isReadOnly){
 
+        var readOnly = isReadOnly?"readonly":"";
+        
         if (!itemValueBase[key]){
             itemValueBase[key]=defaultValue;
         }
@@ -4366,9 +4358,9 @@ Dime.DetailDialog.prototype = {
 
         if (!isTextArea){
             innerHtml += '<input class="dimeDetailDialogKeyValueValue" id="'+id+'" type="text" value="'
-            +itemValueBase[key]+'" ></input>\n';
+            +itemValueBase[key]+'" ' + readOnly + ' ></input>\n';
         }else{
-            innerHtml += '<textarea class="dimeDetailDialogKeyValueValue" id="'+id+'" >'
+            innerHtml += '<textarea class="dimeDetailDialogKeyValueValue" id="'+id+'" ' + readOnly + '>'
             +itemValueBase[key]+'</textarea>\n';
         }
 
@@ -4383,6 +4375,7 @@ Dime.DetailDialog.prototype = {
 
         return result;
     },
+            
     createPlaceDetail: function(item){
 
         this.body
@@ -4394,31 +4387,79 @@ Dime.DetailDialog.prototype = {
 
 
         listContainer.append(
-            this.createKeyValueInput.call(this, "information", item, "", "information", true));
+            this.createKeyValueInput.call(this, "information", item, "", "information", true, true));
 
         if (!item.address){
             item.address={};
         }
 
         listContainer.append(
-            this.createKeyValueInput.call(this, "streetAddress", item.address, "", "streetAddress", false));
+            this.createKeyValueInput.call(this, "streetAddress", item.address, "", "streetAddress", false, true));
         listContainer.append(
-            this.createKeyValueInput.call(this, "postalCode", item.address, "", "postalCode", false));
+            this.createKeyValueInput.call(this, "postalCode", item.address, "", "postalCode", false, true));
         //FIXME locality seems not to be supported by server?!?
         listContainer.append(
-            this.createKeyValueInput.call(this, "locality", item.address, "", "locality", false));
+            this.createKeyValueInput.call(this, "locality", item.address, "", "locality", false, true));
         listContainer.append(
-            this.createKeyValueInput.call(this, "region", item.address, "", "region", false));
+            this.createKeyValueInput.call(this, "region", item.address, "", "region", false, true));
         listContainer.append(
-            this.createKeyValueInput.call(this, "country", item.address, "", "country", false));
+            this.createKeyValueInput.call(this, "country", item.address, "", "country", false, true));
         listContainer.append(
-            this.createKeyValueInput.call(this, "phone", item, "", "phone", false));
+            this.createKeyValueInput.call(this, "phone", item, "", "phone", false, true));
         listContainer.append(
-            this.createKeyValueInput.call(this, "position", item, "", "position", false));
+            this.createKeyValueInput.call(this, "position", item, "", "position", false, true));
         listContainer.append(
-            this.createKeyValueInput.call(this, "url", item, "", "url", false));
+            this.createKeyValueInput.call(this, "url", item, "", "url", false, true));
         listContainer.append(
-            this.createKeyValueInput.call(this, "formatted", item.address, "", "formatted", true));
+            this.createKeyValueInput.call(this, "formatted", item.address, "", "formatted", true, true));
+    
+        //adding favorite-checkbox
+        listContainer.append(
+            $("<li></li>")
+                .addClass("DimeDetailDialogPAValueListItem")
+                .append(
+                    $('<span class="dimeDetailDialogKeyValueCaption"></span>').text("Mark as favorite: ")
+                )
+                .append(
+                    $('<input></input>')
+                        .addClass("dimeDetailDialogKeyValueValue")
+                        .attr("type", "checkbox")
+                        .attr("value", item.favorite)
+                        .attr("id", "favoriteCheckboxLocation")
+                        .change(function(){
+                            if($(this).attr("checked")){
+                                item.favorite = true;
+                            }else{
+                                item.favorite = false;
+                            }
+                        })
+                    )
+            );
+    
+        //adding rating stars + click-handler
+        listContainer.append(
+            $("<li></li>")
+                .addClass("DimeDetailDialogPAValueListItem")
+                .append(
+                    $('<span class="dimeDetailDialogKeyValueCaption"></span>').text("Rate this location: ")
+                )
+                .append(
+                    $("<div></div>")
+                        .addClass("ratingStarsYour")
+                        .raty({
+                            score: item.userRating*5,
+                            width: 200,
+                            cancel: true,
+                            half: true,
+                            precision: true,
+                            click: function(score, event){
+                                //TODO: 0 abfangen -> "cancel"-button
+                                item.userRating = score/5;
+                            }
+                        })
+                )
+        );    
+            
         return listContainer;
     },
 
@@ -5634,7 +5675,6 @@ Dime.Dialog={
 
     showDetailItemModal: function(entry, isEditable, message){
         var caption;
-
         
         if (entry.type===Dime.psMap.TYPE.PROFILEATTRIBUTE){
             caption = Dime.PACategory.getCategoryByName(entry.category).caption+': "'+entry.name+'"';
@@ -5661,8 +5701,7 @@ Dime.Dialog={
                     (new Dime.Dialog.Toast(caption+ " updated successfully.")).showLong();
                 }
             };
-
-
+            
             //post the update
             Dime.REST.updateItem(item, updateItemCallBack, this);
         };

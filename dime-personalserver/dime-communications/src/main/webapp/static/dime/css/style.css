@@ -1773,6 +1773,15 @@ input[type="checkbox"] {
     padding: 0px 0px 20px 20px;
 }
 
+.placeItem > p {
+    margin-top: -40px;
+    width: 240px;
+    font-size: 11px;
+    margin-left: 100px;
+    text-align: left;
+    padding: 0px 0px 20px 20px;
+}
+
 .placeItem > img {
     height: 100px;
     width: 100px;
@@ -3239,4 +3248,23 @@ input[type="text"].DimeDetailDialogPAValueListItemValue{
     min-width: 700px;
     color: white;
     text-shadow: none;
+}
+
+/****** rating class ******/
+.ratingContainerSocial {
+    margin-top: -25px;
+    width: 240px;
+    margin-left: 100px;
+    text-align: left;
+    padding: 0px 0px 20px 20px;
+    font-size: 11px;
+}
+
+.ratingContainerOwn {
+    margin-top: -20px;
+    width: 240px;
+    margin-left: 100px;
+    text-align: left;
+    padding: 0px 0px 20px 20px;
+    font-size: 11px;
 }
