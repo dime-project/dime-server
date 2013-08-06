@@ -49,15 +49,20 @@ public interface LiveContextSession {
 	 * Retrieves the current auto-commit mode for this session.
 	 * 
 	 * @return the current state of this session's auto-commit mode
-	 * @throws LiveContextException SQLException - if an RDF repository access error occurs or this method is called on a closed session
+	 * @throws LiveContextException SQLException - if an RDF repository access error occurs or
+	 *         this method is called on a closed session
 	 */
 	boolean getAutoCommit() throws LiveContextException;
 
 	/**
-	 * Sets this connection's auto-commit mode to the given state. If a connection is in auto-commit mode, then all its SQL statements will be executed and committed as individual sessions. Otherwise, its SQL statements are grouped into sessions that are terminated by a call to either the method commit or the method rollback. By default, new connections are in auto-commit mode.
+	 * Sets this connection's auto-commit mode to the given state. If a connection is in auto-commit
+	 * mode, then all its SQL statements will be executed and committed as individual sessions.
+	 * Otherwise, its SQL statements are grouped into sessions that are terminated by a call to either
+	 * the method commit or the method rollback. By default, new connections are in auto-commit mode.
 	 * 
 	 * @param autoCommit true to enable auto-commit mode; false to disable it
-	 * @throws LiveContextException if an RDF repository access error occurs, or this method is called on a closed session
+	 * @throws LiveContextException if an RDF repository access error occurs, or this method is
+	 *         called on a closed session
 	 */
 	void setAutoCommit(boolean autoCommit) throws LiveContextException;
 
@@ -79,10 +84,10 @@ public interface LiveContextSession {
 	 * 
 	 * @param aspect subclass of Aspect representing the aspect to be updated
 	 * @param property URI of the property relating the aspect with its elements
-	 * @param elementUris set of element instances to be updated.
+	 * @param elements set of element instances to be updated.
 	 * @throws LiveContextException if the operation cannot be performed
 	 */
-	void set(Class<? extends Aspect> aspect, URI property, URI... elementUris) throws LiveContextException;
+	void set(Class<? extends Aspect> aspect, URI property, URI... elements) throws LiveContextException;
 	
 	/**
 	 * Same as {@link #set(Class, URI, URI...)}, except the elements are RDFReactor objects. 
@@ -105,10 +110,10 @@ public interface LiveContextSession {
 	 * 
 	 * @param aspect subclass of Aspect representing the aspect to be updated
 	 * @param property URI of the property relating the aspect with its elements
-	 * @param elementUris set of element instances to be updated.
+	 * @param elements set of element instances to be updated.
 	 * @throws LiveContextException if the operation cannot be performed
      */
-	void add(Class<? extends Aspect> aspect, URI property, URI... elementUris) throws LiveContextException;
+	void add(Class<? extends Aspect> aspect, URI property, URI... elements) throws LiveContextException;
     
 	/**
 	 * Same as {@link #add(Class, URI, URI...)}, except the elements are RDFReactor objects. 
@@ -147,7 +152,7 @@ public interface LiveContextSession {
 	/**
 	 * Same as {@link #remove(Class, URI)}, except only relations to specific elements are removed. 
 	 */
-	void remove(Class<? extends Aspect> aspect, URI property, URI... elementUris) throws LiveContextException;
+	void remove(Class<? extends Aspect> aspect, URI property, URI... elements) throws LiveContextException;
 	
 	/**
 	 * Same as {@link #remove(URI, URI)}, except only relations to specific values are removed. 

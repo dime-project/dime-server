@@ -56,6 +56,12 @@ import eu.dime.ps.semantic.service.LiveContextSession;
 import eu.dime.ps.semantic.service.exception.LiveContextException;
 import eu.dime.ps.semantic.util.DateUtils;
 
+/**
+ * <p>Performs updates on a RDF2Go model object holding the data of the 'live context' graph.</p>
+ * <p>It will broadcast events occurring in the live context to the BroadcastManager.</p>
+ * 
+ * @author Ismael Rivera
+ */
 public class LiveContextSessionImpl implements LiveContextSession {
 
 	private static final Logger logger = LoggerFactory.getLogger(LiveContextSessionImpl.class);
@@ -95,14 +101,15 @@ public class LiveContextSessionImpl implements LiveContextSession {
 		InputStream in = LiveContextSessionImpl.class.getClassLoader().getResourceAsStream(DCON_PATH);
 		if (in == null) {
             throw new RuntimeException(
-            		new OntologyInvalidException("Cannot load DCON ontology file: " + DCON_PATH));
+            		new OntologyInvalidException("Cannot load DCON ontology file at: " + DCON_PATH));
         }
 		
 		Model model = RDF2Go.getModelFactory().createModel().open();
 		try {
 			model.readFrom(in, Syntax.Trig);
 		} catch (IOException e) {
-			throw new RuntimeException("Cannot load DCON ontology file: " + DCON_PATH, e);
+			throw new RuntimeException(
+					new OntologyInvalidException("Cannot load DCON ontology file at: " + DCON_PATH));
 		}
 		
 		// cache all subproperties of dcon:hasContextAttribute
@@ -286,52 +293,49 @@ public class LiveContextSessionImpl implements LiveContextSession {
 	@Override
 	public void remove(Class<? extends Aspect> aspect, URI property) throws LiveContextException {
 		URI aspectUri = findAspect(aspect);
-		
+
+		List<Node> elements = new ArrayList<Node>();
 		ClosableIterator<Statement> elementsIt = liveContext.findStatements(aspectUri, property, Variable.ANY);
 		while (elementsIt.hasNext()) {
-			Node element = elementsIt.next().getObject();
-			if (element instanceof org.ontoware.rdf2go.model.node.Resource) {
-				
-				// check if the element is linked from another aspects, or with a different property
-				boolean isShared = false;
-				ClosableIterator<Statement> relationsIt = liveContext.findStatements(Variable.ANY, Variable.ANY, element);
-				while (relationsIt.hasNext()) {
-					Statement stmt = relationsIt.next();
-					if (!stmt.getSubject().equals(aspectUri) || !stmt.getPredicate().equals(property)) {
-						isShared = true;
-						break;
-					}
-				}
-				relationsIt.close();
+			elements.add(elementsIt.next().getObject());
+		}
+		elementsIt.close();
+		
+		_remove(aspect, property, elements.toArray(new Node[elements.size()]));
+	}
 
+	@Override
+	public void remove(Class<? extends Aspect> aspect, URI property, URI... elements)
+			throws LiveContextException {
+		_remove(aspect, property, elements);
+	}
+
+	private void _remove(Class<? extends Aspect> aspect, URI property, Node... elements)
+			throws LiveContextException {
+		URI aspectUri = findAspect(aspect);
+		
+		for (Node element : elements) {
+			if (element instanceof org.ontoware.rdf2go.model.node.Resource) {
 				// if element is shared, only the relation with the specified aspect is removed, otherwise
 				// all metadata of the element is removed, and also all observations
-				if (isShared) {
+				if (isShared(aspectUri, (org.ontoware.rdf2go.model.node.Resource) element, property)) {
 					toRemove(liveContext.findStatements(aspectUri, property, element));
 				} else {
-					toRemove(liveContext.findStatements(Variable.ANY, Variable.ANY, element));
+					// remove all observations for this element
+					ClosableIterator<Statement> observationsIt = liveContext.findStatements(element.asResource(), DCON.hasObservation, Variable.ANY);
+					while (observationsIt.hasNext()) {
+						toAdd.add(observationsIt.next());
+					}
 					
-					// TODO remove all observations for this element
-					
+					// remove all metadata (triples) where element is subject or object
+					toRemove(liveContext.findStatements(Variable.ANY, Variable.ANY, element));					
 					toRemove(liveContext.findStatements(element.asResource(), Variable.ANY, Variable.ANY));
 				}
 			} else {
 				toRemove(liveContext.findStatements(Variable.ANY, Variable.ANY, element));
 			}
 		}
-		elementsIt.close();
 		
-		commitIfAuto();
-	}
-
-	@Override
-	public void remove(Class<? extends Aspect> aspect, URI property, URI... elementUris)
-			throws LiveContextException {
-		// TODO get the functionality from the above remove(), and also use it when passing elements as URIs
-		URI aspectUri = findAspect(aspect);
-		for (URI elementUri : elementUris) {
-			toRemove(liveContext.findStatements(aspectUri, property, elementUri));
-		}
 		commitIfAuto();
 	}
 	
@@ -391,6 +395,21 @@ public class LiveContextSessionImpl implements LiveContextSession {
 			}
 		}
 		return aspectUri;
+	}
+	
+	// check if the element is linked from another aspects, or with a different property
+	private boolean isShared(URI aspect, org.ontoware.rdf2go.model.node.Resource element, URI property) {
+		boolean shared = false;
+		ClosableIterator<Statement> relationsIt = liveContext.findStatements(Variable.ANY, Variable.ANY, element);
+		while (relationsIt.hasNext()) {
+			Statement stmt = relationsIt.next();
+			if (!stmt.getSubject().equals(aspect) || !stmt.getPredicate().equals(property)) {
+				shared = true;
+				break;
+			}
+		}
+		relationsIt.close();
+		return shared;
 	}
 	
 }
