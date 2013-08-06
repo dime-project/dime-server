@@ -25,6 +25,13 @@ import eu.dime.ps.semantic.Event;
 import eu.dime.ps.semantic.connection.Connection;
 import eu.dime.ps.semantic.connection.ConnectionProvider;
 
+/**
+ * Creates PIMO instances for new/modified information elements, or other
+ * resources (ie. it will create a pimo:Person instance if a new PersonContact
+ * resource has been created).
+ * 
+ * @author Ismael Rivera
+ */
 public class PimoLifter implements BroadcastReceiver {
 	
 	private static final Logger logger = LoggerFactory.getLogger(PimoLifter.class);
@@ -54,12 +61,12 @@ public class PimoLifter implements BroadcastReceiver {
 			}
 		}
 
-		if (Event.ACTION_RESOURCE_ADD.equals(event.getAction())) {
+		String action = event.getAction();
+		if (Event.ACTION_RESOURCE_ADD.equals(action)
+				|| Event.ACTION_RESOURCE_MODIFY.equals(action)) {
 			pimoService.getOrCreateThingForOccurrence(event.getIdentifier());
-		} else if (Event.ACTION_RESOURCE_MODIFY.equals(event.getAction())) {
-			// TODO add modify action implementation
-		} else if (Event.ACTION_RESOURCE_DELETE.equals(event.getAction())) {
-			// TODO add the 'ON CASCADE' deletions logic
+		} else if (Event.ACTION_RESOURCE_DELETE.equals(action)) {
+			// no-op
 		}
 	}
 
