@@ -14,7 +14,9 @@
 
 package eu.dime.ps.datamining.service.api.impl;
 
+import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.createNiceMock;
+import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.reset;
@@ -143,9 +145,9 @@ public class JPAPersistenceManagerTestCase extends AbstractJUnit4SpringContextTe
 		replay(adapter);
 
 		// now setup the gateway to return the adapter bridge mock object
-		expect(gateway.getServiceAdapter(accountIdentifier, tenant)).andReturn(adapter).anyTimes();
+		expect(gateway.getServiceAdapter(eq(accountIdentifier), anyObject(Tenant.class))).andReturn(adapter).anyTimes();
 
-		// Setup is finished need to activate the mock
+		// setup is finished need to activate the mock
 		replay(gateway);
 	}
 
@@ -161,12 +163,12 @@ public class JPAPersistenceManagerTestCase extends AbstractJUnit4SpringContextTe
 
 		// remove test tenant
 		try {
-			tenant = Tenant.findByName(connection.getName());
-			if (tenant != null)
+			if (tenant != null) {
 				tenant.remove();
+			}
 		} catch (Exception e) {}
 	}
-
+	
 	@Test
 	public void testRestoreRegistryState() throws Exception {
 		ServiceCrawler crawler = setupDummyData();
