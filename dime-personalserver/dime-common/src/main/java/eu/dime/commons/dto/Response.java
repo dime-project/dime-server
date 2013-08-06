@@ -14,13 +14,15 @@
 
 package eu.dime.commons.dto;
 
+import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
+import java.util.Map;
 
 import javax.xml.bind.annotation.XmlAccessType;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 
 @javax.xml.bind.annotation.XmlRootElement
 @javax.xml.bind.annotation.XmlAccessorType(XmlAccessType.FIELD)
@@ -39,6 +41,14 @@ public class Response<T> {
         private final int code;
         private final String reason;
         
+        private final static Map<Integer, Status> lookup;
+    	static {
+    		lookup = new HashMap<Integer, Status>();
+    		for (Status status : EnumSet.allOf(Status.class)) {
+   				lookup.put(status.getCode(), status);
+    		}
+    	}
+
         Status(final int code, final String reason) {
             this.code = code;
             this.reason = reason;
@@ -57,7 +67,7 @@ public class Response<T> {
          * @return the reason
          */
         public String getReason() {
-            return toString();
+            return reason;
         }
         
         /**
@@ -66,9 +76,19 @@ public class Response<T> {
          */
         @Override
         public String toString() {
-            return code+" - "+reason;
+            return code+" "+reason;
         }
     
+        /**
+         * Look up a Status by its code.
+         * 
+         * @param code status code
+         * @return the Status enum for the given code
+         */
+    	public static Status get(int code) {
+    		return lookup.get(code);
+    	}
+    	
     }
     
 	@javax.xml.bind.annotation.XmlElement(name="response")

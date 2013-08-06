@@ -75,7 +75,7 @@ public class PSSearchController implements APIController {
 		} catch (ServiceNotAvailableException e) {
 			return Response.serverError(e.getMessage(), e);
 		} catch (ServiceException e) {
-			return Response.status(Status.valueOf(e.getDetailCode()), e.getMessage(), e);
+			return Response.status(Status.get(Integer.parseInt(e.getDetailCode())), e.getMessage(), e);
 		}
 
 	}

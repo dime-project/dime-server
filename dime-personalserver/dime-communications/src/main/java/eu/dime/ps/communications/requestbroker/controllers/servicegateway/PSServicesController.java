@@ -294,7 +294,7 @@ public class PSServicesController {
 					+ e.getMessage());
 			return Response.serverError(e.getMessage(), e);
 		} catch (ServiceException e) {
-			return Response.status(Status.valueOf(e.getDetailCode()), e.getMessage(), e);
+			return Response.status(Status.get(Integer.parseInt(e.getDetailCode())), e.getMessage(), e);
 		}
 
 		// Notify to UI
@@ -315,7 +315,7 @@ public class PSServicesController {
 		return Response.okEmpty();
 
 	}
-
+	
 	private UNRefToItem getAndSaveSharedObject(
 			ExternalNotificationDTO jsonNotification, String saidUriSender,
 			String saidUriReceiver) throws UnsupportedEncodingException,
