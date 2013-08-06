@@ -32,6 +32,8 @@ import org.ontoware.rdfreactor.schema.rdfs.Resource;
 import eu.dime.ps.controllers.exception.InfosphereException;
 import eu.dime.ps.semantic.connection.ConnectionProvider;
 import eu.dime.ps.semantic.exception.NotFoundException;
+import eu.dime.ps.semantic.model.nco.OrganizationContact;
+import eu.dime.ps.semantic.model.nco.PersonContact;
 import eu.dime.ps.semantic.model.nie.DataSource;
 import eu.dime.ps.semantic.query.Query;
 import eu.dime.ps.semantic.query.impl.BasicQuery;
@@ -138,6 +140,21 @@ public class ProfileAttributeManagerImpl extends InfoSphereManagerBase<Resource>
 			throw new InfosphereException("Profile attribute "+attributeId+" not found.");
 		}
 	}
+	
+	@Override
+	public OrganizationContact getOrganization(String orgId) throws InfosphereException{
+		
+		ResourceStore resourceStore = getResourceStore();
+		OrganizationContact org;
+		try {
+			org = resourceStore.get(new URIImpl(orgId), OrganizationContact.class,new URI[0]);
+		} catch (NotFoundException e) {
+			throw new InfosphereException("cannot retrieve the organizationContact: "+e, e);
+		}						
+		return org;						
+	}
+	
+	
 
 	@Override
 	public void add(Resource attribute) throws InfosphereException {

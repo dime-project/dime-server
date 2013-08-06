@@ -16,6 +16,7 @@
 package eu.dime.ps.communications.requestbroker.controllers.infosphere;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedList;
 
 import javax.ws.rs.Consumes;
@@ -51,6 +52,7 @@ import eu.dime.ps.semantic.model.nco.BirthDate;
 import eu.dime.ps.semantic.model.nco.EmailAddress;
 import eu.dime.ps.semantic.model.nco.Hobby;
 import eu.dime.ps.semantic.model.nco.Name;
+import eu.dime.ps.semantic.model.nco.OrganizationContact;
 import eu.dime.ps.semantic.model.nco.PersonContact;
 import eu.dime.ps.semantic.model.nco.PhoneNumber;
 import eu.dime.ps.semantic.model.nco.PostalAddress;
@@ -178,6 +180,7 @@ public class PSProfileAttributeController implements APIController {
 			org.ontoware.rdfreactor.schema.rdfs.Resource attribute = profileAttributeManager
 					.get(profileAttributeID);
 			ProfileAttribute pAttribute  = new ProfileAttribute(attribute, "@me");
+			setOrganization(pAttribute);
 			data = new Data<ProfileAttribute>(0, 1,pAttribute);
 		} catch (IllegalArgumentException e) {
 			return Response.badRequest(e.getMessage(), e);
@@ -427,8 +430,9 @@ public class PSProfileAttributeController implements APIController {
 
 				profileAttributeManager.update(attribute);
 				org.ontoware.rdfreactor.schema.rdfs.Resource returnAttribute = profileAttributeManager.get(profileAttributeID);
-
-				returnData = new Data<ProfileAttribute>(0, 1,new ProfileAttribute(returnAttribute,"@me"));
+				ProfileAttribute pAttribute  = new ProfileAttribute(returnAttribute, "@me");
+				setOrganization(pAttribute);
+				returnData = new Data<ProfileAttribute>(0, 1,pAttribute);				
 			} else
 				return Response.badRequest("the profile attribute: "
 						+ profileAttributeID
@@ -585,16 +589,26 @@ public class PSProfileAttributeController implements APIController {
 	}
 
 	private void addAttributeToData(Data<ProfileAttribute> data,
-			Resource attribute, org.ontoware.rdfreactor.schema.rdfs.Resource profile) throws BadFormedException, InfosphereException {
+			Resource attribute, org.ontoware.rdfreactor.schema.rdfs.Resource profile) throws InfosphereException {
 
-		ProfileAttribute pAttribute = createProfileAttribute(profile,attribute);		
-		data.getEntries().add(pAttribute);
+		ProfileAttribute pAttribute=null;
+		try {
+			pAttribute = createProfileAttribute(profile,attribute);
+		} catch (BadFormedException e) {
+			logger.warn("Profile attribute cannot be created: BadFomartException "+e,e);
+		}
+		finally{
+			if(pAttribute != null)
+				data.getEntries().add(pAttribute);
+		}
 	}
 
 	private ProfileAttribute createProfileAttribute(Resource profile, Resource attribute) throws InfosphereException, BadFormedException {
 		String userId = findUserId(profile);
-		return new ProfileAttribute(attribute,userId);		
-	}
+		ProfileAttribute pAttribute = new ProfileAttribute(attribute,userId);
+		setOrganization(pAttribute);
+		return pAttribute;
+	}	
 
 	private String findUserId(Resource profile) throws InfosphereException {
 		if(profile instanceof PersonContact)
@@ -624,6 +638,40 @@ public class PSProfileAttributeController implements APIController {
 			else return person.asURI().toString();
 		throw new InfosphereException("profile "+profile.asURI()+" has no Person as PIMO.occurence");
 	}
+	private void setOrganization(ProfileAttribute pAttribute)  {
+		OrganizationContact org=null;		
+		String orgId  = getOrganizationId(pAttribute);
+		if(orgId != null)
+			try {
+				org = profileAttributeManager.getOrganization(orgId);
+			} catch (Exception e) {
+				return;
+			}		
+		if(org != null){
+			String name = null;
+			name = org.getPrefLabel();
+			if (name != null)
+				setOrganitzationId(name,pAttribute);
+			else 
+				setOrganitzationId("",pAttribute);
+		}
 
+	}
+
+	private void setOrganitzationId(String name, ProfileAttribute pAttribute) {
+		HashMap<String,Object> value = (HashMap<String,Object>) pAttribute.get("value");
+		value.put("org", name);
+		pAttribute.put("value", value);
+	}
+
+	private String getOrganizationId(ProfileAttribute pAttribute) {
+		if(pAttribute.getCategory().equals("Affiliation")){
+			HashMap<String,Object> value = (HashMap<String,Object>) pAttribute.get("value");
+			if(value.containsKey("org"))
+				return value.get("org").toString();
+			else return null;
+		}
+		return null;
+	}	
 
 }

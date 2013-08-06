@@ -19,6 +19,7 @@ import java.util.Collection;
 import org.ontoware.rdfreactor.schema.rdfs.Resource;
 
 import eu.dime.ps.controllers.exception.InfosphereException;
+import eu.dime.ps.semantic.model.nco.OrganizationContact;
 
 /**
  * Management of profile attributes.
@@ -36,5 +37,8 @@ public interface ProfileAttributeManager extends InfoSphereManager<Resource> {
 	 * @return
 	 */
 	Collection<Resource> getAllByContainer(String containerId) throws InfosphereException;
+
+	OrganizationContact getOrganization(String orgId)
+			throws InfosphereException;
 	
 }
