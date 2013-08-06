@@ -41,7 +41,6 @@ import eu.dime.ps.controllers.UserManager;
 import eu.dime.ps.storage.entities.Role;
 import eu.dime.ps.storage.entities.Tenant;
 import eu.dime.ps.storage.entities.User;
-import jcifs.dcerpc.rpc;
 
 /**
  * Intercepts all requests to the API in order to check authentication for requested resources
@@ -51,6 +50,7 @@ import jcifs.dcerpc.rpc;
 public class AccessFilter implements Filter {
 
     private static final Logger logger = LoggerFactory.getLogger(AccessFilter.class);
+    
     private final static String API_PREFIX = "api/dime/rest/";
     private final static int API_PREFIX_LENGTH = API_PREFIX.length();
     private final static String PUSH_PREFIX = "push/";
@@ -66,118 +66,109 @@ public class AccessFilter implements Filter {
 	public void doFilter(ServletRequest request, ServletResponse response,
 			FilterChain chain) throws IOException, ServletException {
 		String said = ""; 
-		String username = "";
-		String password = "";
 		Tenant tenant = null;
+		
 		HttpServletRequest req = (HttpServletRequest) request;
 		String url = req.getRequestURL().toString();
-		logger.info("request: "+url);
+		logger.debug("AccessFilter processing "+req.getMethod()+" "+url+" request.");
 		
-		int index = url.indexOf("api/dime/rest/");
-		int index_push = url.indexOf("push/");
+		int apiPrefixIdx = url.indexOf(API_PREFIX);
+		int pushPrefixIdx = url.indexOf(PUSH_PREFIX);
 		
-		if (	((index < 0) && (index_push < 0))
-				|| 
-				((url.length() <= (index + API_PREFIX_LENGTH+1)) && (url.length() <= (index + PUSH_PREFIX_LENGTH+1)))){
-                    logger.error("Unable to handle url: "+ url);
-                    return;
-		} 
+		if ((apiPrefixIdx < 0 && pushPrefixIdx < 0)
+				|| (url.length() <= (apiPrefixIdx+API_PREFIX_LENGTH+1) && url.length() <= (apiPrefixIdx+PUSH_PREFIX_LENGTH+1))) {
+			logger.error("Unable to handle url: "+ url);
+			return;
+		}
 		
-		
-		if((index > 0)){
-			index += API_PREFIX_LENGTH; // adds length of 'api/dime/rest/'
-			said = url.substring(index, url.indexOf("/", index));
-		}else 
-		if((index_push > 0)){
-			index_push += PUSH_PREFIX_LENGTH; // adds length of 'push/'
-			said = url.substring(index_push, url.indexOf("/", index_push));
-		}else{
+		if (apiPrefixIdx > 0) {
+			apiPrefixIdx += API_PREFIX_LENGTH; // adds length of API_PREFIX
+			said = url.substring(apiPrefixIdx, url.indexOf("/", apiPrefixIdx));
+		} else if (pushPrefixIdx > 0) {
+			pushPrefixIdx += PUSH_PREFIX_LENGTH; // adds length of PUSH_PREFIX
+			said = url.substring(pushPrefixIdx, url.indexOf("/", pushPrefixIdx));
+		} else {
 			logger.error("Unable to handle url: "+ url);
             return;
 		}
-			
-			try {
-				
-				tenant = tenantManager.getByAccountName(said);
-				String auth = req.getHeader("Authorization");
-				if (auth == null){
-					// not authenticated
-					HttpSession session = req.getSession();
-					SecurityContext secContext = 
-							(SecurityContext) session.getAttribute("SPRING_SECURITY_CONTEXT");
-					if (secContext != null){
-						username = secContext.getAuthentication().getName();
-					    Collection<GrantedAuthority> authorities = secContext.getAuthentication().getAuthorities();
-					    boolean pass = false;
-					    for (Iterator<GrantedAuthority> iterator = authorities.iterator(); iterator.hasNext();) {
-							GrantedAuthority grantedAuthority = (GrantedAuthority) iterator.next();
-							if (grantedAuthority.getAuthority().equals(Role.OWNER.toString()) ||
-									grantedAuthority.getAuthority().equals(Role.ADMIN.toString())){
-								pass = true;
-								logger.debug(username + "  ---> authenticated as "+grantedAuthority.getAuthority());
-							}
-						}
-					    User user = User.findByTenantAndByUsername(tenant, username);
-					    //boolean sameId = tenant.getId().equals(tenantManager.getByAccountName(username).getId());
-						if (pass && (user != null)){
-							chain.doFilter(request, response);
-							logger.debug("Access granted to: "+ url + " for user: "+username + "  --- ");
-							return;
-						} else {
-							logger.error("Access denied to: "+ url + " for user: "+username);
-							throw new AccessControlException("Not authorized for requested ressources");
-						}
-					} else {
-						logger.debug("Access denied to: "+ url + " for user: "+username);
-						throw new AccessControlException("Not authorized for requested ressources");
-					}
-				} else { // basic auth
-					auth = auth.substring(5);
-					String decoded_auth = Base64encoding.decode(auth.trim());
 		
-					int d_index = decoded_auth.indexOf(":");
-					username = decoded_auth.substring(0, d_index);
-					password = decoded_auth.substring(d_index+1);
-				
-					if (url.endsWith("/api/dime/rest/"+said+"/user/credentials/"+username)){
-						// get credentials request -> no password check
-						User user = User.findByTenantAndByUsername(tenant, username);
-						if (user.getTenant().getId().equals(tenant.getId())){
-							chain.doFilter(request, response);
-						} else {
-							logger.error("Access denied to: "+ url + " for user: "+username);
-							throw new AccessControlException("Not authorized for requested ressources");
+		try {
+			tenant = tenantManager.getByAccountName(said);
+			String auth = req.getHeader("Authorization");
+			
+			if (auth == null){
+				// not authenticated
+				HttpSession session = req.getSession();
+				SecurityContext secContext = (SecurityContext) session.getAttribute("SPRING_SECURITY_CONTEXT");
+				if (secContext != null){
+					String username = secContext.getAuthentication().getName();
+				    
+					Collection<GrantedAuthority> authorities = secContext.getAuthentication().getAuthorities();
+				    boolean pass = false;
+				    for (Iterator<GrantedAuthority> iterator = authorities.iterator(); iterator.hasNext();) {
+						GrantedAuthority grantedAuthority = (GrantedAuthority) iterator.next();
+						if (Role.OWNER.toString().equals(grantedAuthority.getAuthority())
+								|| Role.ADMIN.toString().equals(grantedAuthority.getAuthority())) {
+							pass = true;
+							logger.debug(username+"  ---> authenticated as "+grantedAuthority.getAuthority());
 						}
-					} else { // check if guests belong to tenant
-						User user = userManager.getByUsernameAndPassword(username, password);
-						if ((user.getRole() == Role.GUEST) && user.getTenant().getId().equals(tenant.getId())){
-							// authenticated as guest of tenant, so continue
-							if (url.contains("/api/dime/rest/"+said+"/shared")){ //let only requests to new GUEST API pass
-								logger.debug("Access granted to: "+ url + " for user: "+username + "  --- authenticated as GUEST of tenant "+user.getTenant().getName());
-								chain.doFilter(request, response);
-							}
-						} else if (user.getRole() == Role.OWNER && user.getTenant().getId().equals(tenant.getId())){
-							// authenticated as owner and requesting own ressources, so continue
-							logger.debug("Access granted to: "+ url + " for user: "+username + "  --- authenticated as OWNER");
-							chain.doFilter(request, response);
-						} else if (user.getRole() == Role.ADMIN){ // ADMIN may access all tenants paths
-							logger.debug("Access granted to: "+ url + " for user: "+username + "  --- authenticated as ADMIN");
+					}
+				    
+				    User user = User.findByTenantAndByUsername(tenant, username);
+					if (pass && user != null) {
+						chain.doFilter(request, response);
+						logger.debug(req.getMethod()+" "+url+" granted for user "+username);
+						return;
+					} else {
+						throw new AccessControlException(req.getMethod()+" "+url+" request not authorized for user "+username);
+					}
+				} else {
+					throw new AccessControlException(req.getMethod()+" "+url+" request not authorized. No authorization data provided.");
+				}
+			} else { // basic auth
+				String decodedAuth = Base64encoding.decode(auth.substring(5).trim());
+				String[] credentials = decodedAuth.split(":");
+				String username = credentials[0];
+				String password = credentials[1];
+			
+				if (url.endsWith(API_PREFIX+said+"/user/credentials/"+username)) {
+					// get credentials request -> no password check
+					User user = User.findByTenantAndByUsername(tenant, username);
+					if (user.getTenant().getId().equals(tenant.getId())){
+						chain.doFilter(request, response);
+					} else {
+						throw new AccessControlException(req.getMethod()+" "+url+" request not authorized for user "+username);
+					}
+				} else {
+					// check if guests belong to tenant
+					User user = userManager.getByUsernameAndPassword(username, password);
+					if (user == null) {
+						// maybe username doesn't exist, or password is incorrect
+						throw new AccessControlException(req.getMethod()+" "+url+" request not authorized for user "+username+": username or password incorrect.");
+					} else if (Role.GUEST.equals(user.getRole()) && user.getTenant().getId().equals(tenant.getId())) {
+						// authenticated as guest of tenant, so continue
+						if (url.contains("/api/dime/rest/"+said+"/shared")){ //let only requests to new GUEST API pass
+							logger.debug("Access granted to: "+ url+" for user: "+username+"  --- authenticated as GUEST of tenant "+user.getTenant().getName());
 							chain.doFilter(request, response);
 						}
-						else {
-							// not owner and not guest and not admin of said
-							logger.error("Access denied to: "+ url + " for user: "+username);
-							throw new AccessControlException("Not authorized for requested ressources");
-						}
+					} else if (Role.OWNER.equals(user.getRole())  && user.getTenant().getId().equals(tenant.getId())){
+						// authenticated as owner and requesting own ressources, so continue
+						logger.debug("Access granted to: "+ url+" for user: "+username+"  --- authenticated as OWNER");
+						chain.doFilter(request, response);
+					} else if (Role.ADMIN.equals(user.getRole())){ // ADMIN may access all tenants paths
+						logger.debug("Access granted to: "+ url+" for user: "+username+"  --- authenticated as ADMIN");
+						chain.doFilter(request, response);
+					} else {
+						// not owner and not guest and not admin of said
+						throw new AccessControlException(req.getMethod()+" "+url+" request not authorized for user "+username);
 					}
 				}
-				//chain.doFilter(request, response);
-			} catch (IndexOutOfBoundsException e) {
-				logger.error("Couldn't find 'said' in the request URL "+url);
-			} catch (NoResultException e) {
-				logger.error("User not found: "+username);
-				throw new AccessControlException("Not authorized for requested ressources");
 			}
+		} catch (IndexOutOfBoundsException e) {
+			logger.error("Couldn't find 'said' in the request URL "+url);
+		} catch (NoResultException e) {
+			throw new AccessControlException(req.getMethod()+" "+url+" request not authorized: "+e.getMessage());
+		}
 	}
 	
 	@Override
