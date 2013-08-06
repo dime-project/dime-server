@@ -39,6 +39,9 @@ import eu.dime.ps.semantic.service.exception.PimoConfigurationException;
 import eu.dime.ps.semantic.service.exception.PimoException;
 import eu.dime.ps.semantic.service.impl.PimoService;
 
+/**
+ * Tests {@link PimoService}.
+ */
 public class PimoServiceTest extends SemanticTest {
 
 	@Autowired

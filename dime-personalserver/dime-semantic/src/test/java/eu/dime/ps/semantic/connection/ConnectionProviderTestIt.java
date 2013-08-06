@@ -19,16 +19,14 @@ import ie.deri.smile.vocabulary.NFO;
 
 import java.util.UUID;
 
-import junit.framework.TestCase;
-
 import org.junit.After;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.model.node.impl.URIImpl;
 import org.ontoware.rdf2go.vocabulary.RDF;
 
+import eu.dime.ps.semantic.SemanticTest;
 import eu.dime.ps.semantic.model.ModelFactory;
 import eu.dime.ps.semantic.model.pimo.Person;
 import eu.dime.ps.semantic.rdf.impl.SesameNativeRepositoryFactory;
@@ -38,19 +36,14 @@ import eu.dime.ps.semantic.rdf.impl.SesameNativeRepositoryFactory;
  * 
  * @author Ismael Rivera
  */
-public class ConnectionProviderTestIt extends TestCase {
+public class ConnectionProviderTestIt extends SemanticTest {
 
 	private ConnectionProvider connectionProvider;
 
-	@BeforeClass
-	public static void setUpClass() throws Exception {
-		// disabling org.openrdf.rdf2go.RepositoryModel warnings
-		org.apache.log4j.Logger.getLogger("org.openrdf.rdf2go").setLevel(org.apache.log4j.Level.OFF);        
-		java.util.logging.Logger.getLogger("org.openrdf.rdf2go").setLevel(java.util.logging.Level.OFF);
-	}
-
+	@Override
 	@Before
 	public void setUp() throws Exception {
+		super.setUp();
 		connectionProvider = new ConnectionProvider(new SesameNativeRepositoryFactory());
 	}
 

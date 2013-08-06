@@ -16,11 +16,11 @@ package eu.dime.ps.semantic.dto;
 
 import ie.deri.smile.vocabulary.NFO;
 
-import org.junit.Assert;
 import org.junit.Test;
 import org.ontoware.rdf2go.vocabulary.RDF;
 
 import eu.dime.ps.dto.Type;
+import eu.dime.ps.semantic.SemanticTest;
 import eu.dime.ps.semantic.model.ModelFactory;
 import eu.dime.ps.semantic.model.dao.Account;
 import eu.dime.ps.semantic.model.ddo.Device;
@@ -41,7 +41,7 @@ import eu.dime.ps.semantic.privacy.PrivacyPreferenceType;
  * 
  * @author Ismael Rivera
  */
-public class TypeTest extends Assert {
+public class TypeTest extends SemanticTest {
 
 	ModelFactory factory = new ModelFactory();
 

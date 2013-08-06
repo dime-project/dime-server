@@ -82,8 +82,8 @@ public abstract class SemanticTest extends Assert {
 
 	@BeforeClass
 	public static void setUpClass() throws Exception {
-		//disable warnings from RepositoryModel
-		org.apache.log4j.Logger.getLogger("org.openrdf.rdf2go").setLevel(org.apache.log4j.Level.OFF);		
+		// disabling org.openrdf.rdf2go.RepositoryModel warnings
+		org.apache.log4j.Logger.getLogger("org.openrdf.rdf2go").setLevel(org.apache.log4j.Level.OFF);        
 		java.util.logging.Logger.getLogger("org.openrdf.rdf2go").setLevel(java.util.logging.Level.OFF);
 		
 		org.apache.log4j.Logger.getLogger("org.semanticdesktop.aperture").setLevel(org.apache.log4j.Level.OFF);		
