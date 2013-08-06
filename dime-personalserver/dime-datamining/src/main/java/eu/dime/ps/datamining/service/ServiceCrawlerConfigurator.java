@@ -56,37 +56,12 @@ public class ServiceCrawlerConfigurator {
 	
 	private ServiceCrawlerConfigurator() {
 		this.config = new HashMap<String, List<JobConfiguration>>();
-		
-		// Pertaining to decision in daily call on 17.07.2013: Disable livepost crawling functionality.
-		
-		// FIXME on the staging server (linux) the config XML files are not found, now setting the config programmatically
-		// and will fix later
-		config.put("Facebook", new ArrayList<JobConfiguration>());
-		config.get("Facebook").add(new JobConfiguration("/person/@me/@all", eu.dime.ps.semantic.model.nco.PersonContact.class, "0 0/30 1 1 * ?"));
-		config.get("Facebook").add(new JobConfiguration("/profile/@me/@all", eu.dime.ps.semantic.model.nco.PersonContact.class, "0 0/30 * * * ?"));
-//		config.get("Facebook").add(new JobConfiguration("/livepost/@me/@all", eu.dime.ps.semantic.model.dlpo.LivePost.class, "0 0/5 * * * ?"));
-		config.put("Fitbit", new ArrayList<JobConfiguration>());
-//		config.get("Fitbit").add(new JobConfiguration("/person/@me/@all", eu.dime.ps.semantic.model.nco.PersonContact.class, "0 0/30 * * * ?"));
-//		config.get("Fitbit").add(new JobConfiguration("/profile/@me/@all", eu.dime.ps.semantic.model.nco.PersonContact.class, "0 0/30 * * * ?"));
-		config.get("Fitbit").add(new JobConfiguration("/activity/@me/@all", eu.dime.ps.semantic.model.dpo.Activity.class, "0 0/5 * * * ?"));
-		config.put("GooglePlus", new ArrayList<JobConfiguration>());
-		config.get("GooglePlus").add(new JobConfiguration("/profile/@me/@all", eu.dime.ps.semantic.model.nco.PersonContact.class, "0 0/30 * * * ?"));
-//		config.get("GooglePlus").add(new JobConfiguration("/livepost/@me/@all", eu.dime.ps.semantic.model.dlpo.LivePost.class, "0 0/5 * * * ?"));
-		config.put("LinkedIn", new ArrayList<JobConfiguration>());
-		config.get("LinkedIn").add(new JobConfiguration("/person/@me/@all", eu.dime.ps.semantic.model.nco.PersonContact.class, "0 0/30 1 1 * ?"));
-		config.get("LinkedIn").add(new JobConfiguration("/profile/@me/@all", eu.dime.ps.semantic.model.nco.PersonContact.class, "0 0/30 * * * ?"));
-//		config.get("LinkedIn").add(new JobConfiguration("/livepost/@me/@all", eu.dime.ps.semantic.model.dlpo.LivePost.class, "0 0/5 * * * ?"));
-//		config.get("LinkedIn").add(new JobConfiguration("/livepost/@all", eu.dime.ps.semantic.model.dlpo.LivePost.class, "0 0/5 * * * ?"));
-		config.put("Twitter", new ArrayList<JobConfiguration>());
-		config.get("Twitter").add(new JobConfiguration("/person/@me/@all", eu.dime.ps.semantic.model.nco.PersonContact.class, "0 0/30 * * * ?"));
-		config.get("Twitter").add(new JobConfiguration("/profile/@me/@all", eu.dime.ps.semantic.model.nco.PersonContact.class, "0 0/30 * * * ?"));
-//		config.get("Twitter").add(new JobConfiguration("/livepost/@me/@all", eu.dime.ps.semantic.model.dlpo.LivePost.class, "0 0/5 * * * ?"));
-//		config.get("Twitter").add(new JobConfiguration("/livepost/@all", eu.dime.ps.semantic.model.dlpo.LivePost.class, "0 0/5 * * * ?"));
 	}
 	
 	public static ServiceCrawlerConfigurator getInstance() {
-		if (INSTANCE == null)
+		if (INSTANCE == null) {
 			INSTANCE = new ServiceCrawlerConfigurator();
+		}
 		return INSTANCE;
 	}
 	
@@ -120,7 +95,7 @@ public class ServiceCrawlerConfigurator {
 		List<JobConfiguration> jobs = new ArrayList<JobConfiguration>();
 
 		// reads XML file for the adapter in directory 'crawler'
-		String configFile = "crawler" + File.separator + adapterName + ".xml";
+		String configFile = "crawler" + File.separator + adapterName.toLowerCase() + ".xml";
 		InputStream stream = this.getClass().getClassLoader().getResourceAsStream(configFile);
 		
 		// stream = null if file not found
@@ -174,7 +149,6 @@ public class ServiceCrawlerConfigurator {
 		} catch (ClassNotFoundException e) {
 			throw new ConfigurationParsingException("Crawling config could not be processed for adapter '"+adapterName+"'", e);
 		}
-		
 	}
 
 }

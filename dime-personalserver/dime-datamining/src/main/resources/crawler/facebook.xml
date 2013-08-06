@@ -5,17 +5,18 @@
 		<job>
 			<path>/person/@me/@all</path>
 			<type>eu.dime.ps.semantic.model.nco.PersonContact</type>
-			<cron>0 0 0 * * ?</cron>
+			<cron>0 0 0 1 1 ?</cron>
 		</job>
 		<job>
 			<path>/profile/@me/@all</path>
 			<type>eu.dime.ps.semantic.model.nco.PersonContact</type>
-			<cron>0 0 0 * * ?</cron>
+			<cron>0 0 0 1 1 ?</cron>
 		</job>
-		<job>
+		<!-- Pertaining to decision in daily call on 17.07.2013: Disable livepost crawling functionality. -->
+		<!-- job>
 			<path>/livepost/@me/@all</path>
 			<type>eu.dime.ps.semantic.model.dlpo.LivePost</type>
 			<cron>0 0/15 * * * ?</cron>
-		</job>
+		</job -->
 	</jobs>
 </crawler>
