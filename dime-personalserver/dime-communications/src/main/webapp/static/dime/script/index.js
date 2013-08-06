@@ -36,6 +36,17 @@ DimeView = {
     currentGuid: null,
     pushState:{}, //browser history to manage back-button
     
+    getShortNameForLocation: function(name){
+        var myName = name;
+        
+        if(myName.length>40){
+            myName = myName.substr(0, 40);
+            myName = myName + " ..";
+        }
+        
+        return myName;
+    },
+    
     getShortName: function(name){
         var myName = name;
         
@@ -240,10 +251,19 @@ DimeView = {
         var jChildItem = $("<div/>");
         var itemClass = entry.type + "Item childItem";
         
+        jChildItem.attr("id", entry.guid + "Div");
         jChildItem.addClass(itemClass);
+        
+        //get current placeGuid stored in #currentPlaceGuid
+        var currentPlaceGuid = document.getElementById("currentPlaceGuid").getAttribute("data-guid");
+        if(entry.guid == currentPlaceGuid){
+            jChildItem.addClass("highlightCurrentPlaceItem");
+        }
+        
         jChildItem.append('<img src="'+ Dime.psHelper.guessLinkURL(entry.imageUrl)+ '" />');
         jChildItem.append(DimeView.createMark(entry, "", false));
-        jChildItem.append('<h4>'+ DimeView.getShortName(entry.name) + '</h4>');
+        //jChildItem.append('<h4>'+ DimeView.getShortName(entry.name) + '</h4>');
+        jChildItem.append('<h4 title="' + entry.name + '"><b>'+ DimeView.getShortNameForLocation(entry.name) +  '</b></h4>');
         if(fav){
             jChildItem.append('<p>' + fav + '</p>');
         }
@@ -1276,7 +1296,6 @@ DimeView = {
                                 var lon = position.coords.longitude;
                                 var acc = position.coords.accuracy;
                                 Dime.psHelper.postCurrentContext(lat, lon, acc);
-                                (new Dime.Dialog.Toast("Getting current geolocation was successfully!")).show();
                             }); 
                         }else{
                             (new Dime.Dialog.Toast("Geolocation services are not supported by your browser.")).show();

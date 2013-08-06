@@ -1038,7 +1038,7 @@ Dime.privacyTrust={
     }
     
     
-}
+};
 
 
 Dime.AdvisoryRequest=function(profileGuid, agentGuids, shareableItems){
@@ -2524,7 +2524,6 @@ Dime.psHelper = {
         return null;
     },
     
-
     tiggerNewSituationEvent: function(situation, switchOff){
         var path = Dime.psHelper.serverContextPath+'/@me';
         if (!situation){
@@ -2557,6 +2556,63 @@ Dime.psHelper = {
         myReq.send();
 
     },
+    
+    //REFACTOR: merge following 2 methods (postUpdateCurrentPlace + postCurrentContext)     
+    postUpdateCurrentPlace: function(event, element, item, restoreLocation){
+        
+        var path = Dime.ps_configuration.getUserUrlString()+"/context/@me";
+        
+        var timestamp = new Date();
+        timestamp.setMilliseconds(0);
+        
+        var expires = new Date();
+        if(restoreLocation){
+            expires.setSeconds(expires.getSeconds() + 1);
+            expires.setMilliseconds(0);
+        }else{
+            //midnight
+            expires.setHours(23);
+            expires.setMinutes(59);
+            expires.setSeconds(59);
+            expires.setMilliseconds(0);
+        }
+        
+        var entry = {
+            "guid": "9f0dfb3a-938c-4e6c-aad3-2078c80d55fa",
+            "type": "context",
+            //HACK! force to this time format, need dynamically time offset
+            "timestamp": timestamp.toISOString().replace("Z","+02:00").replace(".000",""),
+            "expires": expires.toISOString().replace("Z","+02:00").replace(".000",""),
+            "scope": "currentPlace",
+            "entity": {
+                "id": "@me",
+                "type": "username"
+            },
+            "source": {
+                "id": "desktop-crawler",
+                "v": "0.9"
+            },
+            "dataPart": {
+                "placeId": item.guid,
+                "placeName": item.name
+            }
+        };
+        
+        var callback = function(response){
+            console.log(response);
+            //TODO check response for errors
+            if(restoreLocation){
+                (new Dime.Dialog.Toast('Removing "' + item.name + '" as your current location was successfully!')).showLong();
+            }else{
+                (new Dime.Dialog.Toast('Setting "' + item.name + '" as your current location was successfully!')).showLong();
+            }
+                
+        };
+        
+        var request = Dime.psHelper.prepareRequest(entry);
+        $.postJSON(path, request, callback);
+        
+    },
      
     postCurrentContext: function(latitude, longitude, accuracy){
 
@@ -2570,18 +2626,30 @@ Dime.psHelper = {
         timestamp.setMilliseconds(0);
         
         //expires date (midnight)
+<<<<<<< HEAD
         var date = new Date();
         date.setHours(23);
         date.setMinutes(59);
         date.setSeconds(59);
         date.setMilliseconds(0);
+=======
+        var expires = new Date();
+        expires.setHours(23);
+        expires.setMinutes(59);
+        expires.setSeconds(59);
+        expires.setMilliseconds(0);
+>>>>>>> FEATURE added 'setting location' and additional improvements
         
         var entry ={
                     "guid": JSTool.randomGUID(),
                     "type": "context",
+<<<<<<< HEAD
                     //TODO: time format
+=======
+                    //HACK! force to this time format, need dynamically time offset
+>>>>>>> FEATURE added 'setting location' and additional improvements
                     "timestamp": timestamp.toISOString().replace("Z","+02:00").replace(".000",""),
-                    "expires": date.toISOString().replace("Z","+02:00").replace(".000",""), 
+                    "expires": expires.toISOString().replace("Z","+02:00").replace(".000",""), 
                     "scope": "position",
                     "entity": {
                         "id": "@me",
@@ -2601,6 +2669,8 @@ Dime.psHelper = {
         
         var callback = function(response){
             console.log(response);
+            //TODO check response for errors
+            (new Dime.Dialog.Toast("Getting current geolocation was successfully!")).showLong();
         };
         
         var request = Dime.psHelper.prepareRequest(entry);
@@ -3503,10 +3573,10 @@ Dime.Navigation = {
     updateCurrentPlace: function(){
         var handleCurrentPlaceCallBack=function(placeGuidAndNameObject){
             
-            var updateCurPlaceElement=function(placeName){
+            var updateCurPlaceElement=function(placeName, placeId){
                 var placeElement = document.getElementById('currentPlace');                
                 placeElement.innerHTML =  '<div class="places">'
-                + '<div class="placesIcon"></div>'
+                + '<div class="placesIcon" id="currentPlaceGuid" data-guid="' + placeId + '"></div>'
                 + placeName+'</div>';                
             };
             
@@ -3515,7 +3585,7 @@ Dime.Navigation = {
                 return;
             }
             
-            updateCurPlaceElement(placeGuidAndNameObject.placeName);
+            updateCurPlaceElement(placeGuidAndNameObject.placeName, placeGuidAndNameObject.placeId);
             
         };
         Dime.REST.getCurrentPlaceGuidAndName(handleCurrentPlaceCallBack);
@@ -4126,7 +4196,6 @@ Dime.DetailDialog.prototype = {
 
     createNameInput: function(item){
         var prefix=((item.type!==Dime.psMap.TYPE.LIVEPOST)?'name of ':'title of ');
-        
         var nameInput=$('<input type="text"></input>').prop("readonly",this.readonly)
                 .addClass("itemDetailNameInput")
                 .attr('placeholder',prefix+Dime.psHelper.getCaptionForItemType(item.type))
@@ -4362,25 +4431,27 @@ Dime.DetailDialog.prototype = {
         var readOnly = isReadOnly?"readonly":"";
         
         if (!itemValueBase[key]){
-            itemValueBase[key]=defaultValue;
+            //ADD to skip empty fields
+            return;
+            itemValueBase[key] = defaultValue;
         }
 
-        var innerHtml ='<span class="dimeDetailDialogKeyValueCaption">'+key+':</span>';
+        var innerHtml ='<span class="dimeDetailDialogKeyValueCaption">'+id+': </span>';
 
         if (!isTextArea){
-            innerHtml += '<input class="dimeDetailDialogKeyValueValue" id="'+id+'" type="text" value="'
+            innerHtml += '<input class="dimeDetailDialogKeyValueValue" id="'+key+'" type="text" value="'
             +itemValueBase[key]+'" ' + readOnly + ' ></input>\n';
         }else{
-            innerHtml += '<textarea class="dimeDetailDialogKeyValueValue" id="'+id+'" ' + readOnly + '>'
+            innerHtml += '<textarea class="dimeDetailDialogKeyValueValue" id="'+key+'" ' + readOnly + '>'
             +itemValueBase[key]+'</textarea>\n';
         }
 
         var result =
-        $(JSTool.createHTMLElementString("li", id+"KeyValue", ["DimeDetailDialogPAValueListItem"], null, innerHtml));
+        $(JSTool.createHTMLElementString("li", key+"KeyValue", ["DimeDetailDialogPAValueListItem"], null, innerHtml));
 
         var updateKeyValue = function(){
 
-            itemValueBase[key]=$("#"+id).val();
+            itemValueBase[key]=$("#"+key).val();
         };
         this.assembleFunctions.push(updateKeyValue);
 
@@ -4395,34 +4466,36 @@ Dime.DetailDialog.prototype = {
 
         var listContainer =
         $(JSTool.createHTMLElementString("ul", this.placeListContainer, [], null, ""));
-
+        
+        //CSS: center the input
+        listContainer.attr("style", "margin-right: 100px");
 
         listContainer.append(
-            this.createKeyValueInput.call(this, "information", item, "", "information", true, true));
+            this.createKeyValueInput.call(this, "information", item, "", "Information", true, true));
 
         if (!item.address){
             item.address={};
         }
 
         listContainer.append(
-            this.createKeyValueInput.call(this, "streetAddress", item.address, "", "streetAddress", false, true));
+            this.createKeyValueInput.call(this, "streetAddress", item.address, "", "Street address", false, true));
         listContainer.append(
-            this.createKeyValueInput.call(this, "postalCode", item.address, "", "postalCode", false, true));
+            this.createKeyValueInput.call(this, "postalCode", item.address, "", "Postal code", false, true));
         //FIXME locality seems not to be supported by server?!?
         listContainer.append(
-            this.createKeyValueInput.call(this, "locality", item.address, "", "locality", false, true));
+            this.createKeyValueInput.call(this, "locality", item.address, "", "Locality", false, true));
         listContainer.append(
-            this.createKeyValueInput.call(this, "region", item.address, "", "region", false, true));
+            this.createKeyValueInput.call(this, "region", item.address, "", "Region", false, true));
         listContainer.append(
-            this.createKeyValueInput.call(this, "country", item.address, "", "country", false, true));
+            this.createKeyValueInput.call(this, "country", item.address, "", "Country", false, true));
         listContainer.append(
-            this.createKeyValueInput.call(this, "phone", item, "", "phone", false, true));
+            this.createKeyValueInput.call(this, "phone", item, "", "Phone", false, true));
         listContainer.append(
-            this.createKeyValueInput.call(this, "position", item, "", "position", false, true));
+            this.createKeyValueInput.call(this, "position", item, "", "Position", false, true));
         listContainer.append(
-            this.createKeyValueInput.call(this, "url", item, "", "url", false, true));
+            this.createKeyValueInput.call(this, "url", item, "", "Website", false, true));
         listContainer.append(
-            this.createKeyValueInput.call(this, "formatted", item.address, "", "formatted", true, true));
+            this.createKeyValueInput.call(this, "formatted", item.address, "", "Address", true, true));
     
         //adding favorite-checkbox
         listContainer.append(
@@ -4451,15 +4524,18 @@ Dime.DetailDialog.prototype = {
         listContainer.append(
             $("<li></li>")
                 .addClass("DimeDetailDialogPAValueListItem")
+                //add CSS, refactor?
+                .attr("style", "display: -webkit-inline-box; margin-top: 5px;")
                 .append(
                     $('<span class="dimeDetailDialogKeyValueCaption"></span>').text("Rate this location: ")
                 )
                 .append(
                     $("<div></div>")
                         .addClass("ratingStarsYour")
+                        //add CSS, refactor?
+                        .attr("style", "margin-left: 11px; width: 202px !important;")
                         .raty({
                             score: item.userRating*5,
-                            width: 200,
                             cancel: true,
                             half: true,
                             precision: true,
@@ -4622,7 +4698,7 @@ Dime.DetailDialog.prototype = {
             .append(this.createNameInput(item));
 
         if(item.type!==Dime.psMap.TYPE.GROUP){
-            this.body.append(this.getPrivTrustElement(item,this.readonly))
+            this.body.append(this.getPrivTrustElement(item,this.readonly));
         }
 
         var childType = Dime.psHelper.getChildType(item.type);
@@ -4725,6 +4801,25 @@ Dime.DetailDialog.prototype = {
         }else if (item.type===Dime.psMap.TYPE.PLACE){
             this.body.append(this.createPlaceDetail(item));
             
+            var currentPlaceGuid = document.getElementById("currentPlaceGuid").getAttribute("data-guid");
+            
+            if(item.guid == currentPlaceGuid){
+                //samePlace
+                var button = $('<div></div>')
+                            .addClass("setCurrentPlaceButton")
+                            .attr("href", "#")
+                            .clickExt(this, Dime.psHelper.postUpdateCurrentPlace, item, true)
+                            .append("Remove this as current location");
+            }else{
+                //otherPlace
+                var button = $('<div></div>')
+                            .addClass("setCurrentPlaceButton")
+                            .attr("href", "#")
+                            .clickExt(this, Dime.psHelper.postUpdateCurrentPlace, item, false)
+                            .append("Set as current location (valid today)");
+            }
+                   
+            this.body.append(button);   
         }   
         
     },
@@ -4806,7 +4901,7 @@ Dime.DetailDialog.prototype = {
             if (className){
                 listItem.addClass(className);
             }
-
+            
             listItem.append(
                 $('<div class="listElementText"/>')
                 .append($('<span class="listElementTextName"/>').text(name))
@@ -4846,7 +4941,7 @@ Dime.DetailDialog.prototype = {
                     addAgentsToContainer(profileContainerList, aclPackage.personItems);
                     addAgentsToContainer(profileContainerList, aclPackage.serviceItems);
 
-                    var profileContainer = createAgentListItem("shared as:",pName,pImage, "metaDataShareProfile")
+                    var profileContainer = createAgentListItem("shared as:", pName, pImage, "metaDataShareProfile")
                     .append(profileContainerList);
 
                     editDlgRef.itemsItemSection.append(profileContainer);
@@ -5136,7 +5231,7 @@ Dime.ShareDialog.prototype={
 
             var loadingDone=function(){
                 updateWarningView(advisory, allMyData);
-            }
+            };
 
             allMyData.load(loadingDone);
         };
@@ -5898,8 +5993,8 @@ Dime.Dialog={
 
 
 Dime.Dialog.Toast.prototype={
-    LONG: 3*1000,
-    SHORT: 1500,
+    LONG: 3.5*1000,
+    SHORT: 2000,
 
     showShort: function(){
         this.show(this.SHORT);
