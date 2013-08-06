@@ -2524,6 +2524,7 @@ Dime.psHelper = {
         return null;
     },
     
+
     tiggerNewSituationEvent: function(situation, switchOff){
         var path = Dime.psHelper.serverContextPath+'/@me';
         if (!situation){
@@ -2626,28 +2627,16 @@ Dime.psHelper = {
         timestamp.setMilliseconds(0);
         
         //expires date (midnight)
-<<<<<<< HEAD
-        var date = new Date();
-        date.setHours(23);
-        date.setMinutes(59);
-        date.setSeconds(59);
-        date.setMilliseconds(0);
-=======
         var expires = new Date();
         expires.setHours(23);
         expires.setMinutes(59);
         expires.setSeconds(59);
         expires.setMilliseconds(0);
->>>>>>> FEATURE added 'setting location' and additional improvements
         
         var entry ={
                     "guid": JSTool.randomGUID(),
                     "type": "context",
-<<<<<<< HEAD
-                    //TODO: time format
-=======
                     //HACK! force to this time format, need dynamically time offset
->>>>>>> FEATURE added 'setting location' and additional improvements
                     "timestamp": timestamp.toISOString().replace("Z","+02:00").replace(".000",""),
                     "expires": expires.toISOString().replace("Z","+02:00").replace(".000",""), 
                     "scope": "position",
@@ -3581,7 +3570,7 @@ Dime.Navigation = {
             };
             
             if (!placeGuidAndNameObject || !placeGuidAndNameObject.placeName || placeGuidAndNameObject.placeName===0){
-                updateCurPlaceElement("Location unknown");
+                updateCurPlaceElement("Location: unknown");
                 return;
             }
             
@@ -3606,7 +3595,7 @@ Dime.Navigation = {
             .attr('href','index.html?type='+ Dime.psMap.TYPE.SITUATION)
             .append($('<div/>').addClass('clear'))
             .append($('<div/>').addClass('situation').attr('id','currentSituationText')
-                .textOnly('Situation unknown')
+                .textOnly('Situation: unknown')
                 .append($('<div/>').addClass('situationIcon'))
                 );
             var placeLink = $('<a/>')
@@ -3646,7 +3635,7 @@ Dime.Navigation = {
             .append(Dime.Navigation.createMenuLiButton("navButtonMessages","" ,Dime.psMap.TYPE.LIVESTREAM))
             .append(Dime.Navigation.createMenuLiButton("navButtonPeople","People" ,Dime.psMap.TYPE.GROUP))
             .append(Dime.Navigation.createMenuLiButton("navButtonData","My Data" ,Dime.psMap.TYPE.DATABOX))
-            .append(Dime.Navigation.createMenuLiButton("navButtonProfile","My Profile" ,Dime.psMap.TYPE.PROFILE))
+            .append(Dime.Navigation.createMenuLiButton("navButtonProfile","My Profile Cards" ,Dime.psMap.TYPE.PROFILE))
             .append(Dime.Navigation.createMenuLiButton("navButtonEvent","Calendar" ,Dime.psMap.TYPE.EVENT))
             .append(Dime.Navigation.createMenuLiButtonSettings())
             .append(createNavCorner())
@@ -4508,7 +4497,7 @@ Dime.DetailDialog.prototype = {
                     $('<input></input>')
                         .addClass("dimeDetailDialogKeyValueValue")
                         .attr("type", "checkbox")
-                        .attr("value", item.favorite)
+                        .attr("checked", item.favorite)
                         .attr("id", "favoriteCheckboxLocation")
                         .change(function(){
                             if($(this).attr("checked")){
@@ -5672,6 +5661,7 @@ Dime.ConfigurationDialog.prototype = {
                     );
             }
         };
+        
         var deleteAcc = "";
         if(!isNewAccount){
             deleteAcc = $('<div></div>')
@@ -5969,6 +5959,7 @@ Dime.Dialog={
             return element;
         }
     },
+            
     Toast: function(text){
         this.id=JSTool.randomGUID();
         this.text = text;
@@ -5977,6 +5968,7 @@ Dime.Dialog={
                 $('<div/>').text(text)
             );
     },
+            
     Alert: function(text){
         this.id=JSTool.randomGUID();
         this.text = text;
