@@ -1032,7 +1032,7 @@ DimeView = {
     },
     
     cleanUpView: function(){
-        //clear container 
+        //clear container
         $('#groupNavigation').empty();
         $('#itemNavigation').empty();
 
@@ -1097,7 +1097,13 @@ DimeView = {
                 if(!connected){
                     //(new Dime.Dialog.Toast('To activate support for places, please connect to the YellowMapPlaceService in the settings tab!')).show(10*1000);
                     //window.alert('To activate support for places, please connect to the YellowMapPlaceService in the settings tab!');
-                    (new Dime.Dialog.Alert('To activate support for places, please connect to the YellowMapPlaceService in the settings tab!')).show();
+                    //(new Dime.Dialog.Alert('To activate support for places, please connect to the YellowMapPlaceService in the settings tab!')).show();
+                    $("#alertStatusNavigation")
+                            .removeClass("hidden")
+                            //.append($('<img/>').attr('src','img/warn/share_state_severe.png'))
+                            .append('To see places nearby to you, please')
+                            .append('<br>1. go to Settings and add the "YellowmapPlaceService"')
+                            .append('<br>2. get your current location (buttons bar on the right "Get location")');
                     continueSearch=false;
                 }
             },this);
@@ -1270,9 +1276,10 @@ DimeView = {
                                 var lon = position.coords.longitude;
                                 var acc = position.coords.accuracy;
                                 Dime.psHelper.postCurrentContext(lat, lon, acc);
+                                (new Dime.Dialog.Toast("Getting current geolocation was successfully!")).show();
                             }); 
                         }else{
-                            alert("Geolocation services are not supported by your browser.");
+                            (new Dime.Dialog.Toast("Geolocation services are not supported by your browser.")).show();
                         };
                     });
         }else{
@@ -1314,6 +1321,9 @@ DimeView = {
      *
      */
     updateView: function(groupType, viewType, avoidPushingHistory){
+        
+        //to remove/empty the alert in another view
+        $("#alertStatusNavigation").addClass("hidden").empty();
 
         if (!viewType){
             viewType = DimeView.GROUP_CONTAINER_VIEW;
@@ -1369,6 +1379,8 @@ DimeView = {
         }else if (DimeView.groupType===Dime.psMap.TYPE.EVENT){
             Dime.Navigation.setButtonsActive("navButtonEvent");
             $('#searchText').attr('placeholder', 'find events');
+            //added alert for not supported calendar
+            $("#alertStatusNavigation").removeClass("hidden").text("Oups! The calendar is not yet supported in the research prototype, sorry.");
         }else if (DimeView.groupType===Dime.psMap.TYPE.USERNOTIFICATION){
             Dime.Navigation.setButtonsActive("notificationIcon");
             $('#searchText').attr('placeholder', 'find notifications');
@@ -1393,7 +1405,7 @@ DimeView = {
         DimeView.updateMetaBar(groupType);
         DimeView.resetSearch();
         
-        //in order to avoid "disabled"-class
+        //placed here in order to avoid "disabled"-class
         DimeView.updateAddRemoveButton(groupType);
     },
 
