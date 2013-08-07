@@ -190,6 +190,40 @@ public class PSDataboxController extends PSSharingControllerBase implements APIC
 	}
 
 
+	
+	/**
+	 * Return DB
+	 * 
+	 * @param dbID
+	 * @return
+	 */
+	@GET
+	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
+	@Path("@me/{dbId}")
+	public Response<Resource> getMyDatabox(@PathParam("said") String said,
+			 @PathParam("dbId") String dbId) {
+
+		Data<Resource> data = null;
+		logger.info("called API method: GET /dime/rest/" + said + "/databox/@me/"+dbId);
+
+		try {
+			DataContainer databox = databoxManager.get(dbId);
+
+			data = new Data<Resource>(0, 1, 1);
+			Resource resource =new Resource(databox,null,RENAMING_RULES,databoxManager.getMe().asURI());
+			writeIncludes(resource,databox);
+			setUserId(resource);
+			data.getEntries().add(resource);
+		} catch (InfosphereException e) {
+			return Response.badRequest(e.getMessage(), e);
+		} catch (Exception e) {
+			return Response.serverError(e.getMessage(), e);
+		}
+
+		return Response.ok(data);
+	}	
+	
+	
 	/**
 	 * Return DB
 	 * 
@@ -200,13 +234,13 @@ public class PSDataboxController extends PSSharingControllerBase implements APIC
 	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
 	@Path("{personId}/{dbId}")
 	public Response<Resource> getMyDataboxById(@PathParam("said") String said,
-			@PathParam("dbId") String dbID,@PathParam("personId") String personId) {
+			@PathParam("personId") String personId, @PathParam("dbId") String dbId) {
 
 		Data<Resource> data = null;
-		logger.info("called API method: GET /dime/rest/" + said + "/databox/"+personId+"/"+dbID);
+		logger.info("called API method: GET /dime/rest/" + said + "/databox/"+personId+"/"+dbId);
 
 		try {
-			DataContainer databox = databoxManager.get(dbID);
+			DataContainer databox = databoxManager.get(dbId);
 
 			data = new Data<Resource>(0, 1, 1);
 			Resource resource =new Resource(databox,null,RENAMING_RULES,databoxManager.getMe().asURI());
