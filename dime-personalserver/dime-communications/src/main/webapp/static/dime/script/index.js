@@ -110,7 +110,6 @@ DimeView = {
             jElement.clickExt(DimeView, DimeView.showGroupMembers, entry);
         }else if (entry.type===Dime.psMap.TYPE.PERSON){
             jElement.clickExt(DimeView, DimeView.updateViewForPerson, entry);
-        
         }else if(showEditOnClick){
             jElement.clickExt(DimeView, DimeView.editItem, entry);
         }
@@ -258,11 +257,13 @@ DimeView = {
         var currentPlaceGuid = document.getElementById("currentPlaceGuid").getAttribute("data-guid");
         if(entry.guid == currentPlaceGuid){
             jChildItem.addClass("highlightCurrentPlaceItem");
+        }else{
+            jChildItem.removeClass("highlightCurrentPlaceItem");
         }
         
-        jChildItem.append('<img src="'+ Dime.psHelper.guessLinkURL(entry.imageUrl)+ '" />');
+        //replace resource.png (no-image) with default
+        jChildItem.append('<img src="'+ Dime.psHelper.guessLinkURL(entry.imageUrl.replace("resource.png","place_default.png"))+ '" />');
         jChildItem.append(DimeView.createMark(entry, "", false));
-        //jChildItem.append('<h4>'+ DimeView.getShortName(entry.name) + '</h4>');
         jChildItem.append('<h4 title="' + entry.name + '"><b>'+ DimeView.getShortNameForLocation(entry.name) +  '</b></h4>');
         if(fav){
             jChildItem.append('<p>' + fav + '</p>');
@@ -750,9 +751,12 @@ DimeView = {
 	if (reltg===tg) {
             return;
         }
+        
 	// Mouseout took place when mouse actually left layer
 	// Handle event
-        DimeView.updateMetabarForSelection();
+        //commented out in order to stay visible after mouseout (web ui issue)
+        //won't show list of selected items on the metabar
+        //DimeView.updateMetabarForSelection();
        
     },
        
@@ -882,10 +886,11 @@ DimeView = {
     
     showGroupMembers: function(event, element, groupEntry){
         event.stopPropagation();
-
+        
         if ((!groupEntry) || (!groupEntry.items)){
          return;
         }
+        
         $('.groupItem').removeClass('groupChecked');
         element.addClass('groupChecked');
 
@@ -1291,15 +1296,19 @@ DimeView = {
                         if (navigator.geolocation) {
                             //getCurrentPosition() fires once - watchPosition() fires continuosly
                             //maybe: https://github.com/estebanav/javascript-mobile-desktop-geolocation
+                            //maybe (enableHighAccuracy): http://dev.w3.org/geo/api/spec-source.html#get-current-position 
                             navigator.geolocation.getCurrentPosition(function(position) {                       
                                 var lat = position.coords.latitude;
                                 var lon = position.coords.longitude;
                                 var acc = position.coords.accuracy;
                                 Dime.psHelper.postCurrentContext(lat, lon, acc);
+                                
                             }); 
                         }else{
                             (new Dime.Dialog.Toast("Geolocation services are not supported by your browser.")).show();
                         };
+                        
+                        DimeView.updateView("place", DimeView.GROUP_CONTAINER_VIEW, true);
                     });
         }else{
             //remove the click event
@@ -1399,7 +1408,7 @@ DimeView = {
             Dime.Navigation.setButtonsActive("navButtonEvent");
             $('#searchText').attr('placeholder', 'find events');
             //added alert for not supported calendar
-            $("#alertStatusNavigation").removeClass("hidden").text("Oups! The calendar is not yet supported in the research prototype, sorry.");
+            $("#alertStatusNavigation").removeClass("hidden").text("Ooops! The calendar is not yet supported in the research prototype, sorry.");
         }else if (DimeView.groupType===Dime.psMap.TYPE.USERNOTIFICATION){
             Dime.Navigation.setButtonsActive("notificationIcon");
             $('#searchText').attr('placeholder', 'find notifications');

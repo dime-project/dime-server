@@ -558,8 +558,7 @@ input[type="file"] {
 }
 
 .groupChecked.groupItem{
-    background-color: #DDDEDD;
-   
+    background-color: #DDDEDD;   
 }
 
 #groupNavigation > #containerCaption{
