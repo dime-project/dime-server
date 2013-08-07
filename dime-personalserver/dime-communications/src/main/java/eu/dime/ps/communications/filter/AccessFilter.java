@@ -81,15 +81,22 @@ public class AccessFilter implements Filter {
 			return;
 		}
 		
+		int start = -1;
 		if (apiPrefixIdx > 0) {
-			apiPrefixIdx += API_PREFIX_LENGTH; // adds length of API_PREFIX
-			said = url.substring(apiPrefixIdx, url.indexOf("/", apiPrefixIdx));
+			start = apiPrefixIdx + API_PREFIX_LENGTH; // adds length of API_PREFIX
 		} else if (pushPrefixIdx > 0) {
-			pushPrefixIdx += PUSH_PREFIX_LENGTH; // adds length of PUSH_PREFIX
-			said = url.substring(pushPrefixIdx, url.indexOf("/", pushPrefixIdx));
+			start = pushPrefixIdx + PUSH_PREFIX_LENGTH; // adds length of PUSH_PREFIX
 		} else {
 			logger.error("Unable to handle url: "+ url);
             return;
+		}
+
+		int end = url.indexOf("/", start);
+		if (end > start) {
+			said = url.substring(start, end);
+		} else {
+			logger.error("Couldn't find 'said' in the request URL "+url+" following '"+API_PREFIX+"<said>' or '"+PUSH_PREFIX+"<said>' pattern.");
+			return;
 		}
 		
 		try {
@@ -164,8 +171,6 @@ public class AccessFilter implements Filter {
 					}
 				}
 			}
-		} catch (IndexOutOfBoundsException e) {
-			logger.error("Couldn't find 'said' in the request URL "+url);
 		} catch (NoResultException e) {
 			throw new AccessControlException(req.getMethod()+" "+url+" request not authorized: "+e.getMessage());
 		}
