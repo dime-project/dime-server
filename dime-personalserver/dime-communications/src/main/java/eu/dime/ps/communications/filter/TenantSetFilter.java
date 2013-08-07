@@ -45,8 +45,7 @@ public class TenantSetFilter implements Filter {
 
 	private static final Logger logger = LoggerFactory.getLogger(TenantSetFilter.class);
 	
-	private static final String REST_PATH = "api/dime/rest/";
-	private static final String PUSH_PATH = "push/";
+	private static final String[] ALLOWED_PATHS = new String[]{"api/dime/rest/", "push/"};
 	
     @Autowired
     private TenantManager tenantManager;
@@ -59,58 +58,36 @@ public class TenantSetFilter implements Filter {
 		Tenant tenant = null;
 		String url = ((HttpServletRequest) request).getRequestURL().toString();
 
+		for (String path : ALLOWED_PATHS) {
+			if (url.contains(path)) {
+				int start = url.indexOf(path);
+				int end = -1;
+				
+				if (start < 0) {
+					logger.error("Couldn't find 'said' in the request URL "+url+": the account identifier should be supplied as '"+path+"<said>'");
+				} else {
+					start += path.length(); // adds length of path
+					end = url.indexOf("/", start);
+					if (end > start) {
+						said = url.substring(start, end);
+						tenant = tenantManager.getByAccountName(said);
+						
+						logger.debug("Request intercepted at {} - Setting request data: [tenant={}]", new Object[]{url, tenant.getId()});
 		
-		if(url.contains(REST_PATH)){
-			
-			int start = url.indexOf(REST_PATH);
-			if (start < 0) {
-				logger.error("Couldn't find 'said' in the request URL "+url+": the account identifier should be supplied as 'api/dime/rest/<said>'");
-			} else {
-				start += REST_PATH.length(); // adds length of 'api/dime/rest/'
-				try {
-					said = url.substring(start, url.indexOf("/", start));
-					tenant = tenantManager.getByAccountName(said);
-					
-					logger.debug("Request intercepted at {} - Setting request data: [tenant={}]", new Object[]{url, tenant.getId()});
-		
-					// setting tenant identifier
-					TenantContextHolder.setTenant(tenant.getId());
-					chain.doFilter(request, response);
-				} catch (IndexOutOfBoundsException e) {
-					logger.error("Couldn't find 'said' in the request URL "+url+": "+e.getMessage(), e);
+						// setting tenant identifier
+						TenantContextHolder.setTenant(tenant.getId());
+						chain.doFilter(request, response);
+					} else {
+						logger.error("Couldn't find 'said' in the request URL "+url+" following '"+path+"<said>' pattern.");
+					}
 				}
+				
+				return;
 			}
-			
-			return;
-			
 		}
 		
-		if(url.contains(PUSH_PATH)){
-			
-			int start = url.indexOf(PUSH_PATH);
-			if (start < 0) {
-				logger.error("Couldn't find 'said' in the request URL "+url+": the account identifier should be supplied as 'push/<said>'");
-			} else {
-				start += PUSH_PATH.length(); // adds length of 'push/'
-				try {
-					said = url.substring(start, url.indexOf("/", start));
-					tenant = tenantManager.getByAccountName(said);
-					
-					logger.info("Request intercepted at {} - Setting request data: [tenant={}]", new Object[]{url, tenant.getId()});
-		
-					// setting tenant identifier
-					TenantContextHolder.setTenant(tenant.getId());
-					chain.doFilter(request, response);
-				} catch (IndexOutOfBoundsException e) {
-					logger.error("Couldn't find 'said' in the request URL "+url+": "+e.getMessage(), e);
-				}
-			}
-			
-			return;
-		}
-		
-		logger.warn("The url not contains the: " + REST_PATH + " or " + PUSH_PATH +  " path");	
-
+		logger.error("TenantSetFilter is called for URL "+url+", but it does not matches any of the allowed patterns: "+ALLOWED_PATHS+ 
+				". Please check that TenantSetFilter is called only for the expected URLs.");	
 	}
 
 	@Override
