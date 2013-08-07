@@ -36,14 +36,11 @@ DimeView = {
     currentGuid: null,
     pushState:{}, //browser history to manage back-button
     
-    getShortNameForLocation: function(name){
+    getShortNameWithLength: function(name, length){
         var myName = name;
-        
-        if(myName.length>40){
-            myName = myName.substr(0, 40);
-            myName = myName + " ..";
+        if(myName.length>length){
+            myName = myName.substr(0, length) + " ..";
         }
-        
         return myName;
     },
     
@@ -264,7 +261,7 @@ DimeView = {
         //replace resource.png (no-image) with default
         jChildItem.append('<img src="'+ Dime.psHelper.guessLinkURL(entry.imageUrl.replace("resource.png","place_default.png"))+ '" />');
         jChildItem.append(DimeView.createMark(entry, "", false));
-        jChildItem.append('<h4 title="' + entry.name + '"><b>'+ DimeView.getShortNameForLocation(entry.name) +  '</b></h4>');
+        jChildItem.append('<h4 title="' + entry.name + '"><b>'+ DimeView.getShortNameWithLength(entry.name, 40) +  '</b></h4>');
         if(fav){
             jChildItem.append('<p>' + fav + '</p>');
         }
@@ -381,8 +378,6 @@ DimeView = {
      * @param {String} containerId valid ids are  CONTAINER_ID_INFORMATION CONTAINER_ID_SHAREDWITH
      */
     getMetaListContainer: function(containerId){
-        
-        
         if (containerId === DimeView.CONTAINER_ID_INFORMATION){
             return $("#metaDataInformationContainer");
         }else if(containerId === DimeView.CONTAINER_ID_SHAREDWITH){
@@ -605,6 +600,12 @@ DimeView = {
         $("#globalActionButton").text(memberCount);
         
         this.updateActionView(memberCount);
+        
+        if(isGroupItem){
+            //when selected, set focus on groupElement
+            this.showGroupMembers(event, element, entry);
+            element.parent().parent().addClass("groupChecked");
+        }
 
     },
     
@@ -668,7 +669,8 @@ DimeView = {
 
         var informationViewContainer = DimeView.getMetaListContainer(DimeView.CONTAINER_ID_INFORMATION);  
         
-        informationViewContainer.append(DimeView.createMetaBarListItem(entry.name,"", entry.imageUrl));
+        //informationViewContainer.append(DimeView.createMetaBarListItem(entry.name,"", entry.imageUrl));
+        informationViewContainer.append(DimeView.createMetaBarListItem(DimeView.getShortNameWithLength(entry.name, 35), "", entry.imageUrl));
         informationViewContainer.append(DimeView.createMetaBarListItem(
             "changed:", JSTool.millisToFormatString(entry.lastModified), null));
              

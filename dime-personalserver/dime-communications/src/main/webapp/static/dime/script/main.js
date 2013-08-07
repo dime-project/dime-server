@@ -3578,10 +3578,10 @@ Dime.Navigation = {
         var handleCurrentPlaceCallBack=function(placeGuidAndNameObject){
             
             var updateCurPlaceElement=function(placeName, placeId){
-                var placeElement = document.getElementById('currentPlace');                
+                var placeElement = document.getElementById('currentPlace');
                 placeElement.innerHTML =  '<div class="places">'
-                + '<div class="placesIcon" id="currentPlaceGuid" data-guid="' + placeId + '"></div>'
-                + placeName+'</div>';                
+                + '<div class="placesIcon" id="currentPlaceGuid" data-guid="' + placeId + '" title="' + placeName + '"></div>'
+                + DimeView.getShortNameWithLength(placeName, 34)+'</div>';                
             };
             
             if (!placeGuidAndNameObject || !placeGuidAndNameObject.placeName || placeGuidAndNameObject.placeName===0){
@@ -3833,17 +3833,12 @@ Dime.BasicDialog = function(title, caption, dialogId, bodyId, body, cancelHandle
     //footer
     .append(this.footerElement);
     
+    //TODO?
     //add ESC-key-event on dialogs to return
-    $(document).keyup(function(e) {
+    var thisDialog = this.dialog;
+    $(document).keyup(thisDialog, function(e) {
         if (e.keyCode == 27) {
-            console.log("hi");
-            var dialog = document.getElementById(dialogId);
-            if (dialog) {
-                document.body.removeChild(dialog);
-                if (!this.bodyWasHidden) {
-                    $('body').removeClass('stop-scrolling');
-                }
-            }
+            thisDialog.remove();
         }
         $(document).unbind("keyup");
     });
@@ -4958,7 +4953,7 @@ Dime.DetailDialog.prototype = {
                     addAgentsToContainer(profileContainerList, aclPackage.personItems);
                     addAgentsToContainer(profileContainerList, aclPackage.serviceItems);
 
-                    var profileContainer = createAgentListItem("shared as:", pName, pImage, "metaDataShareProfile")
+                    var profileContainer = createAgentListItem("shared with:", pName, pImage, "metaDataShareProfile")
                     .append(profileContainerList);
 
                     editDlgRef.itemsItemSection.append(profileContainer);
@@ -5943,7 +5938,7 @@ Dime.Dialog={
             //update items
             Dime.psHelper.addAgentAccessForItemsAndUpdateServer(selectedReceivers, selectedItems, said, function(sharingSuccessful){
                 if(sharingSuccessful){
-                    (new Dime.Dialog.Toast("Sharing accomplished!")).showLong();
+                    (new Dime.Dialog.Toast("Sharing done!")).showLong();
                 }else{
                     (new Dime.Dialog.Toast("Sharing failed!")).showLong();
                 }
