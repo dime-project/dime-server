@@ -190,7 +190,7 @@ public class DimeServiceAdapter extends ServiceAdapterBase implements InternalSe
 			proxy.authenticate(new UsernamePasswordAuthenticationToken(username, secret));
 		} catch (DimeDNSCannotConnectException e) {
 			throw new ServiceNotAvailableException("Could not connect to dns for " + receiverSAID, e);
-                } catch (DimeDNSCannotResolveException e) {
+		} catch (DimeDNSCannotResolveException e) {
 			throw new ServiceNotAvailableException("said not registered at dns: " + receiverSAID, e);
 		} catch (DimeDNSException e) {
 			throw new ServiceNotAvailableException("Unknown error occurred when trying to connect to " + 
@@ -286,9 +286,9 @@ public class DimeServiceAdapter extends ServiceAdapterBase implements InternalSe
 			proxy = prepareProxy(targetResolver.resolve(targetSaidName), username, secret);
 			proxy.authenticate(new UsernamePasswordAuthenticationToken(username, secret));
 
-                } catch (DimeDNSCannotConnectException e) {
+		} catch (DimeDNSCannotConnectException e) {
 			throw new ServiceNotAvailableException("Could not connect to dns for " + receiverSAID, e);
-                } catch (DimeDNSCannotResolveException e) {
+		} catch (DimeDNSCannotResolveException e) {
 			throw new ServiceNotAvailableException("said not registered at dns: " + receiverSAID, e);
 		} catch (DimeDNSException e) {
 			throw new ServiceNotAvailableException("Unknown error occurred when trying to connect to " +
@@ -300,25 +300,19 @@ public class DimeServiceAdapter extends ServiceAdapterBase implements InternalSe
 
 		path = SHARED_BINARY_FILE_PATH.replace(":id", resourceId);
 
-
 		// Insert the target said in the path
 		path = path.replace(":target", targetSaidName);
 
-		
-
 		// Perform GET request
-		
 		BinaryFile response = proxy.getBinary(path, headers("Accept",MediaType.APPLICATION_OCTET_STREAM));
 		logger.info("GET " + path + " returned: " + response.getType());	
 		
-		
 		if (proxy != null) {
 			proxy.close();	
-			}
+		}
 		
 		return response;
 	}
-
 
 	@Override
 	public void _set(String attribute, Object value)
@@ -367,7 +361,7 @@ public class DimeServiceAdapter extends ServiceAdapterBase implements InternalSe
 			}
 		} catch (DimeDNSCannotConnectException e) {
 			throw new ServiceNotAvailableException("Could not connect to dns server" , e);
-                } catch (DimeDNSCannotResolveException e) {
+		} catch (DimeDNSCannotResolveException e) {
 			throw new ServiceNotAvailableException("said not registered at dns: ", e);
 		} catch (DimeDNSException e) {
 			throw new ServiceNotAvailableException(e.getMessage(), e);
@@ -482,9 +476,9 @@ public class DimeServiceAdapter extends ServiceAdapterBase implements InternalSe
 			if (logger.isDebugEnabled()) {
 				logger.debug("Profile metadata for "+path+" response is:\n"+profile.getModel().serialize(Syntax.Turtle));
 			}
-                } catch (DimeDNSCannotConnectException e) {
+		} catch (DimeDNSCannotConnectException e) {
 			throw new ServiceNotAvailableException("Could not connect to dns for " + targetSaidName, e);
-                } catch (DimeDNSCannotResolveException e) {
+		} catch (DimeDNSCannotResolveException e) {
 			throw new ServiceNotAvailableException("said not registered at dns: " + targetSaidName, e);
 		} catch (DimeDNSException e) {
 			throw new ServiceNotAvailableException("Unknown error occurred when trying to connect to " + 
@@ -500,7 +494,9 @@ public class DimeServiceAdapter extends ServiceAdapterBase implements InternalSe
 		} catch (Exception e) {
 			throw new ServiceNotAvailableException("Unknown error occurred: "+e.getMessage(), e);
 		} finally {
-			proxy.close();
+			if (proxy != null) {
+				proxy.close();
+			}
 		}
 
 		return profile;
@@ -543,7 +539,7 @@ public class DimeServiceAdapter extends ServiceAdapterBase implements InternalSe
 			logger.info("ERROR in Response: it was not JSON.");
 		} catch (DimeDNSCannotConnectException e) {
 			throw new ServiceNotAvailableException(e.getMessage(), e);
-                } catch (DimeDNSCannotResolveException e) {
+		} catch (DimeDNSCannotResolveException e) {
 			throw new ServiceNotAvailableException(e.getMessage(), e);
 		} catch (DimeDNSException e) {
 			throw new ServiceNotAvailableException(e.getMessage(), e);
@@ -561,22 +557,23 @@ public class DimeServiceAdapter extends ServiceAdapterBase implements InternalSe
 	public boolean confirmToken(Token token){
 		int status;
 		HttpRestProxy proxy = null;
+		String path = null;
+		
 		try {
-			String path = CREDENTIALS_PATH.replace(":target", this.identifier).replace(":username", token.getToken());
+			path = CREDENTIALS_PATH.replace(":target", this.identifier).replace(":username", token.getToken());
 			proxy = prepareProxy(targetResolver.resolve(this.identifier), token.getToken(), token.getSecret());
-			// TODO empty POST??? can this be done in a bit nicer way???
 			status = proxy.post(path, "");
 		} catch (ServiceNotAvailableException e) {
-			logger.error("Could not confirm token. System may be in a undefined state.\n", e);
+			logger.error("Could not confirm token. System may be in a undefined state: "+e.getMessage(), e);
 			return false;
-                } catch (DimeDNSCannotConnectException e) {
-			logger.error("Could not confirm token. System may be in a undefined state.\n"+e.getMessage(), e);
+		} catch (DimeDNSCannotConnectException e) {
+			logger.error("Could not confirm token. System may be in a undefined state: "+e.getMessage(), e);
 			return false;
-                } catch (DimeDNSCannotResolveException e) {
-			logger.error("Could not confirm token. System may be in a undefined state.\n"+e.getMessage(), e);
+		} catch (DimeDNSCannotResolveException e) {
+			logger.error("Could not confirm token. System may be in a undefined state: "+e.getMessage(), e);
 			return false;
 		} catch (DimeDNSException e) {
-			logger.error("Could not confirm token. System may be in a undefined state.\n"+e.getMessage(), e);
+			logger.error("Could not confirm token. System may be in a undefined state: "+e.getMessage(), e);
 			return false;
 		} finally {
 			if (proxy != null) {
@@ -584,12 +581,11 @@ public class DimeServiceAdapter extends ServiceAdapterBase implements InternalSe
 			}
 		}
 
-		logger.info("POST Response: " + status);
 		if (status == HttpStatus.SC_OK){
-			logger.info("Token confirmed. Everything ok!");
+			logger.info("POST "+path+" returned "+status+". Token confirmed!");
 			return true;
 		} else {
-			logger.warn("Could not confirm token. System may be in a undefined state.");
+			logger.warn("POST "+path+" returned "+status+". Could not confirm token. System may be in a undefined state.");
 			return false;
 		}
 	}

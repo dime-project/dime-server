@@ -163,7 +163,7 @@ public class HttpRestProxy implements ServiceProxy {
                         String encoded = Base64.encodeBase64String((this.username+":"+this.password).getBytes()).replace("\r\n", "");
                         
 			httpget.addHeader("Authorization","Basic "+ encoded);
-			logger.info("Executing GET request: " + httpget.getRequestLine());
+			logger.info("Performing " + httpget.getRequestLine());
 			HttpResponse response = this.client.execute(httpget);
 			HttpEntity entity = response.getEntity();
 			responseCode = response.getStatusLine().getStatusCode();
@@ -219,7 +219,8 @@ public class HttpRestProxy implements ServiceProxy {
                         String encoded = Base64.encodeBase64String((this.username+":"+this.password).getBytes()).replace("\r\n", "");
                         
 			httpget.addHeader("Authorization","Basic "+ encoded);
-			logger.info("Executing GET request: " + httpget.getRequestLine());
+			
+			logger.info("Performing " + httpget.getRequestLine());
 			HttpResponse response = this.client.execute(httpget);
 			HttpEntity entity = response.getEntity();
 			byteStream = entity.getContent();	
@@ -309,8 +310,8 @@ public class HttpRestProxy implements ServiceProxy {
 			contentEntity.setContentEncoding(HTTP.UTF_8);
 			contentEntity.setContentType(contentType);
 			httppost.setEntity(contentEntity);
-			logger.info("Executing POST request:" + httppost.getRequestLine());
-			logger.debug("Payload:" + content);
+
+			logger.info("Performing " + httppost.getRequestLine() + "\nPayload:" + content);
 			HttpResponse response = this.client.execute(httppost);
 			HttpEntity entity = response.getEntity();
 
@@ -333,7 +334,6 @@ public class HttpRestProxy implements ServiceProxy {
 	public String postAndGetResponse(String query, String content, String contentType, String auth)
 			throws ServiceNotAvailableException, IOException {
 
-		int status = HttpStatus.SC_OK;
 		this.client = this.getConnection(query);
 		HttpResponse response = null;
 		
@@ -343,10 +343,12 @@ public class HttpRestProxy implements ServiceProxy {
 			StringEntity contentEntity = new StringEntity(content);
 			contentEntity.setContentEncoding(HTTP.UTF_8);
 			contentEntity.setContentType(contentType);
-			if (!auth.equalsIgnoreCase("")) httppost.addHeader("Authorization",auth);
+			if (!auth.equalsIgnoreCase("")) {
+				httppost.addHeader("Authorization",auth);
+			}
 			httppost.setEntity(contentEntity);
-			logger.info("Executing POST request:" + httppost.getRequestLine());
-			logger.debug("Payload:" + content);
+
+			logger.info("Performing " + httppost.getRequestLine() + "\nPayload:" + content);
 			response = this.client.execute(httppost);
 			
 			BasicResponseHandler handler = new BasicResponseHandler();
@@ -387,7 +389,8 @@ public class HttpRestProxy implements ServiceProxy {
 		// execute the DELETE
 		try {
 			HttpDelete httpDelete = new HttpDelete(this.url + query);
-			System.out.println("Executing DELETE request:" + httpDelete.getRequestLine());
+			
+			logger.info("Performing " + httpDelete.getRequestLine());
 			HttpResponse response = this.client.execute(httpDelete);
 			HttpEntity entity = response.getEntity();
 
