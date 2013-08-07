@@ -38,7 +38,7 @@ import eu.dime.ps.semantic.service.impl.PimoService;
 
 public abstract class AdvisoryBase {
 	
-	Logger logger = Logger.getLogger(getClass());
+	private final Logger logger = Logger.getLogger(getClass());
 
 	protected ConnectionProvider connectionProvider;
 	
@@ -130,4 +130,5 @@ public abstract class AdvisoryBase {
 		}
 		return items;
 	}
+
 }

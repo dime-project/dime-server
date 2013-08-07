@@ -45,7 +45,6 @@ import eu.dime.ps.controllers.trustengine.utils.AdvisoryConstants;
 import eu.dime.ps.semantic.BroadcastManager;
 import eu.dime.ps.semantic.BroadcastReceiver;
 import eu.dime.ps.semantic.Event;
-import eu.dime.ps.semantic.connection.ConnectionProvider;
 import eu.dime.ps.semantic.exception.NotFoundException;
 import eu.dime.ps.semantic.model.RDFReactorThing;
 import eu.dime.ps.semantic.model.dlpo.LivePost;
@@ -75,8 +74,6 @@ public class TrustEngineUpdateService extends AdvisoryBase implements BroadcastR
 	@Autowired
 	FileManager filemanager;
 	
-	private ResourceStore resourceStore;
-		
 	public TrustEngineUpdateService(){
 		BroadcastManager.getInstance().registerReceiver(this);
 	}
@@ -334,10 +331,10 @@ public class TrustEngineUpdateService extends AdvisoryBase implements BroadcastR
 			}
 			sendTrustNotifications(personsToAdapt);
 		}
-		
 	}
 	
-	private void sendTrustNotifications(Set<URI> personsToAdapt) {
+	private void sendTrustNotifications(Set<URI> personsToAdapt) throws RepositoryException {
+		ResourceStore resourceStore = getResourceStore();
 		if (personsToAdapt.isEmpty()){
 			return;
 		} else {
@@ -349,11 +346,9 @@ public class TrustEngineUpdateService extends AdvisoryBase implements BroadcastR
 					logger.error("Could not send notification because Person not found.", e);
 					return;
 				}
-
 				notifyUI(UNRefToItem.OPERATION_INC_TRUST, UNRefToItem.TYPE_PERSON, person.asURI().toString(), person.getPrefLabel());
 			}
 		}
-		
 	}
 
 	private List<Agent> getPersonsFromPP(PrivacyPreference pp, 
@@ -396,14 +391,4 @@ public class TrustEngineUpdateService extends AdvisoryBase implements BroadcastR
 		return new ArrayList<PersonGroup>(groups);
 	}
 		
-	@Override
-	protected ResourceStore getResourceStore() throws RepositoryException{
-		if (resourceStore != null) {
-			return resourceStore;
-		} else {
-			resourceStore = super.getResourceStore();
-		}
-		return resourceStore;
-	}
-	
 }
