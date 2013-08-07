@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<person>
+  <id>J7qb-67bTP</id>
+  <first-name>Juan</first-name>
+  <last-name>Martinez</last-name>
+  <location>
+    <name></name>
+  </location>
+  <picture-url>http://media.linkedin.com/mpr/mprx/0_yq555n50SdvS0jaMptNn5qFTTW_8xZ7MOzlV5zqxYuBK8pZJr-vWIv8l7FixpxmvgcbUEtEdTYeM</picture-url>
+  <positions total="1">
+    <position>
+      <id>224093780</id>
+      <title>Digital Strategy Manager</title>
+      <summary></summary>
+      <start-date>
+        <year>2003</year>
+        <month>1</month>
+      </start-date>
+      <is-current>true</is-current>
+      <company>
+        <name>Madrid Ingeneria y Construction Industrial</name>
+        <industry>Research</industry>
+      </company>
+    </position>
+  </positions>
+  <phone-numbers total="1">
+    <phone-number>
+      <phone-type>home</phone-type>
+      <phone-number>+34 750 106 567</phone-number>
+    </phone-number>
+  </phone-numbers>
+  <im-accounts total="0" />
+  <date-of-birth>
+    <year>1966</year>
+    <month>8</month>
+    <day>5</day>
+  </date-of-birth>
+  <main-address></main-address>
+  <interests>Digital Media, Business</interests>
+</person>

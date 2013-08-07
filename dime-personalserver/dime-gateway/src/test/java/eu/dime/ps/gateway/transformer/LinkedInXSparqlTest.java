@@ -14,6 +14,7 @@
 
 package eu.dime.ps.gateway.transformer;
 
+import ie.deri.smile.rdf.util.ModelUtils;
 import ie.deri.smile.vocabulary.DLPO;
 import ie.deri.smile.vocabulary.NAO;
 import ie.deri.smile.vocabulary.NCO;
@@ -29,6 +30,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.ontoware.aifbcommons.collection.ClosableIterator;
 import org.ontoware.rdf2go.model.node.DatatypeLiteral;
 import org.ontoware.rdf2go.model.node.Resource;
 import org.ontoware.rdf2go.model.node.Variable;
@@ -203,6 +205,22 @@ public class LinkedInXSparqlTest extends Assert {
 		}
 		assertTrue(livepostFound);
 	} 
+	
+	@Test
+	public void testProfileEmptyPostalAddress() throws Exception {
+		String xml = loadResource("transformer/linkedin_profiles_empty_postal_address.xml");
+		Collection<PersonContact> contacts = transformer.deserialize(xml, "linkedin", "/profile/@me/@all", PersonContact.class);
+		PersonContact contact = contacts.iterator().next();
+
+		// test both address resources exist, but have empty nao:prefLabel
+		assertEquals(2, contact.getAllPostalAddress_as().count());
+		ClosableIterator<PostalAddress> addresses = contact.getAllPostalAddress();
+		while (addresses.hasNext()) {
+			PostalAddress address = addresses.next();
+			assertEquals("", ModelUtils.findObject(contact.getModel(), address, NAO.prefLabel).asLiteral().getValue());
+		}
+		addresses.close();
+	}
 	
 	private String loadResource(String resource) throws Exception {
 		InputStream xmlStream = null;
