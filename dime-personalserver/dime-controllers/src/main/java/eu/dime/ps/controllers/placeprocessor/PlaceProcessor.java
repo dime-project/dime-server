@@ -160,6 +160,9 @@ public class PlaceProcessor {
 			
 		} 
 		// TODO @YM add here retrieval of proper YM account
+                
+                
+                
 		// TODO @Roman: correct? 
 		else if (serviceName.equalsIgnoreCase(PlaceServiceAdapter.adapterName)) {
 			try {
@@ -264,7 +267,8 @@ public class PlaceProcessor {
 			// TODO @YM, tenant should be removed from the signature after proper Adapter connection. Proper service account URI should be used..
 			// TODO @Roman proper account: pending due to missing UI elements
 			// TODO @Roman categories
-			this.placeServiceAdapter.setCredentials(mainSaid);
+			//this.placeServiceAdapter.setCredentials(mainSaid);
+			this.placeServiceAdapter.setCredentials();
 
 			raw = this.placeServiceAdapter.getRaw(placeServiceAdapter.getPlacesParameters(longitude, latitude, new Double(radius).intValue()));
 		} catch (AttributeNotSupportedException e) {
@@ -423,7 +427,8 @@ public class PlaceProcessor {
 					throw new ServiceNotAvailableException("Check if the service adapter YellowMap has been registered.");
 				}
 				// TODO @Roman proper account: pending due to missing UI elements
-				this.placeServiceAdapter.setCredentials(mainSaid);
+				// this.placeServiceAdapter.setCredentials(mainSaid);
+				this.placeServiceAdapter.setCredentials();
 
 				this.placeServiceAdapter.updatePlace(place);
 			} catch (UnsupportedEncodingException e) {
@@ -442,7 +447,8 @@ public class PlaceProcessor {
 					throw new ServiceNotAvailableException("Check if the service adapter YellowMap has been registered.");
 				}
 				// TODO @Roman proper account: pending due to missing UI elements
-				this.placeServiceAdapter.setCredentials(mainSaid);
+				// this.placeServiceAdapter.setCredentials(mainSaid);
+                                this.placeServiceAdapter.setCredentials();
 
 				this.placeServiceAdapter.updatePlace(place);
 			} catch (UnsupportedEncodingException e) {
@@ -504,7 +510,8 @@ public class PlaceProcessor {
 			}
 
 			// TODO @Roman proper account: pending due to missing UI elements
-			this.placeServiceAdapter.setCredentials(tenant);
+			//this.placeServiceAdapter.setCredentials(tenant);
+			this.placeServiceAdapter.setCredentials();
 			//raw = this.ymServiceAdapter.getRaw(YMUtils.getPlaceDetailsParameters(placeId));
 			raw = this.placeServiceAdapter.getRaw(placeServiceAdapter.getPlaceDetailsParameters(placeId));
 			
