@@ -449,7 +449,7 @@ public class PSServicesController {
 
 			PersonContact profile = adapter.getProfile(saidNameSender, token);
 			if (profile != null) {
-				userManager.addProfile(new URIImpl(saidUriSender), profile, TenantHelper.getCurrentTenant());
+				userManager.addProfile(new URIImpl(saidUriSender), profile);
 				return profile;
 			} else {
 				logger.warn("failed to add Profile for User " + saidNameSender

@@ -183,13 +183,13 @@ public class PSServicesControllerTest {
 		
 		user.setAccountUri(SENDER_URI_ON_DEMAND);
 		when(userManager.add(Mockito.eq(SENDER), Mockito.any(URI.class))).thenReturn(user);
-		when(userManager.addProfile(Mockito.eq(new URIImpl(SENDER_URI_ON_DEMAND)), Mockito.eq(profile), Mockito.any(Tenant.class))).thenReturn(account);
+		when(userManager.addProfile(Mockito.eq(new URIImpl(SENDER_URI_ON_DEMAND)), Mockito.eq(profile))).thenReturn(account);
 
 		//ServiceGateway			
 		Vector<LivePost> liveposts = new Vector<LivePost>();
 		livepost =  modelFactory.getDLPOFactory().createLivePost();	
 		liveposts.add(livepost);
-		when(mockDimeServiceAdapter.get(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.any(Class.class),  Mockito.any(Tenant.class))).thenReturn(liveposts);
+		when(mockDimeServiceAdapter.get(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.any(Class.class), Mockito.any(Tenant.class))).thenReturn(liveposts);
 		when(serviceGateway.getDimeServiceAdapter(RECEIVER_URI)).thenReturn(mockDimeServiceAdapter); 
 		
 	}
@@ -225,7 +225,7 @@ public class PSServicesControllerTest {
 		
 		user.setAccountUri(SENDER_URI_ON_DEMAND);
 		when(userManager.add(Mockito.eq(SENDER), Mockito.any(URI.class))).thenReturn(user);
-		when(userManager.addProfile(Mockito.eq(new URIImpl(SENDER_URI_ON_DEMAND)), Mockito.eq(profile), Mockito.any(Tenant.class))).thenReturn(account);
+		when(userManager.addProfile(Mockito.eq(new URIImpl(SENDER_URI_ON_DEMAND)), Mockito.eq(profile))).thenReturn(account);
 
 		//ServiceGateway			
 		Vector<LivePost> liveposts = new Vector<LivePost>();
@@ -233,7 +233,6 @@ public class PSServicesControllerTest {
 		liveposts.add(livepost);
 		when(mockDimeServiceAdapter.get(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.any(Class.class), Mockito.any(Tenant.class))).thenReturn(liveposts);
 		when(serviceGateway.getDimeServiceAdapter(RECEIVER_URI)).thenReturn(mockDimeServiceAdapter); 
-		
 	}
 
 	private Request <ExternalNotificationDTO> buildMockNotification(){	
@@ -263,7 +262,8 @@ public class PSServicesControllerTest {
 	}
 	
 	private void setupTenant(){
-		this.tenant = mock(Tenant.class);		
+		this.tenant = mock(Tenant.class);
 		when(tenant.find(Mockito.any(Long.class))).thenReturn(this.tenant);
 	}
+	
 }

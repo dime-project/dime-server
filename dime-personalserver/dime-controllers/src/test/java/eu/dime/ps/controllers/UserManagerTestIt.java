@@ -14,13 +14,9 @@
 
 package eu.dime.ps.controllers;
 
-import eu.dime.commons.dto.UserRegister;
-import eu.dime.commons.exception.DimeException;
-import eu.dime.ps.gateway.service.internal.DimeDNSRegisterFailedException;
 import java.util.Random;
 import java.util.UUID;
 
-import org.hibernate.exception.ConstraintViolationException;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -35,12 +31,15 @@ import org.springframework.security.authentication.encoding.ShaPasswordEncoder;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
+import eu.dime.commons.dto.UserRegister;
+import eu.dime.commons.exception.DimeException;
 import eu.dime.ps.controllers.account.register.DimeDNSRegisterService;
 import eu.dime.ps.controllers.infosphere.InfoSphereManagerTest;
 import eu.dime.ps.controllers.infosphere.manager.AccountManager;
 import eu.dime.ps.controllers.infosphere.manager.PersonManager;
 import eu.dime.ps.controllers.infosphere.manager.ProfileCardManager;
 import eu.dime.ps.controllers.infosphere.manager.ProfileManager;
+import eu.dime.ps.gateway.service.internal.DimeDNSRegisterFailedException;
 import eu.dime.ps.semantic.connection.ConnectionProvider;
 import eu.dime.ps.semantic.model.dao.Account;
 import eu.dime.ps.semantic.model.nco.PersonContact;
@@ -257,7 +256,7 @@ public class UserManagerTestIt extends InfoSphereManagerTest {
 		URIImpl uri = new URIImpl("urn:uuid:" + UUID.randomUUID());
 		User tmp = userManager.add("someGuestSAID", uri);
 		assertNotNull(tmp);
-		Account account = userManager.addProfile(uri, profile, one);
+		Account account = userManager.addProfile(uri, profile);
 		assertNotNull(account);
 
 		User user = User.findByAccountUri(uri.toString(), one);

@@ -14,21 +14,21 @@
 
 package eu.dime.ps.controllers;
 
+import java.util.List;
+
+import org.ontoware.rdf2go.model.node.URI;
+
 import eu.dime.commons.dto.AccountEntry;
 import eu.dime.commons.dto.UserRegister;
 import eu.dime.commons.exception.DimeException;
-import eu.dime.ps.gateway.service.internal.DimeDNSRegisterFailedException;
 import eu.dime.ps.controllers.exception.InfosphereException;
 import eu.dime.ps.controllers.exception.UserNotFoundException;
-import eu.dime.ps.gateway.service.internal.DimeDNSCannotConnectException;
 import eu.dime.ps.gateway.service.internal.DimeDNSException;
+import eu.dime.ps.gateway.service.internal.DimeDNSRegisterFailedException;
 import eu.dime.ps.semantic.model.dao.Account;
 import eu.dime.ps.semantic.model.nco.PersonContact;
-import eu.dime.ps.storage.entities.Tenant;
 import eu.dime.ps.storage.entities.User;
 import eu.dime.ps.storage.exception.ReadOnlyValueChangedOnUpdate;
-import java.util.List;
-import org.ontoware.rdf2go.model.node.URI;
 
 /**
  *
@@ -103,13 +103,12 @@ public interface UserManager {
 
     public User generatePassword(Long id);
 
-    Account addProfile(URI accountUri, PersonContact contact, Tenant localTenant) throws InfosphereException;
+    public Account addProfile(URI accountUri, PersonContact contact) throws InfosphereException;
 
     public AccountEntry updateUserByAccount(AccountEntry accountUpdate)
             throws ReadOnlyValueChangedOnUpdate, UserNotFoundException;
 
     public AccountEntry getUserAccount(String userName);
-
 
     public boolean validateUserCanLogEvaluationData(User user);
 

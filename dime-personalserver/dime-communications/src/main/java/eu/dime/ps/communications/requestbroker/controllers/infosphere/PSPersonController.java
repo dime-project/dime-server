@@ -359,7 +359,7 @@ public class PSPersonController implements APIController {
 				String accountSaid = (String)jsonObject.get("said");
 				URI accountUri = new URIImpl("urn:uuid:"+UUID.randomUUID());
 				userManager.add(accountSaid, accountUri);
-				userManager.addProfile(accountUri, personContact, TenantHelper.getCurrentTenant());
+				userManager.addProfile(accountUri, personContact);
 
 				returnData.addEntry(jsonObject);
 			}

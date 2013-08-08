@@ -47,7 +47,6 @@ import eu.dime.ps.controllers.infosphere.manager.PersonManager;
 import eu.dime.ps.controllers.infosphere.manager.ProfileCardManager;
 import eu.dime.ps.controllers.infosphere.manager.ProfileManager;
 import eu.dime.ps.controllers.infosphere.manager.SituationManager;
-import eu.dime.ps.controllers.util.TenantHelper;
 import eu.dime.ps.gateway.service.internal.DimeServiceAdapter;
 import eu.dime.ps.semantic.BroadcastManager;
 import eu.dime.ps.semantic.BroadcastReceiver;
@@ -244,7 +243,7 @@ private static final Logger logger = LoggerFactory.getLogger(DefaultDataSetup.cl
 			URI accountUri = new URIImpl("urn:uuid:" + UUID.randomUUID());
 			try {
 				userManager.add(said, accountUri);
-				userManager.addProfile(accountUri, profile, TenantHelper.getTenant(tenant));
+				userManager.addProfile(accountUri, profile);
 				
 				Account account = accountManager.get(accountUri.toString());
 				contactsAccounts.add(account);

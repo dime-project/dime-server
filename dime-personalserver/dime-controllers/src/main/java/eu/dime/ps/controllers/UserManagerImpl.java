@@ -14,7 +14,9 @@
 
 package eu.dime.ps.controllers;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -27,14 +29,15 @@ import org.semanticdesktop.aperture.vocabulary.NIE;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.support.PropertiesLoaderUtils;
 import org.springframework.security.authentication.encoding.ShaPasswordEncoder;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import eu.dime.commons.dto.AccountEntry;
 import eu.dime.commons.dto.UserRegister;
 import eu.dime.commons.exception.DimeException;
 import eu.dime.commons.notifications.DimeInternalNotification;
 import eu.dime.commons.notifications.system.SystemNotification;
-import eu.dime.ps.gateway.service.internal.DimeDNSRegisterFailedException;
 import eu.dime.ps.controllers.account.register.DimeDNSRegisterService;
 import eu.dime.ps.controllers.exception.InfosphereException;
 import eu.dime.ps.controllers.exception.UserNotFoundException;
@@ -56,6 +59,7 @@ import eu.dime.ps.gateway.service.external.DimeUserResolverServiceAdapter;
 import eu.dime.ps.gateway.service.internal.DimeDNSCannotConnectException;
 import eu.dime.ps.gateway.service.internal.DimeDNSCannotResolveException;
 import eu.dime.ps.gateway.service.internal.DimeDNSException;
+import eu.dime.ps.gateway.service.internal.DimeDNSRegisterFailedException;
 import eu.dime.ps.gateway.service.internal.DimeIPResolver;
 import eu.dime.ps.gateway.service.internal.DimeServiceAdapter;
 import eu.dime.ps.semantic.BroadcastManager;
@@ -77,12 +81,6 @@ import eu.dime.ps.storage.entities.User;
 import eu.dime.ps.storage.exception.ReadOnlyValueChangedOnUpdate;
 import eu.dime.ps.storage.manager.EntityFactory;
 import eu.dime.ps.storage.util.QueryUtil;
-import java.io.IOException;
-import java.util.Properties;
-import java.util.logging.Level;
-import javax.naming.NamingException;
-import org.springframework.core.io.support.PropertiesLoaderUtils;
-import org.springframework.security.core.context.SecurityContextHolder;
 
 /**
  *
@@ -425,14 +423,13 @@ public class UserManagerImpl implements UserManager {
      *
      * @param accountUri
      * @param contact
-     * @param localTenant 
      * @return
      * @throws InfosphereException
      */
     @Override
-    public Account addProfile(URI accountUri, PersonContact contact, Tenant localTenant) throws InfosphereException {
-        
-        User user = User.findByAccountUri(accountUri.toString(),localTenant);
+    public Account addProfile(URI accountUri, PersonContact contact) throws InfosphereException {
+        Tenant tenant = TenantHelper.getCurrentTenant();
+        User user = User.findByAccountUri(accountUri.toString(), tenant);
         if (user == null) {
             throw new InfosphereException("Could not add profile/account. User with uri: " + accountUri + " does not exist.");
         }
