@@ -147,22 +147,22 @@ public class ServiceGatewayImpl implements ServiceGateway {
 	}
 	
 	@Override
-	public ServiceAdapter getServiceAdapter(String identifier, Tenant localTenant) throws ServiceNotAvailableException,
+	public ServiceAdapter getServiceAdapter(String identifier, Tenant tenant) throws ServiceNotAvailableException,
 			ServiceAdapterNotSupportedException {
 	
-                if (identifier == null) {
-                        throw new ServiceNotAvailableException("Cannot find a service adapter if identifier is not specified.");
-                }
+		if (identifier == null) {
+			throw new ServiceNotAvailableException("Cannot find a service adapter if identifier is not specified.");
+		}
 	
-		// the list of adapters is lazily initialized when the adapters are
-		// requested
+		// the list of adapters is lazily initialized when the adapters are requested
 		if (!this.adapters.containsKey(identifier)) {
-			ServiceAccount account = ServiceAccount.findAllByAccountUri(identifier, localTenant);
-			ServiceAdapter adapter = buildAdapter(account, identifier, localTenant);
+			ServiceAccount account = ServiceAccount.findAllByTenantAndAccountUri(tenant, identifier);
+			ServiceAdapter adapter = buildAdapter(account, identifier);
 	
-			if (adapter == null)
+			if (adapter == null) {
 				throw new ServiceNotAvailableException(
 						"Cannot find a service adapter for the account " + identifier);
+			}
 	
 			this.adapters.put(identifier, adapter);
 		}
@@ -172,25 +172,22 @@ public class ServiceGatewayImpl implements ServiceGateway {
 
 	public DimeServiceAdapter getDimeServiceAdapter(String identifier) throws ServiceNotAvailableException {
 
-		DimeServiceAdapter adapter = new DimeServiceAdapter(identifier);
+		if (identifier == null) {
+			throw new ServiceNotAvailableException("Cannot find a service adapter if identifier is not specified.");
+		}
 
-		return adapter;
+		// FIXME why not caching (and lazy initialization) for these adapters???
+		return new DimeServiceAdapter(identifier);
 	}
 
 	public DimeUserResolverServiceAdapter getDimeUserResolverServiceAdapter()
 			throws ServiceNotAvailableException {
-	
 		String name = DimeUserResolverServiceAdapter.NAME;
-	
 		if (!this.adapters.containsKey(name)) {
 			DimeUserResolverServiceAdapter adapter = new DimeUserResolverServiceAdapter();
-			
-	
 			this.adapters.put(name, adapter);
 		}
-	
 		return (DimeUserResolverServiceAdapter) this.adapters.get(name);
-	
 	}
 
 	@Override
@@ -266,28 +263,28 @@ public class ServiceGatewayImpl implements ServiceGateway {
 				+ this.policyManager.getPolicyString("AUTHSERVLET", adapterName);
 	}
 
-	private ServiceAdapter buildAdapter(ServiceAccount account, String guid, Tenant localTenant)
+	private ServiceAdapter buildAdapter(ServiceAccount account, String guid)
 			throws ServiceNotAvailableException, ServiceAdapterNotSupportedException {
-		ServiceAdapter adapter = null;
+		
 		if (account == null) {
 			throw new ServiceAdapterNotSupportedException(new Exception(
 					"You need to specify an account."));
 		}
 
 		String adapterName = account.getServiceProvider().getServiceName();
+		ServiceAdapter adapter = null;
 
-
-		// instanciate the proper service adapter
+		// instantiate the proper service adapter
 		if (LinkedInServiceAdapter.NAME.equals(adapterName)) {
-			adapter = new LinkedInServiceAdapter(localTenant);
+			adapter = new LinkedInServiceAdapter(account.getTenant());
 		} else if (TwitterServiceAdapter.NAME.equals(adapterName)) {
-			adapter = new TwitterServiceAdapter(localTenant);
+			adapter = new TwitterServiceAdapter(account.getTenant());
 		} else if (FacebookServiceAdapter.NAME.equals(adapterName)) {
-			adapter = new FacebookServiceAdapter(localTenant);
+			adapter = new FacebookServiceAdapter(account.getTenant());
 		} else if (FitbitServiceAdapter.NAME.equals(adapterName)) {
-			adapter = new FitbitServiceAdapter(localTenant);
+			adapter = new FitbitServiceAdapter(account.getTenant());
 		} else if (GooglePlusServiceAdapter.NAME.equals(adapterName)) {
-			adapter = new GooglePlusServiceAdapter(localTenant);
+			adapter = new GooglePlusServiceAdapter(account.getTenant());
 		} else if (SocialRecommenderAdapter.adapterName.equals(adapterName)) {
 			adapter = new SocialRecommenderAdapter();
 		} else if (LocationServiceAdapter.adapterName.equals(adapterName)) {
@@ -305,7 +302,8 @@ public class ServiceGatewayImpl implements ServiceGateway {
 			throw new ServiceAdapterNotSupportedException(new Exception(adapterName
 					+ " is not a supported service."));
 		}
-                // set common attributes for any type of service adapter
+		
+		// set common attributes for any type of service adapter
 		adapter.setIdentifer(guid);
 		
                 //init meta

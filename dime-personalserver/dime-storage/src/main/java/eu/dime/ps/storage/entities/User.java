@@ -14,8 +14,8 @@
 
 package eu.dime.ps.storage.entities;
 
-import eu.dime.ps.storage.exception.ReadOnlyValueChangedOnUpdate;
 import java.util.List;
+import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -28,11 +28,9 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 import javax.persistence.TypedQuery;
+import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
-
-
 
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.roo.addon.entity.RooEntity;
@@ -41,7 +39,6 @@ import org.springframework.roo.addon.tostring.RooToString;
 import org.springframework.transaction.annotation.Transactional;
 
 import eu.dime.ps.storage.util.QueryUtil;
-import java.util.UUID;
 
 @Configurable
 @Entity
@@ -350,18 +347,19 @@ public class User {
         return q;
     }
 
-    public static User findByAccountUri(String accountUri, Tenant localTenant) {
+    public static User findByTenantAndByAccountUri(Tenant tenant, String accountUri) {
+        if (tenant == null) {
+            throw new IllegalArgumentException("The tenant argument is required");
+        }
         if (accountUri == null || accountUri.length() == 0) {
             throw new IllegalArgumentException("The accountUri argument is required");
         }
         EntityManager em = User.entityManager();
         TypedQuery<User> q = em.createQuery("SELECT o FROM User AS o WHERE o.tenant = :tenant AND o.accountUri = :accountUri", User.class);
         q.setParameter("accountUri", accountUri);
-        q.setParameter("tenant", localTenant);
+        q.setParameter("tenant", tenant);
         return QueryUtil.getSingleResultOrNull(q);
     }
-
-    
 
     /**
      * @return the uiLanguage

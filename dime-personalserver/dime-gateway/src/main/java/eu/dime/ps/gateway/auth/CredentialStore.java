@@ -21,7 +21,6 @@ import org.ontoware.rdf2go.model.node.Resource;
 import org.ontoware.rdf2go.model.node.URI;
 
 import eu.dime.ps.semantic.connection.ConnectionProvider;
-import eu.dime.ps.semantic.exception.NotFoundException;
 import eu.dime.ps.semantic.exception.RepositoryStorageException;
 import eu.dime.ps.storage.entities.Tenant;
 import eu.dime.ps.storage.manager.EntityFactory;
@@ -37,32 +36,32 @@ public interface CredentialStore {
      *
      * @param sender URI of sender account
      * @param receiver URI of receiver account
-     * @param localTenant
+     * @param tenant
      * @return password
      * @throws NoResultException
      */
-    public String getPassword(String sender, String receiver, Tenant localTenant) throws NoResultException;
+    public String getPassword(String sender, String receiver, Tenant tenant) throws NoResultException;
 
     /**
      * Returns username to authenticate in PS2PS (di.me) communication
      *
      * @param sender URI of sender account
      * @param receiver URI of receiver account
-     * @param localTenant
+     * @param tenant
      * @return username
      * @throws NoResultException
      */
-    public String getUsername(String sender, String receiver, Tenant localTenant) throws NoResultException;
+    public String getUsername(String sender, String receiver, Tenant tenant) throws NoResultException;
 
     /**
      * get username to communicate with external service
      *
      * @param account account identifier for external sa
-     * @param localTenant 
+     * @param tenant 
      * @return username
      * @throws NoResultException
      */
-    public String getNameSaid(String account, Tenant localTenant) throws NoResultException;
+    public String getNameSaid(String account, Tenant tenant) throws NoResultException;
 
     /**
      * get provider name for service account (e.g. "facebook", "di.me" etc.)
@@ -71,17 +70,17 @@ public interface CredentialStore {
      * @return username
      * @throws NoResultException
      */
-    public String getProviderName(String account, Tenant localTenant) throws NoResultException;
+    public String getProviderName(String account, Tenant tenant) throws NoResultException;
 
     /**
      * get usertoken to communicate with external OAuth service
      *
      * @param account account identifier for external sa
-     * @param localTenant
+     * @param tenant
      * @return token
      * @throws NoResultException
      */
-    public String getAccessToken(String account, Tenant localTenant) throws NoResultException;
+    public String getAccessToken(String account, Tenant tenant) throws NoResultException;
 
     /**
      * get usersecret to communicate with external OAuth service
@@ -89,13 +88,13 @@ public interface CredentialStore {
      * @param account account identifier for external sa
      * @return secret
      */
-    public String getAccessSecret(String account, Tenant localTenant) throws NoResultException;
+    public String getAccessSecret(String account, Tenant tenant) throws NoResultException;
 
     void storeCredentialsForAccount(String localAccount, String remoteAccount,
-            String username, String password, Tenant localTenant) throws RepositoryStorageException;
+            String username, String password, Tenant tenant) throws RepositoryStorageException;
 
     void updateCredentialsForAccount(String localAccount, String remoteAccount,
-            String targetSaid, String password, Tenant localTenant) throws RepositoryStorageException;
+            String targetSaid, String password, Tenant tenant) throws RepositoryStorageException;
 
     void storeServiceProvider(String adaperId, String consumerKey,
             String consumerSecret);
@@ -104,7 +103,7 @@ public interface CredentialStore {
 
     String getConsumerKey(String providerName) throws NoResultException;
 
-    public void storeOAuthCredentials(String providerName, String accountId, String token, String secret, Tenant localTenant);
+    public void storeOAuthCredentials(String providerName, String accountId, String token, String secret, Tenant tenant);
 
     public String getUriForName(String saidNameReceiver) throws NoResultException;
 
@@ -117,5 +116,5 @@ public interface CredentialStore {
      */
     public String getUriForAccountName(String saidLocal, String saidRemote);
 
-    public void tryCreateAccountCredentials(Resource sender, Collection<URI> recipients, Long tenant, Tenant localTenant);
+    public void tryCreateAccountCredentials(Resource sender, Collection<URI> recipients, Tenant tenant);
 }

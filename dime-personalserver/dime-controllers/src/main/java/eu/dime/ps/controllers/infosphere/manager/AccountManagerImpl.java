@@ -283,7 +283,8 @@ public class AccountManagerImpl extends InfoSphereManagerBase<Account> implement
         }
 
         // removes entry from the DB
-        ServiceAccount account = ServiceAccount.findAllByAccountUri(accountId, TenantHelper.getCurrentTenant());
+        Tenant tenant = TenantHelper.getCurrentTenant();
+        ServiceAccount account = ServiceAccount.findAllByTenantAndAccountUri(tenant, accountId);
         if (account != null) {
             // FIXME throws a 'deleted entity passed to persist' exception
 //			account.remove();
@@ -297,4 +298,5 @@ public class AccountManagerImpl extends InfoSphereManagerBase<Account> implement
     public void crawl(String accountId) {
         serviceCrawlerRegistry.fireCrawler(accountId);
     }
+    
 }

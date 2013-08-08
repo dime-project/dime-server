@@ -246,8 +246,6 @@ public class UserManagerTestIt extends InfoSphereManagerTest {
 		assertNull(user2); //should never go there...
 	}
 
-
-
 	@Test
 	@Transactional
 	public void testAddAndRemove() throws Exception {
@@ -259,14 +257,13 @@ public class UserManagerTestIt extends InfoSphereManagerTest {
 		Account account = userManager.addProfile(uri, profile);
 		assertNotNull(account);
 
-		User user = User.findByAccountUri(uri.toString(), one);
+		User user = User.findByTenantAndByAccountUri(one, uri.toString());
 		if (user != null) {
 			String userId = user.getId().toString();
 			userManager.remove(userId);
 
 			assertFalse(userManager.exists(userId));
 		}
-
 	}
 
 	@Test

@@ -14,6 +14,19 @@
 
 package eu.dime.ps.controllers.account.register;
 
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.util.List;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.log4j.Logger;
+import org.ontoware.rdf2go.model.node.URI;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import eu.dime.commons.dto.DNSRegister;
 import eu.dime.commons.util.HttpUtils;
 import eu.dime.commons.util.JaxbJsonSerializer;
@@ -29,17 +42,7 @@ import eu.dime.ps.semantic.BroadcastReceiver;
 import eu.dime.ps.semantic.Event;
 import eu.dime.ps.semantic.model.dao.Account;
 import eu.dime.ps.storage.entities.ServiceAccount;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.util.List;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.log4j.Logger;
-import org.ontoware.rdf2go.model.node.URI;
-import org.springframework.beans.factory.annotation.Autowired;
+import eu.dime.ps.storage.entities.Tenant;
 
 /**
  * this class listens for the account created-event, checks is said is already
@@ -77,8 +80,8 @@ public class DimeDNSRegisterService implements BroadcastReceiver {
                 Account account = (Account) event.getData();
 
                 if (account.getAccountType().equals(DimeServiceAdapter.NAME)) {
-                    ServiceAccount sa = ServiceAccount.findAllByAccountUri(account.asURI().toString(),
-                            TenantHelper.getTenant(event.getTenantId()));
+                	Tenant tenant = TenantHelper.getTenant(event.getTenantId());
+                    ServiceAccount sa = ServiceAccount.findAllByTenantAndAccountUri(tenant, account.asURI().toString());
                     if (sa != null) { //if sa == null it is not an own account so no dns register neccessary
                         said = sa.getName();
                         

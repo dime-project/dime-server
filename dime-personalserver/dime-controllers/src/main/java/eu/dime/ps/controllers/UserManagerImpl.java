@@ -429,7 +429,7 @@ public class UserManagerImpl implements UserManager {
     @Override
     public Account addProfile(URI accountUri, PersonContact contact) throws InfosphereException {
         Tenant tenant = TenantHelper.getCurrentTenant();
-        User user = User.findByAccountUri(accountUri.toString(), tenant);
+        User user = User.findByTenantAndByAccountUri(tenant, accountUri.toString());
         if (user == null) {
             throw new InfosphereException("Could not add profile/account. User with uri: " + accountUri + " does not exist.");
         }

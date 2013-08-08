@@ -154,7 +154,7 @@ public class PSSharedControllerTestIt extends Assert {
 		dbTenant = entityFactory.buildTenant();
 		dbTenant.setName("test"+System.nanoTime());
 		dbTenant.persist();
-		dbUser = User.findByAccountUri(recipient.toString(), dbTenant);
+		dbUser = User.findByTenantAndByAccountUri(dbTenant, recipient.toString());
 		if (dbUser == null) {
 			dbUser = entityFactory.buildUser();
 			dbUser.setTenant(dbTenant);

@@ -260,16 +260,19 @@ public class AccountCredentials {
 		return q.getResultList();
 	}
 
-	public static AccountCredentials findAllByTargetUri(String targetUri, Tenant localTenant) {
-        if (localTenant==null){
-            throw new IllegalArgumentException("localTenant must not be null!");
+	public static AccountCredentials findAllByTenantAndByTargetUri(Tenant tenant, String targetUri) {
+        if (tenant == null){
+            throw new IllegalArgumentException("tenant must not be null!");
+        }
+        if (targetUri == null){
+            throw new IllegalArgumentException("targetUri must not be null!");
         }
 		EntityManager em = AccountCredentials.entityManager();
 		TypedQuery<AccountCredentials> q = em.createQuery(
 				"SELECT o FROM AccountCredentials AS o WHERE o.tenant = :tenant AND o.targetUri = :targetUri",
 				AccountCredentials.class);
 		q.setParameter("targetUri", targetUri);
-        q.setParameter("tenant", localTenant);
+        q.setParameter("tenant", tenant);
 		return QueryUtil.getSingleResultOrNull(q);
 	}
 	

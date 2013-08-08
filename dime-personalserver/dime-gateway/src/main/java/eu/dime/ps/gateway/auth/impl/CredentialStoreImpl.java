@@ -22,19 +22,18 @@ import javax.persistence.NoResultException;
 import org.apache.log4j.Logger;
 import org.ontoware.rdf2go.model.node.Resource;
 import org.ontoware.rdf2go.model.node.URI;
-import org.openrdf.repository.RepositoryException;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import eu.dime.ps.gateway.auth.CredentialStore;
 import eu.dime.ps.semantic.connection.ConnectionProvider;
 import eu.dime.ps.semantic.exception.RepositoryStorageException;
-import eu.dime.ps.semantic.rdf.ResourceStore;
 import eu.dime.ps.storage.entities.AccountCredentials;
 import eu.dime.ps.storage.entities.ServiceAccount;
 import eu.dime.ps.storage.entities.ServiceProvider;
 import eu.dime.ps.storage.entities.Tenant;
 import eu.dime.ps.storage.entities.User;
 import eu.dime.ps.storage.manager.EntityFactory;
+
 /**
  * 
  * @author marcel
@@ -71,9 +70,9 @@ public class CredentialStoreImpl implements CredentialStore{
 	@Override
 	public void storeCredentialsForAccount(
 			String local, String remote, 
-			String target, String password, Tenant localTenant) throws RepositoryStorageException{
+			String target, String password, Tenant tenant) throws RepositoryStorageException{
 
-		ServiceAccount account = ServiceAccount.findAllByAccountUri(local, localTenant);
+		ServiceAccount account = ServiceAccount.findAllByTenantAndAccountUri(tenant, local);
 		if (account != null){
 			AccountCredentials ac = entityFactory.buildAccountCredentials();
 			ac.setSecret(password);
@@ -90,7 +89,7 @@ public class CredentialStoreImpl implements CredentialStore{
 	}
 	
 	@Override
-	public void storeOAuthCredentials(String providerName, String accountId, String token, String secret, Tenant localTenant){
+	public void storeOAuthCredentials(String providerName, String accountId, String token, String secret, Tenant tenant){
 		ServiceProvider serviceProvider = ServiceProvider.findByName(providerName);
 		if (serviceProvider != null){
 			ServiceAccount serviceAccount = entityFactory.buildServiceAccount();
@@ -98,7 +97,7 @@ public class CredentialStoreImpl implements CredentialStore{
 			serviceAccount.setAccessToken(token);
 			serviceAccount.setAccessSecret(secret);
 			serviceAccount.setServiceProvider(serviceProvider);
-			serviceAccount.setTenant(localTenant);
+			serviceAccount.setTenant(tenant);
 			serviceAccount.merge();
 			serviceAccount.flush();
 			serviceProvider.getServiceAccounts().add(serviceAccount);
@@ -131,8 +130,8 @@ public class CredentialStoreImpl implements CredentialStore{
 	}
 		
 	@Override
-	public String getAccessToken(String accountId, Tenant localTenant) throws NoResultException{
-		ServiceAccount sa = ServiceAccount.findAllByAccountUri(accountId, localTenant);
+	public String getAccessToken(String accountId, Tenant tenant) throws NoResultException{
+		ServiceAccount sa = ServiceAccount.findAllByTenantAndAccountUri(tenant, accountId);
 		 if (sa == null){
 			 throw new NoResultException("Could not find Service Account for: "+accountId);
 		 }
@@ -140,8 +139,8 @@ public class CredentialStoreImpl implements CredentialStore{
 	}
 	
 	@Override
-	public String getAccessSecret(String accountId, Tenant localTenant) {
-		ServiceAccount sa = ServiceAccount.findAllByAccountUri(accountId, localTenant);
+	public String getAccessSecret(String accountId, Tenant tenant) {
+		ServiceAccount sa = ServiceAccount.findAllByTenantAndAccountUri(tenant, accountId);
 		 if (sa == null){
 			 throw new NoResultException("Could not find Service Account for: "+accountId);
 		 }
@@ -172,21 +171,21 @@ public class CredentialStoreImpl implements CredentialStore{
 	}
 
 	@Override
-	public String getPassword(String sender, String receiver, Tenant localTenant) {
-		ServiceAccount sa = ServiceAccount.findAllByAccountUri(sender, localTenant);
+	public String getPassword(String sender, String receiver, Tenant tenant) {
+		ServiceAccount sa = ServiceAccount.findAllByTenantAndAccountUri(tenant, sender);
 		if (sa == null){
-			ServiceAccount.findByName(sender);
+			throw new NoResultException("Could not find ServiceAccount where tenant = "+tenant.getId()+" and accountUri = "+sender);
 		}
 		AccountCredentials ac = AccountCredentials.findAllBySourceAndByTargetUri(sa, receiver);
 		if (ac == null){
-			 throw new NoResultException("Could not find AccountCredentials for: "+sa.getAccountURI());
+			throw new NoResultException("Could not find AccountCredentials for: "+sa.getAccountURI());
 		}
 		return ac.getSecret();
 	}
 
 	@Override
-	public String getUsername(String sender, String receiver, Tenant localTenant) {
-		ServiceAccount sa = ServiceAccount.findAllByAccountUri(sender, localTenant);
+	public String getUsername(String sender, String receiver, Tenant tenant) {
+		ServiceAccount sa = ServiceAccount.findAllByTenantAndAccountUri(tenant, sender);
 		if (sa == null){
 			sa = ServiceAccount.findByName(sender);
 		}
@@ -195,7 +194,7 @@ public class CredentialStoreImpl implements CredentialStore{
 		}
 		AccountCredentials ac = AccountCredentials.findAllBySourceAndByTargetUri(sa, receiver);
 		if (ac == null){
-			User user = User.findByAccountUri(receiver, localTenant);
+			User user = User.findByTenantAndByAccountUri(tenant, receiver);
 			if(user != null){
 				return user.getUsername();
 			} else {
@@ -206,18 +205,18 @@ public class CredentialStoreImpl implements CredentialStore{
 	}
 	
 	@Override
-	public String getNameSaid(String account, Tenant localTenant) {
+	public String getNameSaid(String account, Tenant tenant) {
         //if connection was established before
-		AccountCredentials ac = AccountCredentials.findAllByTargetUri(account, localTenant);
+		AccountCredentials ac = AccountCredentials.findAllByTenantAndByTargetUri(tenant, account);
 		if (ac != null){
 			return ac.getTarget();
 		}
 		if (account != null) {
-			ServiceAccount sa = ServiceAccount.findAllByAccountUri(account, localTenant);
+			ServiceAccount sa = ServiceAccount.findAllByTenantAndAccountUri(tenant, account);
 			if (sa != null){
 				return sa.getName();
 			} else {
-				User user = User.findByAccountUri(account, localTenant);
+				User user = User.findByTenantAndByAccountUri(tenant, account);
 				return user.getUsername();
 			}
 		}
@@ -225,8 +224,8 @@ public class CredentialStoreImpl implements CredentialStore{
 	}
 
 	@Override
-	public String getProviderName(String account, Tenant localTenant) {
-		 ServiceAccount sa = ServiceAccount.findAllByAccountUri(account, localTenant);
+	public String getProviderName(String account, Tenant tenant) {
+		 ServiceAccount sa = ServiceAccount.findAllByTenantAndAccountUri(tenant, account);
 		 if (sa == null){
 			 throw new NoResultException("Could not find Service Account for: "+account);
 		 }
@@ -248,14 +247,14 @@ public class CredentialStoreImpl implements CredentialStore{
 
 	@Override
 	public void updateCredentialsForAccount(String local,
-			String remote, String target, String password, Tenant localTenant)
+			String remote, String target, String password, Tenant tenant)
 			throws RepositoryStorageException {
 		
-		ServiceAccount account = ServiceAccount.findAllByAccountUri(local, localTenant);
+		ServiceAccount account = ServiceAccount.findAllByTenantAndAccountUri(tenant, local);
 		if (account != null){
 			AccountCredentials ac = AccountCredentials.findAllBySourceAndByTargetUri(account, remote);
 			if (ac == null){
-				storeCredentialsForAccount(local, remote, target, password, localTenant);
+				storeCredentialsForAccount(local, remote, target, password, tenant);
 				return;
 			}
 			ac.setSecret(password);
@@ -299,17 +298,16 @@ public class CredentialStoreImpl implements CredentialStore{
 	}
 
 	@Override
-	public void tryCreateAccountCredentials(Resource sender, Collection<URI> recipients, Long tenantId, Tenant localTenant) {
+	public void tryCreateAccountCredentials(Resource sender, Collection<URI> recipients, Tenant tenant) {
 		for (URI recipient : recipients) {
 			if (recipient.equals(sender)) {
 				continue;
 			}
 			
-			AccountCredentials ac = AccountCredentials.findAllByTargetUri(recipient.toString(), localTenant);
+			AccountCredentials ac = AccountCredentials.findAllByTenantAndByTargetUri(tenant, recipient.toString());
 			if (ac == null){
-				User user = User.findByAccountUri(recipient.toString(), localTenant);
-				ServiceAccount sa = ServiceAccount.findAllByAccountUri(sender.toString(), localTenant);
-				Tenant tenant = Tenant.find(tenantId);
+				User user = User.findByTenantAndByAccountUri(tenant, recipient.toString());
+				ServiceAccount sa = ServiceAccount.findAllByTenantAndAccountUri(tenant, sender.toString());
 				
 				ac = entityFactory.buildAccountCredentials();
 				ac.setTenant(tenant);

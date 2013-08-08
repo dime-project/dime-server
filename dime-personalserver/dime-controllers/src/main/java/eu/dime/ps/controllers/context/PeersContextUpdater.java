@@ -16,8 +16,6 @@ package eu.dime.ps.controllers.context;
 
 import ie.deri.smile.vocabulary.DCON;
 
-
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -137,58 +135,63 @@ public class PeersContextUpdater implements LiveContextUpdater, IContextListener
 	public void update() {
 		Iterator<IContextElement> it = this.rawContextQueue.iterator();
 		while (it.hasNext()) {
-			try {
-				IContextElement ce = it.next();
-				// [TI] ce.getEntity().getEntityIDAsString() contains account used to share proximity (e.g. urn:juan:account)
-				Tenant t = tenantManager.getByAccountName(ce.getEntity().getEntityIDAsString());
-				if (t != null) {
-						if (ce.getScope().getScopeAsString().equalsIgnoreCase(Constants.SCOPE_PROXIMITY)) {
-							TenantContextHolder.setTenant(t.getId());
-							connection = connectionProvider.getConnection(t.getId().toString());
-							liveContextService = connection.getLiveContextService();
-							LiveContextSession session = liveContextService.getSession(dataSource);
-							session.setAutoCommit(false);
-							session.remove(Peers.class, DCON.nearbyPerson);
-							
-							String saidsNearby = (String)ce.getContextData().getValue(Factory.createScope(Constants.SCOPE_PROXIMITY_USERS)).getValue();
-							StringTokenizer tok = new StringTokenizer(saidsNearby,",");
-							while (tok.hasMoreTokens()) {
-								String said = tok.nextToken();
-								ServiceAccount sa = ServiceAccount.findAllByAccountUri(said, t);
-								String username = sa.getName();
-								User u = User.findByTenantAndByUsername(t, username);
-								if (u != null) {
-									String userUri = u.getAccountUri();
-									Account account;
-									try {
-										account = accountManager.get(userUri);
-										if (account != null) {
-											Party pt = account.getCreator();
-											if (pt != null) {
-												Person p = personManager.get(pt.toString());
-												if (p != null) {
-													session.add(Peers.class,DCON.nearbyPerson,p.asURI());
-													logger.debug("Peer " + p.getPrefLabel() + " added to Live Context");
-												}
+			IContextElement ce = it.next();
+			// [TI] ce.getEntity().getEntityIDAsString() contains account used to share proximity (e.g. urn:juan:account)
+			Tenant tenant = tenantManager.getByAccountName(ce.getEntity().getEntityIDAsString());
+			if (tenant == null) {
+				logger.error("No tenant found for account " + ce.getEntity().getEntityIDAsString() + ": peers not updated");
+			} else {
+				if (ce.getScope().getScopeAsString().equalsIgnoreCase(Constants.SCOPE_PROXIMITY)) {
+					TenantContextHolder.setTenant(tenant.getId());
+					
+					try {
+						connection = connectionProvider.getConnection(tenant.getId().toString());
+						liveContextService = connection.getLiveContextService();
+					} catch (RepositoryException e) {
+						logger.error("Peers couldn't be updated: " + e.getMessage(), e);
+					}
+					
+					LiveContextSession session = liveContextService.getSession(dataSource);
+					try {
+						session.setAutoCommit(false);
+						session.remove(Peers.class, DCON.nearbyPerson);
+						
+						String saidsNearby = (String)ce.getContextData().getValue(Factory.createScope(Constants.SCOPE_PROXIMITY_USERS)).getValue();
+						StringTokenizer tok = new StringTokenizer(saidsNearby,",");
+						while (tok.hasMoreTokens()) {
+							String said = tok.nextToken();
+							ServiceAccount sa = ServiceAccount.findAllByTenantAndAccountUri(tenant, said);
+							String username = sa.getName();
+							User u = User.findByTenantAndByUsername(tenant, username);
+							if (u != null) {
+								String userUri = u.getAccountUri();
+								Account account;
+								try {
+									account = accountManager.get(userUri);
+									if (account != null) {
+										Party pt = account.getCreator();
+										if (pt != null) {
+											Person p = personManager.get(pt.toString());
+											if (p != null) {
+												session.add(Peers.class,DCON.nearbyPerson,p.asURI());
+												logger.debug("Peer " + p.getPrefLabel() + " added to Live Context");
 											}
 										}
-									} catch (InfosphereException e) {
-										logger.warn(e.getMessage(),e);
 									}
+								} catch (InfosphereException e) {
+									logger.warn(e.getMessage(),e);
 								}
 							}
-							session.commit();
-							TenantContextHolder.unset();
 						}
-				} else logger.debug("No tenant found for account " + ce.getEntity().getEntityIDAsString() + ": peers not updated");
-				
-			} catch (RepositoryException e) {
-				logger.error(e.toString(),e);
-			} catch (ClassCastException e) {
-				logger.error(e.toString(),e);
-			} catch (LiveContextException e) {
-				logger.error(e.toString(),e);
-			} 
+						session.commit();
+					} catch (LiveContextException e) {
+						logger.error("Peers couldn't be updated: " + e.getMessage(), e);
+					}
+					
+					TenantContextHolder.unset();
+				}
+			}
+			// TODO review if the following line should be there...
 			it.remove();
 		}
 	}
