@@ -349,49 +349,17 @@ private static final Logger logger = LoggerFactory.getLogger(DefaultDataSetup.cl
 		// add all dime people in a group
 		createPersonGroup("di.me Project", me, dimePeople.toArray(new Person[dimePeople.size()]));
 		
-		setRelatedTo(photo, friendsGroup);
-		setRelatedTo(friendsGroup, photo);
+		// set photo and group "friends" related (nao:isRelated) to one another
+		photo.getModel().addStatement(photo, NAO.isRelated, friendsGroup);
+		friendsGroup.getModel().addStatement(friendsGroup, NAO.isRelated, photo);
 		try {
 			personGroupManager.update(friendsGroup);
 			fileManager.update(photo);
 		} catch (InfosphereException e) {
-			logger.warn("Could not update relatedTo. "+e);
+			logger.error("Could not set nao:isRelatedTo between photo and group 'friends': " + e.getMessage(), e);
 		}
 		
-
 		TenantContextHolder.clear();
-	}
-
-	private Person createPerson(String givenName, String familyName, String nickname, double trustLevel) {
-		String fullname = givenName + " " + familyName;
-		
-		Person person = modelFactory.getPIMOFactory().createPerson();
-		person.setPrefLabel(fullname);
-		person.setTrustLevel(trustLevel);
-		
-		PersonName name = modelFactory.getNCOFactory().createPersonName();
-		name.setNickname(nickname);
-		name.setFullname(fullname);
-		name.setNameGiven(givenName);
-		name.setNameFamily(familyName);
-		PersonContact profile = modelFactory.getNCOFactory().createPersonContact();
-		profile.setCreator(person);
-		profile.setPersonName(name);
-		profile.setPrefLabel(fullname + "@di.me");
-		
-		Account account = modelFactory.getDAOFactory().createAccount();
-		account.setCreator(person);
-		account.setAccountType("di.me");
-
-		try {
-			personManager.add(person);
-			profileManager.add(person, profile);
-			accountManager.add(account);
-		} catch (InfosphereException e) {
-			logger.error("An error ocurred ...", e);
-		}
-
-		return person;
 	}
 	
 	private PersonGroup createPersonGroup(String label, Person creator, Person... members) {
@@ -410,10 +378,6 @@ private static final Logger logger = LoggerFactory.getLogger(DefaultDataSetup.cl
 		return group;
 	}
 
-	private void setRelatedTo(Resource a, Resource b){
-		a.getModel().addStatement(a, NAO.isRelated, b);
-	}
-	
 	private LivePost createLivePost(String text, Person creator, URI sharedBy, URI sharedWith) {
 		LivePost livePost = modelFactory.getDLPOFactory().createLivePost();
 		livePost.setTextualContent(text);
@@ -478,7 +442,7 @@ private static final Logger logger = LoggerFactory.getLogger(DefaultDataSetup.cl
 		return profileCard;
 	}
 
-	public DataContainer createDatabox(String label, FileDataObject... files) {
+	private DataContainer createDatabox(String label, FileDataObject... files) {
 		// create the databox
 		DataContainer databox = modelFactory.getNFOFactory().createDataContainer();
 		databox.setPrefLabel(label);
