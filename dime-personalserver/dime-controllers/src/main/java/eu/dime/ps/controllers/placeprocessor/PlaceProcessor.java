@@ -211,8 +211,8 @@ public class PlaceProcessor {
 		// coordinates and if user's position is not available in raw context cache
 		
 		// Stuttgart coordinates (Nobelstrasse 12)
-		double defaultLat = 48.740035;
-		double defaultLon = 9.097087;
+//		double defaultLat = 48.740035;
+//		double defaultLon = 9.097087;
 		double defaultRad = 30000;
 		
 		if ((latitude == 0) && (longitude == 0)) {
@@ -238,20 +238,22 @@ public class PlaceProcessor {
 					longitude = (Double)ce.getContextData().getContextValue(longitudeScope).getValue().getValue();
                                         radius = defaultRad;
                                         //categories.add("DIME");
-				} else {
-					// 2. set default location ???
-					if (latitude==0) latitude = defaultLat;
-					if (longitude==0) longitude = defaultLon;
-					if (radius==0) radius = defaultRad;
-					if (categories.isEmpty()) categories.add("DIME");
-				}
-			} else {
-				// 2. set default location ???
-				if (latitude==0) latitude = defaultLat;
-				if (longitude==0) longitude = defaultLon;
-				if (radius==0) radius = defaultRad;
-				if (categories.isEmpty()) categories.add("DIME");
-			}
+				} 
+//                                else {
+//					// 2. set default location ???
+//					if (latitude==0) latitude = defaultLat;
+//					if (longitude==0) longitude = defaultLon;
+//					if (radius==0) radius = defaultRad;
+//					if (categories.isEmpty()) categories.add("DIME");
+//				}
+			} 
+//                        else {
+//				// 2. set default location ???
+//				if (latitude==0) latitude = defaultLat;
+//				if (longitude==0) longitude = defaultLon;
+//				if (radius==0) radius = defaultRad;
+//				if (categories.isEmpty()) categories.add("DIME");
+//			}
 		}
                   
                 
@@ -506,7 +508,7 @@ public class PlaceProcessor {
 		
 		try {
 			if(placeServiceAdapter == null) {
-				throw new ServiceNotAvailableException("Check if the service adapter YellowMap has been registered.");
+				throw new ServiceNotAvailableException("Check if the YellowMapService has been registered.");
 			}
 
 			// TODO @Roman proper account: pending due to missing UI elements
