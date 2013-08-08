@@ -169,9 +169,7 @@ DimeView = {
 
     createUserNotification: function(entry){
 
-
         var jChildItem = $("<div/>");
-
 
         var markRead=function(){
             entry.read=true;
@@ -190,7 +188,7 @@ DimeView = {
         }
         
         var unValues=Dime.un.getCaptionImageUrl(entry);
-
+        
         if (entry.unType===Dime.psMap.UN_TYPE.REF_TO_ITEM){
             var elementType=entry.unEntry.type;
 
@@ -223,20 +221,14 @@ DimeView = {
         //img
         jChildItem.append($('<img/>').attr('src',Dime.psHelper.guessLinkURL(entry.imageUrl)));
         
-        
-
-        
         jChildItem
             .append($('<img/>').attr('src', unValues.imageUrl).addClass('childItemNotifElemType'))
-            .append('<h4>'+ unValues.caption + '</h4>')
-            .append($('<div/>').addClass('childItemNotifOperation').append('<span>'+ unValues.operation + '</span>'))
+            .append('<h4 style="font-size: 12px">'+ unValues.caption + '</h4>')
+            .append($('<div/>').addClass('childItemNotifOperation').append('<span>'+ unValues.operationName + '</span>'))
             .append($('<span/>').addClass("childItemNotifElemCaption").text(unValues.childName)
             );
 
-
         return jChildItem;
-
-
     },
             
     createLocationItemJElement: function(entry){
@@ -960,7 +952,7 @@ DimeView = {
         Dime.evaluation.createAndSendEvaluationItemForAction("action_share");
 
         var selectedItems = JSTool.getDefinedMembers(DimeView.selectedItems);
-
+        
         var triggerDialog=function(response){
 
             Dime.Dialog.showShareWithSelection(response);
@@ -1469,7 +1461,11 @@ DimeView = {
 
     updateViewForPerson: function(event, element, entry){
         var guid = entry.guid;
-
+        
+        //select the clicked person for preselection in the share-dialog
+        this.clearSelectedItems();
+        this.selectItem(event, element, entry, false);
+        
         //check and get item
         if (!guid || guid.length===0){
             console.log("ERROR wrong call updateViewForPerson with guid:", guid);
@@ -1487,8 +1483,6 @@ DimeView = {
 
         
         var updateProfileContainer=function(response){            
-            
-            
             DimeView.handleSearchResultForContainer(Dime.psMap.TYPE.PROFILE,
                     response, $('#personProfileNavigation'), true);
         };

@@ -1093,7 +1093,7 @@ Dime.AdvisoryItem.prototype={
     
     WARNING_TYPES:{
         "untrusted":{
-            name: "Privacy risk!<br/>",
+            name: "Privacy risk!",
             getMessage:function(attributes, selectedReceivers, selectedItems, allMyData){
                 return '<table><tr><td  class="warningDlgAdvHeading">'
                     + this.getPrivacyLevelText(attributes.privacyValue)
@@ -1108,7 +1108,7 @@ Dime.AdvisoryItem.prototype={
             
         }, 
         "disjunct_groups":{
-            name: "Sharing outside usual group!<br/>",
+            name: "Sharing outside usual group!",
             getMessage:function(attributes, selectedReceivers, selectedItems, allMyData){
                 var personString = this.getFormatedNamesOfGuids(attributes.concernedPersons, selectedReceivers, [Dime.psMap.TYPE.PERSON], allMyData);
                 var groupString = this.getFormatedNamesOfGuids(attributes.previousSharedGroups, selectedReceivers, [Dime.psMap.TYPE.GROUP], allMyData);
@@ -1344,6 +1344,7 @@ Dime.un={
                 return JSTool.upCaseFirstLetter(Dime.psHelper.getCaptionForItemType(entry.unEntry.type))+ " has been shared:";
             },
             imageUrl: 'img/metaData/sharedWith.png',
+            operationName: "Shared",
             getShortCaption: function(entry){
                 return "shared: "+Dime.psHelper.getCaptionForItemType(entry.unEntry.type);
             }
@@ -1353,6 +1354,7 @@ Dime.un={
                 return JSTool.upCaseFirstLetter(Dime.psHelper.getCaptionForItemType(entry.unEntry.type))+ " has been unshared:";
             },
             imageUrl: 'img/metaData/sharedWith.png',
+            operationName: "Unshared",
             getShortCaption: function(entry){
                 return "unshared: "+Dime.psHelper.getCaptionForItemType(entry.unEntry.type);
             }
@@ -1362,6 +1364,7 @@ Dime.un={
                 return "Please consider to increase the privacy level for";
             },
             imageUrl: 'img/metaData/sharedWith.png',
+            operationName: "Increase privacy",
             getShortCaption: function(entry){
                 return "privacy: "+Dime.psHelper.getCaptionForItemType(entry.unEntry.type);
             }
@@ -1371,6 +1374,7 @@ Dime.un={
                 return "Please consider to deincrease the privacy level for";
             },
             imageUrl: 'img/metaData/sharedWith.png',
+            operationName: "Decrease privacy",
             getShortCaption: function(entry){
                 return "privacy: "+Dime.psHelper.getCaptionForItemType(entry.unEntry.type);
             }
@@ -1380,6 +1384,7 @@ Dime.un={
                 return "Please consider to increase the trust level for";
             },
             imageUrl: 'img/metaData/sharedWith.png',
+            operationName: "Increase trust",
             getShortCaption: function(entry){
                 return "trust: "+Dime.psHelper.getCaptionForItemType(entry.unEntry.type);
             }
@@ -1389,27 +1394,32 @@ Dime.un={
                 return "Please consider to decrease the trust level for";
             },
             imageUrl: 'img/metaData/sharedWith.png',
+            operationName: "Decrease trust",
             getShortCaption: function(entry){
                 return "trust: "+Dime.psHelper.getCaptionForItemType(entry.unEntry.type);
             }
         }
     },
+            
     getCaptionImageUrl:function(entry){
+        
         if (entry.unType===Dime.psMap.UN_TYPE.REF_TO_ITEM){
             var operationEntry = this.unOperations[entry.unEntry.operation];
             return {
                 caption: operationEntry.getCaption(entry),
                 imageUrl: operationEntry.imageUrl,
                 operation: entry.unEntry.operation,
+                operationName: operationEntry.operationName,
                 childName: entry.unEntry.name+"("+entry.unEntry.type+")",
                 shortCaption: operationEntry.getShortCaption(entry)
             };
 
         }else if (entry.unType===Dime.psMap.UN_TYPE.MERGE_RECOMMENDATION){
             return {
-                caption: 'Recommendation to merge',
+                caption: 'These contacts have the same name. You may merge them to one person',
                 imageUrl: 'img/metaData/merge_person.png',
                 operation: 'merge',
+                operationName: 'Merge',
                 childName: entry.unEntry.sourceName +' and '+entry.unEntry.targetName,
                 shortCaption: "merge?"
             };
@@ -1418,6 +1428,7 @@ Dime.un={
                 caption: entry.unType,
                 imageUrl: Dime.psHelper.getImageUrlForItemType(entry.type),
                 operation: "",
+                operationName: "",
                 childName: "",
                 shortCaption: entry.unType
             };
@@ -3558,15 +3569,29 @@ Dime.Navigation = {
         
         var handleSituationCallBack=function(response){
             
-            var updateSituationElement=function(situationItem){
-                $('#currentSituationText').textOnly(situationItem.name);
+            var updateSituationElement=function(resultSituation){
+                $('#currentSituationText')
+                        .textOnly(DimeView.getShortNameWithLength(resultSituation, 31))
+                        .attr("title", resultSituation);
             };
             
+            var resultSituation = "";
+            var moreSituations = false;
             for (var i=0;i<response.length;i++){
                 if (response[i].active===true){
-                    updateSituationElement(response[i]);
-                    return;
+                    if(!moreSituations){
+                        resultSituation += response[i].name;
+                        moreSituations = true;
+                    }else{
+                        resultSituation = resultSituation + ", " + response[i].name;
+                    }
                 }
+            }
+            
+            if(resultSituation!=""){
+                updateSituationElement(resultSituation);
+            }else{
+                updateSituationElement("Situation: unknown");
             }
         };
         
@@ -3833,8 +3858,8 @@ Dime.BasicDialog = function(title, caption, dialogId, bodyId, body, cancelHandle
     //footer
     .append(this.footerElement);
     
-    //TODO?
-    //add ESC-key-event on dialogs to return
+    //HACK/TODO removeSelectionDialog()?
+    //add ESC(27)-key-event on dialogs to return
     var thisDialog = this.dialog;
     $(document).keyup(thisDialog, function(e) {
         if (e.keyCode == 27) {
@@ -4813,8 +4838,8 @@ Dime.DetailDialog.prototype = {
         }else if (item.type===Dime.psMap.TYPE.PLACE){
             this.body.append(this.createPlaceDetail(item));
             
+            //TODO: move this to createPlaceDetail()
             var currentPlaceGuid = document.getElementById("currentPlaceGuid").getAttribute("data-guid");
-            
             if(item.guid == currentPlaceGuid){
                 //samePlace
                 var button = $('<div></div>')
@@ -5205,21 +5230,18 @@ Dime.ShareDialog.prototype={
                 var warnText=$('<div class="shareDlgWarnText well">'
                     +advisory.getTextForWarning(shareDlgRef.selectedReceivers, shareDlgRef.selectedItems, allMyData)
                     +'</div>');
-                if (!firstEntry){
-                    warnText.addClass("hidden");
-                    
-                }else{
-                    firstEntry=false;
-                }
-                
+            
+                warnText.addClass("hidden");
+                      
                 shareDlgRef.warnings.append($('<div></div>').addClass("shareDlgWarn")
                     .append($('<div/>')
                         .append(advisory.getIconForWarning())
                         .append($('<span class="shareDlgWarnType">'+advisory.getTypeText()+'</div>'))                        
-                        .append($('<span class="caret"></span>'))
+                        .append($('<span class="caret">more</span>'))
                         ).click(function(){
-                        warnText.toggleClass("hidden");
-                    })
+                            $(".shareDlgWarnText").addClass("hidden");
+                            warnText.toggleClass("hidden");
+                        })
                     .append(warnText)
                     );
             });

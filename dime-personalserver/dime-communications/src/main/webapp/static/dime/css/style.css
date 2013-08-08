@@ -213,7 +213,7 @@ body {
     margin: 0% 0;
     border: 1px solid silver;
     background-color: white;
-    margin-top: 10px;	
+    margin-top: 11px;	
     border-radius: 5px;
 }
 
@@ -2865,7 +2865,12 @@ input[type="text"].DimeDetailDialogPAValueListItemValue{
 
 .shareDlgWarn > div > .caret{
     float: right;
-    margin-right: 10px;
+    margin-right: 27px;
+    margin-top: 5px;
+    border-top: 5px solid #000000;
+    border-right: 5px solid transparent;
+    border-left: 5px solid transparent;
+    opacity: 0.4;
 }
 
 .shareDlgWarnLvl{
@@ -3357,8 +3362,14 @@ input[type="text"].DimeDetailDialogPAValueListItemValue{
 
 /****** highlighted placeItem ******/
 .highlightCurrentPlaceItem {
-    box-shadow: 2px 2px #0091FF;
-    border: 1px solid #0091FF;
+    background: #5A9DD5;
+    color: white;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+}
+
+.highlightCurrentPlaceItem > h4{
+    color: white;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
 }
 
 
