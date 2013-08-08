@@ -88,15 +88,12 @@ import eu.dime.ps.storage.entities.User;
 @Path("/services/{said}/")
 public class PSServicesController {
 
-	private static final Logger logger = LoggerFactory
-			.getLogger(PSServicesController.class);
+	private static final Logger logger = LoggerFactory.getLogger(PSServicesController.class);
 
 	private ServiceGateway serviceGateway;
 	private TenantManager tenantManager;
 	private AccountManager accountManager;
 	private CredentialStore credentialStore;
-
-	private Token token;
 
 	@Autowired
 	private ShareableDataboxManager shareableDataboxManager;
@@ -160,11 +157,11 @@ public class PSServicesController {
 			@PathParam("said") String said) throws InfosphereException,
 			RepositoryStorageException, UnsupportedEncodingException {
 
+		ExternalNotificationDTO jsonNotification = null;
+		
 		try {
-
 			// Deserialize notification
-			ExternalNotificationDTO jsonNotification = json.getMessage().getData()
-					.getEntries().iterator().next();
+			jsonNotification = json.getMessage().getData().getEntries().iterator().next();
 
 			String saidNameReceiver = jsonNotification.getSaidReciever();
 
@@ -172,100 +169,78 @@ public class PSServicesController {
 			if (!saidNameReceiver.equals(said)) {
 				return Response.badRequest();
 			} else {
-				Long tenant = TenantContextHolder.getTenant();
-				if (tenant == null) {
-					TenantContextHolder.setTenant(this.tenantManager
-							.getByAccountName(saidNameReceiver).getId());
-				}
+				TenantContextHolder.setTenant(this.tenantManager.getByAccountName(saidNameReceiver).getId());
 			}
 
-			if (jsonNotification.getOperation().equals(
-					ExternalNotificationDTO.OPERATION_SHARE)) {
-				logger.debug("Shared notification received");
-				return this.obtainSharedObjecte(jsonNotification);
+			if (ExternalNotificationDTO.OPERATION_SHARE.equals(jsonNotification.getOperation())) {
+				return this.requestSharedObject(jsonNotification);
 			}
-
-			// Catch all - no failing allowed!
 		} catch (Exception e) {
-			e.printStackTrace();
-			return Response.serverError(
-					"Unknown Error! Details: " + e.getMessage()
-					+ e.getStackTrace(), e);
+			// Catch all - no failing allowed!
+			return Response.serverError("Unknown Error! Details: " + e.getMessage(), e);
+		} finally {
+			// clearing up tenant from TenantContextHolder
+			TenantContextHolder.clear();
 		}
 
 		return Response.okEmpty();
 	}
 
-	private Response obtainSharedObjecte(ExternalNotificationDTO jsonNotification)
+	private Response requestSharedObject(ExternalNotificationDTO jsonNotification)
 			throws UnsupportedEncodingException {
 
 		String saidNameSender = jsonNotification.getSaidSender();
 		String saidNameReceiver = jsonNotification.getSaidReciever();
 		String saidUriReceiver = null;
 		String saidUriSender = null;
-		String tmpPassw = null;
+		String password = null;
 
 		// Get URI Receiver
 		try {
 			saidUriReceiver = credentialStore.getUriForName(saidNameReceiver);
 		} catch (NoResultException e) {
-			logger.error(
-					"Could not find URI for own SAIDname. Received notification may be corrupt.",
-					e);
+			logger.error("Could not find URI for own SAIDname. Received notification may be corrupt: " + e.getMessage(), e);
 			return Response.badRequest(e.getMessage(), e);
 		} catch (Exception e) {
-			logger.error(
-					"Very bad unknown error! Received notification may be corrupt. Details: "
-							+ e.getStackTrace(), e);
+			logger.error("Very bad unknown error! Received notification may be corrupt: " + e.getMessage(), e);
 			return Response.serverError(e.getMessage(), e);
 		}
 
 		// Get URI Sender
-		saidUriSender = credentialStore.getUriForAccountName(saidNameReceiver,
-				saidNameSender);
+		saidUriSender = credentialStore.getUriForAccountName(saidNameReceiver, saidNameSender);
 
 		if (saidUriSender != null) {
 			try {
-				tmpPassw = credentialStore.getPassword(saidUriReceiver,
+				password = credentialStore.getPassword(saidUriReceiver,
 						saidUriSender, TenantHelper.getCurrentTenant());
-
 			} catch (NoResultException e) {
-				logger.info("Could not load Password for " + saidUriReceiver
-						+ " - " + saidUriSender
-						+ ". You need to request a password!", e);
+				logger.info("Could not find password to authenticate request [sender=" + saidUriSender
+						+ ", receiver=" + saidUriReceiver + "]. A password will be requested to access the other PS.");
 			}
 		}
 
-		if (tmpPassw == null || tmpPassw.equals("")) {
+		if (password == null || password.equals("")) {
 			try {
 				// get credentials from other PS
 				saidUriSender = this.requestCredentialsAndProfile(
 						saidNameSender, saidNameReceiver, saidUriReceiver);
-
 			} catch (Exception e) {
 				// FIXME
-				logger.warn(
-						"Catched exception when trying to retrieve credentials. Maybe no problem. ;-)",
-						e);
+				logger.warn("Catched exception when trying to retrieve credentials. Maybe no problem. ;-)", e);
 			}
 		} else {
-
-			if (this.token == null) {
-				this.token = new Token(saidNameReceiver, tmpPassw);
-			}
-
+			Token token = new Token(saidNameReceiver, password);
 			try {
-				this.requestProfile(saidNameSender, saidUriSender,
-						saidUriReceiver);
-
+				// saidNameSender is unknown, thus the profile is requested for this sender
+				requestProfile(token, saidNameSender, saidUriSender, saidUriReceiver);
 			} catch (ServiceNotAvailableException e) {
-				logger.warn("Error obtaining Profile: " + e.getMessage());
+				logger.error("Error obtaining profile: " + e.getMessage(), e);
 				return Response.serverError(e.getMessage(), e);
 			} catch (AttributeNotSupportedException e) {
-				logger.warn("Error obtaining Profile: " + e.getMessage());
+				logger.error("Error obtaining profile: " + e.getMessage(), e);
 				return Response.badRequest(e.getMessage(), e);
 			} catch (InfosphereException e) {
-				logger.warn("Error obtaining Profile: " + e.getMessage());
+				logger.error("Error obtaining profile: " + e.getMessage(), e);
 				return Response.serverError(e.getMessage(), e);
 			}
 		}
@@ -275,23 +250,18 @@ public class PSServicesController {
 		UNRefToItem unEntry = null;
 
 		try {
-			unEntry = this.getAndSaveSharedObject(jsonNotification,
-					saidUriSender, saidUriReceiver);
+			unEntry = getAndSaveSharedObject(jsonNotification, saidUriSender, saidUriReceiver);
 		} catch (AttributeNotSupportedException e) {
-			logger.warn("Error obtaining the resources shared: "
-					+ e.getMessage());
+			logger.warn("Error obtaining the resources shared: " + e.getMessage());
 			return Response.badRequest(e.getMessage(), e);
 		} catch (ServiceNotAvailableException e) {
-			logger.warn("Error obtaining the resources shared: "
-					+ e.getMessage());
+			logger.warn("Error obtaining the resources shared: " + e.getMessage());
 			return Response.serverError(e.getMessage(), e);
 		} catch (InvalidLoginException e) {
-			logger.warn("Error obtaining the resources shared: "
-					+ e.getMessage());
+			logger.warn("Error obtaining the resources shared: " + e.getMessage());
 			return Response.badRequest(e.getMessage(), e);
 		} catch (InfosphereException e) {
-			logger.warn("Error obtaining the resources shared: "
-					+ e.getMessage());
+			logger.warn("Error obtaining the resources shared: " + e.getMessage());
 			return Response.serverError(e.getMessage(), e);
 		} catch (ServiceException e) {
 			return Response.status(Status.get(Integer.parseInt(e.getDetailCode())), e.getMessage(), e);
@@ -299,21 +269,17 @@ public class PSServicesController {
 
 		// Notify to UI
 		try {
-			Long tenant = tenantManager.getByAccountName(saidNameReceiver)
-					.getId();
-			UserNotification notification = new UserNotification(tenant,
-					unEntry);
+			Long tenant = tenantManager.getByAccountName(saidNameReceiver).getId();
+			UserNotification notification = new UserNotification(tenant, unEntry);
 			// TODO remove when the Manager will do it
 			// this.notifierManager.pushInternalNotification(notification);
 
 		} catch (Exception e) {
-			return Response.serverError(
-					"Notifier Exception: " + e.getMessage(), e);
+			return Response.serverError("Notifier Exception: " + e.getMessage(), e);
 		}
 
 		// TODO return NotificationDTO
 		return Response.okEmpty();
-
 	}
 	
 	private UNRefToItem getAndSaveSharedObject(
@@ -325,45 +291,35 @@ public class PSServicesController {
 		String saidNameSender = jsonNotification.getSaidSender();
 		String objectSharedType = ResourceAttributes.ATTR_RESOURCE;
 		Class returnType = null;
-		String attributes;
+		String path = null;
 
 		// Notification RefToItem
 		UNRefToItem unEntry = new UNRefToItem();
 		unEntry.setOperation(UNRefToItem.OPERATION_SHARED);
 		unEntry.setUserID(saidUriSender);
 
-		DimeServiceAdapter adapter = serviceGateway
-				.getDimeServiceAdapter(saidNameSender);
+		DimeServiceAdapter adapter = serviceGateway.getDimeServiceAdapter(saidNameSender);
 
 		Entry entry = jsonNotification.getElement();
+		String entryType = entry.getType();
 
-		if (entry.getType().equals(DimeInternalNotification.ITEM_TYPE_RESOURCE)) {
-			logger.info("Shared type: " + ResourceAttributes.ATTR_RESOURCE);
+		if (DimeInternalNotification.ITEM_TYPE_RESOURCE.equals(entryType)) {
 			objectSharedType = ResourceAttributes.ATTR_RESOURCE;
 			returnType = FileDataObject.class;
-		}
-
-		if (entry.getType().equals(DimeInternalNotification.ITEM_TYPE_DATABOX)) {
-			logger.info("Shared type: " + ResourceAttributes.ATTR_DATABOX);
+		} else if (DimeInternalNotification.ITEM_TYPE_DATABOX.equals(entryType)) {
 			objectSharedType = ResourceAttributes.ATTR_DATABOX;
 			returnType = DataContainer.class;
-		}
-
-		if (entry.getType().equals(DimeInternalNotification.ITEM_TYPE_LIVEPOST)) {
-			logger.info("Shared type: " + ResourceAttributes.ATTR_LIVEPOST);
+		} else if (DimeInternalNotification.ITEM_TYPE_LIVEPOST.equals(entryType)) {
 			objectSharedType = ResourceAttributes.ATTR_LIVEPOST;
 			returnType = LivePost.class;
-		}
-
-		if (entry.getType().equals(DimeInternalNotification.ITEM_TYPE_PROFILE)) {
-			logger.info("Shared type: " + ResourceAttributes.ATTR_PROFILE);
+		} else if (DimeInternalNotification.ITEM_TYPE_PROFILE.equals(entryType)) {
 			objectSharedType = ResourceAttributes.ATTR_PROFILE;
 			returnType = ProfileCard.class;
 		}
 
-		// Obtain Resources Shared
-		if (objectSharedType != null) {
-
+		if (objectSharedType == null) {
+			throw new InfosphereException("Shared resource's [" + entry.getGuid() + "] type '" + entryType + "' is unknown or not supported.");
+		} else {
 			// Add type on the Notification
 			unEntry.setType(objectSharedType);
 
@@ -375,19 +331,17 @@ public class PSServicesController {
 			unEntry.setGuid(resourceID);
 
 			// building the path
-			attributes = "/" + objectSharedType + "/"
+			path = "/" + objectSharedType + "/"
 					+ jsonNotification.getSender() + "/"
 					+ resourceIDBase64Encoded;
-			logger.info("Calling: " + attributes
-					+ " to obtain shared resources");
 
 			// Sending the call to obtain the Resource
-			Collection<org.ontoware.rdfreactor.schema.rdfs.Resource> semanticResources = adapter
-					.get(saidUriSender, saidUriReceiver, attributes, returnType, TenantHelper.getCurrentTenant());
-			logger.info("Results received: " + semanticResources.size());
+			Collection<org.ontoware.rdfreactor.schema.rdfs.Resource> resources = adapter
+					.get(saidUriSender, saidUriReceiver, path, returnType, TenantHelper.getCurrentTenant());
+			logger.info("GET request to: " + path + " to retrieve shared resource: " + resources.size() + " objects received.");
 
 			// Saving the Resource
-			for (org.ontoware.rdfreactor.schema.rdfs.Resource resource : semanticResources) {
+			for (org.ontoware.rdfreactor.schema.rdfs.Resource resource : resources) {
 
 				// if DataBox
 				if (resource instanceof DataContainer) {
@@ -397,13 +351,12 @@ public class PSServicesController {
 					ClosableIterator<Node> files = databox.getAllPart_asNode();
 					Collection<FileDataObject> fileResources = new ArrayList<FileDataObject>();
 					while (files.hasNext()) {
-
 						String fileId = files.next().asURI().toString();
 						String fileIDBase64Encoded = Base64encoding.encode(fileId);
 
-						attributes = "/resource/" + saidNameSender + "/" + fileIDBase64Encoded;
+						path = "/resource/" + saidNameSender + "/" + fileIDBase64Encoded;
 						Collection<FileDataObject> dbFiles = adapter.get(
-								saidUriSender, saidUriReceiver, attributes,
+								saidUriSender, saidUriReceiver, path,
 								FileDataObject.class, TenantHelper.getCurrentTenant());
 
 						fileResources.addAll(dbFiles);
@@ -444,7 +397,7 @@ public class PSServicesController {
 
 				// if LivePost
 				if (resource instanceof LivePost) {
-					LivePost livepost= (LivePost) resource;
+					LivePost livepost = (LivePost) resource;
 					if(shareableLivePostManager.exist(resource.toString())){
 						logger.info("updating a shared LivePost from: " + saidUriSender);	
 						shareableLivePostManager.update(livepost, saidUriSender, saidUriReceiver);
@@ -468,31 +421,33 @@ public class PSServicesController {
 			}
 			
 			return unEntry;
-		} else {
-			// TODO NO tipus
-			return null;
 		}
-
 	}
 
-	private PersonContact requestProfile(String saidNameSender,
+	private PersonContact requestProfile(Token token, String saidNameSender,
 			String saidUriSender, String saidUriReceiver)
 					throws ServiceNotAvailableException,
 					AttributeNotSupportedException, InfosphereException {
 
-		DimeServiceAdapter adapter = serviceGateway
-				.getDimeServiceAdapter(saidNameSender);
+		DimeServiceAdapter adapter = serviceGateway.getDimeServiceAdapter(saidNameSender);
 
+		// try to find Account instance for sender URI, if not found request the
+		// profile information to sender PS for that account
 		Account account = null;
 		try {
-			account = accountManager.get(saidUriSender);
+			if (accountManager.exist(saidUriSender)) {
+				account = accountManager.get(saidUriSender);
+			}
 		} catch (InfosphereException e) {
-			logger.info("account not found for uri: " + saidUriSender
-					+ ". will try to create");
+			// this can happen if accountManager.get() cannot find the account,
+			// but in this case we just want account to be null
 		}
+		
 		if (account == null) {
-			PersonContact profile = adapter.getProfile(saidNameSender,
-					this.token);
+			logger.info("Sender is unknown: no di.me account (and therefore a profile) has been found with " +
+					"URI " + saidUriSender + ". The profile shared through that account will be retrieved from the sender PS.");
+
+			PersonContact profile = adapter.getProfile(saidNameSender, token);
 			if (profile != null) {
 				userManager.addProfile(new URIImpl(saidUriSender), profile, TenantHelper.getCurrentTenant());
 				return profile;
@@ -501,8 +456,8 @@ public class PSServicesController {
 						+ " to the infosphere. May be already there");
 			}
 		}
+		
 		return null;
-
 	}
 
 	private String requestCredentialsAndProfile(String saidNameSender,
@@ -511,12 +466,8 @@ public class PSServicesController {
 					AttributeNotSupportedException, ServiceNotAvailableException, ServiceException {
 
 		String saidUriSender = null;
-		DimeServiceAdapter adapter = serviceGateway
-				.getDimeServiceAdapter(saidNameSender);
-		this.token = adapter.getUserToken(saidNameReceiver); // <-- http request
-		// to other PS
-		// for
-		// credentials
+		DimeServiceAdapter adapter = serviceGateway.getDimeServiceAdapter(saidNameSender);
+		Token token = adapter.getUserToken(saidNameReceiver); // <-- http request to other PS for credentials
 
 		// HTTP request to other PS for the profile
 		User user = null;
@@ -524,33 +475,21 @@ public class PSServicesController {
 			try {
 				// add contact & create guest account
 				saidUriSender = "urn:uuid:" + UUID.randomUUID();
-				user = userManager.add(saidNameSender, new URIImpl(
-						saidUriSender));
+				user = userManager.add(saidNameSender, new URIImpl(saidUriSender));
 			} catch (Exception e) {
-				logger.info(
-						"Could not create user. Maybe already exists. But will still try to update credentials",
-						e);
-				saidUriSender = credentialStore.getUriForAccountName(
-						saidNameReceiver, saidNameSender);
+				logger.info("Could not create user. Maybe already exists. But will still try to update credentials");
+				saidUriSender = credentialStore.getUriForAccountName(saidNameReceiver, saidNameSender);
 			}
 			credentialStore.updateCredentialsForAccount(saidUriReceiver,
 					saidUriSender, saidNameSender, token.getSecret(), TenantHelper.getCurrentTenant());
 		}
 
-		Account account = null;
-		try {
-			account = accountManager.get(saidUriSender);
-		} catch (InfosphereException e) {
-			logger.info("No account for URI: " + saidUriSender
-					+ " found. Will be requested", e);
+		// request profile from sender
+		PersonContact profile = requestProfile(token, saidNameSender, saidUriSender, saidUriReceiver);
+		if (profile != null) {
+			adapter.confirmToken(token);
 		}
-		if (account == null) {
-			PersonContact profile = this.requestProfile(saidNameSender,
-					saidUriSender, saidUriReceiver);
-			if (profile != null) {
-				adapter.confirmToken(this.token);
-			}
-		}
+		
 		// do authenticated post to other PS to confirm that credentials are
 		// stored
 		// FIXME [Marcel] what happens if confirmToken returns false? shouldn't
