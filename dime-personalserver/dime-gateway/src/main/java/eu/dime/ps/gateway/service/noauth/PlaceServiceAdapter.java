@@ -24,7 +24,7 @@ public interface PlaceServiceAdapter extends ExternalServiceAdapter {
 	
 	public static String adapterName = "YellowMapPlaceService";
 
-	public void setCredentials(String tenant);
+	public void setCredentials();
 
 	public void updatePlace(Place place) throws UnsupportedEncodingException, ServiceNotAvailableException, ServiceException;
 	

@@ -44,7 +44,7 @@ import eu.dime.commons.dto.PlaceAddress;
 
 public class YMUtils {
 
-	public static String USR_PWD = "dime";
+	//public static String USR_PWD = "dime";
 	
 	static String CATEGORY_DIME = "dime";
 	public static float NO_SCORE = -1;

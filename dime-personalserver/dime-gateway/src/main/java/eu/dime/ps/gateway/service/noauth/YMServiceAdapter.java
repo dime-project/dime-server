@@ -108,15 +108,24 @@ public class YMServiceAdapter extends ServiceAdapterBase implements /*ExternalSe
 		return sr;
 	}
 
-	public void setCredentials(String user) {
+	public void setCredentials() {
 		// The my yellowmap user
-		this.sadapter.updateSetting(YMServiceAdapter.USERNAME, user);
-		this.sadapter.updateSetting(YMServiceAdapter.PASSWORD, YMUtils.USR_PWD);
+		this.sadapter.getSetting(YMServiceAdapter.USERNAME);
+		this.sadapter.getSetting(YMServiceAdapter.PASSWORD);
                 // additional optional parameters
                 this.sadapter.getSetting(YMServiceAdapter.FIRSTNAME);
                 this.sadapter.getSetting(YMServiceAdapter.LASTNAME);
 	}
-	
+
+//        	public void setCredentials(String user) {
+//		// The my yellowmap user
+//		this.sadapter.updateSetting(YMServiceAdapter.USERNAME, user);
+//		this.sadapter.getSetting(YMServiceAdapter.PASSWORD);
+//                // additional optional parameters
+//                this.sadapter.getSetting(YMServiceAdapter.FIRSTNAME);
+//                this.sadapter.getSetting(YMServiceAdapter.LASTNAME);
+//	}
+
 	/**
 	 * Update the personal information (favorit, rating) on the given place
 	 * @param place
