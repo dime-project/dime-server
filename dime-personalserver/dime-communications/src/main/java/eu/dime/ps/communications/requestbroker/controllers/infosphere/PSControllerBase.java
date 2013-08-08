@@ -23,12 +23,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 import eu.dime.commons.dto.Response;
 import eu.dime.commons.dto.Response.Status;
-import eu.dime.ps.controllers.TenantContextHolder;
 import eu.dime.ps.controllers.exception.ForbiddenException;
 import eu.dime.ps.controllers.exception.InfosphereException;
 import eu.dime.ps.controllers.infosphere.manager.ShareableManager;
 import eu.dime.ps.controllers.util.TenantHelper;
-import eu.dime.ps.controllers.util.TenantNotFoundException;
 import eu.dime.ps.gateway.util.JSONLDUtils;
 import eu.dime.ps.semantic.exception.NotFoundException;
 import eu.dime.ps.storage.entities.ServiceAccount;
@@ -100,18 +98,11 @@ public abstract class PSControllerBase {
 
 	protected final String getRequesterAccount() {
 		String requester = getRequester();
-
-        Tenant tenant;
-		try{
-            tenant = TenantHelper.getCurrentTenant();
-        }catch(TenantNotFoundException ex){
-            throw new IllegalArgumentException("Tenant not found.\n"+ex.getMessage(), ex);
-        }
-
+        Tenant tenant = TenantHelper.getCurrentTenant();
 		User user = User.findByTenantAndByUsername(tenant, requester);
-		if (user == null || user.getAccountUri() == null)
+		if (user == null || user.getAccountUri() == null) {
 			throw new IllegalArgumentException("User's account URI not found for requester '"+requester+"'.");
-
+		}
 		return user.getAccountUri();
 	}
 
