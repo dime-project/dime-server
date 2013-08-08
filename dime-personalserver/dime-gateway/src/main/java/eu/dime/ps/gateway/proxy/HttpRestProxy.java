@@ -151,8 +151,9 @@ public class HttpRestProxy implements ServiceProxy {
 		int responseCode = -1;
 
 		// execute the GET
+		HttpGet httpget = null;
 		try {
-			HttpGet httpget = new HttpGet(this.url + query);
+			httpget = new HttpGet(this.url + query);
 			// adding headers to request
 			for (String name : headers.keySet()) {
 				httpget.addHeader(name, headers.get(name));
@@ -190,10 +191,10 @@ public class HttpRestProxy implements ServiceProxy {
 			// this.client.getConnectionManager().shutdown();
 		}
 		
-		logger.debug("GET " + this.url + " returned: ["+responseCode+"] " + result.toString());
+		logger.debug(httpget.getRequestLine() + " returned: ["+responseCode+"] " + result.toString());
 		
 		if (responseCode >= 400) {
-			throw new ServiceException("GET " + this.url + " returned: " + result.toString(), Integer.toString(responseCode));
+			throw new ServiceException(httpget.getRequestLine() + " returned: " + result.toString(), Integer.toString(responseCode));
 		}
 
 		return result.toString();
