@@ -14,6 +14,7 @@
 
 package eu.dime.ps.controllers.infosphere.manager;
 
+import ie.deri.smile.rdf.TripleStore;
 import ie.deri.smile.vocabulary.NAO;
 import ie.deri.smile.vocabulary.PIMO;
 
@@ -22,6 +23,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.ontoware.rdf2go.model.node.URI;
+import org.ontoware.rdf2go.model.node.Variable;
 import org.ontoware.rdf2go.model.node.impl.URIImpl;
 
 import eu.dime.ps.controllers.exception.InfosphereException;
@@ -117,7 +119,7 @@ public class PersonGroupManagerImpl extends InfoSphereManagerBase<PersonGroup> i
 			return pimoService.get(new URIImpl(groupId), PersonGroup.class, 
 					properties.toArray(new URI[properties.size()]));
 		} catch (NotFoundException e) {
-			throw new InfosphereException("PersonGroup "+groupId+" not found", e);
+			throw new InfosphereException("PersonGroup "+groupId+" not found.", e);
 		}
 	}
 	
@@ -131,7 +133,7 @@ public class PersonGroupManagerImpl extends InfoSphereManagerBase<PersonGroup> i
 			personGroup.setCreator(new URIImpl("urn:auto-generated"));
 			pimoService.create(personGroup);
 		} catch (ResourceExistsException e) {
-			throw new InfosphereException("cannot add person group: "+e, e);
+			throw new InfosphereException("Cannot add person group "+personGroup, e);
 		}
 	}
 	
@@ -142,29 +144,31 @@ public class PersonGroupManagerImpl extends InfoSphereManagerBase<PersonGroup> i
 			personGroup.setCreator(pimoService.getUserUri());
 			pimoService.create(personGroup);
 		} catch (ResourceExistsException e) {
-			throw new InfosphereException("cannot add person group: "+e, e);
+			throw new InfosphereException("Cannot add person group "+personGroup, e);
 		}
 	}
 	
 	@Override
-	public void update(PersonGroup personGroup)
-			throws InfosphereException {
+	public void update(PersonGroup personGroup) throws InfosphereException {
 		PimoService pimoService = getPimoService();
+		TripleStore tripleStore = pimoService.getTripleStore();
 		try {
+			// remove always all members from the group (in case group is now empty) 
+			tripleStore.removeStatements(pimoService.getPimoUri(), personGroup, PIMO.hasMember, Variable.ANY);
+			
 			pimoService.update(personGroup, true);
 		} catch (NotFoundException e) {
-			throw new InfosphereException("cannot update person group: "+e, e);
+			throw new InfosphereException("Cannot update person group "+personGroup, e);
 		}
 	}
 	
 	@Override
-	public void remove(String groupId)
-			throws InfosphereException{
+	public void remove(String groupId) throws InfosphereException{
 		PimoService pimoService = getPimoService();
 		try {
 			pimoService.remove(new URIImpl(groupId));
 		} catch (NotFoundException e) {
-			throw new InfosphereException("cannot delete person group: "+e, e);
+			throw new InfosphereException("Cannot delete person group "+groupId, e);
 		}
 	}
 
