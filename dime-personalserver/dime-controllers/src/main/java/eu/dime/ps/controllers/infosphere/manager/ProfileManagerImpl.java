@@ -14,6 +14,7 @@
 
 package eu.dime.ps.controllers.infosphere.manager;
 
+import ie.deri.smile.vocabulary.NCO;
 import ie.deri.smile.vocabulary.PIMO;
 
 import java.util.ArrayList;
@@ -23,6 +24,7 @@ import java.util.List;
 import org.ontoware.aifbcommons.collection.ClosableIterator;
 import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.model.node.impl.URIImpl;
+import org.ontoware.rdf2go.vocabulary.RDF;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -62,6 +64,12 @@ public class ProfileManagerImpl extends InfoSphereManagerBase<PersonContact> imp
 			throws InfosphereException {
 		ResourceStore resourceStore = getResourceStore();
 		PimoService pimoService = getPimoService();
+		
+		// force type of profile to be nco:PersonContact
+		if (!profile.getModel().contains(profile, RDF.type, NCO.PersonContact)) {
+			profile.getModel().addStatement(profile, RDF.type, NCO.PersonContact);
+		}
+
 		try {
 			// adds the relation to the profile:
 			// - pimo:groundingOccurrence for the digital.me default profile
