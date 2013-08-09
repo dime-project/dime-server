@@ -154,8 +154,8 @@ body {
 }
 
 .mark:hover {
-    background-color: #F6C200;
-    border: 2px solid #ffffff;
+    background-color: #FFFFFF;
+    border: 2px solid #F6C200;
     cursor: pointer;
     height: 18px;
     width: 18px;
@@ -553,6 +553,14 @@ input[type="file"] {
 .ItemChecked{
     background-color: #F6C200;
     border: 2px solid white;
+    height: 18px;
+    width: 18px;
+}
+
+.ItemChecked:hover {
+    background-color: #F6C200;
+    border: 2px solid #F6C200;
+    cursor: pointer;
     height: 18px;
     width: 18px;
 }

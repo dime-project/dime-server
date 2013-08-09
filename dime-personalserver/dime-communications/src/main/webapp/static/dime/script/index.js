@@ -126,8 +126,13 @@ DimeView = {
                 .append('<div class="groupItemCounter" ><h1>'+ entry.items.length + '</h1></div>')
                 .append('<div class="clear"></div>')
                 .append(
-                    $('<h4>'+ DimeView.getShortName(entry.name) + '</h4>')
+                    $('<h4 title="' + entry.name + '">'+ DimeView.getShortNameWithLength(entry.name, 11) + '</h4>')
                         .clickExt(DimeView, DimeView.editItem, entry)
+                        .hover(function(){
+                            $(this).append('<span class="editHintGroupElement"><br>click to edit</span>');
+                        }, function(){
+                            $(".editHintGroupElement").remove();
+                        })
                 ));
    
 
@@ -567,6 +572,7 @@ DimeView = {
     },
     
     selectItem: function(event, element, entry, isGroupItem){
+        
         if (event){
             event.stopPropagation();
         }
@@ -1601,7 +1607,7 @@ DimeView = {
                 )
                 .append($('<p/>')
                     .append($('<span/>').text('The research project:'))
-                    .addHrefOpeningInNewWindow('http://www.di.me-project.eu','www.di.me-project.eu','orangeBubbleLink')
+                    .addHrefOpeningInNewWindow('http://www.dime-project.eu','www.dime-project.eu','orangeBubbleLink')
                 )
                 .append($('<p/>')
                     .append($('<span/>').text('Your dime-server @ '+serverInfo.affiliation+":"))

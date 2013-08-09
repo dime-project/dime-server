@@ -3605,8 +3605,9 @@ Dime.Navigation = {
             var updateCurPlaceElement=function(placeName, placeId){
                 var placeElement = document.getElementById('currentPlace');
                 placeElement.innerHTML =  '<div class="places">'
-                + '<div class="placesIcon" id="currentPlaceGuid" data-guid="' + placeId + '" title="' + placeName + '"></div>'
-                + DimeView.getShortNameWithLength(placeName, 34)+'</div>';                
+                + '<div class="placesIcon" id="currentPlaceGuid" data-guid="' + placeId + '"></div>'
+                + DimeView.getShortNameWithLength(placeName, 34)+'</div>';
+                $("#currentPlace").attr("title", placeName);
             };
             
             if (!placeGuidAndNameObject || !placeGuidAndNameObject.placeName || placeGuidAndNameObject.placeName===0){
