@@ -10,7 +10,7 @@
 <c:url value="/j_spring_security_logout" var="logoutUrl"/>
 <html>
     <head>
-
+		<meta charset="utf-8">
         <meta name="viewport" user-scalable="no" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 
         <title>di.me Server</title>
