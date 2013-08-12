@@ -1,16 +1,16 @@
 /*
-* Copyright 2013 by the digital.me project (http://www.dime-project.eu).
-*
-* Licensed under the EUPL, Version 1.1 only (the "Licence");
-* You may not use this work except in compliance with the Licence.
-* You may obtain a copy of the Licence at:
-*
-* http://joinup.ec.europa.eu/software/page/eupl/licence-eupl
-*
-* Unless required by applicable law or agreed to in writing, software distributed under the Licence is distributed on an "AS IS" basis,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-* See the Licence for the specific language governing permissions and limitations under the Licence.
-*/
+ * Copyright 2013 by the digital.me project (http://www.dime-project.eu).
+ *
+ * Licensed under the EUPL, Version 1.1 only (the "Licence");
+ * You may not use this work except in compliance with the Licence.
+ * You may obtain a copy of the Licence at:
+ *
+ * http://joinup.ec.europa.eu/software/page/eupl/licence-eupl
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the Licence is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the Licence for the specific language governing permissions and limitations under the Licence.
+ */
 
 package eu.dime.ps.communications.requestbroker.controllers.infosphere;
 
@@ -52,240 +52,251 @@ import eu.dime.ps.semantic.model.pimo.Person;
 @Path("/dime/rest/{said}/event/")
 public class PSEventController implements APIController {
 
-    private static final Logger logger = LoggerFactory.getLogger(PSPersonController.class);
+	private static final Logger logger = LoggerFactory.getLogger(PSPersonController.class);
 
-    private EventManager eventManager;
-    @Autowired
-    private PersonManager personManager;
-    
+	private EventManager eventManager;
+	@Autowired
+	private PersonManager personManager;
 
-    public void setEventManager(EventManager eventManager) {
-	this.eventManager = eventManager;
-    }
 
-    public void setPersonManager(PersonManager personManager) {
-    	this.personManager = personManager;
-        }
-    /**
-     * Return Collection of Meetings
-     * 
-     * @return
-     */
-    @GET
-    @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
-    @Path("@me/@all")
-    public Response<Resource> getMyEvents(@PathParam("said") String said) {
-
-	Data<Resource> data = null;
-	logger.info("called API method: GET /dime/rest" + said + "/events/@me/@all");
-	try {
-	    Collection<SocialEvent> events = eventManager.getAll();
-	    data = new Data<Resource>(0, events.size(), events.size());
-	    for (SocialEvent event : events) {
-		data.getEntries().add(new Resource(event,eventManager.getMe().asURI()));
-	    }
-	} catch (InfosphereException e) {
-	    return Response.badRequest(e.getMessage(), e);
-	} catch (Exception e) {
-	    return Response.serverError(e.getMessage(), e);
+	public void setEventManager(EventManager eventManager) {
+		this.eventManager = eventManager;
 	}
 
-	return Response.ok(data);
+	public void setPersonManager(PersonManager personManager) {
+		this.personManager = personManager;
+	}
+	/**
+	 * Return Collection of Meetings
+	 * 
+	 * @return
+	 */
+	@GET
+	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
+	@Path("@me/@all")
+	public Response<Resource> getMyEvents(@PathParam("said") String said) {
 
-    }
+		logger.info("called API method: GET /dime/rest" + said + "/events/@me/@all");
+		
+		Data<Resource> data = null;	
+		
+		try {
+			Collection<SocialEvent> events = eventManager.getAll();
+			data = new Data<Resource>(0, events.size(), events.size());
+			for (SocialEvent event : events) {
+				data.getEntries().add(new Resource(event,eventManager.getMe().asURI()));
+			}
+		} catch (InfosphereException e) {
+			return Response.badRequest(e.getMessage(), e);
+		} catch (Exception e) {
+			return Response.serverError(e.getMessage(), e);
+		}
 
-    /**
-     * Return Meeting
-     * 
-     * @param eventID
-     * @return
-     */
-    @GET
-    @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
-    @Path("@me/{eventID}")
-    public Response<Resource> getMyEvent(@PathParam("said") String said,
-	    @PathParam("eventID") String eventID) {
+		return Response.ok(data);
 
-	Data<Resource> data = null;
-
-	try {
-	    SocialEvent event = eventManager.get(eventID);
-	    data = new Data<Resource>(0, 1, 1);
-	    data.getEntries().add(new Resource(event,eventManager.getMe().asURI()));
-
-	} catch (InfosphereException e) {
-	    return Response.badRequest(e.getMessage(), e);
-	} catch (Exception e) {
-	    return Response.serverError(e.getMessage(), e);
 	}
 
-	return Response.ok(data);
+	/**
+	 * Return Meeting
+	 * 
+	 * @param eventID
+	 * @return
+	 */
+	@GET
+	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
+	@Path("@me/{eventID}")
+	public Response<Resource> getMyEvent(@PathParam("said") String said,
+			@PathParam("eventID") String eventID) {
 
-    }
+		logger.info("called API method: GET /dime/rest" + said + "/events/@me/"+eventID);	
 
-    /**
-     * Create Event
-     * 
-     * @param json
-     * @return
-     */
-    @POST
-    @Path("@me")
-    @Consumes(MediaType.APPLICATION_JSON + ";charset=UTF-8")
-    @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
-    public Response<Resource> createMyEvent(@PathParam("said") String said,
-	    Request<Resource> request) {
-	Data<Resource> data, returnData;
+		Data<Resource> data = null;
 
-	try {
-	    RequestValidator.validateRequest(request);
+		try {
+			SocialEvent event = eventManager.get(eventID);
+			data = new Data<Resource>(0, 1, 1);
+			data.getEntries().add(new Resource(event,eventManager.getMe().asURI()));
 
-	    data = request.getMessage().getData();
-	    Resource dto = data.getEntries().iterator().next();
+		} catch (InfosphereException e) {
+			return Response.badRequest(e.getMessage(), e);
+		} catch (Exception e) {
+			return Response.serverError(e.getMessage(), e);
+		}
 
-	    // Remove guid because is a new object
-	    dto.remove("guid");
+		return Response.ok(data);
 
-	    SocialEvent event = dto.asResource(SocialEvent.class,eventManager.getMe().asURI());
-	    eventManager.add(event);
-
-	    returnData = new Data<Resource>(0, 1, new Resource(event,eventManager.getMe().asURI()));
-	} catch (IllegalArgumentException e) {
-	    return Response.badRequest(e.getMessage(), e);
-	} catch (InfosphereException e) {
-	    return Response.badRequest(e.getMessage(), e);
-	} catch (Exception e) {
-	    return Response.serverError(e.getMessage(), e);
 	}
 
-	return Response.ok(returnData);
-    }
+	/**
+	 * Create Event
+	 * 
+	 * @param json
+	 * @return
+	 */
+	@POST
+	@Path("@me")
+	@Consumes(MediaType.APPLICATION_JSON + ";charset=UTF-8")
+	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
+	public Response<Resource> createMyEvent(@PathParam("said") String said,
+			Request<Resource> request) {
+		
+		logger.info("called API method: POST /dime/rest" + said + "/events/@me/");	
+		
+		Data<Resource> data, returnData;
 
-    /**
-     * Update Event
-     * 
-     * @param json
-     * @param eventID
-     * @return
-     */
-    @POST
-    @Path("@me/{eventID}")
-    @Consumes(MediaType.APPLICATION_JSON + ";charset=UTF-8")
-    @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
-    public Response<Resource> updateMyEvent(@PathParam("said") String said,
-	    Request<Resource> request, @PathParam("eventID") String eventID) {
+		try {
+			RequestValidator.validateRequest(request);
 
-	Data<Resource> data, returnData;
+			data = request.getMessage().getData();
+			Resource dto = data.getEntries().iterator().next();
 
-	try {
-	    RequestValidator.validateRequest(request);
+			// Remove guid because is a new object
+			dto.remove("guid");
 
-	    data = request.getMessage().getData();
-	    SocialEvent event = data.getEntries().iterator().next()
-		    .asResource(new URIImpl(eventID), SocialEvent.class,eventManager.getMe().asURI());
-	    eventManager.update(event);
+			SocialEvent event = dto.asResource(SocialEvent.class,eventManager.getMe().asURI());
+			eventManager.add(event);
 
-	    returnData = new Data<Resource>(0, 1, new Resource(event,eventManager.getMe().asURI()));
-	} catch (IllegalArgumentException e) {
-	    return Response.badRequest(e.getMessage(), e);
-	} catch (InfosphereException e) {
-	    return Response.badRequest(e.getMessage(), e);
-	} catch (Exception e) {
-	    return Response.serverError(e.getMessage(), e);
+			returnData = new Data<Resource>(0, 1, new Resource(event,eventManager.getMe().asURI()));
+		} catch (IllegalArgumentException e) {
+			return Response.badRequest(e.getMessage(), e);
+		} catch (InfosphereException e) {
+			return Response.badRequest(e.getMessage(), e);
+		} catch (Exception e) {
+			return Response.serverError(e.getMessage(), e);
+		}
+
+		return Response.ok(returnData);
 	}
 
-	return Response.ok(returnData);
-    }
+	/**
+	 * Update Event
+	 * 
+	 * @param json
+	 * @param eventID
+	 * @return
+	 */
+	@POST
+	@Path("@me/{eventID}")
+	@Consumes(MediaType.APPLICATION_JSON + ";charset=UTF-8")
+	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
+	public Response<Resource> updateMyEvent(@PathParam("said") String said,
+			Request<Resource> request, @PathParam("eventID") String eventID) {
+		
+		logger.info("called API method: POST /dime/rest" + said + "/events/@me/"+eventID);	
 
-    /**
-     * Remove Event and Attendee
-     * 
-     * @param eventID
-     * @return
-     */
-    @DELETE
-    @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
-    @Path("@me/{eventID}")
-    public Response deleteMyEvent(@PathParam("said") String said,
-	    @PathParam("eventID") String eventID) {
+		Data<Resource> data, returnData;
 
-	try {
+		try {
+			RequestValidator.validateRequest(request);
 
-	    eventManager.remove(eventID);
+			data = request.getMessage().getData();
+			SocialEvent event = data.getEntries().iterator().next()
+					.asResource(new URIImpl(eventID), SocialEvent.class,eventManager.getMe().asURI());
+			eventManager.update(event);
 
-	} catch (InfosphereException e) {
-	    return Response.badRequest(e.getMessage(), e);
-	} catch (Exception e) {
-	    return Response.serverError(e.getMessage(), e);
+			returnData = new Data<Resource>(0, 1, new Resource(event,eventManager.getMe().asURI()));
+		} catch (IllegalArgumentException e) {
+			return Response.badRequest(e.getMessage(), e);
+		} catch (InfosphereException e) {
+			return Response.badRequest(e.getMessage(), e);
+		} catch (Exception e) {
+			return Response.serverError(e.getMessage(), e);
+		}
+
+		return Response.ok(returnData);
 	}
 
-	return Response.ok();
+	/**
+	 * Remove Event and Attendee
+	 * 
+	 * @param eventID
+	 * @return
+	 */
+	@DELETE
+	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
+	@Path("@me/{eventID}")
+	public Response deleteMyEvent(@PathParam("said") String said,
+			@PathParam("eventID") String eventID) {
+		
+		logger.info("called API method: DELETE /dime/rest" + said + "/events/@me/"+eventID);	
 
-    }
- 
+		try {
 
-    /**
-     * Create Attendee
-     * 
-     * @param json
-     * @param eventID
-     * @param personID
-     * @return
-     */
-    @POST
-    @Path("@me/{eventID}/{personID}")
-    @Consumes(MediaType.APPLICATION_JSON + ";charset=UTF-8")
-    @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
-    public Response<Resource> postMyEvent(@PathParam("said") String said,
-	    Request<Resource> request, @PathParam("eventID") String eventID,
-	    @PathParam("personID") String personID) {
+			eventManager.remove(eventID);
 
-	
-    	Data<Resource> returnData;   	
-    	
-    	 try {
-    		  
-    		 Person person= personManager.get(personID);    		 
+		} catch (InfosphereException e) {
+			return Response.badRequest(e.getMessage(), e);
+		} catch (Exception e) {
+			return Response.serverError(e.getMessage(), e);
+		}
+
+		return Response.ok();
+
+	}
+
+
+	/**
+	 * Create Attendee
+	 * 
+	 * @param json
+	 * @param eventID
+	 * @param personID
+	 * @return
+	 */
+	@POST
+	@Path("@me/{eventID}/{personID}")
+	@Consumes(MediaType.APPLICATION_JSON + ";charset=UTF-8")
+	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
+	public Response<Resource> postMyEvent(@PathParam("said") String said,
+			Request<Resource> request, @PathParam("eventID") String eventID,
+			@PathParam("personID") String personID) {
+
+
+		Data<Resource> returnData;   	
+
+		try {
+
+			Person person= personManager.get(personID);    		 
 			eventManager.addAttendee(person, eventID);			
 			SocialEvent event = eventManager.get(eventID);
 			returnData = new Data<Resource>(0, 1, new Resource(event,eventManager.getMe().asURI()));
-			
+
 		} catch (InfosphereException e) {
-			 return Response.badRequest(e.getMessage(), e);
+			return Response.badRequest(e.getMessage(), e);
 		}catch (Exception e) {
-		    return Response.serverError(e.getMessage(), e);
+			return Response.serverError(e.getMessage(), e);
 		}
-	return Response.ok(returnData);
+		return Response.ok(returnData);
 
-    }
+	}
 
-    /**
-     * Remove Attendee
-     * 
-     * @param eventID
-     * @param personID
-     * @return
-     */
-    @DELETE
-    @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
-    @Path("@me/{eventID}/{personID}")
-    public Response<Resource> deleteMyEvent(@PathParam("said") String said,
-	    @PathParam("eventID") String eventID, @PathParam("personID") String personID) {
+	/**
+	 * Remove Attendee
+	 * 
+	 * @param eventID
+	 * @param personID
+	 * @return
+	 */
+	@DELETE
+	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
+	@Path("@me/{eventID}/{personID}")
+	public Response<Resource> deleteMyEvent(@PathParam("said") String said,
+			@PathParam("eventID") String eventID, @PathParam("personID") String personID) {
 
-	
-    	Data<Resource> returnData;    	
-    	
-   	 try {   		  
-   		 Person person= personManager.get(personID);    		 
-		 eventManager.removeAttendee(person, eventID);			
-		 SocialEvent event = eventManager.get(eventID);
-		 returnData = new Data<Resource>(0, 1, new Resource(event,eventManager.getMe().asURI()));
-		 
+
+		Data<Resource> returnData;    	
+
+		try {   		  
+			Person person= personManager.get(personID);    		 
+			eventManager.removeAttendee(person, eventID);			
+			SocialEvent event = eventManager.get(eventID);
+			returnData = new Data<Resource>(0, 1, new Resource(event,eventManager.getMe().asURI()));
+
 		} catch (InfosphereException e) {
-			 return Response.badRequest(e.getMessage(), e);
+			return Response.badRequest(e.getMessage(), e);
 		}catch (Exception e) {
-		    return Response.serverError(e.getMessage(), e);
+			return Response.serverError(e.getMessage(), e);
 		}
-	return Response.ok(returnData);
-    }
+		return Response.ok(returnData);
+	}
 }

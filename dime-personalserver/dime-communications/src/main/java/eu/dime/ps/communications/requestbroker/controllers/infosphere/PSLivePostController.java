@@ -136,7 +136,7 @@ public class PSLivePostController extends PSSharingControllerBase implements API
 	@Path("@all")
 	public Response<Resource> getAllLivePosts(@PathParam("said") String said) {
 		Data<Resource> data = null;
-		logger.info("called API method: POST /dime/rest/" + said + "/livepost/@all");
+		logger.info("called API method: GET /dime/rest/" + said + "/livepost/@all");
 		List<URI> properties = new ArrayList<URI>();
 		properties = Arrays.asList(payload);
 
@@ -171,8 +171,10 @@ public class PSLivePostController extends PSSharingControllerBase implements API
 	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
 	@Path("{personId}/@all")
 	public Response<Resource> getAllLivePostsByPerson(
-			@PathParam("personId") String personId,@PathParam("said") String said) {		
-		logger.info("called API method: POST /dime/rest/" + said + "/livepost/"+personId+"/@all");		
+			@PathParam("personId") String personId,@PathParam("said") String said) {
+		
+		logger.info("called API method: GET /dime/rest/" + said + "/livepost/"+personId+"/@all");	
+		
 		Data<Resource> data = null;
 		List<URI> properties = new ArrayList<URI>();
 		properties = Arrays.asList(payload);
@@ -220,7 +222,8 @@ public class PSLivePostController extends PSSharingControllerBase implements API
 			@PathParam("said") String said,
 			@PathParam("personId") String personId,
 			@PathParam("livePostId") String livePostId) {
-		logger.info("called API method: POST /dime/rest/" + said + "/livepost/"+personId+"/"+livePostId);	
+		
+		logger.info("called API method: GET /dime/rest/" + said + "/livepost/"+personId+"/"+livePostId);	
 
 		Data<Resource> data = null;
 		List<URI> properties = new ArrayList<URI>();
@@ -245,8 +248,6 @@ public class PSLivePostController extends PSSharingControllerBase implements API
 	}
 
 
-
-
 	/**
 	 * Creates a new live post.
 	 * 
@@ -261,6 +262,7 @@ public class PSLivePostController extends PSSharingControllerBase implements API
 	public Response<Resource> createLivePost(Request<Resource> request,
 			@PathParam("said") String said) {
 		Data<Resource> data, returnData;
+		
 		logger.info("called API method: POST /dime/rest/" + said + "/livepost/@me");
 		try {
 			RequestValidator.validateRequest(request);
@@ -319,7 +321,7 @@ public class PSLivePostController extends PSSharingControllerBase implements API
 			@PathParam("personId") String personId,
 			@PathParam("livePostId") String livePostId) {
 		Data<Resource> data, returnData;
-		logger.info("called API method: UPDATE /dime/rest/" + said + "/livepost/"+personId+"/"+livePostId);
+		logger.info("called API method: POST /dime/rest/" + said + "/livepost/"+personId+"/"+livePostId);
 
 		try {
 			RequestValidator.validateRequest(request);
@@ -359,7 +361,7 @@ public class PSLivePostController extends PSSharingControllerBase implements API
 			@PathParam("said") String said,
 			@PathParam("personId") String personId,
 			@PathParam("livePostId") String livePostId) {
-		logger.info("called API method: POST /dime/rest/" + said + "/livepost/@me");
+		logger.info("called API method: DELETE /dime/rest/" + said + "/livepost/"+personId+"/"+livePostId);
 		try {
 			livePostManager.remove(livePostId);
 

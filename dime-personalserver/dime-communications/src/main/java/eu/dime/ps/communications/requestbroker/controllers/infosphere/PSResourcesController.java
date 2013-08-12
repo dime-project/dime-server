@@ -169,6 +169,7 @@ public class PSResourcesController extends PSSharingControllerBase implements AP
 	public Response<Resource> getAllResources(@PathParam("said") String said) {
 
 		logger.info("called API method: GET /dime/rest/" + said + "/resource/@all");
+		
 		Data<Resource> data = null;
 		List<URI> properties = new ArrayList<URI>();
 		properties = Arrays.asList(payload);
@@ -324,7 +325,7 @@ public class PSResourcesController extends PSSharingControllerBase implements AP
 
 		Data<Resource> data, returnData;
 		
-		logger.info("called API method: UPDATE /dime/rest/" + said + "/resource/"+personID+"/"+resourceID);
+		logger.info("called API method: POST /dime/rest/" + said + "/resource/"+personID+"/"+resourceID);
 		try {
 			RequestValidator.validateRequest(request);
 
@@ -368,7 +369,7 @@ public class PSResourcesController extends PSSharingControllerBase implements AP
 	public Response deleteResourceFromPersonById(@PathParam("said") String said,
 			@PathParam("personID") String personID, @PathParam("resourceID") String resourceID) {
 
-		logger.info("called API method: DELETE /dime/rest/{said}/resource/{personID}/{groupID}");
+		logger.info("called API method: DELETE /dime/rest/" + said + "/resource/"+personID+"/"+resourceID);
 		try {
 
 			fileManager.remove(resourceID);

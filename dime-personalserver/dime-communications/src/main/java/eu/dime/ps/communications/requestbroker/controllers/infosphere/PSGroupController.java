@@ -82,7 +82,7 @@ public class PSGroupController implements APIController {
     @Path("/@me/@all")
     public Response<Resource> getAllPersonGroups(@PathParam("said") String said) {
 
-	logger.info("called API method: GET /dime/rest/{said}/group/@me/@all");
+	logger.info("called API method: GET /dime/rest/"+said+"/group/@me/@all");
 
 	Data<Resource> data = null;
 
@@ -114,7 +114,7 @@ public class PSGroupController implements APIController {
     public Response<Resource> getPersonGroupById(@PathParam("said") String said,
 	    @PathParam("groupID") String groupID) {
 
-	logger.info("called API method: GET /dime/rest/{said}/group/@me/{groupID}");
+	logger.info("called API method: GET /dime/rest/"+said+"/group/@me/"+groupID);
 
 	Data<Resource> data = null;
 
@@ -145,10 +145,10 @@ public class PSGroupController implements APIController {
     public Response<Resource> createPersonGroup(@PathParam("said") String said,
 	    Request<Resource> request) {
 
-	logger.info("called API method: POST /dime/rest/{said}/group/@me");
+	logger.info("called API method: POST /dime/rest/"+said+"/group/@me");
 	Data<Resource> data, returnData;
 
-	try {
+	try{
 	    RequestValidator.validateRequest(request);
 
 	    data = request.getMessage().getData();
@@ -189,7 +189,7 @@ public class PSGroupController implements APIController {
     public Response<Resource> updatePersonGroup(@PathParam("said") String said,
 	    Request<Resource> request, @PathParam("groupID") String groupID) {
 
-	logger.info("called API method: POST /dime/rest/{said}/group/@me/{groupID}");
+	logger.info("called API method: POST /dime/rest/"+said+"/group/@me/"+groupID);
 	Data<Resource> data, returnData;
 
 	try {
@@ -225,7 +225,7 @@ public class PSGroupController implements APIController {
     public Response deletePersonGroupById(@PathParam("said") String said,
 	    @PathParam("groupID") String groupID) {
 
-	logger.info("called API method: DELETE /dime/rest/{said}/group/@me/{groupID}");
+	logger.info("called API method: DELETE /dime/rest/"+said+"/group/@me/"+groupID);
 
 	try {
 	    personGroupManager.remove(groupID);

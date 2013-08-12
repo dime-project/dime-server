@@ -241,7 +241,7 @@ public class PSProfileController extends PSSharingControllerBase implements APIC
 	public Response<eu.dime.ps.dto.Resource> getAllProfilesFromPersonById(
 			@PathParam("said") String said, @PathParam("personID") String personId) {
 
-		logger.info("called API method: GET /dime/rest/" + said + "/profile/{personID}/@all");
+		logger.info("called API method: GET /dime/rest/" + said + "/profile/"+personId+"/@all");
 
 		Data<eu.dime.ps.dto.Resource> data = null;
 
@@ -275,8 +275,7 @@ public class PSProfileController extends PSSharingControllerBase implements APIC
 
 	/**
 	 * Return profile
-	 * 
-	 * @param personID
+	 * 	
 	 * @param profileID
 	 * @return
 	 */
@@ -284,10 +283,10 @@ public class PSProfileController extends PSSharingControllerBase implements APIC
 	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
 	@Path("/@me/{profileID}")
 	public Response<eu.dime.ps.dto.Resource> getProfileFromMe(
-			@PathParam("said") String said, @PathParam("personID") String personID,
-			@PathParam("profileID") String profileID) {
+			@PathParam("said") String said,	@PathParam("profileID") String profileID) {
 
-		logger.info("called API method: GET /dime/rest/" + said + "/profile/@me/{profileID}");
+		logger.info("called API method: GET /dime/rest/" + said + "/profile/@me/"+profileID);
+		
 		Data<eu.dime.ps.dto.Resource> data = null;
 
 		try {
@@ -334,7 +333,9 @@ public class PSProfileController extends PSSharingControllerBase implements APIC
 	public Response<eu.dime.ps.dto.Resource> getProfileFromPersonById(
 			@PathParam("said") String said, @PathParam("personID") String personID,
 			@PathParam("profileID") String profileID) {
-		logger.info("called API method: GET /dime/rest/" + said + "/profile/{personID}/{profileID}");
+		
+		logger.info("called API method: GET /dime/rest/" + said + "/profile/"+personID+"/"+profileID);
+		
 		Data<eu.dime.ps.dto.Resource> data = null;
 
 		try {
@@ -388,6 +389,7 @@ public class PSProfileController extends PSSharingControllerBase implements APIC
 			Request<eu.dime.ps.dto.Resource> request) throws InfosphereException {
 
 		logger.info("called API method: POST /dime/rest/" + said + "/profile/@me");
+		
 		Data<eu.dime.ps.dto.Resource> data, returnData;
 
 		try {
@@ -469,8 +471,9 @@ public class PSProfileController extends PSSharingControllerBase implements APIC
 	public Response<eu.dime.ps.dto.Resource> updateProfile(@PathParam("said") String said,
 			Request<eu.dime.ps.dto.Resource> request,
 			@PathParam("personID") String personID, @PathParam("profileID") String profileID) {
+		
 		logger.info("called API method: POST /dime/rest/" + said
-				+ "/profile/{personID}/{profileID}");
+				+ "/profile/"+personID+"/"+profileID);
 
 		Data<eu.dime.ps.dto.Resource> data, returnData = null;
 
@@ -530,8 +533,9 @@ public class PSProfileController extends PSSharingControllerBase implements APIC
 	public Response<eu.dime.ps.dto.Resource> updateMyProfile(@PathParam("said") String said,
 			Request<eu.dime.ps.dto.Resource> request,
 			@PathParam("profileID") String profileID) {
+		
 		logger.info("called API method: POST /dime/rest/" + said
-				+ "/profile/@me/{profileID}");
+				+ "/profile/@me/"+profileID);
 
 		Data<eu.dime.ps.dto.Resource> data, returnData = null;
 
@@ -590,7 +594,7 @@ public class PSProfileController extends PSSharingControllerBase implements APIC
 			@PathParam("personID") String personID, @PathParam("profileID") String profileID) {
 
 		logger.info("called API method: DELETE /dime/rest/" + said
-				+ "/profile/{personID}/{profileID}");
+				+ "/profile/"+personID+"/"+profileID);
 
 		try {
 			if (profileID.startsWith("pc_")) {
@@ -624,7 +628,7 @@ public class PSProfileController extends PSSharingControllerBase implements APIC
 	public Response removeProfile(@PathParam("said") String said,@PathParam("profileID") String profileID) {
 
 		logger.info("called API method: DELETE /dime/rest/" + said
-				+ "/profile/{personID}/{profileID}");
+				+ "/profile/@me/"+profileID);
 
 		try {
 			if (profileID.startsWith("pc_")) {

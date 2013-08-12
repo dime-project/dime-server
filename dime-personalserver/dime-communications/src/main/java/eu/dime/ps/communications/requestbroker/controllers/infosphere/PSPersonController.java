@@ -132,7 +132,7 @@ public class PSPersonController implements APIController {
 			@PathParam("personID") String personID) {
 
 		logger.info("called API method: GET /dime/rest/" + said
-				+ "/person/@me/{personID}");
+				+ "/person/@me/"+personID);
 		Data<Resource> data = null;
 
 		try {
@@ -224,7 +224,7 @@ public class PSPersonController implements APIController {
 			Request<Resource> request, @PathParam("personID") String personID) {
 
 		logger.info("called API method: POST /dime/rest/" + said
-				+ "/person/@me/{personID}");
+				+ "/person/@me/"+personID);
 		Data<Resource> data, returnData;
 
 		try {
@@ -275,7 +275,7 @@ public class PSPersonController implements APIController {
 			@PathParam("personID") String personID) {
 
 		logger.info("called API method: DELETE /dime/rest/" + said
-				+ "/person/@me/{personID}");
+				+ "/person/@me/"+personID);
 
 		try {
 			personManager.remove(personID);

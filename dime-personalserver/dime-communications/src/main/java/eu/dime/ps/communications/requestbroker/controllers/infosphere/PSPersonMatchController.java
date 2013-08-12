@@ -164,7 +164,7 @@ public class PSPersonMatchController implements APIController {
 			@PathParam("personID") String personID ) {
 
 		logger.info("called API method: GET /dime/rest" + said
-				+ "/personmatch/@me/{personID}" + personID);
+				+ "/personmatch/@me/" + personID);
 		Data<List<PersonMatchEntry>> data = null;
 
 		try {
@@ -217,7 +217,7 @@ public class PSPersonMatchController implements APIController {
 			@PathParam("status") String status, @PathParam("personID") String personID) {
 
 		logger.info("called API method: GET /dime/rest" + said
-				+ "/personmatch/@me/{status}/" + status + "/{personID}" + personID);
+				+ "/personmatch/@me/" + status + "/"+personID);
 		Data<List<PersonMatchEntry>> data = null;
 
 		try {

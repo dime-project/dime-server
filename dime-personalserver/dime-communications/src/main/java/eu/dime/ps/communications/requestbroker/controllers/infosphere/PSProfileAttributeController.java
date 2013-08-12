@@ -117,7 +117,7 @@ public class PSProfileAttributeController implements APIController {
 			@PathParam("personId") String personId) {
 
 		logger.info("called API method: GET /dime/rest/" + said
-				+ "/profileattribute/{personId}/@all");
+				+ "/profileattribute/"+personId+"/@all");
 
 		Data<ProfileAttribute> data = null;
 
@@ -173,7 +173,7 @@ public class PSProfileAttributeController implements APIController {
 			@PathParam("profileAttributeID") String profileAttributeID) {
 
 		logger.info("called API method: GET /dime/rest/" + said
-				+ "/profileattribute/@me/{profileAttributeID}");
+				+ "/profileattribute/@me/"+profileAttributeID);
 		Data<ProfileAttribute> data = null;
 
 		try {
@@ -209,7 +209,7 @@ public class PSProfileAttributeController implements APIController {
 			@PathParam("profileAttributeID") String profileAttributeID) {
 
 		logger.info("called API method: GET /dime/rest/" + said
-				+ "/profileattribute/{profileID}/{profileAttributeID}");
+				+ "/profileattribute/"+profileOrPersonID+"/"+profileAttributeID);
 
 		Data<ProfileAttribute> data = null;
 		ProfileAttribute pAttribute = null;
@@ -336,6 +336,9 @@ public class PSProfileAttributeController implements APIController {
 			@PathParam("said") String said, Request<ProfileAttribute> request,
 			@PathParam("profileID") String profileID) {
 
+		logger.info("called API method: POST /dime/rest/" + said
+				+ "/profileattribute/"+profileID);
+		
 		Data<ProfileAttribute> data, returnData;
 
 		try {
@@ -416,6 +419,9 @@ public class PSProfileAttributeController implements APIController {
 			@PathParam("said") String said, Request<ProfileAttribute> request,
 			@PathParam("profileAttributeID") String profileAttributeID) {
 
+		logger.info("called API method: POST /dime/rest/" + said
+				+ "/profileattribute/@me"+profileAttributeID);
+		
 		Data<ProfileAttribute> data, returnData;
 
 		try {
@@ -463,6 +469,10 @@ public class PSProfileAttributeController implements APIController {
 			@PathParam("profileID") String profileID,
 			@PathParam("profileAttributeID") String profileAttributeID) {
 
+		logger.info("called API method: POST /dime/rest/" + said
+				+ "/profileattribute/"+profileID+"/"+profileAttributeID);
+		
+		
 		Data<ProfileAttribute> data, returnData;
 
 		try {
@@ -503,6 +513,10 @@ public class PSProfileAttributeController implements APIController {
 	@Path("/@me/{profileAttributeID}")
 	public Response deleteMyProfileAttribute(@PathParam("said") String said,
 			@PathParam("profileAttributeID") String profileAttributeID) {
+		
+		logger.info("called API method: DELETE /dime/rest/" + said
+				+ "/profileattribute/@me"+profileAttributeID);
+		
 
 		try {
 			if (belongsTo(profileAttributeID, "@me")) {
@@ -528,6 +542,10 @@ public class PSProfileAttributeController implements APIController {
 			@PathParam("profileID") String profileID,
 			@PathParam("profileAttributeID") String profileAttributeID) {
 
+		logger.info("called API method: DELETE /dime/rest/" + said
+				+ "/profileattribute/"+profileID+"/"+profileAttributeID);
+		
+		
 		// Remove the p_ form the UI
 		if (profileID.startsWith("pc")) {
 			profileID = profileID.replaceFirst("pc_", "");

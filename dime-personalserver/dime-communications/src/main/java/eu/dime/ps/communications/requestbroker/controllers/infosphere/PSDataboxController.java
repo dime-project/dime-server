@@ -270,9 +270,9 @@ public class PSDataboxController extends PSSharingControllerBase implements APIC
 	public Response<Databox> postCreateMyDatabox(
 			@PathParam("said") String said, Request<Databox> request) {
 
-		// trustEngineInterface.processTrust(resourceType, resourceId, agentID,
-		// dbId, groupId, adapt, jsonData);
-
+		
+		logger.info("called API method: post /dime/rest/" + said + "/databox/@me");
+		
 		Data<Databox> data, returnData;
 
 		try {
@@ -323,6 +323,8 @@ public class PSDataboxController extends PSSharingControllerBase implements APIC
 			@PathParam("said") String said, Request<Resource> request,
 			@PathParam("dbID") String dbID) {
 
+		logger.info("called API method: POST /dime/rest/" + said + "/databox/@me/"+dbID);
+		
 		Data<Resource> data, returnData;
 
 		try {
@@ -367,6 +369,8 @@ public class PSDataboxController extends PSSharingControllerBase implements APIC
 	public Response deleteMyDataboxById(@PathParam("said") String said,
 			@PathParam("dbID") String dbID) {
 
+		logger.info("called API method: DELETE /dime/rest/" + said + "/databox/@me/"+dbID);
+		
 		try {
 			databoxManager.remove(dbID);
 

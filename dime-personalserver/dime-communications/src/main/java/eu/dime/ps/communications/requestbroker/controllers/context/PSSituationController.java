@@ -97,7 +97,8 @@ public class PSSituationController {
 	public Response<SituationDTO> createSituation(
 			@PathParam("said") String said, Request<SituationDTO> request) {
 
-		logger.info("called API method: POST /dime/rest/{said}/situation/@me");
+		logger.info("called API method: POST /dime/rest/"+said+"/situation/@me");
+		
 		Data<SituationDTO> data, returnData = new Data<SituationDTO>(0, 1, 1);
 
 		data = request.getMessage().getData();
@@ -130,7 +131,8 @@ public class PSSituationController {
 			Request<SituationDTO> request,
 			@PathParam("situationID") String situationID) {
 
-		logger.info("called API method: POST /dime/rest/{said}/situation/@me/update/"+situationID);
+		logger.info("called API method: POST /dime/rest/"+said+"/situation/@me/update/"+situationID);
+		
 		Data<SituationDTO> data, returnData = new Data<SituationDTO>(0, 1, 1);
 
 		data = request.getMessage().getData();
