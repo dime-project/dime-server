@@ -286,13 +286,6 @@ public class PolicyManagerImpl implements PolicyManager {
 					GLOBAL_PREFIX + "_" + policyName, value.toString());
 			if (value.toString().length() > 0)
 				policyStore.storeOrUpdate(GLOBAL_PREFIX + "_" + policyName, value.toString());
-			try {
-				FileOutputStream fos = new FileOutputStream("services.properties");
-				this.properties.store(fos, null);
-				fos.close();
-			} catch (IOException e) {
-				logger.warn("Could not save oAuthToken to services.properties.", e);
-			}
 		} else {
 			logger.warn("Could not save policy: services.properties was not loaded.");
 		}
@@ -315,21 +308,6 @@ public class PolicyManagerImpl implements PolicyManager {
 			value = "";
 		adapterPolicy.put(adapterId + "_" + policyName, value);
 		policyStore.storeOrUpdate(adapterId + "_" + policyName, value.toString());
-		
-		// Write changes to disk
-		if (this.properties != null) {
-			this.properties.setProperty(
-				adapterId + "_" + policyName, value.toString());
-			try {
-				FileOutputStream fos = new FileOutputStream("services.properties");
-				this.properties.store(fos, null);
-				fos.close();
-			} catch (IOException e) {
-				logger.warn("Could not save oAuthToken to services.properties.", e);
-			}
-		} else {
-			logger.warn("Could not save policy: services.properties was not loaded.");
-		}
 	}
 	
 	/* (non-Javadoc)
