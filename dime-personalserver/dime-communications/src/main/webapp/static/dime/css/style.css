@@ -675,7 +675,6 @@ input[type="file"] {
     border-radius: 0 0 5px 5px;
     border-top: 1px solid white;
     text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
-
 }
 
 
@@ -3393,4 +3392,28 @@ input[type="checkbox"].dimeDetailDialogKeyValueValue {
 textarea[readonly].dimeDetailDialogKeyValueValue,
 input[readonly].dimeDetailDialogKeyValueValue {
     cursor: auto;
+}
+
+/***** additional hint "click to edit" *****/
+.editHintGroupElement {
+    text-decoration: none;
+    text-align: center;
+    color: lightgray;
+    font-size: 12px;
+}
+
+.captionForGroupElement {
+    position: relative;
+    top: -50px;
+    height: 38px;
+    width: 100%;
+    cursor: url("../img/edit_16.ico"),auto;
+}
+
+.captionForGroupElement > h4 {  
+    line-height: 12px;
+    padding: 5px 5px 0px 5px;
+    border-radius: 0 0 5px 5px;
+    border-top: 1px solid white;
+    text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
 }

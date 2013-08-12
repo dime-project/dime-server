@@ -125,15 +125,26 @@ DimeView = {
                 )
                 .append('<div class="groupItemCounter" ><h1>'+ entry.items.length + '</h1></div>')
                 .append('<div class="clear"></div>')
+        
+                //additional hint: "click to edit)
                 .append(
-                    $('<h4 title="' + entry.name + '">'+ DimeView.getShortNameWithLength(entry.name, 11) + '</h4>')
-                        .clickExt(DimeView, DimeView.editItem, entry)
+                    $('<div/>')
+                        .addClass('captionForGroupElement')
+                        .attr('title', entry.name)
+                        .append(
+                            $('<h4>'+ DimeView.getShortNameWithLength(entry.name, 11) + '</h4>')
+                        )
+                        .append(
+                            $('<div class="editHintGroupElement"></div>')  
+                        )
                         .hover(function(){
-                            $(this).append('<span class="editHintGroupElement"><br>click to edit</span>');
-                        }, function(){
-                            $(".editHintGroupElement").remove();
+                                $(this).children('.editHintGroupElement').append('(click to edit)');
+                            }, function(){
+                                $(this).children('.editHintGroupElement').empty();
                         })
-                ));
+                        .clickExt(DimeView, DimeView.editItem, entry)
+                )
+        );
    
 
         DimeView.setActionAttributeForElements(entry, jGroupItem, true, false);
