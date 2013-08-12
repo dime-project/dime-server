@@ -307,8 +307,7 @@ public class HttpRestProxy implements ServiceProxy {
 		// execute the POST
 		try {
 			HttpPost httppost = new HttpPost(this.url + query);
-			StringEntity contentEntity = new StringEntity(content);
-			contentEntity.setContentEncoding(HTTP.UTF_8);
+			StringEntity contentEntity = new StringEntity(content, "UTF-8");
 			contentEntity.setContentType(contentType);
 			httppost.setEntity(contentEntity);
 
@@ -341,8 +340,7 @@ public class HttpRestProxy implements ServiceProxy {
 		// execute the POST
 		try {
 			HttpPost httppost = new HttpPost(this.url + query);
-			StringEntity contentEntity = new StringEntity(content);
-			contentEntity.setContentEncoding(HTTP.UTF_8);
+			StringEntity contentEntity = new StringEntity(content, "UTF-8");
 			contentEntity.setContentType(contentType);
 			if (!auth.equalsIgnoreCase("")) {
 				httppost.addHeader("Authorization",auth);

@@ -75,7 +75,7 @@ public class ResolverClient implements DimeResolver {
 
 
 		try {
-			httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+			httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs, "UTF-8"));
 		} catch(UnsupportedEncodingException e) {
 			logger.debug("Unable to set post prameters", e);
 			throw new RuntimeException("Unable to set post prameters");
