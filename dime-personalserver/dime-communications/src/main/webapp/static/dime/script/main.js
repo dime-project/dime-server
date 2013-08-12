@@ -4002,9 +4002,6 @@ Dime.SelectDialog.prototype = {
         return entry;
     },
     
-    
-   
-
     updateItemSelection: function(entry, select){
         
         if (entry.selected===select){
@@ -4040,8 +4037,6 @@ Dime.SelectDialog.prototype = {
         this.resultFunction.call(this.handlerSelf, selectedItems, true);       
     },
     
-    
-    
     addItemsToList: function(items){
         
         if (!items){
@@ -4073,7 +4068,17 @@ Dime.SelectDialog.prototype = {
                 );
             listItem.clickExt(this, toggleSelectFunction, items[i].guid);
             listItem.mouseover(function(){
-                $(this).removeClass("selectedImageListSelected");       
+                $(this).removeClass("selectedImageListSelected");
+            });
+            listItem.append($('<div class="selectHintShareDialog"></div>'));
+            listItem.hover(function(){
+                if($(this).hasClass('selectedImageList')){
+                    $(this).children('.selectHintShareDialog').append('(click to remove)');
+                }else{
+                    $(this).children('.selectHintShareDialog').append('(click to add)');
+                }
+            }, function(){
+                $('.selectHintShareDialog').empty();
             });
             var entry = {
                 item: items[i],
@@ -5416,6 +5421,9 @@ Dime.ShareDialog.prototype={
         
         receiverSection.clickExt(this, showAddReceiverDlg);
         
+        receiverSection.append(
+                $('<div/>').addClass('changeDetailsHintshareDialog').append("click to change recipients")
+            );
         
         return receiverSection;
     },
@@ -5460,6 +5468,9 @@ Dime.ShareDialog.prototype={
         
         itemSection.clickExt(this, showAddItemsDlg);
         
+        itemSection.append(
+                $('<div/>').addClass('changeDetailsHintshareDialog').append("click to change items")
+            );
         
         return itemSection;
     },

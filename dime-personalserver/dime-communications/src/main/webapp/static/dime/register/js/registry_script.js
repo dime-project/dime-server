@@ -265,13 +265,7 @@ Dime.register={
             caption:'Please enter a valid email address!'
         },
         'prsNickname':{
-            caption:'Please fill in a nickname!'
-        },
-        'prsFirstname':{
-            caption:'Please fill in a firstname!'
-        },
-        'prsLastname':{
-            caption:'Please fill in a lastname!'
+            caption:'Please fill in a public nickname for the public DimeUserDirectory!'
         }
     },
 

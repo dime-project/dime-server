@@ -2145,7 +2145,7 @@ input[type="checkbox"] {
 
 .selectionDialogBodyList:first-of-type{
     background-color: #F5F5F5;
-    max-height: 109px;
+    max-height: 116px;
 }
 
 .loadImageListItem {
@@ -3424,5 +3424,13 @@ input[readonly].dimeDetailDialogKeyValueValue {
     position: inherit;
     margin-top: 10px;
     color: lightgray;
+    font-size: 12px;
+}
+
+.selectHintShareDialog {
+    position: relative;
+    top: -5px;
+    float: right;
+    margin-right: 10px;
     font-size: 12px;
 }

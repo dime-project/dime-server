@@ -209,8 +209,9 @@
                         <h3>1. Registration data</h3>
                         <div class="control-group">
                             <div class="controls">
-                                <input type="text" class="required" id="registrationUsername" placeholder="Username">
                                 <h6>The username is your master-identity in di.me It is not shown to other people</h6>
+                                <input type="text" class="required" id="registrationUsername" placeholder="Username">
+                                <br><br>
                                 <input type="password" class="required" id="registrationPassword" placeholder="Choose Password">
                                 <input type="password" class="required" id="registrationPassword2" placeholder="Retype Password">
                                 <h6>Pleae enter a valid e-mail address. We use your email only for important notifications about this demonstration (e.g. if we need to reset your user account for technical reasons).</h6>
@@ -229,8 +230,8 @@
                             <div class="controls">
                                 <p>To use di.me, you need to publish a a public mini-Profile ("MyPublicCard") on the DimeUserDirectory. This directory is public for all di.me users, so that you can get contacted by others in the network. You can use a nickname and also your real name.</p>
                                 <input type="text" id="prsNickname" placeholder="public nickname" class="required">
-                                <input type="text" id="prsFirstname" placeholder="Firstname" class="required">
-                                <input type="text" id="prsLastname" placeholder="Lastname" class="required">
+                                <input type="text" id="prsFirstname" placeholder="Firstname">
+                                <input type="text" id="prsLastname" placeholder="Lastname">
                                 <p>To change this later go to the page "Settings".</p>
 
                             </div>
