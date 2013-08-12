@@ -14,7 +14,6 @@
 
 package eu.dime.ps.gateway.policy;
 
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -25,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
+import org.apache.commons.lang.ArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -121,42 +121,32 @@ public class PolicyManagerImpl implements PolicyManager {
 			
 			logger.debug("Bootstraping service providers: "+this.globalPolicy.get("ENABLED"));
 
+			// load or update key & secret for the different service providers
 			for (String providerName : enabled) {
 				providerName = providerName.trim();
 				ServiceProvider dbProvider = ServiceProvider.findByName(providerName);
+
+				String key = this.getPolicyString("CONSUMER_KEY", providerName);
+				if (key == null || key.trim().equals("")){
+					key = "COULD NOT LOAD FROM PREFERENCES";
+				}
 				
+				String secret = this.getPolicyString("CONSUMER_SECRET", providerName);
+				if (secret == null || secret.trim().equals("")){
+					secret = "COULD NOT LOAD FROM PREFERENCES";
+				}					
+
 				// create provider if it does not exist yet
 				if (dbProvider == null) {
 					dbProvider = EntityFactory.getInstance().buildServiceProvider();
 					dbProvider.setEnabled(Boolean.TRUE);
 					dbProvider.setServiceName(providerName);
-					String key, secret;
-					
-					key = this.getPolicyString("CONSUMER_KEY", providerName);
-					secret = this.getPolicyString("CONSUMER_SECRET", providerName);
-					
-					if (secret == null || secret.equals("")){
-						secret = "COULD NOT LOAD FROM PREFERENCES";
-					}					
-					if (key == null || key.equals("")){
-						key = "COULD NOT LOAD FROM PREFERENCES";
-					}
 					dbProvider.setConsumerKey(key);
 					dbProvider.setConsumerSecret(secret);
 					
 					dbProvider.persist();
 				} else {
-					//try to update keys
-					String key, secret;
-					key = this.getPolicyString("CONSUMER_KEY", providerName);
-					secret = this.getPolicyString("CONSUMER_SECRET", providerName);
-					
-					if (secret == null || secret.equals("")){
-						secret = "COULD NOT LOAD FROM PREFERENCES";
-					}					
-					if (key == null || key.equals("")){
-						key = "COULD NOT LOAD FROM PREFERENCES";
-					}
+					// try to update key and secret
 					dbProvider.setConsumerKey(key);
 					dbProvider.setConsumerSecret(secret);
 					
@@ -165,51 +155,11 @@ public class PolicyManagerImpl implements PolicyManager {
 				}
 			}
 			
-			// FIXME for some reason, the following code throws an exception
-			
-//			// enable/disable providers if they are found in GLOBAL_ENABLED or not
-//			for (ServiceProvider provider : ServiceProvider.findAll()) {
-//				if (ArrayUtils.contains(enabled, provider.getServiceName())) {
-//					provider.setEnabled(Boolean.TRUE);
-//					provider.merge();
-//				} else {
-//					provider.setEnabled(Boolean.FALSE);
-//					provider.merge();
-//				}
-//			}
-			
-//			Caused by: java.lang.ExceptionInInitializerError
-//			at eu.dime.ps.gateway.impl.ServiceGatewayImpl.<init>(ServiceGatewayImpl.java:39)
-//			at eu.dime.ps.controllers.service.ServiceAdapterManagerImpl.<init>(ServiceAdapterManagerImpl.java:59)
-//			at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
-//			at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:39)
-//			at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:27)
-//			at java.lang.reflect.Constructor.newInstance(Constructor.java:513)
-//			at org.springframework.beans.BeanUtils.instantiateClass(BeanUtils.java:126)
-//			... 45 more
-//		Caused by: org.springframework.dao.InvalidDataAccessApiUsageException: no transaction is in progress; nested exception is javax.persistence.TransactionRequiredException: no transaction is in progress
-//			at org.springframework.orm.jpa.EntityManagerFactoryUtils.convertJpaAccessExceptionIfPossible(EntityManagerFactoryUtils.java:306)
-//			at org.springframework.orm.jpa.aspectj.JpaExceptionTranslatorAspect.ajc$afterThrowing$org_springframework_orm_jpa_aspectj_JpaExceptionTranslatorAspect$1$18a1ac9(JpaExceptionTranslatorAspect.aj:15)
-//			at eu.dime.ps.storage.entities.ServiceProvider.merge(ServiceProvider.java:123)
-//			at eu.dime.ps.gateway.policy.PolicyManagerImpl.<init>(PolicyManagerImpl.java:120)
-//			at eu.dime.ps.gateway.policy.PolicyManagerImpl.<clinit>(PolicyManagerImpl.java:55)
-//			... 52 more
-//		Caused by: javax.persistence.TransactionRequiredException: no transaction is in progress
-//			at org.hibernate.ejb.AbstractEntityManagerImpl.flush(AbstractEntityManagerImpl.java:793)
-//			at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-//			at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:39)
-//			at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)
-//			at java.lang.reflect.Method.invoke(Method.java:597)
-//			at org.springframework.orm.jpa.ExtendedEntityManagerCreator$ExtendedEntityManagerInvocationHandler.invoke(ExtendedEntityManagerCreator.java:365)
-//			at $Proxy48.flush(Unknown Source)
-//			at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-//			at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:39)
-//			at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)
-//			at java.lang.reflect.Method.invoke(Method.java:597)
-//			at org.springframework.orm.jpa.SharedEntityManagerCreator$SharedEntityManagerInvocationHandler.invoke(SharedEntityManagerCreator.java:240)
-//			at $Proxy47.flush(Unknown Source)
-//			... 55 more
-
+			// enable/disable providers if they are found in GLOBAL_ENABLED or not
+			for (ServiceProvider dbProvider : ServiceProvider.findAll()) {
+				dbProvider.setEnabled(ArrayUtils.contains(enabled, dbProvider.getServiceName()));
+				dbProvider.merge();
+			}
 		}
 	}
 
