@@ -126,7 +126,7 @@ DimeView = {
                 .append('<div class="groupItemCounter" ><h1>'+ entry.items.length + '</h1></div>')
                 .append('<div class="clear"></div>')
         
-                //additional hint: "click to edit)
+                //additional hint: "click to edit"
                 .append(
                     $('<div/>')
                         .addClass('captionForGroupElement')

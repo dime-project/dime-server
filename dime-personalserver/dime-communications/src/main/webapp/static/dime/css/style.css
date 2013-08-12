@@ -3417,3 +3417,12 @@ input[readonly].dimeDetailDialogKeyValueValue {
     border-top: 1px solid white;
     text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
 }
+
+.changeDetailsHintshareDialog {
+    float: right;
+    margin-right: 10px;
+    position: inherit;
+    margin-top: 10px;
+    color: lightgray;
+    font-size: 12px;
+}

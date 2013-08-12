@@ -4911,7 +4911,12 @@ Dime.DetailDialog.prototype = {
             .click(function(){
                 (new Dime.Dialog.Toast('Function not yet available. Please use the "Share..." button for sharing.')).showLong();
             })
-            .append(editDlgRef.itemsItemSection);
+            .append(editDlgRef.itemsItemSection)
+            
+            //additional hint for sharing items
+            .append(
+                $('<div/>').addClass('changeDetailsHintshareDialog').append("click to change items")
+            );
       
     },            
 
@@ -4996,6 +5001,11 @@ Dime.DetailDialog.prototype = {
                 (new Dime.Dialog.Toast('Function not yet available. Please use the "Share..." button for sharing.')).showLong();
             })
             .append(editDlgRef.itemsItemSection);
+    
+        //additional hint for sharing
+        agentsSection.append(
+            $('<div/>').addClass('changeDetailsHintshareDialog').append("click to change receivers")
+        );
 
         return agentsSection;
     },
@@ -5056,6 +5066,11 @@ Dime.DetailDialog.prototype = {
         };
         if (!this.readonly){
             memberSection.clickExt(this, showAddMembersDlg);
+            
+            //additional hint for "click to change"
+            memberSection.append(
+                $('<div/>').addClass('changeDetailsHintshareDialog').append("click to change " + childCaption)
+            );
         }else{
             memberSection.click(function(){
                 (new Dime.Dialog.Toast(editDlgRef.caption + " ... is readonly and can not be updated.")).showLong();
