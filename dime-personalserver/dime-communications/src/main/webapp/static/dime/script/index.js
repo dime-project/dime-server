@@ -93,7 +93,17 @@ DimeView = {
             result.addClass('noActionMark');
             return result;
         }//else
-
+        
+        //new behaviour of selection (old: switching a group led to lost of selection)
+        if(!isGroup){
+            var allSelectedItems = JSTool.getDefinedMembers(DimeView.selectedItems);
+            for(var j=0; j<allSelectedItems.length; j++){
+                if(entry.guid == allSelectedItems[j].guid){
+                    result.addClass("ItemChecked");
+                }
+            }
+        }
+        
         result.clickExt(DimeView, DimeView.selectItem, entry, isGroup);
         return result;
     },
@@ -589,14 +599,27 @@ DimeView = {
         }
         var guid=entry.guid;
         
-        //item was selected --> unselect item       
-        if (DimeView.selectedItems[guid]){     
+        //new behaviour of selection
+        var selectedItemsAll = JSTool.getDefinedMembers(DimeView.selectedItems);
+        var lastMemberCount = selectedItemsAll.length;
+        if(DimeView.selectedItems[guid]){
             DimeView.selectedItems[guid] = null;
             $(element).removeClass("ItemChecked");
-            
-        }else{
+        }else if(lastMemberCount == 0 || entry.type == selectedItemsAll[lastMemberCount-1].type){
             DimeView.selectedItems[guid] = { //FIXME refactor - only use a hash with guid as key for all items!!!
-                guid:guid, 
+                guid:guid,
+                userId:entry.userId,
+                type:entry.type,
+                isGroupItem:isGroupItem,
+                element:element
+            };
+            $(element).addClass("ItemChecked");
+        }else{
+            DimeView.selectedItems = {};
+            $(".groupChecked").removeClass("ItemChecked");
+            $(".personItem").removeClass("ItemChecked");
+            DimeView.selectedItems[guid] = { //FIXME refactor - only use a hash with guid as key for all items!!!
+                guid:guid,
                 userId:entry.userId,
                 type:entry.type,
                 isGroupItem:isGroupItem,
@@ -879,20 +902,16 @@ DimeView = {
         
     updateItemContainerFromArray: function(entries, selectingGroupName){
 
-         DimeView.initContainer($('#itemNavigation'), 
+        DimeView.initContainer($('#itemNavigation'), 
             Dime.psHelper.getPluralCaptionForItemType(DimeView.itemType),
             selectingGroupName);
 
-
         var itemContainer = $('#itemNavigation');
         for (var i=0; i<entries.length; i++){ 
-            if (entries[i].name.toLowerCase().indexOf(DimeView.searchFilter.toLowerCase())!==-1){            
-                
-                
+            if (entries[i].name.toLowerCase().indexOf(DimeView.searchFilter.toLowerCase())!==-1){              
                 DimeView.addItemElement(itemContainer, entries[i]);
-                 
             }
-        }
+        }  
     },
     
     showGroupMembers: function(event, element, groupEntry){
@@ -910,7 +929,7 @@ DimeView = {
         };
 
         Dime.REST.getItems(groupEntry.items,Dime.psHelper.getChildType(groupEntry.type), updateGroupMembers, groupEntry.userId, this);
-                    
+                           
     }, 
     
     editItem: function(event, element, entry, message){
