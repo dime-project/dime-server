@@ -21,8 +21,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-import javax.persistence.NoResultException;
-
 import org.ontoware.aifbcommons.collection.ClosableIterator;
 import org.ontoware.rdf2go.model.node.URI;
 import org.semanticdesktop.aperture.vocabulary.NIE;
@@ -80,7 +78,6 @@ import eu.dime.ps.storage.entities.Tenant;
 import eu.dime.ps.storage.entities.User;
 import eu.dime.ps.storage.exception.ReadOnlyValueChangedOnUpdate;
 import eu.dime.ps.storage.manager.EntityFactory;
-import eu.dime.ps.storage.util.QueryUtil;
 
 /**
  *
@@ -189,8 +186,14 @@ public class UserManagerImpl implements UserManager {
         if ((password == null) || (password.trim().isEmpty())) {
             return null;
         }
-        return QueryUtil.getSingleResultOrNull(User.findByUsernameAndPassword(username,
-                dimePasswordEncoder.encodePassword(password, username)));
+        
+        // password may be passed encoded as well
+        User user = User.findByUsernameAndPassword(username, dimePasswordEncoder.encodePassword(password, username));
+        if (user == null) {
+        	user = User.findByUsernameAndPassword(username, password);
+        }
+        
+        return user;
     }
 
     private void validateUser(String username, String password) {
@@ -525,12 +528,7 @@ public class UserManagerImpl implements UserManager {
 
     @Override
     public boolean existsByUsernameAndPassword(String username, String password) {
-        try {
-            return User.findByUsernameAndPassword(username,
-                    dimePasswordEncoder.encodePassword(password, username)).getSingleResult() != null;
-        } catch (NoResultException e) {
-            return false;
-        }
+    	return getByUsernameAndPassword(username, password) != null;
     }
 
     @Override

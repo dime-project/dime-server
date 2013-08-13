@@ -458,6 +458,7 @@ public class DimeServiceAdapter extends ServiceAdapterBase implements InternalSe
 		HttpRestProxy proxy = null;
 		PersonContact profile = null;
 		String path = SHARED_PROFILE_PATH.replace(":target", targetSaidName);
+		
 		try {
 			String baseURL = targetResolver.resolve(targetSaidName);
 			proxy = prepareProxy(baseURL, token.getToken(), token.getSecret());
@@ -470,7 +471,7 @@ public class DimeServiceAdapter extends ServiceAdapterBase implements InternalSe
 					"Authorization", "Basic " + authorization);
 
 			String response = proxy.get(path, headers);
-			logger.info("GET "+path+" responded with: "+response);
+			logger.info("GET "+path+" [username="+token.getToken()+", password="+token.getSecret()+"] responded with: "+response);
 
 			profile = JSONLDUtils.deserialize(response, PersonContact.class);
 			if (logger.isDebugEnabled()) {
@@ -508,7 +509,9 @@ public class DimeServiceAdapter extends ServiceAdapterBase implements InternalSe
 
 		try {
 			// request username/password to access the target di.me PS
-			proxy = prepareProxy(targetResolver.resolve(this.identifier), username, null);
+			// since the password is yet unknown, it can be set to anything including empty string
+			proxy = prepareProxy(targetResolver.resolve(this.identifier), username, "");
+			
 			String path = CREDENTIALS_PATH.replace(":target", this.identifier).replace(":username", username);
 			String response = proxy.get(path, headers("Accept", MediaType.APPLICATION_JSON));
 			logger.info("GET "+path+" returned: " + response);

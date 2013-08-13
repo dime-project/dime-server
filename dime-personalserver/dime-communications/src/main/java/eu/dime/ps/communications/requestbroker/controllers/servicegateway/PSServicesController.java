@@ -70,7 +70,6 @@ import eu.dime.ps.semantic.model.dlpo.LivePost;
 import eu.dime.ps.semantic.model.nco.PersonContact;
 import eu.dime.ps.semantic.model.nfo.DataContainer;
 import eu.dime.ps.semantic.model.nfo.FileDataObject;
-import eu.dime.ps.storage.entities.User;
 
 /**
  * Allows other di.me servers (or other services) to communicate with a di.me
@@ -470,35 +469,35 @@ public class PSServicesController {
 		Token token = adapter.getUserToken(saidNameReceiver); // <-- http request to other PS for credentials
 
 		// HTTP request to other PS for the profile
-		User user = null;
 		if (token != null) {
 			try {
 				// add contact & create guest account
 				saidUriSender = "urn:uuid:" + UUID.randomUUID();
-				user = userManager.add(saidNameSender, new URIImpl(saidUriSender));
+				userManager.add(saidNameSender, new URIImpl(saidUriSender));
 			} catch (Exception e) {
+				// TODO what kind of exceptions are catched? catching all exceptions for control flow, and giving
+				// the following explanation is a bit confusing, code-wise and in the log.
 				logger.info("Could not create user. Maybe already exists. But will still try to update credentials");
+				e.printStackTrace();
 				saidUriSender = credentialStore.getUriForAccountName(saidNameReceiver, saidNameSender);
 			}
+			
+			// store credentials (given by the receiver PS) to send requests to 'receiver' account
 			credentialStore.updateCredentialsForAccount(saidUriReceiver,
 					saidUriSender, saidNameSender, token.getSecret(), TenantHelper.getCurrentTenant());
-		}
 
-		// request profile from sender
-		PersonContact profile = requestProfile(token, saidNameSender, saidUriSender, saidUriReceiver);
-		if (profile != null) {
+			// request profile from sender
+			requestProfile(token, saidNameSender, saidUriSender, saidUriReceiver);
+
+			// FIXME [Marcel] what happens if confirmToken returns false? shouldn't
+			// we do something here? some simple recovery mechanishm or at least 
+			// showing an error to the user??
+
+			// confirming token was received (to the sender PS)
 			adapter.confirmToken(token);
 		}
-		
-		// do authenticated post to other PS to confirm that credentials are
-		// stored
-		// FIXME [Marcel] what happens if confirmToken returns false? shouldn't
-		// we do
-		// something here? some simple recovery mechanishm or at least showing
-		// an error
-		// to the user??
 
-		return user.getAccountUri();
+		return saidUriSender;
 	}
-
+	
 }

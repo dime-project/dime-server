@@ -49,7 +49,6 @@ import org.apache.http.conn.ssl.SSLSocketFactory;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -154,16 +153,19 @@ public class HttpRestProxy implements ServiceProxy {
 		HttpGet httpget = null;
 		try {
 			httpget = new HttpGet(this.url + query);
+			
 			// adding headers to request
 			for (String name : headers.keySet()) {
 				httpget.addHeader(name, headers.get(name));
 			}
-			//add basic auth header
-                        
-                        //fix by YellowMap, illegal request because of line break
-                        String encoded = Base64.encodeBase64String((this.username+":"+this.password).getBytes()).replace("\r\n", "");
-                        
-			httpget.addHeader("Authorization","Basic "+ encoded);
+			
+			// add basic auth header
+			if (this.username != null && this.password != null) {
+				String authorization = Base64.encodeBase64String((this.username+":"+this.password).getBytes());
+				authorization = authorization.replace("\r\n", ""); // line breaks can cause the request to be rejected
+				httpget.addHeader("Authorization", "Basic "+ authorization);
+			}
+			
 			logger.info("Performing " + httpget.getRequestLine());
 			HttpResponse response = this.client.execute(httpget);
 			HttpEntity entity = response.getEntity();
@@ -202,25 +204,26 @@ public class HttpRestProxy implements ServiceProxy {
 	
 	
 	public BinaryFile getBinary(String query, Map<String, String> headers) throws ServiceNotAvailableException {
-
-		
 		this.client = this.getConnection(query);
 		InputStream byteStream = null;
 		BinaryFile result = new BinaryFile();
-		// execute the GET
+		
 		try {
+			// execute the GET
 			HttpGet httpget = new HttpGet(this.url + query);
+
 			// adding headers to request
 			for (String name : headers.keySet()) {
 				httpget.addHeader(name, headers.get(name));
 			}
-			//add basic auth header
-                        
-                        //fix by YellowMap, illegal request because of line break
-                        String encoded = Base64.encodeBase64String((this.username+":"+this.password).getBytes()).replace("\r\n", "");
-                        
-			httpget.addHeader("Authorization","Basic "+ encoded);
-			
+
+			// add basic auth header
+			if (this.username != null && this.password != null) {
+				String authorization = Base64.encodeBase64String((this.username+":"+this.password).getBytes());
+				authorization = authorization.replace("\r\n", ""); // line breaks can cause the request to be rejected
+				httpget.addHeader("Authorization", "Basic "+ authorization);
+			}
+
 			logger.info("Performing " + httpget.getRequestLine());
 			HttpResponse response = this.client.execute(httpget);
 			HttpEntity entity = response.getEntity();
@@ -264,10 +267,7 @@ public class HttpRestProxy implements ServiceProxy {
 	      logger.error("Could not download file.", e);
 	    }
 	    return result.toByteArray();
-	  }
-
-	
-	
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -293,23 +293,28 @@ public class HttpRestProxy implements ServiceProxy {
 	@Override
 	public int post(String query, String content)
 			throws ServiceNotAvailableException {
-
-		return post (query, content, "application/json");
+		return post(query, content, "application/json");
 	}
 	
-
 	public int post(String query, String content, String contentType)
 			throws ServiceNotAvailableException {
 
 		int status = HttpStatus.SC_OK;
 		this.client = this.getConnection(query);
 
-		// execute the POST
 		try {
+			// execute the POST
 			HttpPost httppost = new HttpPost(this.url + query);
 			StringEntity contentEntity = new StringEntity(content, "UTF-8");
 			contentEntity.setContentType(contentType);
 			httppost.setEntity(contentEntity);
+
+			// add basic auth header
+			if (this.username != null && this.password != null) {
+				String authorization = Base64.encodeBase64String((this.username+":"+this.password).getBytes());
+				authorization = authorization.replace("\r\n", ""); // line breaks can cause the request to be rejected 
+				httppost.addHeader("Authorization", "Basic "+ authorization);
+			}
 
 			logger.info("Performing " + httppost.getRequestLine() + "\nPayload:" + content);
 			HttpResponse response = this.client.execute(httppost);
@@ -337,8 +342,8 @@ public class HttpRestProxy implements ServiceProxy {
 		this.client = this.getConnection(query);
 		HttpResponse response = null;
 		
-		// execute the POST
 		try {
+			// execute the POST
 			HttpPost httppost = new HttpPost(this.url + query);
 			StringEntity contentEntity = new StringEntity(content, "UTF-8");
 			contentEntity.setContentType(contentType);
@@ -346,6 +351,13 @@ public class HttpRestProxy implements ServiceProxy {
 				httppost.addHeader("Authorization",auth);
 			}
 			httppost.setEntity(contentEntity);
+
+			// add basic auth header
+			if (this.username != null && this.password != null) {
+				String authorization = Base64.encodeBase64String((this.username+":"+this.password).getBytes());
+				authorization = authorization.replace("\r\n", ""); // line breaks can cause the request to be rejected 
+				httppost.addHeader("Authorization", "Basic "+ authorization);
+			}
 
 			logger.info("Performing " + httppost.getRequestLine() + "\nPayload:" + content);
 			response = this.client.execute(httppost);
@@ -389,6 +401,13 @@ public class HttpRestProxy implements ServiceProxy {
 		try {
 			HttpDelete httpDelete = new HttpDelete(this.url + query);
 			
+			// add basic auth header
+			if (this.username != null && this.password != null) {
+				String authorization = Base64.encodeBase64String((this.username+":"+this.password).getBytes());
+				authorization = authorization.replace("\r\n", ""); // line breaks can cause the request to be rejected 
+				httpDelete.addHeader("Authorization", "Basic "+ authorization);
+			}
+
 			logger.info("Performing " + httpDelete.getRequestLine());
 			HttpResponse response = this.client.execute(httpDelete);
 			HttpEntity entity = response.getEntity();
@@ -479,4 +498,5 @@ public class HttpRestProxy implements ServiceProxy {
 		}
 		
 	}
+	
 }

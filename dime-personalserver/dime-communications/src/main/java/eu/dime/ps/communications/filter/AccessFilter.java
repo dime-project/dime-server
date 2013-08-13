@@ -135,16 +135,16 @@ public class AccessFilter implements Filter {
 			} else { // basic auth
 				String decodedAuth = Base64encoding.decode(auth.substring(5).trim());
 				String[] credentials = decodedAuth.split(":");
-				String username = credentials[0];
-				String password = credentials[1];
+				String username = credentials.length > 0 ? credentials[0] : null;
+				String password = credentials.length > 1 ? credentials[1] : null;
 			
 				if (url.endsWith(API_PREFIX+said+"/user/credentials/"+username)) {
 					// get credentials request -> no password check
 					User user = User.findByTenantAndByUsername(tenant, username);
-					if (user.getTenant().getId().equals(tenant.getId())){
+					if (user != null) {
 						chain.doFilter(request, response);
 					} else {
-						throw new AccessControlException(req.getMethod()+" "+url+" request not authorized for user "+username);
+						throw new AccessControlException(req.getMethod()+" "+url+" request not authorized for user "+username+": user doesn't exist.");
 					}
 				} else {
 					// check if guests belong to tenant

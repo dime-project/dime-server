@@ -306,18 +306,20 @@ public class User {
         return q.getResultList();
     }
 
-    public static TypedQuery<User> findByUsernameAndPassword(String username, String password) {
+    public static User findByUsernameAndPassword(String username, String password) {
         if (username == null || username.length() == 0) {
             throw new IllegalArgumentException("The username argument is required");
         }
         if (password == null || password.length() == 0) {
             throw new IllegalArgumentException("The password argument is required");
         }
+        
         EntityManager em = User.entityManager();
         TypedQuery<User> q = em.createQuery("SELECT o FROM User AS o WHERE o.username = :username AND o.password = :password", User.class);
         q.setParameter("username", username);
         q.setParameter("password", password);
-        return q;
+        
+        return QueryUtil.getSingleResultOrNull(q);
     }
 
     public static TypedQuery<User> findByUsernameLike(String username) {
