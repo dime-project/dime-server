@@ -3767,28 +3767,33 @@ input[type="submit"].btn.btn-mini {
 }
 
 .navbar .nav > li:nth-child(1) > a {
-	background: url('../img/navigation/messages.png') no-repeat right center transparent;
-    width: 30px;
+    background: url('../img/navigation/messages.png') no-repeat right center transparent;
+    width: 99px;
 }
 
 .navbar .nav > li:nth-child(2) > a {
-	background: url('../img/navigation/people.png') no-repeat right center transparent;
+    background: url('../img/navigation/people.png') no-repeat right center transparent;
+    width: 104px;
 }
 
 .navbar .nav > li:nth-child(3) > a {
-	background: url('../img/navigation/myData.png') no-repeat right center transparent;
+    background: url('../img/navigation/myData.png') no-repeat right center transparent;
+    width: 104px;
 }
-.navbar .nav > li:nth-child(4) > a {
-	background: url('../img/navigation/myProfile.png') no-repeat right center transparent;
 
+.navbar .nav > li:nth-child(4) > a {
+    background: url('../img/navigation/myProfile.png') no-repeat right center transparent;
+    width: 129px;
 }
+
 .navbar .nav > li:nth-child(5) > a {
-    width: 90px;
     background: url('../img/navigation/calendar.png') no-repeat right center transparent;
+    width: 92px;
 }
 
 .navbar .nav > li:nth-child(6) > a {
-	background: url('../img/navigation/settings.png') no-repeat right center transparent;
+    background: url('../img/navigation/settings.png') no-repeat right center transparent;
+    width: 104px;
 }
 
 

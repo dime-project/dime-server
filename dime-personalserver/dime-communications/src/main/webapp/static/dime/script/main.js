@@ -3673,7 +3673,7 @@ Dime.Navigation = {
 
         var navigation = $('<div/>').addClass('nav-collapse')
         .append($('<ul/>').addClass('nav')
-            .append(Dime.Navigation.createMenuLiButton("navButtonMessages","" ,Dime.psMap.TYPE.LIVESTREAM))
+            .append(Dime.Navigation.createMenuLiButton("navButtonMessages","Livepost" ,Dime.psMap.TYPE.LIVESTREAM))
             .append(Dime.Navigation.createMenuLiButton("navButtonPeople","People" ,Dime.psMap.TYPE.GROUP))
             .append(Dime.Navigation.createMenuLiButton("navButtonData","My Data" ,Dime.psMap.TYPE.DATABOX))
             .append(Dime.Navigation.createMenuLiButton("navButtonProfile","My Profile Cards" ,Dime.psMap.TYPE.PROFILE))

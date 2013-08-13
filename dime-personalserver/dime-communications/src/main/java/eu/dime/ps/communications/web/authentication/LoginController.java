@@ -138,7 +138,7 @@ public class LoginController {
         logger.info("notauthenticated.");
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("login");
-        modelAndView.addObject("jspLoginMessage", "Sorry, wrong password. Please try again, or contact Administrator.");
+        modelAndView.addObject("jspLoginMessage", "Sorry, wrong password or username. Please try again.");
         return modelAndView;
     }
 

@@ -1725,14 +1725,14 @@ Dime.Settings = {
 
     createServiceAccountElement: function(item) {
         
-        return $('<div></div>')
+        return $('<div title="' + item.name + '"></div>')
                 .addClass("wrapConnect")
                 .clickExt(Dime.Settings, Dime.Settings.editServiceAccount, item)
                 .append(
                     $('<img></img>')                    
                     .attr("src", Dime.psHelper.guessLinkURL(item.imageUrl))                    
                    )
-                .append("<b>" + item.name.substr(0,17) + "</b></br>")
+                .append("<b>" + DimeView.getShortNameWithLength(item.name, 22) + "</b></br>")
                 .append(
                     $("<span></span>")
                     .addClass("serviceActiveMessage")

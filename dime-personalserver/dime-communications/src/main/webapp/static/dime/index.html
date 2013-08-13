@@ -33,12 +33,12 @@
                         <div class="wrapBoxes">
                             <div id="searchBox">                                
                                 <div class="search">
-                                    <input class="searchBarInput" id="searchText" placeholder="find" type="text" onchange="DimeView.search()" />
+                                    <input class="searchBarInput" id="searchText" placeholder="find" type="text" onchange="DimeView.search();" />
                                 </div>
-                                <div class="searchIcon"><img src="img/leftTop/lupe.png" onclick="DimeView.search()"></div>  
+                                <div class="searchIcon"><img src="img/leftTop/lupe.png" onclick="DimeView.search();"></div>  
                             </div>              
                             
-                            <div class="hidden btn" id="backToGroupButton" onclick="DimeView.restoreGroupView()" >back</div>                            
+                            <div class="hidden btn" id="backToGroupButton" onclick="DimeView.restoreGroupView();" >back</div>                            
                         </div>
                     </div>
                     <div class="alert hidden" id="alertStatusNavigation"></div>
@@ -57,14 +57,14 @@
 
                     <div id="settingsNavigationContainer" class="wrapSettings hidden">
                         <div class="settingsTab">
-                            <img src="img/settings/collaps.png" onclick="Dime.Settings.toggleTab(this, 'generalSettingsContainer')">
+                            <img src="img/settings/collaps.png" onclick="Dime.Settings.toggleTab(this, 'generalSettingsContainer');">
                             General Settings
                         </div>
                         <div class="settingsContent expandedSettingsTab" id="generalSettingsContainer"></div>
                         <div class="settingsTab" >
                             <span class="settingsTabTitle">Connect to services</span>
                             
-                            <img src="img/settings/collaps.png" onclick="Dime.Settings.toggleTab(this,'serviceContainer')">
+                            <img src="img/settings/collaps.png" onclick="Dime.Settings.toggleTab(this,'serviceContainer');">
                             <div class="btn-group serviceAdapterDropDowngGroup">
                                 
                                 <div class="btn serviceAdapterDropDowngButton" data-toggle="dropdown">
@@ -76,7 +76,7 @@
                         </div>
                         <div class="settingsContent expandedSettingsTab" id="serviceContainer"></div>
                         <div class="settingsTab hidden">
-                            <img src="img/settings/open.png" onclick="Dime.Settings.toggleTab(this,'trustLevelSettingsContainer')">                            
+                            <img src="img/settings/open.png" onclick="Dime.Settings.toggleTab(this,'trustLevelSettingsContainer');">                            
                             Trust level
                         </div>
                         <div class="settingsContent collapsedSettingsTab hidden" id="trustLevelSettingsContainer"></div>
@@ -91,7 +91,7 @@
 
                 <div class="span4" id="metabarMetaContainer"> <!-- Begin meta-bar container -->
                     <div class="metaData" id="switch">	
-                        <div class="actionMenu" id="globalActionButton" onclick="DimeView.showSelectedItems()">
+                        <div class="actionMenu" id="globalActionButton" onclick="DimeView.clearSelectedItems();" title="Click here to reset your selection.">
                             <div style="border: 1px solid white;height: 3px; top: 2px; margin:3px; margin-top: 4px; position: relative"></div>
                             <div style="border: 1px solid white;height: 3px; top: 2px; margin:3px; position: relative"></div>
                             <div style="border: 1px solid white;height: 3px; top: 2px; margin:3px; position: relative"></div>
@@ -101,11 +101,11 @@
                             <ul class="dropdown-menu actionButtonDropDownNew" id="actionButtonDropDownNew" role="menu">
                                
                             </ul>
-                            <div class="actionButton btn" id="actionButtonEdit" onclick="DimeView.editSelected()">Edit ...</div>
+                            <div class="actionButton btn" id="actionButtonEdit" onclick="DimeView.editSelected();">Edit ...</div>
 
-                            <div class="actionButton btn" id="actionButtonShare" onclick="DimeView.shareSelected()">Share ...</div>
+                            <div class="actionButton btn" id="actionButtonShare" onclick="DimeView.shareSelected();">Share ...</div>
 
-                            <div class="actionButton btn" id="actionButtonDelete" onclick="DimeView.removeSelected()">Delete</div>
+                            <div class="actionButton btn" id="actionButtonDelete" onclick="DimeView.removeSelected();">Delete</div>
                             
                         </div>
                         <div class="btn-group metaActionView2">
@@ -140,7 +140,7 @@
 
         <div class="clear"></div>
 
-        <div  class="span2" id="infoButtonLeft" onclick="DimeView.showAbout()"><img src="img/metaData/info_big.png"/></div>
+        <div  class="span2" id="infoButtonLeft" onclick="DimeView.showAbout();"><img src="img/metaData/info_big.png"/></div>
 
         <!-- java-script -->
         <!-- Placed at the end of the document so the pages load faster -->
