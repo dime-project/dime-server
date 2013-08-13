@@ -1,16 +1,16 @@
 /*
-* Copyright 2013 by the digital.me project (http://www.dime-project.eu).
-*
-* Licensed under the EUPL, Version 1.1 only (the "Licence");
-* You may not use this work except in compliance with the Licence.
-* You may obtain a copy of the Licence at:
-*
-* http://joinup.ec.europa.eu/software/page/eupl/licence-eupl
-*
-* Unless required by applicable law or agreed to in writing, software distributed under the Licence is distributed on an "AS IS" basis,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-* See the Licence for the specific language governing permissions and limitations under the Licence.
-*/
+ * Copyright 2013 by the digital.me project (http://www.dime-project.eu).
+ *
+ * Licensed under the EUPL, Version 1.1 only (the "Licence");
+ * You may not use this work except in compliance with the Licence.
+ * You may obtain a copy of the Licence at:
+ *
+ * http://joinup.ec.europa.eu/software/page/eupl/licence-eupl
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the Licence is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the Licence for the specific language governing permissions and limitations under the Licence.
+ */
 
 package eu.dime.ps.communications.requestbroker.controllers.infosphere;
 
@@ -168,7 +168,7 @@ public class PSProfileController extends PSSharingControllerBase implements APIC
 				writeIncludes(resource,card);
 				data.getEntries().add(resource);
 			}
-			
+
 		} catch (InfosphereException e) {
 			return Response.badRequest(e.getMessage(), e);
 		} catch (Exception e) {
@@ -179,7 +179,7 @@ public class PSProfileController extends PSSharingControllerBase implements APIC
 	}
 
 	private String findPersonId(PersonContact profile, Person me) throws InfosphereException {
-		
+
 		Collection<Person> persons = personManager.getAllByProfile(profile);
 		for (Person person : persons)
 			if(person.equals(me)) return "@me";
@@ -263,7 +263,7 @@ public class PSProfileController extends PSSharingControllerBase implements APIC
 				writeIncludes(resource,card);
 				data.getEntries().add(resource);
 			}
-			
+
 		} catch (InfosphereException e) {
 			return Response.badRequest(e.getMessage(), e);
 		} catch (Exception e) {
@@ -286,7 +286,7 @@ public class PSProfileController extends PSSharingControllerBase implements APIC
 			@PathParam("said") String said,	@PathParam("profileID") String profileID) {
 
 		logger.info("called API method: GET /dime/rest/" + said + "/profile/@me/"+profileID);
-		
+
 		Data<eu.dime.ps.dto.Resource> data = null;
 
 		try {
@@ -333,9 +333,9 @@ public class PSProfileController extends PSSharingControllerBase implements APIC
 	public Response<eu.dime.ps.dto.Resource> getProfileFromPersonById(
 			@PathParam("said") String said, @PathParam("personID") String personID,
 			@PathParam("profileID") String profileID) {
-		
+
 		logger.info("called API method: GET /dime/rest/" + said + "/profile/"+personID+"/"+profileID);
-		
+
 		Data<eu.dime.ps.dto.Resource> data = null;
 
 		try {
@@ -375,7 +375,7 @@ public class PSProfileController extends PSSharingControllerBase implements APIC
 	}
 
 	/**
-	 * Create new profile or profile card
+	 * Create new profile card
 	 * 
 	 * @param json
 	 * @return
@@ -385,522 +385,509 @@ public class PSProfileController extends PSSharingControllerBase implements APIC
 	@Path("/@me")
 	@Consumes(MediaType.APPLICATION_JSON + ";charset=UTF-8")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
-	public Response<eu.dime.ps.dto.Resource> createProfile(@PathParam("said") String said,
-			Request<eu.dime.ps.dto.Resource> request) throws InfosphereException {
+	public Response<eu.dime.ps.dto.ProfileCard> createProfileCard(@PathParam("said") String said,
+			Request<eu.dime.ps.dto.ProfileCard> request) throws InfosphereException {
 
 		logger.info("called API method: POST /dime/rest/" + said + "/profile/@me");
-		
-		Data<eu.dime.ps.dto.Resource> data, returnData;
+
+		Data<eu.dime.ps.dto.ProfileCard> data, returnData;
 
 		try {
 
 			RequestValidator.validateRequest(request);
 			data = request.getMessage().getData();
-			eu.dime.ps.dto.Resource resource = data.getEntries().iterator().next();
-			if (data.getEntries().iterator().next().containsKey(KEY_PROFILECARD)) {
-				// If it is a profilecard
+			eu.dime.ps.dto.ProfileCard resourceDTO =  data.getEntries().iterator().next();
+			
+			PrivacyPreference profilecard =resourceDTO.asResource(PrivacyPreference.class,profileCardManager.getMe().asURI());				
+			addAccessSpaceAndDimeAccount(profilecard);	                       
+			profileCardManager.add(profilecard);
 
-				PrivacyPreference profilecard = data.getEntries().iterator().next()
-						.asResource(PrivacyPreference.class,profileCardManager.getMe().asURI());
-				
-				addAccessSpaceAndDimeAccount(profilecard);	                       
-				profileCardManager.add(profilecard);
-				
-				String serviceAccountId = findSaid(profilecard);
-				readIncludes(resource,profilecard);
-				returnData = new Data<eu.dime.ps.dto.Resource>(0, 1, new ProfileCard(profilecard,serviceAccountId,profileCardManager.getMe().asURI()));
-			} else {
-				// If it is a profile
-				
-				PersonContact profile =data.getEntries().iterator().next().asResource(PersonContact.class,profileManager.getMe().asURI());	 	
-				profileManager.add(profile);			
+			String serviceAccountId = findSaid(profilecard);
+			readIncludes(resourceDTO,profilecard);
+			returnData = new Data<eu.dime.ps.dto.ProfileCard>(0, 1, new ProfileCard(profilecard,serviceAccountId,profileCardManager.getMe().asURI()));
 
-				String serviceAccountId = findSaid(profile);
-				Profile profileDTO = new Profile(profile, serviceAccountId,profileManager.getMe().asURI());
-				profileDTO.setUserId(profile,"@me");
-				returnData = new Data<eu.dime.ps.dto.Resource>(0, 1,profileDTO);
-
-			}
 		} catch (InfosphereException e) {
-			return Response.badRequest(e.getMessage(), e);
-		} catch (IllegalArgumentException e) {
-			return Response.badRequest(e.getMessage(), e);
-		} catch (Exception e) {
-			return Response.serverError(e.getMessage(), e);
-		}
-
-		return Response.ok(returnData);
-
+		return Response.badRequest(e.getMessage(), e);
+	} catch (IllegalArgumentException e) {
+		return Response.badRequest(e.getMessage(), e);
+	} catch (Exception e) {
+		return Response.serverError(e.getMessage(), e);
 	}
 
-	private void addAccessSpaceAndDimeAccount(PrivacyPreference profilecard) throws InfosphereException {
-		
-		//create a di.me account related to the profile	card			
-		Account dimeAccount = modelFactory.getDAOFactory().createAccount();
-		dimeAccount.setAccountType(DimeServiceAdapter.NAME);
-		if(profilecard.getPrefLabel() != null)
+	return Response.ok(returnData);
+
+}
+
+
+
+private void addAccessSpaceAndDimeAccount(PrivacyPreference profilecard) throws InfosphereException {
+
+	//create a di.me account related to the profile	card			
+	Account dimeAccount = modelFactory.getDAOFactory().createAccount();
+	dimeAccount.setAccountType(DimeServiceAdapter.NAME);
+	if(profilecard.getPrefLabel() != null)
 		dimeAccount.setPrefLabel(profilecard.getPrefLabel() + "@di.me");
-		else{
-			logger.warn("Profile card "+profilecard.asURI().toString()+" was created with no name");
-			dimeAccount.setPrefLabel(profilecard.asURI().toString() + "@di.me");
-		}
-		 accountManager.add(dimeAccount);
-		 
-		// create an access space and set di.me account as sharedThrough
-        AccessSpace accessSpace = modelFactory.getNSOFactory().createAccessSpace();
-        accessSpace.setSharedThrough(dimeAccount);
-        profilecard.setAccessSpace(accessSpace);
-        profilecard.getModel().addAll(accessSpace.getModel().iterator());       
-		
+	else{
+		logger.warn("Profile card "+profilecard.asURI().toString()+" was created with no name");
+		dimeAccount.setPrefLabel(profilecard.asURI().toString() + "@di.me");
 	}
-	
-	
+	accountManager.add(dimeAccount);
 
-	/**
-	 * Update profile
-	 * 
-	 * @param json
-	 * @param personID
-	 * @param profileID
-	 * @return
-	 */
-	@POST
-	@Path("/{personID}/{profileID}")
-	@Consumes(MediaType.APPLICATION_JSON + ";charset=UTF-8")
-	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
-	public Response<eu.dime.ps.dto.Resource> updateProfile(@PathParam("said") String said,
-			Request<eu.dime.ps.dto.Resource> request,
-			@PathParam("personID") String personID, @PathParam("profileID") String profileID) {
-		
-		logger.info("called API method: POST /dime/rest/" + said
-				+ "/profile/"+personID+"/"+profileID);
+	// create an access space and set di.me account as sharedThrough
+	AccessSpace accessSpace = modelFactory.getNSOFactory().createAccessSpace();
+	accessSpace.setSharedThrough(dimeAccount);
+	profilecard.setAccessSpace(accessSpace);
+	profilecard.getModel().addAll(accessSpace.getModel().iterator());       
 
-		Data<eu.dime.ps.dto.Resource> data, returnData = null;
-
-		try {
-
-			RequestValidator.validateRequest(request);
-			data = request.getMessage().getData();
+}
 
 
-			eu.dime.ps.dto.Resource resource = data.getEntries().iterator().next();
+
+/**
+ * Update profile
+ * 
+ * @param json
+ * @param personID
+ * @param profileID
+ * @return
+ */
+@POST
+@Path("/{personID}/{profileID}")
+@Consumes(MediaType.APPLICATION_JSON + ";charset=UTF-8")
+@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
+public Response<eu.dime.ps.dto.Resource> updateProfile(@PathParam("said") String said,
+		Request<eu.dime.ps.dto.Resource> request,
+		@PathParam("personID") String personID, @PathParam("profileID") String profileID) {
+
+	logger.info("called API method: POST /dime/rest/" + said
+			+ "/profile/"+personID+"/"+profileID);
+
+	Data<eu.dime.ps.dto.Resource> data, returnData = null;
+
+	try {
+
+		RequestValidator.validateRequest(request);
+		data = request.getMessage().getData();
 
 
-			if (profileID.startsWith("pc_")) {
-				profileID = profileID.replaceFirst("pc_", "");
-				PrivacyPreference card = data.getEntries().iterator().next()
-						.asResource(new URIImpl(profileID), PrivacyPreference.class,profileCardManager.getMe().asURI());
-				profileCardManager.update(card);
-				String serviceAccountId = findSaid(card);	
-				readIncludes(resource,card);
-				returnData = new Data<eu.dime.ps.dto.Resource>(0, 1, new ProfileCard(card,serviceAccountId,profileCardManager.getMe().asURI()));
-			} else if (profileID.startsWith("p_")) {
-				profileID = profileID.replaceFirst("p_", "");
-				PersonContact profile = data.getEntries().iterator().next()
-						.asResource(new URIImpl(profileID), PersonContact.class,profileManager.getMe().asURI());
-				profileManager.update(profile);
-				String serviceAccountId = findSaid(profile);
-				Profile profileDTO = new Profile(profile, serviceAccountId,profileManager.getMe().asURI());
-				profileDTO.setUserId(profile,personID);
-				returnData = new Data<eu.dime.ps.dto.Resource>(0, 1,profileDTO);
-			} else {
-				throw new InfosphereException("profile or Profile Card with Id: " + profileID
-						+ " has not been found.");
-			}
-		} catch (IllegalArgumentException e) {
-			return Response.badRequest(e.getMessage(), e);
-		} catch (InfosphereException e) {
-			return Response.badRequest(e.getMessage(), e);
-		} catch (Exception e) {
-			return Response.serverError(e.getMessage(), e);
-		}
-
-		return Response.ok(returnData);
-	}
-
-	/**
-	 * Update profile
-	 * 
-	 * @param json
-	 * @param personID
-	 * @param profileID
-	 * @return
-	 */
-	@POST
-	@Path("/@me/{profileID}")
-	@Consumes(MediaType.APPLICATION_JSON + ";charset=UTF-8")
-	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
-	public Response<eu.dime.ps.dto.Resource> updateMyProfile(@PathParam("said") String said,
-			Request<eu.dime.ps.dto.Resource> request,
-			@PathParam("profileID") String profileID) {
-		
-		logger.info("called API method: POST /dime/rest/" + said
-				+ "/profile/@me/"+profileID);
-
-		Data<eu.dime.ps.dto.Resource> data, returnData = null;
-
-		try {
-
-			RequestValidator.validateRequest(request);
-			data = request.getMessage().getData();
-
-			//process includes
-			eu.dime.ps.dto.Resource resource = data.getEntries().iterator().next();			
-
-			if (profileID.startsWith("pc_")) {
-				profileID = profileID.replaceFirst("pc_", "");
-
-				PrivacyPreference card = data.getEntries().iterator().next()
-						.asResource(new URIImpl(profileID), PrivacyPreference.class,profileCardManager.getMe().asURI());
-				profileCardManager.update(card);
-				String serviceAccountId = findSaid(card);
-				readIncludes(resource,card);
-				returnData = new Data<eu.dime.ps.dto.Resource>(0, 1, new ProfileCard(card,serviceAccountId,profileCardManager.getMe().asURI()));
-			} else if (profileID.startsWith("p_")) {
-				profileID = profileID.replaceFirst("p_", "");
-				PersonContact profile = data.getEntries().iterator().next()
-						.asResource(new URIImpl(profileID), PersonContact.class,profileManager.getMe().asURI());
-				profileManager.update(profile);
-				String serviceAccountId = findSaid(profile);
-				Profile profileDTO = new Profile(profile, serviceAccountId,profileManager.getMe().asURI());
-				profileDTO.setUserId(profile,"@me");
-				returnData = new Data<eu.dime.ps.dto.Resource>(0, 1, profileDTO);
-			} else {
-				throw new InfosphereException("profile or Profile Card with Id: " + profileID
-						+ " has not been found.");
-			}
-		} catch (IllegalArgumentException e) {
-			return Response.badRequest(e.getMessage(), e);
-		} catch (InfosphereException e) {
-			return Response.badRequest(e.getMessage(), e);
-		} catch (Exception e) {
-			return Response.serverError(e.getMessage(), e);
-		}
-
-		return Response.ok(returnData);
-	}
-
-	/**
-	 * Remove profile
-	 * 
-	 * @param personID
-	 * @param profileID
-	 * @return
-	 */
-	@DELETE
-	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
-	@Path("/{personID}/{profileID}")
-	public Response removeProfile(@PathParam("said") String said,
-			@PathParam("personID") String personID, @PathParam("profileID") String profileID) {
-
-		logger.info("called API method: DELETE /dime/rest/" + said
-				+ "/profile/"+personID+"/"+profileID);
-
-		try {
-			if (profileID.startsWith("pc_")) {
-				profileID = profileID.replaceFirst("pc_", "");
-				profileCardManager.remove(profileID);
-			} else if (profileID.startsWith("p_")) {
-				profileID = profileID.replaceFirst("p_", "");
-				profileManager.remove(profileID);
-			}
-		} catch (IllegalArgumentException e) {
-			return Response.badRequest(e.getMessage(), e);
-		} catch (InfosphereException e) {
-			return Response.badRequest(e.getMessage(), e);
-		} catch (Exception e) {
-			return Response.serverError(e.getMessage(), e);
-		}
-
-		return Response.ok();
-	}
-
-	/**
-	 * Remove profile
-	 * 
-	 * @param personID
-	 * @param profileID
-	 * @return
-	 */
-	@DELETE
-	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
-	@Path("/@me/{profileID}")
-	public Response removeProfile(@PathParam("said") String said,@PathParam("profileID") String profileID) {
-
-		logger.info("called API method: DELETE /dime/rest/" + said
-				+ "/profile/@me/"+profileID);
-
-		try {
-			if (profileID.startsWith("pc_")) {
-				profileID = profileID.replaceFirst("pc_", "");
-				profileCardManager.remove(profileID);
-			} else if (profileID.startsWith("p_")) {
-				profileID = profileID.replaceFirst("p_", "");
-				profileManager.remove(profileID);
-			}
-		} catch (IllegalArgumentException e) {
-			return Response.badRequest(e.getMessage(), e);
-		} catch (InfosphereException e) {
-			return Response.badRequest(e.getMessage(), e);
-		} catch (Exception e) {
-			return Response.serverError(e.getMessage(), e);
-		}
-
-		return Response.ok();
-	}
-
-	////
-	//Method for reading the privacyPreferences of a profileCard
-	////
-	@Override
-	public List<Include> readIncludes(eu.dime.ps.dto.Resource resource,eu.dime.ps.semantic.model.RDFReactorThing card)
-			throws InfosphereException {			
-
-		List<Include> includes = buildIncludesFromMap(resource);
-		if (!includes.isEmpty()){
-			//TODO manage the unsharing 
-			ArrayList<Include> shared = new ArrayList<Include>();
-			ArrayList<Include> excludes = new ArrayList<Include>(); 					
-
-			for(Include include: includes){
-				for(String group : include.groups){	
-					sharingManager.shareProfileCard(card.asURI().toString(), include.getSaidSender(),  new String[]{group});
-				}
-				for(String service: include.services){	
-					sharingManager.shareProfileCard(card.asURI().toString(), include.getSaidSender(),  new String[]{service});						
-				}
-				for (HashMap<String, String> person : include.persons){
-					if(person.get("saidReceiver") == null){						
-						sharingManager.shareProfileCard(card.asURI().toString(), include.getSaidSender(),  new String[]{person.get("personId")});	
-					}
-					else{	
-						sharingManager.shareProfileCard(card.asURI().toString(), include.getSaidSender(),  new String[]{person.get("saidReceiver")});	
-					}					
-				}
-
-			}
-		}
-		return includes;
-	}
+		eu.dime.ps.dto.Resource resource = data.getEntries().iterator().next();
 
 
-	// ---------------------------------
-	// ------------ JSON-LD ------------
-	// ---------------------------------
-
-	@POST
-	@Path("/@me")
-	@Consumes(MediaType.APPLICATION_JSONLD)
-	@Produces(MediaType.APPLICATION_JSONLD)
-	public List<Object> createProfileJSONLD(List<Object> request, @PathParam("said") String said) {
-
-		List<? extends Resource> resources = null;
-		PersonContact profile = null;
-		Model attributes = RDF2Go.getModelFactory().createModel().open();
-		try {
-			resources = JSONLDUtils.deserializeCollection(request);
-			for (Resource resource : resources) {
-				if (resource instanceof PersonContact) { // profile
-					profile = (PersonContact) resource;
-				} else { // profile attribute
-					attributes.addAll(resource.getModel().iterator());
-				}
-			}
-
-			if (profile == null) {
-				logger.error("A profile object was not found in the request.");
-				return null;
-			}
-
-			profile.getModel().addAll(attributes.iterator());
-			profileManager.add(profileManager.getMe(), profile);
-		} catch (InfosphereException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return null;
-		} catch (JsonParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (JsonMappingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		return JSONLDUtils.serializeCollection(profile);
-	}
-
-	@PUT
-	@Path("/{profileId}")
-	@Consumes(MediaType.APPLICATION_JSONLD)
-	@Produces(MediaType.APPLICATION_JSONLD)
-	public List<Object> updateProfileJSONLD(List<Object> request, @PathParam("said") String said,
-			@PathParam("profileId") String profileId) {
-
-		List<? extends Resource> resources = null;
-		PersonContact profile = null;
-		Model attributes = RDF2Go.getModelFactory().createModel().open();
-		try {
-			resources = JSONLDUtils.deserializeCollection(request);
-			for (Resource resource : resources) {
-				if (resource instanceof PersonContact) { // profile
-					profile = (PersonContact) resource;
-				} else { // profile attribute
-					attributes.addAll(resource.getModel().iterator());
-				}
-			}
-
-			if (profile == null) {
-				logger.error("A profile object was not found in the request.");
-				return null;
-			}
-
-			profile.getModel().addAll(attributes.iterator());
+		if (profileID.startsWith("pc_")) {
+			profileID = profileID.replaceFirst("pc_", "");
+			PrivacyPreference card = data.getEntries().iterator().next()
+					.asResource(new URIImpl(profileID), PrivacyPreference.class,profileCardManager.getMe().asURI());
+			profileCardManager.update(card);
+			String serviceAccountId = findSaid(card);	
+			readIncludes(resource,card);
+			returnData = new Data<eu.dime.ps.dto.Resource>(0, 1, new ProfileCard(card,serviceAccountId,profileCardManager.getMe().asURI()));
+		} else if (profileID.startsWith("p_")) {
+			profileID = profileID.replaceFirst("p_", "");
+			PersonContact profile = data.getEntries().iterator().next()
+					.asResource(new URIImpl(profileID), PersonContact.class,profileManager.getMe().asURI());
 			profileManager.update(profile);
-		} catch (InfosphereException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			String serviceAccountId = findSaid(profile);
+			Profile profileDTO = new Profile(profile, serviceAccountId,profileManager.getMe().asURI());
+			profileDTO.setUserId(profile,personID);
+			returnData = new Data<eu.dime.ps.dto.Resource>(0, 1,profileDTO);
+		} else {
+			throw new InfosphereException("profile or Profile Card with Id: " + profileID
+					+ " has not been found.");
+		}
+	} catch (IllegalArgumentException e) {
+		return Response.badRequest(e.getMessage(), e);
+	} catch (InfosphereException e) {
+		return Response.badRequest(e.getMessage(), e);
+	} catch (Exception e) {
+		return Response.serverError(e.getMessage(), e);
+	}
+
+	return Response.ok(returnData);
+}
+
+/**
+ * Update profile
+ * 
+ * @param json
+ * @param personID
+ * @param profileID
+ * @return
+ */
+@POST
+@Path("/@me/{profileID}")
+@Consumes(MediaType.APPLICATION_JSON + ";charset=UTF-8")
+@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
+public Response<eu.dime.ps.dto.Resource> updateMyProfile(@PathParam("said") String said,
+		Request<eu.dime.ps.dto.Resource> request,
+		@PathParam("profileID") String profileID) {
+
+	logger.info("called API method: POST /dime/rest/" + said
+			+ "/profile/@me/"+profileID);
+
+	Data<eu.dime.ps.dto.Resource> data, returnData = null;
+
+	try {
+
+		RequestValidator.validateRequest(request);
+		data = request.getMessage().getData();
+
+		//process includes
+		eu.dime.ps.dto.Resource resource = data.getEntries().iterator().next();			
+
+		if (profileID.startsWith("pc_")) {
+			profileID = profileID.replaceFirst("pc_", "");
+
+			PrivacyPreference card = data.getEntries().iterator().next()
+					.asResource(new URIImpl(profileID), PrivacyPreference.class,profileCardManager.getMe().asURI());
+			profileCardManager.update(card);
+			String serviceAccountId = findSaid(card);
+			readIncludes(resource,card);
+			returnData = new Data<eu.dime.ps.dto.Resource>(0, 1, new ProfileCard(card,serviceAccountId,profileCardManager.getMe().asURI()));
+		} else if (profileID.startsWith("p_")) {
+			profileID = profileID.replaceFirst("p_", "");
+			PersonContact profile = data.getEntries().iterator().next()
+					.asResource(new URIImpl(profileID), PersonContact.class,profileManager.getMe().asURI());
+			profileManager.update(profile);
+			String serviceAccountId = findSaid(profile);
+			Profile profileDTO = new Profile(profile, serviceAccountId,profileManager.getMe().asURI());
+			profileDTO.setUserId(profile,"@me");
+			returnData = new Data<eu.dime.ps.dto.Resource>(0, 1, profileDTO);
+		} else {
+			throw new InfosphereException("profile or Profile Card with Id: " + profileID
+					+ " has not been found.");
+		}
+	} catch (IllegalArgumentException e) {
+		return Response.badRequest(e.getMessage(), e);
+	} catch (InfosphereException e) {
+		return Response.badRequest(e.getMessage(), e);
+	} catch (Exception e) {
+		return Response.serverError(e.getMessage(), e);
+	}
+
+	return Response.ok(returnData);
+}
+
+/**
+ * Remove profile
+ * 
+ * @param personID
+ * @param profileID
+ * @return
+ */
+@DELETE
+@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
+@Path("/{personID}/{profileID}")
+public Response removeProfile(@PathParam("said") String said,
+		@PathParam("personID") String personID, @PathParam("profileID") String profileID) {
+
+	logger.info("called API method: DELETE /dime/rest/" + said
+			+ "/profile/"+personID+"/"+profileID);
+
+	try {
+		if (profileID.startsWith("pc_")) {
+			profileID = profileID.replaceFirst("pc_", "");
+			profileCardManager.remove(profileID);
+		} else if (profileID.startsWith("p_")) {
+			profileID = profileID.replaceFirst("p_", "");
+			profileManager.remove(profileID);
+		}
+	} catch (IllegalArgumentException e) {
+		return Response.badRequest(e.getMessage(), e);
+	} catch (InfosphereException e) {
+		return Response.badRequest(e.getMessage(), e);
+	} catch (Exception e) {
+		return Response.serverError(e.getMessage(), e);
+	}
+
+	return Response.ok();
+}
+
+/**
+ * Remove profile
+ * 
+ * @param personID
+ * @param profileID
+ * @return
+ */
+@DELETE
+@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
+@Path("/@me/{profileID}")
+public Response removeProfile(@PathParam("said") String said,@PathParam("profileID") String profileID) {
+
+	logger.info("called API method: DELETE /dime/rest/" + said
+			+ "/profile/@me/"+profileID);
+
+	try {
+		if (profileID.startsWith("pc_")) {
+			profileID = profileID.replaceFirst("pc_", "");
+			profileCardManager.remove(profileID);
+		} else if (profileID.startsWith("p_")) {
+			profileID = profileID.replaceFirst("p_", "");
+			profileManager.remove(profileID);
+		}
+	} catch (IllegalArgumentException e) {
+		return Response.badRequest(e.getMessage(), e);
+	} catch (InfosphereException e) {
+		return Response.badRequest(e.getMessage(), e);
+	} catch (Exception e) {
+		return Response.serverError(e.getMessage(), e);
+	}
+
+	return Response.ok();
+}
+
+////
+//Method for reading the privacyPreferences of a profileCard
+////
+@Override
+public List<Include> readIncludes(eu.dime.ps.dto.Resource resource,eu.dime.ps.semantic.model.RDFReactorThing card)
+		throws InfosphereException {			
+
+	List<Include> includes = buildIncludesFromMap(resource);
+	if (!includes.isEmpty()){
+		//TODO manage the unsharing 
+		ArrayList<Include> shared = new ArrayList<Include>();
+		ArrayList<Include> excludes = new ArrayList<Include>(); 					
+
+		for(Include include: includes){
+			for(String group : include.groups){	
+				sharingManager.shareProfileCard(card.asURI().toString(), include.getSaidSender(),  new String[]{group});
+			}
+			for(String service: include.services){	
+				sharingManager.shareProfileCard(card.asURI().toString(), include.getSaidSender(),  new String[]{service});						
+			}
+			for (HashMap<String, String> person : include.persons){
+				if(person.get("saidReceiver") == null){						
+					sharingManager.shareProfileCard(card.asURI().toString(), include.getSaidSender(),  new String[]{person.get("personId")});	
+				}
+				else{	
+					sharingManager.shareProfileCard(card.asURI().toString(), include.getSaidSender(),  new String[]{person.get("saidReceiver")});	
+				}					
+			}
+
+		}
+	}
+	return includes;
+}
+
+
+// ---------------------------------
+// ------------ JSON-LD ------------
+// ---------------------------------
+
+@POST
+@Path("/@me")
+@Consumes(MediaType.APPLICATION_JSONLD)
+@Produces(MediaType.APPLICATION_JSONLD)
+public List<Object> createProfileJSONLD(List<Object> request, @PathParam("said") String said) {
+
+	List<? extends Resource> resources = null;
+	PersonContact profile = null;
+	Model attributes = RDF2Go.getModelFactory().createModel().open();
+	try {
+		resources = JSONLDUtils.deserializeCollection(request);
+		for (Resource resource : resources) {
+			if (resource instanceof PersonContact) { // profile
+				profile = (PersonContact) resource;
+			} else { // profile attribute
+				attributes.addAll(resource.getModel().iterator());
+			}
+		}
+
+		if (profile == null) {
+			logger.error("A profile object was not found in the request.");
 			return null;
-		} catch (JsonParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (JsonMappingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 
-		return JSONLDUtils.serializeCollection(profile);
+		profile.getModel().addAll(attributes.iterator());
+		profileManager.add(profileManager.getMe(), profile);
+	} catch (InfosphereException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+		return null;
+	} catch (JsonParseException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	} catch (JsonMappingException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
 	}
 
-	// ---------------------------------
-	// ------------ Profile Card Shared ------------
-	// ---------------------------------
-	/**
-	 * 
-	 * @deprecated Do not use this method! 
-	 * 			   
-	 */
-	@Deprecated
-	@GET
-	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
-	@Path("/@me/@sharedTo/{agentId}/@all")
-	public Response<ProfileCard> getProfileCardsSharedWith(@PathParam("agentId") String agentId) {
-		Data<ProfileCard> data = null;
+	return JSONLDUtils.serializeCollection(profile);
+}
 
+@PUT
+@Path("/{profileId}")
+@Consumes(MediaType.APPLICATION_JSONLD)
+@Produces(MediaType.APPLICATION_JSONLD)
+public List<Object> updateProfileJSONLD(List<Object> request, @PathParam("said") String said,
+		@PathParam("profileId") String profileId) {
+
+	List<? extends Resource> resources = null;
+	PersonContact profile = null;
+	Model attributes = RDF2Go.getModelFactory().createModel().open();
+	try {
+		resources = JSONLDUtils.deserializeCollection(request);
+		for (Resource resource : resources) {
+			if (resource instanceof PersonContact) { // profile
+				profile = (PersonContact) resource;
+			} else { // profile attribute
+				attributes.addAll(resource.getModel().iterator());
+			}
+		}
+
+		if (profile == null) {
+			logger.error("A profile object was not found in the request.");
+			return null;
+		}
+
+		profile.getModel().addAll(attributes.iterator());
+		profileManager.update(profile);
+	} catch (InfosphereException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+		return null;
+	} catch (JsonParseException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	} catch (JsonMappingException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+
+	return JSONLDUtils.serializeCollection(profile);
+}
+
+// ---------------------------------
+// ------------ Profile Card Shared ------------
+// ---------------------------------
+/**
+ * 
+ * @deprecated Do not use this method! 
+ * 			   
+ */
+@Deprecated
+@GET
+@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
+@Path("/@me/@sharedTo/{agentId}/@all")
+public Response<ProfileCard> getProfileCardsSharedWith(@PathParam("agentId") String agentId) {
+	Data<ProfileCard> data = null;
+
+	try {
+		Collection<PrivacyPreference> cards = sharingManager.getSharedProfileCards(agentId);
+		data = new Data<ProfileCard>(0, cards.size(), cards.size());
+		for (PrivacyPreference card : cards) {
+			String serviceAccountId = findSaid(card);
+			data.getEntries().add(new ProfileCard(card,serviceAccountId,profileCardManager.getMe().asURI()));
+		}
+	} catch (IllegalArgumentException e) {
+		return Response.badRequest(e.getMessage(), e);
+	} catch (InfosphereException e) {
+		return Response.badRequest(e.getMessage(), e);
+	} catch (Exception e) {
+		return Response.serverError(e.getMessage(), e);
+	}
+
+	return Response.ok(data);
+}
+
+
+
+@GET
+@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
+@Path(value = "@me/@all/shared")
+public Response<ProfileCard> getProfileCardsSharedByQuery(
+		@QueryParam("sharedWithAgent") String agentId,
+		@QueryParam("sharedWithService") String serviceId) {
+	Data<ProfileCard> data = null;
+
+	try {
+		Collection<PrivacyPreference> cards = sharingManager.getSharedProfileCards(serviceId==null? agentId: serviceId);
+		data = new Data<ProfileCard>(0, cards.size(), cards.size());
+		for (PrivacyPreference card : cards) {
+			String serviceAccountId = findSaid(card);
+			data.getEntries().add(new ProfileCard(card,serviceAccountId,profileCardManager.getMe().asURI()));
+		}
+	} catch (IllegalArgumentException e) {
+		return Response.badRequest(e.getMessage(), e);
+	} catch (InfosphereException e) {
+		return Response.badRequest(e.getMessage(), e);
+	} catch (Exception e) {
+		return Response.serverError(e.getMessage(), e);
+	}
+
+	return Response.ok(data);
+}
+
+
+/**
+ * 
+ * @deprecated Do not use this method! 
+ * 			   
+ */
+@Deprecated
+@GET
+@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
+@Path("/@me/@sharedTo/{agentId}/{profileCardId}")
+public Response<ProfileCard> getProfileCardSharedWith(@PathParam("agentId") String agentId,
+		@PathParam("profileCardId") String profileCardId) {
+	Data<ProfileCard> data = null;
+	profileCardId = profileCardId.replaceFirst("pc_", "");
+	try {
+		if (sharingManager.hasAccessToProfileCard(profileCardId, agentId)) {
+			PrivacyPreference card = profileCardManager.get(profileCardId);
+			String serviceAccountId = findSaid(card);
+			data = new Data<ProfileCard>(0, 1, new ProfileCard(card,serviceAccountId,profileCardManager.getMe().asURI()));
+		} else {
+			return Response.badRequest("Profile card " + profileCardId
+					+ " cannot be accessed by " + agentId, null);
+		}
+	} catch (IllegalArgumentException e) {
+		return Response.badRequest(e.getMessage(), e);
+	} catch (InfosphereException e) {
+		return Response.badRequest(e.getMessage(), e);
+	} catch (Exception e) {
+		return Response.serverError(e.getMessage(), e);
+	}
+	return Response.ok(data);
+
+}
+
+
+// TODO why only 1 said? what if the profile card has been shared through multiple accounts??
+private String findSaid(PrivacyPreference profileCard) throws Exception {
+	Model metadata = profileCard.getModel();
+	for (Node accessSpace : ModelUtils.findObjects(metadata, profileCard, PPO.hasAccessSpace)) {
+		Node sharedThrough = ModelUtils.findObject(metadata, accessSpace.asResource(), NSO.sharedThrough);
+		if (sharedThrough != null) {
+			return sharedThrough.toString();
+		}
+	}
+	return "";
+}
+
+private String findSaid(PersonContact profile) throws Exception { 
+
+	ClosableIterator<Statement> iterator = profile.getModel()
+			.findStatements(profile.asResource().asURI(), NIE.dataSource, Variable.ANY);    	
+	while (iterator.hasNext()) {
+		Statement statement = iterator.next();    	   
+		Node node = statement.getObject();
 		try {
-			Collection<PrivacyPreference> cards = sharingManager.getSharedProfileCards(agentId);
-			data = new Data<ProfileCard>(0, cards.size(), cards.size());
-			for (PrivacyPreference card : cards) {
-				String serviceAccountId = findSaid(card);
-				data.getEntries().add(new ProfileCard(card,serviceAccountId,profileCardManager.getMe().asURI()));
-			}
-		} catch (IllegalArgumentException e) {
-			return Response.badRequest(e.getMessage(), e);
+			for(Account accountId: accountManager.getAll())
+				if(node.asURI().toString().equals(accountId.asURI().toString())){
+					return node.asURI().toString();
+				}
+		} catch (ClassCastException e) {						
+			throw new Exception(e.getMessage());					
+
 		} catch (InfosphereException e) {
-			return Response.badRequest(e.getMessage(), e);
-		} catch (Exception e) {
-			return Response.serverError(e.getMessage(), e);
-		}
-
-		return Response.ok(data);
-	}
-
-
-
-	@GET
-	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
-	@Path(value = "@me/@all/shared")
-	public Response<ProfileCard> getProfileCardsSharedByQuery(
-			@QueryParam("sharedWithAgent") String agentId,
-			@QueryParam("sharedWithService") String serviceId) {
-		Data<ProfileCard> data = null;
-
-		try {
-			Collection<PrivacyPreference> cards = sharingManager.getSharedProfileCards(serviceId==null? agentId: serviceId);
-			data = new Data<ProfileCard>(0, cards.size(), cards.size());
-			for (PrivacyPreference card : cards) {
-				String serviceAccountId = findSaid(card);
-				data.getEntries().add(new ProfileCard(card,serviceAccountId,profileCardManager.getMe().asURI()));
-			}
-		} catch (IllegalArgumentException e) {
-			return Response.badRequest(e.getMessage(), e);
-		} catch (InfosphereException e) {
-			return Response.badRequest(e.getMessage(), e);
-		} catch (Exception e) {
-			return Response.serverError(e.getMessage(), e);
-		}
-
-		return Response.ok(data);
-	}
-
-
-	/**
-	 * 
-	 * @deprecated Do not use this method! 
-	 * 			   
-	 */
-	@Deprecated
-	@GET
-	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
-	@Path("/@me/@sharedTo/{agentId}/{profileCardId}")
-	public Response<ProfileCard> getProfileCardSharedWith(@PathParam("agentId") String agentId,
-			@PathParam("profileCardId") String profileCardId) {
-		Data<ProfileCard> data = null;
-		profileCardId = profileCardId.replaceFirst("pc_", "");
-		try {
-			if (sharingManager.hasAccessToProfileCard(profileCardId, agentId)) {
-				PrivacyPreference card = profileCardManager.get(profileCardId);
-				String serviceAccountId = findSaid(card);
-				data = new Data<ProfileCard>(0, 1, new ProfileCard(card,serviceAccountId,profileCardManager.getMe().asURI()));
-			} else {
-				return Response.badRequest("Profile card " + profileCardId
-						+ " cannot be accessed by " + agentId, null);
-			}
-		} catch (IllegalArgumentException e) {
-			return Response.badRequest(e.getMessage(), e);
-		} catch (InfosphereException e) {
-			return Response.badRequest(e.getMessage(), e);
-		} catch (Exception e) {
-			return Response.serverError(e.getMessage(), e);
-		}
-		return Response.ok(data);
-
-	}
-
-
-	// TODO why only 1 said? what if the profile card has been shared through multiple accounts??
-	private String findSaid(PrivacyPreference profileCard) throws Exception {
-		Model metadata = profileCard.getModel();
-		for (Node accessSpace : ModelUtils.findObjects(metadata, profileCard, PPO.hasAccessSpace)) {
-			Node sharedThrough = ModelUtils.findObject(metadata, accessSpace.asResource(), NSO.sharedThrough);
-			if (sharedThrough != null) {
-				return sharedThrough.toString();
-			}
-		}
-		return "";
-	}
-
-	private String findSaid(PersonContact profile) throws Exception { 
-
-		ClosableIterator<Statement> iterator = profile.getModel()
-				.findStatements(profile.asResource().asURI(), NIE.dataSource, Variable.ANY);    	
-		while (iterator.hasNext()) {
-			Statement statement = iterator.next();    	   
-			Node node = statement.getObject();
-			try {
-				for(Account accountId: accountManager.getAll())
-					if(node.asURI().toString().equals(accountId.asURI().toString())){
-						return node.asURI().toString();
-					}
-			} catch (ClassCastException e) {						
-				throw new Exception(e.getMessage());					
-
-			} catch (InfosphereException e) {
-				throw new InfosphereException(e.getMessage(),e);
-
-			}
+			throw new InfosphereException(e.getMessage(),e);
 
 		}
-		return "";
+
 	}
+	return "";
+}
 
 }

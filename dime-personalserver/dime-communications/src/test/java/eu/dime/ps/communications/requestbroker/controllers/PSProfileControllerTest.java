@@ -78,20 +78,7 @@ public class PSProfileControllerTest extends PSInfoSphereControllerTest {
 		assertEquals("Juan",response.getMessage().getData().entry.iterator().next().get("name").toString());
 	}
 	
-	
-	@Test
-	public void testCreateProfile()  {				
-		Response<Resource> response = null;
-		try {
-			response = controller.createProfile(said,request);
-		} catch (InfosphereException e) {			
-			e.printStackTrace();
-		}
-		assertNotNull(response);
-	//assertEquals("Juan",response.getMessage().getData().entry.iterator().next().get("name").toString());
-		
-	}
-	
+
 	@Test
 	public void testUpdateProfile() throws ClassCastException, InfosphereException  {
 		Response<Resource> response= controller.updateProfile(said,request,"@self","p_"+mockedManager.get("juan").asURI().toString());

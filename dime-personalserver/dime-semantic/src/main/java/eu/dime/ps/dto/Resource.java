@@ -451,7 +451,7 @@ public class Resource extends LinkedHashMap<String, Object> {
 				addToModel(rModel, resourceUri, RDF.type, PIMO.PersonGroup);
 			} else if (type.equals("profile")) {	    	
 				if(!this.containsKey("nao:includes")){
-					addToModel(rModel, resourceUri, RDF.type, NCO.Contact);}
+					addToModel(rModel, resourceUri, RDF.type, NCO.PersonContact);}
 				else {
 					addToModel(rModel, resourceUri, RDF.type, PPO.PrivacyPreference);
 					addToModel(rModel, resourceUri, RDFS.label, "PROFILECARD");

@@ -57,7 +57,6 @@ import eu.dime.ps.semantic.model.nco.PersonName;
 import eu.dime.ps.semantic.model.nco.PhoneNumber;
 import eu.dime.ps.semantic.model.pimo.Person;
 import eu.dime.ps.semantic.privacy.PrivacyPreferenceType;
-import eu.dime.jfix.util.Arrays;
 
 
 public class PSProfileControllerTestIt extends PSInfosphereControllerTestIt {
@@ -138,8 +137,8 @@ public class PSProfileControllerTestIt extends PSInfosphereControllerTestIt {
 		profileCard.put("items", Arrays.asList(new String[]{ personName.toString(), phoneNumber.toString() }));
 		profileCard.put("nao:includes", buildIncludes(sender, person));
 		
-		Request<Resource> request = buildRequest(profileCard);
-		Response<Resource> response = controller.createProfile(SAID, request);
+		Request<ProfileCard> request = buildRequestProfileCard(profileCard);
+		Response<ProfileCard> response = controller.createProfileCard(SAID, request);
 		
 		assertNotNull(response);
 		assertEquals(1, response.getMessage().getData().getEntries().size());
@@ -169,6 +168,7 @@ public class PSProfileControllerTestIt extends PSInfosphereControllerTestIt {
 	}
 	
 	
+	
 	@Ignore
 	@Test
 	public void testUpdateProfileCardFormedRDF() throws ResourceExistsException, InfosphereException  {
@@ -193,8 +193,8 @@ public class PSProfileControllerTestIt extends PSInfosphereControllerTestIt {
 		profileCard.put("items", Arrays.asList(new String[]{ personName.toString(), phoneNumber.toString() }));
 		profileCard.put("nao:includes", buildIncludes(sender, person));
 		
-		Request<Resource> request = buildRequest(profileCard);
-		Response<Resource> response = controller.createProfile(SAID, request);
+		Request<ProfileCard> request = buildRequestProfileCard(profileCard);
+		Response<ProfileCard> response = controller.createProfileCard(SAID, request);
 		
 		EmailAddress email = modelFactory.getNCOFactory().createEmailAddress();
 		email.setEmailAddress("test@mail.com");

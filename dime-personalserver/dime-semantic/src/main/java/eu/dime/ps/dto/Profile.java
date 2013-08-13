@@ -43,7 +43,7 @@ import eu.dime.ps.semantic.rdf.URIGenerator;
 
 public class Profile extends Resource {
 
-	//TODO add postalAdress and other attributes after revision
+	
 	private static final URI[] ITEMS_PROPERTIES = new URI[] { NCO.hasPersonName, NCO.hasAffiliation,
 		NCO.hasEmailAddress, NCO.hasPhoneNumber, NCO.hasBirthDate,NCO.hasPostalAddress,NCO.hobby,NCO.hasLocation};
 
@@ -143,8 +143,7 @@ public class Profile extends Resource {
 	public PersonContact asResource(URI resourceUri, URI me) {
 		Model rModel = RDF2Go.getModelFactory().createModel().open();
 		PersonContact result = new PersonContact(rModel, resourceUri, true);
-
-		// TODO set userId
+		
 		this.remove("userId");
 		this.remove("said");
 		this.remove("editable");

@@ -31,6 +31,7 @@ import eu.dime.commons.dto.Message;
 import eu.dime.commons.dto.Request;
 import eu.dime.ps.controllers.TenantContextHolder;
 import eu.dime.ps.dto.Databox;
+import eu.dime.ps.dto.ProfileCard;
 import eu.dime.ps.dto.Resource;
 import eu.dime.ps.gateway.service.internal.DimeServiceAdapter;
 import eu.dime.ps.semantic.connection.Connection;
@@ -95,6 +96,19 @@ public abstract class PSInfosphereControllerTestIt extends Assert {
 
 		return request;
 	}
+	
+	protected Request<ProfileCard> buildRequestProfileCard(ProfileCard profileCard) {
+		Request<ProfileCard> request = new Request<ProfileCard>();
+		Message<ProfileCard> message = new Message<ProfileCard>();
+
+		Data<ProfileCard> data = new Data<ProfileCard>();
+		data.getEntries().add(profileCard);
+		message.setData(data);
+		request.setMessage(message);
+
+		return request;
+	}
+
 
 	protected Request<Databox> buildDataboxRequest(Databox databox) {
 		Request<Databox> request = new Request<Databox>();
