@@ -32,7 +32,6 @@ import net.sf.json.JSONException;
 import net.sf.json.JSONObject;
 import net.sf.json.JSONSerializer;
 
-import org.apache.commons.codec.binary.Base64;
 import org.apache.http.HttpStatus;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
@@ -463,12 +462,8 @@ public class DimeServiceAdapter extends ServiceAdapterBase implements InternalSe
 			String baseURL = targetResolver.resolve(targetSaidName);
 			proxy = prepareProxy(baseURL, token.getToken(), token.getSecret());
 
-			// encode username and password
-			String authorization = Base64.encodeBase64String((token.getToken()+":"+token.getSecret()).getBytes()).replace("\r\n", "");
-
 			Map<String, String> headers = headers(
-					"Accept", MediaType.APPLICATION_JSONLD,
-					"Authorization", "Basic " + authorization);
+					"Accept", MediaType.APPLICATION_JSONLD);
 
 			String response = proxy.get(path, headers);
 			logger.info("GET "+path+" [username="+token.getToken()+", password="+token.getSecret()+"] responded with: "+response);
@@ -502,7 +497,7 @@ public class DimeServiceAdapter extends ServiceAdapterBase implements InternalSe
 
 		return profile;
 	}
-
+	
 	public Token getUserToken(String username) throws ServiceNotAvailableException, ServiceException {
 		Token token = null;
 		HttpRestProxy proxy = null;

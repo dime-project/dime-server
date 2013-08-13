@@ -21,7 +21,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.HashMap;
@@ -63,7 +66,8 @@ import eu.dime.ps.gateway.exception.ServiceNotAvailableException;
  * Connects to an external service using HTTP connection
  * 
  * @author Sophie.Wrobel
- * @author <a href="mailto:bourimi@wiwi.uni-siegen.de"> Mohamed Bourimi (mbourimi)</a>
+ * @author Mohamed Bourimi (mbourimi)
+ * @author Ismael Rivera
  */
 public class HttpRestProxy implements ServiceProxy {
 
@@ -149,23 +153,20 @@ public class HttpRestProxy implements ServiceProxy {
 		this.client = this.getConnection(query);
 		int responseCode = -1;
 
-		// execute the GET
-		HttpGet httpget = null;
+		HttpGet httpget = new HttpGet(this.url + query);
+
+		// adding headers to request
+		for (String name : headers.keySet()) {
+			httpget.addHeader(name, headers.get(name));
+		}
+		
+		// add basic auth header
+		String authorization = getBasicAuthorization();
+		if (authorization != null) {
+			httpget.addHeader("Authorization", "Basic "+ authorization);
+		}
+
 		try {
-			httpget = new HttpGet(this.url + query);
-			
-			// adding headers to request
-			for (String name : headers.keySet()) {
-				httpget.addHeader(name, headers.get(name));
-			}
-			
-			// add basic auth header
-			if (this.username != null && this.password != null) {
-				String authorization = Base64.encodeBase64String((this.username+":"+this.password).getBytes());
-				authorization = authorization.replace("\r\n", ""); // line breaks can cause the request to be rejected
-				httpget.addHeader("Authorization", "Basic "+ authorization);
-			}
-			
 			logger.info("Performing " + httpget.getRequestLine());
 			HttpResponse response = this.client.execute(httpget);
 			HttpEntity entity = response.getEntity();
@@ -185,9 +186,9 @@ public class HttpRestProxy implements ServiceProxy {
 
 			EntityUtils.consume(entity);
 		} catch (ClientProtocolException e) {
-			throw new ServiceNotAvailableException (e);
+			throw new ServiceNotAvailableException("Error performing " + httpget.getRequestLine(), e);
 		} catch (IOException e) {
-			throw new ServiceNotAvailableException (e);
+			throw new ServiceNotAvailableException("Error performing " + httpget.getRequestLine(), e);
 		} finally {
 			// We don't want to shut down!
 			// this.client.getConnectionManager().shutdown();
@@ -202,28 +203,25 @@ public class HttpRestProxy implements ServiceProxy {
 		return result.toString();
 	}
 	
-	
 	public BinaryFile getBinary(String query, Map<String, String> headers) throws ServiceNotAvailableException {
 		this.client = this.getConnection(query);
 		InputStream byteStream = null;
 		BinaryFile result = new BinaryFile();
 		
+		HttpGet httpget = new HttpGet(this.url + query);
+
+		// adding headers to request
+		for (String name : headers.keySet()) {
+			httpget.addHeader(name, headers.get(name));
+		}
+
+		// add basic auth header
+		String authorization = getBasicAuthorization();
+		if (authorization != null) {
+			httpget.addHeader("Authorization", "Basic "+ authorization);
+		}
+
 		try {
-			// execute the GET
-			HttpGet httpget = new HttpGet(this.url + query);
-
-			// adding headers to request
-			for (String name : headers.keySet()) {
-				httpget.addHeader(name, headers.get(name));
-			}
-
-			// add basic auth header
-			if (this.username != null && this.password != null) {
-				String authorization = Base64.encodeBase64String((this.username+":"+this.password).getBytes());
-				authorization = authorization.replace("\r\n", ""); // line breaks can cause the request to be rejected
-				httpget.addHeader("Authorization", "Basic "+ authorization);
-			}
-
 			logger.info("Performing " + httpget.getRequestLine());
 			HttpResponse response = this.client.execute(httpget);
 			HttpEntity entity = response.getEntity();
@@ -231,11 +229,11 @@ public class HttpRestProxy implements ServiceProxy {
 			byte[] bytes = readAndClose(new BufferedInputStream(byteStream));
 			
 			result.setByteStream(new ByteArrayInputStream(bytes));
-			result.setType(	entity.getContentType().toString());
+			result.setType(entity.getContentType().toString());
 		} catch (ClientProtocolException e) {
-			throw new ServiceNotAvailableException (e);
+			throw new ServiceNotAvailableException("Error performing " + httpget.getRequestLine(), e);
 		} catch (IOException e) {
-			throw new ServiceNotAvailableException (e);
+			throw new ServiceNotAvailableException("Error performing " + httpget.getRequestLine(), e);
 		} finally {
 			// We don't want to shut down!
 			// this.client.getConnectionManager().shutdown();
@@ -244,29 +242,23 @@ public class HttpRestProxy implements ServiceProxy {
 		return result;
 	}
 	
-	byte[] readAndClose(InputStream is){    
-	    byte[] bucket = new byte[32*1024]; 
-	    ByteArrayOutputStream result = null; 
-	    try  {
-	      try {
-	        result = new ByteArrayOutputStream();
-	        int bytesRead = 0;
-	        while(bytesRead != -1){
-	          bytesRead = is.read(bucket);
-	          if(bytesRead > 0){
-	            result.write(bucket, 0, bytesRead);
-	          }
-	        }
-	      }
-	      finally {
-	    	is.close();
-	    	result.close();
-	      }
-	    }
-	    catch (IOException e){
-	      logger.error("Could not download file.", e);
-	    }
-	    return result.toByteArray();
+	private byte[] readAndClose(InputStream is) throws IOException {    
+		byte[] bucket = new byte[32 * 1024];
+		ByteArrayOutputStream result = null;
+		try {
+			result = new ByteArrayOutputStream();
+			int bytesRead = 0;
+			while (bytesRead != -1) {
+				bytesRead = is.read(bucket);
+				if (bytesRead > 0) {
+					result.write(bucket, 0, bytesRead);
+				}
+			}
+		} finally {
+			is.close();
+			result.close();
+		}
+		return result.toByteArray();
 	}
 
 	/*
@@ -291,8 +283,7 @@ public class HttpRestProxy implements ServiceProxy {
 	 * String, java.lang.String)
 	 */
 	@Override
-	public int post(String query, String content)
-			throws ServiceNotAvailableException {
+	public int post(String query, String content) throws ServiceNotAvailableException {
 		return post(query, content, "application/json");
 	}
 	
@@ -302,20 +293,23 @@ public class HttpRestProxy implements ServiceProxy {
 		int status = HttpStatus.SC_OK;
 		this.client = this.getConnection(query);
 
+		HttpPost httppost = new HttpPost(this.url + query);
+		
 		try {
-			// execute the POST
-			HttpPost httppost = new HttpPost(this.url + query);
 			StringEntity contentEntity = new StringEntity(content, "UTF-8");
 			contentEntity.setContentType(contentType);
 			httppost.setEntity(contentEntity);
+		} catch (UnsupportedEncodingException e) {
+			throw new ServiceNotAvailableException("Error performing " + httppost.getRequestLine(), e);
+		}
 
-			// add basic auth header
-			if (this.username != null && this.password != null) {
-				String authorization = Base64.encodeBase64String((this.username+":"+this.password).getBytes());
-				authorization = authorization.replace("\r\n", ""); // line breaks can cause the request to be rejected 
-				httppost.addHeader("Authorization", "Basic "+ authorization);
-			}
+		// add basic auth header
+		String authorization = getBasicAuthorization();
+		if (authorization != null) {
+			httppost.addHeader("Authorization", "Basic "+ authorization);
+		}
 
+		try {
 			logger.info("Performing " + httppost.getRequestLine() + "\nPayload:" + content);
 			HttpResponse response = this.client.execute(httppost);
 			HttpEntity entity = response.getEntity();
@@ -326,39 +320,35 @@ public class HttpRestProxy implements ServiceProxy {
 
 			EntityUtils.consume(entity);
 		} catch (ClientProtocolException e) {
-			throw new ServiceNotAvailableException (e);
+			throw new ServiceNotAvailableException("Error performing " + httppost.getRequestLine(), e);
 		} catch (IOException e) {
-			throw new ServiceNotAvailableException (e);
+			throw new ServiceNotAvailableException("Error performing " + httppost.getRequestLine(), e);
 		} finally {
 			// We don't want to shut down!
 			// this.client.getConnectionManager().shutdown();
 		}
+		
 		return status;
 	}
 	
-	public String postAndGetResponse(String query, String content, String contentType, String auth)
+	public String postAndGetResponse(String query, String content, String contentType)
 			throws ServiceNotAvailableException, IOException {
 
 		this.client = this.getConnection(query);
 		HttpResponse response = null;
-		
+
+		HttpPost httppost = new HttpPost(this.url + query);
+		StringEntity contentEntity = new StringEntity(content, "UTF-8");
+		contentEntity.setContentType(contentType);
+		httppost.setEntity(contentEntity);
+
+		// add basic auth header
+		String authorization = getBasicAuthorization();
+		if (authorization != null) {
+			httppost.addHeader("Authorization", "Basic "+ authorization);
+		}
+
 		try {
-			// execute the POST
-			HttpPost httppost = new HttpPost(this.url + query);
-			StringEntity contentEntity = new StringEntity(content, "UTF-8");
-			contentEntity.setContentType(contentType);
-			if (!auth.equalsIgnoreCase("")) {
-				httppost.addHeader("Authorization",auth);
-			}
-			httppost.setEntity(contentEntity);
-
-			// add basic auth header
-			if (this.username != null && this.password != null) {
-				String authorization = Base64.encodeBase64String((this.username+":"+this.password).getBytes());
-				authorization = authorization.replace("\r\n", ""); // line breaks can cause the request to be rejected 
-				httppost.addHeader("Authorization", "Basic "+ authorization);
-			}
-
 			logger.info("Performing " + httppost.getRequestLine() + "\nPayload:" + content);
 			response = this.client.execute(httppost);
 			
@@ -371,17 +361,17 @@ public class HttpRestProxy implements ServiceProxy {
 				EntityUtils.consume(entity);
 				return null;
 			}
-			//throw new ServiceNotAvailableException (e);
 		} catch (IOException e) {
 			if (response != null) {
 				HttpEntity entity = response.getEntity();
 				EntityUtils.consume(entity);
 			}
-			throw new ServiceNotAvailableException (e);
+			throw new ServiceNotAvailableException("Error performing " + httppost.getRequestLine(), e);
 		} finally {
 			// We don't want to shut down!
 			// this.client.getConnectionManager().shutdown();
 		}
+		
 		return null;
 	}
 
@@ -397,17 +387,15 @@ public class HttpRestProxy implements ServiceProxy {
 		int status = HttpStatus.SC_OK;
 		this.client = this.getConnection(query);
 
-		// execute the DELETE
-		try {
-			HttpDelete httpDelete = new HttpDelete(this.url + query);
-			
-			// add basic auth header
-			if (this.username != null && this.password != null) {
-				String authorization = Base64.encodeBase64String((this.username+":"+this.password).getBytes());
-				authorization = authorization.replace("\r\n", ""); // line breaks can cause the request to be rejected 
-				httpDelete.addHeader("Authorization", "Basic "+ authorization);
-			}
+		HttpDelete httpDelete = new HttpDelete(this.url + query);
 
+		// add basic auth header
+		String authorization = getBasicAuthorization();
+		if (authorization != null) {
+			httpDelete.addHeader("Authorization", "Basic "+ authorization);
+		}
+
+		try {
 			logger.info("Performing " + httpDelete.getRequestLine());
 			HttpResponse response = this.client.execute(httpDelete);
 			HttpEntity entity = response.getEntity();
@@ -418,13 +406,14 @@ public class HttpRestProxy implements ServiceProxy {
 
 			EntityUtils.consume(entity);
 		} catch (ClientProtocolException e) {
-			throw new ServiceNotAvailableException (e);
+			throw new ServiceNotAvailableException("Error performing " + httpDelete.getRequestLine(), e);
 		} catch (IOException e) {
-			throw new ServiceNotAvailableException (e);
+			throw new ServiceNotAvailableException("Error performing " + httpDelete.getRequestLine(), e);
 		} finally {
 			// We don't want to shut down!
 			// this.client.getConnectionManager().shutdown();
 		}
+		
 		return status;
 	}
 
@@ -454,7 +443,7 @@ public class HttpRestProxy implements ServiceProxy {
 		}
 	}
 
-	private DefaultHttpClient createClient() {
+	private DefaultHttpClient createClient() throws ServiceNotAvailableException {
 		try {
 			DefaultHttpClient base = HttpUtils.createHttpClient();
 			SSLContext ctx = SSLContext.getInstance("SSL");
@@ -474,19 +463,18 @@ public class HttpRestProxy implements ServiceProxy {
 			};
 
 			ctx.init(null, new TrustManager[] { tm }, null);
-			SSLSocketFactory ssf = new SSLSocketFactory(ctx,
-					SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
+			SSLSocketFactory ssf = new SSLSocketFactory(ctx, SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
 			ClientConnectionManager ccm = base.getConnectionManager();
 			SchemeRegistry sr = ccm.getSchemeRegistry();
 			sr.register(new Scheme(this.scheme, this.port, ssf));
-
+			
 			return new DefaultHttpClient(ccm, base.getParams());
 
-		} catch (Exception ex) {
-			ex.printStackTrace();
-			return null;
+		} catch (KeyManagementException e) {
+			throw new ServiceNotAvailableException("Cannot create client.", e);
+		} catch (NoSuchAlgorithmException e) {
+			throw new ServiceNotAvailableException("Cannot create client.", e);
 		}
-
 	}
 
 	/* (non-Javadoc)
@@ -499,4 +487,16 @@ public class HttpRestProxy implements ServiceProxy {
 		
 	}
 	
+	/**
+	 * Encodes username and password as specified in the HTTP spec for basic authentication
+	 * @return username:password encoded in base 64
+	 */
+	protected String getBasicAuthorization() {
+		if (this.username == null || this.password == null) {
+			return null;
+		}
+		String authorization = Base64.encodeBase64String((this.username+":"+this.password).getBytes());
+		return authorization.replace("\r\n", ""); // line breaks can cause the request to be rejected 
+	}
+
 }
