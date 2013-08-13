@@ -20,16 +20,10 @@ import javax.persistence.NoResultException;
 import org.ontoware.rdf2go.model.node.Resource;
 import org.ontoware.rdf2go.model.node.URI;
 
-import eu.dime.ps.semantic.connection.ConnectionProvider;
 import eu.dime.ps.semantic.exception.RepositoryStorageException;
 import eu.dime.ps.storage.entities.Tenant;
-import eu.dime.ps.storage.manager.EntityFactory;
 
 public interface CredentialStore {
-
-    void setConnectionProvider(ConnectionProvider connectionProvider);
-
-    void setEntityFactory(EntityFactory entityFactory);
 
     /**
      * Returns password to authenticate in PS2PS (di.me) communication
@@ -114,7 +108,8 @@ public interface CredentialStore {
      * @param saidRemote said of contact
      * @return
      */
-    public String getUriForAccountName(String saidLocal, String saidRemote);
+	public String getUriForAccountName(String saidLocal, String saidRemote, Tenant tenant);
 
     public void tryCreateAccountCredentials(Resource sender, Collection<URI> recipients, Tenant tenant);
+
 }

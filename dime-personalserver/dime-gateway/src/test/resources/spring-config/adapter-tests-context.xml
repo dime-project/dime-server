@@ -12,7 +12,6 @@
 	<!-- credentialStore is a Singleton -->
 	<bean id="credentialStore" class="eu.dime.ps.gateway.auth.impl.CredentialStoreImpl" factory-method="getInstance" lazy-init="false" scope="singleton">
 		<property name="entityFactory" ref="entityFactory"/>
-		<property name="connectionProvider" ref="connectionProvider"></property>
 	</bean>
 	
 	<bean id="transformer" 

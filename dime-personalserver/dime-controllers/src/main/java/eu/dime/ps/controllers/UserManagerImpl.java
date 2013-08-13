@@ -458,34 +458,32 @@ public class UserManagerImpl implements UserManager {
     @Override
     public User add(String said, URI accountUri) throws InfosphereException {
         Tenant tenant;
-        try{
+        try {
             tenant = TenantHelper.getCurrentTenant();
-        }catch(TenantNotFoundException ex){
-            throw new InfosphereException("Cannot add contact with said '" + said + "': tenant not found.\n"+ex.getMessage(), ex);
+        } catch (TenantNotFoundException e) {
+            throw new InfosphereException("Cannot add contact with said '" + said + "'.", e);
         }
 
         User user = User.findByTenantAndByUsername(tenant, said);
         if (user != null) {
-            throw new InfosphereException("Cannot add contact with said '" + said + "' [tenant=" + tenant.getId() + "]:"
-                    + " there's already another User with id " + user.getId());
-        }
-
-        try {
-            // creating GUEST of the tenant
-            // password is set to NULL, and the user is disabled until an item is shared with them
-            user = entityFactory.buildUser();
-            user.setUsername(said);
-            user.setPassword(null);
-            user.setEnabled(false);
-            user.setRole(Role.GUEST);
-            user.setAccountUri(accountUri.toString());
-            user.setTenant(tenant);
-            user.merge();
-            user.flush();
-            logger.debug("Created new user [id=" + user.getId() + ", username=" + user.getUsername() + ", role=" + user.getRole() + "]");
-        } catch (IllegalArgumentException e) {
-            // FIXME what to do if the User fails to be created in the db? should we remove the
-            // resources from the database?
+        	if (!user.getAccountUri().equals(accountUri)) {
+                throw new InfosphereException("Cannot add contact with said '" + said + "' and accountUri " + accountUri
+                		+ " [tenant=" + tenant.getId() + "]:"
+                        + " there's already another User with id " + user.getId() + " whose accountUri is " + user.getAccountUri());
+        	}
+        } else {
+	        // creating GUEST of the tenant
+	        // password is set to NULL, and the user is disabled until an item is shared with them
+	        user = entityFactory.buildUser();
+	        user.setUsername(said);
+	        user.setPassword(null);
+	        user.setEnabled(false);
+	        user.setRole(Role.GUEST);
+	        user.setAccountUri(accountUri.toString());
+	        user.setTenant(tenant);
+	        user.merge();
+	        user.flush();
+	        logger.debug("Created new user [id=" + user.getId() + ", username=" + user.getUsername() + ", role=" + user.getRole() + "]");
         }
 
         return user;

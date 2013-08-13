@@ -156,7 +156,7 @@ public class PSServicesControllerTest {
 		
 		// CredentialStore
 		when(credentialStore.getUriForName(RECEIVER)).thenReturn(RECEIVER_URI);
-		when(credentialStore.getUriForAccountName(RECEIVER, SENDER)).thenReturn(SENDER_URI);
+		when(credentialStore.getUriForAccountName(RECEIVER, SENDER, tenant)).thenReturn(SENDER_URI);
 		when(credentialStore.getPassword(RECEIVER, SENDER, tenant)).thenReturn(PASSWORD);
 		
 		
@@ -204,7 +204,7 @@ public class PSServicesControllerTest {
 		
 		// CredentialStore
 		when(credentialStore.getUriForName(RECEIVER)).thenReturn(RECEIVER_URI);
-		when(credentialStore.getUriForAccountName(RECEIVER, SENDER)).thenReturn(null);
+		when(credentialStore.getUriForAccountName(RECEIVER, SENDER, tenant)).thenReturn(null);
 		when(credentialStore.getPassword(RECEIVER, SENDER, tenant)).thenReturn(null);
 		
 		// Mocking: DimeServiceAdapter

@@ -182,11 +182,8 @@
 	    	<property name="policyStore" ref="policyStore"/>
 	</bean>
 	
-	
-	
 	<bean id="credentialStore" class="eu.dime.ps.gateway.auth.impl.CredentialStoreImpl" factory-method="getInstance">
 		<property name="entityFactory" ref="entityFactory"/>
-		<property name="connectionProvider" ref="connectionProvider"></property>
 	</bean>
 	
 </beans>

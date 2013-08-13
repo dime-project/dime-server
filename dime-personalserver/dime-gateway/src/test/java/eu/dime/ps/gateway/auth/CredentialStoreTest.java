@@ -17,15 +17,14 @@
  */
 package eu.dime.ps.gateway.auth;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.fail;
+import static org.mockito.Mockito.when;
 
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mock;
-import static org.mockito.Mockito.*;
 import org.mockito.MockitoAnnotations;
-import org.openrdf.repository.RepositoryException;
 
 import eu.dime.ps.gateway.auth.impl.CredentialStoreImpl;
 import eu.dime.ps.semantic.connection.Connection;
@@ -40,7 +39,7 @@ import eu.dime.ps.storage.manager.EntityFactory;
 @Ignore
 public class CredentialStoreTest {
 
-	private CredentialStore credentialStore;
+	private CredentialStoreImpl credentialStore;
 	
 	@Mock ConnectionProvider connectionProvider;
 	@Mock EntityFactory entityFactory;
@@ -56,9 +55,8 @@ public class CredentialStoreTest {
 		when(connectionProvider.getConnection("test")).thenReturn(connection);
 		
 		credentialStore = new CredentialStoreImpl();
-		
 		credentialStore.setEntityFactory(entityFactory);
-		credentialStore.setConnectionProvider(connectionProvider);
+		
         setupTenant();
 	}
 

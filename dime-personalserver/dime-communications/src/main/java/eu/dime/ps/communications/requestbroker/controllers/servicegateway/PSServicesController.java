@@ -17,7 +17,6 @@ package eu.dime.ps.communications.requestbroker.controllers.servicegateway;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.UUID;
 
 import javax.persistence.NoResultException;
 import javax.ws.rs.Consumes;
@@ -186,7 +185,7 @@ public class PSServicesController {
 	}
 
 	private Response requestSharedObject(ExternalNotificationDTO jsonNotification)
-			throws UnsupportedEncodingException {
+			throws UnsupportedEncodingException, ServiceException, InfosphereException, RepositoryStorageException {
 
 		String saidNameSender = jsonNotification.getSaidSender();
 		String saidNameReceiver = jsonNotification.getSaidReciever();
@@ -206,12 +205,11 @@ public class PSServicesController {
 		}
 
 		// Get URI Sender
-		saidUriSender = credentialStore.getUriForAccountName(saidNameReceiver, saidNameSender);
+		saidUriSender = credentialStore.getUriForAccountName(saidNameReceiver, saidNameSender, TenantHelper.getCurrentTenant());
 
 		if (saidUriSender != null) {
 			try {
-				password = credentialStore.getPassword(saidUriReceiver,
-						saidUriSender, TenantHelper.getCurrentTenant());
+				password = credentialStore.getPassword(saidUriReceiver, saidUriSender, TenantHelper.getCurrentTenant());
 			} catch (NoResultException e) {
 				logger.info("Could not find password to authenticate request [sender=" + saidUriSender
 						+ ", receiver=" + saidUriReceiver + "]. A password will be requested to access the other PS.");
@@ -219,14 +217,8 @@ public class PSServicesController {
 		}
 
 		if (password == null || password.equals("")) {
-			try {
-				// get credentials from other PS
-				saidUriSender = this.requestCredentialsAndProfile(
-						saidNameSender, saidNameReceiver, saidUriReceiver);
-			} catch (Exception e) {
-				// FIXME
-				logger.warn("Catched exception when trying to retrieve credentials. Maybe no problem. ;-)", e);
-			}
+			// get credentials from other PS
+			saidUriSender = this.requestCredentialsAndProfile(saidNameSender, saidNameReceiver, saidUriReceiver);
 		} else {
 			Token token = new Token(saidNameReceiver, password);
 			try {
@@ -472,29 +464,33 @@ public class PSServicesController {
 		if (token != null) {
 			try {
 				// add contact & create guest account
-				saidUriSender = "urn:uuid:" + UUID.randomUUID();
+				saidUriSender = "urn:uuid:" + saidNameSender;
 				userManager.add(saidNameSender, new URIImpl(saidUriSender));
-			} catch (Exception e) {
-				// TODO what kind of exceptions are catched? catching all exceptions for control flow, and giving
-				// the following explanation is a bit confusing, code-wise and in the log.
-				logger.info("Could not create user. Maybe already exists. But will still try to update credentials");
-				e.printStackTrace();
-				saidUriSender = credentialStore.getUriForAccountName(saidNameReceiver, saidNameSender);
+			} catch (InfosphereException e) {
+				// TODO not very nice catching these exceptions for control flow
+				// logic here is a bit confusing, code-wise and message logged is confusing...
+				logger.debug("Could not create user. Maybe already exists. But will still try to update credentials");
+				saidUriSender = credentialStore.getUriForAccountName(saidNameReceiver, saidNameSender, TenantHelper.getCurrentTenant());
 			}
 			
-			// store credentials (given by the receiver PS) to send requests to 'receiver' account
-			credentialStore.updateCredentialsForAccount(saidUriReceiver,
-					saidUriSender, saidNameSender, token.getSecret(), TenantHelper.getCurrentTenant());
-
-			// request profile from sender
-			requestProfile(token, saidNameSender, saidUriSender, saidUriReceiver);
-
-			// FIXME [Marcel] what happens if confirmToken returns false? shouldn't
-			// we do something here? some simple recovery mechanishm or at least 
-			// showing an error to the user??
-
-			// confirming token was received (to the sender PS)
-			adapter.confirmToken(token);
+			if (saidUriSender == null) {
+				throw new InfosphereException("Account URI couldn't be found for sender '" + saidNameSender
+						+ "', being '" + saidNameReceiver + "' the receiver's account name.");
+			} else {
+				// store credentials (given by the receiver PS) to send requests to 'receiver' account
+				credentialStore.updateCredentialsForAccount(saidUriReceiver,
+						saidUriSender, saidNameSender, token.getSecret(), TenantHelper.getCurrentTenant());
+	
+				// request profile from sender
+				requestProfile(token, saidNameSender, saidUriSender, saidUriReceiver);
+	
+				// FIXME [Marcel] what happens if confirmToken returns false? shouldn't
+				// we do something here? some simple recovery mechanishm or at least 
+				// showing an error to the user??
+	
+				// confirming token was received (to the sender PS)
+				adapter.confirmToken(token);
+			}
 		}
 
 		return saidUriSender;

@@ -15,7 +15,6 @@
 package eu.dime.ps.gateway.auth.impl;
 
 import java.util.Collection;
-import java.util.List;
 
 import javax.persistence.NoResultException;
 
@@ -25,7 +24,6 @@ import org.ontoware.rdf2go.model.node.URI;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import eu.dime.ps.gateway.auth.CredentialStore;
-import eu.dime.ps.semantic.connection.ConnectionProvider;
 import eu.dime.ps.semantic.exception.RepositoryStorageException;
 import eu.dime.ps.storage.entities.AccountCredentials;
 import eu.dime.ps.storage.entities.ServiceAccount;
@@ -39,33 +37,22 @@ import eu.dime.ps.storage.manager.EntityFactory;
  * @author marcel
  *
  */
-public class CredentialStoreImpl implements CredentialStore{
+public class CredentialStoreImpl implements CredentialStore {
 			
-	private Logger logger = Logger.getLogger(CredentialStore.class);
+	private Logger logger = Logger.getLogger(CredentialStoreImpl.class);
 	
 	private static CredentialStore instance;
 		
 	private EntityFactory entityFactory;
 			
-	private ConnectionProvider connectionProvider;
-	
-	@Autowired
-	public void setConnectionProvider(ConnectionProvider connectionProvider) {
-		this.connectionProvider = connectionProvider;
-	}
-
 	@Autowired
 	public void setEntityFactory(EntityFactory entityFactory) {
 		this.entityFactory = entityFactory;
 	}
 
-	public CredentialStoreImpl(){
+	public CredentialStoreImpl() {
 		super();
 	}
-	
-
-
-	
 	
 	@Override
 	public void storeCredentialsForAccount(
@@ -121,14 +108,6 @@ public class CredentialStoreImpl implements CredentialStore{
 		serviceProvider.flush();	
 	}
 	
-	private String encode(String plaintext){
-		return plaintext; //TODO:encode
-	}
-	
-	private String decode(String chiffre){
-		return chiffre;	//TODO:decode
-	}
-		
 	@Override
 	public String getAccessToken(String accountId, Tenant tenant) throws NoResultException{
 		ServiceAccount sa = ServiceAccount.findAllByTenantAndAccountUri(tenant, accountId);
@@ -276,24 +255,20 @@ public class CredentialStoreImpl implements CredentialStore{
 	}
 
 	@Override
-	public String getUriForAccountName(String saidLocal,
-			String saidRemote) {
-		ServiceAccount sa = ServiceAccount.findByName(saidLocal);
-		if (sa == null){
-			throw new NoResultException("No (local) ServiceAccount found for said:"+saidLocal);
-		}
-		AccountCredentials ac = AccountCredentials.findAllByTenantAndBySourceAndByTarget(sa.getTenant(), sa, saidRemote);
-		if (ac == null){
-			List<User> users = User.findAllByUsername(saidRemote);
-			for (User user : users) {
-				if (user.getTenant().getId().equals(sa.getTenant().getId())){
-					return user.getAccountUri();
-				}
-			} 
-			logger.info("AccountCredentials not found for sa:"+saidRemote);
+	public String getUriForAccountName(String saidLocal, String saidRemote, Tenant tenant) {
+		// TODO replace with a findByTenantAndByName
+		ServiceAccount sourceAccount = ServiceAccount.findByName(saidLocal);
+		if (sourceAccount == null) {
+			logger.debug("No ServiceAccount instance found for said " + saidLocal + ". Returning null.");
 			return null;
-		} else {
+		}
+		
+		AccountCredentials ac = AccountCredentials.findAllByTenantAndBySourceAndByTarget(tenant, sourceAccount, saidRemote);
+		if (ac != null) {
 			return ac.getTargetUri();
+		} else {
+			User user = User.findByTenantAndByUsername(tenant, saidRemote);
+			return user == null ? null : user.getAccountUri();
 		}
 	}
 

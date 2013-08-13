@@ -212,7 +212,7 @@ public class PSServicesControllerTestIt extends Assert {
 
 		//FIXME mocking credential store
 		when(credentialStore.getUriForName(RECEIVER)).thenReturn(RECEIVER_URI);	
-		when(credentialStore.getUriForAccountName(RECEIVER, SENDER)).thenReturn(SENDER_URI);
+		when(credentialStore.getUriForAccountName(RECEIVER, SENDER, tenant)).thenReturn(SENDER_URI);
 		when(credentialStore.getPassword(RECEIVER_URI, SENDER_URI, tenant)).thenReturn(PASS);
 
 		//mocking DimeServiceAdapter
