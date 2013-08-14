@@ -4989,7 +4989,7 @@ Dime.DetailDialog.prototype = {
                     addAgentsToContainer(profileContainerList, aclPackage.personItems);
                     addAgentsToContainer(profileContainerList, aclPackage.serviceItems);
 
-                    var profileContainer = createAgentListItem("shared with:", pName, pImage, "metaDataShareProfile")
+                    var profileContainer = createAgentListItem("shared as:", pName, pImage, "metaDataShareProfile")
                     .append(profileContainerList);
 
                     editDlgRef.itemsItemSection.append(profileContainer);

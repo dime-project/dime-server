@@ -112,7 +112,8 @@ DimeView = {
        
         jElement.mouseoverExt(DimeView, DimeView.showMouseOver, entry, isGroupItem);
         jElement.mouseoutExt(DimeView, DimeView.hideMouseOver, entry);
-
+        
+        //FIX: add additional handler for situations
         if(isGroupItem){
             jElement.clickExt(DimeView, DimeView.showGroupMembers, entry);
         }else if (entry.type===Dime.psMap.TYPE.PERSON){
@@ -1206,7 +1207,7 @@ DimeView = {
 
                 var pACategory = this;
                 var link= $('<a tabindex="-1" href="#" />')
-                .text('New '+pACategory.caption+' ..')
+                .append('<span style="margin-left: 5px;">- '+pACategory.caption+' ..</span>')
                 .clickExt(Dime.Dialog,function(){
                         var newItem = Dime.psHelper.createNewItem(type, "My "+pACategory.caption);
                         newItem.category=pACategory.name;

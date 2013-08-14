@@ -1367,7 +1367,7 @@ input[type="checkbox"] {
     color: darkgray;
     border-bottom: 1px solid silver;
     margin-top: 5px;
-    text-align: center;
+    padding-left: 15px;
 }
 
 .newScreenButton {
@@ -2063,10 +2063,7 @@ input[type="checkbox"] {
 }
 
 .metaDataShareProfile{
-    border-top: 1px solid #5A9DD5;
-    border-left: 1px solid #5A9DD5;
     background-color: #EFEFEF;
-
     height: 100%;
     max-height: 125px;
     overflow-y: hidden;
