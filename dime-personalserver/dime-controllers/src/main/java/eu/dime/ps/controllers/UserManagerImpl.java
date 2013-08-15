@@ -242,14 +242,12 @@ public class UserManagerImpl implements UserManager {
         if (userRegister.getEmailAddress() != null) {
 	        EmailAddress email = modelFactory.getNCOFactory().createEmailAddress();
 	        email.setEmailAddress(userRegister.getEmailAddress());
-                email.setPrefLabel("Email");
 	        profile.setEmailAddress(email);
 	        profile.getModel().addAll(email.getModel().iterator());
         }
 
         // set profile's label
-        String username = userRegister.getUsername();
-        profile.setPrefLabel(username + "@di.me");
+        profile.setPrefLabel(userRegister.getFirstname() + " " + userRegister.getLastname());
         
         return profile;
     }
@@ -438,14 +436,16 @@ public class UserManagerImpl implements UserManager {
         }
 
         String name = contact.getPrefLabel();
+        if (name == null) {
+        	name = "Undefined";
+        }
 
         Account account = modelFactory.getDAOFactory().createAccount(accountUri);
         account.setAccountType(DimeServiceAdapter.NAME);
-        account.setPrefLabel(name + "@" + DimeServiceAdapter.NAME);
-
+        account.setPrefLabel(name);
 
         contact.getModel().addStatement(contact, NIE.dataSource, account);
-        contact.setPrefLabel(name + "@" + DimeServiceAdapter.NAME);
+        contact.setPrefLabel(name);
 
         Person person = personManager.create(contact);
 

@@ -15,6 +15,7 @@
 package eu.dime.ps.controllers.infosphere.manager;
 
 import ie.deri.smile.rdf.util.ModelUtils;
+import ie.deri.smile.rdf.util.ResourceUtils;
 import ie.deri.smile.vocabulary.NAO;
 import ie.deri.smile.vocabulary.NCO;
 import ie.deri.smile.vocabulary.NSO;
@@ -25,7 +26,6 @@ import java.util.Collection;
 import java.util.List;
 
 import org.ontoware.aifbcommons.collection.ClosableIterator;
-import org.ontoware.rdf2go.model.Model;
 import org.ontoware.rdf2go.model.QueryRow;
 import org.ontoware.rdf2go.model.node.Node;
 import org.ontoware.rdf2go.model.node.URI;
@@ -199,14 +199,6 @@ public class ProfileCardManagerImpl extends PrivacyPreferenceManager<PrivacyPref
 				if (rowIt.hasNext()) {
 					URI property = rowIt.next().getValue("property").asURI();
 					
-					if (property.equals(NCO.hasPersonName)) {
-						Model nameModel = resourceStore.get(attribute.asURI(), propertiesToFetch).getModel();
-						Node fullname = ModelUtils.findObject(nameModel, attribute, NCO.fullname);
-						if (fullname != null) {
-							profile.setPrefLabel(fullname.asLiteral().getValue());
-						}
-					}
-
 					// relate profile and attribute
 					profile.getModel().addStatement(profile, property, attribute);
 					
@@ -220,6 +212,12 @@ public class ProfileCardManagerImpl extends PrivacyPreferenceManager<PrivacyPref
 			}
 		}
 		attributesIt.close();
+		
+		// set a nao:prefLabel for the profile
+		String prefLabel = ResourceUtils.guessPreferredLabel(profile.getModel(), profile, false);
+		if (prefLabel != null) {
+			profile.setPrefLabel(prefLabel);
+		}
 		
 		return profile;
 	}
