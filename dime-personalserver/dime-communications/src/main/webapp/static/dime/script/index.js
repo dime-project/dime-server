@@ -363,7 +363,7 @@ DimeView = {
         jChildItem.append(DimeView.createMark(entry, "", false));
         
         //innerChild - name
-        var entryName = DimeView.getShortName(entry.name);
+        var entryName = DimeView.getShortNameWithLength(entry.name, 30);
         
         
         if (entry.type!==Dime.psMap.TYPE.USERNOTIFICATION){
@@ -420,7 +420,9 @@ DimeView = {
         if (selectingGroupName){
             containerCaption += ' in "' +selectingGroupName+'"';
         }else if (DimeView.searchFilter.length===0){
-            containerCaption = "All "+containerCaption;
+            if(jContainer.selector !== "#groupNavigation"){
+                containerCaption = "All "+containerCaption;
+            }
         }
 
         jContainer.empty();
@@ -702,6 +704,7 @@ DimeView = {
 
         var informationViewContainer = DimeView.getMetaListContainer(DimeView.CONTAINER_ID_INFORMATION);  
         
+        console.log(entry);
         //informationViewContainer.append(DimeView.createMetaBarListItem(entry.name,"", entry.imageUrl));
         informationViewContainer.append(DimeView.createMetaBarListItem(DimeView.getShortNameWithLength(entry.name, 35), "", entry.imageUrl));
         informationViewContainer.append(DimeView.createMetaBarListItem(
@@ -712,7 +715,7 @@ DimeView = {
             var setProviderName=function(response){
                 if (response){
                 informationViewContainer.append(DimeView.createMetaBarListItem(
-                    "provided by:", response.name, response.imageUrl));
+                    "shared by:", response.name, response.imageUrl));
                 }
             };
             Dime.REST.getItem(entry.userId, Dime.psMap.TYPE.PERSON, setProviderName, '@me', this);

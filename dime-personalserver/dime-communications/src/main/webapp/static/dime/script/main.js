@@ -5455,7 +5455,7 @@ Dime.ShareDialog.prototype={
         
          
         var showAddItemsDlg=function(event, jqueryItem){
-            var dialog = new Dime.SelectDialog("Share With", "Select Items", true);
+            var dialog = new Dime.SelectDialog("Share With", "Items", true);
        
             var itemLoadingFunction = function(){   
 

@@ -712,13 +712,17 @@ input[type="file"] {
 }
 
 .listElementTextValue:hover {
+    /*
     text-decoration: underline;
     cursor: pointer;
+    */
 }
 
 .listElementTextName:hover {
+    /*
     text-decoration: underline;
     cursor: pointer;
+    */
 }
 
 .listElementIcon {
@@ -2057,9 +2061,11 @@ input[type="checkbox"] {
     text-align: center;
 }
 .metaDataShareArea span:hover {
+    /*
     text-decoration: underline;
     color: white;
     box-shadow: 2px 2px #5A9DD5;
+    */
 }
 
 .metaDataShareProfile{
