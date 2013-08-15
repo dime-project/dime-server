@@ -1421,7 +1421,7 @@ Dime.un={
                 operation: 'merge',
                 operationName: 'Merge',
                 childName: entry.unEntry.sourceName +' and '+entry.unEntry.targetName,
-                shortCaption: "merge?"
+                shortCaption: "merge suggestion"
             };
         }else{
             return{
@@ -3859,16 +3859,19 @@ Dime.BasicDialog = function(title, caption, dialogId, bodyId, body, cancelHandle
     //footer
     .append(this.footerElement);
     
-    //HACK/TODO removeSelectionDialog()?
+    $("#lightBoxBlack").fadeIn(300);
+    
+    //TODO for each dialog -> removeSelectionDialog()?
     //add ESC(27)-key-event on dialogs to return
     var thisDialog = this.dialog;
     $(document).keyup(thisDialog, function(e) {
         if (e.keyCode == 27) {
             thisDialog.remove();
+            $("#lightBoxBlack").fadeOut(300);
+            $('body').removeClass('stop-scrolling');
         }
         $(document).unbind("keyup");
     });
-
 };
 
 //---------------------------------------------
@@ -4259,6 +4262,7 @@ Dime.DetailDialog.prototype = {
         //remove dialog if existing
         var dialog = document.getElementById(this.dialogId);
         if (dialog){
+            $("#lightBoxBlack").fadeOut(300);
             document.body.removeChild(dialog);
             if (!this.bodyWasHidden){
                 $('body').removeClass('stop-scrolling');
@@ -5180,6 +5184,18 @@ Dime.ShareDialog = function(){
     );
             
     this.initBody();
+    
+    //TODO for each dialog -> removeSelectionDialog()?
+    //add ESC(27)-key-event on dialogs to return
+    var thisDialog = this.dialog;
+    $(document).keyup(thisDialog, function(e) {
+        if (e.keyCode == 27) {
+            thisDialog.remove();
+            $("#lightBoxBlack").fadeOut(300);
+            $('body').removeClass('stop-scrolling');
+        }
+        $(document).unbind("keyup");
+    });
 
 };
 
@@ -5189,6 +5205,7 @@ Dime.ShareDialog.prototype={
         //remove dialog if existing
         var dialog = document.getElementById(this.dialogId);
         if (dialog){
+            $("#lightBoxBlack").fadeOut(300);
             document.body.removeChild(dialog);
             if (!this.bodyWasHidden){
                 $('body').removeClass('stop-scrolling');
@@ -5196,7 +5213,7 @@ Dime.ShareDialog.prototype={
         }
     },
     
-    cancelHandler:function(){        
+    cancelHandler:function(){
         this.removeDialog();  
         this.resultFunction.call(this.handlerSelf, false);
         
@@ -5207,7 +5224,7 @@ Dime.ShareDialog.prototype={
             window.alert("Please make sure a profile, a recipient and an item has been selected!");
             return;
         }
-        
+
         this.removeDialog();
         this.resultFunction.call(this.handlerSelf, true, this.selectedProfile, this.selectedReceivers, this.selectedItems);
 
@@ -5526,7 +5543,6 @@ Dime.ShareDialog.prototype={
 Dime.ConfigurationDialog = function(handlerSelf, okHandler){
     this.handlerSelf = handlerSelf;
     this.okHandler = okHandler;
-
 };
 
 Dime.ConfigurationDialog.prototype = {
@@ -5549,10 +5565,12 @@ Dime.ConfigurationDialog.prototype = {
                 
         var myOkHandler = function(){
             window.open(adapterAuthUrl, "_blank", "");
+            $("#lightBoxBlack").fadeOut(300);
             $('#ConfigServiceDialogID').remove();
         };
 
         var myCancelHandler = function() {
+            $("#lightBoxBlack").fadeOut(300);
             $('#ConfigServiceDialogID').remove();
         };
                
@@ -5766,7 +5784,6 @@ Dime.ConfigurationDialog.prototype = {
         var myOkHandler = function(){
             //getting input values and set them into account
             var val = true;
-            console.log(serviceAccount);
             for(var i=0; i<serviceAccount.settings.length; i++){
                 serviceAccount.settings[i].value = inputs[i].value();
                 val = val && inputs[i].validation();
@@ -5782,13 +5799,14 @@ Dime.ConfigurationDialog.prototype = {
             }
 
             if(val){
-
+                $("#lightBoxBlack").fadeOut(300);
                 $('#ConfigServiceDialogID').remove();
                 this.okHandler.call(this.handlerSelf, serviceAccount, isNewAccount);
             }
         };
 
         var myCancelHandler = function() {
+            $("#lightBoxBlack").fadeOut(300);
             $('#ConfigServiceDialogID').remove();
         };
 
@@ -5951,6 +5969,7 @@ Dime.Dialog={
             
     showShareWithSelection: function(selectedItems){
        
+        $("#lightBoxBlack").fadeIn(300);
         var dialog = new Dime.ShareDialog();
 
         //init dialog with selected items

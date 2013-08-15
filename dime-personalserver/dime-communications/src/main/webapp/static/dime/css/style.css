@@ -2489,6 +2489,7 @@ input[type="text"].DimeDetailDialogPAValueListItemValue{
 
 .childItemLivepostText {
     float: left;
+    width: 520px;
     margin-left: 150px;
     text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
 }
@@ -2667,27 +2668,27 @@ input[type="text"].DimeDetailDialogPAValueListItemValue{
 }
 
 .trustLevelLowThin {
-    border-bottom: 1px solid #ec1e32;
+    border-bottom: 2px solid #ec1e32;
 }
 
 .trustLevelMediumThin {
-    border-bottom: 1px solid #ebe104;
+    border-bottom: 2px solid #ebe104;
 }
 
 .trustLevelHighThin {
-    border-bottom: 1px solid #649614;
+    border-bottom: 2px solid #649614;
 }
 
 .privacyLevelLowThin {
-    border-bottom: 1px solid #e3c3d2;
+    border-bottom: 2px solid #e3c3d2;
 }
 
 .privacyLevelMediumThin {
-    border-bottom: 1px solid #cb588b;
+    border-bottom: 2px solid #cb588b;
 }
 
 .privacyLevelHighThin {
-    border-bottom: 1px solid #843559;
+    border-bottom: 2px solid #843559;
 }
 
 /* -------------------------- */
@@ -3430,4 +3431,18 @@ input[readonly].dimeDetailDialogKeyValueValue {
     float: right;
     margin-right: 10px;
     font-size: 12px;
+}
+
+#lightBoxBlack {
+    position: absolute;
+    top: 0px;  
+    left: 0px; 
+    display: none;  
+    background: #000000;  
+    opacity: 0.8;  
+    filter: alpha(opacity=90);  
+    min-width: 100%;  
+    min-height: 100%;
+    /** navigationBar has 1030 **/
+    z-index: 1031; 
 }

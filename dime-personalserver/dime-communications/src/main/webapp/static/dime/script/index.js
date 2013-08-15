@@ -1812,6 +1812,7 @@ Dime.Settings = {
     },
 
     deactivateServiceAccount: function(event, element, serviceAccount) {
+        $("#lightBoxBlack").fadeOut(300);
         $('#ConfigServiceDialogID').remove();
         var callBackHandler = function(response) {
             console.log("DELETED service " + serviceAccount.guid + " - response:", response);
@@ -1908,7 +1909,7 @@ Dime.Settings = {
                                                 (new Dime.Dialog.Toast("Please try again! - Your passwords didn't match!")).showLong();
                                             }else{
                                                 user.password=myPass;
-                                                Dime.REST.updateUser(user,Dime.Settings.updateSettings, Dime.Settings);
+                                                Dime.REST.updateUser(user, Dime.Settings.updateSettings, Dime.Settings);
                                                 (new Dime.Dialog.Toast("Password updated successfully!")).show();
                                             }
                                             myPass=null;
