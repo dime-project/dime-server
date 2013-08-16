@@ -2494,6 +2494,7 @@ input[type="text"].DimeDetailDialogPAValueListItemValue{
 }
 
 .childItemLivepostText {
+	clear: both;
     float: left;
     width: 520px;
     margin-left: 150px;
@@ -3445,10 +3446,17 @@ input[readonly].dimeDetailDialogKeyValueValue {
     left: 0px; 
     display: none;  
     background: #000000;  
-    opacity: 0.8;  
+    opacity: 0.6;  
     filter: alpha(opacity=90);  
     min-width: 100%;  
     min-height: 100%;
     /** navigationBar has 1030 **/
     z-index: 1031; 
+}
+
+.ratingStarsYour {
+	float: none;
+	margin-right: 90px;
+	margin-left: 7px;
+	cursor: pointer;
 }

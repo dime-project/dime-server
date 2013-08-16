@@ -1416,7 +1416,7 @@ Dime.un={
 
         }else if (entry.unType===Dime.psMap.UN_TYPE.MERGE_RECOMMENDATION){
             return {
-                caption: 'These contacts have the same name. You may merge them to one person',
+                caption: 'These contacts have similar profile informations. You may merge them to one person.',
                 imageUrl: 'img/metaData/merge_person.png',
                 operation: 'merge',
                 operationName: 'Merge',
@@ -4571,16 +4571,12 @@ Dime.DetailDialog.prototype = {
         listContainer.append(
             $("<li></li>")
                 .addClass("DimeDetailDialogPAValueListItem")
-                //add CSS, refactor?
-                .attr("style", "display: -webkit-box; margin-top: 5px;")
                 .append(
                     $('<span class="dimeDetailDialogKeyValueCaption"></span>').text("Rate this location: ")
                 )
                 .append(
-                    $("<div></div>")
+                    $("<span></span>")
                         .addClass("ratingStarsYour")
-                        //add CSS, refactor?
-                        .attr("style", "margin-left: 11px; width: 202px !important;")
                         .raty({
                             score: item.userRating*5,
                             cancel: true,
