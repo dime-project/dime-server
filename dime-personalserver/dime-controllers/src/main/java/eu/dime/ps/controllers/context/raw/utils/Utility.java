@@ -15,12 +15,16 @@
 package eu.dime.ps.controllers.context.raw.utils;
 
 import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 
 import eu.dime.context.model.Constants;
 import eu.dime.context.model.api.IContextElement;
 import eu.dime.context.model.impl.Factory;
+import eu.dime.ps.storage.entities.ServiceAccount;
+import eu.dime.ps.storage.entities.User;
 
 public class Utility {
 	
@@ -41,6 +45,26 @@ public class Utility {
 			}
 		}
 		return index;
+	}
+	
+	public static ServiceAccount findBySaid(String said) {
+		List<ServiceAccount> accts = ServiceAccount.findAll();
+		Iterator<ServiceAccount> it = accts.iterator();
+		while (it.hasNext()) {
+			ServiceAccount sa = it.next();
+			if (sa.getAccountURI().equalsIgnoreCase(said)) return sa;
+		}
+		return null;
+	}
+	
+	public static User findByUsername(String username) {
+		List<User> users = User.findAll();
+		Iterator<User> it = users.iterator();
+		while (it.hasNext()) {
+			User u = it.next();
+			if (u.getUsername().equalsIgnoreCase(username)) return u;
+		}
+		return null;
 	}
 
 }

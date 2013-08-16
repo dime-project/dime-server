@@ -39,6 +39,7 @@ import eu.dime.ps.contextprocessor.IContextProcessor;
 import eu.dime.ps.contextprocessor.impl.RawContextNotification;
 import eu.dime.ps.controllers.TenantContextHolder;
 import eu.dime.ps.controllers.TenantManager;
+import eu.dime.ps.controllers.context.raw.utils.Utility;
 import eu.dime.ps.controllers.exception.InfosphereException;
 import eu.dime.ps.controllers.infosphere.manager.AccountManager;
 import eu.dime.ps.controllers.infosphere.manager.PersonManager;
@@ -142,7 +143,6 @@ public class PeersContextUpdater implements LiveContextUpdater, IContextListener
 				logger.error("No tenant found for account " + ce.getEntity().getEntityIDAsString() + ": peers not updated");
 			} else {
 				if (ce.getScope().getScopeAsString().equalsIgnoreCase(Constants.SCOPE_PROXIMITY)) {
-					TenantContextHolder.setTenant(tenant.getId());
 					
 					try {
 						connection = connectionProvider.getConnection(tenant.getId().toString());
@@ -156,13 +156,11 @@ public class PeersContextUpdater implements LiveContextUpdater, IContextListener
 						session.setAutoCommit(false);
 						session.remove(Peers.class, DCON.nearbyPerson);
 						
-						String saidsNearby = (String)ce.getContextData().getValue(Factory.createScope(Constants.SCOPE_PROXIMITY_USERS)).getValue();
-						StringTokenizer tok = new StringTokenizer(saidsNearby,",");
+						String namesNearby = (String)ce.getContextData().getValue(Factory.createScope(Constants.SCOPE_PROXIMITY_USERS)).getValue();
+						StringTokenizer tok = new StringTokenizer(namesNearby,",");
 						while (tok.hasMoreTokens()) {
 							String said = tok.nextToken();
-							ServiceAccount sa = ServiceAccount.findAllByTenantAndAccountUri(tenant, said);
-							String username = sa.getName();
-							User u = User.findByTenantAndByUsername(tenant, username);
+							User u = Utility.findByUsername(said);
 							if (u != null) {
 								String userUri = u.getAccountUri();
 								Account account;
@@ -188,7 +186,6 @@ public class PeersContextUpdater implements LiveContextUpdater, IContextListener
 						logger.error("Peers couldn't be updated: " + e.getMessage(), e);
 					}
 					
-					TenantContextHolder.unset();
 				}
 			}
 			// TODO review if the following line should be there...

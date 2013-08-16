@@ -14,6 +14,8 @@
 
 package eu.dime.ps.controllers.context.raw.impl;
 
+import ie.deri.smile.vocabulary.DCON;
+
 import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
@@ -32,6 +34,7 @@ import eu.dime.ps.controllers.TenantContextHolder;
 import eu.dime.ps.controllers.TenantManager;
 import eu.dime.ps.controllers.context.raw.data.ContextGroup;
 import eu.dime.ps.controllers.context.raw.ifc.IContextGroupService;
+import eu.dime.ps.controllers.context.raw.utils.Utility;
 import eu.dime.ps.controllers.exception.InfosphereException;
 import eu.dime.ps.controllers.infosphere.manager.AccountManager;
 import eu.dime.ps.controllers.infosphere.manager.PersonGroupManager;
@@ -39,6 +42,7 @@ import eu.dime.ps.controllers.infosphere.manager.PersonManager;
 import eu.dime.ps.controllers.notifier.NotifierManager;
 import eu.dime.ps.semantic.model.ModelFactory;
 import eu.dime.ps.semantic.model.dao.Account;
+import eu.dime.ps.semantic.model.dcon.Peers;
 import eu.dime.ps.semantic.model.nao.Party;
 import eu.dime.ps.semantic.model.pimo.Person;
 import eu.dime.ps.semantic.model.pimo.PersonGroup;
@@ -146,13 +150,22 @@ public class ContextGroupService implements IContextGroupService {
 						}
 					}
 				}*/
-				Collection<Person> ps = personManager.getAllByAccount(member);
-				if (ps != null && ps.size() > 0) {
-					Iterator<Person> pit = ps.iterator();
-					Person p = pit.next();
-					persons.add(p);
-					logger.debug("Found member " + p.getPrefLabel() + " for adHoc group");
-				} else logger.debug("No persons found related to account: " + member);
+				
+				User u = Utility.findByUsername(member);
+				if (u != null) {
+					String userUri = u.getAccountUri();
+					Account account = accountManager.get(userUri);
+					if (account != null) {
+						Party pt = account.getCreator();
+						if (pt != null) {
+							Person p = personManager.get(pt.toString());
+							if (p != null) {
+								persons.add(p);
+								logger.debug("Found member " + p.getPrefLabel() + " for adHoc group");
+							} else logger.debug("No persons found related to account: " + member);
+						}
+					}
+				}
 			} catch (InfosphereException e) {
 				logger.debug("Member " + member + " not found: " + e.toString());
 			} 

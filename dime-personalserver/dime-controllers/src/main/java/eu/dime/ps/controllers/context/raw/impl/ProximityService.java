@@ -63,6 +63,7 @@ import eu.dime.ps.gateway.service.noauth.LocationServiceAdapter;
 import eu.dime.ps.gateway.service.noauth.ProximityServiceAdapter;
 import eu.dime.ps.semantic.model.dao.Account;
 import eu.dime.ps.semantic.model.pimo.Person;
+import eu.dime.ps.storage.entities.ServiceAccount;
 import eu.dime.ps.storage.entities.Tenant;
 
 public class ProximityService implements IProximityService, IContextListener {
@@ -77,8 +78,6 @@ public class ProximityService implements IProximityService, IContextListener {
 			
 	private IContextGroupService groupService = null;
 	private IContextProcessor contextProcessor;
-	
-	//public static HashMap<String, Person> proximityMap = new HashMap<String, Person>(); 
 	
 	private IScope userProximity = Factory.createScope(Constants.SCOPE_PROXIMITY);
 	
@@ -107,15 +106,6 @@ public class ProximityService implements IProximityService, IContextListener {
 	}
 	
 	private Account retrieveProximityAccount(Tenant t, IEntity entity) {
-		// [TI] commented code was used when service config was not yet available
-		/*if (this.accountManager != null && this.serviceGateway != null) {
-			Account proximityAccount = contextProcessor.getProximityAccount(entity.getEntityIDAsString());
-				if (proximityAccount == null) {
-					logger.debug("ServiceAccount to share proximity not found");
-					return null;
-				} else return proximityAccount;
-		}
-		return null;*/
 		if (this.accountManager != null && this.serviceGateway != null) {
 			Account adapterAccount = retrieveAdapterAccount(t);
 			if (adapterAccount == null) {
@@ -123,8 +113,6 @@ public class ProximityService implements IProximityService, IContextListener {
 				return null;
 			}
 			String accountId = this.policyManager.getPolicyString("accountId",adapterAccount.asURI().toString().replaceAll(":","-"));
-			//String accountId = "urn:uuid:j000071";
-			//String accountId = "urn:uuid:a000018";
 			if (accountId == null || accountId.equalsIgnoreCase("")) {
 				logger.debug("Configured account to share proximity not found");
 				return null;
@@ -209,8 +197,10 @@ public class ProximityService implements IProximityService, IContextListener {
 
 	private void processNotifiedData(Tenant t, IEntity entity, IContextDataset dataset) {
 		
+		TenantContextHolder.setTenant(t.getId());
+		
 		// sending notified raw data to ProximityService
-		postRawData(t,entity,dataset);
+		postRawData(t,entity,dataset); 
 		
 		Account proximityAccount = retrieveProximityAccount(t,entity);
 		if (proximityAccount == null) return;
@@ -218,7 +208,8 @@ public class ProximityService implements IProximityService, IContextListener {
 		// retrieve proximity from ProximityService
 		IContextDataset proximities = IContextDataset.EMPTY_CONTEXT_DATASET;
 		try {
-			IEntity proxEntity = Factory.createEntity(proximityAccount.asURI().toString());
+			//IEntity proxEntity = Factory.createEntity(proximityAccount.asURI().toString());
+			IEntity proxEntity = Factory.createEntity(getMySaid(proximityAccount.asURI().toString()));
 			proximities = this.contextProcessor.getContext(t, proxEntity, Factory.createScope(Constants.SCOPE_PROXIMITY), 
 					Util.getDateTime(System.currentTimeMillis() - (duration * 1000)),
 					null);
@@ -274,8 +265,6 @@ public class ProximityService implements IProximityService, IContextListener {
 			return;
 		}*/
 		
-		if (t != null) TenantContextHolder.setTenant(t.getId());
-		
 		Account proximityAccount = retrieveProximityAccount(t,entity);
 		if (proximityAccount == null) return;
 		
@@ -284,10 +273,11 @@ public class ProximityService implements IProximityService, IContextListener {
 			setServiceReference(adapterAccount, t);
 		} else {
 			logger.debug("No adapter account found for " + ProximityServiceAdapter.adapterName + " service");
-			TenantContextHolder.unset();
 			return;
 		}
-		TenantContextHolder.unset();
+		
+		String saidToProximity = getMySaid(proximityAccount.asURI().toString());
+		if (saidToProximity == null) return;
 		
 		IScope scope = null;
 		String body = null;
@@ -324,7 +314,8 @@ public class ProximityService implements IProximityService, IContextListener {
 				wfSignals = (int[])wfSignalsValues.getValue();
 			}
 			
-			body = createWfPostBody(proximityAccount.asURI().toString(),wfNames, wfSignals, wfTs, wfExp);
+			//body = createWfPostBody(proximityAccount.asURI().toString(),wfNames, wfSignals, wfTs, wfExp);
+			body = createWfPostBody(saidToProximity,wfNames, wfSignals, wfTs, wfExp);
 			
 		}
 		
@@ -347,7 +338,8 @@ public class ProximityService implements IProximityService, IContextListener {
 				btList = (String)btListValues.getValue();
 			}
 			
-			body = createBtPostBody(proximityAccount.asURI().toString(),localBt, btList, btTs, btExp);
+			//body = createBtPostBody(proximityAccount.asURI().toString(),localBt, btList, btTs, btExp);
+			body = createBtPostBody(saidToProximity,localBt, btList, btTs, btExp);
 			
 			
 		}
@@ -363,8 +355,8 @@ public class ProximityService implements IProximityService, IContextListener {
 		String response;
 		try {
 			// TI note: commented line was used before service configuration was available
-			// response = this.proximityService.postRaw(proximityAccount.asURI().toString() + "/" + scope.getScopeAsString(),body);
-			response = this.proximityService.postRaw(proximityAccount.asURI().toString() + "/" + scope.getScopeAsString(),body);
+			//response = this.proximityService.postRaw(proximityAccount.asURI().toString() + "/" + scope.getScopeAsString(),body);
+			response = this.proximityService.postRaw(saidToProximity + "/" + scope.getScopeAsString(),body);
 		} catch (AttributeNotSupportedException e) {
 			logger.error(e.toString(),e);
 			return;
@@ -392,6 +384,10 @@ public class ProximityService implements IProximityService, IContextListener {
 		}
 	
 	}
+
+	/*private String getMySaid() {
+		return null;
+	}*/
 
 	private String createBtPostBody(String ent, String localBt, String btList, String btTs, String btExp) {
 		
@@ -512,12 +508,6 @@ public class ProximityService implements IProximityService, IContextListener {
 	@Override
 	public IContextDataset getProximity(IEntity entity, Tenant t) {
 		
-		/*Account proximityAccount = contextProcessor.getProximityAccount(entity.getEntityIDAsString());
-		if (proximityAccount == null) {
-			logger.debug("ServiceAccount related to said " + entity.getEntityIDAsString() + " not found. No proximity returned");
-			return IContextDataset.EMPTY_CONTEXT_DATASET;
-		}*/
-		
 		Account proximityAccount = retrieveProximityAccount(t,entity);
 		if (proximityAccount == null) return IContextDataset.EMPTY_CONTEXT_DATASET;
 		
@@ -530,11 +520,15 @@ public class ProximityService implements IProximityService, IContextListener {
 			return IContextDataset.EMPTY_CONTEXT_DATASET;
 		}
 		
+		String saidToProximity = getMySaid(proximityAccount.asURI().toString());
+		if (saidToProximity == null) return IContextDataset.EMPTY_CONTEXT_DATASET;
+		
 		// Step 1: invoke ContextAPI to retrieve userProximity ContextML
 		//String response = helper.get(this.serviceUrl + "/" + proximityAccount.asURI().toString() + "/" + this.userProximity.getScopeAsString() + "?output=json",this.universalToken);
 		ServiceResponse[] responses = null;
 		try {
-			responses = this.proximityService.getRaw("/" + proximityAccount.asURI().toString() + "/" + this.userProximity.getScopeAsString() + "?output=json");
+			//responses = this.proximityService.getRaw("/" + proximityAccount.asURI().toString() + "/" + this.userProximity.getScopeAsString() + "?output=json");
+			responses = this.proximityService.getRaw("/" + saidToProximity + "/" + this.userProximity.getScopeAsString() + "?output=json");
 		} catch (AttributeNotSupportedException e) {
 			logger.error(e.toString(),e);
 		} catch (ServiceNotAvailableException e) {
@@ -551,6 +545,12 @@ public class ProximityService implements IProximityService, IContextListener {
 			return dataset;
 		}
 		return IContextDataset.EMPTY_CONTEXT_DATASET;
+	}
+
+	private String getMySaid(String account) {
+		ServiceAccount sa = Utility.findBySaid(account);
+		if (sa != null) return sa.getName();
+		else return null;
 	}
 
 	private IContextDataset parseCloudResponse(IEntity entity, String strResponse) {
