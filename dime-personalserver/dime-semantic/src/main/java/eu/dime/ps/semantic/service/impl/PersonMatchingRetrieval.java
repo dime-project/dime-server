@@ -255,7 +255,7 @@ public class PersonMatchingRetrieval {
 					"SELECT DISTINCT ?contact ?addrFull ?addrStr ?addrPCode ?addrPOBox ?addrExt ?addrLoc ?addrCnt ?addrReg " +		
 					"WHERE {     {?person pimo:occurrence ?contact} " ,
 					"            {?contact nie:dataSource ?dataSrc}  " ,	
-					"            { {?contact nco:hasPostalAddress ?addr} .  {?addr nao:prefLabel ?addrFull} OPTIONAL {?addr nco:streetAddress ?addrStr} OPTIONAL {?addr nco:postalcode ?addrPCode} OPTIONAL {?addr nco:pobox ?addrPOBox} OPTIONAL {?addr nco:extendedAddress ?addrExt} OPTIONAL {?addr nco:locality ?addrLoc} OPTIONAL {?addr nco:country ?addrCnt} OPTIONAL {?addr nco:region ?addrReg} } . " ,	 
+					"            { {?contact nco:hasPostalAddress ?addr} . OPTIONAL {?addr nao:prefLabel ?addrFull} OPTIONAL {?addr nco:streetAddress ?addrStr} OPTIONAL {?addr nco:postalcode ?addrPCode} OPTIONAL {?addr nco:pobox ?addrPOBox} OPTIONAL {?addr nco:extendedAddress ?addrExt} OPTIONAL {?addr nco:locality ?addrLoc} OPTIONAL {?addr nco:country ?addrCnt} OPTIONAL {?addr nco:region ?addrReg} } . " ,	 
 					"FILTER (?person "+condition+person.toSPARQL()+")",
 					"FILTER (?dataSrc "+condition+accountSource.toSPARQL()+")",
 			        "}");
@@ -264,7 +264,7 @@ public class PersonMatchingRetrieval {
 					namespaces,					
 					"SELECT DISTINCT ?contact ?addrFull ?addrStr ?addrPCode ?addrPOBox ?addrExt ?addrLoc ?addrCnt ?addrReg " +		
 					"WHERE {     {?person pimo:occurrence ?contact} " ,
-					"            { {?contact nco:hasPostalAddress ?addr} .  {?addr nao:prefLabel ?addrFull} OPTIONAL {?addr nco:streetAddress ?addrStr} OPTIONAL {?addr nco:postalcode ?addrPCode} OPTIONAL {?addr nco:pobox ?addrPOBox} OPTIONAL {?addr nco:extendedAddress ?addrExt} OPTIONAL {?addr nco:locality ?addrLoc} OPTIONAL {?addr nco:country ?addrCnt} OPTIONAL {?addr nco:region ?addrReg} } . " ,	 
+					"            { {?contact nco:hasPostalAddress ?addr} . OPTIONAL {?addr nao:prefLabel ?addrFull} OPTIONAL {?addr nco:streetAddress ?addrStr} OPTIONAL {?addr nco:postalcode ?addrPCode} OPTIONAL {?addr nco:pobox ?addrPOBox} OPTIONAL {?addr nco:extendedAddress ?addrExt} OPTIONAL {?addr nco:locality ?addrLoc} OPTIONAL {?addr nco:country ?addrCnt} OPTIONAL {?addr nco:region ?addrReg} } . " ,	 
 					"FILTER (?person "+condition+person.toSPARQL()+")",				
 			        "}");
 		}
