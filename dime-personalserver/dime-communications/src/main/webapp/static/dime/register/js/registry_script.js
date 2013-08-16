@@ -370,7 +370,7 @@ Dime.register={
             }
             if(response.meta.status.toLowerCase()!=="ok"){
                 $('#registerErrorMessage').text('Registration failed: '+response.meta.msg);
-                $('#registrationEmail')
+                $('#registrationUsername')
                         .addClass("validateFalse")
                         .on('input',function(){
                             if($(this).val().length===0){
