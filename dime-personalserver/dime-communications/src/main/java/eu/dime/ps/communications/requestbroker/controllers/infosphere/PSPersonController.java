@@ -30,6 +30,9 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.CacheControl;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.EntityTag;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.commons.lang.ArrayUtils;
@@ -46,9 +49,7 @@ import eu.dime.commons.dto.Response;
 import eu.dime.ps.controllers.UserManager;
 import eu.dime.ps.controllers.exception.InfosphereException;
 import eu.dime.ps.controllers.infosphere.manager.PersonManager;
-import eu.dime.ps.controllers.infosphere.manager.SharingManager;
 import eu.dime.ps.controllers.trustengine.utils.AdvisoryConstants;
-import eu.dime.ps.controllers.util.TenantHelper;
 import eu.dime.ps.dto.Resource;
 import eu.dime.ps.semantic.model.NCOFactory;
 import eu.dime.ps.semantic.model.nco.PersonContact;
@@ -66,8 +67,7 @@ import eu.dime.ps.semantic.model.pimo.Person;
 @Path("/dime/rest/{said}/person")
 public class PSPersonController implements APIController {
 
-	private static final Logger logger = LoggerFactory
-			.getLogger(PSPersonController.class);
+	private static final Logger logger = LoggerFactory.getLogger(PSPersonController.class);
 	
 	private static final Map<URI, String> RENAMING_RULES;
 	static {
@@ -128,27 +128,61 @@ public class PSPersonController implements APIController {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
 	@Path("/@me/{personID}")
-	public Response<Resource> getPersonById(@PathParam("said") String said,
-			@PathParam("personID") String personID) {
+	public javax.ws.rs.core.Response getPersonById(@PathParam("said") String said,
+			@PathParam("personID") String personID, @Context javax.ws.rs.core.Request req) {
 
-		logger.info("called API method: GET /dime/rest/" + said
-				+ "/person/@me/"+personID);
-		Data<Resource> data = null;
-
+		logger.info("called API method: GET /dime/rest/"+said+"/person/@me/"+personID);
+		
+		CacheControl cc = new CacheControl();
+		cc.setMaxAge(86400); // max age to one day
+		     
+		javax.ws.rs.core.Response.ResponseBuilder rb = null;
+		Person person = null;
+		
 		try {
-			Person person = "@self".equals(personID) ? personManager.getMe()
-					: personManager.get(personID);
-			// Person person= personManager.get(personID);
-			data = new Data<Resource>(0, 1, 1);
-			data.getEntries().add(new Resource(person,null,RENAMING_RULES,personManager.getMe().asURI()));
-
+			// ETag is the hash code of the resource
+			person = "@self".equals(personID) ? personManager.getMe() : personManager.get(personID);
+			EntityTag etag = new EntityTag(person.hashCode()+"");
+			 
+			// Verify if it matched with etag available in the HTTP request
+			rb = req.evaluatePreconditions(etag);
+			 
+			// If ETag matches the rb will be non-null; 
+			// Use the rb to return the response without any further processing
+			if (rb != null) {
+				return rb.cacheControl(cc).tag(etag).build();
+			}
+			 
+			// If rb is null then either it is first time request; or resource is modified
+			// Get the updated representation and return with Etag attached to it
+			Data<Resource> data = new Data<Resource>(0, 1, 1);
+			data.getEntries().add(new Resource(person, null, RENAMING_RULES, personManager.getMe().asURI()));
+			rb = javax.ws.rs.core.Response.ok(data).cacheControl(cc).tag(etag);
+			return rb.build();
 		} catch (InfosphereException e) {
-			return Response.badRequest(e.getMessage(), e);
+			// TODO return a proper JSON for the error
+			return javax.ws.rs.core.Response.serverError().build();
 		} catch (Exception e) {
-			return Response.serverError(e.getMessage(), e);
+			// TODO return a proper JSON for the error
+			return javax.ws.rs.core.Response.serverError().build();
 		}
-
-		return Response.ok(data);
+		
+//		Data<Resource> data = null;
+//
+//		try {
+//			Person person = "@self".equals(personID) ? personManager.getMe()
+//					: personManager.get(personID);
+//			// Person person= personManager.get(personID);
+//			data = new Data<Resource>(0, 1, 1);
+//			data.getEntries().add(new Resource(person,null,RENAMING_RULES,personManager.getMe().asURI()));
+//
+//		} catch (InfosphereException e) {
+//			return Response.badRequest(e.getMessage(), e);
+//		} catch (Exception e) {
+//			return Response.serverError(e.getMessage(), e);
+//		}
+//
+//		return Response.ok(data);
 	}
 
 	/**

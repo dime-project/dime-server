@@ -21,8 +21,9 @@ import org.ontoware.rdf2go.model.node.BlankNode;
 import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.model.node.impl.URIImpl;
 import org.ontoware.rdfreactor.runtime.Base;
-import org.ontoware.rdfreactor.runtime.ReactorResult;
 import org.ontoware.rdfreactor.runtime.CardinalityException;
+import org.ontoware.rdfreactor.runtime.RDFDataException;
+import org.ontoware.rdfreactor.runtime.ReactorResult;
 
 
 /**
@@ -87418,4 +87419,14 @@ public class RDFReactorThing extends org.ontoware.rdfreactor.schema.rdfs.Class {
 		Base.removeAll(this.model, this.getResource(), PREFLABEL);
 	}
 
+	@Override
+	public int hashCode() {
+		Model model = this.getModel();
+		if (model.isEmpty()) {
+			return super.hashCode();
+		} else {
+			return ie.deri.smile.rdf.util.ModelUtils.hashCode(model);
+		}
+	}
+	
  }
