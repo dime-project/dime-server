@@ -6,7 +6,6 @@
 
 	<context:annotation-config />
 
-	<bean id="dataMiningService" class="eu.dime.ps.datamining.impl.DataMiningServiceImpl" />
 	<bean id="fileDataMining" class="eu.dime.ps.datamining.impl.FileDataMiningImpl" />
 
 	<!-- enable this if persistence is required - no need for the min though -->
