@@ -20,7 +20,7 @@ import java.util.List;
 import org.ontoware.rdfreactor.schema.rdfs.Resource;
 
 import eu.dime.commons.dto.SAdapterSetting;
-import eu.dime.commons.object.ServiceMetadata;
+import eu.dime.ps.gateway.ServiceMetadata;
 import eu.dime.ps.gateway.exception.AttributeNotSupportedException;
 import eu.dime.ps.gateway.exception.InvalidDataException;
 import eu.dime.ps.gateway.exception.InvalidLoginException;

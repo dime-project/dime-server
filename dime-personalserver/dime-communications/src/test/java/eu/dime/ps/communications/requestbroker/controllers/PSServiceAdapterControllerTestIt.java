@@ -18,7 +18,6 @@ import java.util.Collection;
 import java.util.Map;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,8 +29,8 @@ import org.springframework.transaction.annotation.Transactional;
 import eu.dime.commons.dto.Data;
 import eu.dime.commons.dto.Response;
 import eu.dime.commons.dto.SAdapter;
-import eu.dime.commons.object.ServiceMetadata;
 import eu.dime.ps.communications.requestbroker.controllers.infosphere.PSServiceAdapterController;
+import eu.dime.ps.gateway.ServiceMetadata;
 import eu.dime.ps.gateway.auth.CredentialStore;
 import eu.dime.ps.gateway.impl.ServiceGatewayImpl;
 import eu.dime.ps.gateway.policy.PolicyManager;

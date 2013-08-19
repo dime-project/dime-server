@@ -16,17 +16,12 @@ package eu.dime.ps.gateway;
 
 import java.util.Map;
 
-import javax.naming.NamingException;
-
-import eu.dime.commons.object.ServiceMetadata;
 import eu.dime.ps.gateway.exception.InvalidLoginException;
 import eu.dime.ps.gateway.exception.ServiceAdapterNotSupportedException;
 import eu.dime.ps.gateway.exception.ServiceNotAvailableException;
 import eu.dime.ps.gateway.service.ServiceAdapter;
 import eu.dime.ps.gateway.service.external.DimeUserResolverServiceAdapter;
 import eu.dime.ps.gateway.service.internal.DimeServiceAdapter;
-import eu.dime.ps.semantic.exception.NotFoundException;
-import eu.dime.ps.semantic.exception.RepositoryStorageException;
 import eu.dime.ps.storage.entities.Tenant;
 
 public interface ServiceGateway {

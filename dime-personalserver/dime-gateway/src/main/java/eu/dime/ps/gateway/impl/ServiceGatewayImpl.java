@@ -27,8 +27,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import eu.dime.commons.dto.SAdapterSetting;
-import eu.dime.commons.object.ServiceMetadata;
 import eu.dime.ps.gateway.ServiceGateway;
+import eu.dime.ps.gateway.ServiceMetadata;
 import eu.dime.ps.gateway.auth.CredentialStore;
 import eu.dime.ps.gateway.exception.InvalidLoginException;
 import eu.dime.ps.gateway.exception.ServiceAdapterNotSupportedException;
@@ -65,23 +65,28 @@ public class ServiceGatewayImpl implements ServiceGateway {
 
 	private static final Logger logger = LoggerFactory.getLogger(ServiceGatewayImpl.class);
 
-	protected ConcurrentMap<String, ServiceAdapter> adapters;
-	protected ConcurrentMap<String, ServiceMetadata> supportedAdapters;
-	protected String[] hiddenAdapters;
+	private ConcurrentMap<String, ServiceAdapter> adapters;
+	private ConcurrentMap<String, ServiceMetadata> supportedAdapters;
+	private String[] hiddenAdapters;
 	
-	@Autowired
-	protected PolicyManager policyManager;
-	protected ConcurrentMap<String, Class> loadedAdapters;
+	private ConcurrentMap<String, Class> loadedAdapters;
 	
-	@Autowired
+	private PolicyManager policyManager;
+
 	private CredentialStore credentialStore;
 	
+	@Autowired
+	public void setPolicyManager(PolicyManager policyManager) {
+		this.policyManager = policyManager;
+	}
+
+	@Autowired
 	public void setCredentialStore(CredentialStore credentialStore) {
 		this.credentialStore = credentialStore;
 	}
 
 	public ServiceGatewayImpl() {
-		this.loadedAdapters = new ConcurrentHashMap<String, Class> ();
+		this.loadedAdapters = new ConcurrentHashMap<String, Class>();
 		this.loadedAdapters.putIfAbsent(AMETICDummyAdapter.adapterName, AMETICDummyAdapter.class);
 		this.loadedAdapters.putIfAbsent(DimeUserResolverServiceAdapter.NAME, DimeUserResolverServiceAdapter.class);
 		this.loadedAdapters.putIfAbsent(KMLAdapter.NAME, KMLAdapter.class);

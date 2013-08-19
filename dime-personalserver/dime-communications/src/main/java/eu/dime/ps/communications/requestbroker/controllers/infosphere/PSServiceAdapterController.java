@@ -14,7 +14,6 @@
 
 package eu.dime.ps.communications.requestbroker.controllers.infosphere;
 
-import java.util.Collection;
 import java.util.Map;
 
 import javax.ws.rs.GET;
@@ -31,10 +30,9 @@ import org.springframework.stereotype.Controller;
 import eu.dime.commons.dto.Data;
 import eu.dime.commons.dto.Response;
 import eu.dime.commons.dto.SAdapter;
-import eu.dime.commons.object.ServiceMetadata;
 import eu.dime.ps.controllers.infosphere.manager.AccountManager;
 import eu.dime.ps.gateway.ServiceGateway;
-import eu.dime.ps.semantic.model.dao.Account;
+import eu.dime.ps.gateway.ServiceMetadata;
 
 /**
  * Responsible for handling initialization of service adapter capabilities

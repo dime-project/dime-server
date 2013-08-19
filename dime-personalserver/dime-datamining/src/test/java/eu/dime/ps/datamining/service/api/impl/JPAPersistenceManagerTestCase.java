@@ -42,13 +42,13 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import eu.dime.commons.object.ServiceMetadata;
 import eu.dime.ps.datamining.service.CrawlerHandler;
 import eu.dime.ps.datamining.service.PathDescriptor;
 import eu.dime.ps.datamining.service.ServiceCrawler;
 import eu.dime.ps.datamining.service.ServiceCrawlerRegistry;
 import eu.dime.ps.datamining.service.UniqueCrawlerConstraint;
 import eu.dime.ps.gateway.ServiceGateway;
+import eu.dime.ps.gateway.ServiceMetadata;
 import eu.dime.ps.gateway.service.ServiceAdapter;
 import eu.dime.ps.semantic.connection.Connection;
 import eu.dime.ps.semantic.connection.ConnectionProvider;

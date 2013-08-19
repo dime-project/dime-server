@@ -14,7 +14,6 @@
 
 package eu.dime.commons.notifications;
 
-import eu.dime.commons.object.AbstractDimeObject;
 import eu.dime.commons.util.JaxbJsonSerializer;
 
 /**
@@ -26,7 +25,7 @@ import eu.dime.commons.util.JaxbJsonSerializer;
  * @author Marc Planaguma (BDCT)
  * 
  */
-public class DimeExternalNotification implements AbstractDimeObject {
+public class DimeExternalNotification extends Notification {
 
 	private Long id;
     private String target;

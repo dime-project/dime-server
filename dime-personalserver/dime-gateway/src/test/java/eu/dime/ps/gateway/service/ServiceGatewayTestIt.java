@@ -28,13 +28,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import eu.dime.commons.object.ServiceMetadata;
-import eu.dime.ps.gateway.ServiceGateway;
-import eu.dime.ps.gateway.exception.ServiceAdapterNotSupportedException;
-import eu.dime.ps.gateway.exception.ServiceNotAvailableException;
+import eu.dime.ps.gateway.ServiceMetadata;
 import eu.dime.ps.gateway.impl.ServiceGatewayImpl;
 import eu.dime.ps.gateway.policy.PolicyManagerImpl;
-import eu.dime.ps.gateway.service.external.AMETICDummyAdapter;
 
 /**
  * @author Sophie.Wrobel

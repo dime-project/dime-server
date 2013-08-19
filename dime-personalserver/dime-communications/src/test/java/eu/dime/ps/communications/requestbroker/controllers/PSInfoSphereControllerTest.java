@@ -14,9 +14,9 @@
 
 package eu.dime.ps.communications.requestbroker.controllers;
 
+import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyListOf;
 import static org.mockito.Matchers.anyString;
-import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import ie.deri.smile.vocabulary.DLPO;
@@ -43,7 +43,6 @@ import eu.dime.commons.dto.SAccount;
 import eu.dime.commons.notifications.DimeInternalNotification;
 import eu.dime.commons.notifications.user.UserNotification;
 import eu.dime.commons.notifications.user.UserNotificationEntry;
-import eu.dime.commons.object.ServiceMetadata;
 import eu.dime.ps.controllers.TenantManager;
 import eu.dime.ps.controllers.exception.InfosphereException;
 import eu.dime.ps.controllers.infosphere.manager.AccountManager;
@@ -60,6 +59,7 @@ import eu.dime.ps.controllers.infosphere.manager.SharingManager;
 import eu.dime.ps.controllers.notifier.NotifierManager;
 import eu.dime.ps.dto.Resource;
 import eu.dime.ps.gateway.ServiceGateway;
+import eu.dime.ps.gateway.ServiceMetadata;
 import eu.dime.ps.gateway.exception.ServiceAdapterNotSupportedException;
 import eu.dime.ps.gateway.exception.ServiceNotAvailableException;
 import eu.dime.ps.gateway.service.internal.DimeServiceAdapter;

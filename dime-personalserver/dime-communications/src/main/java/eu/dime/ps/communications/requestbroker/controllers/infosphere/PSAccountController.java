@@ -14,27 +14,9 @@
 
 package eu.dime.ps.communications.requestbroker.controllers.infosphere;
 
-import eu.dime.commons.dto.Data;
-import eu.dime.commons.dto.Request;
-import eu.dime.commons.dto.Response;
-import eu.dime.commons.dto.SAccount;
-import eu.dime.commons.dto.SAdapterSetting;
-import eu.dime.commons.object.ServiceMetadata;
-import eu.dime.ps.controllers.exception.InfosphereException;
-import eu.dime.ps.controllers.infosphere.manager.AccountManager;
-import eu.dime.ps.controllers.infosphere.manager.PersonManager;
-import eu.dime.ps.controllers.util.TenantHelper;
-import eu.dime.ps.dto.Resource;
-import eu.dime.ps.gateway.ServiceGateway;
-import eu.dime.ps.gateway.exception.ServiceAdapterNotSupportedException;
-import eu.dime.ps.gateway.exception.ServiceNotAvailableException;
-import eu.dime.ps.gateway.service.ServiceAdapter;
-import eu.dime.ps.gateway.service.noauth.PlaceServiceAdapter;
-import eu.dime.ps.gateway.service.noauth.SocialRecommenderAdapter;
-import eu.dime.ps.semantic.model.dao.Account;
-import eu.dime.ps.semantic.model.pimo.Person;
 import java.util.Collection;
 import java.util.Iterator;
+
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -42,10 +24,31 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+
+import eu.dime.commons.dto.Data;
+import eu.dime.commons.dto.Request;
+import eu.dime.commons.dto.Response;
+import eu.dime.commons.dto.SAccount;
+import eu.dime.commons.dto.SAdapterSetting;
+import eu.dime.ps.controllers.exception.InfosphereException;
+import eu.dime.ps.controllers.infosphere.manager.AccountManager;
+import eu.dime.ps.controllers.infosphere.manager.PersonManager;
+import eu.dime.ps.controllers.util.TenantHelper;
+import eu.dime.ps.dto.Resource;
+import eu.dime.ps.gateway.ServiceGateway;
+import eu.dime.ps.gateway.ServiceMetadata;
+import eu.dime.ps.gateway.exception.ServiceAdapterNotSupportedException;
+import eu.dime.ps.gateway.exception.ServiceNotAvailableException;
+import eu.dime.ps.gateway.service.ServiceAdapter;
+import eu.dime.ps.gateway.service.noauth.PlaceServiceAdapter;
+import eu.dime.ps.gateway.service.noauth.SocialRecommenderAdapter;
+import eu.dime.ps.semantic.model.dao.Account;
+import eu.dime.ps.semantic.model.pimo.Person;
 
 /**
  * Dime REST API Controller for a InfoSphere features
