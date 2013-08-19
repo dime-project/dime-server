@@ -4434,7 +4434,7 @@ Dime.DetailDialog.prototype = {
         
         var result=$('<div/>')
         .addClass("DetailDialogPrivTrustElem")
-        .append('<span >'+(currPrivTrust.isPrivacy?"How private is this:":"Trust:")+'</span>');
+        .append('<span >'+(currPrivTrust.isPrivacy?"How private is this: ":"Trust: ")+'</span>');
         if (!readOnly){
             result.append(BSTool.createDropdown(createButtonLabel(currPrivTrust),
                 dropDownElements, "btn"));

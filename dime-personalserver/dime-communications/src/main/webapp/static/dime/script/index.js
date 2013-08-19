@@ -363,8 +363,11 @@ DimeView = {
         jChildItem.append(DimeView.createMark(entry, "", false));
         
         //innerChild - name
-        var entryName = DimeView.getShortNameWithLength(entry.name, 30);
-        
+        if (entry.type===Dime.psMap.TYPE.LIVEPOST){
+            var entryName = DimeView.getShortNameWithLength(entry.name, 125);
+        }else{
+            var entryName = DimeView.getShortNameWithLength(entry.name, 30);
+        }
         
         if (entry.type!==Dime.psMap.TYPE.USERNOTIFICATION){
             jChildItem.append('<h4>'+ entryName + '</h4>');
@@ -415,7 +418,8 @@ DimeView = {
     
     itemEntries: [],
 
-    initContainer: function(jContainer, caption, selectingGroupName){
+    initContainer: function(jContainer, caption, selectingGroupName){  
+
         var containerCaption = JSTool.upCaseFirstLetter(caption);
         if (selectingGroupName){
             containerCaption += ' in "' +selectingGroupName+'"';
@@ -1502,6 +1506,9 @@ DimeView = {
     updateViewForPerson: function(event, element, entry){
         var guid = entry.guid;
         
+        //adding name next to the back-button
+        $('#currentPersonName').empty().append("Person: <b>" + entry.name + "</b>");
+
         //select the clicked person for preselection in the share-dialog
         this.clearSelectedItems();
         this.selectItem(event, element, entry, false);
@@ -1551,7 +1558,6 @@ DimeView = {
         Dime.REST.getAll(Dime.psMap.TYPE.LIVEPOST, updateLivepostContainer, guid);        
         Dime.REST.getAll(Dime.psMap.TYPE.DATABOX, updateDataboxContainer, guid);
         Dime.REST.getAll(Dime.psMap.TYPE.RESOURCE, updateResourceContainer, guid);
-        
         
     },
 
@@ -1694,6 +1700,7 @@ DimeView.addToViewMap(new DimeView.viewMapEntry('itemNavigation', false, false, 
 DimeView.addToViewMap(new DimeView.viewMapEntry('searchBox', true, false, false));
 DimeView.addToViewMap(new DimeView.viewMapEntry('metabarMetaContainer', true, false, true));
 DimeView.addToViewMap(new DimeView.viewMapEntry('backToGroupButton', false, false, true));
+DimeView.addToViewMap(new DimeView.viewMapEntry('currentPersonName', false, false, true));
 DimeView.addToViewMap(new DimeView.viewMapEntry('personProfileAttributeNavigation', false, false, true));
 DimeView.addToViewMap(new DimeView.viewMapEntry('personProfileNavigation', false, false, true));
 DimeView.addToViewMap(new DimeView.viewMapEntry('personLivepostNavigation', false, false, true));
