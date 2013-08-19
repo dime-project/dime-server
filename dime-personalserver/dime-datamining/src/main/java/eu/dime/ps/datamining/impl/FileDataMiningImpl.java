@@ -65,7 +65,7 @@ import eu.dime.ps.semantic.rdf.URIGenerator;
  * It extracts metadata from files using Aperture.
  * For a given file, a filesystem crawler is executed for the file path.
  * 
- * @author Ismael Rivera (ismael.rivera@deri.org)
+ * @author Ismael Rivera
  */
 public class FileDataMiningImpl implements FileDataMining {
 
@@ -145,7 +145,7 @@ public class FileDataMiningImpl implements FileDataMining {
 	/**
 	 * A CrawlerHandler which stores in memory the metadata about the files.
 	 * 
-	 * @author Ismael Rivera (ismael.rivera@deri.org)
+	 * @author Ismael Rivera
 	 */
 	private class TemporaryFileCrawlerHandler implements CrawlerHandler, RDFContainerFactory {
 

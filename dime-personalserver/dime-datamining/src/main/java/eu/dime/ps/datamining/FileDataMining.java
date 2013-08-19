@@ -25,7 +25,7 @@ import eu.dime.ps.datamining.exceptions.DataMiningException;
 /**
  * Extracts metadata from files.
  * 
- * @author Ismael Rivera (ismael.rivera@deri.org)
+ * @author Ismael Rivera
  */
 public interface FileDataMining {
 	
