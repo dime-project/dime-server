@@ -250,7 +250,8 @@ public class YMUtils {
  	 * @param poiElm the retrieved POI from the yellowmap.de service
  	 * @param favorites the list of POI IDs that are favorites
  	 */
-	private static void addPlace(Document doc, Element rootElement, Element poiElm, List<String> favorites) {
+	private static void addPlace(Document doc, Element rootElement, Element poiElm, List<String> favorites) 
+        {
 		Element placeElm = doc.createElement(XML_PLACE);
 		rootElement.appendChild(placeElm);
 		addElement(doc, placeElm, XML_SNAME, poiElm.getElementsByTagName("SName").item(0).getTextContent());
@@ -313,24 +314,8 @@ public class YMUtils {
 		} catch (Exception e) {
 			logger.info("Could not extract " + XML_ID + " from YMServiceAdapter response.");
 		}	
-		try {
-			// add ImageUrl, if Image exists
-			int CustID = Integer.parseInt(poiAttrMap.getNamedItem("CustID").getNodeValue());
-
-			switch (CustID) {
-			case 8:
-			case 12:
-			case 13: {
-				break;
-			}
-			default: {
-				addElement(doc, placeElm, XML_IMG_URL, "http://www.uni-siegen.de/fb5/itsec/projekte/dime/ym-pictures/" + poiAttrMap.getNamedItem("CustID").getNodeValue() + ".jpg");
-				break;
-			}
-			}
-		} catch (Exception e) {
-			logger.info("Could not extract " + "CustID" + " from YMServiceAdapter response.");
-		}
+                // ImageUrl is not delivered by the service - work around - store images on yellowmap service
+		addElement(doc, placeElm, XML_IMG_URL, "http://www.yellowmap.de/userdaten/dime/" + poiAttrMap.getNamedItem("SName").getNodeValue() + ".jpg");
 	}
 	
 	/**
