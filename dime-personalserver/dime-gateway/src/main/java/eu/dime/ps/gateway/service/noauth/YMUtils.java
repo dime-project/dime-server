@@ -41,6 +41,7 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import eu.dime.commons.dto.Place;
 import eu.dime.commons.dto.PlaceAddress;
+import eu.dime.ps.gateway.policy.PolicyManager;
 
 public class YMUtils {
 
@@ -68,6 +69,8 @@ public class YMUtils {
 	public static String XML_SNAME = "SName";
 	public static String XML_VAL_TRUE = "true";
 	public static String XML_VAL_FALSE = "false";
+        public static int[] exImageNumbers = {1,2,3,4,5,6,7,9,10,11,14,15,16,17,18,19,20,21,42,43,44,45,46,47,48,49,15292517,15292518,15292519,15292520,111308476,111308477};
+
 	
 	private static final Logger logger = LoggerFactory.getLogger(YMUtils.class);
 	
@@ -250,8 +253,7 @@ public class YMUtils {
  	 * @param poiElm the retrieved POI from the yellowmap.de service
  	 * @param favorites the list of POI IDs that are favorites
  	 */
-	private static void addPlace(Document doc, Element rootElement, Element poiElm, List<String> favorites) 
-        {
+	private static void addPlace(Document doc, Element rootElement, Element poiElm, List<String> favorites) {
 		Element placeElm = doc.createElement(XML_PLACE);
 		rootElement.appendChild(placeElm);
 		addElement(doc, placeElm, XML_SNAME, poiElm.getElementsByTagName("SName").item(0).getTextContent());
@@ -314,8 +316,17 @@ public class YMUtils {
 		} catch (Exception e) {
 			logger.info("Could not extract " + XML_ID + " from YMServiceAdapter response.");
 		}	
-                // ImageUrl is not delivered by the service - work around - store images on yellowmap service
-		addElement(doc, placeElm, XML_IMG_URL, "http://www.yellowmap.de/userdaten/dime/" + poiAttrMap.getNamedItem("SName").getNodeValue() + ".jpg");
+		try {
+			// add ImageUrl, if Image exists
+			int CustID = Integer.parseInt(poiAttrMap.getNamedItem("CustID").getNodeValue());
+                        for(int i = 0; i < exImageNumbers.length;i++)
+                        {
+                            if(CustID==exImageNumbers[i])
+                                addElement(doc, placeElm, XML_IMG_URL, "http://www.yellowmap.de/userdaten/dime/" + poiAttrMap.getNamedItem("CustID").getNodeValue() + ".jpg");
+                        }    
+		} catch (Exception e) {
+			logger.info("Could not extract " + "CustID" + " from YMServiceAdapter response.");
+		}
 	}
 	
 	/**
