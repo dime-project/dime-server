@@ -39,7 +39,7 @@
                             </div>              
                             
                             <div class="hidden btn" id="backToGroupButton" onclick="DimeView.restoreGroupView();" >back</div>
-                            <div class="hidden" id="currentPersonName">Person: </div>
+
                         </div>  
                     </div>
                     <div class="alert hidden" id="alertStatusNavigation"></div>
@@ -50,12 +50,13 @@
                     </div>
                     <div class="globalSearchResultContainer hidden" id="globalItemNavigation"> <!-- global search navigation -->
                     </div>
+                    <div class="personInformationContainer hidden" id="currentPersonOverview"></div>
                     <div class="personProfileContainer hidden" id="personProfileNavigation"></div>                    
                     <div class="personProfileAttributeContainer hidden" id="personProfileAttributeNavigation"></div>                    
                     <div class="personLivepostContainer hidden" id="personLivepostNavigation"></div>
                     <div class="personDataboxContainer hidden" id="personDataboxNavigation"></div>
                     <div class="personResourceContainer hidden" id="personResourceNavigation"></div>
-
+                    
                     <div id="settingsNavigationContainer" class="wrapSettings hidden">
                         <div class="settingsTab">
                             <img src="img/settings/collaps.png" onclick="Dime.Settings.toggleTab(this, 'generalSettingsContainer');">

@@ -682,12 +682,12 @@ DimeView = {
 
         listItem.append(
                 $('<div class="listElementText"/>')
-                    .append($('<span class="listElementTextName"/>').text(name))
+                    .append($('<span class="listElementTextName"/>').text(DimeView.getShortNameWithLength(name, 50)))
                     .append($('<span class="listElementTextValue"/>').text(value))
                 )
-                .append(listIconElement); 
+                .append(listIconElement);
+        
         return listItem;
-  
     },
 
     createMetaBarListItemForItem: function(item){
@@ -708,7 +708,6 @@ DimeView = {
 
         var informationViewContainer = DimeView.getMetaListContainer(DimeView.CONTAINER_ID_INFORMATION);  
         
-        console.log(entry);
         //informationViewContainer.append(DimeView.createMetaBarListItem(entry.name,"", entry.imageUrl));
         informationViewContainer.append(DimeView.createMetaBarListItem(DimeView.getShortNameWithLength(entry.name, 35), "", entry.imageUrl));
         informationViewContainer.append(DimeView.createMetaBarListItem(
@@ -863,7 +862,7 @@ DimeView = {
                     var pName = (profile?profile.name:"No profile for "+aclPackage.saidSender);
                     var pImage = (profile?profile.imageUrl:null);
                     var profileContainerList = $('<ul/>');
-                    var profileContainer = DimeView.createMetaBarListItem("shared as:",pName,pImage, "metaDataShareProfile")
+                    var profileContainer = DimeView.createMetaBarListItem("shared as:", pName, pImage, "metaDataShareProfile")
                         .append(profileContainerList);
                     listItemContainer.append(profileContainer);
                     addAgentsToMetaBar(profileContainerList, aclPackage.groupItems);
@@ -901,7 +900,6 @@ DimeView = {
         
         var isAgent = Dime.psHelper.isAgentType(entry.type);
         if (isAgent){
-        
             Dime.psHelper.getAllSharedItems(entry, handleSharedItemsResult);
         }else if (Dime.psHelper.isShareableType(entry.type) ){
             Dime.psHelper.getAllReceiversOfItem(entry, handleSharedToAgentResult);
@@ -1506,8 +1504,41 @@ DimeView = {
     updateViewForPerson: function(event, element, entry){
         var guid = entry.guid;
         
-        //adding name next to the back-button
-        $('#currentPersonName').empty().append("Person: <b>" + entry.name + "</b>");
+        //adding person information
+        $('#currentPersonOverview')
+            .empty()
+            .append(
+                $('<div></div>')
+                    .addClass("currentPersonImage")
+                    .append(
+                        $('<img></img>').attr("src", entry.imageUrl)
+                    )
+            )
+            .append(
+                $('<div></div>')
+                    .addClass("currentPersonInformation")
+                    .append(
+                        $('<div></div>')
+                            .addClass("personInformationName")
+                            .append(entry.name)
+                    )
+                    .append(
+                        $('<div></div>')
+                            .addClass("personInformationChange")
+                            .append("Last change: ")
+                            .append(JSTool.millisToFormatString(entry.lastModified))
+                    )
+                    .append(
+                        $('<div></div>')
+                            .addClass("personInformationTrust")
+                            .append("Trust level: ")
+                            .append(Dime.privacyTrust.getClassAndCaptionForPrivacyTrust(entry["nao:trustLevel"], false).caption)
+                            .addClass(Dime.privacyTrust.getClassAndCaptionForPrivacyTrust(entry["nao:trustLevel"], false).classString)
+                    )
+            )
+            .append(
+                $('<div></div>').addClass("clear")
+            );
 
         //select the clicked person for preselection in the share-dialog
         this.clearSelectedItems();
@@ -1558,6 +1589,13 @@ DimeView = {
         Dime.REST.getAll(Dime.psMap.TYPE.LIVEPOST, updateLivepostContainer, guid);        
         Dime.REST.getAll(Dime.psMap.TYPE.DATABOX, updateDataboxContainer, guid);
         Dime.REST.getAll(Dime.psMap.TYPE.RESOURCE, updateResourceContainer, guid);
+        
+        var updateAllSharedItems=function(response){
+            for(var i=0; i<response.length; i++){
+                //$("#test1234").append(DimeView.createItemJElement(response[i]));
+            } 
+        };
+        Dime.psHelper.getAllSharedItems(entry, updateAllSharedItems);
         
     },
 
@@ -1700,7 +1738,8 @@ DimeView.addToViewMap(new DimeView.viewMapEntry('itemNavigation', false, false, 
 DimeView.addToViewMap(new DimeView.viewMapEntry('searchBox', true, false, false));
 DimeView.addToViewMap(new DimeView.viewMapEntry('metabarMetaContainer', true, false, true));
 DimeView.addToViewMap(new DimeView.viewMapEntry('backToGroupButton', false, false, true));
-DimeView.addToViewMap(new DimeView.viewMapEntry('currentPersonName', false, false, true));
+DimeView.addToViewMap(new DimeView.viewMapEntry('currentPersonOverview', false, false, true));
+DimeView.addToViewMap(new DimeView.viewMapEntry('currentPersonLabel', false, false, true));
 DimeView.addToViewMap(new DimeView.viewMapEntry('personProfileAttributeNavigation', false, false, true));
 DimeView.addToViewMap(new DimeView.viewMapEntry('personProfileNavigation', false, false, true));
 DimeView.addToViewMap(new DimeView.viewMapEntry('personLivepostNavigation', false, false, true));

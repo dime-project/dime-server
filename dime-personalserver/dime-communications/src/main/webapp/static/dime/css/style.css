@@ -2494,11 +2494,11 @@ input[type="text"].DimeDetailDialogPAValueListItemValue{
 }
 
 .childItemLivepostText {
-	clear: both;
     float: left;
     width: 520px;
     margin-left: 150px;
     text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
+    clear: both;
 }
 
 .livepostItem:hover {
@@ -2626,11 +2626,12 @@ input[type="text"].DimeDetailDialogPAValueListItemValue{
 }
 
 #backToGroupButton{
-    margin-left: 1px;
+    width: 80px;
+    margin-left: 5px;
     background-color: #5A9DD5;
     border-radius: 5px 0 0 5px;
     color: white;
-    margin-top: 4px;
+    margin-top: 10px;
     text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
 
 }
@@ -3461,20 +3462,49 @@ input[readonly].dimeDetailDialogKeyValueValue {
 	cursor: pointer;
 }
 
-#currentPersonName {
-    margin-left: 5px;
-    width: 89%;
-    background-color: white;
-    border: 1px solid silver;	
-    border-radius: 0 5px 5px 0;
-    color: black;
-    margin-top: 4px;
-    text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
-    display: inline-block;
-    padding: 4px 10px 4px;
-    margin-bottom: 0;
-    font-size: 13px;
-    line-height: 16px;
-    vertical-align: middle;
-    cursor: pointer;
+.personInformationContainer {
+    clear: both;
+    min-height: 80px;
+    background-color: white;	
+    border: 1px solid silver;
+    overflow-y: auto;
+    overflow-x: hidden;
+    border-radius: 5px;
+    margin-top: 10px;
+    margin-bottom: 20px;
 }
+
+.currentPersonImage {
+    margin: 15px;
+    float: left;
+}
+
+.currentPersonInformation {
+    float: left;
+    margin-top: 15px;
+}
+
+.personInformationName {
+    margin: 5px;
+    font-weight: bold;
+}
+
+.personInformationChange {
+    line-height: 12px;
+    padding: 10px 5px 0px 0px;
+    font-size: 12px;
+    margin-left: 5px;
+}
+
+.personInformationTrust {
+    line-height: 12px;
+    padding: 5px 5px 1px 0px;
+    font-size: 12px;
+    margin-left: 5px;
+}
+
+.currentPersonImage > img {
+    width: 90px;
+    height: 90px;
+}
+
