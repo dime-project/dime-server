@@ -230,7 +230,7 @@ public class PolicyManagerImpl implements PolicyManager {
 		
 		globalPolicy.put(policyName, value);
 
-		// Write changes to disk
+		// Save changes
 		if (this.properties != null) {
 			this.properties.setProperty(
 					GLOBAL_PREFIX + "_" + policyName, value.toString());
