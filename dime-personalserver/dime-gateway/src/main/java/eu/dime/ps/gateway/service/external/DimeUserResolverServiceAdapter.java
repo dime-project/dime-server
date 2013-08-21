@@ -27,6 +27,8 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import net.sf.json.JSONSerializer;
 
+import org.apache.commons.httpclient.URIException;
+import org.apache.commons.httpclient.util.URIUtil;
 import org.ontoware.rdfreactor.schema.rdfs.Resource;
 import org.scribe.model.Token;
 import org.slf4j.Logger;
@@ -136,23 +138,29 @@ public class DimeUserResolverServiceAdapter extends ServiceAdapterBase implement
 	public JSONArray search(String value) throws ServiceNotAvailableException, ServiceException {
 
 		// Generate query
-		String query = "noauth/users/search?string=" + value;
+		String query;
+		try {
+			query = "noauth/users/search?string=" + URIUtil.encodeWithinQuery(value);
 
-		// Execute query
-		String responseString = this.proxy.get(query, headers);
-		JSON json = JSONSerializer.toJSON(responseString);
-
-		JSONArray jsonContacts = null;
-		
-		if (json instanceof JSONObject) {
-			jsonContacts = ((JSONObject) json).getJSONArray("result");
-		} else if (json instanceof JSONArray) {
-			jsonContacts = (JSONArray) json;
-		} else {
-			// TODO what happens in this case???
+			// Execute query
+			String responseString = this.proxy.get(query, headers);
+			JSON json = JSONSerializer.toJSON(responseString);
+	
+			JSONArray jsonContacts = null;
+			
+			if (json instanceof JSONObject) {
+				jsonContacts = ((JSONObject) json).getJSONArray("result");
+			} else if (json instanceof JSONArray) {
+				jsonContacts = (JSONArray) json;
+			} else {
+				// TODO what happens in this case???
+			}
+			
+			return jsonContacts;
+		} catch (URIException e) {
+			e.printStackTrace();
+			throw new ServiceException("010", e.getMessage(), e);
 		}
-		
-		return jsonContacts;
 	}
 
 	@Override
@@ -230,9 +238,9 @@ public class DimeUserResolverServiceAdapter extends ServiceAdapterBase implement
         DimeResolver resolverClient = new ResolverClient(resolverEndpoint.toString());
 
         Map<String, String> values = new HashMap<String, String>();
-        values.put("name", firstname);
-        values.put("surname", surname);
-        values.put("nickname", nickname);
+        values.put("name", URIUtil.encodeWithinQuery(firstname));
+        values.put("surname", URIUtil.encodeWithinQuery(surname));
+        values.put("nickname", URIUtil.encodeWithinQuery(nickname));
 
         // Register with user service //token currently not supported without idemix
         return resolverClient.register(null, firstname, surname, nickname, id);
