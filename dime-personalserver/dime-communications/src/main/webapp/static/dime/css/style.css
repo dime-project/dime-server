@@ -730,6 +730,7 @@ input[type="file"] {
     position: relative;
     top: 3px;
     margin-right: 10px;
+    margin-top: 2px;
 }
 
 .listElementIcon img {
@@ -3482,16 +3483,18 @@ input[readonly].dimeDetailDialogKeyValueValue {
 .currentPersonInformation {
     float: left;
     margin-top: 15px;
+    width: 75%;
 }
 
 .personInformationName {
     margin: 5px;
     font-weight: bold;
+    font-size: 1.8em;
 }
 
 .personInformationChange {
     line-height: 12px;
-    padding: 10px 5px 0px 0px;
+    padding: 15px 5px 0px 0px;
     font-size: 12px;
     margin-left: 5px;
 }

@@ -59,6 +59,7 @@ Dime.register={
             console.log('Unknow Error.\n' + x.responseText);
         }
     },
+    
     prepareRequest: function(entry){
 
         var myEntry = entry;
@@ -110,7 +111,6 @@ Dime.register={
         $.getJSON(callPath, "", jointCallBack);
     },
 
-
     LINK_CLASSES:{
         'linkToRegister':{
             targetId:'registerContainer',
@@ -160,6 +160,7 @@ Dime.register={
             loadUrl:'/dime-communications/static/ui/dime/register/html/privacypolicy_DE.html'
         }
     },
+    
     activateLinks: function(jStartElem){
         jQuery.each(Dime.register.LINK_CLASSES,function(k){
             var linkElements = jStartElem.find('.'+k);
@@ -194,8 +195,6 @@ Dime.register={
             Dime.register.sendRegistrationForm();
         });
         
-        
-
         //finally show containerId set from jsp if any
         if (initialContainerId){            
             Dime.register.showContainer(initialContainerId);
@@ -210,17 +209,15 @@ Dime.register={
 
             var servername = serverInfo.baseUrl.replace(exp, "$3");
 
-            $('.institutionLogo').attr('src',serverInfo.imageUrl);
+            $('.institutionLogo').attr('src', serverInfo.imageUrl);
             $('#serverNameHeader').text(serverInfo.name);
             $('.adaptAffiliation').text(serverInfo.affiliation);
             $('.adaptServerName').text(servername);
         };
+        
         Dime.register.getServerInformation(serverInfoCallBack, Dime.register);
-
-
     },
-
-
+    
     showContainer:function(newId, dontSaveNavigation){
         jQuery.each(Dime.register.LINK_CLASSES,function(key){
             
@@ -253,7 +250,7 @@ Dime.register={
 
     REGISTRATION_REQUIRED_FIELDS:{
         'registrationUsername':{
-            caption:'Please fill in a username!'
+            caption:'Please fill in a username, which contains only unicode letters or digits!'
         },
         'registrationPassword':{
             caption:'Please fill in a password!'
@@ -268,49 +265,69 @@ Dime.register={
             caption:'Please fill in a public nickname for the public DimeUserDirectory!'
         }
     },
+            
+    checkFieldWithRegExp: function(fieldId, regExp){
+        var value = $('#'+fieldId).val();
+        if(!value.match(regExp)){
+            return false;
+        }
+        return true;
+    },
 
     validateReform: function(){
         $('#registerErrorMessage').empty();
-        var warnStr ="";
-        var result=true;
+        var warnStr = "";
+        var result = true;
+        
         jQuery.each(this.REGISTRATION_REQUIRED_FIELDS, function(fieldId){
-            if ((!$('#'+fieldId).val())||$('#'+fieldId).val().length===0){
-                result=false;
-                warnStr+="Registration failed: " + this.caption + "</br>";
-                $('#'+fieldId)
-                        .addClass("validateFalse")
-                        .on('input',function(){
-                            if($(this).val().length===0){
-                                $(this).addClass("validateFalse");
-                            }else{
-                                $(this).removeClass("validateFalse");
-                            }
-                        });
+            $('#'+fieldId).removeClass("validateFalse");
+            
+            //TODO: nicer coding with if
+            switch (fieldId){
+                case "registrationUsername":
+                    //minimum of one character included (+)
+                    if(!Dime.register.checkFieldWithRegExp(fieldId, "^[0-9a-zA-Z]+$")){
+                        result = false;
+                        warnStr += "Registration failed: " + this.caption + "</br>";
+                        $("#"+fieldId).addClass("validateFalse");
+                    }
+                    break;
+                case "registrationPassword":
+                    if((!$('#'+fieldId).val()) || ($('#'+fieldId).val().length===0)){
+                        result = false;
+                        warnStr += "Registration failed: " + this.caption + "</br>";
+                        $("#"+fieldId).addClass("validateFalse");
+                    }
+                    break;
+                case "registrationPassword2":
+                    if($('#registrationPassword').val()!==$('#registrationPassword2').val() || !$('#'+fieldId).val()){
+                        result = false;
+                        warnStr += "Registration failed: " + this.caption + "</br>";
+                        $("#"+fieldId).addClass("validateFalse");
+                    }
+                    break;
+                case "registrationEmail":
+                    if(!Dime.register.checkFieldWithRegExp(fieldId, "^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$")){
+                        result = false;
+                        warnStr += "Registration failed: " + this.caption + "</br>";
+                        $("#"+fieldId).addClass("validateFalse");
+                    }
+                    break;
+                case "prsNickname":
+                    if((!$('#'+fieldId).val()) || ($('#'+fieldId).val().length===0)){
+                        result = false;
+                        warnStr += "Registration failed: " + this.caption + "</br>";
+                        $("#"+fieldId).addClass("validateFalse");
+                    }
+                    break;
             }
         });
 
         if (!result){
-            //warnStr = "No all required fields are provided."+ warnStr;
-            //window.alert(warnStr);
             $('#registerErrorMessage').append(warnStr);
             return false;
         }
-
-
-        if($('#registrationPassword').val()!==$('#registrationPassword2').val()){
-            $('#registerErrorMessage').text("Registration failed: The given passwords are not equal. Please try again.");
-            $('#registrationPassword2')
-                        .addClass("validateFalse")
-                        .on('input',function(){
-                            if($(this).val().length===0){
-                                $(this).addClass("validateFalse");
-                            }else{
-                                $(this).removeClass("validateFalse");
-                            }
-                        });
-            return false;
-        }
-
+        
         return true;
     },
 
@@ -356,7 +373,6 @@ Dime.register={
 
         var callback=function(response){
             
-            console.log(response);
             Dime.register.toggleWaitModal(false);
             if (!response){
                 $('#registerErrorMessage').text('Registration failed for unknown reason!');
@@ -368,23 +384,18 @@ Dime.register={
                 $('#registerErrorMessage').text('Registration failed: Incomplete response structure (meta)!');
                 return;
             }
+            
             if(response.meta.status.toLowerCase()!=="ok"){
-                $('#registerErrorMessage').text('Registration failed: '+response.meta.msg);
-                $('#registrationUsername')
-                        .addClass("validateFalse")
-                        .on('input',function(){
-                            if($(this).val().length===0){
-                                $(this).addClass("validateFalse");
-                            }else{
-                                $(this).removeClass("validateFalse");
-                            }
-                        });
+                var errorMessage = response.meta.msg;
+                $('#registerErrorMessage').text('Registration failed: '+ errorMessage);
                 return;
             }
+            
             if (!response.data||!response.data.entry||!response.data.entry[0].username){
                 $('#registerErrorMessage').text('Registration failed: Incomplete response structure (data)!');
                 return;
             }
+            
             //else
             $('#loginMessage').text('Registration was successful! Please login.');
 
@@ -392,7 +403,6 @@ Dime.register={
             $('#passwordLogin').val(request.password);
 
             Dime.register.showContainer('loginContainer');
-
         };
 
 
@@ -405,7 +415,6 @@ Dime.register={
 
         $.postJSON(path, envelope, callback);
         Dime.register.toggleWaitModal(true);
-
     }
 };
 	
@@ -461,7 +470,6 @@ $(document).ready(function() {
     });
 
     Dime.register.init();
-	
 });
 
 
