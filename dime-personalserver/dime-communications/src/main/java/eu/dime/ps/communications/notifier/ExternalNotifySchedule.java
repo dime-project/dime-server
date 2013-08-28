@@ -72,7 +72,7 @@ public class ExternalNotifySchedule {
 			adapter = (DimeServiceAdapter) serviceGateway.getDimeServiceAdapter(senderURI);
 
 	    } catch (ServiceNotAvailableException e) {
-	    	logger.error("Notification Could not be sended for: " + e.getMessage());
+	    	logger.error("Notification Could not be sended for: " + e.getMessage(), e);
 	    } 
 	    
 	    logger.info("Notification dealed to DimeServiceAdapter ("
