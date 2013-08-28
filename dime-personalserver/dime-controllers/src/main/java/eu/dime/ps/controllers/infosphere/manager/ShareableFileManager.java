@@ -39,10 +39,11 @@ public class ShareableFileManager extends ShareableManagerBase<FileDataObject> i
 
 	public static final List<URI> SHAREABLE_FILE_PROPERTIES;
 	static {
-		SHAREABLE_FILE_PROPERTIES = new ArrayList<URI>(7);
+		SHAREABLE_FILE_PROPERTIES = new ArrayList<URI>(8);
 		SHAREABLE_FILE_PROPERTIES.add(NAO.created);
 		SHAREABLE_FILE_PROPERTIES.add(NAO.lastModified);
 		SHAREABLE_FILE_PROPERTIES.add(NAO.prefLabel);
+		SHAREABLE_FILE_PROPERTIES.add(NAO.privacyLevel);
 		SHAREABLE_FILE_PROPERTIES.add(NFO.fileName);
 		SHAREABLE_FILE_PROPERTIES.add(NFO.fileSize);
 		SHAREABLE_FILE_PROPERTIES.add(NFO.fileLastModified);
