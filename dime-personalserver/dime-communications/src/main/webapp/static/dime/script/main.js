@@ -4231,7 +4231,7 @@ Dime.DetailDialog.prototype = {
             .append('<h1>Edit: Image</h1>')
             .append('<img src="' + Dime.psHelper.guessLinkURL(item.imageUrl)
                 + '" class="itemDetailPicImageBig" alt="imageUrl image" height=100px" width="100px" ></img>')
-            .append('<h2>Select or upload a new icon ...</h2>')
+            .append('<h2>Select or upload a new icon:</h2>')
             .append(
                 $('<div class="itemDetailPicButtons"></div>')
                     .append($('<div class="itemDetailPicSelectBtn btn" >select</div>')

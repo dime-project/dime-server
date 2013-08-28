@@ -1891,7 +1891,7 @@ input[type="checkbox"] {
     font-size: 14px;
     text-align: center;
     position: relative;
-    margin: 50px 0 10px 0;
+    margin: 25px 0 10px 0;
 }
 
 .itemDetailPic > h3 {
@@ -1938,7 +1938,8 @@ input[type="checkbox"] {
 }
 
 .itemDetailPicUploadBtn{
-    float: left;   
+    float: left;
+    width: 100px;
 }
 
 .itemDetailName{    
@@ -1971,7 +1972,7 @@ input[type="checkbox"] {
 }
 
 .detailDialogBody{
-    width: 98%;
+    width: 97%;
 }
 
 #DimeDetailDialogSituation{
@@ -2209,8 +2210,7 @@ input[type="checkbox"] {
     box-shadow: 2px 2px #5A9DD5;
     padding: 7px 20px 7px 20px;
     float: left;
-
-
+    width: 60px;
 }
 
 .itemDetailPicSelectBtn:hover {
@@ -2616,7 +2616,7 @@ input[type="text"].DimeDetailDialogPAValueListItemValue{
 
 .itemDetailPicButtons {
     width: 300px;
-    margin-left: 145px;
+    margin-left: 100px;
     height: 50px;
 }
 
@@ -2747,7 +2747,7 @@ input[type="text"].DimeDetailDialogPAValueListItemValue{
 
 .shareDlg > .modal-body{
     height: 650px;
-    width: 104%;
+    width: 99%;
 }
 
 
@@ -3283,7 +3283,8 @@ input[type="text"].DimeDetailDialogPAValueListItemValue{
 }
 
 .shareDlg .dimeDialogInfoBox{
-    margin-left: -40px;
+    margin-left: 70px;
+    margin-top: 25px;
 }
 
 .dimeToast{
@@ -3446,7 +3447,7 @@ input[readonly].dimeDetailDialogKeyValueValue {
 }
 
 #lightBoxBlack {
-    position: absolute;
+    position: fixed;
     top: 0px;  
     left: 0px; 
     display: none;  
@@ -3460,10 +3461,10 @@ input[readonly].dimeDetailDialogKeyValueValue {
 }
 
 .ratingStarsYour {
-	float: none;
-	margin-right: 90px;
-	margin-left: 7px;
-	cursor: pointer;
+    float: none;
+    margin-right: 90px;
+    margin-left: 7px;
+    cursor: pointer;
 }
 
 .personInformationContainer {
@@ -3512,5 +3513,9 @@ input[readonly].dimeDetailDialogKeyValueValue {
 .currentPersonImage > img {
     width: 90px;
     height: 90px;
+}
+
+#addNewServiceAdapterDropDown {
+    min-width: 175px;
 }
 

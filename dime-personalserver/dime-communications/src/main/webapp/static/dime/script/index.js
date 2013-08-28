@@ -1160,7 +1160,7 @@ DimeView = {
                     //window.alert('To activate support for places, please connect to the YellowMapPlaceService in the settings tab!');
                     //(new Dime.Dialog.Alert('To activate support for places, please connect to the YellowMapPlaceService in the settings tab!')).show();
                     $("#alertStatusNavigation")
-                            .empty()
+                            .empty() 
                             .removeClass("hidden")
                             //.append($('<img/>').attr('src','img/warn/share_state_severe.png'))
                             .append('To see places nearby to you, please')
@@ -1818,7 +1818,8 @@ Dime.Settings = {
             var dropItem = $("<li></li>").attr("role", "menuitem")
             .append(
                 $('<a tabindex="-1" target="_blank"  id="'
-                    + adapters[i].guid + '">' + adapters[i].name.substring(0, 10) + '</a>')
+                    + adapters[i].guid + '">' + adapters[i].name.substring(0, 16) + '</a>')
+                //DimeView.getShortNameWithLength(adapters[i].name, 16)
                 .clickExt(this, Dime.Settings.dropdownOnClick, adapters[i])
                 .append('<img class="serviceAdapterIconDropdown" src="' + adapters[i].imageUrl + '" width="20px" align="middle" />')
                 );
