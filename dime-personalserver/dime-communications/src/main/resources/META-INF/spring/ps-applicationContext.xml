@@ -214,5 +214,9 @@
 		<property name="trustEngine" ref="trustEngine"></property>
 	</bean> 
 
+	<bean id="sparqlController"
+		class="eu.dime.ps.communications.requestbroker.controllers.infosphere.SparqlController">
+		<property name="connectionProvider" ref="connectionProvider"></property>
+	</bean>
 
 </beans>
