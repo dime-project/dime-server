@@ -2163,6 +2163,9 @@ input[type="checkbox"] {
 
 .loadImageListItemName{
     margin-left: 20px;
+    float: left;
+    margin-top: 10px;
+    min-width: 125px;
 }
 
 .loadImageListItemImage {
@@ -2170,6 +2173,7 @@ input[type="checkbox"] {
     height: 25px;
     width: 25px;
     margin-top: 12px;
+    float: left;
 }
 
 .loadImageListItem:hover{
@@ -3435,11 +3439,10 @@ input[readonly].dimeDetailDialogKeyValueValue {
 }
 
 .selectHintShareDialog {
-    position: relative;
-    top: -5px;
-    float: right;
-    margin-right: 10px;
     font-size: 12px;
+    margin-right: 10px;
+    margin-top: 4px;
+    float: right;
 }
 
 #lightBoxBlack {

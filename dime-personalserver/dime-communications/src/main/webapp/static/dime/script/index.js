@@ -1160,6 +1160,7 @@ DimeView = {
                     //window.alert('To activate support for places, please connect to the YellowMapPlaceService in the settings tab!');
                     //(new Dime.Dialog.Alert('To activate support for places, please connect to the YellowMapPlaceService in the settings tab!')).show();
                     $("#alertStatusNavigation")
+                            .empty()
                             .removeClass("hidden")
                             //.append($('<img/>').attr('src','img/warn/share_state_severe.png'))
                             .append('To see places nearby to you, please')

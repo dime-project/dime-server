@@ -2723,6 +2723,8 @@ Dime.psHelper = {
         }
         if (type===Dime.psMap.TYPE.LIVEPOST){
             entry.created=entry.lastModified;
+            //set empty for the view on android
+            entry.imageUrl="";
         }
         
         return entry;
@@ -4066,8 +4068,12 @@ Dime.SelectDialog.prototype = {
                     );
             }
             listItem.append(
-                $('<span class="loadImageListItemName">'+items[i].name.substring(0, 19)+'<span>')
-                .addClass(privTrust.thinClassString)      
+                $('<div></div>')
+                    .addClass("loadImageListItemName")
+                    .append(
+                        $('<span>'+ items[i].name.substring(0, 19) +'</span>')
+                            .addClass(privTrust.thinClassString)      
+                    )
                 );
             listItem.clickExt(this, toggleSelectFunction, items[i].guid);
             listItem.mouseover(function(){
@@ -5952,7 +5958,6 @@ Dime.Dialog={
                     (new Dime.Dialog.Toast(elementName+ " created successfully.")).showLong();
                 }
             };
-            
             
             //post the update
             Dime.REST.postNewItem(item, newItemCallBack);
