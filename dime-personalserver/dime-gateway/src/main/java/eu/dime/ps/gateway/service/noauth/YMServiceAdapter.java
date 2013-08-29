@@ -43,8 +43,8 @@ public class YMServiceAdapter extends ServiceAdapterBase implements /*ExternalSe
 	private static final String AGREEDTC = "agreedTC";
  
         // additional optional parameters (see services.properties)
-        private static final String FIRSTNAME ="firstname";
-        private static final String LASTNAME ="firstname";
+        private static final String FIRSTNAME ="firstName";
+        private static final String LASTNAME ="lastName";
         
 	
 	private YMServiceWrapper ymServiceWrapper;
