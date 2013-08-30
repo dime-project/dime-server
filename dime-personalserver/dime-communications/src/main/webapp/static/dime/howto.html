@@ -1,561 +1,829 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>di.me-Tutorial</title>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<head>
+<title>di.me-Tutorial</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link href="register/css/bootstrap.min.css" rel="stylesheet">
+<link href="register/css/style_howto.css" rel="stylesheet">
+<link href="register/css/style-responsive.css" rel="stylesheet">
+
+<!--Umrahmt die zusammengehörigen elemente rot!	-->
+<!-- <style>
+.text{
+border: 1px solid red;
+}
+</style> -->
+</head>
+
+<body>
 
 
-        <link href="register/css/bootstrap.min.css" rel="stylesheet">
-        <link href="register/css/style_howto.css" rel="stylesheet">
-        <link href="register/css/style-responsive.css" rel="stylesheet">
+	<!--Black Navbar-->
+	<div class="navbar navbar-inverse navbar-fixed-top">
+		<div class="navbar-inner">
 
+			<a class="brand" href="index.html"><img class="logo"
+				src="register/img/logo.png" /></a>
+		</div>
+	</div>
+	<!--Black Navbar ende-->
 
-        <!--Umrahmt die zusammengehörigen elemente rot!	-->
-        <!--
-        <style>
-        .text{
-        border: 1px solid red;
-        }
-        </style>
-        -->
-    </head>
+	<div id="wrapper" class="container">
 
-    <body>
-
-
-        <!--Black Navbar-->
-        <div class="navbar navbar-inverse navbar-fixed-top">
-            <div class="navbar-inner">
-
-                <a class="brand" href="index.html"><img class="logo" src="register/img/logo.png"/></a>
-            </div>
-        </div>
-        <!--Black Navbar ende-->
-        <br>
-        <br>
-
-        <br>
-
-        <div id="wrapper" class="container">
-
-
-
-
-<!-- START OF CONTENT -->
-            <!-- h1 TITLE --><div class="container headline1">
-                <h1>Guided Tour</h1>
-				<p>This tour guides you will show you the prototype and demonstrate the main concepts of the di.me research project. Please notie that the system is a demonstrator and you will encounter unstable functions. </p>
-				<p>If you have chosen and registered to a di.me server, you can access it by the your favourite Internet Browser.</p></div>
-            <!-- Access  <div class="container text faderContainer">
+		<!-- START OF CONTENT -->
+		<!-- h1 TITLE -->
+		<div class="container headline1">
+			<h1>Guided Tour</h1>
+			<p>This tour guides you will show you the prototype and
+				demonstrate the main concepts of the di.me research project. Please
+				notice that the system is a demonstrator and you will encounter
+				unstable functions.</p>
+			<p>If you have chosen and registered to a di.me server, you can
+				access it by the your favourite Internet Browser.</p>
+		</div>
+		<!-- Access  <div class="container text faderContainer">
                 <div class="fader">Access your di.me server in your desktop browser<div class="arrow right"></div></div>
                 <div class="steps">                     <ul>
                         <li>On the desktop: Login to di.me on your server on the<a href="/dime-communications/web/access/login" class="push" target="_blank">login page</a></li>
 					</ul>
                 </div>
             </div>
-	 <div class="container text"><p>Or: Use di.me for Android smartphones:</p></div>	-->
-            <!-- Install Android --><div class="container text faderContainer">
-                <div class="fader">Additionaly, you can install the di.me App on your Android smartphone<div class="arrow right"></div></div>
-                <div class="steps"> <!--Steps -->
-                    <ul>
-                        <li>On your smartphone: Download the app to your Android device:</li>
-                    </ul>
-                     <p class="or">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<img width="120px" id="qr" src="register/img/dime-mobile-qr.jpg"/><br>
-                        <a id="pushthis" href="http://dimetrials.bdigital.org:8080/dimemobile.apk">download the Android-apk-file</a></p>
-                    <ul>
-                        <li>Look for the download in the Android notifications</li>
-                        <li>Click on the download file "di.me-mobile.apk".</li>
-                        <li>Follow the Android installation instruction. <i>Please note</i>: You have to accept installations from "unknown sources", because di.me was not installed from the App store.</li>
-                        <li>Start the app: Go to "All apps" and click on "di.me mobile"</li>
-                        <li>Now you can login to your di.me account on the Android client.</li><!-- xxx further steps with Android -->
-                    </ul>
-                </div>
-            </div>
-            <!-- Before you start --><div class="container text">
-                <p><em>Before you start: </em>For research purposes we need to collect anonymised usage data<!-- (xxx update UI done?) -->. If you have disagreed to participate at registration time, we kindly ask you to accept that now:</p>
-            </div>
-            <!-- Evalation Data --><div class="container text faderContainer">
-                <div class="fader">Accept to send us evaluation data<div class="arrow right"></div></div>
-                <div class="steps">
-                    <ul> <!--Steps -->
-                        <li>In di.me: Go to "Settings", select "General Settings" </li>
-<li>The data is anonymous and does not contain any content, e.g. documents. Under "Further information", please read the details which evaluation data are collected.</li>
-                        <li>Activate the checkbox "Send anonymous click data"<!-- (xxx update UI done?) --></li>
-                    </ul>
-                </div>
-            </div>
-            <!-- 1. IDENTITIES --><div class="container text">
-                <h2>1. Social networking with different identities</h2>
-                <p>Central to di.me is the concept of using different identities which are called "Profile Cards". You can use them for sharing information to others.</p>
-            </div>
-            <!-- Predefined test Data --><div class="container text faderContainer">
-                <div class="fader">Take a look at the predefined Profile Card<div class="arrow right"></div></div>
-                <div class="steps">
-						<p class="or">When you register to di.me, some items are automatically added to your empty di.me account: </p>
-                    <ul> <!--Steps -->
-                        <li>When you go to "My Profile Cards", predefined cards with information from the registration are shown (e.g. your name and email in "MyBusinessCard").<br>&nbsp;&nbsp;&#8594 <em>Please note:</em> The card "MyPublicCard" is special: This is the information published in the Dime User Directory. You can, however, not edit this information.</li>
-                    </ul>
-                </div>
-            </div>
-            <!-- Use "MyBusinessCard" to share "digital.me_project.pdf" with "TestUser1 --><div class="container text faderContainer">
-                <div class="fader">Use "MyBusinessCard" to share "digital.me_project.pdf" with "TestUser1"<div class="arrow right"></div></div>
-                <div class="steps">
-						<p class="or">You can try out sharing with predefined test data, e.g. example documents or virtual test user accounts like "TestUser1". </p>
-				<ul> <!--Steps -->
-                        <li>Go to "My Data"</li>
-                        <li>Select "digital.me_project_flyer.pdf" (browser: click on the little box in the top-right corner)</li>
-                        <li>Click "Share" (browser: bar on the right)</li>
-                        <li>In the pop-up window: Click "Select Profile" and select "MyBusinessCard"</li>
-                        <li>Click "Recipients" and select "TestUser1" from the list</li>
-                        <li>Click "OK"</li>
-                    </ul>
-                </div>
-            </div>
-            <!-- Now share something anonymously with "MyAnonymousCard" (TestUser3) --><div class="container text faderContainer">
-                <div class="fader">Now share the file "digital.me_logo.jpg" anonymously using "MyAnonymousCard" with "TestUser3"<div class="arrow right"></div></div>
-                <div class="steps"> <!--Steps -->
-                    <ul>
-                        <li>As above: Select the file "digital.me_logo.jpg", and open the dialog "Share"</li>
-                        <li>Click "Select Profile" and select "MyAnonymousCard"</li>
-                        <li>Select "TestUser3" as recipient and click "OK"</li>
-                    </ul>
-                </div>
-            </div>
-            <!-- Conclusion --><div class="container text">
-                <p>&#8594 </p> <p class="push block">The recipients get the different files. As senders, they see <em>different identities</em>: Testuser1 receives a file from a person showing the information in your "MyBusinessCard", whereas Testuser3 receives a file from a person showing the information in your "MyAnonymousCard".</p></div>
-
-<!-- h2 PRIV RECOMMENDATIONS --><div class="container text">
-                <h2>2. Try out di.me’s privacy recommendations</h2>
-                <p>One of di.me’s research objectives is to give privacy recommendations: di.me warns in certain cases to share information to others. This is mainly based on privacy and trust levels: </p> 
-            </div>
-            <!-- Take a look at the people’s trust and the privacy of files --><div class="container text faderContainer">
-                <div class="fader">How do privacy recommendations work?<div class="arrow right"></div></div>
-                <div class="steps">
-                    <ul> <!--Steps -->
-                        <li>Any document gets a <em>privacy level</em>. When a document is uploaded, di.me automatically sets the privacy level to "high". This means, it is a personal or private document. You can change the privacy level (see below).</li>
-						<li>Any contact gets a <em>trust level</em>. When a contact is added, e.g. from the di.me user directory, di.me sets the trust level to "medium". This means a medium trusted person. You can change the trust level (see below).</li>
-						<li>di.me shows <em>warnings</em>, e.g. if you want to share a highly private document, and in other cases.</li>
-						<li><em>Please note:</em>di.me does <em>not automatically share or give access to a document</em> because of the trust and privacy levels. It only shows warnings. You can share information to others with the action "share" (see below).</li>
-						<li><em>Please note:</em>di.me will <em>suggest to change</em> trust or privacy values if you share private items several times to a person with low trust.</li>
-				</ul>
-                </div>
-            </div>
-			<div class="container text">
-                <p>Try it out with the test data:</p> 
-            </div>
-            <!-- Take a look at the people’s trust and the privacy of files --><div class="container text faderContainer">
-                <div class="fader">Take a look at person trust and file privacy levels<div class="arrow right"></div></div>
-                <div class="steps">
-                    <ul> <!--Steps -->
-                        <li>Go to "MyData", click on file "hiking.jpg" <br>&nbsp;&nbsp;&#8594 The details for the file are shown; its <em>privacy is set to "high"</em>. </li>
-                        <li>Go to "People".</li>
-                        <li>Open "TestUser3" (browser: select the little box on "TestUser3", click "edit" in the bar on the right) <br>&nbsp;&nbsp;&#8594 The details for the person are shown; the <em>trust level for this person is set to "high".</em></li>
-                    </ul>
-                </div>
-            </div>
-            <!-- Share the files in "FriendsBox" to the group "Friends" --><div class="container text faderContainer">
-                <div class="fader">Share the files in "FriendsBox" with the "Friends" group<div class="arrow right"></div></div>
-                <div class="steps">
-                    <ul> <!--Steps -->
-                        <li>Go to "My Data"</li>
-						<li>Select the "FriendsBox" databox (browser: select the little box in the top-right corner)</li>
-                        <li>Share the databox with "Friends" (browser: click "Share" in the bar on the right, select any Profile Card and choose "Friends")
-			<br>&#8594 di.me shows a <em>warning "Privacy risk"</em> because "hiking.jpg" is private and "TestUser1" has a medium trust level.
-			<br>&#8594 di.me will suggest to change the trust or privacy level, if you share private items several times to a person with low trust level.</li>
-                    </ul>
-                    <!-- <p class="or"></p> -->
-                    <!-- <p class="or"></p> -->
-                </div>
-            </div>
-            <!-- Now share the "FriendsBox" with the group "BusinessContacts" --><div class="container text faderContainer">
-                <div class="fader">Now share the "FriendsBox" with the "BusinessContacts" group<div class="arrow right"></div></div>
-                <div class="steps">
-                    <ul> <!--Steps -->
-                        <li>As above: Select the "FriendsBox", share it with "BusinessContacts"
-			<br>&#8594 di.me shows a warning because "FriendsBox" is being <em>shared outside the usual groups</em>. Since you shared it with "Friends" before, di.me warns that sharing it to another group could be unintended.</li>
-                    </ul>
-<!-- <p class="or"></p> -->
-                </div>
-            </div>
-            <!-- Conclusion --><div class="container text">
-                <div class="container text"><p><em>Other recommendations</em> are shown when there is a potentially unintentional sharing of data, e.g. if a Profile Card is revealed for the first time, if many items are shared all at once, or if the user is sharing an item with a lot of people.</p><div>
-
-<!-- h2 CONNECT --><div class="container text">
-                <h2>3. Connecting to other people</h2>
-            </div>
-            <!-- Search for di.me people, e.g. from the di.me project --><div class="container text faderContainer">
-                <div class="fader">Look for other people, e.g. from the di.me project<div class="arrow right"></div></div>
-                                   <div class="steps">
-			<!-- <p class="or">You can look for people in your <em>contact list</em> and in the <em>public di.me user directory</em>.</p> -->
-                    <ul> <!--Steps -->
-                        <li>Go to "People":
-			<br>&nbsp;&nbsp;&#8594 A group of persons from the di.me project is automatically in your contact list.</li>
-			<!-- <li>Look who from the di.me project is already in your contact list.</li><br> -->
-			<li>Search in the public <em>di.me user directory</em> (browser: enter a name in the search field; Android: use the action-icon on the top left; <em>Please note:</em> use e.g. "John" or "Doe", but not "John Doe", or "Jo", or "Do").
-				<br>&nbsp;&nbsp;&#8594 Search results obtained from your contact list and from the public di.me user directory (bottom) are shown.</li>
-                        <li>Click "add" to add the desired person from the di.me user directory to your di.me contacts.</li>
-                    </ul>
-                </div>
-            </div>
-           <!-- Send messages --><div class="container text faderContainer">
-                <div class="fader">Share a livepost with someone<div class="arrow right"></div></div>
-                <div class="steps">
-		<ul>
-                    <li>Go to liveposts (browser: click the letter-icon in the top menu)</li>
-                    <li>Click "new livepost" (browser: in the bar on the right) </li>
-		    <li>Select the profile card that is used to share from, and the recipients</li>
-		    <li>Enter a message subject and text</li>
-		    <li>Click "Share"</li>
-		</ul>
-                </div>
-            </div>
-            <!-- Coming soon: Invite others to the trial<div class="container text faderContainer">
-<div class="fader">Invite others to the trial<div class="arrow right"></div></div>
-<div class="steps">
-<ul>
-<li> [Coming soon!] <howto: sends invitation to join dime to a person (e.g. for phone book contacts); invite people via tweet, email, …>go to and click here and there step 1 text</li>
-</ul>
-<p class="or">OR</p>
-<ul>
-<li>howto: the user adds (a single) contact from the the android phonebook</li>
-<li>howto: sends invitation to join dime to a person (e.g. for phone book contacts); invite people via tweet, email, …</li>
-</ul>
-</div>
-</div> -->
-
-            <!-- h2 Add your own data to di.me and share it.--><div class="container text">
-                <h2>4. Add your own data to di.me and share it</h2>
-                <p>You can upload your own files and information to your di.me, in order to share them with your contacts. Your data is stored on your di.me, i.e. on the server to which you have registered (the di.me test trial 2013 or your own server if you opted to host di.me yourself).</p></div>
-            <!-- Upload files to your di.me server and share them--><div class="container text faderContainer">
-                <div class="fader">Upload files to your di.me server and share them<div class="arrow right"></div></div>
-                <div class="steps">
-                    <ul> <!--Steps -->
-                        <li>Go to "MyData"</li>
-                        <li>Upload files (browser: drop a file to the dropzone or use the button "upload" at the bottom) </li>
-                        <li>Now you can share the file with others, set it's privacy value, etc.</li>
-                        <li>You may also use <em>"data boxes"</em> to organize your files: add your own boxes and drop your files in it.</li>
-                    </ul>
-                </div>
-            </div>
-            <!-- Connect to Linkedin or twitter // Merge // reuse profiles --><div class="container text faderContainer">
-                <div class="fader">Connect your Linkedin or Twitter account and see the profile information from there<div class="arrow right"></div></div>
-                <div class="steps">
-                    <ul> <!--Steps -->
-                        <li>Go to "Settings" </li>
-                        <li>Click on "+" add a service, then select "Linkedin" or "Twitter"</li>
-                        <li>Follow the instructions of the dialogs to connect to your accounts.
-<br>&#8594 Contacts from Linkedin are shown in your di.me contact list. Di.me will also show suggestions to merge contacts to existing ones that you perhaps already have.
-<br>&#8594 Your profile details from Linkedin or Twitter are imported to di.me. You can reuse these to enrich your di.me profile cards.</li>
-                    </ul>
-                    <!-- <p class="or"></p> -->
-                    <!-- <li>xxx send via twitter senden</li> -->
-                </div>
-            </div>
-            <!-- Add new details to your profile card --><div class="container text faderContainer">
-                <div class="fader">Add new profile details<div class="arrow right"></div></div>
-                <div class="steps">
-					<p class="or">You can edit the details shown in a profile card:</p> 
-                    <ul> <!--Steps -->
-                        <li>Go to "My Profile".</li>
-			<li>Click on "MyBusinessCard".</li>
-			<li>Add or remove profile details (browser: Click on the profile details; in the popup window, click on the profile details to add or remove them from the Profile Card).</li>
-                    </ul>
-					<p class="or">You can enter new profile details:</p>
-						<ul> <!--Steps -->
-                        <li>Go to "My Profile".</li>
-							<li>Make a new profile detail(browser: click "New &gt; New profile detail" in the bar on the right)"</li>
-							<li>Choose the category, e.g. "PhoneNumber", or "Interest".</li>
-							<li>Add information, e.g. the phone number, or an interest</li>
-							<li>You may change the description from e.g. "My Phone" to "My private mobile phone".</li>
-							<li>Click "Create" &#8594 The new profile detail shows up in the list.</li>
-							<li>As above: Now you can add this new profile detail to a Profile Card, e.g. "MyBusinessCard"</li>
-                    </ul>
-                </div>
-            </div>
-			<!-- Add a new profile card --><div class="container text faderContainer">
-                <div class="fader">Add a new profile card<div class="arrow right"></div></div>
-                <div class="steps">
-                    <ul> <!--Steps -->
-                        <li>Go to "My Profile".</li>
-						<li>Make a new Profile Card (browser: click "New &gt; New Profile Card" in the bar on the right)"</li>
-						<li>Enter a title for the Card, e.g. "MyCloseFriendsCard"</li>
-						<li>As above: Add or remove profile information (browser: Click on the list of attributes; in the popup window, click on the attributes to add or remove them from the Profile Card).</li>
-                    </ul>
-                </div>
-           </div>
-
-
-<!-- h2 SITUATION Test di.me's knowledge about situations, and who is nearby--><div class="container text">
-                <h2>5. di.me's context-awareness </h2>
-                <p>di.me is a context-aware system: You can try out the detection of locations, situations, people nearby, etc.:</p></div>
-				<!-- Prepare your di.me Android app for Context-Awareness--><div class="container text faderContainer">
-                <div class="fader"><b>Required: </b>Activate the location detection<div class="arrow right"></div></div>
-                <div class="steps">
-					<p class="or">The context-aware functions in di.me use your location. If you the di.me Android app, also sensor data can be used. This data is stored on your di.me server and used by di.me services (see below).</p>
-					<p class="or">Browser:</p>
-                    <ul> <!--Steps -->
-					<li>Go to places (top right corner: Click on "Location unknown" or your current location)</li>
-					<li>Click on "Get location ..." (in the bar on the right), follow the instructions in the browser</li>
-					</ul>
-					<p class="or">On your Android:</p>
-                    <ul> <!--Steps -->
-					<li>Go to "Settings"</li>
-					<li>Click on "Store Android sensor data"</li>
-					</ul>
-               </div>
-            </div>
-            <!-- See what Situation di.me detects--><div class="container text faderContainer">
-                <div class="fader">See your situations, or add custom ones.<div class="arrow right"></div></div>
-                <div class="steps">
-					<p class="or">You can train di.me to recognize your situations: If you train the system, di.me will recognize the situation according to your context.</p>
-                    <ul> <!--Steps -->
-						<li>Click on the current situation (browser: in the top-right corner below your user-name; Android: on the start page) <br>&nbsp;&nbsp;&#8594 The list of situations provided by default is shown</li>
-<li>click on "activate (browser: in the bar on the right) <br>&nbsp;&nbsp;&#8594 The selected situation is now active and the system learns that it is related to the current sensor data.
-<br>&nbsp;&nbsp;&#8594 As you use and train di.me to recognise your situations, you will notice that the order of the stored situations will change according to your context.</li>
-                        <li>Coming soon: Add custom situations</li>
-                    </ul>
-                </div>
-            </div>
-            <!-- Coming soon: See di.me users who are nearby --><div class="container text faderContainer">
-<div class="fader">Coming soon: See di.me users who are nearby.<div class="arrow right"></div></div>
-<div class="steps">
-                    <ul> <!--Steps -->
-<li>Connect to the <em>ProximityService</em>: Coming soon. <!--(As above: go to "Settings &gt; Services", add the service; Android app: use the Action button in the top-right corner)--></li>
-                    </ul>
-<!-- <p class="or">&nbsp;&nbsp;&#8594 The ProximityService is activated; It shows a "nearby-group" (di.me users nearby to you), and shows to other users that you are nearby. When you connect, you select the Profile Card that shall be given to other nearby users. Only if they know this ProfileCard already, you are shown in their "nearby-group". Uses the geo-location and other sensor data from your Android device (if you have activated the setting "Store Android sensor data on your server"). This service is provided as test service from the di.me project consortium.</p>
--->	
-</div>
-            </div>
-            <!-- Nearby Places --><div class="container text faderContainer">
-                <div class="fader">Show nearby places <div class="arrow right"></div></div>
-                <div class="steps">
-				<p class="or">The YellowMapPlaces service detects places nearby, allows you to vote and set favorite places and to retrieve social recommendations on them (<em>Please note:</em> Currently, the service shows only places in selected cities of the di.me project):</p>
+	 		<div class="container text"><p>Or: Use di.me for Android smartphones:</p></div>	-->
+		<!-- Install Android -->
+		<div class="container text faderContainer">
+			<div class="fader">
+				Additionally, you can install the di.me app on your Android
+				smartphone
+				<div class="arrow right"></div>
+			</div>
+			<div class="steps">
+				<!--Steps -->
 				<ul>
-					<li>Connect to the YellowMapPlaceService (Android: use the Action button / Browser: go to "Settings", select "Add Service", choose "YellowMapPlaceService", accept YM service terms.)</li>
-					<li>Go to places (browser: Click on your current place, e.g. "Location unknown", in the top right corner; if needed, click "Get location ..." again).
-					<br>&nbsp;&nbsp;&#8594 The places nearby to your location are shown.</li>
-					<li>Open a place to get a detailed description, to mark a favorite place, or to set a personal rating</li>
-                    </ul>
-                </div>
-</div>
+					<li>On your smartphone: Download the app to your Android
+						device:</li>
+				</ul>
+				<p class="qr">
+					<img width="120px" id="qr" src="register/img/dime-mobile-qr.jpg" /><br>
+					<a id="pushthis"
+						href="http://dimetrials.bdigital.org:8080/dimemobile.apk">download
+						the Android-apk-file</a>
+				</p>
+				<ul>
+					<li>Look for the download in the Android notifications</li>
+					<li>Click on the download file "di.me-mobile.apk".</li>
+					<li>Follow the Android installation instruction. <i>Please
+							note</i>: You have to accept installations from "unknown sources",
+						because di.me was not installed from the App store.
+					</li>
+					<li>Start the app: Go to "All apps" and click on "di.me
+						mobile"</li>
+					<li>Now you can login to your di.me account on the Android
+						client.</li>
+					<!-- xxx further steps with Android -->
+				</ul>
+			</div>
+		</div>
+		<!-- Before you start -->
+		<div class="container text">
+			<p>
+				<em>Before you start: </em>For research purposes we need to collect
+				anonymised usage data
+				<!-- (xxx update UI done?) -->
+				. If you have disagreed to participate at registration time, we
+				kindly ask you to accept that now:
+			</p>
+		</div>
+		<!-- Evalation Data -->
+		<div class="container text faderContainer">
+			<div class="fader">
+				Accept to send us evaluation data
+				<div class="arrow right"></div>
+			</div>
+			<div class="steps">
+				<ul>
+					<!--Steps -->
+					<li>In di.me: Go to "Settings", select "General Settings"</li>
+					<li>The data is anonymous and does not contain any content,
+						e.g. documents. Under "Further information", please read the
+						details which evaluation data are collected.</li>
+					<li>Activate the checkbox "Send anonymous click data"<!-- (xxx update UI done?) --></li>
+				</ul>
+			</div>
+		</div>
+		<!-- 1. IDENTITIES -->
+		<div class="container text">
+			<h2>1. Social networking with different identities</h2>
+			<p>Central to di.me is the concept of using different identities
+				which are called "Profile Cards". You can use them for sharing
+				information to others.</p>
+		</div>
+		<!-- Predefined test Data -->
+		<div class="container text faderContainer">
+			<div class="fader">
+				Take a look at the predefined Profile Card
+				<div class="arrow right"></div>
+			</div>
+			<div class="steps">
+				<p class="or">When you register to di.me, some items are
+					automatically added to your empty di.me account:</p>
+				<ul>
+					<!--Steps -->
+					<li>When you go to "My Profile Cards", predefined cards with
+						information from the registration are shown (e.g. your name and
+						email in "MyBusinessCard").<br>&nbsp;&nbsp;&#8594 <em>Please
+							note:</em> The card "MyPublicCard" is special: This is the information
+						published in the Dime User Directory. You can, however, not edit
+						this information.
+					</li>
+				</ul>
+			</div>
+		</div>
+		<!-- Use "MyBusinessCard" to share "digital.me_project.pdf" with "TestUser1 -->
+		<div class="container text faderContainer">
+			<div class="fader">
+				Use "MyBusinessCard" to share "digital.me_project.pdf" with
+				"TestUser1"
+				<div class="arrow right"></div>
+			</div>
+			<div class="steps">
+				<p class="or">You can try out sharing with predefined test data,
+					e.g. example documents or virtual test user accounts like
+					"TestUser1".</p>
+				<ul>
+					<!--Steps -->
+					<li>Go to "My Data"</li>
+					<li>Select "digital.me_project_flyer.pdf" (browser: click on
+						the little box in the top-right corner)</li>
+					<li>Click "Share" (browser: bar on the right)</li>
+					<li>In the pop-up window: Click "Select Profile" and select
+						"MyBusinessCard"</li>
+					<li>Click "Recipients" and select "TestUser1" from the list</li>
+					<li>Click "OK"</li>
+				</ul>
+			</div>
+		</div>
+		<!-- Now share something anonymously with "MyAnonymousCard" (TestUser3) -->
+		<div class="container text faderContainer">
+			<div class="fader">
+				Now share the file "digital.me_logo.jpg" anonymously using
+				"MyAnonymousCard" with "TestUser3"
+				<div class="arrow right"></div>
+			</div>
+			<div class="steps">
+				<!--Steps -->
+				<ul>
+					<li>As above: Select the file "digital.me_logo.jpg", and open
+						the dialog "Share"</li>
+					<li>Click "Select Profile" and select "MyAnonymousCard"</li>
+					<li>Select "TestUser3" as recipient and click "OK"</li>
+				</ul>
+			</div>
+		</div>
+		<!-- Conclusion -->
+		<div class="container text">
+			<p>
+				&#8594 The recipients get the different files. As senders, they see
+				<em>different identities</em>: Testuser1 receives a file from a
+				person showing the information in your "MyBusinessCard", whereas
+				Testuser3 receives a file from a person showing the information in
+				your "MyAnonymousCard".
+			</p>
+		</div>
 
-<!--FOOTER-->
-            <br>
-            <div class="container">
-                <h2>Finally:</h2>
-                <h5>Please continue your di.me trial!</h5>
-               <p>The trial will run in 2013, and will serve as a demonstration of the project results and the public open source di.me development. Therefore, we would like to invite you to use and test the demonstrator continuously, by connecting to others, <!-- importing your profiles, uploading your files, sharing your data --> and trying out the available features.</p>
+		<!-- h2 PRIV RECOMMENDATIONS -->
+		<div class="container text">
+			<h2>2. Try out di.me’s privacy recommendations</h2>
+			<p>One of di.me’s research objectives is to give privacy
+				recommendations: di.me warns in certain cases to share information
+				to others. This is mainly based on privacy and trust levels:</p>
+		</div>
+		<!-- Take a look at the people’s trust and the privacy of files -->
+		<div class="container text faderContainer">
+			<div class="fader">
+				How do privacy recommendations work?
+				<div class="arrow right"></div>
+			</div>
+			<div class="steps">
+				<ul>
+					<!--Steps -->
+					<li>Any document gets a <em>privacy level</em>. When a
+						document is uploaded, di.me automatically sets the privacy level
+						to "high". This means, it is a personal or private document. You
+						can change the privacy level (see below).
+					</li>
+					<li>Any contact gets a <em>trust level</em>. When a contact is
+						added, e.g. from the di.me user directory, di.me sets the trust
+						level to "medium". This means a medium trusted person. You can
+						change the trust level (see below).
+					</li>
+					<li>di.me shows <em>warnings</em>, e.g. if you want to share a
+						highly private document, and in other cases.
+					</li>
+					<li><em>Please note:</em>di.me does <em>not automatically
+							share or give access to a document</em> because of the trust and
+						privacy levels. It only shows warnings. You can share information
+						to others with the action "share" (see below).</li>
+					<li><em>Please note:</em>di.me will <em>suggest to change</em>
+						trust or privacy values if you share private items several times
+						to a person with low trust.</li>
+				</ul>
+			</div>
+		</div>
+		<div class="container text">
+			<p>Try it out with the test data:</p>
+		</div>
+		<!-- Take a look at the people’s trust and the privacy of files -->
+		<div class="container text faderContainer">
+			<div class="fader">
+				Take a look at person trust and file privacy levels
+				<div class="arrow right"></div>
+			</div>
+			<div class="steps">
+				<ul>
+					<!--Steps -->
+					<li>Go to "MyData", click on file "hiking.jpg" <br>&nbsp;&nbsp;&#8594
+						The details for the file are shown; its <em>privacy is set to
+							"high"</em>.
+					</li>
+					<li>Go to "People".</li>
+					<li>Open "TestUser3" (browser: select the little box on
+						"TestUser3", click "edit" in the bar on the right) <br>&nbsp;&nbsp;&#8594
+						The details for the person are shown; the <em>trust level for
+							this person is set to "high".</em>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<!-- Share the files in "FriendsBox" to the group "Friends" -->
+		<div class="container text faderContainer">
+			<div class="fader">
+				Share the files in "FriendsBox" with the "Friends" group
+				<div class="arrow right"></div>
+			</div>
+			<div class="steps">
+				<ul>
+					<!--Steps -->
+					<li>Go to "My Data"</li>
+					<li>Select the "FriendsBox" databox (browser: select the
+						little box in the top-right corner)</li>
+					<li>Share the databox with "Friends" (browser: click "Share"
+						in the bar on the right, select any Profile Card and choose
+						"Friends") <br>&#8594 di.me shows a <em>warning "Privacy
+							risk"</em> because "hiking.jpg" is private and "TestUser1" has a
+						medium trust level. <br>&#8594 di.me will suggest to change
+						the trust or privacy level, if you share private items several
+						times to a person with low trust level.
+					</li>
+				</ul>
+				<!-- <p class="or"></p> -->
+				<!-- <p class="or"></p> -->
+			</div>
+		</div>
+		<!-- Now share the "FriendsBox" with the group "BusinessContacts" -->
+		<div class="container text faderContainer">
+			<div class="fader">
+				Now share the "FriendsBox" with the "BusinessContacts" group
+				<div class="arrow right"></div>
+			</div>
+			<div class="steps">
+				<ul>
+					<!--Steps -->
+					<li>As above: Select the "FriendsBox", share it with
+						"BusinessContacts" <br>&#8594 di.me shows a warning because
+						"FriendsBox" is being <em>shared outside the usual groups</em>.
+						Since you shared it with "Friends" before, di.me warns that
+						sharing it to another group could be unintended.
+					</li>
+				</ul>
+				<!-- <p class="or"></p> -->
+			</div>
+		</div>
+		<!-- Conclusion -->
+		<div class="container text">
+			<div class="container text">
+				<p>
+					<em>Other recommendations</em> are shown when there is a
+					potentially unintentional sharing of data, e.g. if a Profile Card
+					is revealed for the first time, if many items are shared all at
+					once, or if the user is sharing an item with a lot of people.
+				</p>
+				<div>
 
-<h5>Feedback is very much appreciated!</h5>
+					<!-- h2 CONNECT -->
+					<div class="container text">
+						<h2>3. Connecting to other people</h2>
+					</div>
+					<!-- Search for di.me people, e.g. from the di.me project -->
+					<div class="container text faderContainer">
+						<div class="fader">
+							Look for other people, e.g. from the di.me project
+							<div class="arrow right"></div>
+						</div>
+						<div class="steps">
+							<!-- <p class="or">You can look for people in your <em>contact list</em> and in the <em>public di.me user directory</em>.</p> -->
+							<ul>
+								<!--Steps -->
+								<li>Go to "People": <br>&nbsp;&nbsp;&#8594 A group of
+									persons from the di.me project is automatically in your contact
+									list.
+								</li>
+								<!-- <li>Look who from the di.me project is already in your contact list.</li><br> -->
+								<li>Search in the public <em>di.me user directory</em>
+									(browser: enter a name in the search field; Android: use the
+									action-icon on the top left; <em>Please note:</em> use e.g.
+									"John" or "Doe", but not "John Doe", or "Jo", or "Do"). <br>&nbsp;&nbsp;&#8594
+									Search results obtained from your contact list and from the
+									public di.me user directory (bottom) are shown.
+								</li>
+								<li>Click "add" to add the desired person from the di.me
+									user directory to your di.me contacts.</li>
+							</ul>
+						</div>
+					</div>
+					<!-- Send messages -->
+					<div class="container text faderContainer">
+						<div class="fader">
+							Share a livepost with someone
+							<div class="arrow right"></div>
+						</div>
+						<div class="steps">
+							<ul>
+								<li>Go to liveposts (browser: click the letter-icon in the
+									top menu)</li>
+								<li>Click "new livepost" (browser: in the bar on the right)
+								</li>
+								<li>Select the profile card that is used to share from, and
+									the recipients</li>
+								<li>Enter a message subject and text</li>
+								<li>Click "Share"</li>
+							</ul>
+						</div>
+					</div>
+					<!-- Coming soon: Invite others to the trial<div class="container text faderContainer">
+			<div class="fader">Invite others to the trial<div class="arrow right"></div></div>
+			<div class="steps">
+			<ul>
+			<li> [Coming soon!] <howto: sends invitation to join dime to a person (e.g. for phone book contacts); invite people via tweet, email, …>go to and click here and there step 1 text</li>
+			</ul>
+			<p class="or">OR</p>
+			<ul>
+			<li>howto: the user adds (a single) contact from the the android phonebook</li>
+			<li>howto: sends invitation to join dime to a person (e.g. for phone book contacts); invite people via tweet, email, …</li>
+			</ul>
+			</div>
+			</div> -->
 
-<p>Once you went through this tour and have familiarised yourself with the di.me demonstrator, please find some time to fill out our questionaire:</p>
-
-<p><a href="/dime-communications/web/access/questionaire?lang=en" class="push" target="_blank">questionnaire</a> (please login with your di.me account).<!-- <a href="/di/dime-communications/web/access/questionaire?lang=de" class="push" target="_blank">(German)</a>. --></p>
-<br><br>
-
-                <!-- Invite others to the trial <div class="container text faderContainer">
-<div class="fader">Invite others to the trial<div class="arrow right"></div></div>
-<div class="steps">
-<ul>
-<li> [Coming soon!] <howto: sends invitation to join dime to a person (e.g. for phone book contacts); invite people via tweet, email, …>go to and click here and there step 1 text</li>
-</ul>
-<p class="or">OR</p>
-<ul>
-<li>howto: the user adds (a single) contact from the the android phonebook</li>
-<li>howto: sends invitation to join dime to a person (e.g. for phone book contacts); invite people via tweet, email, …</li>
-</ul>
-</div>
-</div> -->
-
-                <h3>Thanks a lot for your time!</h3>
-            </div></div>
-
-<!-- END OF CONTENT -->
-
-
-  <script src="/dime-communications/static/ui/dime/register/js/jquery-1.9.1.min.js" type="text/javascript"></script>
-   <script src="/dime-communications/static/ui/dime/register/js/bootstrap.min.js" type="text/javascript"></script>
-
-
-<script>
-
-
-$(".fader:eq(0)").click(function() {
-$(".steps:eq(0)").fadeToggle("fast", "linear");
-<!--pfeil-->
-$(".arrow:eq(0)").toggleClass("right");
-$(".arrow:eq(0)").toggleClass("down");
-});
-
-$(".fader:eq(1)").click(function() {
-$(".steps:eq(1)").fadeToggle("fast", "linear");
-<!--pfeil-->
-$(".arrow:eq(1)").toggleClass("right");
-$(".arrow:eq(1)").toggleClass("down");
-});
-
-$(".fader:eq(2)").click(function() {
-$(".steps:eq(2)").fadeToggle("fast", "linear");
-<!--pfeil-->
-$(".arrow:eq(2)").toggleClass("right");
-$(".arrow:eq(2)").toggleClass("down");
-});
-
-$(".fader:eq(3)").click(function() {
-$(".steps:eq(3)").fadeToggle("fast", "linear");
-<!--pfeil-->
-$(".arrow:eq(3)").toggleClass("right");
-$(".arrow:eq(3)").toggleClass("down");
-});
-
-$(".fader:eq(4)").click(function() {
-$(".steps:eq(4)").fadeToggle("fast", "linear");
-<!--pfeil-->
-$(".arrow:eq(4)").toggleClass("right");
-$(".arrow:eq(4)").toggleClass("down");
-});
-
-$(".fader:eq(5)").click(function() {
-$(".steps:eq(5)").fadeToggle("fast", "linear");
-<!--pfeil-->
-$(".arrow:eq(5)").toggleClass("right");
-$(".arrow:eq(5)").toggleClass("down");
-});
-
-$(".fader:eq(6)").click(function() {
-$(".steps:eq(6)").fadeToggle("fast", "linear");
-<!--pfeil-->
-$(".arrow:eq(6)").toggleClass("right");
-$(".arrow:eq(6)").toggleClass("down");
-});
-
-$(".fader:eq(7)").click(function() {
-$(".steps:eq(7)").fadeToggle("fast", "linear");
-<!--pfeil-->
-$(".arrow:eq(7)").toggleClass("right");
-$(".arrow:eq(7)").toggleClass("down");
-});
-
-$(".fader:eq(8)").click(function() {
-$(".steps:eq(8)").fadeToggle("fast", "linear");
-<!--pfeil-->
-$(".arrow:eq(8)").toggleClass("right");
-$(".arrow:eq(8)").toggleClass("down");
-});
-
-$(".fader:eq(9)").click(function() {
-$(".steps:eq(9)").fadeToggle("fast", "linear");
-<!--pfeil-->
-$(".arrow:eq(9)").toggleClass("right");
-$(".arrow:eq(9)").toggleClass("down");
-});
-
-$(".fader:eq(10)").click(function() {
-$(".steps:eq(10)").fadeToggle("fast", "linear");
-<!--pfeil-->
-$(".arrow:eq(10)").toggleClass("right");
-$(".arrow:eq(10)").toggleClass("down");
-});
-
-$(".fader:eq(11)").click(function() {
-$(".steps:eq(11)").fadeToggle("fast", "linear");
-<!--pfeil-->
-$(".arrow:eq(11)").toggleClass("right");
-$(".arrow:eq(11)").toggleClass("down");
-});
-
-$(".fader:eq(12)").click(function() {
-$(".steps:eq(12)").fadeToggle("fast", "linear");
-<!--pfeil-->
-$(".arrow:eq(12)").toggleClass("right");
-$(".arrow:eq(12)").toggleClass("down");
-});
-
-$(".fader:eq(13)").click(function() {
-$(".steps:eq(13)").fadeToggle("fast", "linear");
-<!--pfeil-->
-$(".arrow:eq(13)").toggleClass("right");
-$(".arrow:eq(13)").toggleClass("down");
-});
-
-$(".fader:eq(14)").click(function() {
-$(".steps:eq(14)").fadeToggle("fast", "linear");
-<!--pfeil-->
-$(".arrow:eq(14)").toggleClass("right");
-$(".arrow:eq(14)").toggleClass("down");
-});
-
-$(".fader:eq(15)").click(function() {
-$(".steps:eq(15)").fadeToggle("fast", "linear");
-<!--pfeil-->
-$(".arrow:eq(15)").toggleClass("right");
-$(".arrow:eq(15)").toggleClass("down");
-});
-
-$(".fader:eq(16)").click(function() {
-$(".steps:eq(16)").fadeToggle("fast", "linear");
-<!--pfeil-->
-$(".arrow:eq(16)").toggleClass("right");
-$(".arrow:eq(16)").toggleClass("down");
-});
-
-$(".fader:eq(17)").click(function() {
-$(".steps:eq(17)").fadeToggle("fast", "linear");
-<!--pfeil-->
-$(".arrow:eq(17)").toggleClass("right");
-$(".arrow:eq(17)").toggleClass("down");
-});
-
-$(".fader:eq(18)").click(function() {
-$(".steps:eq(18)").fadeToggle("fast", "linear");
-<!--pfeil-->
-$(".arrow:eq(18)").toggleClass("right");
-$(".arrow:eq(18)").toggleClass("down");
-});
-
-
-$(".fader:eq(19)").click(function() {
-$(".steps:eq(19)").fadeToggle("fast", "linear");
-<!--pfeil-->
-$(".arrow:eq(19)").toggleClass("right");
-$(".arrow:eq(19)").toggleClass("down");
-});
-
-$(".fader:eq(20)").click(function() {
-$(".steps:eq(20)").fadeToggle("fast", "linear");
-<!--pfeil-->
-$(".arrow:eq(20)").toggleClass("right");
-$(".arrow:eq(20)").toggleClass("down");
-});
-
-$(".fader:eq(21)").click(function() {
-$(".steps:eq(21)").fadeToggle("fast", "linear");
-<!--pfeil-->
-$(".arrow:eq(21)").toggleClass("right");
-$(".arrow:eq(21)").toggleClass("down");
-});</script>
-
-<!--  
+					<!-- h2 Add your own data to di.me and share it.-->
+					<div class="container text">
+						<h2>4. Add your own data to di.me and share it</h2>
+						<p>You can upload your own files and information to your
+							di.me, in order to share them with your contacts. Your data is
+							stored on your di.me, i.e. on the server to which you have
+							registered (the di.me test trial 2013 or your own server if you
+							opted to host di.me yourself).</p>
+					</div>
+					<!-- Upload files to your di.me server and share them-->
+					<div class="container text faderContainer">
+						<div class="fader">
+							Upload files to your di.me server and share them
+							<div class="arrow right"></div>
+						</div>
+						<div class="steps">
+							<ul>
+								<!--Steps -->
+								<li>Go to "MyData"</li>
+								<li>Upload files (browser: drop a file to the dropzone or
+									use the button "upload" at the bottom)</li>
+								<li>Now you can share the file with others, set it's
+									privacy value, etc.</li>
+								<li>You may also use <em>"data boxes"</em> to organize your
+									files: add your own boxes and drop your files in it.
+								</li>
+							</ul>
+						</div>
+					</div>
+					<!-- Connect to Linkedin or twitter // Merge // reuse profiles -->
+					<div class="container text faderContainer">
+						<div class="fader">
+							Connect your Linkedin or Twitter account and see the profile
+							information from there
+							<div class="arrow right"></div>
+						</div>
+						<div class="steps">
+							<ul>
+								<!--Steps -->
+								<li>Go to "Settings"</li>
+								<li>Click on "+" add a service, then select "Linkedin" or
+									"Twitter"</li>
+								<li>Follow the instructions of the dialogs to connect to
+									your accounts. <br>&#8594 Contacts from Linkedin are shown
+									in your di.me contact list. Di.me will also show suggestions to
+									merge contacts to existing ones that you perhaps already have.
+									<br>&#8594 Your profile details from Linkedin or Twitter
+									are imported to di.me. You can reuse these to enrich your di.me
+									profile cards.
+								</li>
+							</ul>
+							<!-- <p class="or"></p> -->
+							<!-- <li>xxx send via twitter senden</li> -->
+						</div>
+					</div>
+					<!-- Add new details to your profile card -->
+					<div class="container text faderContainer">
+						<div class="fader">
+							Add new profile details
+							<div class="arrow right"></div>
+						</div>
+						<div class="steps">
+							<p class="or">You can edit the details shown in a profile
+								card:</p>
+							<ul>
+								<!--Steps -->
+								<li>Go to "My Profile".</li>
+								<li>Click on "MyBusinessCard".</li>
+								<li>Add or remove profile details (browser: Click on the
+									profile details; in the popup window, click on the profile
+									details to add or remove them from the Profile Card).</li>
+							</ul>
+							<p class="or">You can enter new profile details:</p>
+							<ul>
+								<!--Steps -->
+								<li>Go to "My Profile".</li>
+								<li>Make a new profile detail(browser: click "New &gt; New
+									profile detail" in the bar on the right)"</li>
+								<li>Choose the category, e.g. "PhoneNumber", or "Interest".
+								</li>
+								<li>Add information, e.g. the phone number, or an interest
+								</li>
+								<li>You may change the description from e.g. "My Phone" to
+									"My private mobile phone".</li>
+								<li>Click "Create" &#8594 The new profile detail shows up
+									in the list.</li>
+								<li>As above: Now you can add this new profile detail to a
+									Profile Card, e.g. "MyBusinessCard"</li>
+							</ul>
+						</div>
+					</div>
+					<!-- Add a new profile card -->
+					<div class="container text faderContainer">
+						<div class="fader">
+							Add a new profile card
+							<div class="arrow right"></div>
+						</div>
+						<div class="steps">
+							<ul>
+								<!--Steps -->
+								<li>Go to "My Profile".</li>
+								<li>Make a new Profile Card (browser: click "New &gt; New
+									Profile Card" in the bar on the right)"</li>
+								<li>Enter a title for the Card, e.g. "MyCloseFriendsCard"</li>
+								<li>As above: Add or remove profile information (browser:
+									Click on the list of attributes; in the popup window, click on
+									the attributes to add or remove them from the Profile Card).</li>
+							</ul>
+						</div>
+					</div>
 
 
-<script>
+					<!-- h2 SITUATION Test di.me's knowledge about situations, and who is nearby-->
+					<div class="container text">
+						<h2>5. di.me's context-awareness</h2>
+						<p>di.me is a context-aware system: You can try out the
+							detection of locations, situations, people nearby, etc.:</p>
+					</div>
+					<!-- Prepare your di.me Android app for Context-Awareness-->
+					<div class="container text faderContainer">
+						<div class="fader">
+							<b>Required: </b>Activate the location detection
+							<div class="arrow right"></div>
+						</div>
+						<div class="steps">
+							<p class="or">The context-aware functions in di.me use your
+								location. If you the di.me Android app, also sensor data can be
+								used. This data is stored on your di.me server and used by di.me
+								services (see below).</p>
+							<p class="or">Browser:</p>
+							<ul>
+								<!--Steps -->
+								<li>Go to places (top right corner: Click on "Location
+									unknown" or your current location)</li>
+								<li>Click on "Get location ..." (in the bar on the right),
+									follow the instructions in the browser</li>
+							</ul>
+							<p class="or">On your Android:</p>
+							<ul>
+								<!--Steps -->
+								<li>Go to "Settings"</li>
+								<li>Activate "Store Android sensor data"</li>
+							</ul>
+						</div>
+					</div>
+					<!-- See what Situation di.me detects-->
+					<div class="container text faderContainer">
+						<div class="fader">
+							See your situations, or add custom ones.
+							<div class="arrow right"></div>
+						</div>
+						<div class="steps">
+							<p class="or">You can train di.me to recognize your
+								situations: If you train the system, di.me will recognize the
+								situation according to your context.</p>
+							<ul>
+								<!--Steps -->
+								<li>Click on the current situation (browser: in the
+									top-right corner below your user-name; Android: on the start
+									page) <br>&nbsp;&nbsp;&#8594 The list of situations
+									provided by default is shown
+								</li>
+								<li>click on "activate (browser: in the bar on the right) <br>&nbsp;&nbsp;&#8594
+									The selected situation is now active and the system learns that
+									it is related to the current sensor data. <br>&nbsp;&nbsp;&#8594
+									As you use and train di.me to recognise your situations, you
+									will notice that the order of the stored situations will change
+									according to your context.
+								</li>
+								<li>Coming soon: Add custom situations</li>
+							</ul>
+						</div>
+					</div>
+					<!-- Coming soon: See di.me users who are nearby -->
+					<div class="container text faderContainer">
+						<div class="fader">
+							See di.me users who are nearby.
+							<div class="arrow right"></div>
+						</div>
+						<div class="steps">
+							<ul>
+								<!--Steps -->
+								<li>Connect to the <em>ProximityService</em> (As above: go
+									to "Settings &gt; Services", add the service; Android app: use
+									the Action button in the top-right corner)
+									<p class="or">&#8594 The ProximityService is activated; It
+										shows a "nearby-group" (di.me users nearby to you), and shows
+										to other users that you are nearby. When you connect, you
+										select the Profile Card that shall be given to other nearby
+										users (NOTE: this feature is currently supported only if you
+										select your public profile card). Only if they know this
+										ProfileCard already, you are shown in their "nearby-group".
+										Uses the geo-location and other sensor data from your Android
+										device (if you have activated the setting "Store Android
+										sensor data on your server"). This service is provided as test
+										service from the di.me project consortium.</p></li>
+							</ul>
+						</div>
+					</div>
+					<!-- Nearby Places -->
+					<div class="container text faderContainer">
+						<div class="fader">
+							Show nearby places
+							<div class="arrow right"></div>
+						</div>
+						<div class="steps">
+							<p class="or">
+								The YellowMapPlaces service detects places nearby, allows you to
+								vote and set favorite places and to retrieve social
+								recommendations on them (<em>Please note:</em> Currently, the
+								service shows only places in selected cities of the di.me
+								project):
+							</p>
+							<ul>
+								<li>Connect to the YellowMapPlaceService (Android: use the
+									Action button / Browser: go to "Settings", select "Add
+									Service", choose "YellowMapPlaceService", accept YM service
+									terms.)</li>
+								<li>Go to places (browser: Click on your current place,
+									e.g. "Location unknown", in the top right corner; if needed,
+									click "Get location ..." again). <br>&nbsp;&nbsp;&#8594
+									The places nearby to your location are shown.
+								</li>
+								<li>Open a place to get a detailed description, to mark a
+									favorite place, or to set a personal rating</li>
+							</ul>
+						</div>
+					</div>
 
-$('.faderContainer').click(function() {
-  var self   = $(this),
-      index  = self.index(),
-      text   = self.text();
-	  
-  $(this).find(".steps").fadeToggle("fast", "linear");
-  $(this).find(".arrow").toggleClass("right");
-  $(this).find(".arrow").toggleClass("down");
- 
-  
-  
-  
-});
+					<!--FOOTER-->
+					<br>
+					<div class="container">
+						<h2>Finally:</h2>
+						<h5>Please continue your di.me trial!</h5>
+						<p>
+							The trial will run in 2013, and will serve as a demonstration of
+							the project results and the public open source di.me development.
+							Therefore, we would like to invite you to use and test the
+							demonstrator continuously, by connecting to others,
+							<!-- importing your profiles, uploading your files, sharing your data -->
+							and trying out the available features.
+						</p>
 
-</script>
--->
+						<h5>Feedback is very much appreciated!</h5>
+
+						<p>Once you went through this tour and have familiarised
+							yourself with the di.me demonstrator, please find some time to
+							fill out our questionaire:</p>
+
+						<p>
+							<a href="/dime-communications/web/access/questionaire?lang=en"
+								target="_blank">questionnaire</a> (please login with your di.me
+							account).
+							<!-- <a href="/di/dime-communications/web/access/questionaire?lang=de" class="push" target="_blank">(German)</a>. -->
+						</p>
+
+						<!-- Invite others to the trial <div class="container text faderContainer">
+						<div class="fader">Invite others to the trial<div class="arrow right"></div></div>
+						<div class="steps">
+						<ul>
+						<li> [Coming soon!] <howto: sends invitation to join dime to a person (e.g. for phone book contacts); invite people via tweet, email, …>go to and click here and there step 1 text</li>
+						</ul>
+						<p class="or">OR</p>
+						<ul>
+						<li>howto: the user adds (a single) contact from the the android phonebook</li>
+						<li>howto: sends invitation to join dime to a person (e.g. for phone book contacts); invite people via tweet, email, …</li>
+						</ul>
+						</div>
+						</div> -->
+
+						<h3>Thanks a lot for your time!</h3>
+					</div>
+				</div>
+
+				<!-- END OF CONTENT -->
+
+				<script
+					src="/dime-communications/static/ui/dime/register/js/jquery-1.9.1.min.js"
+					type="text/javascript"></script>
+				<script
+					src="/dime-communications/static/ui/dime/register/js/bootstrap.min.js"
+					type="text/javascript"></script>
+
+				<script>
+					$(".fader:eq(0)").click(function() {
+						$(".steps:eq(0)").fadeToggle("fast", "linear");
+						<!--pfeil-->
+						$(".arrow:eq(0)").toggleClass("right");
+						$(".arrow:eq(0)").toggleClass("down");
+					});
+
+					$(".fader:eq(1)").click(function() {
+						$(".steps:eq(1)").fadeToggle("fast", "linear");
+						<!--pfeil-->
+						$(".arrow:eq(1)").toggleClass("right");
+						$(".arrow:eq(1)").toggleClass("down");
+					});
+
+					$(".fader:eq(2)").click(function() {
+						$(".steps:eq(2)").fadeToggle("fast", "linear");
+						<!--pfeil-->
+						$(".arrow:eq(2)").toggleClass("right");
+						$(".arrow:eq(2)").toggleClass("down");
+					});
+
+					$(".fader:eq(3)").click(function() {
+						$(".steps:eq(3)").fadeToggle("fast", "linear");
+						<!--pfeil-->
+						$(".arrow:eq(3)").toggleClass("right");
+						$(".arrow:eq(3)").toggleClass("down");
+					});
+
+					$(".fader:eq(4)").click(function() {
+						$(".steps:eq(4)").fadeToggle("fast", "linear");
+						<!--pfeil-->
+						$(".arrow:eq(4)").toggleClass("right");
+						$(".arrow:eq(4)").toggleClass("down");
+					});
+
+					$(".fader:eq(5)").click(function() {
+						$(".steps:eq(5)").fadeToggle("fast", "linear");
+						<!--pfeil-->
+						$(".arrow:eq(5)").toggleClass("right");
+						$(".arrow:eq(5)").toggleClass("down");
+					});
+
+					$(".fader:eq(6)").click(function() {
+						$(".steps:eq(6)").fadeToggle("fast", "linear");
+						<!--pfeil-->
+						$(".arrow:eq(6)").toggleClass("right");
+						$(".arrow:eq(6)").toggleClass("down");
+					});
+
+					$(".fader:eq(7)").click(function() {
+						$(".steps:eq(7)").fadeToggle("fast", "linear");
+						<!--pfeil-->
+						$(".arrow:eq(7)").toggleClass("right");
+						$(".arrow:eq(7)").toggleClass("down");
+					});
+
+					$(".fader:eq(8)").click(function() {
+						$(".steps:eq(8)").fadeToggle("fast", "linear");
+						<!--pfeil-->
+						$(".arrow:eq(8)").toggleClass("right");
+						$(".arrow:eq(8)").toggleClass("down");
+					});
+
+					$(".fader:eq(9)").click(function() {
+						$(".steps:eq(9)").fadeToggle("fast", "linear");
+						<!--pfeil-->
+						$(".arrow:eq(9)").toggleClass("right");
+						$(".arrow:eq(9)").toggleClass("down");
+					});
+
+					$(".fader:eq(10)").click(function() {
+						$(".steps:eq(10)").fadeToggle("fast", "linear");
+						<!--pfeil-->
+						$(".arrow:eq(10)").toggleClass("right");
+						$(".arrow:eq(10)").toggleClass("down");
+					});
+
+					$(".fader:eq(11)").click(function() {
+						$(".steps:eq(11)").fadeToggle("fast", "linear");
+						<!--pfeil-->
+						$(".arrow:eq(11)").toggleClass("right");
+						$(".arrow:eq(11)").toggleClass("down");
+					});
+
+					$(".fader:eq(12)").click(function() {
+						$(".steps:eq(12)").fadeToggle("fast", "linear");
+						<!--pfeil-->
+						$(".arrow:eq(12)").toggleClass("right");
+						$(".arrow:eq(12)").toggleClass("down");
+					});
+
+					$(".fader:eq(13)").click(function() {
+						$(".steps:eq(13)").fadeToggle("fast", "linear");
+						<!--pfeil-->
+						$(".arrow:eq(13)").toggleClass("right");
+						$(".arrow:eq(13)").toggleClass("down");
+					});
+
+					$(".fader:eq(14)").click(function() {
+						$(".steps:eq(14)").fadeToggle("fast", "linear");
+						<!--pfeil-->
+						$(".arrow:eq(14)").toggleClass("right");
+						$(".arrow:eq(14)").toggleClass("down");
+					});
+
+					$(".fader:eq(15)").click(function() {
+						$(".steps:eq(15)").fadeToggle("fast", "linear");
+						<!--pfeil-->
+						$(".arrow:eq(15)").toggleClass("right");
+						$(".arrow:eq(15)").toggleClass("down");
+					});
+
+					$(".fader:eq(16)").click(function() {
+						$(".steps:eq(16)").fadeToggle("fast", "linear");
+						<!--pfeil-->
+						$(".arrow:eq(16)").toggleClass("right");
+						$(".arrow:eq(16)").toggleClass("down");
+					});
+
+					$(".fader:eq(17)").click(function() {
+						$(".steps:eq(17)").fadeToggle("fast", "linear");
+						<!--pfeil-->
+						$(".arrow:eq(17)").toggleClass("right");
+						$(".arrow:eq(17)").toggleClass("down");
+					});
+
+					$(".fader:eq(18)").click(function() {
+						$(".steps:eq(18)").fadeToggle("fast", "linear");
+						<!--pfeil-->
+						$(".arrow:eq(18)").toggleClass("right");
+						$(".arrow:eq(18)").toggleClass("down");
+					});
+
+					$(".fader:eq(19)").click(function() {
+						$(".steps:eq(19)").fadeToggle("fast", "linear");
+						<!--pfeil-->
+						$(".arrow:eq(19)").toggleClass("right");
+						$(".arrow:eq(19)").toggleClass("down");
+					});
+
+					$(".fader:eq(20)").click(function() {
+						$(".steps:eq(20)").fadeToggle("fast", "linear");
+						<!--pfeil-->
+						$(".arrow:eq(20)").toggleClass("right");
+						$(".arrow:eq(20)").toggleClass("down");
+					});
+
+					$(".fader:eq(21)").click(function() {
+						$(".steps:eq(21)").fadeToggle("fast", "linear");
+						<!--pfeil-->
+						$(".arrow:eq(21)").toggleClass("right");
+						$(".arrow:eq(21)").toggleClass("down");
+					});
+				</script>
+
+				<!--  <script>
+				$('.faderContainer').click(function() {
+				  var self   = $(this),
+				      index  = self.index(),
+				      text   = self.text();
+					  
+				  $(this).find(".steps").fadeToggle("fast", "linear");
+				  $(this).find(".arrow").toggleClass("right");
+				  $(this).find(".arrow").toggleClass("down");
+				  
+				});
+				</script> -->
 </body>
 
 
