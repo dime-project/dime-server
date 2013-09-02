@@ -62,7 +62,18 @@ public interface PolicyManager {
 	 * @param adapterId
 	 * @param value
 	 */
+	@Deprecated
 	public void setAdapterPolicy(String policyName, String adapterId, String value);
+
+	/**
+	 * Sets a policy setting value with adapter-level scope.
+	 * 
+	 * @param tenantId
+	 * @param policyName
+	 * @param adapterId
+	 * @param value
+	 */
+	public void setAdapterPolicy(Long tenantId, String policyName, String adapterId, String value);
 	
 	/**
 	 * Registers a policy plugin to modify operations.

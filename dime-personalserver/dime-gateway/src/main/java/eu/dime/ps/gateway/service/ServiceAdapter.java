@@ -60,6 +60,18 @@ public interface ServiceAdapter {
     public void setSetting(String name, String value) throws ServiceNotAvailableException;
 
     /**
+     * Sets the value of a service-specific di.me setting. This is saved in the
+     * policy manager in services.properties as both a adapter-specific setting,
+     * and in the adapter-specific SETTINGS json output string.
+     *
+     * @param tenantId
+     * @param name
+     * @param value
+     * @throws ServiceNotAvailableException
+     */
+    public void setSetting(Long tenantId, String name, String value) throws ServiceNotAvailableException;
+
+    /**
      * Sets the policy manager.
      *
      * @param policyManager

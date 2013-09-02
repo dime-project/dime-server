@@ -136,6 +136,17 @@ public abstract class ServiceAdapterBase implements ServiceAdapter {
     }
 
     /**
+     *
+     * @param name
+     * @param value
+     */
+    public void setSetting(Long tenantId, String name, String value) {
+        this.policyManager.setAdapterPolicy(tenantId, name, this.identifier, value);
+        this.sadapter.updateSetting(name, value);
+        this.policyManager.setAdapterPolicy(tenantId, name, this.identifier, value);
+    }
+
+    /**
      * Retrieves an attribute. This method returns the raw data from the
      * service. In case multiple objects are returned, the objects will be
      * sequentially listed in the returned string array.

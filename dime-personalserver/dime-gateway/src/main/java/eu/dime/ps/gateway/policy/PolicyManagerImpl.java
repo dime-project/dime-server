@@ -248,6 +248,7 @@ public class PolicyManagerImpl implements PolicyManager {
 	 * eu.dime.ps.communications.services.PolicyManager#setAdapterPolicy(java
 	 * .lang.String, java.lang.String, java.lang.Integer)
 	 */
+	@Deprecated
 	public void setAdapterPolicy(String policyName, String adapterId,
 			String value) {
 		policyName = clean(policyName);
@@ -258,6 +259,26 @@ public class PolicyManagerImpl implements PolicyManager {
 			value = "";
 		adapterPolicy.put(adapterId + "_" + policyName, value);
 		policyStore.storeOrUpdate(adapterId + "_" + policyName, value.toString(), adapterId, false, policyName);
+	}
+	
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * eu.dime.ps.communications.services.PolicyManager#setAdapterPolicy(java.lang.Long, java
+	 * .lang.String, java.lang.String, java.lang.Integer)
+	 */
+	public void setAdapterPolicy(Long tenantId, String policyName, String adapterId,
+			String value) {
+		policyName = clean(policyName);
+		adapterId = clean(adapterId);
+
+		// Note: PolicyStore does not allow deleting, so we set an empty string
+		if (value == null)
+			value = "";
+		adapterPolicy.put(adapterId + "_" + policyName, value);
+		policyStore.storeOrUpdate(adapterId + "_" + policyName, value.toString(), tenantId,  adapterId, policyName, false);
 	}
 	
 	/* (non-Javadoc)

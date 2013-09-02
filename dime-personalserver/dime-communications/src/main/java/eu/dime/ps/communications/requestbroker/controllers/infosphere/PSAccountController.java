@@ -205,7 +205,7 @@ public class PSAccountController implements APIController {
                 Iterator<SAdapterSetting> iter = newAccount.getSettings().iterator();
                 while (iter.hasNext()) {
                     SAdapterSetting setting = iter.next();
-                    sa.setSetting(setting.getName(), setting.getValue());
+                    sa.setSetting(TenantHelper.getCurrentTenant().getId(), setting.getName(), setting.getValue());
                 }
             }
 
@@ -274,7 +274,7 @@ public class PSAccountController implements APIController {
                 Iterator<SAdapterSetting> iter = updatedAccount.getSettings().iterator();
                 while (iter.hasNext()) {
                     SAdapterSetting setting = iter.next();
-                    sa.setSetting(setting.getName(), setting.getValue());
+                    sa.setSetting(TenantHelper.getCurrentTenant().getId(), setting.getName(), setting.getValue());
                 }
             }
 
