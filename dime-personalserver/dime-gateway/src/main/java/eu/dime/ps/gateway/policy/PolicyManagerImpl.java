@@ -257,7 +257,7 @@ public class PolicyManagerImpl implements PolicyManager {
 		if (value == null)
 			value = "";
 		adapterPolicy.put(adapterId + "_" + policyName, value);
-		policyStore.storeOrUpdate(adapterId + "_" + policyName, value.toString());
+		policyStore.storeOrUpdate(adapterId + "_" + policyName, value.toString(), adapterId, false, policyName);
 	}
 	
 	/* (non-Javadoc)
