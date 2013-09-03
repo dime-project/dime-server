@@ -16,3 +16,8 @@ Documentation can be found in the wiki: https://github.com/dime-project/meta/wik
 Please report issues in the project issue tracker at: https://github.com/dime-project/meta/issues
 
 
+### Project Web-Site
+
+Information about the Open-Source project can be found at:  http://dime-project.github.io
+
+The web-site of the research project: http://www.dime-project.eu
