@@ -59,16 +59,6 @@ public class PSSharedController extends PSControllerBase implements APIControlle
 
 	private static final Logger logger = LoggerFactory.getLogger(PSSharedController.class);
 
-	private static final Map<String, String> NS_PREFIXES = new HashMap<String, String>();
-	static {
-		NS_PREFIXES.put("dlpo", "http://www.semanticdesktop.org/ontologies/2011/10/05/dlpo");
-		NS_PREFIXES.put("nao", "http://www.semanticdesktop.org/ontologies/2007/08/15/nao#");
-		NS_PREFIXES.put("nco", "http://www.semanticdesktop.org/ontologies/2007/03/22/nco#");
-		NS_PREFIXES.put("nie", "http://www.semanticdesktop.org/ontologies/2007/01/19/nie");
-		NS_PREFIXES.put("nfo", "http://www.semanticdesktop.org/ontologies/2007/03/22/nfo");
-		NS_PREFIXES.put("ppo", "http://vocab.deri.ie/ppo");
-	}
-
 	private ShareableDataboxManager shareableDataboxManager;
 	private ShareableLivePostManager shareableLivePostManager;
 	private ShareableProfileManager shareableProfileManager;
@@ -229,7 +219,7 @@ public class PSSharedController extends PSControllerBase implements APIControlle
 			}
 			profile = profiles.iterator().next();
 			
-			return JSONLDUtils.serialize(profile, NS_PREFIXES);
+			return JSONLDUtils.serialize(NS_PREFIXES, profile);
 		} catch (InfosphereException e) {
 			error.put("error", "Cannot retrieve resource: " + e.getMessage());
 			return error;

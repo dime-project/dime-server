@@ -15,6 +15,8 @@
 package eu.dime.ps.communications.requestbroker.controllers.infosphere;
 
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.ontoware.rdfreactor.schema.rdfs.Resource;
 import org.slf4j.Logger;
@@ -39,12 +41,23 @@ public abstract class PSControllerBase {
 
 	private static final Logger logger = LoggerFactory.getLogger(PSControllerBase.class);
 
+	protected static final Map<String, String> NS_PREFIXES = new HashMap<String, String>();
+	static {
+		NS_PREFIXES.put("dlpo", "http://www.semanticdesktop.org/ontologies/2011/10/05/dlpo#");
+		NS_PREFIXES.put("nao", "http://www.semanticdesktop.org/ontologies/2007/08/15/nao#");
+		NS_PREFIXES.put("nco", "http://www.semanticdesktop.org/ontologies/2007/03/22/nco#");
+		NS_PREFIXES.put("nie", "http://www.semanticdesktop.org/ontologies/2007/01/19/nie#");
+		NS_PREFIXES.put("nfo", "http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#");
+		NS_PREFIXES.put("ppo", "http://vocab.deri.ie/ppo#");
+	}
+
 	protected <T extends Resource> Object getResource(String said, String resourceId,
 			ShareableManager<T> manager) {
 
 		ServiceAccount account = ServiceAccount.findByName(said);
-		if (account == null || account.getAccountURI() == null)
+		if (account == null || account.getAccountURI() == null) {
 			throw new RuntimeException("Account "+said+" does not exist or is corrupted!");
+		}
 
 		Object response = null;
 
@@ -54,7 +67,7 @@ public abstract class PSControllerBase {
 			// but also that the requester is able to access this element
 			// for now, we just return the object without checking any resource
 			resource = manager.get(resourceId, getRequesterAccount());
-			response = JSONLDUtils.serialize(resource);
+			response = JSONLDUtils.serialize(NS_PREFIXES, resource);
 			logger.debug("Fetching resource "+resourceId+": "+response);
 		} catch (JSONLDProcessingError e) {
 			response = Response.serverError("Cannot serialize object to JSON-LD: " + e.getMessage(), e);
@@ -75,9 +88,10 @@ public abstract class PSControllerBase {
 		// TODO check what resources this said can access!!! and filter by it :)
 
 		ServiceAccount account = ServiceAccount.findByName(said);
-		if (account == null || account.getAccountURI() == null)
+		if (account == null || account.getAccountURI() == null) {
 			throw new RuntimeException("Account "+said+" does not exist or is corrupted!");
-
+		}
+		
 		Object response = null;
 
 		Collection<T> resources = null;
@@ -88,7 +102,7 @@ public abstract class PSControllerBase {
 
 			resources = manager.getAll(account.getAccountURI(), getRequesterAccount());
 
-			response = JSONLDUtils.serializeCollection(resources.toArray(new Resource[resources.size()]));
+			response = JSONLDUtils.serializeCollection(NS_PREFIXES, resources.toArray(new Resource[resources.size()]));
 		} catch (InfosphereException e) {
 			response = Response.serverError(e.getMessage(), e);
 		} catch (JSONLDProcessingError e) {
@@ -104,7 +118,7 @@ public abstract class PSControllerBase {
 
 	protected final String getRequesterAccount() {
 		String requester = getRequester();
-        Tenant tenant = TenantHelper.getCurrentTenant();
+		Tenant tenant = TenantHelper.getCurrentTenant();
 		User user = User.findByTenantAndByUsername(tenant, requester);
 		if (user == null || user.getAccountUri() == null) {
 			throw new IllegalArgumentException("User's account URI not found for requester '"+requester+"'.");
