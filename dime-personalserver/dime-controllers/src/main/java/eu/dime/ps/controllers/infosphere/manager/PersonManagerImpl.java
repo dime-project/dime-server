@@ -15,14 +15,17 @@
 package eu.dime.ps.controllers.infosphere.manager;
 
 import ie.deri.smile.vocabulary.FOAF;
+import ie.deri.smile.vocabulary.NCO;
 import ie.deri.smile.vocabulary.PIMO;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.ontoware.rdf2go.model.Syntax;
 import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.model.node.impl.URIImpl;
+import org.ontoware.rdf2go.vocabulary.RDF;
 
 import eu.dime.ps.controllers.exception.InfosphereException;
 import eu.dime.ps.controllers.trustengine.utils.AdvisoryConstants;
@@ -201,8 +204,13 @@ public class PersonManagerImpl extends InfoSphereManagerBase<Person> implements 
 
 	@Override
 	public Person create(PersonContact contact) throws InfosphereException {
-		PimoService pimoService = getPimoService();
+		// raise error if contact metadata doesn't contain the proper type
+		if (!contact.getModel().contains(contact, RDF.type, NCO.PersonContact)) {
+			throw new InfosphereException("The person couldn't be created. " +
+					"The profile " + contact + " must be of type nco:PersonContact. Profile metadata:\n" + contact.getModel().serialize(Syntax.Turtle));
+		}
 		
+		PimoService pimoService = getPimoService();
 		try {
 			pimoService.create(contact);
 		} catch (ResourceExistsException e) {

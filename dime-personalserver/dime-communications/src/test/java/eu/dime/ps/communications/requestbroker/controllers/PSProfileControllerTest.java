@@ -14,14 +14,12 @@
 
 package eu.dime.ps.communications.requestbroker.controllers;
 
-import static org.mockito.Mockito.mock;
-
 import java.util.List;
 
-import org.junit.Assert;
 import org.junit.Test;
 
-import de.dfki.km.json.JSONUtils;
+import com.github.jsonldjava.utils.JSONUtils;
+
 import eu.dime.commons.dto.Request;
 import eu.dime.commons.dto.Response;
 import eu.dime.ps.communications.requestbroker.controllers.infosphere.PSProfileController;

@@ -11,10 +11,7 @@
 * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 * See the Licence for the specific language governing permissions and limitations under the Licence.
 */
-
-
 package eu.dime.ps.gateway.service.internal;
-
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -33,14 +30,16 @@ import net.sf.json.JSONObject;
 import net.sf.json.JSONSerializer;
 
 import org.apache.http.HttpStatus;
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.map.JsonMappingException;
 import org.ontoware.rdf2go.model.Syntax;
 import org.ontoware.rdfreactor.schema.rdfs.Resource;
 import org.scribe.model.Token;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.github.jsonldjava.core.JSONLDProcessingError;
 
 import eu.dime.commons.dto.Data;
 import eu.dime.commons.dto.Entry;
@@ -243,6 +242,10 @@ public class DimeServiceAdapter extends ServiceAdapterBase implements InternalSe
 					"Could not process response: Invalid JSON returned - Parse exception.",
 					"SERV-100");
 		} catch (JsonMappingException e) {
+			throw new ServiceNotAvailableException(
+					"Could not process response: Invalid JSON returned - Parse exception.",
+					"SERV-100");
+		} catch (JSONLDProcessingError e) {
 			throw new ServiceNotAvailableException(
 					"Could not process response: Invalid JSON returned - Parse exception.",
 					"SERV-100");

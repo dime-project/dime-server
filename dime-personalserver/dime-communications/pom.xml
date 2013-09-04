@@ -18,6 +18,8 @@
 	<name>Digital.me Communication Interface</name>
 
 	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	
 		<web.container.server>localhost</web.container.server>
 		<web.container.server.port>8080</web.container.server.port>
 		<web.container.https.port>8443</web.container.https.port>
@@ -26,8 +28,8 @@
 		<key.store.filename>dime-server-ssl.keystore</key.store.filename>
 		<key.store.keypass>dimepass</key.store.keypass>
 		<key.store.storepass>dimepass</key.store.storepass>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<org.apache.version>4.1</org.apache.version>
+		
+		<org.apache.httpcomponents.version>4.2.5</org.apache.httpcomponents.version>
 		<atmosphere.version>1.0.0</atmosphere.version>
 	</properties>
 
@@ -179,7 +181,7 @@
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpmime</artifactId>
-			<version>${org.apache.version}</version>
+			<version>${org.apache.httpcomponents.version}</version>
 			<exclusions>
 				<exclusion>
 					<groupId>commons-logging</groupId>
@@ -190,7 +192,7 @@
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpclient</artifactId>
-			<version>${org.apache.version}</version>
+			<version>${org.apache.httpcomponents.version}</version>
 			<exclusions>
 				<exclusion>
 					<groupId>commons-logging</groupId>

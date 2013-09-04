@@ -21,6 +21,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import com.github.jsonldjava.core.JSONLDProcessingError;
+
 import eu.dime.commons.dto.Response;
 import eu.dime.commons.dto.Response.Status;
 import eu.dime.ps.controllers.exception.ForbiddenException;
@@ -54,6 +56,8 @@ public abstract class PSControllerBase {
 			resource = manager.get(resourceId, getRequesterAccount());
 			response = JSONLDUtils.serialize(resource);
 			logger.debug("Fetching resource "+resourceId+": "+response);
+		} catch (JSONLDProcessingError e) {
+			response = Response.serverError("Cannot serialize object to JSON-LD: " + e.getMessage(), e);
 		} catch (NotFoundException e) {
 			response = Response.status(Status.NOT_FOUND, e.getMessage());
 		} catch (ForbiddenException e) {
@@ -87,6 +91,8 @@ public abstract class PSControllerBase {
 			response = JSONLDUtils.serializeCollection(resources.toArray(new Resource[resources.size()]));
 		} catch (InfosphereException e) {
 			response = Response.serverError(e.getMessage(), e);
+		} catch (JSONLDProcessingError e) {
+			response = Response.serverError("Cannot serialize object to JSON-LD: " + e.getMessage(), e);
 		}
 
 		return response;

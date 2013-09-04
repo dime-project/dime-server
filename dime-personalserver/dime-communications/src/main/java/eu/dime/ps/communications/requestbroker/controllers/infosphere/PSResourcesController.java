@@ -60,6 +60,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
+import com.github.jsonldjava.core.JSONLDProcessingError;
 import com.sun.jersey.multipart.FormDataParam;
 
 import eu.dime.commons.dto.Data;
@@ -85,11 +86,8 @@ import eu.dime.ps.gateway.util.JSONLDUtils;
 import eu.dime.ps.semantic.model.ModelFactory;
 import eu.dime.ps.semantic.model.NFOFactory;
 import eu.dime.ps.semantic.model.nfo.FileDataObject;
-import eu.dime.ps.semantic.model.pimo.Person;
 import eu.dime.ps.semantic.model.ppo.PrivacyPreference;
 import eu.dime.ps.semantic.privacy.PrivacyPreferenceType;
-
-import eu.dime.ps.storage.entities.AccountCredentials;
 import eu.dime.ps.storage.entities.Tenant;
 
 /**
@@ -550,6 +548,8 @@ public class PSResourcesController extends PSSharingControllerBase implements AP
 
 				return Response.ok(data);
 
+			} catch (JSONLDProcessingError e) {
+				return Response.badRequest("JSON-LD document is bad formed and cannot be parsed:\n" + jsonld, e);
 			} catch (ModelRuntimeException e) {
 				return Response.serverError(e.getMessage(), e);
 			} catch (IOException e) {

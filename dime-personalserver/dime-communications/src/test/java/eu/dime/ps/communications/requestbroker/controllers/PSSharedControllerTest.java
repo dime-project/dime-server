@@ -164,18 +164,19 @@ public class PSSharedControllerTest extends Assert {
 	
 	@Test
 	public void testGetProfileJSONLD() throws Exception {
-		Object response = controller.getProfileJSONLD(SAID);
+		Object json = controller.getProfileJSONLD(SAID);
 		
-		assertNotNull(response);
-		assertTrue(response instanceof List);
-		
-		List jsonld = (List) response;
-		assertEquals(4, jsonld.size()); // PersonContact + 3 attributes
+		assertNotNull(json);
+		assertTrue("Response must be a Map containing @context and @graph", json instanceof Map);
+
+		Map response = (Map) json;
+		List resources = (List) response.get("@graph");
+		assertEquals(4, resources.size()); // PersonContact + 3 attributes
 
 		List<String> ids = new ArrayList<String>();
 		List<String> types = new ArrayList<String>();
-		for (Object entry : jsonld) {
-			Map<String, Object> data = (Map<String, Object>) entry;
+		for (Object resource : resources) {
+			Map<String, Object> data = (Map<String, Object>) resource;
 			ids.add(data.get("@id").toString());
 			types.add(data.get("@type").toString());
 		}

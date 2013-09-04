@@ -28,6 +28,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
+import org.ontoware.rdf2go.model.Syntax;
 import org.ontoware.rdf2go.model.node.Node;
 import org.ontoware.rdfreactor.schema.rdfs.Resource;
 import org.semanticdesktop.aperture.util.UriUtil;
@@ -36,6 +37,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+
+import com.github.jsonldjava.core.JSONLDProcessingError;
 
 import eu.dime.ps.communications.utils.Base64encoding;
 import eu.dime.ps.controllers.exception.InfosphereException;
@@ -196,6 +199,7 @@ public class PSSharedController extends PSControllerBase implements APIControlle
 			return error;
 		}
 
+		T profile = null;
 		try {
 			// TODO the managers should ensure that only the "allowed" data is returned,
 			// but also that the requester is able to access this element
@@ -203,6 +207,7 @@ public class PSSharedController extends PSControllerBase implements APIControlle
 
 			String requester = getRequesterAccount();
 			String accountUri = account.getAccountURI();
+			
 			Collection<T> profiles = manager.getAll(accountUri, requester);
 			if (profiles.size() == 0) {
 				error.put("error", "No profile was shared with " + requester + " through account " +
@@ -212,10 +217,15 @@ public class PSSharedController extends PSControllerBase implements APIControlle
 				logger.warn("There should be only one profile card associated with account " + 
 						accountUri + ". Returning first profile card found, but this should not happen.");
 			}
-
-			return JSONLDUtils.serialize(profiles.iterator().next());
+			profile = profiles.iterator().next();
+			
+			return JSONLDUtils.serialize(profile);
 		} catch (InfosphereException e) {
-			error.put("error", "Cannot retrieve resource: " + e.getLocalizedMessage());
+			error.put("error", "Cannot retrieve resource: " + e.getMessage());
+			return error;
+		} catch (JSONLDProcessingError e) {
+			error.put("error", "Cannot serialize profile to JSON-LD: " + e.getMessage() +
+					"\nProfile's RDF: \n" + profile.getModel().serialize(Syntax.Turtle));
 			return error;
 		}
 	}

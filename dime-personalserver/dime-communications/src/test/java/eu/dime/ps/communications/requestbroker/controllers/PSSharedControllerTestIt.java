@@ -223,17 +223,18 @@ public class PSSharedControllerTestIt extends Assert {
 		profileCardManager.add(profileCard);
 
 		Object json = controller.getProfileJSONLD(SAID);
-
+		
 		assertNotNull(json);
-		assertTrue(json instanceof List);
+		assertTrue("Response must be a Map containing @context and @graph", json instanceof Map);
 
-		List response = (List) json;
-		assertEquals(4, response.size()); // PersonContact + 3 attributes
+		Map response = (Map) json;
+		List resources = (List) response.get("@graph");
+		assertEquals(4, resources.size()); // PersonContact + 3 attributes
 
 		List<String> ids = new ArrayList<String>();
 		List<String> types = new ArrayList<String>();
-		for (Object entry : response) {
-			Map<String, Object> data = (Map<String, Object>) entry;
+		for (Object resource : resources) {
+			Map<String, Object> data = (Map<String, Object>) resource;
 			ids.add(data.get("@id").toString());
 			Object type = data.get("@type");
 			if (type instanceof List) {
@@ -280,15 +281,16 @@ public class PSSharedControllerTestIt extends Assert {
 		Object json = controller.getProfileJSONLD(SAID);
 
 		assertNotNull(json);
-		assertTrue(json instanceof List);
+		assertTrue("Response must be a Map containing @context and @graph", json instanceof Map);
 
-		List response = (List) json;
-		assertEquals(4, response.size()); // PersonContact + 3 attributes
+		Map response = (Map) json;
+		List resources = (List) response.get("@graph");
+		assertEquals(4, resources.size()); // PersonContact + 3 attributes
 
 		List<String> ids = new ArrayList<String>();
 		List<String> types = new ArrayList<String>();
-		for (Object entry : response) {
-			Map<String, Object> data = (Map<String, Object>) entry;
+		for (Object resource : resources) {
+			Map<String, Object> data = (Map<String, Object>) resource;
 			ids.add(data.get("@id").toString());
 			Object type = data.get("@type");
 			if (type instanceof List) {
@@ -333,15 +335,16 @@ public class PSSharedControllerTestIt extends Assert {
 		Object json = controller.getProfileJSONLD(SAID);
 
 		assertNotNull(json);
-		assertTrue(json instanceof List);
+		assertTrue("Response must be a Map containing @context and @graph", json instanceof Map);
 
-		List response = (List) json;
-		assertEquals(4, response.size()); // PersonContact + 3 attributes
+		Map response = (Map) json;
+		List resources = (List) response.get("@graph");
+		assertEquals(4, resources.size()); // PersonContact + 3 attributes
 
 		List<String> ids = new ArrayList<String>();
 		List<String> types = new ArrayList<String>();
-		for (Object entry : response) {
-			Map<String, Object> data = (Map<String, Object>) entry;
+		for (Object resource : resources) {
+			Map<String, Object> data = (Map<String, Object>) resource;
 			ids.add(data.get("@id").toString());
 			Object type = data.get("@type");
 			if (type instanceof List) {

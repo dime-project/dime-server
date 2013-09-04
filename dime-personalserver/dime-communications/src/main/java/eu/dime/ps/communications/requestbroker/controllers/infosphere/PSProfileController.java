@@ -34,8 +34,6 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.map.JsonMappingException;
 import org.ontoware.aifbcommons.collection.ClosableIterator;
 import org.ontoware.rdf2go.RDF2Go;
 import org.ontoware.rdf2go.model.Model;
@@ -47,6 +45,10 @@ import org.ontoware.rdfreactor.schema.rdfs.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
+
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.github.jsonldjava.core.JSONLDProcessingError;
 
 import eu.dime.commons.dto.Data;
 import eu.dime.commons.dto.Request;
@@ -62,7 +64,6 @@ import eu.dime.ps.dto.Include;
 import eu.dime.ps.dto.Profile;
 import eu.dime.ps.dto.ProfileCard;
 import eu.dime.ps.gateway.service.MediaType;
-import eu.dime.ps.gateway.service.ServiceAdapter;
 import eu.dime.ps.gateway.service.internal.DimeServiceAdapter;
 import eu.dime.ps.gateway.util.JSONLDUtils;
 import eu.dime.ps.semantic.model.ModelFactory;
@@ -679,7 +680,7 @@ public List<Include> readIncludes(eu.dime.ps.dto.Resource resource,eu.dime.ps.se
 @Path("/@me")
 @Consumes(MediaType.APPLICATION_JSONLD)
 @Produces(MediaType.APPLICATION_JSONLD)
-public List<Object> createProfileJSONLD(List<Object> request, @PathParam("said") String said) {
+public List<Object> createProfileJSONLD(List<Object> request, @PathParam("said") String said) throws JSONLDProcessingError {
 
 	List<? extends Resource> resources = null;
 	PersonContact profile = null;
@@ -721,7 +722,7 @@ public List<Object> createProfileJSONLD(List<Object> request, @PathParam("said")
 @Consumes(MediaType.APPLICATION_JSONLD)
 @Produces(MediaType.APPLICATION_JSONLD)
 public List<Object> updateProfileJSONLD(List<Object> request, @PathParam("said") String said,
-		@PathParam("profileId") String profileId) {
+		@PathParam("profileId") String profileId) throws JSONLDProcessingError {
 
 	List<? extends Resource> resources = null;
 	PersonContact profile = null;
