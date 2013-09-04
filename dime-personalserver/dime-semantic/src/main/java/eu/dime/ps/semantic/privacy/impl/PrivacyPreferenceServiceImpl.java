@@ -491,36 +491,35 @@ public class PrivacyPreferenceServiceImpl implements PrivacyPreferenceService {
 	 * @return true in case the given privacy preference grants access to the agent
 	 * @throws PrivacyPreferenceException
 	 */
-	private boolean hasAccessViaPrivacyPreference(PrivacyPreference privacyPref, Agent agent) throws PrivacyPreferenceException {
+	private boolean hasAccessViaPrivacyPreference(PrivacyPreference privacyPref, Agent agent) {
 		boolean included = false;
 		boolean excluded = false;
 
 		try {
 			privacyPref = pimoService.get(privacyPref.asURI(), PrivacyPreference.class);
+			
+			if (privacyPref.hasAccessSpace()) {
+				ClosableIterator<Node> asIt = privacyPref.getAllAccessSpace_asNode();
+				while (asIt.hasNext()) {
+					AccessSpace accessSpace = null;
+					try {
+						accessSpace = pimoService.get(asIt.next().asResource(), AccessSpace.class);
+						included = included || isIncluded(accessSpace, agent);
+						excluded = excluded || isExcluded(accessSpace, agent);
+					} catch (NotFoundException e) {
+						logger.error("Cannot check access: access space "+accessSpace+" does not exist.", e);
+					}
+				}
+				asIt.close();
+			}
 		} catch (NotFoundException e) {
-			throw new PrivacyPreferenceException("Cannot check access: privacy preference "+privacyPref+" does not exist.", e);
+			logger.error("Cannot check access: privacy preference "+privacyPref+" does not exist.", e);
 		}
 
-		if (privacyPref.hasAccessSpace()) {
-			ClosableIterator<Node> asIt = privacyPref.getAllAccessSpace_asNode();
-			while (asIt.hasNext()) {
-				AccessSpace accessSpace = null;
-				try {
-					accessSpace = pimoService.get(asIt.next().asResource(), AccessSpace.class);
-					included = included || isIncluded(accessSpace, agent);
-					excluded = excluded || isExcluded(accessSpace, agent);
-				} catch (NotFoundException e) {
-					throw new PrivacyPreferenceException("Cannot check access: access space "+accessSpace+" does not exist.", e);
-				}
-			}
-		} else {
-			throw new PrivacyPreferenceException("Cannot check access: privacy preference "+privacyPref+" does not define an access space.");
-		}
-		
 		return included && !excluded;
 	}
 	
-	private boolean isIncluded(AccessSpace accessSpace, Agent agent) throws PrivacyPreferenceException {
+	private boolean isIncluded(AccessSpace accessSpace, Agent agent) {
 		boolean included = false;
 		
 		try {
@@ -567,13 +566,13 @@ public class PrivacyPreferenceServiceImpl implements PrivacyPreferenceService {
 				included = included | accessSpace.getModel().contains(accessSpace.asResource(), NSO.includes, agent.asResource());
 			}
 		} catch (NotFoundException e) {
-			throw new PrivacyPreferenceException("Cannot check access: agent "+agent+" seems not to exist.", e);
+			logger.error("Cannot check access: agent "+agent+" seems not to exist.", e);
 		}
 
 		return included;
 	}
 	
-	private boolean isExcluded(AccessSpace accessSpace, Agent agent) throws PrivacyPreferenceException {
+	private boolean isExcluded(AccessSpace accessSpace, Agent agent) {
 		boolean excluded = false;
 		
 		try {
@@ -620,7 +619,7 @@ public class PrivacyPreferenceServiceImpl implements PrivacyPreferenceService {
 				excluded = excluded | accessSpace.getModel().contains(accessSpace.asResource(), NSO.excludes, agent.asResource());
 			}
 		} catch (NotFoundException e) {
-			throw new PrivacyPreferenceException("Cannot check access: agent "+agent+" seems not to exist.", e);
+			logger.error("Cannot check access: agent "+agent+" seems not to exist.", e);
 		}
 
 		return excluded;
