@@ -194,10 +194,24 @@ public class JSONLDUtils {
 	 * @throws JSONLDProcessingError if serialization to JSON-LD fails
 	 */
 	public static <T extends Resource> Object serialize(T resource) throws JSONLDProcessingError {
-    	if (INCLUDE_DEFAULT_PREFIXES) addDefaultPrefixes(resource.getModel());
+		return serialize(resource, null);
+	}
+
+	/**
+	 * Serializes an RDF resource into JSON-LD. 
+	 * 
+	 * @param resource the RDFReactor resource to serialize
+	 * @param prefixes a key-value Map with namespace prefixes and fully-qualified URIs
+	 * @return a key-value map with representing the JSON-LD document
+	 * @throws JSONLDProcessingError if serialization to JSON-LD fails
+	 */
+	public static <T extends Resource> Object serialize(T resource, Map<String, String> prefixes)
+			throws JSONLDProcessingError {
+		if (INCLUDE_DEFAULT_PREFIXES) addDefaultPrefixes(resource.getModel());
+		if (prefixes != null) addPrefixes(prefixes, resource.getModel());
 		return JSONLD.fromRDF(resource.getModel(), OPTIONS, RDF_PARSER);
 	}
-	
+
 	/**
 	 * Serializes an RDF resource into JSON-LD into a string. 
 	 * 
@@ -206,7 +220,21 @@ public class JSONLDUtils {
 	 * @throws JSONLDProcessingError if serialization to JSON-LD fails
 	 */
 	public static <T extends Resource> String serializeAsString(T resource) throws JSONLDProcessingError {
+		return serializeAsString(resource, null);
+	}
+
+	/**
+	 * Serializes an RDF resource into JSON-LD into a string. 
+	 * 
+	 * @param resource the RDFReactor resource to serialize
+	 * @param prefixes a key-value Map with namespace prefixes and fully-qualified URIs
+	 * @return a string representation of the JSON-LD document
+	 * @throws JSONLDProcessingError if serialization to JSON-LD fails
+	 */
+	public static <T extends Resource> String serializeAsString(T resource, Map<String, String> prefixes)
+			throws JSONLDProcessingError {
 		if (INCLUDE_DEFAULT_PREFIXES) addDefaultPrefixes(resource.getModel());
+		if (prefixes != null) addPrefixes(prefixes, resource.getModel());
 		return JSONUtils.toString(JSONLD.fromRDF(resource.getModel(), OPTIONS, RDF_PARSER));
 	}
 	
@@ -217,7 +245,8 @@ public class JSONLDUtils {
 	 * @return a list of key-value maps with representing the JSON-LD documents
 	 * @throws JSONLDProcessingError if serialization to JSON-LD fails
 	 */
-	public static <T extends Resource> List<Object> serializeCollection(T... collection) throws JSONLDProcessingError {
+	public static <T extends Resource> List<Object> serializeCollection(T... collection)
+			throws JSONLDProcessingError {
 		List<Object> jsonList = new ArrayList<Object>(collection.length);
     	for (T resource : collection) {
     		if (INCLUDE_DEFAULT_PREFIXES) addDefaultPrefixes(resource.getModel());
@@ -233,10 +262,14 @@ public class JSONLDUtils {
 		return clazz;
 	}
 	
-	private static void addDefaultPrefixes(Model model) {
-		for (String prefix : NS_PREFIX_MAP.keySet()) {
-			model.setNamespace(prefix, NS_PREFIX_MAP.get(prefix));
+	private static void addPrefixes(Map<String, String> prefixes, Model model) {
+		for (String prefix : prefixes.keySet()) {
+			model.setNamespace(prefix, prefixes.get(prefix));
 		}
+	}
+	
+	private static void addDefaultPrefixes(Model model) {
+		addPrefixes(NS_PREFIX_MAP, model);
 	}
 	
 }
