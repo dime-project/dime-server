@@ -14,7 +14,7 @@
 
 package eu.dime.ps.communications.requestbroker.controllers;
 
-import java.util.List;
+import java.util.Map;
 
 import org.junit.Test;
 
@@ -90,31 +90,25 @@ public class PSProfileControllerTest extends PSInfoSphereControllerTest {
 		assertNotNull(response);
 	}
 	
-	
-	
-	
-	
 	@Test
 	public void testGetProfileJSONLD() throws Exception {
-		
+		// TODO implement test!
 	}
 	
 	@Test
 	public void testCreateProfileJSONLD() throws Exception {
-		Object jsonObject = JSONUtils.fromInputStream(this.getClass().getClassLoader().getResourceAsStream("controllers/profile/profile.jsonld"));
-		List<Object> request = (List<Object>) jsonObject;
-		Object response = controller.createProfileJSONLD(request, "123");
+		Object json = JSONUtils.fromInputStream(this.getClass().getClassLoader().getResourceAsStream("controllers/profile/profile.jsonld"));
+		Object response = controller.createProfileJSONLD(json, "123");
 		assertNotNull(response);
-		assertTrue(response instanceof List);
+		assertTrue(response instanceof Map);
 	}
 	
 	@Test
 	public void testUpdateProfileJSONLD() throws Exception {
-		Object jsonObject = JSONUtils.fromInputStream(this.getClass().getClassLoader().getResourceAsStream("controllers/profile/profile.jsonld"));
-		List<Object> request = (List<Object>) jsonObject;
-		Object response = controller.updateProfileJSONLD(request, "123", "content://com.android.contacts/contacts/lookup/1");
+		Object json = JSONUtils.fromInputStream(this.getClass().getClassLoader().getResourceAsStream("controllers/profile/profile.jsonld"));
+		Object response = controller.updateProfileJSONLD(json, "123", "content://com.android.contacts/contacts/lookup/1");
 		assertNotNull(response);
-		assertTrue(response instanceof List);
+		assertTrue(response instanceof Map);
 	}
 	
 }

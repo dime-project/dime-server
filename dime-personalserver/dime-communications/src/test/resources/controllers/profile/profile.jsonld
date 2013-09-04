@@ -1,9 +1,12 @@
-[{"@context":{"nco":"http://www.semanticdesktop.org/ontologies/2007/03/22/nco#"},
-  "@id":"mailto:fran.cpdata@hotmail.com",
-  "nco:contactMediumComment":"Other Email Address",
-  "@type":"nco:EmailAddress",
-  "nco:emailAddress":"fran.cpdata@hotmail.com"},
-  {"@context":{"nco":"http://www.semanticdesktop.org/ontologies/2007/03/22/nco#"},
-   "nco:hasEmailAddress":{"@id":"mailto:fran.cpdata@hotmail.com"},
+{
+ "@context":{"nco":"http://www.semanticdesktop.org/ontologies/2007/03/22/nco#"},
+ "@graph":[
+  {"@id":"content://com.android.contacts/contacts/lookup/1",
    "@type":"nco:PersonContact",
-   "@id":"content://com.android.contacts/contacts/lookup/1"}]
+   "nco:hasEmailAddress":{"@id":"mailto:fran.cpdata@hotmail.com"}},
+  {"@id":"mailto:fran.cpdata@hotmail.com",
+   "@type":"nco:EmailAddress",
+   "nco:contactMediumComment":"Other Email Address",
+   "nco:emailAddress":"fran.cpdata@hotmail.com"}
+ ]
+}

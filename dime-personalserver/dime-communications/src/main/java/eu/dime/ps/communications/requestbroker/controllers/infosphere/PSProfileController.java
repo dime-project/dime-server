@@ -35,13 +35,11 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 
 import org.ontoware.aifbcommons.collection.ClosableIterator;
-import org.ontoware.rdf2go.RDF2Go;
 import org.ontoware.rdf2go.model.Model;
 import org.ontoware.rdf2go.model.Statement;
 import org.ontoware.rdf2go.model.node.Node;
 import org.ontoware.rdf2go.model.node.Variable;
 import org.ontoware.rdf2go.model.node.impl.URIImpl;
-import org.ontoware.rdfreactor.schema.rdfs.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -680,27 +678,12 @@ public List<Include> readIncludes(eu.dime.ps.dto.Resource resource,eu.dime.ps.se
 @Path("/@me")
 @Consumes(MediaType.APPLICATION_JSONLD)
 @Produces(MediaType.APPLICATION_JSONLD)
-public List<Object> createProfileJSONLD(List<Object> request, @PathParam("said") String said) throws JSONLDProcessingError {
-
-	List<? extends Resource> resources = null;
+public Object createProfileJSONLD(Object request, @PathParam("said") String said)
+		throws JSONLDProcessingError {
 	PersonContact profile = null;
-	Model attributes = RDF2Go.getModelFactory().createModel().open();
+	
 	try {
-		resources = JSONLDUtils.deserializeCollection(request);
-		for (Resource resource : resources) {
-			if (resource instanceof PersonContact) { // profile
-				profile = (PersonContact) resource;
-			} else { // profile attribute
-				attributes.addAll(resource.getModel().iterator());
-			}
-		}
-
-		if (profile == null) {
-			logger.error("A profile object was not found in the request.");
-			return null;
-		}
-
-		profile.getModel().addAll(attributes.iterator());
+		profile = JSONLDUtils.deserialize(request, PersonContact.class);
 		profileManager.add(profileManager.getMe(), profile);
 	} catch (InfosphereException e) {
 		// TODO Auto-generated catch block
@@ -714,35 +697,19 @@ public List<Object> createProfileJSONLD(List<Object> request, @PathParam("said")
 		e.printStackTrace();
 	}
 
-	return JSONLDUtils.serializeCollection(profile);
+	return JSONLDUtils.serialize(profile);
 }
 
 @PUT
 @Path("/{profileId}")
 @Consumes(MediaType.APPLICATION_JSONLD)
 @Produces(MediaType.APPLICATION_JSONLD)
-public List<Object> updateProfileJSONLD(List<Object> request, @PathParam("said") String said,
+public Object updateProfileJSONLD(Object request, @PathParam("said") String said,
 		@PathParam("profileId") String profileId) throws JSONLDProcessingError {
-
-	List<? extends Resource> resources = null;
 	PersonContact profile = null;
-	Model attributes = RDF2Go.getModelFactory().createModel().open();
+	
 	try {
-		resources = JSONLDUtils.deserializeCollection(request);
-		for (Resource resource : resources) {
-			if (resource instanceof PersonContact) { // profile
-				profile = (PersonContact) resource;
-			} else { // profile attribute
-				attributes.addAll(resource.getModel().iterator());
-			}
-		}
-
-		if (profile == null) {
-			logger.error("A profile object was not found in the request.");
-			return null;
-		}
-
-		profile.getModel().addAll(attributes.iterator());
+		profile = JSONLDUtils.deserialize(request, PersonContact.class);
 		profileManager.update(profile);
 	} catch (InfosphereException e) {
 		// TODO Auto-generated catch block
@@ -756,7 +723,7 @@ public List<Object> updateProfileJSONLD(List<Object> request, @PathParam("said")
 		e.printStackTrace();
 	}
 
-	return JSONLDUtils.serializeCollection(profile);
+	return JSONLDUtils.serialize(profile);
 }
 
 // ---------------------------------
