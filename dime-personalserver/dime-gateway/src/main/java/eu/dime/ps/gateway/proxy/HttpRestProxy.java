@@ -61,6 +61,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import eu.dime.commons.util.HttpUtils;
 import eu.dime.ps.gateway.exception.ServiceException;
 import eu.dime.ps.gateway.exception.ServiceNotAvailableException;
+import java.nio.charset.Charset;
 
 /**
  * Connects to an external service using HTTP connection
@@ -154,7 +155,7 @@ public class HttpRestProxy implements ServiceProxy {
 		int responseCode = -1;
 
 		HttpGet httpget = new HttpGet(this.url + query);
-
+                
 		// adding headers to request
 		for (String name : headers.keySet()) {
 			httpget.addHeader(name, headers.get(name));
@@ -176,7 +177,8 @@ public class HttpRestProxy implements ServiceProxy {
 				char[] buffer = new char[4*1024];
 				int length;
 				BufferedReader reader = new BufferedReader(
-						new InputStreamReader(response.getEntity().getContent()));
+						new InputStreamReader(response.getEntity().getContent(), Charset.forName("UTF-8")));
+                                
 				while ((length = reader.read(buffer)) >= 0) {
 				    result.append(buffer, 0, length);
 				}
