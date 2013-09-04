@@ -30,9 +30,11 @@ return
 	  				  else if ($activity/name="Squash") then "SportActivity"
 	  				  else if ($activity/name="Soccer, casual, general") then "SportActivity"
 	  				  else if ($activity/name="Riding in a bus") then "RidingInABus"
-	  				  else (fn:replace($activity/name,"[, ;]",""))	
+	  				  else (fn:replace($activity/name,"[-,;%]\s"," "))			 
+     let $activityNameNormalised := fn:normalize-space($activityName) #removing any leading, trailing white spaces or internal sequences of white space with one
+     let $activityNameUri := fn:replace($activityNameNormalised,"\s","-") #replacing white spaces with '-' 
 	  				    
-	 let $activity := if ($name="Shopping") then "OtherActivity"
+     let $activity := if ($name="Shopping") then "OtherActivity"
 	 				  else if ($name="Shopping") then "OtherActivity"
 	 				  else if ($name="Sleeping") then "OtherActivity"
 	 				  else if ($name="Bicycling") then "OtherActivity"
@@ -43,13 +45,13 @@ return
 	 				  else if ($name="RidingInABus") then "Travelling"
 	 				  else ("Activity")
 	 				  
-	 let $uri := if ($activity = "Activity") then "fitbit"
+     let $uri := if ($activity = "Activity") then "fitbit"
 	 		     else ("dpo")
                    
     #Construct for the activity	
 	construct
 	{  	
-	  {data($uri)}:{data($activityName)} a dpo:Activity , dpo:{data($activity)};
+	  {data($uri)}:{data($activityNameUri)} a dpo:Activity , dpo:{data($activity)};
 	  nao:externalIdentifier {data($activityId)};
 	  nao:prefLabel {data($name)};
 	  nao:description {data($description)};
