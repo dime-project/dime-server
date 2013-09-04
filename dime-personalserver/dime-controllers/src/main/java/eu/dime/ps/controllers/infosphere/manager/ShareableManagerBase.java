@@ -33,7 +33,6 @@ import org.slf4j.LoggerFactory;
 
 import eu.dime.commons.notifications.user.UNRefToItem;
 import eu.dime.commons.notifications.user.UserNotification;
-import eu.dime.ps.controllers.TenantContextHolder;
 import eu.dime.ps.controllers.exception.ForbiddenException;
 import eu.dime.ps.controllers.exception.InfosphereException;
 import eu.dime.ps.controllers.notifier.NotifierManager;
@@ -193,7 +192,7 @@ public abstract class ShareableManagerBase<T extends Resource> extends Connectio
 		ResourceStore resourceStore = getResourceStore();
 
 		try {
-			assertExistence(resource, sharedBy);
+			assertExistence(resource);
 			resourceStore.update(resource, true);
 			onUpdate(resource);
 		} catch (NotFoundException e) {
@@ -206,7 +205,7 @@ public abstract class ShareableManagerBase<T extends Resource> extends Connectio
 		ResourceStore resourceStore = getResourceStore();
 
 		try {
-			assertExistence(resource, sharedBy);
+			assertExistence(resource);
 			resourceStore.remove(resource);
 			onDelete(resource);
 		} catch (NotFoundException e) {
@@ -214,6 +213,12 @@ public abstract class ShareableManagerBase<T extends Resource> extends Connectio
 		}
 	}
 
+	private void assertExistence(T resource) throws NotFoundException, InfosphereException {
+		ResourceStore resourceStore = getResourceStore();
+		resourceStore.get(resource.asResource());
+	}
+	
+	@Deprecated
 	private void assertExistence(T resource, String accountId) throws NotFoundException, InfosphereException {
 		ResourceStore resourceStore = getResourceStore();
 
