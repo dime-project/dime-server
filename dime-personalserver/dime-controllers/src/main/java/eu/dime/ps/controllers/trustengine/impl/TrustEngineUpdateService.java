@@ -97,6 +97,9 @@ public class TrustEngineUpdateService extends AdvisoryBase implements BroadcastR
 		
 		if (Event.ACTION_RESOURCE_MODIFY.equals(event.getAction())){
 			try {
+				if (connectionProvider.getConnection(tenant) == null){
+					return;
+				}
 				ppoService = connectionProvider.getConnection(event.getTenant()).getPrivacyPreferenceService();
 				pimoService  = connectionProvider.getConnection(event.getTenant()).getPimoService();
 			} catch (RepositoryException e) {
