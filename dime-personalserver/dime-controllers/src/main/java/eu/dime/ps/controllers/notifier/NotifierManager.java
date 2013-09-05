@@ -133,4 +133,6 @@ public interface NotifierManager {
 	 * Mark as read the notification in the storage
 	 */
 	public void markNotificationAsRead(Long id);
+	
+	public void purgeNotifications();
 }

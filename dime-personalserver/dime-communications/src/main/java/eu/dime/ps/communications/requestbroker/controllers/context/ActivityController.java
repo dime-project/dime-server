@@ -42,7 +42,6 @@ import org.springframework.stereotype.Controller;
 import eu.dime.commons.dto.Data;
 import eu.dime.commons.dto.Entry;
 import eu.dime.commons.dto.Response;
-import eu.dime.ps.controllers.TenantContextHolder;
 import eu.dime.ps.controllers.util.TenantHelper;
 import eu.dime.ps.semantic.connection.Connection;
 import eu.dime.ps.semantic.connection.ConnectionProvider;

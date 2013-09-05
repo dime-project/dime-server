@@ -10,6 +10,10 @@
 
 	<!-- Notifications -->
 	
+	<bean id="purgeNotifySchedule" class="eu.dime.ps.communications.notifier.PurgeNotifySchedule">
+		<property name="notifierManager" ref="notifierManager"></property>
+	</bean>
+	
 	<bean id="externalNotifySchedule" class="eu.dime.ps.communications.notifier.ExternalNotifySchedule">
 		<property name="notifierManager" ref="notifierManager"></property>
 		<property name="serviceGateway" ref="serviceGateway"></property>
@@ -21,9 +25,19 @@
 		<property name="credentialStore" ref="credentialStore"></property>
 		<property name="tenantManager" ref="tenantManager"></property>
 	</bean>
-
+	
 	<!-- Scheduling for Push Notifications  -->
 	<!-- Job -->
+	
+	<bean name="purgeNotifyJob" class="org.springframework.scheduling.quartz.JobDetailBean">
+		<property name="jobClass" value="eu.dime.ps.communications.notifier.PurgeNotifySchedule" />
+		<property name="jobDataAsMap">
+			<map>
+				<entry key="purgeNotifySchedule" value-ref="purgeNotifySchedule" />
+			</map>
+		</property>
+	</bean>	
+	
 	<bean name="externalNotifyJob" class="org.springframework.scheduling.quartz.JobDetailBean">
 		<property name="jobClass" value="eu.dime.ps.communications.notifier.ExternalNotifyJob" />
 		<property name="jobDataAsMap">
@@ -41,13 +55,22 @@
 			</map>
 		</property>
 	</bean>
-
+	
+	<bean id="jobPurgeTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+		<!-- see the example of method invoking job above -->
+		<property name="jobDetail" ref="purgeNotifyJob" />
+		<!-- 10 seconds -->
+		<property name="startDelay" value="10000" />
+		<!-- repeat every hour -->
+		<property name="repeatInterval" value="5000" />
+	</bean>
+		
 	<bean id="jobExternalTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
 		<!-- see the example of method invoking job above -->
 		<property name="jobDetail" ref="externalNotifyJob" />
 		<!-- 10 seconds -->
 		<property name="startDelay" value="10000" />
-		<!-- repeat every 3 seconds -->
+		<!-- repeat every  -->
 		<property name="repeatInterval" value="${task.time.notify.external}" />
 	</bean>
 	
@@ -56,10 +79,18 @@
 		<property name="jobDetail" ref="internalNotifyJob" />
 		<!-- 10 seconds -->
 		<property name="startDelay" value="10000" />
-		<!-- repeat every 3 seconds -->
+		<!-- repeat every  -->
 		<property name="repeatInterval" value="${task.time.notify.internal}" />
 	</bean>
-
+	
+	<bean id="DFB0" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list>
+				<ref bean="jobPurgeTrigger" />
+			</list>
+		</property>
+	</bean>	
+	
 	<bean id="DFB1" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
 		<property name="triggers">
 			<list>
@@ -75,5 +106,5 @@
 			</list>
 		</property>
 	</bean>
-
+	
 </beans>

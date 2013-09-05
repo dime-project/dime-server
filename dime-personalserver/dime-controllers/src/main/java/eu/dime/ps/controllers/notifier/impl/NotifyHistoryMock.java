@@ -62,5 +62,7 @@ public class NotifyHistoryMock  implements NotifyHistory  {
 		// TODO Auto-generated method stub
 		
 	}
+	
+
 
 }

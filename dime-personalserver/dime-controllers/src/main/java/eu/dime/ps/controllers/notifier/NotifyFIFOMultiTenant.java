@@ -15,6 +15,7 @@
 package eu.dime.ps.controllers.notifier;
 
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -73,6 +74,26 @@ public class NotifyFIFOMultiTenant {
     	}
     	
     	return fifo.size();
+    }
+    
+    public void purgeNotifications(){
+    	
+    	Set<Long> keys = mapFifoLists.keySet();
+    	logger.info("Purging !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+    	for (Long tenant : keys) {
+    		ConcurrentLinkedQueue<DimeInternalNotification> list = mapFifoLists.get(tenant);
+    		for (DimeInternalNotification dimeInternalNotification : list) {
+				
+    			int oneday = 1000 * 60 * 60 * 24;
+    			Long now = System.currentTimeMillis();
+    			if (dimeInternalNotification.getUpdateTS().compareTo(now + oneday) > 0){
+    				// Deprecated and removed
+    				list.remove(dimeInternalNotification);
+    			}
+    			
+			}
+		}
+    	
     }
 
 }

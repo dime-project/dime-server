@@ -178,6 +178,11 @@ public class NotifierManagerImpl implements NotifierManager {
 	public void markNotificationAsRead(Long id){
 		notifyHistory.markAsRead(id);
 	}
+	
+	@Override
+	public void purgeNotifications(){
+		internalNotifyFifo.purgeNotifications();
+	}
 
 	// SETTERS
 

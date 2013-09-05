@@ -109,4 +109,10 @@ public class NotifierManagerMock implements NotifierManager {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public void purgeNotifications() {
+		// TODO Auto-generated method stub
+		
+	}
 }
