@@ -30,7 +30,7 @@
 	<!-- Job -->
 	
 	<bean name="purgeNotifyJob" class="org.springframework.scheduling.quartz.JobDetailBean">
-		<property name="jobClass" value="eu.dime.ps.communications.notifier.PurgeNotifySchedule" />
+		<property name="jobClass" value="eu.dime.ps.communications.notifier.PurgeNotifyJob" />
 		<property name="jobDataAsMap">
 			<map>
 				<entry key="purgeNotifySchedule" value-ref="purgeNotifySchedule" />
@@ -62,7 +62,7 @@
 		<!-- 10 seconds -->
 		<property name="startDelay" value="10000" />
 		<!-- repeat every hour -->
-		<property name="repeatInterval" value="5000" />
+		<property name="repeatInterval" value="${task.time.notify.purge}" />
 	</bean>
 		
 	<bean id="jobExternalTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">

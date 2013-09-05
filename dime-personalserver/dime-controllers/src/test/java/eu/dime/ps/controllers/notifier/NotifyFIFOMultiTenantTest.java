@@ -105,5 +105,39 @@ public class NotifyFIFOMultiTenantTest {
 		Assert.assertEquals(0, fifoMulti.size(tenant));
 		
 	}
+	
+	@Test
+	public void testpurgeFIFONotification() {
+		
+fifoMulti = new NotifyFIFOMultiTenant();
+		
+		int twodays = (1000 * 60 * 60 * 24 * 2);
+
+		Long tenant = 666l;
+
+		SystemNotification sn1 = new SystemNotification(tenant, "operation", "itemID", "itemType", "userID");
+		sn1.setUpdateTS(System.currentTimeMillis() + twodays);
+		
+		DimeInternalNotification n1 = (sn1);
+		n1.setItemID("n1");
+		
+		fifoMulti.pushNotification(n1);
+		
+		SystemNotification sn2 = new SystemNotification(tenant, "operation", "itemID", "itemType", "userID");
+		sn2.setUpdateTS(System.currentTimeMillis() + twodays);
+		
+		DimeInternalNotification n2 = (sn2);
+		n2.setItemID("n2");
+		
+		fifoMulti.pushNotification(n2);
+		
+		Assert.assertEquals(2, fifoMulti.size(tenant));
+		
+		fifoMulti.purgeNotifications();
+		
+		Assert.assertEquals(0, fifoMulti.size(tenant));
+		
+		
+	}
 
 }

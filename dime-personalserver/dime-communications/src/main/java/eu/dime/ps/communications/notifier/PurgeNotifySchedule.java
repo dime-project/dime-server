@@ -35,7 +35,7 @@ public class PurgeNotifySchedule {
 	}
 
 	public void purgeNotifications() {
-		logger.info("Purge executed !!!!!!!!!!!!!!");
+		logger.info("Queues purge executed.");
 		notifierManager.purgeNotifications();
 	}
 
