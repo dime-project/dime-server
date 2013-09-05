@@ -79,7 +79,7 @@ public class NotifyFIFOMultiTenant {
     public void purgeNotifications(){
     	
     	Set<Long> keys = mapFifoLists.keySet();
-    	logger.info("Purging !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+    	logger.info("Purging deprecated Notifications");
     	for (Long tenant : keys) {
     		ConcurrentLinkedQueue<DimeInternalNotification> list = mapFifoLists.get(tenant);
     		for (DimeInternalNotification dimeInternalNotification : list) {
@@ -88,6 +88,7 @@ public class NotifyFIFOMultiTenant {
     			Long now = System.currentTimeMillis();
     			if (dimeInternalNotification.getUpdateTS().compareTo(now + oneday) > 0){
     				// Deprecated and removed
+    				
     				list.remove(dimeInternalNotification);
     			}
     			
