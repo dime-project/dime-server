@@ -493,7 +493,7 @@ public class PSSharedControllerTestIt extends Assert {
 	public void testGetDataboxJSONLDNotShared() throws Exception {
 		DataContainer databox = ObjectFactory.buildDatabox("My databox", new DataObject[0], pimoService.getUserUri());
 		databoxManager.add(databox);
-		// not calling 'share', when retrieving an error should be returned
+		// not calling share(databox) => forcing 'not authorized' error to be returned
 
 		String encodedId = Base64encoding.encode(databox.toString());
 		Object json = controller.getDataboxJSONLD(SAID, encodedId);
@@ -502,8 +502,9 @@ public class PSSharedControllerTestIt extends Assert {
 		assertTrue(json instanceof Response);
 
 		Response response = (Response) json;
-		assertTrue(response.getMessage().getMeta().getStatus().equals("ERROR"));
-		assertTrue(response.getMessage().getMeta().getMessage().contains("Cannot check authorization"));
+		assertEquals("ERROR", response.getMessage().getMeta().getStatus());
+		String message = response.getMessage().getMeta().getMessage();
+		assertTrue(message.endsWith("is not authorized to access " + databox.asURI()));
 	}
 
 	@Test
