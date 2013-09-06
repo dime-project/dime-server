@@ -80,6 +80,8 @@ public class SystemNotificationDTO extends Entry{
 		jsonNotification.setGuid(dimeNotification.getId());
 		jsonNotification.setOperation(dimeNotification.getOperation());
 		jsonNotification.setCreated(dimeNotification.getCreateTS());
+		
+		jsonNotification.setName(dimeNotification.getTenant().toString());
 	
 		Element element = new Element();
 			element.setGuid(dimeNotification.getItemID());

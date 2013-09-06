@@ -14,6 +14,7 @@
 
 package eu.dime.ps.communications.notifier;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -21,13 +22,13 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import org.atmosphere.cpr.Broadcaster;
-import org.json.JSONObject;
+import org.codehaus.jettison.json.JSONException;
+import org.codehaus.jettison.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import eu.dime.commons.dto.Data;
-import eu.dime.commons.dto.Element;
 import eu.dime.commons.dto.Response;
 import eu.dime.commons.dto.SystemNotificationDTO;
 import eu.dime.commons.notifications.DimeInternalNotification;
@@ -66,10 +67,40 @@ public class InternalNotifySchedule {
 		this.tenantManager = tenantManager;
 	}
 
-	private ConcurrentLinkedQueue<JSONObject> pendingNotifications = new ConcurrentLinkedQueue<JSONObject>();
+	private  ConcurrentHashMap<String, ConcurrentLinkedQueue<String>> pendingNotifications = new  ConcurrentHashMap<String, ConcurrentLinkedQueue<String>>();
 	
 	public void pushNotAtendedNotification(JSONObject json){
-		pendingNotifications.add(json);
+		
+		try {
+			String tenant = json.getJSONObject("response").getJSONObject("data").getJSONArray("entry").getJSONObject(0).getString("name");
+		
+			ConcurrentLinkedQueue<String> list = pendingNotifications.get(tenant);
+			if(list == null){
+				list = new ConcurrentLinkedQueue<String>();
+			}
+			
+			list.add(json.toString());
+			
+			pendingNotifications.put(tenant, list);
+		
+		} catch (JSONException e) {
+			logger.warn("Is not possible recover this notification: " + json.toString());
+		}
+		
+	
+	}
+	
+	public String popNotAtendedNotification(String tenant){
+
+		ConcurrentLinkedQueue<String> list = pendingNotifications.get(tenant);
+		
+		if(list != null){
+			String o = list.poll();
+			return o;
+		}
+		
+		return null;
+		
 	}
 	
 	// Collection of active broadcaters
@@ -155,44 +186,68 @@ public class InternalNotifySchedule {
 
 			Set<Broadcaster> listKeys = broadcasterMap.keySet();
 			logger.debug("Boradcaster devices: " + listKeys);
+			
+			String pendingNotification = this.popNotAtendedNotification(tenant.toString());
+			
+			if(pendingNotification == null){
+				
+				List<DimeInternalNotification> internalNotififcations = notifierManager
+						.popInternalNotifications(tenant, 10);
 
-			List<DimeInternalNotification> internalNotififcations = notifierManager
-					.popInternalNotifications(tenant, 10);
-
-			if (internalNotififcations.isEmpty()) {
-				logger.debug("No Internal Notifications for user: " + key);
-				break;
-			}
-
-			for (Broadcaster broadcaster : listKeys) {
-
-				PSNotificationDispacher notificationDispacher = broadcasterMap
-						.get(broadcaster);
-
-				Data<SystemNotificationDTO> data = new Data<SystemNotificationDTO>();
-
-				for (DimeInternalNotification internalNotififcation : internalNotififcations) {
-
-					logger.debug("Internal Notifications: "
-							+ internalNotififcation);
-
-					SystemNotificationDTO jsonNotification = SystemNotificationDTO.dINTONDTO(internalNotififcation);
-					
-					data.addEntry(jsonNotification);
+				if (internalNotififcations.isEmpty()) {
+					logger.debug("No Internal Notifications for user: " + key);
+					break;
 				}
+				
+				for (Broadcaster broadcaster : listKeys) {
 
-				Response response = Response.ok(data);
+					PSNotificationDispacher notificationDispacher = broadcasterMap
+							.get(broadcaster);
 
-				String json = JaxbJsonSerializer.jsonValue(response);
-				logger.debug("JSON Notification created: " + json);
+					Data<SystemNotificationDTO> data = new Data<SystemNotificationDTO>();
 
-				logger.info("Dealing Internal Notifications for user: " + key
-						+ " and device: " + broadcaster.getID());
+					for (DimeInternalNotification internalNotififcation : internalNotififcations) {
 
-				// dealing the notification and closing connection
-				notificationDispacher.publishIntern(json, broadcaster);
-				logger.debug("Notification dealed to UI");
+						logger.debug("Internal Notifications: "
+								+ internalNotififcation);
 
+						SystemNotificationDTO jsonNotification = SystemNotificationDTO.dINTONDTO(internalNotififcation);
+						
+						data.addEntry(jsonNotification);
+					}
+
+					Response response = Response.ok(data);
+
+					String json = JaxbJsonSerializer.jsonValue(response);
+					logger.debug("JSON Notification created: " + json);
+
+					logger.info("Dealing Internal Notifications for user: " + key
+							+ " and device: " + broadcaster.getID());
+
+					// dealing the notification and closing connection
+					notificationDispacher.publishIntern(json, broadcaster);
+					logger.debug("Notification dealed to UI");
+
+				}
+				
+			}else{
+				
+				for (Broadcaster broadcaster : listKeys) {
+
+					PSNotificationDispacher notificationDispacher = broadcasterMap
+							.get(broadcaster);
+
+					logger.debug("JSON Notification recovered: " + pendingNotification);
+
+					logger.info("Dealing Internal Notifications for user: " + key
+							+ " and device: " + broadcaster.getID());
+
+					// dealing the notification and closing connection
+					notificationDispacher.publishIntern(pendingNotification, broadcaster);
+					logger.debug("Notification dealed to UI");
+
+				}
+				
 			}
 
 			// removing broadcaster from the pending list

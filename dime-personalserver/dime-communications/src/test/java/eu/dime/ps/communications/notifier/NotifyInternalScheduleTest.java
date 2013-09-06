@@ -15,14 +15,16 @@
 package eu.dime.ps.communications.notifier;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 import java.util.Vector;
 
 import org.atmosphere.cpr.Broadcaster;
 import org.atmosphere.util.SimpleBroadcaster;
+import org.codehaus.jettison.json.JSONException;
+import org.codehaus.jettison.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -182,9 +184,97 @@ public class NotifyInternalScheduleTest {
     	org.junit.Assert.assertEquals("002", e2s2.get("guid"));
     	org.junit.Assert.assertEquals("itemType", e2s2.get("type"));
     	org.junit.Assert.assertEquals("@me", e2s2.get("userId"));
+    	
+
 
     }
+    
+    @Test
+    public void testPendingNotifications(){
+    	
+    	String json_string1 = "{\"response\":{\"meta\":{\"v\":\"0.9\",\"status\":\"OK\",\"code\":200,\"timeRef\":1378384157632,\"msg\":\"\"},\"data\":{\"startIndex\":0,\"itemsPerPage\":1,\"totalResults\":1,\"entry\":[{\"guid\":\"4dc60385-b4f1-4840-b9d8-3af886a5d118\",\"name\":\"696\",\"type\":\"notification\",\"created\":1378384155722,\"operation\":\"create\",\"element\":{\"guid\":\"1608\",\"type\":\"usernotification\",\"userId\":\"@me\"}}]}}}";
+    	String json_string2 = "{\"response\":{\"meta\":{\"v\":\"0.9\",\"status\":\"OK\",\"code\":200,\"timeRef\":1378384157632,\"msg\":\"\"},\"data\":{\"startIndex\":0,\"itemsPerPage\":1,\"totalResults\":1,\"entry\":[{\"guid\":\"4dc60385-b4f1-4840-b9d8-3af886a5d118\",\"name\":\"696\",\"type\":\"notification\",\"created\":1378384155722,\"operation\":\"create\",\"element\":{\"guid\":\"1609\",\"type\":\"usernotification\",\"userId\":\"@me\"}}]}}}";
+    	
+    	JSONObject j;
+		try {
+			// First test - pending queue
+			j = new JSONObject(json_string1);
+			internalNotifySchedule.pushNotAtendedNotification(j);
+			
+			String json_str = internalNotifySchedule.popNotAtendedNotification("696");
+			org.junit.Assert.assertTrue(json_str.contains("696"));
+			
+			json_str = internalNotifySchedule.popNotAtendedNotification("696");
+			org.junit.Assert.assertNull(json_str);
+			
+			JSONObject j1 = new JSONObject(json_string1);
+			internalNotifySchedule.pushNotAtendedNotification(j1);
+			JSONObject j2 = new JSONObject(json_string2);
+			internalNotifySchedule.pushNotAtendedNotification(j2);
+			
+			String json_str_1 = internalNotifySchedule.popNotAtendedNotification("696");
+			org.junit.Assert.assertTrue(json_str_1.contains("696"));
+			org.junit.Assert.assertTrue(json_str_1.contains("1608"));
+			
+			String json_str_2 = internalNotifySchedule.popNotAtendedNotification("696");
+			org.junit.Assert.assertTrue(json_str_2.contains("696"));
+			org.junit.Assert.assertTrue(json_str_2.contains("1609"));
+			
+			json_str = internalNotifySchedule.popNotAtendedNotification("696");
+			org.junit.Assert.assertNull(json_str);
+			
+			
+		} catch (JSONException e) {
+			org.junit.Assert.fail();
+		}
+		
+		
 
+    	
+    }
+
+    @Test
+    public void testDealPendingNotifications(){
+    	
+    	String json_string = "{\"response\":{\"meta\":{\"v\":\"0.9\",\"status\":\"OK\",\"code\":200,\"timeRef\":1378384157632,\"msg\":\"\"},\"data\":{\"startIndex\":0,\"itemsPerPage\":1,\"totalResults\":1,\"entry\":[{\"guid\":\"4dc60385-b4f1-4840-b9d8-3af886a5d118\",\"name\":\"1\",\"type\":\"notification\",\"created\":1378384155722,\"operation\":\"create\",\"element\":{\"guid\":\"1608\",\"type\":\"usernotification\",\"userId\":\"@me\"}}]}}}";
+    	
+    	JSONObject j;
+		try {
+			// pending queue
+			j = new JSONObject(json_string);
+			internalNotifySchedule.pushNotAtendedNotification(j);
+			
+			// dealing pending notification
+			
+			notificationDispacher.setTopic(simpleBroadcaster);
+			notificationDispacher.setInternalNotifySchedule(internalNotifySchedule);
+			internalNotifySchedule.addBroadcaster(notificationDispacher,simpleBroadcaster, said);
+			// session 2
+			notificationDispacher2.setTopic(simpleBroadcaster2);
+			notificationDispacher2.setInternalNotifySchedule(internalNotifySchedule);
+			internalNotifySchedule.addBroadcaster(notificationDispacher2,simpleBroadcaster2, said);
+		
+			// Run
+	    	internalNotifySchedule.dealNotifications();
+	    	
+	    	Mockito.verify(notificationDispacher).publishIntern(captor.capture(), (Broadcaster) Mockito.anyObject());
+	    	
+	    	Mockito.verify(simpleBroadcaster).broadcast(Mockito.anyObject());
+	    	
+	    	Mockito.verify(internalNotifySchedule).removeBroadcaster(simpleBroadcaster);
+	    	
+	    	String json_sended = captor.getValue();
+	    	org.junit.Assert.assertEquals(json_string, json_sended);
+	    	
+			
+		} catch (JSONException e) {
+			org.junit.Assert.fail();
+		}
+		
+		
+
+    	
+    }
     
 //    @Test
 //    public void testDealNotificationsException(){
