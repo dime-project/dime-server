@@ -150,6 +150,11 @@
 		<property name="connectionProvider" ref="connectionProvider"/>
 	</bean>
 	
+	<bean id="ruleManager"
+		class="eu.dime.ps.controllers.infosphere.manager.RuleManagerImpl">
+		<property name="connectionProvider" ref="connectionProvider"/>
+	</bean>
+	
 	<bean id="liveContextManager"
 		class="eu.dime.ps.controllers.context.LiveContextManager">
 		<property name="connectionProvider" ref="connectionProvider"/>

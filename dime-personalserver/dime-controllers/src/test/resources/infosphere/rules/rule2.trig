@@ -1,0 +1,42 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix drmo: <http://www.semanticdesktop.org/ontologies/2012/03/06/drmo#> .
+@prefix dcon: <http://www.semanticdesktop.org/ontologies/2011/10/05/dcon#> .
+@prefix pimo: <http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#> .
+@prefix nao: <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#> .
+@prefix nfo: <http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+	
+{
+<urn:usecase:sharing>	a	drmo:Rule ;
+	drmo:isComposedOf <urn:condition:situation> ;
+	drmo:isComposedOf <urn:condition:personGroup> ;
+	drmo:isComposedOf <urn:condition:fileCreated> ;
+	drmo:triggers	<urn:actions:Share> ;
+	nao:description "Share created file".
+	
+<urn:condition:situation> a drmo:SituationActivated ;
+	drmo:hasConstraintOnObject <urn:situation:Holiday> ;
+	drmo:and <urn:condition:personGroup> .
+	
+<urn:condition:personGroup>	a	drmo:Condition ;
+	drmo:hasResourceType	dcon:Peers ;
+	drmo:hasConstraint	<urn:condition:personGroup:constraint1> ;
+	drmo:and <urn:condition:fileCreated> .
+		
+<urn:condition:personGroup:constraint1>	a	drmo:Condition ;
+	drmo:hasConstraintOnProperty dcon:nearbyPeer ;
+	drmo:hasConstraintOnObject	<urn:condition:personGroup:constraint1_1>.
+	
+<urn:condition:personGroup:constraint1_1>	a drmo:Condition ;
+	drmo:hasResourceType pimo:Person ;
+	drmo:hasConstraintOnProperty	pimo:memberOf ;
+	drmo:hasConstraintOnObject	<urn:groups:CloseFriends> .
+	
+<urn:condition:fileCreated> a drmo:ResourceCreated ;
+	drmo:hasResourceType nfo:Image .
+	
+<urn:actions:Share>	a	drmo:Action ;
+	drmo:hasSubject <urn:condition:fileCreated> ;
+	drmo:hasObject <urn:condition:personGroup:constraint1_1> .
+}

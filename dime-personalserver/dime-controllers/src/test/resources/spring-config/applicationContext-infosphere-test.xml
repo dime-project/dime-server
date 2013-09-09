@@ -159,12 +159,10 @@
 		<property name="connectionProvider" ref="connectionProvider"/>
 	</bean>
 		
-<!-- 	<bean id="dataStore" 
-		factory-bean="dataStoreProvider" 
-		factory-method="getTenantStore" scope="singleton" destroy-method="destroy">
-    	<constructor-arg value="12345" />
-    	<constructor-arg value="true" />
-    </bean> -->
+	<bean id="ruleManager"
+		class="eu.dime.ps.controllers.infosphere.manager.RuleManagerImpl">
+		<property name="connectionProvider" ref="connectionProvider"/>
+	</bean>
 
 	<bean id="notifierManagerMock"
 	    class="org.mockito.Mockito" factory-method="mock">

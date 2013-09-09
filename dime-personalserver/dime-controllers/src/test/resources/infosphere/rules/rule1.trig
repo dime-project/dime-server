@@ -1,0 +1,34 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix drmo: <http://www.semanticdesktop.org/ontologies/2012/03/06/drmo#> .
+@prefix pimo: <http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#> .
+@prefix nao: <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+{
+<urn:usecase:changingTrust>	a	drmo:Rule ;
+	drmo:isComposedOf <urn:condition:personModified> ;
+	drmo:triggers	<urn:actions:changeTrustValue> ;
+	nao:description "Change Trust for person".
+
+<urn:condition:personModified> a drmo:ResourceModified ;
+	drmo:hasResourceType pimo:Person ;
+	drmo:hasConstraint <urn:condition:personModified_constraint1> ;
+	drmo:hasConstraint <urn:condition:personModified_constraint2> .
+	
+<urn:condition:personModified_constraint1> a drmo:Condition ;
+	drmo:hasResourceType pimo:Person ;
+	drmo:hasConstraintOnProperty	pimo:memberOf ;
+	drmo:hasConstraintOnObject	<urn:groups:CloseFriends> ;
+	drmo:and <urn:condition:personModified_constraint2> .
+	
+<urn:condition:personModified_constraint2> a drmo:Condition ;
+	drmo:hasResourceType pimo:Person ;
+	drmo:hasConstraintOnProperty	nao:trustLevel ;
+	drmo:hasConstraintOnObject	0 ;
+	drmo:hasPropertyOperator "=" .
+	
+<urn:actions:changeTrustValue>	a	drmo:Action ;
+	drmo:hasSubject "0.8"^^xsd:double ;
+	drmo:hasObject <urn:condition:newPersonCreated> .
+}
