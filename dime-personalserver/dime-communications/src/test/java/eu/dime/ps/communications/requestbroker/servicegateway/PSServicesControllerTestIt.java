@@ -15,6 +15,9 @@
 package eu.dime.ps.communications.requestbroker.servicegateway;
 
 import static org.mockito.Mockito.when;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
+
 import ie.deri.smile.rdf.TripleStore;
 import ie.deri.smile.vocabulary.NAO;
 import ie.deri.smile.vocabulary.NIE;
@@ -174,6 +177,7 @@ public class PSServicesControllerTestIt extends Assert {
 	}
 
 	@Before
+	@Transactional
 	public void init() throws Exception {
 
 		// All dependencies Mocked
@@ -209,11 +213,11 @@ public class PSServicesControllerTestIt extends Assert {
 
 		SENDER_URI= senderAccount.asURI().toString();		
 
-
+		
 		//FIXME mocking credential store
 		when(credentialStore.getUriForName(RECEIVER)).thenReturn(RECEIVER_URI);	
-		when(credentialStore.getUriForAccountName(RECEIVER, SENDER, tenant)).thenReturn(SENDER_URI);
-		when(credentialStore.getPassword(RECEIVER_URI, SENDER_URI, tenant)).thenReturn(PASS);
+		when(credentialStore.getUriForAccountName(anyString(),anyString(), any(Tenant.class))).thenReturn(SENDER_URI);
+		when(credentialStore.getPassword(anyString(),anyString(), any(Tenant.class))).thenReturn(PASS);
 
 		//mocking DimeServiceAdapter
 		Vector<LivePost> liveposts = new Vector<LivePost>();						
