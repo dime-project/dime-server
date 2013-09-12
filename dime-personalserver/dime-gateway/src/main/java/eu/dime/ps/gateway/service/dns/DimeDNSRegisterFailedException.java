@@ -12,26 +12,22 @@
 * See the Licence for the specific language governing permissions and limitations under the Licence.
 */
 
-package eu.dime.ps.gateway.proxy;
-
-import java.net.URL;
-
-import eu.dime.ps.gateway.exception.ServiceNotAvailableException;
-import eu.dime.ps.gateway.util.UsernameEncoder;
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package eu.dime.ps.gateway.service.dns;
 
 /**
- * Factory to create proxy objects.
- * 
- * @author Ismael Rivera
+ *
+ * @author simon
  */
-public class ProxyFactory {
+public class DimeDNSRegisterFailedException extends DimeDNSException{
 
-	public HttpRestProxy createProxy(URL url) throws ServiceNotAvailableException {
-		return new HttpRestProxy(url);
-	}
+    public DimeDNSRegisterFailedException(String message, Throwable cause) {
+        super(message, cause);
+    }
 
-	public HttpRestProxy createProxy(URL url, String username, String password) throws ServiceNotAvailableException {
-		return new HttpRestProxy(url, UsernameEncoder.encode(username), password);
-	}
+    
 
 }

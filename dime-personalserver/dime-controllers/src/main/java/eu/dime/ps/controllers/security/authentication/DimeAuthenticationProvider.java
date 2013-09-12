@@ -35,12 +35,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.StringUtils;
 
 import eu.dime.ps.controllers.UserManager;
+import eu.dime.ps.gateway.util.UsernameDecoder;
+import eu.dime.ps.storage.entities.Role;
 
-public class DimeAuthenticationProvider extends
-		AbstractUserDetailsAuthenticationProvider {
+public class DimeAuthenticationProvider extends AbstractUserDetailsAuthenticationProvider {
 
-	private static Logger logger = LoggerFactory
-			.getLogger(DimeAuthenticationProvider.class);
+	private static Logger logger = LoggerFactory.getLogger(DimeAuthenticationProvider.class);
 
 	private UserManager userManager;
 	
@@ -52,7 +52,6 @@ public class DimeAuthenticationProvider extends
 	protected void additionalAuthenticationChecks(UserDetails userDetails,
 			UsernamePasswordAuthenticationToken authentication)
 			throws AuthenticationException {
-		
 		
 	}
 
@@ -66,10 +65,11 @@ public class DimeAuthenticationProvider extends
 			throw new BadCredentialsException("Please enter password");
 		}
 
-		List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
+		List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>(1);
 		try {
-			String roleString = userManager.getByUsernameAndPassword(username, password).getRole().name();
-			authorities.add(new GrantedAuthorityImpl(roleString));		
+			username = UsernameDecoder.decode(username);
+			Role role = userManager.getByUsernameAndPassword(username, password).getRole();
+			authorities.add(new GrantedAuthorityImpl(role.name()));
 		} catch (EmptyResultDataAccessException e) {
 			throw new BadCredentialsException("Invalid username or password",e);
 		} catch (EntityNotFoundException e) {
@@ -77,11 +77,9 @@ public class DimeAuthenticationProvider extends
 		} catch (NoResultException e) {
 			throw new BadCredentialsException("You are looking for something does not existing!", e);
 		} catch (NonUniqueResultException e) {
-			throw new BadCredentialsException(
-					"Non-unique user, contact the administrator = yourself!", e);
+			throw new BadCredentialsException("Non-unique user, contact the administrator = yourself!", e);
 		} catch (Exception e) {
-			logger.error("Following Excption has been catched: "
-					+ e.getMessage());
+			logger.error("Couldn't verify authentication", e);
 		}
 
 		return new User(username, password, 
@@ -91,4 +89,5 @@ public class DimeAuthenticationProvider extends
 				true, // account not locked
 				authorities);
 	}
+	
 }

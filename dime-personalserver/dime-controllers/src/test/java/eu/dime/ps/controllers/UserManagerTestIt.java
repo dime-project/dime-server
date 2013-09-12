@@ -33,13 +33,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import eu.dime.commons.dto.UserRegister;
 import eu.dime.commons.exception.DimeException;
-import eu.dime.ps.controllers.account.register.DimeDNSRegisterService;
 import eu.dime.ps.controllers.infosphere.InfoSphereManagerTest;
 import eu.dime.ps.controllers.infosphere.manager.AccountManager;
 import eu.dime.ps.controllers.infosphere.manager.PersonManager;
 import eu.dime.ps.controllers.infosphere.manager.ProfileCardManager;
 import eu.dime.ps.controllers.infosphere.manager.ProfileManager;
-import eu.dime.ps.gateway.service.internal.DimeDNSRegisterFailedException;
+import eu.dime.ps.gateway.service.dns.DimeDNSRegisterFailedException;
+import eu.dime.ps.gateway.service.internal.AccountRegistrar;
 import eu.dime.ps.semantic.connection.ConnectionProvider;
 import eu.dime.ps.semantic.model.dao.Account;
 import eu.dime.ps.semantic.model.nco.PersonContact;
@@ -65,7 +65,7 @@ public class UserManagerTestIt extends InfoSphereManagerTest {
 	@Autowired
 	private EntityFactory entityFactory;
 	@Mock
-	private DimeDNSRegisterService dimeDNSRegisterService;
+	private AccountRegistrar accountRegistrar;
 
 	@Autowired
 	private ConnectionProvider connectionProvider;
@@ -158,7 +158,7 @@ public class UserManagerTestIt extends InfoSphereManagerTest {
 			// any(User.class))).thenReturn(one);
 			userManager = new UserManagerImpl();
 
-			userManager.setDimeDNSRegisterService(dimeDNSRegisterService);
+			userManager.setAccountRegistrar(accountRegistrar);
 			userManager.setTenantManager(tenantManager);
 			userManager.setAccountManager(accountManager);
 			userManager.setPersonManager(personManager);
@@ -207,43 +207,34 @@ public class UserManagerTestIt extends InfoSphereManagerTest {
 	}
 
 	/**
-         * This test is throwing a NPE in ConnectionProvider:32 repositoryFactory seems to be null
-         * probably it is required to mock the connection provider
-         * e.g. like in SharingNotifierTest
-         * @throws Exception
-         */
-        @Ignore
+	 * This test is throwing a NPE in ConnectionProvider:32 repositoryFactory
+	 * seems to be null probably it is required to mock the connection provider
+	 * e.g. like in SharingNotifierTest
+	 * 
+	 * @throws Exception
+	 */
+	@Ignore
 	@Test
 	@Transactional
-	public void testRegister() throws Exception{
-                String tenantName = "tenant";
-                String username = "juan";
-                String password = "juan123";
+	public void testRegister() throws Exception {
+		String tenantName = "tenant";
+		String username = "juan";
+		String password = "juan123";
 
-                UserRegister userRegister = new UserRegister();
-                userRegister.setCheckbox_agree(Boolean.TRUE);
-                userRegister.setEmailAddress("dummy@email.com");
-                userRegister.setFirstname("Juan");
-                userRegister.setLastname("Alvarez");
-                userRegister.setPassword(password);
-                userRegister.setUsername(username);
-                userRegister.setNickname(username);
+		UserRegister userRegister = new UserRegister();
+		userRegister.setCheckbox_agree(Boolean.TRUE);
+		userRegister.setEmailAddress("dummy@email.com");
+		userRegister.setFirstname("Juan");
+		userRegister.setLastname("Alvarez");
+		userRegister.setPassword(password);
+		userRegister.setUsername(username);
+		userRegister.setNickname(username);
 
+		assertNotNull(userManager.register(userRegister));
 
-                try {
-
-
-                    assertNotNull(userManager.register(userRegister));
-                } catch (DimeDNSRegisterFailedException ex) {
-                    fail(ex.getMessage());
-                } catch (IllegalArgumentException e) {
-                    fail("Illegal Argument Exception but arguments are ok");
-                } catch (DimeException e) {
-                    fail("Unexpected DimeException");
-                }
-                //second registration should fail
-                User user2 = userManager.register(userRegister);
-		assertNull(user2); //should never go there...
+		// second registration should fail
+		User user2 = userManager.register(userRegister);
+		assertNull(user2); // should never go there...
 	}
 
 	@Test

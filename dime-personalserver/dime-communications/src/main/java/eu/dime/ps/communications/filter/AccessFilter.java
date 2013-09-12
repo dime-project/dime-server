@@ -38,6 +38,7 @@ import org.springframework.security.core.context.SecurityContext;
 import eu.dime.ps.communications.utils.Base64encoding;
 import eu.dime.ps.controllers.TenantManager;
 import eu.dime.ps.controllers.UserManager;
+import eu.dime.ps.gateway.util.UsernameDecoder;
 import eu.dime.ps.storage.entities.Role;
 import eu.dime.ps.storage.entities.Tenant;
 import eu.dime.ps.storage.entities.User;
@@ -65,7 +66,7 @@ public class AccessFilter implements Filter {
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response,
 			FilterChain chain) throws IOException, ServletException {
-		String said = ""; 
+		String said = "";
 		Tenant tenant = null;
 		
 		HttpServletRequest req = (HttpServletRequest) request;
@@ -91,7 +92,7 @@ public class AccessFilter implements Filter {
             return;
 		}
 
-		int end = url.indexOf("/", start);
+		final int end = url.indexOf("/", start);
 		if (end > start) {
 			said = url.substring(start, end);
 		} else {
@@ -101,8 +102,8 @@ public class AccessFilter implements Filter {
 		
 		try {
 			tenant = tenantManager.getByAccountName(said);
-			String auth = req.getHeader("Authorization");
 			
+			final String auth = req.getHeader("Authorization");
 			if (auth == null){
 				// not authenticated
 				HttpSession session = req.getSession();
@@ -134,10 +135,14 @@ public class AccessFilter implements Filter {
 				}
 			} else { // basic auth
 				String decodedAuth = Base64encoding.decode(auth.substring(5).trim());
-				String[] credentials = decodedAuth.split(":");
-				String username = credentials.length > 0 ? credentials[0] : null;
-				String password = credentials.length > 1 ? credentials[1] : null;
-			
+				String username = null, password = null;
+				
+				int passwordIdx = decodedAuth.lastIndexOf(":");
+				if (passwordIdx > 0) {
+					username = UsernameDecoder.decode(decodedAuth.substring(0, passwordIdx));
+					password = decodedAuth.substring(passwordIdx + 1, decodedAuth.length());
+				}
+				
 				if (url.endsWith(API_PREFIX+said+"/user/credentials/"+username)) {
 					// get credentials request -> no password check
 					User user = User.findByTenantAndByUsername(tenant, username);

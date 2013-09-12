@@ -19,6 +19,9 @@
 	<bean id="policyManager" 
 	    class="eu.dime.ps.gateway.policy.PolicyManagerImpl"/>
 	
+	<bean id="accountRegistrar" 
+	    class="eu.dime.ps.gateway.service.internal.impl.SelfContainedAccountRegistrar"/>
+	
 	<context:annotation-config/>
 		
 </beans>

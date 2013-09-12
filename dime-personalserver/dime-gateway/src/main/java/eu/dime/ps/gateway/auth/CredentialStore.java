@@ -20,7 +20,6 @@ import javax.persistence.NoResultException;
 import org.ontoware.rdf2go.model.node.Resource;
 import org.ontoware.rdf2go.model.node.URI;
 
-import eu.dime.ps.semantic.exception.RepositoryStorageException;
 import eu.dime.ps.storage.entities.Tenant;
 
 public interface CredentialStore {
@@ -85,10 +84,10 @@ public interface CredentialStore {
     public String getAccessSecret(String account, Tenant tenant) throws NoResultException;
 
     void storeCredentialsForAccount(String localAccount, String remoteAccount,
-            String username, String password, Tenant tenant) throws RepositoryStorageException;
+            String username, String password, Tenant tenant);
 
     void updateCredentialsForAccount(String localAccount, String remoteAccount,
-            String targetSaid, String password, Tenant tenant) throws RepositoryStorageException;
+            String targetSaid, String password, Tenant tenant);
 
     void storeServiceProvider(String adaperId, String consumerKey,
             String consumerSecret);

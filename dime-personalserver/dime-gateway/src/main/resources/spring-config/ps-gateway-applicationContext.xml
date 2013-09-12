@@ -28,5 +28,7 @@
 	<bean id="serviceGateway" class="eu.dime.ps.gateway.impl.ServiceGatewayImpl">
 		<property name="credentialStore" ref="credentialStore" />
 	</bean>
+	
+	<bean id="accountRegistrar" class="eu.dime.ps.gateway.service.internal.impl.SelfContainedAccountRegistrar"/>
 
 </beans>

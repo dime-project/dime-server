@@ -21,7 +21,6 @@ import ie.deri.smile.vocabulary.NAO;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.UUID;
 
 import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.model.node.impl.URIImpl;
@@ -49,6 +48,7 @@ import eu.dime.ps.gateway.exception.ServiceNotAvailableException;
 import eu.dime.ps.gateway.service.ServiceAdapter;
 import eu.dime.ps.gateway.service.external.BasicAuthServiceAdapter;
 import eu.dime.ps.gateway.service.external.oauth.OAuthServiceAdapter;
+import eu.dime.ps.gateway.service.internal.AccountRegistrar;
 import eu.dime.ps.semantic.connection.ConnectionProvider;
 import eu.dime.ps.semantic.exception.NotFoundException;
 import eu.dime.ps.semantic.exception.ResourceExistsException;
@@ -80,6 +80,7 @@ public class AccountManagerImpl extends InfoSphereManagerBase<Account> implement
     private EntityFactory entityFactory;
     private ServiceGateway serviceGateway;
     private ServiceCrawlerRegistry serviceCrawlerRegistry;
+    private AccountRegistrar accountRegistrar;
 
     @Autowired
     public void setEntityFactory(EntityFactory entityFactory) {
@@ -92,6 +93,10 @@ public class AccountManagerImpl extends InfoSphereManagerBase<Account> implement
 
     public void setServiceCrawlerRegistry(ServiceCrawlerRegistry serviceCrawlerRegistry) {
         this.serviceCrawlerRegistry = serviceCrawlerRegistry;
+    }
+    
+    public void setAccountRegistrar(AccountRegistrar accountRegistrar) {
+    	this.accountRegistrar = accountRegistrar;
     }
 
     @Override
@@ -187,16 +192,18 @@ public class AccountManagerImpl extends InfoSphereManagerBase<Account> implement
             super.add(account);
             return;
         }
+        
         Tenant tenant = TenantHelper.getCurrentTenant();
         ServiceAccount serviceAccount = entityFactory.buildServiceAccount();
 
         serviceAccount.setServiceProvider(serviceProvider);
         serviceAccount.setTenant(tenant);
         serviceAccount.setEnabled(true);
-
-        serviceAccount.setName(UUID.randomUUID().toString());
         serviceAccount.setAccountURI(account.asURI().toString());
 
+        // registers account, and assigns a new name to the new record
+        serviceAccount.setName(accountRegistrar.register(serviceAccount));
+        
         // persisting account in DB and RDF store
         serviceAccount.persist();
         super.add(account);

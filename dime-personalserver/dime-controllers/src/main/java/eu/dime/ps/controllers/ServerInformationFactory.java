@@ -47,7 +47,7 @@ public class ServerInformationFactory {
         result.setImageUrl(myProps.getProperty("GLOBAL_SERVER_LOGO"));
         result.setAffiliation(myProps.getProperty("GLOBAL_SERVER_AFFILIATION"));
         result.setBaseUrl(myProps.getProperty("GLOBAL_SERVER_BASEURL"));
-        result.setIpAddress(myProps.getProperty("GLOBAL_IPADDRESS"));
+        result.setIpAddress(myProps.getProperty("GLOBAL_SERVER_IPADDRESS"));
         
         return result;
     }

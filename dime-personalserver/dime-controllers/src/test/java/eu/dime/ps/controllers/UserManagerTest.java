@@ -26,11 +26,11 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import eu.dime.ps.controllers.account.register.DimeDNSRegisterService;
 import eu.dime.ps.controllers.infosphere.manager.AccountManager;
 import eu.dime.ps.controllers.infosphere.manager.PersonManager;
 import eu.dime.ps.controllers.infosphere.manager.ProfileCardManager;
 import eu.dime.ps.controllers.infosphere.manager.ProfileManager;
+import eu.dime.ps.gateway.service.internal.AccountRegistrar;
 import eu.dime.ps.semantic.model.nco.PersonContact;
 import eu.dime.ps.storage.entities.User;
 import eu.dime.ps.storage.manager.EntityFactory;
@@ -53,7 +53,7 @@ public class UserManagerTest {
     @Mock
     private ProfileCardManager profileCardManager;
     @Mock
-    private DimeDNSRegisterService dimeDNSRegisterService;
+    private AccountRegistrar accountRegistrar;
     @Mock
     private EntityFactory entityFactory;
     @Mock
@@ -73,7 +73,7 @@ public class UserManagerTest {
         doThrow(new Exception("ping")).when(mockUser).persist();
         when(entityFactory.buildUser()).thenReturn(mockUser);
 
-        userManager.setDimeDNSRegisterService(dimeDNSRegisterService);
+        userManager.setAccountRegistrar(accountRegistrar);
         userManager.setTenantManager(tenantManager);
         userManager.setAccountManager(accountManager);
         userManager.setPersonManager(personManager);

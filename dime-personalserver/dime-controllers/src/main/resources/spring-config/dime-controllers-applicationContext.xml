@@ -66,7 +66,7 @@
 		<property name="accountManager" ref="accountManager"/>
 		<property name="profileManager" ref="profileManager"/>
 		<property name="profileCardManager" ref="profileCardManager"/>
-		<property name="dimeDNSRegisterService" ref="dimeDNSRegisterService"/>
+		<property name="accountRegistrar" ref="accountRegistrar"/>
 	</bean>
 
 	<bean id="accountManager"
@@ -74,6 +74,7 @@
 		<property name="connectionProvider" ref="connectionProvider"/>
 		<property name="serviceGateway" ref="serviceGateway"/>
 		<property name="serviceCrawlerRegistry" ref="serviceCrawlerRegistry"/>
+		<property name="accountRegistrar" ref="accountRegistrar"/>
 	</bean>
 
 	<bean id="databoxManager"
@@ -347,10 +348,6 @@
 	
 	<bean id="logogEventManager" class="eu.dime.ps.controllers.eventlogger.manager.LogEventManagerImpl">
 		<property name="entityFactory" ref="entityFactory"/>
-	</bean>
-	
-	<bean id="dimeDNSRegisterService" 
-		class="eu.dime.ps.controllers.account.register.DimeDNSRegisterService">
 	</bean>
 	
 <!--	<bean id="torHSCreationService" 

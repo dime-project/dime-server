@@ -219,10 +219,7 @@ public class ServiceGatewayImpl implements ServiceGateway {
 
 	// Generate URL that the browser should call to trigger OAuthAuthorization
 	public String getHost(String tenantName) {
-		return "https://" + this.policyManager.getPolicyString("AUTHSERVLET_HOST", null) + ":"
-				+ this.policyManager.getPolicyString("AUTHSERVLET_PORT_SECURE", null)
-				+ this.policyManager.getPolicyString("AUTHSERVLET_PATH", null) + "/services/"
-				+ tenantName;
+		return this.policyManager.getPolicyString("SERVER_BASEURL", "") + "/services/" + tenantName;
 	}
 
 	@Override

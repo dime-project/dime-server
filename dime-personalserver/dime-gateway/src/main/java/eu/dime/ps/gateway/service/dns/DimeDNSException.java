@@ -16,7 +16,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package eu.dime.ps.gateway.service.internal;
+package eu.dime.ps.gateway.service.dns;
 
 /**
  *
@@ -24,9 +24,12 @@ package eu.dime.ps.gateway.service.internal;
  */
 public class DimeDNSException extends Exception{
 
+    public DimeDNSException(String message) {
+        super(message);
+    }
+
     public DimeDNSException(String message, Throwable cause) {
         super(message, cause);
     }
-
 
 }

@@ -67,21 +67,17 @@ public class ExternalNotifySchedule {
 	    String senderURI = externalNotififcation.getSender();
 	    String targetURI = externalNotififcation.getTarget();
 	    Tenant tenant = TenantHelper.getTenant(externalNotififcation.getTenant());
-	    try {
-					
-			adapter = (DimeServiceAdapter) serviceGateway.getDimeServiceAdapter(senderURI);
-
-	    } catch (ServiceNotAvailableException e) {
-	    	logger.error("Notification Could not be sended for: " + e.getMessage(), e);
-	    } 
-	    
-	    logger.info("Notification dealed to DimeServiceAdapter ("
-		    + externalNotififcation.toString() + ")");
 	    
 	    try {
 			String senderName = credentialStore.getNameSaid(senderURI, tenant);
 			String targetName = credentialStore.getNameSaid(targetURI, tenant);
-			
+
+		    try {
+				adapter = (DimeServiceAdapter) serviceGateway.getDimeServiceAdapter(senderName);
+		    } catch (ServiceNotAvailableException e) {
+		    	logger.error("Notification Could not be sended for: " + e.getMessage(), e);
+		    } 
+
 			// Notification to be sended (without tenant)
 			tmpNotification = new DimeExternalNotification(
 					targetName, senderName, 
@@ -91,10 +87,13 @@ public class ExternalNotifySchedule {
 					externalNotififcation.getItemType(), 
 					null); //do not send local tenant id !!!
 
+		    logger.info("Notification dealed to DimeServiceAdapter ("
+				    + externalNotififcation.toString() + ")");
+
 			adapter.set("/notification", tmpNotification);
 		
 	    } catch (Exception e) {
-	    	logger.error("Notification Could not be sended for: " + e.getMessage());
+	    	logger.error("Notification Could not be sended for: " + e.getMessage(), e);
 	    }
 	}
 

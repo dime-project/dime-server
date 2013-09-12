@@ -139,12 +139,9 @@ public class YMServiceWrapper {
 		this.port = policyManager.getPolicyInteger(PORT, YMSA);
 		this.staticParameter = policyManager.getPolicyString(STATICPARAMETERS, YMSA);
 
-		this.ymProxy = new HttpRestProxy(new URL(this.ymServiceURL), this.port,
-				this.realm, this.proxyUsername, this.proxyPassword);
-		this.myymProxy = new HttpRestProxy(new URL(this.myYMServiceURL), this.port,
-				this.realm, this.proxyUsername, this.proxyPassword);
-		this.myymCommentsProxy = new HttpRestProxy(new URL(this.myYMCommentsServiceURL), this.port,
-				this.realm, this.proxyUsername, this.proxyPassword);
+		this.ymProxy = new HttpRestProxy(new URL(this.ymServiceURL + ":" + this.port),this.proxyUsername, this.proxyPassword);
+		this.myymProxy = new HttpRestProxy(new URL(this.myYMServiceURL + ":" + this.port), this.proxyUsername, this.proxyPassword);
+		this.myymCommentsProxy = new HttpRestProxy(new URL(this.myYMCommentsServiceURL + ":" + this.port), this.proxyUsername, this.proxyPassword);
                 
                 this.xpathExpPoiDetail = policyManager.getPolicyString(XPATH_EXP_POI_DETAIL, YMSA);
                 this.xpathExpPoi = policyManager.getPolicyString(XPATH_EXP_POI, YMSA);

@@ -14,8 +14,6 @@
 
 package eu.dime.ps.controllers.infosphere;
 
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
 
 import java.util.Collection;
@@ -23,8 +21,6 @@ import java.util.Collection;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import eu.dime.ps.controllers.TenantContextHolder;
@@ -32,6 +28,7 @@ import eu.dime.ps.controllers.exception.InfosphereException;
 import eu.dime.ps.controllers.infosphere.manager.AccountManagerImpl;
 import eu.dime.ps.datamining.service.ServiceCrawlerRegistry;
 import eu.dime.ps.gateway.ServiceGateway;
+import eu.dime.ps.gateway.service.internal.AccountRegistrar;
 import eu.dime.ps.semantic.model.dao.Account;
 import eu.dime.ps.storage.entities.ServiceAccount;
 import eu.dime.ps.storage.entities.Tenant;
@@ -52,33 +49,25 @@ public class AccountManagerTest extends InfoSphereManagerTest {
 	@Before
 	public void setUp() throws Exception {
 		super.setUp();
-		Tenant tenant = Tenant.findByName("___test");
+		Tenant tenant = Tenant.findByName("___tenant_test");
 		if (tenant == null) {
 			tenant = EntityFactory.getInstance().buildTenant();
-			tenant.setName("___test");
+			tenant.setName("___tenant_test");
 			tenant = tenant.merge();
 		}
 		tenantId = tenant.getId();
 		TenantContextHolder.setTenant(tenantId);
 		
-		// mocking Crawler & Gateway components
+		// mocking dependencies
+		
 		ServiceCrawlerRegistry serviceCrawlerRegistry = mock(ServiceCrawlerRegistry.class);
-		doAnswer(new Answer<Void>() {
-	        public Void answer(InvocationOnMock invocation) {
-	        	// do nothing
-	            return null;
-	        }
-	    }).when(serviceCrawlerRegistry).remove(anyString());
 		accountManager.setServiceCrawlerRegistry(serviceCrawlerRegistry);
 
 		ServiceGateway gateway = mock(ServiceGateway.class);
-		doAnswer(new Answer<Void>() {
-	        public Void answer(InvocationOnMock invocation) {
-	        	// do nothing
-	            return null;
-	        }
-	    }).when(gateway).unsetServiceAdapter(anyString());
 		accountManager.setServiceGateway(gateway);
+
+		AccountRegistrar registrar = mock(AccountRegistrar.class);
+		accountManager.setAccountRegistrar(registrar);
 	}
 
 	@After

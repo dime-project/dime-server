@@ -17,9 +17,12 @@
  */
 package eu.dime.ps.gateway.service.internal;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
+
 import org.junit.Ignore;
 import org.junit.Test;
+
+import eu.dime.ps.gateway.service.dns.DimeDNSException;
 
 /**
  * @author Sophie.Wrobel
@@ -35,12 +38,8 @@ public class DimeIPResolverTestIt {
      */
     @Ignore
     @Test
-    public void testResolve() {
+    public void testResolve() throws DimeDNSException {
         DimeIPResolver resolver = new DimeIPResolver();
-        try {
-            assertTrue(resolver.resolve("sit").equals("https://137.251.22.69:8443/dime-communications"));
-        } catch (DimeDNSException e) {
-            fail(e.getMessage());
-        }
+        assertTrue(resolver.resolve("sit").equals("137.251.22.69"));
     }
 }

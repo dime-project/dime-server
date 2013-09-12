@@ -19,8 +19,8 @@ import eu.dime.ps.controllers.UserManager;
 import eu.dime.ps.gateway.ServiceGateway;
 import eu.dime.ps.gateway.exception.ServiceNotAvailableException;
 import eu.dime.ps.gateway.service.AttributeMap;
+import eu.dime.ps.gateway.service.dns.DimeDNSException;
 import eu.dime.ps.gateway.service.external.DimeUserResolverServiceAdapter;
-import eu.dime.ps.gateway.service.internal.DimeDNSException;
 import eu.dime.ps.gateway.service.internal.DimeIPResolver;
 import eu.dime.ps.semantic.model.nco.PersonContact;
 import eu.dime.ps.storage.entities.User;
@@ -181,22 +181,19 @@ public class LoginController {
         return "redirect:"+forwardUrl;
     }
 
-    @RequestMapping(value = "/resolveSaid", method = RequestMethod.GET)
-    public ModelAndView resolveSaid(@RequestParam(value = "said", required = true) String said) {
-
-         ModelAndView modelAndView = new ModelAndView("ajax_result");
-         DimeIPResolver dir = new DimeIPResolver();
-        try {
-
-            modelAndView.addObject("result", "received from "+dir.getDimeDns()+": ip:"+dir.resolveSaid(said));
-        } catch (DimeDNSException ex) {
-            modelAndView.addObject("result", "DNS resolve failed! Unable to resolve said: "+said+" at "+dir.getDimeDns()
-                    +"<br/>"+ex.getClass().getName()
-                    +"<br/>"+ex.getMessage());
-        }
-
-        return modelAndView;
-    }
+	@RequestMapping(value = "/resolveSaid", method = RequestMethod.GET)
+	public ModelAndView resolveSaid(@RequestParam(value = "said", required = true) String said) {
+		ModelAndView modelAndView = new ModelAndView("ajax_result");
+		try {
+			DimeIPResolver resolver = new DimeIPResolver();
+			modelAndView.addObject("result", "received from "+resolver.getDimeDns()+": ip:"+resolver.resolve(said));
+		} catch (DimeDNSException ex) {
+			modelAndView.addObject("result", "DNS resolve failed! Unable to resolve said: "+said+" at DNS."
+					+"<br/>"+ex.getClass().getName()
+					+"<br/>"+ex.getMessage());
+		}
+		return modelAndView;
+	}
 
 
     @RequestMapping(value = "/ursRegisterTest", method = RequestMethod.GET)

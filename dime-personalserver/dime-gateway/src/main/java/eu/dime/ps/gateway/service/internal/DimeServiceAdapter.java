@@ -35,7 +35,6 @@ import org.ontoware.rdfreactor.schema.rdfs.Resource;
 import org.scribe.model.Token;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -63,6 +62,7 @@ import eu.dime.ps.gateway.service.MediaType;
 import eu.dime.ps.gateway.service.ResourceAttributes;
 import eu.dime.ps.gateway.service.ServiceAdapterBase;
 import eu.dime.ps.gateway.service.ServiceResponse;
+import eu.dime.ps.gateway.service.internal.impl.SelfContainedAccountRegistrar;
 import eu.dime.ps.gateway.transformer.impl.XSparqlTransformer;
 import eu.dime.ps.gateway.util.JSONLDUtils;
 import eu.dime.ps.semantic.model.NCOFactory;
@@ -96,20 +96,20 @@ public class DimeServiceAdapter extends ServiceAdapterBase implements InternalSe
 	private HttpRestProxy publicResolverService;
 
 	/**
-	 * Resolves account identifiers to IPs using the di.me DNS
+	 * Resolves account identifiers to URL addresses
 	 */
-	private DimeIPResolver targetResolver;
+	private AccountRegistrar accountRegistrar;
 
 	private ProxyFactory proxyFactory;
 	private CredentialStore credentialStore;
 	private PolicyManager policyManager;
-
+	
 	public void setProxyFactory(ProxyFactory proxyFactory) {
 		this.proxyFactory = proxyFactory;
 	}
 
-	public void setTargetResolver(DimeIPResolver targetResolver) {
-		this.targetResolver = targetResolver;
+	public void setAccountRegistrar(AccountRegistrar accountRegistrar) {
+		this.accountRegistrar = accountRegistrar;
 	}
 
 	public void setPublicResolverService(HttpRestProxy publicResolverService) {
@@ -139,15 +139,17 @@ public class DimeServiceAdapter extends ServiceAdapterBase implements InternalSe
 
 		this.proxyFactory = new ProxyFactory();
 		this.policyManager = PolicyManagerImpl.getInstance();
-		this.targetResolver = new DimeIPResolver();
 		this.transformer = new XSparqlTransformer();
 		this.credentialStore = CredentialStoreImpl.getInstance();
+		
+		// by default using self-contained account identifiers
+		this.accountRegistrar = new SelfContainedAccountRegistrar();		
 
 		try {
 			this.publicResolverService = new HttpRestProxy(new URL(
 					this.policyManager.getPolicyString("DIME_URS", null)));
 		} catch (MalformedURLException e) {
-			throw new ServiceNotAvailableException("di.me URS couldn't be initialized: " + e.getMessage(), e);
+			throw new ServiceNotAvailableException("di.me user directory couldn't be initialized: " + e.getMessage(), e);
 		}
 	}
 
@@ -159,7 +161,7 @@ public class DimeServiceAdapter extends ServiceAdapterBase implements InternalSe
 	 * @param senderSAID Generated GET request is being sent from this SAID using their credentials to access information
 	 * @param attribute
 	 * @param returnType
-     * @param localTenant
+     * @param tenant
      * @return
 	 * @throws AttributeNotSupportedException
 	 * @throws ServiceNotAvailableException
@@ -167,32 +169,26 @@ public class DimeServiceAdapter extends ServiceAdapterBase implements InternalSe
      * @throws ServiceException 
 	 */
 	public <T extends Resource> Collection<T> get(String receiverSAID, String senderSAID,
-			String attribute, Class<T> returnType, Tenant localTenant) throws AttributeNotSupportedException,
+			String attribute, Class<T> returnType, Tenant tenant) throws AttributeNotSupportedException,
 			ServiceNotAvailableException, InvalidLoginException, ServiceException {
 
 		// Retrieve username & password to establish the connection 
 		String username = null;
 		String secret = null;
 		try {
-			username = credentialStore.getUsername(senderSAID, receiverSAID, localTenant);
-			secret = credentialStore.getPassword(senderSAID, receiverSAID, localTenant);
+			username = credentialStore.getUsername(senderSAID, receiverSAID, tenant);
+			secret = credentialStore.getPassword(senderSAID, receiverSAID, tenant);
 		} catch (NoResultException e) {
 			throw new ServiceNotAvailableException("Could not find username & password from the credentials store", e);
 		}
 
 		// Resolve IP for the receiver said and create proxy
 		HttpRestProxy proxy = null;
-		String targetSaidName = credentialStore.getNameSaid(receiverSAID, localTenant);
+		String targetSaidName = credentialStore.getNameSaid(receiverSAID, tenant);
 		try {
-			proxy = prepareProxy(targetResolver.resolve(targetSaidName), username, secret);
-			proxy.authenticate(new UsernamePasswordAuthenticationToken(username, secret));
-		} catch (DimeDNSCannotConnectException e) {
-			throw new ServiceNotAvailableException("Could not connect to dns for " + receiverSAID, e);
-		} catch (DimeDNSCannotResolveException e) {
+			proxy = proxyFactory.createProxy(accountRegistrar.resolve(targetSaidName), username, secret);
+		} catch (AccountCannotResolveException e) {
 			throw new ServiceNotAvailableException("said not registered at dns: " + receiverSAID, e);
-		} catch (DimeDNSException e) {
-			throw new ServiceNotAvailableException("Unknown error occurred when trying to connect to " + 
-					receiverSAID + ": " + e.getMessage(), e);
 		}
 
 		// Prepare URL path to request/fetch the shared item
@@ -264,45 +260,35 @@ public class DimeServiceAdapter extends ServiceAdapterBase implements InternalSe
 	 * @param receiverSAID
 	 * @param senderSAID
 	 * @param resourceId
-     * @param localTenant
+     * @param tenant
      * @return BinaryFile
 	 * @throws ServiceNotAvailableException	
 	 */
 	public  BinaryFile getBinary(String receiverSAID, String senderSAID,
-			String resourceId, Tenant localTenant) throws 	ServiceNotAvailableException {
+			String resourceId, Tenant tenant) throws 	ServiceNotAvailableException {
 			
 		// Retrieve username & password to establish the connection 
 		String username = null;
 		String secret = null;
 		try {
-			username = credentialStore.getUsername(senderSAID, receiverSAID, localTenant);
-			secret = credentialStore.getPassword(senderSAID, receiverSAID, localTenant);
+			username = credentialStore.getUsername(senderSAID, receiverSAID, tenant);
+			secret = credentialStore.getPassword(senderSAID, receiverSAID, tenant);
 		} catch (NoResultException e) {
 			throw new ServiceNotAvailableException("Could not find username & password from the credentials store", e);
 		}
-		logger.info("username: " + username + " secret: " + secret);
+		
 		// Resolve IP for the receiver said and create proxy
 		HttpRestProxy proxy = null;
-		String targetSaidName = credentialStore.getNameSaid(receiverSAID, localTenant);
+		String targetSaidName = credentialStore.getNameSaid(receiverSAID, tenant);
 		try {
-			proxy = prepareProxy(targetResolver.resolve(targetSaidName), username, secret);
-			proxy.authenticate(new UsernamePasswordAuthenticationToken(username, secret));
-
-		} catch (DimeDNSCannotConnectException e) {
-			throw new ServiceNotAvailableException("Could not connect to dns for " + receiverSAID, e);
-		} catch (DimeDNSCannotResolveException e) {
+			proxy = proxyFactory.createProxy(accountRegistrar.resolve(targetSaidName), username, secret);
+		} catch (AccountCannotResolveException e) {
 			throw new ServiceNotAvailableException("said not registered at dns: " + receiverSAID, e);
-		} catch (DimeDNSException e) {
-			throw new ServiceNotAvailableException("Unknown error occurred when trying to connect to " +
-					receiverSAID + ": " + e.getMessage(), e);
 		}
 
 		// Prepare URL path to request/fetch the binary item	
 		String path = null;
-
 		path = SHARED_BINARY_FILE_PATH.replace(":id", resourceId);
-
-		// Insert the target said in the path
 		path = path.replace(":target", targetSaidName);
 
 		// Perform GET request
@@ -344,7 +330,7 @@ public class DimeServiceAdapter extends ServiceAdapterBase implements InternalSe
 				payload.setSaidSender(notification.getSender());
 
 				// Resolve IP via proxy
-				proxy = prepareProxy(targetResolver.resolve(notification.getTarget()), null, null);
+				proxy = proxyFactory.createProxy(accountRegistrar.resolve(notification.getTarget()), null, null);
 				List<ExternalNotificationDTO> collection = new ArrayList<ExternalNotificationDTO>(1);
 				collection.add(payload);
 				data.setEntry(collection);
@@ -361,12 +347,8 @@ public class DimeServiceAdapter extends ServiceAdapterBase implements InternalSe
 			if (response != 200) {
 				throw new ServiceNotAvailableException(response);
 			}
-		} catch (DimeDNSCannotConnectException e) {
-			throw new ServiceNotAvailableException("Could not connect to dns server" , e);
-		} catch (DimeDNSCannotResolveException e) {
+		} catch (AccountCannotResolveException e) {
 			throw new ServiceNotAvailableException("said not registered at dns: ", e);
-		} catch (DimeDNSException e) {
-			throw new ServiceNotAvailableException(e.getMessage(), e);
 		} finally {
 			if (proxy != null) {
 				proxy.close();
@@ -459,11 +441,11 @@ public class DimeServiceAdapter extends ServiceAdapterBase implements InternalSe
 
 		HttpRestProxy proxy = null;
 		PersonContact profile = null;
-		String path = SHARED_PROFILE_PATH.replace(":target", targetSaidName);
+		final String path = SHARED_PROFILE_PATH.replace(":target", targetSaidName);
 		
 		try {
-			String baseURL = targetResolver.resolve(targetSaidName);
-			proxy = prepareProxy(baseURL, token.getToken(), token.getSecret());
+			URL baseURL = accountRegistrar.resolve(targetSaidName);
+			proxy = proxyFactory.createProxy(baseURL, token.getToken(), token.getSecret());
 
 			Map<String, String> headers = headers(
 					"Accept", MediaType.APPLICATION_JSONLD);
@@ -475,13 +457,8 @@ public class DimeServiceAdapter extends ServiceAdapterBase implements InternalSe
 			if (logger.isDebugEnabled()) {
 				logger.debug("Profile metadata for "+path+" response is:\n"+profile.getModel().serialize(Syntax.Turtle));
 			}
-		} catch (DimeDNSCannotConnectException e) {
-			throw new ServiceNotAvailableException("Could not connect to dns for " + targetSaidName, e);
-		} catch (DimeDNSCannotResolveException e) {
+		} catch (AccountCannotResolveException e) {
 			throw new ServiceNotAvailableException("said not registered at dns: " + targetSaidName, e);
-		} catch (DimeDNSException e) {
-			throw new ServiceNotAvailableException("Unknown error occurred when trying to connect to " + 
-					targetSaidName + ": " + e.getMessage(), e);
 		} catch (JsonParseException e) {
 			throw new ServiceNotAvailableException(
 					"Could not process response from "+path+", invalid JSON returned: "+e.getMessage(),
@@ -501,14 +478,14 @@ public class DimeServiceAdapter extends ServiceAdapterBase implements InternalSe
 		return profile;
 	}
 	
-	public Token getUserToken(String username) throws ServiceNotAvailableException, ServiceException {
+	public Token getUserToken(String username, Tenant tenant) throws ServiceNotAvailableException, ServiceException {
 		Token token = null;
 		HttpRestProxy proxy = null;
-
+		
 		try {
 			// request username/password to access the target di.me PS
 			// since the password is yet unknown, it can be set to anything including empty string
-			proxy = prepareProxy(targetResolver.resolve(this.identifier), username, "");
+			proxy = proxyFactory.createProxy(accountRegistrar.resolve(this.identifier), username, "");
 			
 			String path = CREDENTIALS_PATH.replace(":target", this.identifier).replace(":username", username);
 			String response = proxy.get(path, headers("Accept", MediaType.APPLICATION_JSON));
@@ -538,11 +515,7 @@ public class DimeServiceAdapter extends ServiceAdapterBase implements InternalSe
 
 		} catch (JSONException e) {
 			logger.info("ERROR in Response: it was not JSON.");
-		} catch (DimeDNSCannotConnectException e) {
-			throw new ServiceNotAvailableException(e.getMessage(), e);
-		} catch (DimeDNSCannotResolveException e) {
-			throw new ServiceNotAvailableException(e.getMessage(), e);
-		} catch (DimeDNSException e) {
+		} catch (AccountCannotResolveException e) {
 			throw new ServiceNotAvailableException(e.getMessage(), e);
 		} catch (ServiceNotAvailableException e) {
 			throw new ServiceNotAvailableException(e);
@@ -555,25 +528,20 @@ public class DimeServiceAdapter extends ServiceAdapterBase implements InternalSe
 		return token;
 	}
 
-	public boolean confirmToken(Token token){
+	public boolean confirmToken(Token token, Tenant tenant){
 		int status;
 		HttpRestProxy proxy = null;
 		String path = null;
+		String username = token.getToken();
 		
 		try {
-			path = CREDENTIALS_PATH.replace(":target", this.identifier).replace(":username", token.getToken());
-			proxy = prepareProxy(targetResolver.resolve(this.identifier), token.getToken(), token.getSecret());
+			path = CREDENTIALS_PATH.replace(":target", this.identifier).replace(":username", username);
+			proxy = proxyFactory.createProxy(accountRegistrar.resolve(this.identifier), username, token.getSecret());
 			status = proxy.post(path, "");
 		} catch (ServiceNotAvailableException e) {
 			logger.error("Could not confirm token. System may be in a undefined state: "+e.getMessage(), e);
 			return false;
-		} catch (DimeDNSCannotConnectException e) {
-			logger.error("Could not confirm token. System may be in a undefined state: "+e.getMessage(), e);
-			return false;
-		} catch (DimeDNSCannotResolveException e) {
-			logger.error("Could not confirm token. System may be in a undefined state: "+e.getMessage(), e);
-			return false;
-		} catch (DimeDNSException e) {
+		} catch (AccountCannotResolveException e) {
 			logger.error("Could not confirm token. System may be in a undefined state: "+e.getMessage(), e);
 			return false;
 		} finally {
@@ -622,17 +590,6 @@ public class DimeServiceAdapter extends ServiceAdapterBase implements InternalSe
 		throw new AttributeNotSupportedException("delete is currently not supported for di.me service adapter.", this);
 	}
 
-	// Prepares a HTTP proxy to connect to external web services
-	private HttpRestProxy prepareProxy(String serviceURL, String username, String password) throws ServiceNotAvailableException {
-		try {
-			String realm = policyManager.getPolicyString("DIME_REALM", null);
-			int port = policyManager.getPolicyInteger("DIME_PORT", null);
-			return proxyFactory.createProxy(new URL(serviceURL), port, realm, username, password);
-		} catch (MalformedURLException e) {
-			throw new ServiceNotAvailableException(e);
-		}
-	}
-
 	// Helper method to ease the creation of the Map containing the headers
 	private Map<String, String> headers(String...headers) {
 		if (headers.length % 2 != 0) {
@@ -645,5 +602,5 @@ public class DimeServiceAdapter extends ServiceAdapterBase implements InternalSe
 		}
 		return headersMap;
 	}
-
+	
 }

@@ -25,7 +25,7 @@ import javax.naming.NamingException;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import eu.dime.ps.gateway.util.DnsResolver;
+import eu.dime.ps.gateway.service.dns.DnsResolver;
 
 /**
  * @author Sophie.Wrobel
@@ -35,7 +35,7 @@ import eu.dime.ps.gateway.util.DnsResolver;
 public class DnsResolverTestIt {
 
 	/**
-	 * Test method for {@link eu.dime.ps.controllers.service.util.DnsResolver#resolve(java.lang.String)}.
+	 * Test method for {@link eu.dime.ps.gateway.service.dns.controllers.service.util.DnsResolver#resolve(java.lang.String)}.
 	 */
 	@Test
 	public void testResolve() {

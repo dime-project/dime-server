@@ -168,7 +168,7 @@ public class PSServicesControllerTest {
 		// Mocking: DimeServiceAdapter
 		Token token = new Token("token", "secret");	
 		DimeServiceAdapter mockDimeServiceAdapter = mock(DimeServiceAdapter.class);
-		when(mockDimeServiceAdapter.getUserToken(RECEIVER)).thenReturn(token);
+		when(mockDimeServiceAdapter.getUserToken(RECEIVER, Mockito.any(Tenant.class))).thenReturn(token);
 		PersonContact profile = modelFactory.getNCOFactory().createPersonContact();
 		when(mockDimeServiceAdapter.getProfile(Mockito.anyString(), Mockito.eq(token))).thenReturn(profile);
 	
@@ -182,7 +182,7 @@ public class PSServicesControllerTest {
 		account.setPrefLabel(name+"@"+DimeServiceAdapter.NAME);
 		
 		user.setAccountUri(SENDER_URI_ON_DEMAND);
-		when(userManager.add(Mockito.eq(SENDER), Mockito.any(URI.class))).thenReturn(user);
+		when(userManager.add(Mockito.eq(SENDER))).thenReturn(user);
 		when(userManager.addProfile(Mockito.eq(new URIImpl(SENDER_URI_ON_DEMAND)), Mockito.eq(profile))).thenReturn(account);
 
 		//ServiceGateway			
@@ -210,7 +210,7 @@ public class PSServicesControllerTest {
 		// Mocking: DimeServiceAdapter
 		Token token = new Token("token", "secret");	
 		DimeServiceAdapter mockDimeServiceAdapter = mock(DimeServiceAdapter.class);
-		when(mockDimeServiceAdapter.getUserToken(RECEIVER)).thenReturn(token);
+		when(mockDimeServiceAdapter.getUserToken(RECEIVER, Mockito.any(Tenant.class))).thenReturn(token);
 		PersonContact profile = modelFactory.getNCOFactory().createPersonContact();
 		when(mockDimeServiceAdapter.getProfile(Mockito.anyString(), Mockito.eq(token))).thenReturn(profile);
 	
@@ -224,7 +224,7 @@ public class PSServicesControllerTest {
 		account.setPrefLabel(name+"@"+DimeServiceAdapter.NAME);
 		
 		user.setAccountUri(SENDER_URI_ON_DEMAND);
-		when(userManager.add(Mockito.eq(SENDER), Mockito.any(URI.class))).thenReturn(user);
+		when(userManager.add(Mockito.eq(SENDER))).thenReturn(user);
 		when(userManager.addProfile(Mockito.eq(new URIImpl(SENDER_URI_ON_DEMAND)), Mockito.eq(profile))).thenReturn(account);
 
 		//ServiceGateway			

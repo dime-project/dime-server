@@ -23,6 +23,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
@@ -61,7 +62,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import eu.dime.commons.util.HttpUtils;
 import eu.dime.ps.gateway.exception.ServiceException;
 import eu.dime.ps.gateway.exception.ServiceNotAvailableException;
-import java.nio.charset.Charset;
 
 /**
  * Connects to an external service using HTTP connection
@@ -84,8 +84,6 @@ public class HttpRestProxy implements ServiceProxy {
 	private String username = null;
 	private String password = null;
 	private DefaultHttpClient client;
-	private int serverPort;
-	private String serverRealm;
 
 	/**
 	 * Opens connection to specified external API
@@ -122,16 +120,12 @@ public class HttpRestProxy implements ServiceProxy {
 	 *            password for authenticating with BasicHTTPAuthentication
 	 * @throws ServiceNotAvailableException
 	 */
-	public HttpRestProxy(URL url, int serverPort, String realm,
-			String username, String password)
-			throws ServiceNotAvailableException {
+	public HttpRestProxy(URL url, String username, String password) throws ServiceNotAvailableException {
 		this(url);
-		this.serverPort = serverPort;
-		this.serverRealm = realm;
 		this.username = username;
 		this.password = password;
 	}
-
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -435,7 +429,7 @@ public class HttpRestProxy implements ServiceProxy {
 
 			if (this.username != null && this.password != null) {
 				this.client.getCredentialsProvider().setCredentials(
-						new AuthScope(this.url.getHost(), this.serverPort),
+						new AuthScope(this.url.getHost(), this.port),
 						new UsernamePasswordCredentials(this.username,
 								this.password));
 			}

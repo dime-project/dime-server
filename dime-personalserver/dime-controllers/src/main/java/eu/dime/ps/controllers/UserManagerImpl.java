@@ -15,12 +15,15 @@
 package eu.dime.ps.controllers;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.List;
 import java.util.Properties;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import org.apache.commons.lang3.StringUtils;
 import org.ontoware.aifbcommons.collection.ClosableIterator;
 import org.ontoware.rdf2go.model.node.URI;
 import org.semanticdesktop.aperture.vocabulary.NIE;
@@ -36,7 +39,6 @@ import eu.dime.commons.dto.UserRegister;
 import eu.dime.commons.exception.DimeException;
 import eu.dime.commons.notifications.DimeInternalNotification;
 import eu.dime.commons.notifications.system.SystemNotification;
-import eu.dime.ps.controllers.account.register.DimeDNSRegisterService;
 import eu.dime.ps.controllers.exception.InfosphereException;
 import eu.dime.ps.controllers.exception.UserNotFoundException;
 import eu.dime.ps.controllers.infosphere.manager.AccountManager;
@@ -53,12 +55,10 @@ import eu.dime.ps.gateway.exception.AttributeNotSupportedException;
 import eu.dime.ps.gateway.exception.InvalidDataException;
 import eu.dime.ps.gateway.exception.ServiceNotAvailableException;
 import eu.dime.ps.gateway.service.AttributeMap;
+import eu.dime.ps.gateway.service.dns.DNSAccountRegistrar;
 import eu.dime.ps.gateway.service.external.DimeUserResolverServiceAdapter;
-import eu.dime.ps.gateway.service.internal.DimeDNSCannotConnectException;
-import eu.dime.ps.gateway.service.internal.DimeDNSCannotResolveException;
-import eu.dime.ps.gateway.service.internal.DimeDNSException;
-import eu.dime.ps.gateway.service.internal.DimeDNSRegisterFailedException;
-import eu.dime.ps.gateway.service.internal.DimeIPResolver;
+import eu.dime.ps.gateway.service.internal.AccountCannotResolveException;
+import eu.dime.ps.gateway.service.internal.AccountRegistrar;
 import eu.dime.ps.gateway.service.internal.DimeServiceAdapter;
 import eu.dime.ps.semantic.BroadcastManager;
 import eu.dime.ps.semantic.Event;
@@ -113,15 +113,15 @@ public class UserManagerImpl implements UserManager {
     private ProfileManager profileManager;
     private ProfileCardManager profileCardManager;
     private ServiceGateway serviceGateway;
-    private DimeDNSRegisterService dimeDNSRegisterService;
+    private AccountRegistrar accountRegistrar;
     private ShaPasswordEncoder dimePasswordEncoder;
     
     @Autowired
     private NotifierManager notifierManager;
 
 
-    public void setDimeDNSRegisterService(DimeDNSRegisterService dimeDNSRegisterService) {
-        this.dimeDNSRegisterService = dimeDNSRegisterService;
+    public void setAccountRegistrar(AccountRegistrar accountRegistrar) {
+        this.accountRegistrar = accountRegistrar;
     }
 
     public void setTenantManager(TenantManager tenantManager) {
@@ -164,6 +164,58 @@ public class UserManagerImpl implements UserManager {
         this.modelFactory = new ModelFactory();
     }
 
+
+    private void validate(UserRegister userRegister) {
+    	// username validations
+    	String username = userRegister.getUsername();
+    	validatePresence(username, "username");
+    	validateAlphanumeric(username, "username");
+        if (existsOwnerByUsername(username)) {
+            throw new IllegalArgumentException("username: " + username + " already exists");
+        }
+        
+        // checks if username doesn't exist globally in the DNS (in case of using DNS)
+        // TODO it would be better to ask the AccountRegistrar for this, and let the
+        // implementation decide...
+        if (accountRegistrar instanceof DNSAccountRegistrar) {
+        	DNSAccountRegistrar dns = (DNSAccountRegistrar) accountRegistrar;
+        	try {
+        		URL target = dns.resolve(username);
+        		if (target != null) {
+        			throw new IllegalArgumentException("Username was already registered at the di.me DNS");
+        		}
+        	} catch (AccountCannotResolveException e) {}
+        }
+
+        // email validations
+        String email = userRegister.getEmailAddress();
+        validatePresence(email, "email address");
+        validateEmail(email, "email address");
+        
+        // password validations
+        String password = userRegister.getPassword();
+        validatePresence(password, "password");
+    }
+
+    private void validatePresence(String value, String field) {
+        if (value == null || value.isEmpty()) {
+            throw new IllegalArgumentException(field + " is empty");
+        }
+    }
+    
+    private void validateAlphanumeric(String value, String field) {
+        if (!StringUtils.isAlphanumeric(value)) {
+            throw new IllegalArgumentException(field + " contains non alphanumeric characters");
+        }
+    }
+
+    private void validateEmail(String value, String field) {
+    	// TODO add a real implementation of email validation
+    	if (!value.contains("@")) {
+            throw new IllegalArgumentException(field + " is an invalid email address");
+        }
+    }
+
     @Override
     public List<User> getAll() {
         return User.findAll();
@@ -194,16 +246,6 @@ public class UserManagerImpl implements UserManager {
         }
         
         return user;
-    }
-
-    private void validateUser(String username, String password) {
-        if (existsOwnerByUsername(username)) {
-            throw new IllegalArgumentException("username: " + username + " already exists");
-        }
-
-        if (password == null || password.trim().isEmpty()) {
-            throw new IllegalArgumentException("password field empty");
-        }
     }
 
     private User createUser(UserRegister userRegister) {
@@ -332,22 +374,23 @@ public class UserManagerImpl implements UserManager {
     }
 
     @Override 
-    public User register(UserRegister userRegister) throws IllegalArgumentException, DimeDNSRegisterFailedException, DimeException {
+    public User register(UserRegister userRegister) throws IllegalArgumentException, DimeException {
         
     	boolean unlocked;
     	try {
                 unlocked = lock.tryLock(5L, TimeUnit.SECONDS);// only one register at a time
         } catch (InterruptedException e) {
-                throw new DimeDNSRegisterFailedException("Register failed", e);
+                throw new DimeException("Register failed", e);
         }
     	if (!unlocked) {
     		logger.error("Could not aquire lock within 5 seconds. Returning without registering.");
     		throw new DimeException("Could not register because the system is busy.");
     	}
-    	User user=null;
-        Tenant tenant=null;
+    	
+    	User user = null;
+        Tenant tenant = null;
         try {
-            validateUser(userRegister.getUsername(), userRegister.getPassword());
+            validate(userRegister);
 
             // TODO improve performance: register it asynchronously
             // TODO improve robustness: what happens if this fails? rollback mechanism! Transaction.
@@ -356,12 +399,14 @@ public class UserManagerImpl implements UserManager {
             // we try first to register and hope that no one will try to connect before the rest is established
             // so, we run into an exception in case the dns is not available
             // better would be to somehow reserve a registration and enable it after the user was created
-            dimeDNSRegisterService.registerSaid(userRegister.getUsername());
+            accountRegistrar.register(userRegister.getUsername());
+            
             user = createUser(userRegister);
             user.persist();
             user.flush();
             logger.debug("Creating new user [id=" + user.getId() + ", username="
                 + user.getUsername() + ", role=" + user.getRole() + "]");
+            
             tenant = createTenant(userRegister.getUsername(), user);
             PersonContact profile = null;
             try {
@@ -411,6 +456,7 @@ public class UserManagerImpl implements UserManager {
         } finally {
                 lock.unlock();
         }
+        
         return user;
     }
 
@@ -456,7 +502,7 @@ public class UserManagerImpl implements UserManager {
     }
 
     @Override
-    public User add(String said, URI accountUri) throws InfosphereException {
+    public User add(String said) throws InfosphereException {
         Tenant tenant;
         try {
             tenant = TenantHelper.getCurrentTenant();
@@ -466,20 +512,21 @@ public class UserManagerImpl implements UserManager {
 
         User user = User.findByTenantAndByUsername(tenant, said);
         if (user != null) {
-        	if (!user.getAccountUri().equals(accountUri)) {
-                throw new InfosphereException("Cannot add contact with said '" + said + "' and accountUri " + accountUri
-                		+ " [tenant=" + tenant.getId() + "]:"
-                        + " there's already another User with id " + user.getId() + " whose accountUri is " + user.getAccountUri());
-        	}
+//        	if (!user.getAccountUri().equals(accountUri)) {
+//                throw new InfosphereException("Cannot add contact with said '" + said + "' and accountUri " + accountUri
+//                		+ " [tenant=" + tenant.getId() + "]:"
+//                        + " there's already another User with id " + user.getId() + " whose accountUri is " + user.getAccountUri());
+//        	}
         } else {
 	        // creating GUEST of the tenant
 	        // password is set to NULL, and the user is disabled until an item is shared with them
 	        user = entityFactory.buildUser();
+//	        TODO remove: user.setUsername(HttpRestProxy.clean(said));
 	        user.setUsername(said);
 	        user.setPassword(null);
 	        user.setEnabled(false);
 	        user.setRole(Role.GUEST);
-	        user.setAccountUri(accountUri.toString());
+	        user.setAccountUri("urn:uuid:" + UUID.randomUUID());
 	        user.setTenant(tenant);
 	        user.merge();
 	        user.flush();
@@ -742,22 +789,4 @@ public class UserManagerImpl implements UserManager {
         return user;
     }
 
-    @Override
-    public boolean saidIsRegisteredAtDNS(String said) throws DimeDNSException{
-        try {
-            String  serverIP = new DimeIPResolver().resolveSaid(said);
-            if (!serverIP.isEmpty()){
-                return true;
-            }
-
-        } catch (DimeDNSCannotConnectException ex) {
-            throw ex;
-        } catch (DimeDNSCannotResolveException ex) {
-            return false;
-         } catch (DimeDNSException ex) {
-            throw ex;
-        }
-        return false;
-
-    }
 }

@@ -12,7 +12,7 @@
 * See the Licence for the specific language governing permissions and limitations under the Licence.
 */
 
-package eu.dime.ps.gateway.util;
+package eu.dime.ps.gateway.service.dns;
 
 import java.util.Hashtable;
 import javax.naming.NameNotFoundException;

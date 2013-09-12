@@ -26,7 +26,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import org.ontoware.aifbcommons.collection.ClosableIterator;
 import org.ontoware.rdf2go.model.node.URI;
@@ -79,25 +78,25 @@ public class DefaultDataSetup implements BroadcastReceiver {
 	
 	private static final Map<String, String[]> CONTACTS = new HashMap<String, String[]>();
 	static {
-		CONTACTS.put("c8184790-7e63-4640-98b2-64319ea895b5", new String[] { "Christian Knecht", "christian.knecht@iao.fraunhofer.de", "Chris" });
-		CONTACTS.put("47a53168-d836-4f5d-acbc-3c541ee5ceea", new String[] { "Cristina Fra", "cristina.fra@telecomitalia.it", "cristina" });
-		CONTACTS.put("03baf7e3-eb8f-4c90-8643-63f579c2d88c", new String[] { "Fabian Hermann", "fabian.hermann@iao.fraunhofer.de", "FHermann" });
-		CONTACTS.put("todo", new String[] { "Ismael Rivera", "ismael.rivera@email.com", "ismriv" });
-		CONTACTS.put("todo", new String[] { "Marc Planaguma", "marc.planaguma@email.com", "marc" });
-		CONTACTS.put("429375b5-0380-47e8-b0f7-9d9ebda77a54", new String[] { "Marcel Heupel", "heupel@wiwi.uni-siegen.de", "mhpl" });
-		CONTACTS.put("a8f4fa70-8cd6-468e-9340-26a8849b08be", new String[] { "Massimo Valla ", "massi.tilab@gmail.com", "massitilab" });
-		CONTACTS.put("3a5782da-4881-4eba-924f-de1d5506e47b", new String[] { "Rafael Gimenez", "rgimenez@bdigital.org", "rgimenez" });
-		CONTACTS.put("bef98d62-b857-4321-930d-fa1f00792572", new String[] { "Simon Scerri", "simon.scerri@deri.org", "irrecs" });
-		CONTACTS.put("cc51d3c8-c0d8-459b-adc3-0014ec7bc642", new String[] { "Simon Thiel", "simon.thiel@iao.fraunhofer.de", "Simon" });
-		CONTACTS.put("b6f4cea6-83cf-4e38-912e-258fe9d18c26", new String[] { "Sophie Wrobel", "sophie.wrobel@cas.de", "webmage" });
-		CONTACTS.put("ab846174-5a48-4a05-adf5-382260c8c08a", new String[] { "Richard Wacker", "richard.wacker@yellowmap.de", "riwa" });
-		CONTACTS.put("3ec10478-9e2d-4b4b-a3ea-0ea3f1aca393", new String[] { "Borja Gorriz", "bgorriz@bdigital.org", "bgorriz" });
-		CONTACTS.put("8985479a-b198-426f-acce-15704f310f32", new String[] { "Javier Vendrell", "jvendrell@ametic.es", "jvendrell" });
-		CONTACTS.put("23cb7481-0f16-485e-bb68-345f5f373d78", new String[] { "David Alonso", "dalonso@ametic.es", "dalonso" });
-		//new contacts - testusers
-		CONTACTS.put("246879a0-5b58-4b3f-aedf-64d0335721f5", new String[] { "Test User1", "test.user1@email.com", "testuser1"});
-		CONTACTS.put("aa99d9af-4c69-4388-94dc-c5fb9e9e2763", new String[] { "Test User2", "test.user2@email.com", "testuser2"});
-		CONTACTS.put("8192047a-177f-4486-9dff-1af650d65afd", new String[] { "Test User3", "test.user3@email.com", "testuser3"});
+//		CONTACTS.put("c8184790-7e63-4640-98b2-64319ea895b5", new String[] { "Christian Knecht", "christian.knecht@iao.fraunhofer.de", "Chris" });
+//		CONTACTS.put("47a53168-d836-4f5d-acbc-3c541ee5ceea", new String[] { "Cristina Fra", "cristina.fra@telecomitalia.it", "cristina" });
+//		CONTACTS.put("03baf7e3-eb8f-4c90-8643-63f579c2d88c", new String[] { "Fabian Hermann", "fabian.hermann@iao.fraunhofer.de", "FHermann" });
+//		CONTACTS.put("todo", new String[] { "Ismael Rivera", "ismael.rivera@email.com", "ismriv" });
+//		CONTACTS.put("todo", new String[] { "Marc Planaguma", "marc.planaguma@email.com", "marc" });
+//		CONTACTS.put("429375b5-0380-47e8-b0f7-9d9ebda77a54", new String[] { "Marcel Heupel", "heupel@wiwi.uni-siegen.de", "mhpl" });
+//		CONTACTS.put("a8f4fa70-8cd6-468e-9340-26a8849b08be", new String[] { "Massimo Valla ", "massi.tilab@gmail.com", "massitilab" });
+//		CONTACTS.put("3a5782da-4881-4eba-924f-de1d5506e47b", new String[] { "Rafael Gimenez", "rgimenez@bdigital.org", "rgimenez" });
+//		CONTACTS.put("bef98d62-b857-4321-930d-fa1f00792572", new String[] { "Simon Scerri", "simon.scerri@deri.org", "irrecs" });
+//		CONTACTS.put("cc51d3c8-c0d8-459b-adc3-0014ec7bc642", new String[] { "Simon Thiel", "simon.thiel@iao.fraunhofer.de", "Simon" });
+//		CONTACTS.put("b6f4cea6-83cf-4e38-912e-258fe9d18c26", new String[] { "Sophie Wrobel", "sophie.wrobel@cas.de", "webmage" });
+//		CONTACTS.put("ab846174-5a48-4a05-adf5-382260c8c08a", new String[] { "Richard Wacker", "richard.wacker@yellowmap.de", "riwa" });
+//		CONTACTS.put("3ec10478-9e2d-4b4b-a3ea-0ea3f1aca393", new String[] { "Borja Gorriz", "bgorriz@bdigital.org", "bgorriz" });
+//		CONTACTS.put("8985479a-b198-426f-acce-15704f310f32", new String[] { "Javier Vendrell", "jvendrell@ametic.es", "jvendrell" });
+//		CONTACTS.put("23cb7481-0f16-485e-bb68-345f5f373d78", new String[] { "David Alonso", "dalonso@ametic.es", "dalonso" });
+//		//new contacts - testusers
+//		CONTACTS.put("246879a0-5b58-4b3f-aedf-64d0335721f5", new String[] { "Test User1", "test.user1@email.com", "testuser1"});
+//		CONTACTS.put("aa99d9af-4c69-4388-94dc-c5fb9e9e2763", new String[] { "Test User2", "test.user2@email.com", "testuser2"});
+//		CONTACTS.put("8192047a-177f-4486-9dff-1af650d65afd", new String[] { "Test User3", "test.user3@email.com", "testuser3"});
 	}
 
 private static final Logger logger = LoggerFactory.getLogger(DefaultDataSetup.class);
@@ -240,12 +239,11 @@ private static final Logger logger = LoggerFactory.getLogger(DefaultDataSetup.cl
 			profile.setEmailAddress(email);
 			profile.getModel().addAll(email.getModel().iterator());
 			
-			URI accountUri = new URIImpl("urn:uuid:" + UUID.randomUUID());
 			try {
-				userManager.add(said, accountUri);
-				userManager.addProfile(accountUri, profile);
+				final String accountUri = userManager.add(said).getAccountUri();
+				userManager.addProfile(new URIImpl(accountUri), profile);
 				
-				Account account = accountManager.get(accountUri.toString());
+				Account account = accountManager.get(accountUri);
 				contactsAccounts.add(account);
 				
 				if (account.hasCreator()) {

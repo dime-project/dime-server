@@ -60,8 +60,7 @@ public class SocialRecommenderAdapter extends ServiceAdapterBase implements Exte
 			this.password = this.policyManager.getPolicyString("PASS", "SOCIALRECOMMENDER");
 			this.realm = this.policyManager.getPolicyString("REALM", "SOCIALRECOMMENDER");
 			this.port = this.policyManager.getPolicyInteger("PORT","SOCIALRECOMMENDER");
-			this.proxy = new HttpRestProxy(new URL(this.serviceURL), this.port,
-					this.realm, this.username, this.password);
+			this.proxy = new HttpRestProxy(new URL(this.serviceURL + ":" + this.port), this.username, this.password);
 			this.display = false;
 		} catch (MalformedURLException e) {
 			logger.error(e.getMessage(),e);

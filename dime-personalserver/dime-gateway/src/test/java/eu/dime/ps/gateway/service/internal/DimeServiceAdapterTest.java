@@ -14,6 +14,31 @@
 
 package eu.dime.ps.gateway.service.internal;
 
+import ie.deri.smile.rdf.util.ModelUtils;
+import ie.deri.smile.vocabulary.DLPO;
+import ie.deri.smile.vocabulary.NAO;
+import ie.deri.smile.vocabulary.NCO;
+import ie.deri.smile.vocabulary.NFO;
+
+import java.net.URL;
+import java.util.Collection;
+import java.util.LinkedList;
+
+import org.apache.commons.codec.binary.Base64;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mockito;
+import org.ontoware.rdf2go.model.Model;
+import org.ontoware.rdf2go.model.node.URI;
+import org.ontoware.rdf2go.model.node.impl.URIImpl;
+import org.ontoware.rdf2go.vocabulary.RDF;
+import org.scribe.model.Token;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
 import eu.dime.commons.dto.Data;
 import eu.dime.commons.dto.Entry;
 import eu.dime.commons.dto.ExternalNotificationDTO;
@@ -29,30 +54,6 @@ import eu.dime.ps.semantic.model.nco.PersonContact;
 import eu.dime.ps.semantic.model.nfo.FileDataObject;
 import eu.dime.ps.storage.entities.Tenant;
 import eu.dime.ps.storage.manager.EntityFactory;
-import ie.deri.smile.rdf.util.ModelUtils;
-import ie.deri.smile.vocabulary.DLPO;
-import ie.deri.smile.vocabulary.NAO;
-import ie.deri.smile.vocabulary.NCO;
-import ie.deri.smile.vocabulary.NFO;
-import java.net.URL;
-import java.util.Collection;
-import java.util.LinkedList;
-import org.apache.commons.codec.binary.Base64;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.ontoware.rdf2go.model.Model;
-import org.ontoware.rdf2go.model.node.URI;
-import org.ontoware.rdf2go.model.node.impl.URIImpl;
-import org.ontoware.rdf2go.vocabulary.RDF;
-import org.scribe.model.Token;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 /**
  * Tests for {@link DimeServiceAdapter}.
@@ -64,7 +65,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @ContextConfiguration("classpath:spring-config/storage-loading-tests-context.xml")
 //@Ignore
 //@RunWith(PowerMockRunner.class)
-//@PrepareForTest({DimeServiceAdapter.class, DimeIPResolver.class})
+//@PrepareForTest({DimeServiceAdapter.class, AccountRegistrar.class})
 public class DimeServiceAdapterTest extends Assert {
 
     @Autowired
@@ -95,7 +96,7 @@ public class DimeServiceAdapterTest extends Assert {
 	public void testGetDatabox() throws Exception {
 		URI databoxUri = new URIImpl("urn:uuid:3dcb73e4-399f-41af-b4f2-a8bb48c315a1");
 		String said = "12345";
-		String baseUrl = "http://di.me";
+		URL baseUrl = new URL("http://di.me");
 		String path = "/api/dime/rest/:target/shared/databox/:id".replace(":target", said).replace(":id", databoxUri.toString());
 		String json = "".replace('`', '"');
 		// TODO complete
@@ -114,21 +115,21 @@ public class DimeServiceAdapterTest extends Assert {
 		String json = "{`dlpo:textualContent`:`Hello world!`,`@context`:{`nao`:`http://www.semanticdesktop.org/ontologies/2007/08/15/nao#`,`nfo`:`http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#`,`ncal`:`http://www.semanticdesktop.org/ontologies/2007/04/02/ncal#`,`nie`:`http://www.semanticdesktop.org/ontologies/2007/01/19/nie#`,`nco`:`http://www.semanticdesktop.org/ontologies/2007/03/22/nco#`,`dlpo`:`http://www.semanticdesktop.org/ontologies/2011/10/05/dlpo#`,`rdfs`:`http://www.w3.org/2000/01/rdf-schema#`,`pimo`:`http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#`,`ppo`:`http://vocab.deri.ie/ppo#`,`xsd`:`http://www.w3.org/2001/XMLSchema#`,`rdf`:`http://www.w3.org/1999/02/22-rdf-syntax-ns#`,`nexif`:`http://www.semanticdesktop.org/ontologies/2007/05/10/nexif#`,`nid3`:`http://www.semanticdesktop.org/ontologies/2007/05/10/nid3#`},`dlpo:timestamp`:{`@type`:`http://www.w3.org/2001/XMLSchema#dateTime`,`@value`:`2013-04-25T19:36:25.823Z`},`@type`:`dlpo:LivePost`,`nao:creator`:{`@id`:`urn:uuid:18e938b1-935d-4cb4-b763-3ca1d654305f`},`@id`:`urn:uuid:bd397c8a-ea12-4d52-a788-69ba5deb8dd5`}".replace('`', '"');
 		
 		// setting up components and mocks
-		DimeIPResolver mockResolver = Mockito.mock(DimeIPResolver.class);
-		Mockito.when(mockResolver.resolve(senderSAID)).thenReturn(baseUrl.toString());
+		AccountRegistrar mockRegistrar = Mockito.mock(AccountRegistrar.class);
+		Mockito.when(mockRegistrar.resolve(senderSAID)).thenReturn(baseUrl);
 		
 		HttpRestProxy mockProxy = Mockito.mock(HttpRestProxy.class);
 		Mockito.when(mockProxy.get(Mockito.eq(path), Mockito.anyMap())).thenReturn(json);
 		
 		ProxyFactory mockFactory = Mockito.mock(ProxyFactory.class);
-		Mockito.when(mockFactory.createProxy(Mockito.eq(baseUrl), Mockito.anyInt(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString())).thenReturn(mockProxy);
+		Mockito.when(mockFactory.createProxy(Mockito.eq(baseUrl), Mockito.anyString(), Mockito.anyString())).thenReturn(mockProxy);
 
 		CredentialStore mockStore = Mockito.mock(CredentialStore.class);
 		Mockito.when(mockStore.getNameSaid(receiver, tenant1)).thenReturn(senderSAID);
 
 		DimeServiceAdapter adapter = new DimeServiceAdapter("1");
 		adapter.setProxyFactory(mockFactory);
-		adapter.setTargetResolver(mockResolver);
+		adapter.setAccountRegistrar(mockRegistrar);
 		adapter.setCredentialStore(mockStore);
 	
 		// calling the method to test
@@ -160,21 +161,21 @@ public class DimeServiceAdapterTest extends Assert {
 		String json = "{`@context`:{`nao`:`http://www.semanticdesktop.org/ontologies/2007/08/15/nao#`,`nfo`:`http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#`,`ncal`:`http://www.semanticdesktop.org/ontologies/2007/04/02/ncal#`,`nie`:`http://www.semanticdesktop.org/ontologies/2007/01/19/nie#`,`nco`:`http://www.semanticdesktop.org/ontologies/2007/03/22/nco#`,`dlpo`:`http://www.semanticdesktop.org/ontologies/2011/10/05/dlpo#`,`rdfs`:`http://www.w3.org/2000/01/rdf-schema#`,`pimo`:`http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#`,`ppo`:`http://vocab.deri.ie/ppo#`,`xsd`:`http://www.w3.org/2001/XMLSchema#`,`rdf`:`http://www.w3.org/1999/02/22-rdf-syntax-ns#`,`nexif`:`http://www.semanticdesktop.org/ontologies/2007/05/10/nexif#`,`nid3`:`http://www.semanticdesktop.org/ontologies/2007/05/10/nid3#`},`nfo:fileName`:`Test.doc`,`nfo:fileSize`:{`@type`:`http://www.w3.org/2001/XMLSchema#int`,`@value`:`15464634`},`@type`:`nfo:FileDataObject`,`nao:creator`:{`@id`:`urn:uuid:18e938b1-935d-4cb4-b763-3ca1d654305f`},`nfo:fileLastModified`:{`@type`:`http://www.w3.org/2001/XMLSchema#dateTime`,`@value`:`2013-04-25T18:40:04.676Z`},`@id`:`urn:uuid:a1734636-114c-4e4a-a777-7ed487a4cc0a`}".replace('`', '"');
 
 		// setting up components and mocks
-		DimeIPResolver mockResolver = Mockito.mock(DimeIPResolver.class);
-		Mockito.when(mockResolver.resolve(senderSAID)).thenReturn(baseUrl.toString());
+		AccountRegistrar mockRegistrar = Mockito.mock(AccountRegistrar.class);
+		Mockito.when(mockRegistrar.resolve(senderSAID)).thenReturn(baseUrl);
 		
 		HttpRestProxy mockProxy = Mockito.mock(HttpRestProxy.class);
 		Mockito.when(mockProxy.get(Mockito.eq(path), Mockito.anyMap())).thenReturn(json);
 		
 		ProxyFactory mockFactory = Mockito.mock(ProxyFactory.class);
-		Mockito.when(mockFactory.createProxy(Mockito.eq(baseUrl), Mockito.anyInt(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString())).thenReturn(mockProxy);
+		Mockito.when(mockFactory.createProxy(Mockito.eq(baseUrl), Mockito.anyString(), Mockito.anyString())).thenReturn(mockProxy);
 
 		CredentialStore mockStore = Mockito.mock(CredentialStore.class);
 		Mockito.when(mockStore.getNameSaid(receiver, tenant1)).thenReturn(senderSAID);
 
 		DimeServiceAdapter adapter = new DimeServiceAdapter("1");
 		adapter.setProxyFactory(mockFactory);
-		adapter.setTargetResolver(mockResolver);
+		adapter.setAccountRegistrar(mockRegistrar);
 		adapter.setCredentialStore(mockStore);
 	
 		// calling the method to test
@@ -205,18 +206,18 @@ public class DimeServiceAdapterTest extends Assert {
 		URI nameUri = new URIImpl("urn:uuid:18e938b1-935d-4cb4-b763-3ca1d654305f");
 		
 		// setting up components and mocks
-		DimeIPResolver mockResolver = Mockito.mock(DimeIPResolver.class);
-		Mockito.when(mockResolver.resolve(said)).thenReturn(baseUrl.toString());
+		AccountRegistrar mockRegistrar = Mockito.mock(AccountRegistrar.class);
+		Mockito.when(mockRegistrar.resolve(said)).thenReturn(baseUrl);
 		
 		HttpRestProxy mockProxy = Mockito.mock(HttpRestProxy.class);
 		Mockito.when(mockProxy.get(Mockito.eq(path), Mockito.anyMap())).thenReturn(json);
 		
 		ProxyFactory mockFactory = Mockito.mock(ProxyFactory.class);
-		Mockito.when(mockFactory.createProxy(Mockito.eq(baseUrl), Mockito.anyInt(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString())).thenReturn(mockProxy);
+		Mockito.when(mockFactory.createProxy(Mockito.eq(baseUrl), Mockito.anyString(), Mockito.anyString())).thenReturn(mockProxy);
 
 		DimeServiceAdapter adapter = new DimeServiceAdapter("1");
 		adapter.setProxyFactory(mockFactory);
-		adapter.setTargetResolver(mockResolver);
+		adapter.setAccountRegistrar(mockRegistrar);
 		
 		// calling the method to test
 		PersonContact profile = adapter.getProfile(said, new Token("token", "secret"));
@@ -241,7 +242,7 @@ public class DimeServiceAdapterTest extends Assert {
 	@Test
 	public void testSet() throws Exception {
 		String said = "juan";
-		String baseUrl = "http://di.me";
+		URL baseUrl = new URL("http://di.me");
 		String path = "/api/services/:target/set/notification".replace(":target", said);
 		
 		DimeServiceAdapter adapter = new DimeServiceAdapter("juan");
@@ -278,11 +279,11 @@ public class DimeServiceAdapterTest extends Assert {
 		String json = JaxbJsonSerializer.jsonValue(request);
 		
 		// set up mocks
-		DimeIPResolver mockResolver = Mockito.mock(DimeIPResolver.class);
-		Mockito.when(mockResolver.resolve(Mockito.anyString())).thenReturn(baseUrl);
-		adapter.setTargetResolver(mockResolver);
+		AccountRegistrar mockRegistrar = Mockito.mock(AccountRegistrar.class);
+		Mockito.when(mockRegistrar.resolve(Mockito.anyString())).thenReturn(baseUrl);
+		adapter.setAccountRegistrar(mockRegistrar);
 		
-		//PowerMockito.whenNew(DimeIPResolver.class).withAnyArguments().thenReturn(mockResolver);
+		//PowerMockito.whenNew(AccountRegistrar.class).withAnyArguments().thenReturn(mockRegistrar);
 		
 		HttpRestProxy mockProxy = Mockito.mock(HttpRestProxy.class);
 		// response when error
@@ -291,7 +292,7 @@ public class DimeServiceAdapterTest extends Assert {
 		Mockito.when(mockProxy.post(path, json)).thenReturn(200);
 		
 		ProxyFactory mockFactory = Mockito.mock(ProxyFactory.class);
-		Mockito.when(mockFactory.createProxy(Mockito.eq(new URL(baseUrl)), Mockito.anyInt(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString())).thenReturn(mockProxy);
+		Mockito.when(mockFactory.createProxy(Mockito.eq(baseUrl), Mockito.anyString(), Mockito.anyString())).thenReturn(mockProxy);
 		adapter.setProxyFactory(mockFactory);
 
 		// call

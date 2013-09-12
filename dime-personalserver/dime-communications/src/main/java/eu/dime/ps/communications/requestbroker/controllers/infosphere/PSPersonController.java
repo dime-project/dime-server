@@ -390,9 +390,8 @@ public class PSPersonController implements APIController {
 			for (HashMap jsonObject : jsons) {
 				PersonContact personContact = toPersonContact(jsonObject);
 				
-				String accountSaid = (String)jsonObject.get("said");
-				URI accountUri = new URIImpl("urn:uuid:"+UUID.randomUUID());
-				userManager.add(accountSaid, accountUri);
+				final String accountSaid = (String) jsonObject.get("said");
+				final URI accountUri = new URIImpl(userManager.add(accountSaid).getAccountUri());
 				userManager.addProfile(accountUri, personContact);
 
 				returnData.addEntry(jsonObject);

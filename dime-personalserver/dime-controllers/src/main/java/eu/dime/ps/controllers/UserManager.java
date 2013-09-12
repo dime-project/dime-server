@@ -23,8 +23,7 @@ import eu.dime.commons.dto.UserRegister;
 import eu.dime.commons.exception.DimeException;
 import eu.dime.ps.controllers.exception.InfosphereException;
 import eu.dime.ps.controllers.exception.UserNotFoundException;
-import eu.dime.ps.gateway.service.internal.DimeDNSException;
-import eu.dime.ps.gateway.service.internal.DimeDNSRegisterFailedException;
+import eu.dime.ps.gateway.service.dns.DimeDNSRegisterFailedException;
 import eu.dime.ps.semantic.model.dao.Account;
 import eu.dime.ps.semantic.model.nco.PersonContact;
 import eu.dime.ps.storage.entities.User;
@@ -61,11 +60,10 @@ public interface UserManager {
      * with no credentials.
      *
      * @param said account id known of this person
-     * @param accountUri URI for the account said of the person
      * @param profile profile information known when adding the new contact
      * @return newly created user object
      */
-    public User add(String said, URI accountUri) throws InfosphereException;
+    public User add(String said) throws InfosphereException;
 
     public void remove(String userId);
 
@@ -114,5 +112,4 @@ public interface UserManager {
 
     public User getCurrentUser();
 
-    public boolean saidIsRegisteredAtDNS(String said) throws DimeDNSException;
 }

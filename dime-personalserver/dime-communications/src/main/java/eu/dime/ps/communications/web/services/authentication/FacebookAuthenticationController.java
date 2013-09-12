@@ -71,15 +71,13 @@ public class FacebookAuthenticationController extends OAuthAuthenticationControl
 				// Create callback URL
 				ServletRequestAttributes requestAttributes = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes());
 				requestAttributes.setAttribute("adapter_id", adapterId, ServletRequestAttributes.SCOPE_REQUEST);
-				StringBuilder callbackURL = new StringBuilder("https://");
-				callbackURL.append(this.policyManager.getPolicyString("AUTHSERVLET_HOST", null));
-				callbackURL.append(":");
-				callbackURL.append(this.policyManager.getPolicyString("AUTHSERVLET_PORT_SECURE", null));
-				callbackURL.append("/");
-				callbackURL.append(this.policyManager.getPolicyString("AUTHSERVLET_PATH", null));
+				
+				StringBuilder callbackURL = new StringBuilder();
+				callbackURL.append(this.policyManager.getPolicyString("SERVER_BASEURL", ""));
 				callbackURL.append("/services/");
 				callbackURL.append(said);
 				callbackURL.append(this.policyManager.getPolicyString("callbackURL", serviceAdapter.getAdapterName()));
+
 				// Note: We need to put the adapter ID in path variable as Facebook needs the callback URL to end with a trailing slash
 				callbackURL.append("/"+adapterId+"/");
 				serviceAdapter.setCallbackURL(callbackURL.toString());

@@ -18,16 +18,14 @@
  */
 package eu.dime.ps.gateway.service.internal;
 
-/**
- *
- * @author simon
- */
-public class DimeDNSCannotConnectException extends DimeDNSException{
+public class AccountCannotResolveException extends Exception {
 
-    public DimeDNSCannotConnectException(String message, Throwable cause) {
-        super(message, cause);
+    public AccountCannotResolveException(String message) {
+        super(message);
     }
 
-    
+    public AccountCannotResolveException(String message, Throwable cause) {
+        super(message, cause);
+    }
 
 }

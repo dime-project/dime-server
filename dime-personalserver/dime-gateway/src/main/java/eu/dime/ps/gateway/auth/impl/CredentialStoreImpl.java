@@ -24,7 +24,6 @@ import org.ontoware.rdf2go.model.node.URI;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import eu.dime.ps.gateway.auth.CredentialStore;
-import eu.dime.ps.semantic.exception.RepositoryStorageException;
 import eu.dime.ps.storage.entities.AccountCredentials;
 import eu.dime.ps.storage.entities.ServiceAccount;
 import eu.dime.ps.storage.entities.ServiceProvider;
@@ -57,7 +56,7 @@ public class CredentialStoreImpl implements CredentialStore {
 	@Override
 	public void storeCredentialsForAccount(
 			String local, String remote, 
-			String target, String password, Tenant tenant) throws RepositoryStorageException{
+			String target, String password, Tenant tenant) {
 
 		ServiceAccount account = ServiceAccount.findAllByTenantAndAccountUri(tenant, local);
 		if (account != null){
@@ -226,9 +225,8 @@ public class CredentialStoreImpl implements CredentialStore {
 
 	@Override
 	public void updateCredentialsForAccount(String local,
-			String remote, String target, String password, Tenant tenant)
-			throws RepositoryStorageException {
-		
+			String remote, String target, String password, Tenant tenant) {
+
 		ServiceAccount account = ServiceAccount.findAllByTenantAndAccountUri(tenant, local);
 		if (account != null){
 			AccountCredentials ac = AccountCredentials.findAllBySourceAndByTargetUri(account, remote);

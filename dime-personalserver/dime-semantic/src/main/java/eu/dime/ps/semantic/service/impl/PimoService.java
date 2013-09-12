@@ -236,7 +236,8 @@ public class PimoService implements TaggingService, Queryable {
 		QueryResultTable qres = config.sparqlSelect(query);
 		ClosableIterator<QueryRow> res = qres.iterator();
 		if (!res.hasNext()) {
-			throw new PimoConfigurationException("cannot find user configuration in config-repository. Missing an instance of serverconfig:User with required properties.");
+			throw new PimoConfigurationException("Cannot find user configuration in config-repository. " +
+					"Missing an instance of serverconfig:User with required properties. Dump:\n" + config.serialize(Syntax.Turtle));
 		}
 		QueryRow row = res.next();
 		res.close();

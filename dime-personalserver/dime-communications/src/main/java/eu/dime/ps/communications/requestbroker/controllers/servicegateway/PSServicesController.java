@@ -42,7 +42,6 @@ import eu.dime.commons.dto.Response;
 import eu.dime.commons.dto.Response.Status;
 import eu.dime.commons.notifications.DimeInternalNotification;
 import eu.dime.commons.notifications.user.UNRefToItem;
-import eu.dime.commons.notifications.user.UserNotification;
 import eu.dime.ps.communications.utils.Base64encoding;
 import eu.dime.ps.controllers.TenantContextHolder;
 import eu.dime.ps.controllers.TenantManager;
@@ -63,12 +62,12 @@ import eu.dime.ps.gateway.exception.ServiceException;
 import eu.dime.ps.gateway.exception.ServiceNotAvailableException;
 import eu.dime.ps.gateway.service.ResourceAttributes;
 import eu.dime.ps.gateway.service.internal.DimeServiceAdapter;
-import eu.dime.ps.semantic.exception.RepositoryStorageException;
 import eu.dime.ps.semantic.model.dao.Account;
 import eu.dime.ps.semantic.model.dlpo.LivePost;
 import eu.dime.ps.semantic.model.nco.PersonContact;
 import eu.dime.ps.semantic.model.nfo.DataContainer;
 import eu.dime.ps.semantic.model.nfo.FileDataObject;
+import eu.dime.ps.storage.entities.Tenant;
 
 /**
  * Allows other di.me servers (or other services) to communicate with a di.me
@@ -152,8 +151,7 @@ public class PSServicesController {
 	@Consumes(MediaType.APPLICATION_JSON + ";charset=UTF-8")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
 	public Response setNotification(Request<ExternalNotificationDTO> json,
-			@PathParam("said") String said) throws InfosphereException,
-			RepositoryStorageException, UnsupportedEncodingException {
+			@PathParam("said") String said) throws InfosphereException, UnsupportedEncodingException {
 
 		ExternalNotificationDTO jsonNotification = null;
 		
@@ -185,8 +183,10 @@ public class PSServicesController {
 	}
 
 	private Response requestSharedObject(ExternalNotificationDTO jsonNotification)
-			throws UnsupportedEncodingException, ServiceException, InfosphereException, RepositoryStorageException {
+			throws UnsupportedEncodingException, ServiceException, InfosphereException {
 
+		final Tenant tenant = TenantHelper.getCurrentTenant();
+		
 		String saidNameSender = jsonNotification.getSaidSender();
 		String saidNameReceiver = jsonNotification.getSaidReciever();
 		String saidUriReceiver = null;
@@ -205,11 +205,11 @@ public class PSServicesController {
 		}
 
 		// Get URI Sender
-		saidUriSender = credentialStore.getUriForAccountName(saidNameReceiver, saidNameSender, TenantHelper.getCurrentTenant());
+		saidUriSender = credentialStore.getUriForAccountName(saidNameReceiver, saidNameSender, tenant);
 
 		if (saidUriSender != null) {
 			try {
-				password = credentialStore.getPassword(saidUriReceiver, saidUriSender, TenantHelper.getCurrentTenant());
+				password = credentialStore.getPassword(saidUriReceiver, saidUriSender, tenant);
 			} catch (NoResultException e) {
 				logger.info("Could not find password to authenticate request [sender=" + saidUriSender
 						+ ", receiver=" + saidUriReceiver + "]. A password will be requested to access the other PS.");
@@ -258,17 +258,6 @@ public class PSServicesController {
 			return Response.status(Status.get(Integer.parseInt(e.getDetailCode())), e.getMessage(), e);
 		}
 
-		// Notify to UI
-		try {
-			Long tenant = tenantManager.getByAccountName(saidNameReceiver).getId();
-			UserNotification notification = new UserNotification(tenant, unEntry);
-			// TODO remove when the Manager will do it
-			// this.notifierManager.pushInternalNotification(notification);
-
-		} catch (Exception e) {
-			return Response.serverError("Notifier Exception: " + e.getMessage(), e);
-		}
-
 		// TODO return NotificationDTO
 		return Response.okEmpty();
 	}
@@ -279,6 +268,8 @@ public class PSServicesController {
 			AttributeNotSupportedException, ServiceNotAvailableException,
 			InvalidLoginException, InfosphereException, ServiceException {
 
+		final Tenant tenant = TenantHelper.getCurrentTenant();
+		
 		String saidNameSender = jsonNotification.getSaidSender();
 		String objectSharedType = ResourceAttributes.ATTR_RESOURCE;
 		Class returnType = null;
@@ -289,7 +280,7 @@ public class PSServicesController {
 		unEntry.setOperation(UNRefToItem.OPERATION_SHARED);
 		unEntry.setUserID(saidUriSender);
 
-		DimeServiceAdapter adapter = serviceGateway.getDimeServiceAdapter(saidNameSender);
+		final DimeServiceAdapter adapter = serviceGateway.getDimeServiceAdapter(saidNameSender);
 
 		Entry entry = jsonNotification.getElement();
 		String entryType = entry.getType();
@@ -327,8 +318,7 @@ public class PSServicesController {
 					+ resourceIDBase64Encoded;
 
 			// Sending the call to obtain the Resource
-			Collection<org.ontoware.rdfreactor.schema.rdfs.Resource> resources = adapter
-					.get(saidUriSender, saidUriReceiver, path, returnType, TenantHelper.getCurrentTenant());
+			Collection<org.ontoware.rdfreactor.schema.rdfs.Resource> resources = adapter.get(saidUriSender, saidUriReceiver, path, returnType, tenant);
 			logger.info("GET request to: " + path + " to retrieve shared resource: " + resources.size() + " objects received.");
 
 			// Saving the Resource
@@ -346,9 +336,7 @@ public class PSServicesController {
 						String fileIDBase64Encoded = Base64encoding.encode(fileId);
 
 						path = "/resource/" + saidNameSender + "/" + fileIDBase64Encoded;
-						Collection<FileDataObject> dbFiles = adapter.get(
-								saidUriSender, saidUriReceiver, path,
-								FileDataObject.class, TenantHelper.getCurrentTenant());
+						Collection<FileDataObject> dbFiles = adapter.get( saidUriSender, saidUriReceiver, path, FileDataObject.class, tenant);
 
 						fileResources.addAll(dbFiles);
 					}
@@ -453,24 +441,28 @@ public class PSServicesController {
 
 	private String requestCredentialsAndProfile(String saidNameSender,
 			String saidNameReceiver, String saidUriReceiver)
-					throws RepositoryStorageException, InfosphereException,
-					AttributeNotSupportedException, ServiceNotAvailableException, ServiceException {
+					throws InfosphereException, AttributeNotSupportedException,
+					ServiceNotAvailableException, ServiceException {
+
+		final Tenant tenant = TenantHelper.getCurrentTenant();
+		
+		final DimeServiceAdapter adapter = serviceGateway.getDimeServiceAdapter(saidNameSender);
+		final Token token = adapter.getUserToken(saidNameReceiver, tenant); // <-- http request to other PS for credentials
 
 		String saidUriSender = null;
-		DimeServiceAdapter adapter = serviceGateway.getDimeServiceAdapter(saidNameSender);
-		Token token = adapter.getUserToken(saidNameReceiver); // <-- http request to other PS for credentials
-
+		
 		// HTTP request to other PS for the profile
 		if (token != null) {
 			try {
 				// add contact & create guest account
-				saidUriSender = "urn:uuid:" + saidNameSender;
-				userManager.add(saidNameSender, new URIImpl(saidUriSender));
+//				int separator = saidNameSender.indexOf('@');
+//				saidUriSender = "urn:uuid:" + (separator > 0 ? saidNameSender.substring(0, separator) : saidNameSender);
+				saidUriSender = userManager.add(saidNameSender).getAccountUri();
 			} catch (InfosphereException e) {
 				// TODO not very nice catching these exceptions for control flow
 				// logic here is a bit confusing, code-wise and message logged is confusing...
 				logger.debug("Could not create user. Maybe already exists. But will still try to update credentials");
-				saidUriSender = credentialStore.getUriForAccountName(saidNameReceiver, saidNameSender, TenantHelper.getCurrentTenant());
+				saidUriSender = credentialStore.getUriForAccountName(saidNameReceiver, saidNameSender, tenant);
 			}
 			
 			if (saidUriSender == null) {
@@ -479,7 +471,7 @@ public class PSServicesController {
 			} else {
 				// store credentials (given by the receiver PS) to send requests to 'receiver' account
 				credentialStore.updateCredentialsForAccount(saidUriReceiver,
-						saidUriSender, saidNameSender, token.getSecret(), TenantHelper.getCurrentTenant());
+						saidUriSender, saidNameSender, token.getSecret(), tenant);
 	
 				// request profile from sender
 				requestProfile(token, saidNameSender, saidUriSender, saidUriReceiver);
@@ -489,7 +481,7 @@ public class PSServicesController {
 				// showing an error to the user??
 	
 				// confirming token was received (to the sender PS)
-				adapter.confirmToken(token);
+				adapter.confirmToken(token, tenant);
 			}
 		}
 
