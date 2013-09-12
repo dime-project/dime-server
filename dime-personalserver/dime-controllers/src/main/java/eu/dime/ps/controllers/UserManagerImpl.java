@@ -512,16 +512,12 @@ public class UserManagerImpl implements UserManager {
 
         User user = User.findByTenantAndByUsername(tenant, said);
         if (user != null) {
-//        	if (!user.getAccountUri().equals(accountUri)) {
-//                throw new InfosphereException("Cannot add contact with said '" + said + "' and accountUri " + accountUri
-//                		+ " [tenant=" + tenant.getId() + "]:"
-//                        + " there's already another User with id " + user.getId() + " whose accountUri is " + user.getAccountUri());
-//        	}
+        	logger.info("Cannot add contact with said '" + said + "' [tenant=" + tenant.getId() + "]:"
+                        + " there's already another User with id " + user.getId() + " whose accountUri is " + user.getAccountUri());
         } else {
 	        // creating GUEST of the tenant
 	        // password is set to NULL, and the user is disabled until an item is shared with them
 	        user = entityFactory.buildUser();
-//	        TODO remove: user.setUsername(HttpRestProxy.clean(said));
 	        user.setUsername(said);
 	        user.setPassword(null);
 	        user.setEnabled(false);
