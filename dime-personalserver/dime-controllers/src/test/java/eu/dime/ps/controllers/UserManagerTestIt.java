@@ -32,13 +32,11 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 import eu.dime.commons.dto.UserRegister;
-import eu.dime.commons.exception.DimeException;
 import eu.dime.ps.controllers.infosphere.InfoSphereManagerTest;
 import eu.dime.ps.controllers.infosphere.manager.AccountManager;
 import eu.dime.ps.controllers.infosphere.manager.PersonManager;
 import eu.dime.ps.controllers.infosphere.manager.ProfileCardManager;
 import eu.dime.ps.controllers.infosphere.manager.ProfileManager;
-import eu.dime.ps.gateway.service.dns.DimeDNSRegisterFailedException;
 import eu.dime.ps.gateway.service.internal.AccountRegistrar;
 import eu.dime.ps.semantic.connection.ConnectionProvider;
 import eu.dime.ps.semantic.model.dao.Account;
@@ -242,13 +240,13 @@ public class UserManagerTestIt extends InfoSphereManagerTest {
 	public void testAddAndRemove() throws Exception {
 		TenantContextHolder.setTenant(one.getId());
  		PersonContact profile = buildProfile("newname", "anna@mail.com", "555-12345");
-		URIImpl uri = new URIImpl("urn:uuid:" + UUID.randomUUID());
-		User tmp = userManager.add("someGuestSAID", uri);
+		User tmp = userManager.add("someGuestSAID");
+		String accountUri = tmp.getAccountUri();
 		assertNotNull(tmp);
-		Account account = userManager.addProfile(uri, profile);
+		Account account = userManager.addProfile(new URIImpl(accountUri), profile);
 		assertNotNull(account);
 
-		User user = User.findByTenantAndByAccountUri(one, uri.toString());
+		User user = User.findByTenantAndByAccountUri(one, accountUri);
 		if (user != null) {
 			String userId = user.getId().toString();
 			userManager.remove(userId);
