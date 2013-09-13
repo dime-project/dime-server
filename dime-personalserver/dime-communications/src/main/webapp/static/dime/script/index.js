@@ -1644,7 +1644,7 @@ DimeView = {
         var loginbaselink=Dime.ps_configuration.getRealBasicUrlString()
         +'/dime-communications/web/access/';
         var githubLink='https://github.com/dime-project/meta/';
-        var loginFromServerSettings=serverInfo.baseUrl+'/dime-communications/web/access/login';
+        var loginFromServerSettings=serverInfo.baseUrl+'/access/login';
         var questionaireLink = Dime.ps_configuration.getQuestionairePath();
 
 
