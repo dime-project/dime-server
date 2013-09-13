@@ -14,10 +14,21 @@
 package eu.dime.ps.gateway.util;
 
 /**
- * 
+ * Decoder of usernames used in HTTP Basic Authorization.
  */
 public class UsernameDecoder {
 
+	/**
+	 * Decodes a username which unsafe characters have been replaced by
+	 * {@link UsernameEncoder#encode(String)}.
+	 * 
+	 * <p>For example, an encoded username such as <i>myuniqueid+example.org+8080</i>
+	 * containing a domain and port, would be decoded to <i>myuniqueid@example.org:8080</i></p>
+	 * 
+	 * @param username encoded username
+	 * @return decoded username with the original unsafe characters
+	 * @see UsernameEncoder
+	 */
 	public static String decode(String username) {
 		if (username == null) {
 			return null;

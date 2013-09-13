@@ -18,31 +18,35 @@ import java.net.URL;
 import eu.dime.ps.storage.entities.ServiceAccount;
 
 /**
- * 
+ * Authorizative registrar for di.me accounts.
  * 
  * @author Ismael Rivera
  */
 public interface AccountRegistrar {
 	
 	/**
+	 * Registers an account identifier in the registrar.
 	 * 
-	 * @param accountId
-	 * @return
+	 * @param accountId account identifier to register.
+	 * @return true if successfully registered; false otherwise.
 	 */
 	boolean register(String accountId);
 	
 	/**
+	 * Registers an account in the registrar, which doesn't yet have an identifier.
 	 * 
-	 * @param account
-	 * @return
+	 * @param account {@link ServiceAccount} object, which must have a valid account URI.
+	 * @return the account identifier if successfully registered; false otherwise.
 	 */
 	String register(ServiceAccount account);
 
 	/**
+	 * Resolves an account identifier into a URL which will respond to requests,
+	 * where the account identifier is the target. For example: https://example.org/dime-communications.
 	 * 
-	 * @param accountId
-	 * @return
-	 * @throws AccountCannotResolveException
+	 * @param accountId account identifier to resolve
+	 * @return URL corresponding to the account endpoint
+	 * @throws AccountCannotResolveException if the account couldn't be resolved
 	 */
 	URL resolve(String accountId) throws AccountCannotResolveException;
 

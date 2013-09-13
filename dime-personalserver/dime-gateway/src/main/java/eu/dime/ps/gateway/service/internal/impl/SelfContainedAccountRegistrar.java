@@ -14,6 +14,13 @@ import eu.dime.ps.gateway.service.internal.AccountRegistrar;
 import eu.dime.ps.storage.entities.ServiceAccount;
 
 /**
+ * <p>Account identifiers are self-contained, therefore this {@link AccountRegistrar}
+ * implementation extracts and parses the all needed information from the account
+ * identifiers, without relying on any external service.</p>
+ * 
+ * <p>The account identifiers must contain an <b>unique id</b>, followed by <b>@</b> and a 
+ * <b>domain</b> or <b>IP address</b>. Optionally, a port can be provided after <b>:</b>.
+ * For example: myuniqueid@example.org:8080<p>
  * 
  * @author Ismael Rivera
  */
@@ -79,14 +86,8 @@ public class SelfContainedAccountRegistrar implements AccountRegistrar {
 		if (parts.length == 2) {
 			server = parts[1];
 		} else {
-//			// transparently accepting 'clean' ids such as eab4d140-1955-11e3-8ffd-0800200c9a66+example.org+8080
-//			parts = accountId.split("\\+");
-//			if (parts.length == 3) {
-//				server = parts[1] + ":" + parts[2];
-//			} else {
-				throw new AccountCannotResolveException("Cannot resolve account " + accountId + ": server name part of the" +
-						" account identifier is missing. Example: eab4d140-1955-11e3-8ffd-0800200c9a66@example.org:8080");
-//			}
+			throw new AccountCannotResolveException("Cannot resolve account " + accountId + ": server name part of the" +
+					" account identifier is missing. Example: eab4d140-1955-11e3-8ffd-0800200c9a66@example.org:8080");
 		}
 		
 		try {
