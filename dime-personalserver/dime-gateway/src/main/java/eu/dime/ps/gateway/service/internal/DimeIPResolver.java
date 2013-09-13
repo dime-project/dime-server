@@ -1,31 +1,32 @@
 /*
-* Copyright 2013 by the digital.me project (http://www.dime-project.eu).
-*
-* Licensed under the EUPL, Version 1.1 only (the "Licence");
-* You may not use this work except in compliance with the Licence.
-* You may obtain a copy of the Licence at:
-*
-* http://joinup.ec.europa.eu/software/page/eupl/licence-eupl
-*
-* Unless required by applicable law or agreed to in writing, software distributed under the Licence is distributed on an "AS IS" basis,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-* See the Licence for the specific language governing permissions and limitations under the Licence.
-*/
+ * Copyright 2013 by the digital.me project (http://www.dime-project.eu).
+ *
+ * Licensed under the EUPL, Version 1.1 only (the "Licence");
+ * You may not use this work except in compliance with the Licence.
+ * You may obtain a copy of the Licence at:
+ *
+ * http://joinup.ec.europa.eu/software/page/eupl/licence-eupl
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the Licence is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the Licence for the specific language governing permissions and limitations under the Licence.
+ */
 
 package eu.dime.ps.gateway.service.internal;
 
 import java.io.IOException;
 import java.util.Properties;
 
-import javax.naming.NamingException;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.core.io.support.PropertiesLoaderUtils;
-
-import eu.dime.ps.gateway.util.DnsResolver;
 import javax.naming.CommunicationException;
 import javax.naming.NameNotFoundException;
+import javax.naming.NamingException;
+
+import org.springframework.core.io.support.PropertiesLoaderUtils;
+
+import eu.dime.ps.gateway.service.dns.DimeDNSCannotConnectException;
+import eu.dime.ps.gateway.service.dns.DimeDNSCannotResolveException;
+import eu.dime.ps.gateway.service.dns.DimeDNSException;
+import eu.dime.ps.gateway.service.dns.DnsResolver;
 
 /**
  * THROW-AWAY CLASS
@@ -38,60 +39,42 @@ import javax.naming.NameNotFoundException;
  */
 public class DimeIPResolver {
 
-	private static final Logger logger = LoggerFactory.getLogger(DimeIPResolver.class);
+	private final String dimeDns;
 
-	private static String port;
-	private String dimeDns;
-	
-	public DimeIPResolver() {
-		// TODO: Resolve port properly
+	public DimeIPResolver() throws DimeDNSException {
 		try {
-			if (this.port == null || this.dimeDns == null) {
-				Properties mapping = PropertiesLoaderUtils
-					.loadAllProperties("services.properties");
-				this.port = mapping.getProperty("GLOBAL_AUTHSERVLET_PORT_SECURE");
-				this.dimeDns = mapping.getProperty("DIME_DNS");
+			Properties properties = PropertiesLoaderUtils.loadAllProperties("services.properties");
+			this.dimeDns = properties.getProperty("GLOBAL_DIME_DNS");
+			if (this.dimeDns == null) {
+				throw new DimeDNSException("Could not load GLOBAL_DIME_DNS from services.properties.");
 			}
 		} catch (IOException e) {
-			logger.warn("Could not load dime DNS. Assuming standard DNS.", e);
-			this.port = "443";
+			throw new DimeDNSException("Could not load GLOBAL_DIME_DNS from services.properties: " + e.getMessage(), e);
 		}
 	}
 	
-	public String resolve (String targetURI) throws DimeDNSException {
-		
-		/*
-		 * TODO: Generalize resolution for all possible paths, including 
-		 * http://my.domain.com:4021/long/path/to/dime-communications 
-		 * (custom port, custom sub-path, custom subdomain, http/https) as war deployment path!
-		 * 
-		 * Assumptions for Segovia:
-		 *  - should resolve to https://<TargetDNS>/dime-communications 
-		 *  - <TargetURI> system is already configured to use the dime-DNS (no special DNS configuration takes place here).
-		 */
-		
-		// FIXME doing this for the ametic event as well, getting only the last part of the account URI
-		String said = targetURI.substring(targetURI.lastIndexOf(":") + 1, targetURI.length());
-                return "https://" + resolveSaid(said) + ":" + this.port + "/dime-communications";
+	public String resolve(String said) throws DimeDNSCannotConnectException,
+			DimeDNSCannotResolveException, DimeDNSException {
+		try {
+			return DnsResolver.resolve(dimeDns, said + ".dns.dime-project.eu");
+		} catch (NameNotFoundException e) {
+			throw new DimeDNSCannotResolveException(
+					"DNS failure: unable to resolve said " + said + " at "
+							+ dimeDns + ": " + e.getMessage(), e);
+
+		} catch (CommunicationException e) {
+			throw new DimeDNSCannotConnectException(
+					"DNS failure: CommunicationException, propably server not accessible: "
+							+ dimeDns + " (for said:" + said + "): " + e.getMessage(), e);
+		} catch (NamingException e) {
+			throw new DimeDNSException(
+					"DNS failure when trying to retrieve said " + said
+							+ " at " + dimeDns + ": " + e.getMessage(), e);
+		}
 	}
 
-        public String resolveSaid (String said) throws DimeDNSException {
-            try{
-		return DnsResolver.resolve(dimeDns, said + ".dns.dime-project.eu");
-
-            }catch (NameNotFoundException ex){
-                throw new DimeDNSCannotResolveException("DNS failure: unable to resolve said: "
-                        +said+" at "+dimeDns+"\nDetails: "+ex.getExplanation(),ex);
-
-            }catch (CommunicationException ex){
-                 throw new DimeDNSCannotConnectException("DNS failure: CommunicationException, propably server not accessible: "
-                        +dimeDns+" (for said:"+said+")\nDetails: "+ex.getExplanation(),ex);
-            }catch(NamingException ex){
-                throw new DimeDNSException("DNS failure when trying to retrieve said: "+said+" at "+dimeDns+"\nDetails: " + ex.getExplanation(), ex);            }
+	public String getDimeDns() {
+		return dimeDns;
 	}
-
-        public String getDimeDns(){
-            return dimeDns;
-        }
 
 }
