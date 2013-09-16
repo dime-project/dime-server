@@ -112,12 +112,13 @@ public class RuleManagerImpl extends InfoSphereManagerBase<Rule> implements Rule
 	
 	@Override
 	public void update(Rule entity) throws InfosphereException {
-		// TODO implement!
+		update(entity, true);
 	}
 
 	@Override
 	public void update(Rule entity, boolean override) throws InfosphereException {
-		// TODO implement!
+		remove(entity.asURI().toString());
+		add(entity);
 	}
 
 	@Override
