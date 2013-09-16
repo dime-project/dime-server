@@ -146,6 +146,15 @@ public class Notification {
   	  	q.setMaxResults(maxResults);
         return q.getResultList();
     }
+    
+    @Transactional
+    public static List<Notification> findAllNotificationsByTenant(Tenant tenant) {
+    	 if (tenant == null) throw new IllegalArgumentException("The 'tenant' argument is required");
+    	EntityManager em = Notification.entityManager();
+        TypedQuery<Notification> q = em.createQuery("SELECT o FROM Notification AS o WHERE o.tenant = :tenant", Notification.class);
+        q.setParameter("tenant",tenant);  
+          return q.getResultList();
+    }
 
 	public String toString() {
         StringBuilder sb = new StringBuilder();

@@ -112,4 +112,5 @@ public interface UserManager {
 
     public User getCurrentUser();
 
+	public void clear(String userId);
 }

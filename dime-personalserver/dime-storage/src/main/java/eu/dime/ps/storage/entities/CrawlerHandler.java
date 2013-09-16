@@ -178,4 +178,14 @@ public class CrawlerHandler {
 	public static List<CrawlerHandler> findCrawlerHandlerEntries(int firstResult, int maxResults) {
         return entityManager().createQuery("SELECT o FROM CrawlerHandler o", CrawlerHandler.class).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
     }
+	
+	public static List<CrawlerHandler> findAllByTenant(Tenant tenant) {
+		 if (tenant == null) {
+	            throw new IllegalArgumentException("The tenant argument is required");
+	        }
+		  EntityManager em = CrawlerHandler.entityManager();
+	        TypedQuery<CrawlerHandler> q = em.createQuery("SELECT o FROM CrawlerHandler AS o WHERE o.tenant = :tenant", CrawlerHandler.class);
+	        q.setParameter("tenant", tenant);
+	        return q.getResultList();
+    }
 }

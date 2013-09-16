@@ -25,6 +25,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.beans.factory.annotation.Configurable;
@@ -205,5 +206,14 @@ public class AttributeMatch {
 	public static List<AttributeMatch> findAllAttributeMatch(int firstResult, int maxResults) {
         return entityManager().createQuery("SELECT o FROM AttributeMatch o", AttributeMatch.class).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
     }
+	
+	public static List<AttributeMatch> findAllAttributeMatchByTenant(Tenant tenant) {
+        if (tenant == null) throw new IllegalArgumentException("The 'tenant' argument is required");
+        EntityManager em = Tenant.entityManager();
+        TypedQuery<AttributeMatch> q = em.createQuery("SELECT o FROM AttributeMatch AS o WHERE o.tenant = :tenant", AttributeMatch.class);
+        q.setParameter("tenant", tenant);
+        return q.getResultList();
+    }
+
 
 }

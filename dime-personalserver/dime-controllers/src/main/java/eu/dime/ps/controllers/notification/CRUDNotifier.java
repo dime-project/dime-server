@@ -28,6 +28,7 @@ import org.slf4j.LoggerFactory;
 
 import eu.dime.commons.notifications.DimeInternalNotification;
 import eu.dime.commons.notifications.system.SystemNotification;
+import eu.dime.ps.controllers.evaluationtool.EvaluationManager;
 import eu.dime.ps.controllers.notifier.NotifierManager;
 import eu.dime.ps.controllers.notifier.exception.NotifierException;
 import eu.dime.ps.dto.ProfileAttributeType;
@@ -45,7 +46,9 @@ public class CRUDNotifier implements BroadcastReceiver {
 
 	private static final Logger logger = LoggerFactory.getLogger(CRUDNotifier.class);
 
-	private NotifierManager notifierManager;	
+	private NotifierManager notifierManager;
+	
+	private EvaluationManager evaluationManager;
 	
 	private static final String[] ACTIONS = new String[] {
 		Event.ACTION_RESOURCE_ADD,
@@ -101,6 +104,9 @@ public class CRUDNotifier implements BroadcastReceiver {
 				
 				Long tenant = Long.parseLong(event.getTenant());
 				String operation = NOTIFY_ACTIONS.get(action);
+				
+				//selfevaulation tool
+				
 				
 				// sends internal notifications (to UI)
 				SystemNotification notification = new SystemNotification(tenant, operation, itemId, type, creatorId);

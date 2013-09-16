@@ -231,14 +231,14 @@ public class AccountCredentials {
 		return QueryUtil.getSingleResultOrNull(q);
 	}
 
-	public static TypedQuery<AccountCredentials> findAllByTenant(Tenant tenant) {
+	public static List<AccountCredentials> findAllByTenant(Tenant tenant) {
 		if (tenant == null)
 			throw new IllegalArgumentException("The tenant argument is required");
 		EntityManager em = AccountCredentials.entityManager();
 		TypedQuery<AccountCredentials> q = em.createQuery(
 				"SELECT o FROM AccountCredentials AS o WHERE o.tenant = :tenant", AccountCredentials.class);
 		q.setParameter("tenant", tenant);
-		return q;
+		return q.getResultList();
 	}
 	
 	public static AccountCredentials findAllBySourceAndByTargetUri(ServiceAccount source, String targetUri) {

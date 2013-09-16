@@ -17,6 +17,8 @@ package eu.dime.ps.communications.requestbroker.controllers.infosphere;
 import java.util.List;
 
 
+
+
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -33,6 +35,7 @@ import eu.dime.commons.dto.Response;
 import eu.dime.commons.dto.UserRegister;
 import eu.dime.ps.controllers.UserManager;
 import eu.dime.ps.gateway.service.MediaType;
+import eu.dime.ps.storage.datastore.impl.DataStoreProvider;
 import eu.dime.ps.storage.entities.User;
 
 @Controller
@@ -43,7 +46,7 @@ public class PSAdminController implements APIController {
 
 	private UserManager userManager;
 	
-
+	
 	@Autowired
 	public void setUserManager(UserManager userManager) {
 		this.userManager = userManager;
@@ -58,8 +61,10 @@ public class PSAdminController implements APIController {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
 	@Path("/@all")
-	public Response<UserRegister> getAllUsers() {
-
+	public Response<UserRegister> getAllUsers(@PathParam("said") String said) {
+		
+		logger.info("called API method: GET /dime/rest/" + said + "/admin/@all");
+		
 		Data<UserRegister> data = null;
 
 		try {
@@ -108,9 +113,13 @@ public class PSAdminController implements APIController {
 	@DELETE
 	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
     @Path("/{userName}")
-    public Response deleteNotification(@PathParam("userName") String userName) {
+    public Response deleteNotification(@PathParam("said") String said,
+    								   @PathParam("userName") String userName) {		
 		
-		userManager.removeByUsername(userName);
+		logger.info("called API method: DELETE /dime/rest/" + said + "/admin/"+userName);
+		
+		userManager.clear(userName);
+		
 		return Response.okEmpty();	
 	}
 }

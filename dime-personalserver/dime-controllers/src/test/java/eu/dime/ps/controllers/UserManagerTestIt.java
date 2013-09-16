@@ -25,6 +25,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.model.node.impl.URIImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.encoding.ShaPasswordEncoder;
@@ -84,8 +85,10 @@ public class UserManagerTestIt extends InfoSphereManagerTest {
 	
 	private User user1;
 	private User user2;
+	private User user3;
 	private Tenant one;
 	private Tenant two;
+	private Tenant three;
 
 	// private User mockUser;
 
@@ -363,6 +366,38 @@ public class UserManagerTestIt extends InfoSphereManagerTest {
 		assertNotNull(user);
 		User user1new = User.find(user1.getId());
 		assertTrue(user1new.isEnabled());
+	}
+	
+	@Test
+	@Transactional
+	public void testClear() {
+		setTestClearDB();
+		TenantContextHolder.setTenant(three.getId());
+		assertNotNull(User.find(user3.getId()));
+		
+		userManager.clear(user3.getUsername());
+		
+		assertNull(User.find(user3.getId()));
+		assertNull(Tenant.find(three.getId()));
+		
+	}
+
+	private void setTestClearDB() {
+		three = entityFactory.buildTenant();
+		three.setName(NAME_JUAN);
+		three.persist();
+		three.flush();
+		
+		user3 = entityFactory.buildUser();
+		user3.setUsername(NAME_JUAN);
+		user3.setPassword(dimePasswordEncoder.encodePassword(JUAN_OWNER_PW, NAME_JUAN));
+		user3.setRole(Role.ADMIN);
+		user3.setAccountUri(ACCOUNT_JUAN);
+		user3.setEnabled(true);
+		user3.setTenant(three);
+		user3.persist();
+		user3.flush();	
+				
 	}
 
 	@Test

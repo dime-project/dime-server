@@ -231,4 +231,12 @@ public class CrawlerJob {
 	public static List<CrawlerJob> find(int firstResult, int maxResults) {
         return entityManager().createQuery("SELECT o FROM CrawlerJob o", CrawlerJob.class).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
     }
+	
+	public static List<CrawlerJob> findAllByTenant(Tenant tenant) {
+		  if (tenant == null) throw new IllegalArgumentException("The 'tenant' argument is required");
+		  EntityManager em = CrawlerJob.entityManager();
+	        TypedQuery<CrawlerJob> q = em.createQuery("SELECT o FROM CrawlerJob AS o WHERE o.tenant = :tenant", CrawlerJob.class);
+	        q.setParameter("tenant", tenant);
+	        return q.getResultList();
+    }
 }

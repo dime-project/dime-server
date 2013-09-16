@@ -71,11 +71,20 @@ import eu.dime.ps.semantic.model.nso.AccessSpace;
 import eu.dime.ps.semantic.model.pimo.Person;
 import eu.dime.ps.semantic.model.ppo.PrivacyPreference;
 import eu.dime.ps.semantic.privacy.PrivacyPreferenceType;
+import eu.dime.ps.storage.datastore.impl.DataStoreProvider;
 import eu.dime.ps.storage.entities.Role;
 import eu.dime.ps.storage.entities.ServiceAccount;
 import eu.dime.ps.storage.entities.ServiceProvider;
 import eu.dime.ps.storage.entities.Tenant;
 import eu.dime.ps.storage.entities.User;
+import eu.dime.ps.storage.entities.AccountCredentials;
+import eu.dime.ps.storage.entities.AttributeMatch;
+import eu.dime.ps.storage.entities.CrawlerHandler;
+import eu.dime.ps.storage.entities.CrawlerJob;
+import eu.dime.ps.storage.entities.HistoryCache;
+import eu.dime.ps.storage.entities.Notification;
+import eu.dime.ps.storage.entities.PersonMatch;
+import eu.dime.ps.storage.entities.ProfileMatch;
 import eu.dime.ps.storage.exception.ReadOnlyValueChangedOnUpdate;
 import eu.dime.ps.storage.manager.EntityFactory;
 
@@ -118,6 +127,9 @@ public class UserManagerImpl implements UserManager {
     
     @Autowired
     private NotifierManager notifierManager;
+    
+    @Autowired
+	private DataStoreProvider dataStoreProvider;
 
 
     public void setAccountRegistrar(AccountRegistrar accountRegistrar) {
@@ -539,10 +551,70 @@ public class UserManagerImpl implements UserManager {
 
     @Override
     public void removeByUsername(String userId) {
-        this.getByUsername(userId).remove();
+           
+    	
+    	this.getByUsername(userId).remove();
+    }
+    
+    @Override
+    public void clear(String userId) {
+       
+    	Long tenantId  = TenantHelper.getCurrentTenantId();    	
+    	//TODO remove from user resolver service 	
+    	    	   
+    	dataStoreProvider.deleteTenantStore(tenantId);	    	    	    	
+    	
+    	removeFromDatabase(tenantId,userId);    	
+    	
+    	tenantManager.remove(tenantId.toString());
+    	
     }
 
-    @Override
+    private void removeFromDatabase(Long tenantId, String userId) {
+    	
+    	Tenant tenant= Tenant.find(tenantId);
+    	
+    	//ServiceAccount
+    	 List<ServiceAccount> ServiceAccountList = ServiceAccount.findAllByTenant(tenant);
+		for(ServiceAccount serviceAccount : ServiceAccountList)	serviceAccount.remove();			
+					
+		//User
+		User.findByTenantAndByUsername(tenant, userId).remove();
+		 		 
+		//AccountCredentials
+		 List<AccountCredentials> accountCredentialsList = AccountCredentials.findAllByTenant(tenant);
+		 for(AccountCredentials accountCredentials : accountCredentialsList) accountCredentials.remove();		
+		 
+		//AttributeMatch 
+		 List<AttributeMatch> attributeMatchList = AttributeMatch.findAllAttributeMatchByTenant(tenant);
+		 for(AttributeMatch attributeMatch : attributeMatchList) attributeMatch.remove();
+		 
+		//CrawlerHandler		 
+		 List<CrawlerHandler> crawlerHandlerList = CrawlerHandler.findAllByTenant(tenant);
+		 for(CrawlerHandler crawlerHandler : crawlerHandlerList) crawlerHandler.remove();
+		 
+		 //CrawlerJob		 
+		 List<CrawlerJob> crawlerJobList = CrawlerJob.findAllByTenant(tenant);
+		 for(CrawlerJob crawlerJob : crawlerJobList) crawlerJob.remove();
+		 
+		 //HistoryCache
+		 List<HistoryCache> historyCacheList = HistoryCache.findAllByTenant(tenant);
+		 for(HistoryCache historyCache : historyCacheList) historyCache.remove();
+		 
+		 //Notification
+		 List<Notification> notificationList = Notification.findAllNotificationsByTenant(tenant);
+		 for(Notification notification : notificationList) notification.remove();
+		 
+		 //PersonMatch
+		 List<PersonMatch> personMatchList = PersonMatch.findAllByTenant(tenant);
+		 for(PersonMatch personMatch : personMatchList) personMatch.remove();
+		
+		 //ProfileMatch
+		 List<ProfileMatch> profileMatchList = ProfileMatch.findAllProfileMatchByTenant(tenant);
+		 for(ProfileMatch profileMatch : profileMatchList) profileMatch.remove();
+    }
+
+	@Override
     public boolean exists(String userId) {
         return User.find(Long.parseLong(userId)) != null;
     }
