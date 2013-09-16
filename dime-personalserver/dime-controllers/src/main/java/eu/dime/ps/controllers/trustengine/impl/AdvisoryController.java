@@ -310,6 +310,8 @@ public class AdvisoryController extends AdvisoryBase {
 				String target_element_key = (String) it2.next();
 				URI targetURI = new URIImpl(target_element_key);
 				if (getResourceStore().isTypedAs(targetURI, PIMO.PersonGroup)){
+					GroupDistanceWarning warning = new GroupDistanceWarning();
+
 						// resource is shared to an unrelated group
 					for (Resource groupRes: related_groups) {
 						if (getResourceStore().isTypedAs(groupRes, PIMO.PersonGroup)){
@@ -317,14 +319,17 @@ public class AdvisoryController extends AdvisoryBase {
 							PersonGroup groupB = (PersonGroup) getResourceStore().get(targetURI.asURI(), PersonGroup.class);
 							double distance = GroupDistanceProcessor.getGroupDistance(groupA, groupB);
 							if (distance > AdvisoryConstants.MIN_GROUP_DISTANCE){ //TODO: which min distance?
-								GroupDistanceWarning warning = new GroupDistanceWarning();
 								//List<Agent> members = groupB.getAllMembers_as().asList();
 								warning.addGroup(groupRes.toString());
-								warning.addResource(res_uri);
-								warning.setWarningLevel(distance);
-								warnings.add(warning);
+								if (distance > warning.getWarningLevel()){
+									warning.setWarningLevel(distance);
+								}
 							}
 						}
+					}
+					if (warning.getPreviousSharedGroups().isEmpty() == false){
+						warnings.add(warning);
+						warning.addResource(res_uri);
 					}
 	
 				}
