@@ -8,6 +8,9 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
 
+	<!-- Import main properties WEB-INF/dime-ps.properties -->
+	<context:property-placeholder location="classpath*:META-INF/dime-ps.properties" order="1" ignore-unresolvable="false"/>
+
 	<!-- Notifications -->
 	
 	<bean id="purgeNotifySchedule" class="eu.dime.ps.communications.notifier.PurgeNotifySchedule">
@@ -22,7 +25,6 @@
 	
 	<bean id="internalNotifySchedule" class="eu.dime.ps.communications.notifier.InternalNotifySchedule">
 		<property name="notifierManager" ref="notifierManager"></property>
-		<property name="credentialStore" ref="credentialStore"></property>
 		<property name="tenantManager" ref="tenantManager"></property>
 	</bean>
 	

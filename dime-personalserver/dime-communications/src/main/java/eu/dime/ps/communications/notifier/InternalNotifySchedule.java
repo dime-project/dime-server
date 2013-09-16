@@ -14,19 +14,20 @@
 
 package eu.dime.ps.communications.notifier;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import org.apache.commons.lang.math.NumberUtils;
 import org.atmosphere.cpr.Broadcaster;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 
 import eu.dime.commons.dto.Data;
 import eu.dime.commons.dto.Response;
@@ -37,7 +38,6 @@ import eu.dime.ps.communications.requestbroker.pubsub.PSNotificationDispacher;
 import eu.dime.ps.controllers.TenantManager;
 import eu.dime.ps.controllers.exception.TenantManagerException;
 import eu.dime.ps.controllers.notifier.NotifierManager;
-import eu.dime.ps.gateway.auth.CredentialStore;
 
 /**
  * Cron of tasks for the Notifications delivery to the UI
@@ -51,21 +51,43 @@ public class InternalNotifySchedule {
 			.getLogger(InternalNotifySchedule.class);
 	
 	private NotifierManager notifierManager;
-	private CredentialStore credentialStore;
 	private TenantManager tenantManager;
+	
+	
+	private String messageLimit;
+	private Integer messageLimitNumber;
+	private static final Integer messageLimitDefault = 10;
 
 	public void setNotifierManager(NotifierManager notifierManager) {
 		this.notifierManager = notifierManager;
-	}
-
-	public void setCredentialStore(CredentialStore credentialStore) {
-		this.credentialStore = credentialStore;
 	}
 
 	@Autowired
 	public void setTenantManager(TenantManager tenantManager) {
 		this.tenantManager = tenantManager;
 	}
+	
+	@Value("${notifications.internal.messages.limit}")
+	public void setMessageLimit(String messageLimit) {
+		this.messageLimit = messageLimit;
+	}
+	
+	public Integer getMessageLimit(){
+		
+		if (messageLimitNumber == null) {
+			try {
+				Integer num = NumberUtils.createInteger(this.messageLimit);
+				messageLimitNumber = (num != null) ? num : messageLimitDefault;
+
+			} catch (Exception e) {
+				messageLimitNumber = messageLimitDefault;
+			}
+		}
+		
+		return messageLimitNumber;
+		
+	}
+	
 
 	private  ConcurrentHashMap<String, ConcurrentLinkedQueue<String>> pendingNotifications = new  ConcurrentHashMap<String, ConcurrentLinkedQueue<String>>();
 	
@@ -141,7 +163,6 @@ public class InternalNotifySchedule {
 	public InternalNotifySchedule() {
 		broadcasters = new ConcurrentHashMap<String, ConcurrentHashMap<Broadcaster, PSNotificationDispacher>>(
 				0);
-
 	}
 
 	// Notifications Between PS - UI
@@ -192,7 +213,7 @@ public class InternalNotifySchedule {
 			if(pendingNotification == null){
 				
 				List<DimeInternalNotification> internalNotififcations = notifierManager
-						.popInternalNotifications(tenant, 10);
+						.popInternalNotifications(tenant, getMessageLimit());
 
 				if (internalNotififcations.isEmpty()) {
 					logger.debug("No Internal Notifications for user: " + key);

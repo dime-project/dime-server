@@ -13,17 +13,9 @@
 
 	<import resource="classpath*:spring-config/dime-controllers-applicationContext.xml" />
 		
-	<!-- This will automatically locate any and all property files you have 
-		within your classpath, provided they fall under the META-INF/spring directory. 
-		The located property files are parsed and their values can then be used within 
-		application context files in the form of ${propertyKey}. -->
-	<context:property-placeholder location="classpath*:META-INF/spring/*.properties" />
+	<!-- Scan and Load Annotations -->
+	<context:component-scan base-package="eu.dime.ps"></context:component-scan>
 	<context:spring-configured />
-
-	<context:component-scan base-package="eu.dime">
-		<context:exclude-filter expression=".*_Roo_.*" type="regex" />
-		<context:exclude-filter expression="org.springframework.stereotype.Controller" type="annotation" />
-	</context:component-scan>
 	
 	<!-- Multi-tenancy filter -->
 	<bean class="eu.dime.ps.communications.filter.TenantSetFilter" id="TenantSetFilter" />

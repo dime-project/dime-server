@@ -27,12 +27,6 @@
 
     <context:annotation-config />
     <context:component-scan base-package="eu.dime.ps.communications.ui"/>
-    <context:component-scan base-package="eu.dime">
-		<context:exclude-filter expression=".*_Roo_.*"
-			type="regex" />
-		<context:exclude-filter expression="org.springframework.stereotype.Controller"
-			type="annotation" />
-	</context:component-scan>
 
     <!-- ***************************************************** -->
     <!-- *******  Basic Authentication Services Layer  ******* -->

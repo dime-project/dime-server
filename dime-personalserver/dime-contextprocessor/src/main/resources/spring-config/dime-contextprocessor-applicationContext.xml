@@ -3,7 +3,6 @@
 
 	<import resource="classpath*:spring-config/ps-storage-applicationContext.xml" />
 
-    <context:property-placeholder location="classpath*:META-INF/*.properties"/>
     <context:spring-configured/>
      
     <bean id="storage" class="eu.dime.ps.storage.DimeStorageImpl">

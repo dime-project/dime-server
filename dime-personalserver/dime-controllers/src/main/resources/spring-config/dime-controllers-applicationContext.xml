@@ -22,8 +22,7 @@
 	<import resource="classpath*:spring-config/dime-contextprocessor-applicationContext.xml" />	
 	<import resource="classpath*:spring-config/ps-gateway-applicationContext.xml" />
 
-	<context:property-placeholder location="classpath*:META-INF/*.properties" />
-	<context:spring-configured />
+	<context:annotation-config/>
 
 	<bean name="dimeAuthenticationProvider" class="eu.dime.ps.controllers.security.authentication.DimeAuthenticationProvider" >
 	    <property name="userManager" ref="userManager"></property>
