@@ -9,7 +9,7 @@
 
 
 	<!-- Import main properties WEB-INF/dime-ps.properties -->
-	<context:property-placeholder location="classpath*:META-INF/dime-ps.properties" order="1" ignore-unresolvable="false"/>
+	<context:property-placeholder location="classpath*:META-INF/dime-ps.properties" order="2" ignore-unresolvable="true"/>
 
 	<!-- Notifications -->
 	
