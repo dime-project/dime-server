@@ -75,6 +75,9 @@ import eu.dime.ps.semantic.privacy.PrivacyPreferenceType;
 public class DefaultDataSetup implements BroadcastReceiver {
 	
 	public static final String DEFAULT_PUBLIC_PROFILE_CARD_NAME = "MyPublicCard";
+    protected static final String TEST_USER_1_SAID = "ee1ddbd7-dbfa-467d-a562-374970b9c0bc@team.dime.wiwi.uni-siegen.de:8443";
+    protected static final String TEST_USER_2_SAID = "2c391026-e070-4f93-8fca-975c10c92b1c@team.dime.wiwi.uni-siegen.de:8443";
+    protected static final String TEST_USER_3_SAID = "900dc982-74ae-47b4-b5c6-eb319a3bed23@team.dime.wiwi.uni-siegen.de:8443";
 	
 	private static final Map<String, String[]> CONTACTS = new HashMap<String, String[]>();
 	static {
@@ -95,9 +98,9 @@ public class DefaultDataSetup implements BroadcastReceiver {
 	  CONTACTS.put("65daf588-9821-486a-9f45-279787104604@team.dime.wiwi.uni-siegen.de:8443", new String[] { "Javier Vendrell", "jvendrell@ametic.es", "jvendrell"});
 	  CONTACTS.put("052c37e6-d4a0-4915-8189-73a9ecfc0380@team.dime.wiwi.uni-siegen.de:8443", new String[] { "David Alonso", "dalonso@ametic.es", "dalonso"});
 	  //new contacts - testusers
-	  CONTACTS.put("ee1ddbd7-dbfa-467d-a562-374970b9c0bc@team.dime.wiwi.uni-siegen.de:8443", new String[] { "Test User1", "test.user1@email.com", "testuser1"});
-	  CONTACTS.put("900dc982-74ae-47b4-b5c6-eb319a3bed23@team.dime.wiwi.uni-siegen.de:8443", new String[] { "Test User2", "test.user2@email.com", "testuser2"});
-	  CONTACTS.put("2c391026-e070-4f93-8fca-975c10c92b1c@team.dime.wiwi.uni-siegen.de:8443", new String[] { "Test User3", "test.user3@email.com", "testuser3"});
+	  CONTACTS.put(TEST_USER_1_SAID, new String[] { "Test User1", "test.user1@email.com", "testuser1"});
+	  CONTACTS.put(TEST_USER_2_SAID, new String[] { "Test User2", "test.user2@email.com", "testuser2"});
+	  CONTACTS.put(TEST_USER_3_SAID, new String[] { "Test User3", "test.user3@email.com", "testuser3"});
 
 	}
 	private static final Logger logger = LoggerFactory.getLogger(DefaultDataSetup.class);
@@ -250,15 +253,15 @@ public class DefaultDataSetup implements BroadcastReceiver {
 				if (account.hasCreator()) {
 					Person person = personManager.get(account.getCreator().toString());
 					
-					if (said.equals("246879a0-5b58-4b3f-aedf-64d0335721f5@team.dime.wiwi.uni-siegen.de:8443")) { // testuser1 said
+					if (said.equals(TEST_USER_1_SAID)) { // testuser1 said
 						person.setTrustLevel(0.5); 
 						personManager.update(person);
 						testuser1 = person;
-					} else if (said.equals("aa99d9af-4c69-4388-94dc-c5fb9e9e2763@team.dime.wiwi.uni-siegen.de:8443")) { // testuser2 said
+					} else if (said.equals(TEST_USER_2_SAID)) { // testuser2 said
 						person.setTrustLevel(0.0);
 						personManager.update(person);
 						testuser2 = person;
-					} else if (said.equals("8192047a-177f-4486-9dff-1af650d65afd@team.dime.wiwi.uni-siegen.de:8443")) { // testuser3 said
+					} else if (said.equals(TEST_USER_3_SAID)) { // testuser3 said
 						person.setTrustLevel(1.0);
 						personManager.update(person);
 						testuser3 = person;
