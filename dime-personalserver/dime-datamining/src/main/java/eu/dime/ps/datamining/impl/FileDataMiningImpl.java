@@ -73,7 +73,7 @@ public class FileDataMiningImpl implements FileDataMining {
 
 	private TemporaryFileCrawlerHandler crawlerHandler;
 	private FileSystemCrawler fileSystemCrawler;
-	private FileSystemDataSource source;
+	private RDFContainerFactoryImpl containerFactory;
 	
 	public FileDataMiningImpl() {
 		try {
@@ -84,15 +84,16 @@ public class FileDataMiningImpl implements FileDataMining {
 		fileSystemCrawler = new FileSystemCrawler();
 		fileSystemCrawler.setCrawlerHandler(crawlerHandler);
 		fileSystemCrawler.setDataAccessorRegistry(new DefaultDataAccessorRegistry());
-		RDFContainerFactoryImpl containerFactory = new RDFContainerFactoryImpl();
-		RDFContainer configuration = containerFactory.newInstance("source:datamining");
-		this.source = new FileSystemDataSource();
-		this.source.setConfiguration(configuration);
+		containerFactory = new RDFContainerFactoryImpl();
 	}
 	
 	@Override
 	public Model extractFromContent(URI fileUri, File file) throws IOException {
-		this.source.setRootFolder(file.getCanonicalPath());
+		// setting up crawler configuration
+		final RDFContainer configuration = containerFactory.newInstance("source:datamining");
+		final FileSystemDataSource source = new FileSystemDataSource();
+		source.setConfiguration(configuration);
+		source.setRootFolder(file.getCanonicalPath());
 		fileSystemCrawler.setDataSource(source);
 
 		// does the crawling/extraction
