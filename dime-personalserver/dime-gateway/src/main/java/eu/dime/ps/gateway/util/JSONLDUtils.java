@@ -14,9 +14,12 @@
 
 package eu.dime.ps.gateway.util;
 
+import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import org.ontoware.aifbcommons.collection.ClosableIterator;
@@ -24,9 +27,13 @@ import org.ontoware.rdf2go.RDF2Go;
 import org.ontoware.rdf2go.model.Model;
 import org.ontoware.rdf2go.model.ModelSet;
 import org.ontoware.rdf2go.model.Statement;
+import org.ontoware.rdf2go.model.node.DatatypeLiteral;
+import org.ontoware.rdf2go.model.node.Node;
 import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.model.node.Variable;
+import org.ontoware.rdf2go.model.node.impl.DatatypeLiteralImpl;
 import org.ontoware.rdf2go.vocabulary.RDF;
+import org.ontoware.rdf2go.vocabulary.XSD;
 import org.ontoware.rdfreactor.schema.rdfs.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,6 +42,7 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.github.jsonldjava.core.JSONLD;
 import com.github.jsonldjava.core.JSONLDProcessingError;
+import com.github.jsonldjava.core.JSONLDTripleCallback;
 import com.github.jsonldjava.core.Options;
 import com.github.jsonldjava.impl.RDF2GoRDFParser;
 import com.github.jsonldjava.impl.RDF2GoTripleCallback;
@@ -88,7 +96,7 @@ public class JSONLDUtils {
 	public static <T extends Resource> T deserialize(Object object, Class<T> returnType)
 			throws JsonParseException, JsonMappingException, JSONLDProcessingError {
 		RDF2GoTripleCallback callback = new RDF2GoTripleCallback();
-		ModelSet modelSet = (ModelSet) JSONLD.toRDF(object, callback);
+		ModelSet modelSet = toRDF(object, callback);
 
 		// find the resource URI corresponding to the returnType
 		URI subject = null;
@@ -145,7 +153,7 @@ public class JSONLDUtils {
 		
 		for (Object object : collection) {
 			RDF2GoTripleCallback callback = new RDF2GoTripleCallback();
-			ModelSet deserialized = (ModelSet) JSONLD.toRDF(object, callback);
+			ModelSet deserialized = toRDF(object, callback);
 			
 			ClosableIterator<Statement> statements = deserialized.findStatements(Variable.ANY, Variable.ANY, RDF.type, Variable.ANY);
 			if (!statements.hasNext()) {
@@ -276,6 +284,45 @@ public class JSONLDUtils {
 	
 	private static void addDefaultPrefixes(Model model) {
 		addPrefixes(NS_PREFIX_MAP, model);
+	}
+	
+	private static ModelSet toRDF(Object object, JSONLDTripleCallback callback) throws JSONLDProcessingError {
+		ModelSet modelSet = (ModelSet) JSONLD.toRDF(object, callback);
+		ModelSet result = RDF2Go.getModelFactory().createModelSet();
+		result.open();
+		
+		// JSONLD will serialize Double/Float objects using the canonical representation
+		// in scientific notation, using the default Locale of the JVM.
+		// we always want to use the Java's default standard form (see Double.parseDouble & Double.toString).
+		final DecimalFormat defaultFormat = new DecimalFormat("0.0###############E0");
+		final ClosableIterator<Statement> statements = modelSet.findStatements(Variable.ANY, Variable.ANY, Variable.ANY, Variable.ANY);
+		while (statements.hasNext()) {
+			final Statement statement = statements.next();
+			final Node node = statement.getObject();
+			if (node instanceof DatatypeLiteral) {
+				final DatatypeLiteral literal = (DatatypeLiteral) node;
+				final URI datatype = literal.getDatatype();
+				if (datatype.equals(XSD._double)
+						|| datatype.equals(XSD._float)
+						|| datatype.equals(XSD._decimal)) {
+					final String value = literal.getValue();
+					try {
+						final double number = defaultFormat.parse(value).doubleValue();
+						final DatatypeLiteral formattedLiteral = new DatatypeLiteralImpl(Double.toString(number), datatype);
+						result.addStatement(statement.getContext(), statement.getSubject(), statement.getPredicate(), formattedLiteral);
+					} catch (ParseException e) {
+						throw new JSONLDProcessingError("Couldn't parse '" + value + "' using " + Locale.getDefault() + "' locale: " + e.getMessage());
+					}
+				} else {
+					result.addStatement(statement);
+				}
+			} else {
+				result.addStatement(statement);
+			}
+		}
+		statements.close();
+		
+		return result;
 	}
 	
 }

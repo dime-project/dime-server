@@ -42,6 +42,7 @@ import info.aduna.net.UriUtil;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.HashMap;
@@ -146,6 +147,8 @@ public class Resource extends LinkedHashMap<String, Object> {
 		CONVERTERS.put(NAO.privacyLevel, RDFReactorRuntime.getConverter(Double.class));
 	}
 
+	private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("0.0###############E0");
+	
 	private String said = null;
 
 	public Resource() {
@@ -232,9 +235,17 @@ public class Resource extends LinkedHashMap<String, Object> {
 			if (object instanceof DatatypeLiteral) {
 				DatatypeLiteral literal = object.asDatatypeLiteral();
 				URI type = literal.getDatatype();
-				if (type.equals(XSD._double) || type.equals(XSD._float)
+				if (type.equals(XSD._double)
+						|| type.equals(XSD._float)
 						|| type.equals(XSD._decimal)) {
-					value = Double.parseDouble(literal.getValue().replace(",","."));
+					String number = literal.getValue();
+					if (number.contains("E")) {
+						// scientific notation
+						value = DECIMAL_FORMAT.format(literal.getValue());
+					} else {
+						// standard form
+						value = Double.parseDouble(number);
+					}
 				} else if (type.equals(XSD._long) || type.equals(XSD._integer)
 						|| type.equals(XSD._int)) {
 					value = Long.parseLong(literal.getValue());
@@ -581,5 +592,5 @@ public class Resource extends LinkedHashMap<String, Object> {
 			model.addStatement(rUri, property, RDFReactorRuntime.java2node(model, value));
 		}
 	}
-
+	
 }

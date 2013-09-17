@@ -7,6 +7,8 @@ import ie.deri.smile.vocabulary.NAO;
 import ie.deri.smile.vocabulary.NCO;
 import ie.deri.smile.vocabulary.NIE;
 
+import java.util.Locale;
+
 import org.junit.Test;
 import org.ontoware.rdf2go.model.Model;
 import org.ontoware.rdf2go.model.node.URI;
@@ -17,7 +19,6 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.github.jsonldjava.core.JSONLDProcessingError;
 
-import eu.dime.ps.dto.Databox;
 import eu.dime.ps.semantic.model.ModelFactory;
 import eu.dime.ps.semantic.model.nco.PersonContact;
 import eu.dime.ps.semantic.model.nfo.DataContainer;
@@ -84,7 +85,10 @@ public class JSONLDUtilsTest {
 	}
 	
 	@Test
-	public void shouldSerializePrivacyLevelToFormatedDouble() throws JsonParseException, JsonMappingException, JSONLDProcessingError {
+	public void shouldSerializeDecimalsEnglishLocale() throws JsonParseException, JsonMappingException, JSONLDProcessingError {
+		// setting a different locale to force a different format of the decimal numbers
+		Locale.setDefault(Locale.GERMANY);
+		
 		ModelFactory factory = new ModelFactory();
 		URI file = new URIImpl("urn:file1");
 		DataContainer databox = factory.getNFOFactory().createDataContainer();
@@ -96,13 +100,10 @@ public class JSONLDUtilsTest {
 		DataContainer otherDatabox = JSONLDUtils.deserialize(json, DataContainer.class);
 		
 		assertEquals(databox.asURI(), otherDatabox.asURI());
-		assertEquals("My Databox", ModelUtils.findObject(otherDatabox.getModel(), otherDatabox, NAO.prefLabel).asLiteral().getValue());
-		assertEquals(file, ModelUtils.findObject(otherDatabox.getModel(), otherDatabox, NIE.hasPart).asURI());
 		String privacy = ModelUtils.findObject(otherDatabox.getModel(), otherDatabox, NAO.privacyLevel).asDatatypeLiteral().getValue();
-		assertEquals("5,0E-1",privacy);
-		Databox resource = new Databox(otherDatabox,new URIImpl("urn:borja"));
-		assertEquals("0.5",resource.get("nao:privacyLevel").toString());
+		
+		// should always be formated using the standard form (in English locale)
+		assertEquals("0.5", privacy);
 	}
-	
 	
 }
