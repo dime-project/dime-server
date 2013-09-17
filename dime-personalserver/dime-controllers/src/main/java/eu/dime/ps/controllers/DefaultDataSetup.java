@@ -99,7 +99,7 @@ public class DefaultDataSetup implements BroadcastReceiver {
 	  CONTACTS.put("900dc982-74ae-47b4-b5c6-eb319a3bed23@team.dime.wiwi.uni-siegen.de:8443", new String[] { "Test User2", "test.user2@email.com", "testuser2"});
 	  CONTACTS.put("2c391026-e070-4f93-8fca-975c10c92b1c@team.dime.wiwi.uni-siegen.de:8443", new String[] { "Test User3", "test.user3@email.com", "testuser3"});
 
-
+	}
 	private static final Logger logger = LoggerFactory.getLogger(DefaultDataSetup.class);
 
 	private final ModelFactory modelFactory = new ModelFactory();
