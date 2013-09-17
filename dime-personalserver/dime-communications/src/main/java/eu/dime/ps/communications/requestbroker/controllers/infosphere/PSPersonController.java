@@ -44,8 +44,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import eu.dime.commons.dto.Data;
+import eu.dime.commons.dto.Message;
+import eu.dime.commons.dto.Meta;
 import eu.dime.commons.dto.Request;
 import eu.dime.commons.dto.Response;
+import eu.dime.commons.dto.Response.Status;
 import eu.dime.ps.controllers.UserManager;
 import eu.dime.ps.controllers.exception.InfosphereException;
 import eu.dime.ps.controllers.infosphere.manager.PersonManager;
@@ -142,7 +145,7 @@ public class PSPersonController implements APIController {
 		try {
 			// ETag is the hash code of the resource
 			person = "@self".equals(personID) ? personManager.getMe() : personManager.get(personID);
-			EntityTag etag = new EntityTag(person.hashCode()+"");
+			EntityTag etag = new EntityTag(Integer.toHexString(person.hashCode()));
 			 
 			// Verify if it matched with etag available in the HTTP request
 			rb = req.evaluatePreconditions(etag);
@@ -155,9 +158,21 @@ public class PSPersonController implements APIController {
 			 
 			// If rb is null then either it is first time request; or resource is modified
 			// Get the updated representation and return with Etag attached to it
+			Meta meta = new Meta();
+			meta.setCode(Status.OK.getCode());
+			meta.setStatus("OK");
+			meta.setTimeRef(System.currentTimeMillis());
+			meta.setVersion("0.9");
+			meta.setMessage("");
+			
 			Data<Resource> data = new Data<Resource>(0, 1, 1);
 			data.getEntries().add(new Resource(person, null, RENAMING_RULES, personManager.getMe().asURI()));
-			rb = javax.ws.rs.core.Response.ok(data).cacheControl(cc).tag(etag);
+
+			Message<Resource> message = new Message<Resource>();
+			message.setMeta(meta);
+			message.setData(data);
+			
+			rb = javax.ws.rs.core.Response.ok(message).cacheControl(cc).tag(etag);
 			return rb.build();
 		} catch (InfosphereException e) {
 			// TODO return a proper JSON for the error
