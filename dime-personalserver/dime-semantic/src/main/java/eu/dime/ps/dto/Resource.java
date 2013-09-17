@@ -234,7 +234,7 @@ public class Resource extends LinkedHashMap<String, Object> {
 				URI type = literal.getDatatype();
 				if (type.equals(XSD._double) || type.equals(XSD._float)
 						|| type.equals(XSD._decimal)) {
-					value = Double.parseDouble(literal.getValue());
+					value = Double.parseDouble(literal.getValue().replace(",","."));
 				} else if (type.equals(XSD._long) || type.equals(XSD._integer)
 						|| type.equals(XSD._int)) {
 					value = Long.parseLong(literal.getValue());

@@ -17,6 +17,7 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.github.jsonldjava.core.JSONLDProcessingError;
 
+import eu.dime.ps.dto.Databox;
 import eu.dime.ps.semantic.model.ModelFactory;
 import eu.dime.ps.semantic.model.nco.PersonContact;
 import eu.dime.ps.semantic.model.nfo.DataContainer;
@@ -81,5 +82,27 @@ public class JSONLDUtilsTest {
 		assertEquals("My Databox", ModelUtils.findObject(otherDatabox.getModel(), otherDatabox, NAO.prefLabel).asLiteral().getValue());
 		assertEquals(file, ModelUtils.findObject(otherDatabox.getModel(), otherDatabox, NIE.hasPart).asURI());
 	}
+	
+	@Test
+	public void shouldSerializePrivacyLevelToFormatedDouble() throws JsonParseException, JsonMappingException, JSONLDProcessingError {
+		ModelFactory factory = new ModelFactory();
+		URI file = new URIImpl("urn:file1");
+		DataContainer databox = factory.getNFOFactory().createDataContainer();
+		databox.addPart(file);
+		databox.setPrefLabel("My Databox");
+		databox.addPrivacyLevel(0.5d);
+		
+		String json = JSONLDUtils.serializeAsString(databox);
+		DataContainer otherDatabox = JSONLDUtils.deserialize(json, DataContainer.class);
+		
+		assertEquals(databox.asURI(), otherDatabox.asURI());
+		assertEquals("My Databox", ModelUtils.findObject(otherDatabox.getModel(), otherDatabox, NAO.prefLabel).asLiteral().getValue());
+		assertEquals(file, ModelUtils.findObject(otherDatabox.getModel(), otherDatabox, NIE.hasPart).asURI());
+		String privacy = ModelUtils.findObject(otherDatabox.getModel(), otherDatabox, NAO.privacyLevel).asDatatypeLiteral().getValue();
+		assertEquals("5,0E-1",privacy);
+		Databox resource = new Databox(otherDatabox,new URIImpl("urn:borja"));
+		assertEquals("0.5",resource.get("nao:privacyLevel").toString());
+	}
+	
 	
 }

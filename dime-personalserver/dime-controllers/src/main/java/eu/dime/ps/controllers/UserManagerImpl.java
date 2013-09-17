@@ -126,9 +126,8 @@ public class UserManagerImpl implements UserManager {
     private ShaPasswordEncoder dimePasswordEncoder;
     
     @Autowired
-    private NotifierManager notifierManager;
-    
-    @Autowired
+    private NotifierManager notifierManager;    
+   
 	private DataStoreProvider dataStoreProvider;
 
 
@@ -170,6 +169,12 @@ public class UserManagerImpl implements UserManager {
     public void setServiceGateway(ServiceGateway serviceGateway) {
         this.serviceGateway = serviceGateway;
     }
+    
+    @Autowired
+    public void setDataStoreProvider(DataStoreProvider dataStoreProvider) {
+		this.dataStoreProvider = dataStoreProvider;
+	}
+
 
     public UserManagerImpl() {
         this.broadcastManager = BroadcastManager.getInstance();
@@ -570,7 +575,8 @@ public class UserManagerImpl implements UserManager {
     	
     }
 
-    private void removeFromDatabase(Long tenantId, String userId) {
+   
+	private void removeFromDatabase(Long tenantId, String userId) {
     	
     	Tenant tenant= Tenant.find(tenantId);
     	
