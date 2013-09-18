@@ -29,12 +29,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import eu.dime.commons.notifications.DimeInternalNotification;
 import eu.dime.commons.notifications.system.SystemNotification;
-<<<<<<< HEAD
-=======
-import eu.dime.ps.controllers.evaluationtool.EvaluationManager;
 import eu.dime.ps.controllers.eventlogger.exception.EventLoggerException;
 import eu.dime.ps.controllers.eventlogger.manager.LogEventManager;
->>>>>>> FEATURE added server evaluation data tool
 import eu.dime.ps.controllers.notifier.NotifierManager;
 import eu.dime.ps.controllers.notifier.exception.NotifierException;
 import eu.dime.ps.dto.ProfileAttributeType;
