@@ -78,12 +78,7 @@ public class LoginController {
 
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
     public ModelAndView logout() {
-        logger.info("Logout.");
-        try {
-			logEventManager.setLog("logout", "user");
-		} catch (EventLoggerException e) {
-			logger.error("Login operation could not be logged",e);
-		}
+        logger.info("Logout.");        
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("login");
         modelAndView.addObject("jspLoginMessage", "You have been logged out.");
@@ -167,11 +162,7 @@ public class LoginController {
         String username = SecurityContextHolder.getContext().getAuthentication().getName().toString();
         String pw = SecurityContextHolder.getContext().getAuthentication().getCredentials().toString();
         User user = userManager.getByUsernameAndPassword(username, pw);
-        try {
-			logEventManager.setLog("login", "user");
-		} catch (EventLoggerException e) {
-			logger.error("Login operation could not be logged",e);
-		}
+    
         if (user != null) {
             modelAndView.addObject("result", user.getTenant().getName());
         }
