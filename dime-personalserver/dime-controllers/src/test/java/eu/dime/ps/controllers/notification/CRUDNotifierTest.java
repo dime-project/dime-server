@@ -25,11 +25,12 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import eu.dime.commons.notifications.DimeInternalNotification;
+import eu.dime.ps.controllers.eventlogger.manager.LogEventManagerMock;
+import eu.dime.ps.dto.Type;
 import eu.dime.ps.semantic.Event;
 import eu.dime.ps.semantic.connection.Connection;
 import eu.dime.ps.semantic.model.ModelFactory;
 import eu.dime.ps.semantic.model.pimo.PersonGroup;
-import eu.dime.ps.dto.Type;
 
 @ContextConfiguration(locations = { "classpath*:**/applicationContext-infosphere-test.xml" })
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -41,6 +42,8 @@ public class CRUDNotifierTest extends TestCase {
 	
 	private NotifierManagerMock notifierManager = new NotifierManagerMock();
 	
+	
+	private LogEventManagerMock logEventManager = new LogEventManagerMock();
 	@Autowired
 	private Connection connection;
 	
@@ -51,6 +54,7 @@ public class CRUDNotifierTest extends TestCase {
 		
 		notifier = new CRUDNotifier();
 		notifier.setNotifierManager(notifierManager);
+		notifier.setLogEventManager(logEventManager);
 	}
 	
 	@Test

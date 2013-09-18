@@ -16,6 +16,8 @@ package eu.dime.ps.communications.web.authentication;
 
 import eu.dime.ps.communications.requestbroker.controllers.authentication.AuthenticationController;
 import eu.dime.ps.controllers.UserManager;
+import eu.dime.ps.controllers.eventlogger.exception.EventLoggerException;
+import eu.dime.ps.controllers.eventlogger.manager.LogEventManager;
 import eu.dime.ps.gateway.ServiceGateway;
 import eu.dime.ps.gateway.exception.ServiceNotAvailableException;
 import eu.dime.ps.gateway.service.AttributeMap;
@@ -24,11 +26,14 @@ import eu.dime.ps.gateway.service.external.DimeUserResolverServiceAdapter;
 import eu.dime.ps.gateway.service.internal.DimeIPResolver;
 import eu.dime.ps.semantic.model.nco.PersonContact;
 import eu.dime.ps.storage.entities.User;
+
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.UUID;
 import java.util.logging.Level;
+
 import javax.naming.NamingException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,6 +60,13 @@ public class LoginController {
 
     @Autowired
     private ServiceGateway serviceGateway;
+    
+    private LogEventManager logEventManager;
+
+	@Autowired
+	public void setLogEventManager(LogEventManager logEventManager) {
+		this.logEventManager = logEventManager;
+	}
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public ModelAndView login() {
@@ -67,6 +79,11 @@ public class LoginController {
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
     public ModelAndView logout() {
         logger.info("Logout.");
+        try {
+			logEventManager.setLog("logout", "user");
+		} catch (EventLoggerException e) {
+			logger.error("Login operation could not be logged",e);
+		}
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("login");
         modelAndView.addObject("jspLoginMessage", "You have been logged out.");
@@ -150,6 +167,11 @@ public class LoginController {
         String username = SecurityContextHolder.getContext().getAuthentication().getName().toString();
         String pw = SecurityContextHolder.getContext().getAuthentication().getCredentials().toString();
         User user = userManager.getByUsernameAndPassword(username, pw);
+        try {
+			logEventManager.setLog("login", "user");
+		} catch (EventLoggerException e) {
+			logger.error("Login operation could not be logged",e);
+		}
         if (user != null) {
             modelAndView.addObject("result", user.getTenant().getName());
         }

@@ -31,9 +31,9 @@ import eu.dime.commons.dto.UserRegister;
 import eu.dime.ps.communications.requestbroker.controllers.infosphere.APIController;
 import eu.dime.ps.communications.requestbroker.controllers.infosphere.RequestValidator;
 import eu.dime.ps.controllers.UserManager;
-import eu.dime.ps.controllers.eventlogger.data.LogType;
 import eu.dime.ps.controllers.eventlogger.manager.LogEventManager;
 import eu.dime.ps.gateway.service.MediaType;
+import eu.dime.ps.storage.entities.SphereLog;
 import eu.dime.ps.storage.entities.User;
 
 @Controller
@@ -78,8 +78,8 @@ public class PSUserController implements APIController {
             User user = userManager.register(userRegister);
 
             if (userManager.validateUserCanLogEvaluationData(user)){
-                // Logging the register in EvaluationData Table
-                logEventManager.setLog(LogType.RESISTER, user.getEvaluationId());
+                // Logging the register in SphereLog Table
+                logEventManager.setLog(SphereLog.EVALUATIONDATA_ACTION_REGISTER, "user");
             }
 
             //prepare response

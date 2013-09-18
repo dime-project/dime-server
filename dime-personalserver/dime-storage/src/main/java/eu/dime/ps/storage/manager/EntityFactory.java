@@ -25,6 +25,7 @@ import eu.dime.ps.storage.entities.PersonMatch;
 import eu.dime.ps.storage.entities.ProfileMatch;
 import eu.dime.ps.storage.entities.ServiceAccount;
 import eu.dime.ps.storage.entities.ServiceProvider;
+import eu.dime.ps.storage.entities.SphereLog;
 import eu.dime.ps.storage.entities.Tenant;
 import eu.dime.ps.storage.entities.User;
 import eu.dime.ps.storage.entities.UserDefaults;
@@ -76,6 +77,11 @@ public class EntityFactory {
 	public ServiceAccount buildServiceAccount() {
 		return new ServiceAccount();
 	}
+	
+	public SphereLog buildSphereLog() {
+		return new SphereLog();
+	}
+
 
 	public AccountCredentials buildAccountCredentials() {
 		return new AccountCredentials();

@@ -17,7 +17,6 @@
  */
 package eu.dime.ps.controllers.eventlogger.manager;
 
-import eu.dime.ps.controllers.eventlogger.data.LogType;
 import eu.dime.ps.controllers.eventlogger.exception.EventLoggerException;
 
 /**
@@ -30,7 +29,7 @@ public interface LogEventManager {
 	 * @param type
 	 * @param message
 	 */
-	public void setLog (LogType type, String message) throws EventLoggerException;
+	public void setLog (String action, String type) throws EventLoggerException;
 
 
 }

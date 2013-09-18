@@ -17,7 +17,6 @@ package eu.dime.ps.controllers.eventlogger;
 import static org.junit.Assert.assertTrue;
 
 import java.util.List;
-import java.util.UUID;
 
 import org.junit.After;
 import org.junit.Before;
@@ -31,10 +30,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ibm.icu.impl.Assert;
 
-import eu.dime.ps.controllers.eventlogger.data.LogType;
+import eu.dime.ps.controllers.TenantContextHolder;
 import eu.dime.ps.controllers.eventlogger.exception.EventLoggerException;
 import eu.dime.ps.controllers.eventlogger.manager.LogEventManager;
-import eu.dime.ps.storage.entities.EvaluationData;
+import eu.dime.ps.storage.entities.Role;
+import eu.dime.ps.storage.entities.SphereLog;
+import eu.dime.ps.storage.entities.Tenant;
+import eu.dime.ps.storage.entities.User;
 
 @ContextConfiguration(locations = { "classpath*:**/applicationContext-eventlogger-test.xml" })
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -44,29 +46,51 @@ public class LogEventManagerTest extends Assert {
 	@Autowired
 	private LogEventManager logEventManager;
 	
+	private Tenant tenant;
+	private User user;
+	
 	@Before
+	@Transactional
 	public void setUp() throws Exception {
+		// set up tenant data in the thread local holders
+		tenant =new Tenant("1234");
+		tenant.persist();
+		tenant.flush();
+		TenantContextHolder.setTenant(tenant.getId());
+		
+		user = new User();
+		user.setTenant(tenant);
+		user.setUsername("user");
+		user.setRole(Role.OWNER);
+		user.persist();
+		user.flush();
+		
 	}
 
 	@After
-	public void tearDown() throws Exception {
+	@Transactional
+	public void tearDown() throws Exception {		
+		if (tenant != null) {
+			tenant.remove();
+		}
+		if (user != null) {
+		user.remove();
+		}
+		TenantContextHolder.clear();
 	}
 
 	@Test
 	@Transactional
-	public void test() throws EventLoggerException {
+	public void test() throws EventLoggerException {		
 		
-		String randomTenant = "tenant_" + UUID.randomUUID();
-		
-		logEventManager.setLog(LogType.RESISTER, randomTenant);
-		
-		List<EvaluationData> list = EvaluationData.findAllLogRegisterEvaluationDatas();
+		logEventManager.setLog("register", "user");		
+		List<SphereLog> list = SphereLog.findAllSphereLogs();
 		
 		Boolean result = false;
 		
-		for (EvaluationData evaluationData : list) {
+		for (SphereLog sphereLog : list) {
 			
-			if(randomTenant.equals(evaluationData.getTenantId())){
+			if("user".equals(sphereLog.getType()) && sphereLog.getTenantId().equals(user.getEvaluationId())){
 				result = true;
 				break;
 			}

@@ -37,6 +37,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import eu.dime.commons.notifications.DimeExternalNotification;
 import eu.dime.ps.controllers.SingleConnectionProviderMock;
+import eu.dime.ps.controllers.eventlogger.manager.LogEventManagerMock;
 import eu.dime.ps.dto.Type;
 import eu.dime.ps.gateway.service.internal.DimeServiceAdapter;
 import eu.dime.ps.semantic.Event;
@@ -69,6 +70,7 @@ public class SharingNotifierTest extends TestCase {
 	private Connection connection;
 	private SingleConnectionProviderMock connectionProvider = new SingleConnectionProviderMock();
 	private NotifierManagerMock notifierManager = new NotifierManagerMock();
+	private LogEventManagerMock logEventManager = new LogEventManagerMock();
 	
 	private SharingNotifier notifier;
 	private TripleStore tripleStore;
@@ -102,6 +104,7 @@ public class SharingNotifierTest extends TestCase {
 		notifier = new SharingNotifier();
 		notifier.setConnectionProvider(connectionProvider);
 		notifier.setNotifierManager(notifierManager);
+		notifier.setLogEventManager(logEventManager);
 
 		tripleStore = connection.getTripleStore();
 		pimoService = connection.getPimoService();

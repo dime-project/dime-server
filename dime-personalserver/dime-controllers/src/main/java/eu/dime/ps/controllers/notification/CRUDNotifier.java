@@ -25,9 +25,16 @@ import org.ontoware.rdf2go.model.node.Node;
 import org.ontoware.rdfreactor.schema.rdfs.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import eu.dime.commons.notifications.DimeInternalNotification;
 import eu.dime.commons.notifications.system.SystemNotification;
+<<<<<<< HEAD
+=======
+import eu.dime.ps.controllers.evaluationtool.EvaluationManager;
+import eu.dime.ps.controllers.eventlogger.exception.EventLoggerException;
+import eu.dime.ps.controllers.eventlogger.manager.LogEventManager;
+>>>>>>> FEATURE added server evaluation data tool
 import eu.dime.ps.controllers.notifier.NotifierManager;
 import eu.dime.ps.controllers.notifier.exception.NotifierException;
 import eu.dime.ps.dto.ProfileAttributeType;
@@ -45,13 +52,23 @@ public class CRUDNotifier implements BroadcastReceiver {
 
 	private static final Logger logger = LoggerFactory.getLogger(CRUDNotifier.class);
 
-	private NotifierManager notifierManager;
+	private NotifierManager notifierManager;	
+
+	private LogEventManager logEventManager;
+	
+	 @Autowired
+	    public void setLogEventManager(LogEventManager logEventManager) {
+	        this.logEventManager = logEventManager;
+	    }
 	
 	private static final String[] ACTIONS = new String[] {
 		Event.ACTION_RESOURCE_ADD,
 		Event.ACTION_RESOURCE_MODIFY,
 		Event.ACTION_RESOURCE_DELETE
 	};
+	
+	
+
 
 	private static final Map<String, String> NOTIFY_ACTIONS;
 	static {
@@ -99,9 +116,19 @@ public class CRUDNotifier implements BroadcastReceiver {
 				if (creator != null) {
 					creatorId = creator.toString();
 				}
-				
+		
+
 				final Long tenant = Long.parseLong(event.getTenant());
 				final String operation = NOTIFY_ACTIONS.get(action);
+
+				//selfevaulation tool store create and remove operations
+				if(operation.equals(DimeInternalNotification.OP_CREATE) || operation.equals(DimeInternalNotification.OP_CREATE ))
+				 try {
+					logEventManager.setLog(operation, type);
+				} catch (EventLoggerException e) {					
+					logger.error("A sharing process could not be logged",e);
+				}				   
+
 				
 				// sends internal notifications (to UI)
 				final SystemNotification notification = new SystemNotification(tenant, operation, itemId, type, creatorId);
