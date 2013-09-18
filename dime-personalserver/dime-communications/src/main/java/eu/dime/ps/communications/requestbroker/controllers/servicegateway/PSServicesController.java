@@ -270,8 +270,8 @@ public class PSServicesController {
 
 		final Tenant tenant = TenantHelper.getCurrentTenant();
 		
-		String saidNameSender = jsonNotification.getSaidSender();
-		String objectSharedType = ResourceAttributes.ATTR_RESOURCE;
+		final String saidNameSender = jsonNotification.getSaidSender();
+		String objectSharedType = null;
 		Class returnType = null;
 		String path = null;
 
@@ -282,8 +282,8 @@ public class PSServicesController {
 
 		final DimeServiceAdapter adapter = serviceGateway.getDimeServiceAdapter(saidNameSender);
 
-		Entry entry = jsonNotification.getElement();
-		String entryType = entry.getType();
+		final Entry entry = jsonNotification.getElement();
+		final String entryType = entry.getType();
 
 		if (DimeInternalNotification.ITEM_TYPE_RESOURCE.equals(entryType)) {
 			objectSharedType = ResourceAttributes.ATTR_RESOURCE;
@@ -296,7 +296,7 @@ public class PSServicesController {
 			returnType = LivePost.class;
 		} else if (DimeInternalNotification.ITEM_TYPE_PROFILE.equals(entryType)) {
 			objectSharedType = ResourceAttributes.ATTR_PROFILE;
-			returnType = ProfileCard.class;
+			returnType = PersonContact.class;
 		}
 
 		if (objectSharedType == null) {

@@ -35,8 +35,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import eu.dime.commons.notifications.DimeExternalNotification;
+import eu.dime.jfix.util.Arrays;
 import eu.dime.ps.controllers.notifier.NotifierManager;
 import eu.dime.ps.controllers.notifier.exception.NotifierException;
+import eu.dime.ps.controllers.util.TenantHelper;
+import eu.dime.ps.dto.ShareableType;
 import eu.dime.ps.gateway.ServiceGateway;
 import eu.dime.ps.gateway.exception.AttributeNotSupportedException;
 import eu.dime.ps.gateway.exception.InvalidDataException;
@@ -63,9 +66,6 @@ import eu.dime.ps.semantic.privacy.PrivacyPreferenceType;
 import eu.dime.ps.semantic.query.Query;
 import eu.dime.ps.semantic.rdf.ResourceStore;
 import eu.dime.ps.semantic.service.impl.PimoService;
-import eu.dime.ps.dto.Type;
-import eu.dime.jfix.util.Arrays;
-import eu.dime.ps.controllers.util.TenantHelper;
 import eu.dime.ps.storage.entities.Tenant;
 
 /**
@@ -310,7 +310,7 @@ public class SharingNotifier implements BroadcastReceiver {
 		PimoService pimoService = connection.getPimoService();
 		PrivacyPreferenceService ppoService = connection.getPrivacyPreferenceService();
 
-		Type itemType = Type.get(preference);
+		ShareableType itemType = ShareableType.get(preference);
 		if (itemType == null) {
 			logger.error("Cannot determine item type for privacy preference " + preference);
 			return;

@@ -28,7 +28,6 @@ import org.slf4j.LoggerFactory;
 
 import eu.dime.commons.notifications.DimeInternalNotification;
 import eu.dime.commons.notifications.system.SystemNotification;
-import eu.dime.ps.controllers.evaluationtool.EvaluationManager;
 import eu.dime.ps.controllers.notifier.NotifierManager;
 import eu.dime.ps.controllers.notifier.exception.NotifierException;
 import eu.dime.ps.dto.ProfileAttributeType;
@@ -47,8 +46,6 @@ public class CRUDNotifier implements BroadcastReceiver {
 	private static final Logger logger = LoggerFactory.getLogger(CRUDNotifier.class);
 
 	private NotifierManager notifierManager;
-	
-	private EvaluationManager evaluationManager;
 	
 	private static final String[] ACTIONS = new String[] {
 		Event.ACTION_RESOURCE_ADD,
@@ -74,42 +71,40 @@ public class CRUDNotifier implements BroadcastReceiver {
 	
 	@Override
 	public void onReceive(Event event) {
-		String action = event.getAction();
+		final String action = event.getAction();
 
 		// only interested in create/update/delete actions
 		if (!ArrayUtils.contains(ACTIONS, action)) {
 			return;
 		}
 		
-		String itemId = event.getIdentifier().toString();
-		Resource resource = event.getData();
+		final String itemId = event.getIdentifier().toString();
+		final Resource resource = event.getData();
 		
 		if (NOTIFY_ACTIONS.containsKey(action)) {
 			if (resource == null) {
 				logger.debug("Impossible to find type of resource (no metadata provided in the event), no notification will be sent [item="+itemId+", action="+action+"]");
 			} else {				
-				Type itemType = Type.get(resource); //if Type is not found maybe it is a profile attribute TODO find a better way of handling this
-				ProfileAttributeType itemTypeProfileAttribute = ProfileAttributeType.get(resource);
-				if (itemType == null && itemTypeProfileAttribute ==null) {						
+				final Type itemType = Type.get(resource); //if Type is not found maybe it is a profile attribute TODO find a better way of handling this
+				final ProfileAttributeType itemTypeProfileAttribute = ProfileAttributeType.get(resource);
+				
+				if (itemType == null && itemTypeProfileAttribute == null) {						
 					logger.debug("Type is undefined, no notification will be sent [item="+resource+", action="+action+"]");
 					return;
-					}				
+				}				
 				
-				String type = (itemTypeProfileAttribute == null)? itemType.toString():"profileattribute";
+				final String type = (itemTypeProfileAttribute == null) ? itemType.toString() : "profileattribute";
 				String creatorId = null;
 				Node creator = ModelUtils.findObject(resource.getModel(), resource, NAO.creator);
 				if (creator != null) {
 					creatorId = creator.toString();
 				}
 				
-				Long tenant = Long.parseLong(event.getTenant());
-				String operation = NOTIFY_ACTIONS.get(action);
-				
-				//selfevaulation tool
-				
+				final Long tenant = Long.parseLong(event.getTenant());
+				final String operation = NOTIFY_ACTIONS.get(action);
 				
 				// sends internal notifications (to UI)
-				SystemNotification notification = new SystemNotification(tenant, operation, itemId, type, creatorId);
+				final SystemNotification notification = new SystemNotification(tenant, operation, itemId, type, creatorId);
 				try {
 					logger.debug("Pushing internal notification: "+notification.toString());
 					notifierManager.pushInternalNotification(notification);
