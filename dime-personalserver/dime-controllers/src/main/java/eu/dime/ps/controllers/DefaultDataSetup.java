@@ -74,37 +74,45 @@ import eu.dime.ps.semantic.privacy.PrivacyPreferenceType;
  */
 public class DefaultDataSetup implements BroadcastReceiver {
 	
+	private static final Logger logger = LoggerFactory.getLogger(DefaultDataSetup.class);
+
 	public static final String DEFAULT_PUBLIC_PROFILE_CARD_NAME = "MyPublicCard";
-    protected static final String TEST_USER_1_SAID = "ee1ddbd7-dbfa-467d-a562-374970b9c0bc@team.dime.wiwi.uni-siegen.de:8443";
-    protected static final String TEST_USER_2_SAID = "2c391026-e070-4f93-8fca-975c10c92b1c@team.dime.wiwi.uni-siegen.de:8443";
-    protected static final String TEST_USER_3_SAID = "900dc982-74ae-47b4-b5c6-eb319a3bed23@team.dime.wiwi.uni-siegen.de:8443";
+	
+	private static final String TEST_USER_1_ID = "todo";
+	private static final String TEST_USER_2_ID = "todo";
+	private static final String TEST_USER_3_ID = "todo";
 	
 	private static final Map<String, String[]> CONTACTS = new HashMap<String, String[]>();
 	static {
-
-	  CONTACTS.put("034304cf-a10c-4af9-9087-8944d2a22e3f@team.dime.wiwi.uni-siegen.de:8443", new String[] { "Christian Knecht", "christian.knecht@iao.fraunhofer.de", "Chris"});
-	  CONTACTS.put("a9257590-fd68-4524-a6e6-7df9505e8544@team.dime.wiwi.uni-siegen.de:8443", new String[] { "Cristina Fra", "cristina.fra@telecomitalia.it", "cristina"});
-	  CONTACTS.put("649aafc2-114d-4a4b-8c4e-0abd6db7acf8@team.dime.wiwi.uni-siegen.de:8443", new String[] { "Fabian Hermann", "fabian.hermann@iao.fraunhofer.de", "FHermann"});
-	  CONTACTS.put("b42a8406-9522-424c-86a8-b24784c653d2@team.dime.wiwi.uni-siegen.de:8443", new String[] { "Ismael Rivera", "ismael.rivera@email.com", "ismriv"});
-	  CONTACTS.put("3d0bc719-a110-4313-b06a-161bd4668415@team.dime.wiwi.uni-siegen.de:8443", new String[] { "Marc Planaguma", "marc.planaguma@email.com", "marc"});
-	  CONTACTS.put("05e90662-92da-4ce8-aa1e-a975577eb229@team.dime.wiwi.uni-siegen.de:8443", new String[] { "Marcel Heupel", "heupel@wiwi.uni-siegen.de", "mhpl"});
-	  CONTACTS.put("734b52c0-56b0-476e-8cab-0b7e37086ad3@team.dime.wiwi.uni-siegen.de:8443", new String[] { "Massimo Valla", "massi.tilab@gmail.com", "massitilab"});
-	  CONTACTS.put("b1ec076d-d2e3-45bf-a103-912643027101@team.dime.wiwi.uni-siegen.de:8443", new String[] { "Rafael Gimenez", "rgimenez@bdigital.org", "rgimenez"});
-	  CONTACTS.put("f3a83180-da9c-42d3-8e12-a2cec74157e6@team.dime.wiwi.uni-siegen.de:8443", new String[] { "Simon Scerri", "simon.scerri@deri.org", "irrecs"});
-	  CONTACTS.put("c98c399b-dac2-4574-839a-bc962a33c724@team.dime.wiwi.uni-siegen.de:8443", new String[] { "Simon Thiel", "simon.thiel@iao.fraunhofer.de", "Simon"});
-	  CONTACTS.put("7fd890b0-9a6e-48df-ba5c-030620c3e516@team.dime.wiwi.uni-siegen.de:8443", new String[] { "Sophie Wrobel", "sophie.wrobel@cas.de", "webmage"});
-	  CONTACTS.put("e74a6c3c-f2be-4da5-aea3-3e248d7c9345@team.dime.wiwi.uni-siegen.de:8443", new String[] { "Richard Wacker", "richard.wacker@yellowmap.de", "riwa"});
-	  CONTACTS.put("962f390e-7b8e-4d58-b534-8b54ed2ba4c9@team.dime.wiwi.uni-siegen.de:8443", new String[] { "Borja Gorriz", "bgorriz@bdigital.org", "bgorriz"});
-	  CONTACTS.put("65daf588-9821-486a-9f45-279787104604@team.dime.wiwi.uni-siegen.de:8443", new String[] { "Javier Vendrell", "jvendrell@ametic.es", "jvendrell"});
-	  CONTACTS.put("052c37e6-d4a0-4915-8189-73a9ecfc0380@team.dime.wiwi.uni-siegen.de:8443", new String[] { "David Alonso", "dalonso@ametic.es", "dalonso"});
+	  CONTACTS.put("todo", new String[] { "Christian Knecht", "christian.knecht@iao.fraunhofer.de", "Chris" });
+	  CONTACTS.put("todo", new String[] { "Cristina Fra", "cristina.fra@telecomitalia.it", "cristina" });
+	  CONTACTS.put("todo", new String[] { "Fabian Hermann", "fabian.hermann@iao.fraunhofer.de", "FHermann" });
+	  CONTACTS.put("todo", new String[] { "Ismael Rivera", "ismael.rivera@email.com", "ismriv" });
+	  CONTACTS.put("todo", new String[] { "Marc Planaguma", "marc.planaguma@email.com", "marc" });
+	  CONTACTS.put("todo", new String[] { "Marcel Heupel", "heupel@wiwi.uni-siegen.de", "mhpl" });
+	  CONTACTS.put("todo", new String[] { "Massimo Valla", "massi.tilab@gmail.com", "massitilab" });
+	  CONTACTS.put("todo", new String[] { "Rafael Gimenez", "rgimenez@bdigital.org", "rgimenez" });
+	  CONTACTS.put("todo", new String[] { "Simon Scerri", "simon.scerri@deri.org", "irrecs" });
+	  CONTACTS.put("todo", new String[] { "Simon Thiel", "simon.thiel@iao.fraunhofer.de", "Simon" });
+	  CONTACTS.put("todo", new String[] { "Sophie Wrobel", "sophie.wrobel@cas.de", "webmage" });
+	  CONTACTS.put("todo", new String[] { "Richard Wacker", "richard.wacker@yellowmap.de", "riwa" });
+	  CONTACTS.put("todo", new String[] { "Borja Gorriz", "bgorriz@bdigital.org", "bgorriz" });
+	  CONTACTS.put("todo", new String[] { "Javier Vendrell", "jvendrell@ametic.es", "jvendrell" });
+	  CONTACTS.put("todo", new String[] { "David Alonso", "dalonso@ametic.es", "dalonso" });
 	  //new contacts - testusers
-	  CONTACTS.put(TEST_USER_1_SAID, new String[] { "Test User1", "test.user1@email.com", "testuser1"});
-	  CONTACTS.put(TEST_USER_2_SAID, new String[] { "Test User2", "test.user2@email.com", "testuser2"});
-	  CONTACTS.put(TEST_USER_3_SAID, new String[] { "Test User3", "test.user3@email.com", "testuser3"});
-
+	  CONTACTS.put(TEST_USER_1_ID, new String[] { "Test User1", "test.user1@email.com", "testuser1" });
+	  CONTACTS.put(TEST_USER_2_ID, new String[] { "Test User2", "test.user2@email.com", "testuser2" });
+	  CONTACTS.put(TEST_USER_3_ID, new String[] { "Test User3", "test.user3@email.com", "testuser3" });
 	}
-	private static final Logger logger = LoggerFactory.getLogger(DefaultDataSetup.class);
-
+	
+	private static final URI FILE_FLYER = new URIImpl("urn:uuid:19b74400-1166-4eed-9eb0-f6b8a958c43d");
+	private static final URI FILE_LOGO = new URIImpl("urn:uuid:6025e593-387b-422e-8af3-cb96923a08ba");
+	private static final URI FILE_WELCOME = new URIImpl("urn:uuid:89935e86-2d49-4400-8cf4-3d49eae41422");
+	private static final URI FILE_PHOTO = new URIImpl("urn:uuid:b0bdeed3-4a78-4886-9a33-7063f7e6f225");
+	private static final URI DATABOX_DIME = new URIImpl("urn:uuid:a145f3db-bafd-4bf7-95d8-3d18619d1463");
+	private static final URI DATABOX_FRIENDS = new URIImpl("urn:uuid:b6485de8-1aca-46e4-b71c-6d80402b51e3");
+	private static final URI LIVEPOST_WELCOME = new URIImpl("urn:uuid:613627f7-605c-48be-ac84-4ab8974b87ee");
+	
 	private final ModelFactory modelFactory = new ModelFactory();
 
 	private AccountManager accountManager;
@@ -253,15 +261,15 @@ public class DefaultDataSetup implements BroadcastReceiver {
 				if (account.hasCreator()) {
 					Person person = personManager.get(account.getCreator().toString());
 					
-					if (said.equals(TEST_USER_1_SAID)) { // testuser1 said
+					if (said.equals(TEST_USER_1_ID)) {
 						person.setTrustLevel(0.5); 
 						personManager.update(person);
 						testuser1 = person;
-					} else if (said.equals(TEST_USER_2_SAID)) { // testuser2 said
+					} else if (said.equals(TEST_USER_2_ID)) {
 						person.setTrustLevel(0.0);
 						personManager.update(person);
 						testuser2 = person;
-					} else if (said.equals(TEST_USER_3_SAID)) { // testuser3 said
+					} else if (said.equals(TEST_USER_3_ID)) {
 						person.setTrustLevel(1.0);
 						personManager.update(person);
 						testuser3 = person;
@@ -286,9 +294,12 @@ public class DefaultDataSetup implements BroadcastReceiver {
 
 		// creating pre-defined profile cards
 		PrivacyPreference publicCard = null, anonymousCard = null, businessCard = null, privateCard = null;
+		Account publicAccount = null;
 		Resource[] attributes = null;
 		try {
 			publicCard = profileCardManager.getByLabel(DEFAULT_PUBLIC_PROFILE_CARD_NAME);
+			AccessSpace accessSpace = publicCard.getAllAccessSpace().next();
+			publicAccount = accessSpace.getSharedThrough();
 
 			attributes = publicCard.getAllAppliesToResource_as().asArray();
 			
@@ -317,26 +328,26 @@ public class DefaultDataSetup implements BroadcastReceiver {
 		}
 
 		// creating welcome livepost
-		AccessSpace accessSpace = publicCard.getAllAccessSpace().next();
-		Account publicAccount = null, testuser3Account = null;
-		try {
-			publicAccount = accessSpace.getSharedThrough();
-			testuser3Account = accountManager.getAllByCreator(testuser3).iterator().next();
-			
-			String text = "Welcome to the di.me Test Trial 2013! Please try out the prototype and give us feedback! Visit the trial page: http://dimetrials.bdigital.org:8080/dime or our project page: http://www.di.me-project.eu";
-			createLivePost(text, testuser3, testuser3Account.asURI(), publicAccount.asURI());
-		} catch (Exception e) {
-			logger.error("An error ocurred when creating the pre-defined liveposts.", e);
+		Account testuser3Account = null;
+		if (testuser3 != null) {
+			try {
+				testuser3Account = accountManager.getAllByCreator(testuser3).iterator().next();
+				
+				String text = "Welcome to the di.me Test Trial 2013! Please try out the prototype and give us feedback! Visit the trial page: http://trial.dime-project.eu or our project page: http://www.dime-project.eu";
+				createLivePost(LIVEPOST_WELCOME, text, testuser3, testuser3Account.asURI(), publicAccount.asURI());
+			} catch (Exception e) {
+				logger.error("An error ocurred when creating the pre-defined liveposts.", e);
+			}
 		}
 		
 		// creating pre-defined files
-		FileDataObject flyer = createFile("digital.me_project_flyer.pdf", DefaultDataSetup.class.getClassLoader().getResourceAsStream("default/digital.me_project_flyer.pdf"), 0.5, me);
-		FileDataObject logo = createFile("digital.me_logo.jpg", DefaultDataSetup.class.getClassLoader().getResourceAsStream("default/digital.me_logo.jpg"), 0, me);
-		FileDataObject trial = createFile("welcome_to_di.me_test.txt", DefaultDataSetup.class.getClassLoader().getResourceAsStream("default/welcome_to_di.me_test.txt"), 0, me);
-		FileDataObject photo = createFile("hiking.jpg", DefaultDataSetup.class.getClassLoader().getResourceAsStream("default/hiking.jpg"), 1, me);
+		FileDataObject flyer = createFile(FILE_FLYER, "digital.me_project_flyer.pdf", DefaultDataSetup.class.getClassLoader().getResourceAsStream("default/digital.me_project_flyer.pdf"), 0.5, me);
+		FileDataObject logo = createFile(FILE_LOGO, "digital.me_logo.jpg", DefaultDataSetup.class.getClassLoader().getResourceAsStream("default/digital.me_logo.jpg"), 0, me);
+		FileDataObject trial = createFile(FILE_WELCOME, "welcome_to_di.me_test.txt", DefaultDataSetup.class.getClassLoader().getResourceAsStream("default/welcome_to_di.me_test.txt"), 0, me);
+		FileDataObject photo = createFile(FILE_PHOTO, "hiking.jpg", DefaultDataSetup.class.getClassLoader().getResourceAsStream("default/hiking.jpg"), 1, me);
 
-		DataContainer databoxDime = createDatabox("di.me info", flyer, logo, trial);
-		DataContainer databoxFriends = createDatabox("FriendsBox", photo);
+		DataContainer databoxDime = createDatabox(DATABOX_DIME, "di.me info", flyer, logo, trial);
+		DataContainer databoxFriends = createDatabox(DATABOX_FRIENDS, "FriendsBox", photo);
 		shareDatabox(databoxDime, publicAccount, testuser1);
 
 		// creating pre-defined situations
@@ -367,7 +378,9 @@ public class DefaultDataSetup implements BroadcastReceiver {
 		PersonGroup group = modelFactory.getPIMOFactory().createPersonGroup();
 		group.setPrefLabel(label);
 		for (Person member : members) {
-			group.getModel().addStatement(group, PIMO.hasMember, member);
+			if (member != null) {
+				group.getModel().addStatement(group, PIMO.hasMember, member);
+			}
 		}
 		
 		try {
@@ -379,8 +392,12 @@ public class DefaultDataSetup implements BroadcastReceiver {
 		return group;
 	}
 
-	private LivePost createLivePost(String text, Person creator, URI sharedBy, URI sharedWith) {
-		LivePost livePost = modelFactory.getDLPOFactory().createLivePost();
+	private LivePost createLivePost(URI uri, String text, Person creator, URI sharedBy, URI sharedWith) {
+		if (creator == null || sharedBy == null || sharedWith == null) {
+			return null;
+		}
+		
+		LivePost livePost = modelFactory.getDLPOFactory().createLivePost(uri);
 		livePost.setTextualContent(text);
 		livePost.setCreator(creator);
 		livePost.getModel().addStatement(livePost, NIE.dataSource, sharedBy);
@@ -443,9 +460,9 @@ public class DefaultDataSetup implements BroadcastReceiver {
 		return profileCard;
 	}
 
-	private DataContainer createDatabox(String label, FileDataObject... files) {
+	private DataContainer createDatabox(URI uri, String label, FileDataObject... files) {
 		// create the databox
-		DataContainer databox = modelFactory.getNFOFactory().createDataContainer();
+		DataContainer databox = modelFactory.getNFOFactory().createDataContainer(uri);
 		databox.setPrefLabel(label);
 		
 		// add files to databox
@@ -469,7 +486,9 @@ public class DefaultDataSetup implements BroadcastReceiver {
 		
 		// include agents in access space
 		for (Resource agent : agents) {
-			accessSpace.getModel().addStatement(accessSpace, NSO.includes, agent);
+			if (agent != null) {
+				accessSpace.getModel().addStatement(accessSpace, NSO.includes, agent);
+			}
 		}
 		
 		try {
@@ -503,7 +522,9 @@ public class DefaultDataSetup implements BroadcastReceiver {
 		
 		// include agents in access space
 		for (Resource agent : agents) {
-			accessSpace.getModel().addStatement(accessSpace, NSO.includes, agent);
+			if (agent != null) {
+				accessSpace.getModel().addStatement(accessSpace, NSO.includes, agent);
+			}
 		}
 
 		// add access space metadata to databox
@@ -517,8 +538,8 @@ public class DefaultDataSetup implements BroadcastReceiver {
 		}
 	}
 
-	private FileDataObject createFile(String fileName, InputStream inputStream, double privacyLevel, Person creator) {
-		FileDataObject file = modelFactory.getNFOFactory().createFileDataObject();
+	private FileDataObject createFile(URI uri, String fileName, InputStream inputStream, double privacyLevel, Person creator) {
+		FileDataObject file = modelFactory.getNFOFactory().createFileDataObject(uri);
 		file.setFileName(fileName);
 		file.setPrivacyLevel(privacyLevel);
 		file.setCreator(creator);
