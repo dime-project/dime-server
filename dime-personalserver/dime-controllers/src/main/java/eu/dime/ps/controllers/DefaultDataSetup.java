@@ -78,31 +78,32 @@ public class DefaultDataSetup implements BroadcastReceiver {
 
 	public static final String DEFAULT_PUBLIC_PROFILE_CARD_NAME = "MyPublicCard";
 	
-	private static final String TEST_USER_1_ID = "todo";
-	private static final String TEST_USER_2_ID = "todo";
-	private static final String TEST_USER_3_ID = "todo";
+	private static final String TEST_USER_1_ID = "c17d653e-43cb-45bf-a1c3-7f3304762ece@team.dime.wiwi.uni-siegen.de:8443";
+	private static final String TEST_USER_2_ID = "5f88f366-c537-4ca4-9af1-56db84f3adb3@team.dime.wiwi.uni-siegen.de:8443";
+	private static final String TEST_USER_3_ID = "fe068bf0-ed0e-4611-89da-3a4f40ace745@team.dime.wiwi.uni-siegen.de:8443";
 	
 	private static final Map<String, String[]> CONTACTS = new HashMap<String, String[]>();
-	static {
-	  CONTACTS.put("todo", new String[] { "Christian Knecht", "christian.knecht@iao.fraunhofer.de", "Chris" });
-	  CONTACTS.put("todo", new String[] { "Cristina Fra", "cristina.fra@telecomitalia.it", "cristina" });
-	  CONTACTS.put("todo", new String[] { "Fabian Hermann", "fabian.hermann@iao.fraunhofer.de", "FHermann" });
-	  CONTACTS.put("todo", new String[] { "Ismael Rivera", "ismael.rivera@email.com", "ismriv" });
-	  CONTACTS.put("todo", new String[] { "Marc Planaguma", "marc.planaguma@email.com", "marc" });
-	  CONTACTS.put("todo", new String[] { "Marcel Heupel", "heupel@wiwi.uni-siegen.de", "mhpl" });
-	  CONTACTS.put("todo", new String[] { "Massimo Valla", "massi.tilab@gmail.com", "massitilab" });
-	  CONTACTS.put("todo", new String[] { "Rafael Gimenez", "rgimenez@bdigital.org", "rgimenez" });
-	  CONTACTS.put("todo", new String[] { "Simon Scerri", "simon.scerri@deri.org", "irrecs" });
-	  CONTACTS.put("todo", new String[] { "Simon Thiel", "simon.thiel@iao.fraunhofer.de", "Simon" });
-	  CONTACTS.put("todo", new String[] { "Sophie Wrobel", "sophie.wrobel@cas.de", "webmage" });
-	  CONTACTS.put("todo", new String[] { "Richard Wacker", "richard.wacker@yellowmap.de", "riwa" });
-	  CONTACTS.put("todo", new String[] { "Borja Gorriz", "bgorriz@bdigital.org", "bgorriz" });
-	  CONTACTS.put("todo", new String[] { "Javier Vendrell", "jvendrell@ametic.es", "jvendrell" });
-	  CONTACTS.put("todo", new String[] { "David Alonso", "dalonso@ametic.es", "dalonso" });
+	static {	  
+	  CONTACTS.put("eea9c9ac-514b-4854-ad9e-1906cb8ccc33@team.dime.wiwi.uni-siegen.de:8443", new String[] { "Christian Knecht", "christian.knecht@iao.fraunhofer.de", "Chris"});
+	  CONTACTS.put("8d745f1e-4e7f-43c8-b85c-904514393779@team.dime.wiwi.uni-siegen.de:8443", new String[] { "Cristina Fra", "cristina.fra@telecomitalia.it", "cristina"});
+	  CONTACTS.put("12a18c1e-eaef-45a8-8ec0-a51f4f4c4b7f@team.dime.wiwi.uni-siegen.de:8443", new String[] { "Fabian Hermann", "fabian.hermann@iao.fraunhofer.de", "FHermann"});
+	  CONTACTS.put("078f9fda-7c0b-41d4-98a3-b5c0f7f5f8c2@team.dime.wiwi.uni-siegen.de:8443", new String[] { "Ismael Rivera", "ismael.rivera@email.com", "ismriv"});
+	  CONTACTS.put("f139d98d-1fb8-4b7b-8e1a-50d3e5050bb8@team.dime.wiwi.uni-siegen.de:8443", new String[] { "Marc Planaguma", "marc.planaguma@email.com", "marc"});
+	  CONTACTS.put("dad4c707-fd9e-4b8d-bf49-b8100a75fe84@team.dime.wiwi.uni-siegen.de:8443", new String[] { "Marcel Heupel", "heupel@wiwi.uni-siegen.de", "mhpl"});
+	  CONTACTS.put("c8029310-7089-40f2-a7ab-e113d705240c@team.dime.wiwi.uni-siegen.de:8443", new String[] { "Massimo Valla", "massi.tilab@gmail.com", "massitilab"});
+	  CONTACTS.put("3afbad0c-5e49-40f2-b2a4-587babd5dda3@team.dime.wiwi.uni-siegen.de:8443", new String[] { "Rafael Gimenez", "rgimenez@bdigital.org", "rgimenez"});
+	  CONTACTS.put("e73b3dce-9309-42c3-a1d6-e20617cd6a55@team.dime.wiwi.uni-siegen.de:8443", new String[] { "Simon Scerri", "simon.scerri@deri.org", "irrecs"});
+	  CONTACTS.put("e73b3dce-9309-42c3-a1d6-e20617cd6a55@team.dime.wiwi.uni-siegen.de:8443", new String[] { "Simon Thiel", "simon.thiel@iao.fraunhofer.de", "Simon"});
+	  CONTACTS.put("6f243a9e-e214-435c-8fda-926bf853dcd9@team.dime.wiwi.uni-siegen.de:8443", new String[] { "Simon Thiel", "simon.thiel@iao.fraunhofer.de", "Simon"});
+	  CONTACTS.put("e3004fb5-8bb1-425f-b98e-59e22175e5de@team.dime.wiwi.uni-siegen.de:8443", new String[] { "Sophie Wrobel", "sophie.wrobel@cas.de", "webmage"});
+	  CONTACTS.put("d11a5986-c5ac-4959-98d8-5733bb22dcf8@team.dime.wiwi.uni-siegen.de:8443", new String[] { "Richard Wacker", "richard.wacker@yellowmap.de", "riwa"});
+	  CONTACTS.put("c42422fe-f9da-4290-97e6-19a120fabdc6@team.dime.wiwi.uni-siegen.de:8443", new String[] { "Borja Gorriz", "bgorriz@bdigital.org", "bgorriz"});
+	  CONTACTS.put("69f88843-ae7d-4eb9-9629-aecc23c41dc7@team.dime.wiwi.uni-siegen.de:8443", new String[] { "Javier Vendrell", "jvendrell@ametic.es", "jvendrell"});
+	  CONTACTS.put("c41370d1-0aba-4566-8542-cd84516c7553@team.dime.wiwi.uni-siegen.de:8443", new String[] { "David Alonso", "dalonso@ametic.es", "dalonso"});
 	  //new contacts - testusers
-	  CONTACTS.put(TEST_USER_1_ID, new String[] { "Test User1", "test.user1@email.com", "testuser1" });
-	  CONTACTS.put(TEST_USER_2_ID, new String[] { "Test User2", "test.user2@email.com", "testuser2" });
-	  CONTACTS.put(TEST_USER_3_ID, new String[] { "Test User3", "test.user3@email.com", "testuser3" });
+	  CONTACTS.put("c17d653e-43cb-45bf-a1c3-7f3304762ece@team.dime.wiwi.uni-siegen.de:8443", new String[] { "Test User1", "test.user1@email.com", "testuser1"});
+	  CONTACTS.put("5f88f366-c537-4ca4-9af1-56db84f3adb3@team.dime.wiwi.uni-siegen.de:8443", new String[] { "Test User2", "test.user2@email.com", "testuser2"});
+	  CONTACTS.put("fe068bf0-ed0e-4611-89da-3a4f40ace745@team.dime.wiwi.uni-siegen.de:8443", new String[] { "Test User3", "test.user3@email.com", "testuser3"});
 	}
 	
 	private static final URI FILE_FLYER = new URIImpl("urn:uuid:19b74400-1166-4eed-9eb0-f6b8a958c43d");
