@@ -3098,6 +3098,7 @@ input[type="text"].DimeDetailDialogPAValueListItemValue{
     min-height: 20px;
     border: 1px solid silver;
     border-radius: 5px;
+    padding: 7px 0px 7px 0px;
     max-height: 80px;
     overflow: auto;
 }

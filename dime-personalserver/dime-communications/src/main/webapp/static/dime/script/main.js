@@ -4604,7 +4604,7 @@ Dime.DetailDialog.prototype = {
     addToLivepostReceiverList: function(items){        
         var dialogRef = this;
         jQuery.each(items, function(){
-            dialogRef.receiverList.append(Dime.Dialog.Helper.getAgentElement(this));
+            dialogRef.receiverList.prepend(Dime.Dialog.Helper.getAgentElement(this));
         });
         
     },
@@ -4707,9 +4707,8 @@ Dime.DetailDialog.prototype = {
             }
         };
 
-        this.receiverList= $('<div/>').addClass('livePostReceiverList').click(addRemoveClick);
-
-        var receiverButton = $('<button/>').text("Add/Remove").click(addRemoveClick);
+        var receiverButton = $('<div/>').addClass("changeDetailsHintshareDialog").text("click to change recipients");
+        this.receiverList= $('<div/>').addClass('livePostReceiverList').click(addRemoveClick).append(receiverButton);
 
         //only on new items
         if (this.createNewItem){
@@ -4722,7 +4721,7 @@ Dime.DetailDialog.prototype = {
                 .append($('<div/>').addClass('livePostReceiver')
                     .append($('<span/>').addClass('livePostReceiverCaption').text("Recipient(s)"))
                     .append(this.receiverList)
-                    .append(receiverButton)
+                    //.append(receiverButton)
                 );
         }
         this.body
