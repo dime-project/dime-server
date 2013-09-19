@@ -543,7 +543,7 @@ DimeView = {
         },
         {
             id: "actionButtonAddRemove",
-            minItems: 1,
+            minItems: -1,
             maxItems: 0
         },
         {
@@ -1270,7 +1270,7 @@ DimeView = {
 
         } else if(groupType===Dime.psMap.TYPE.PLACE){
             $('#actionButtonNew').addClass('disabled');
-        } 
+        }
 
     },
 
@@ -1321,19 +1321,22 @@ DimeView = {
 
     },
             
-    updateAddRemoveButton: function(groupType){
+    updateAddRemoveButton: function(groupType, viewType){
         var addRmvBtn = $('#actionButtonAddRemove');
+        
+        //set button to default
+        addRmvBtn.empty().unbind("click").addClass("disabled");
         
         if(groupType===Dime.psMap.TYPE.PLACE){
             addRmvBtn
                     .empty()
-                    .text("Get location...")
+                    .text("Get location ...")
                     .removeClass("disabled")
                     .click(function(){
                         if (navigator.geolocation) {
                             //getCurrentPosition() fires once - watchPosition() fires continuosly
                             //maybe: https://github.com/estebanav/javascript-mobile-desktop-geolocation
-                            //maybe (enableHighAccuracy): http://dev.w3.org/geo/api/spec-source.html#get-current-position 
+                            //maybe: http://dev.w3.org/geo/api/spec-source.html#get-current-position (enableHighAccuracy)
                             navigator.geolocation.getCurrentPosition(function(position) {                       
                                 var lat = position.coords.latitude;
                                 var lon = position.coords.longitude;
@@ -1347,9 +1350,22 @@ DimeView = {
                         
                         DimeView.updateView("place", DimeView.GROUP_CONTAINER_VIEW, true);
                     });
-        }else{
-            //remove the click event
-            addRmvBtn.empty().unbind("click");
+        }
+        
+        if(viewType===DimeView.PERSON_VIEW){
+            addRmvBtn
+                .empty()
+                .text("Send Livepost ...")
+                .removeClass("disabled")
+                .click(function(){
+                    //Dime.evaluation.createAndSendEvaluationItemForAction("action_sendLivepostFromPersonView");
+                    var selectedPerson = JSTool.getDefinedMembers(DimeView.selectedItems);
+
+                    var triggerDialog=function(response){
+                        Dime.Dialog.showLivepostWithSelection(response);
+                    };
+                    Dime.psHelper.getMixedItems(selectedPerson, triggerDialog, this);
+                });
         }
     },
 
@@ -1367,7 +1383,7 @@ DimeView = {
     SETTINGS_VIEW: 2,
     PERSON_VIEW: 3,
 
-    currentView:0,
+    currentView: 0,
 
     viewMapEntry: function(id, groupActive, settingsActive, personViewActive){
         this.id = id;
@@ -1381,6 +1397,7 @@ DimeView = {
     addToViewMap: function(viewMapEntry){
         DimeView.viewMap[viewMapEntry.id]=viewMapEntry;
     },
+    
     /**
      *
      *
@@ -1412,7 +1429,6 @@ DimeView = {
             Dime.Navigation.setButtonsActive("navButtonSettings");
             Dime.Settings.updateView();
             return;
-
         }
 
         if (!groupType){
@@ -1425,8 +1441,6 @@ DimeView = {
         DimeView.groupType = groupType;        
         DimeView.itemType =  Dime.psHelper.getChildType(DimeView.groupType);
 
-        
-        
         //update navigation button shown
         if (DimeView.groupType===Dime.psMap.TYPE.DATABOX){
             Dime.Navigation.setButtonsActive("navButtonData");
@@ -1445,7 +1459,7 @@ DimeView = {
             Dime.Navigation.setButtonsActive("navButtonEvent");
             $('#searchText').attr('placeholder', 'find events');
             //added alert for not supported calendar
-            $("#alertStatusNavigation").removeClass("hidden").text("Ooops! The calendar is not yet supported in the research prototype, sorry.");
+            $("#alertStatusNavigation").removeClass("hidden").text("The calendar is not yet supported in the research prototype, sorry.");
         }else if (DimeView.groupType===Dime.psMap.TYPE.USERNOTIFICATION){
             Dime.Navigation.setButtonsActive("notificationIcon");
             $('#searchText').attr('placeholder', 'find notifications');
@@ -1466,18 +1480,19 @@ DimeView = {
         DimeView.updateNewButton(groupType);
         DimeView.updateShareButton(groupType);
         DimeView.updateMoreButton(groupType);
+        DimeView.updateAddRemoveButton(groupType, viewType);
 
         DimeView.updateMetaBar(groupType);
-        DimeView.resetSearch();
-        
-        //placed here in order to avoid "disabled"-class
-        DimeView.updateAddRemoveButton(groupType);
+        //in order to avoid showing groups and contacts in person view
+        if(viewType!==DimeView.PERSON_VIEW){
+            DimeView.resetSearch();
+        }
     },
 
     switchViewForViewType: function(){
         var viewType=DimeView.currentView;
 
-        jQuery.each(DimeView.viewMap,function(){
+        jQuery.each(DimeView.viewMap, function(){
             //viewMapEntry: id, groupActive, settingsActive, personViewActive
             var displayMe=false;
             if (viewType===DimeView.GROUP_CONTAINER_VIEW){
@@ -1498,12 +1513,31 @@ DimeView = {
     //called from back button in index.html
     restoreGroupView:function(){
         DimeView.updateView(DimeView.groupType, DimeView.GROUP_CONTAINER_VIEW);
-        
     },
 
 
     updateViewForPerson: function(event, element, entry){
         var guid = entry.guid;
+        
+        //hide other container
+        DimeView.currentView=DimeView.PERSON_VIEW;
+        //instead of DimeView.switchViewForViewType();
+        DimeView.updateView(DimeView.groupType, DimeView.PERSON_VIEW, false);
+
+        DimeView.currentGuid=guid;
+        Dime.evaluation.updateViewStack("", DimeView.currentView);
+                
+        
+        //select the clicked person for preselection in the share-dialog
+        this.clearSelectedItems();
+        this.selectItem(event, element, entry, false);
+        
+        //check and get item
+        if (!guid || guid.length===0){
+            console.log("ERROR wrong call updateViewForPerson with guid:", guid);
+            return;
+        }
+
         
         //adding person information
         $('#currentPersonOverview')
@@ -1540,26 +1574,7 @@ DimeView = {
             .append(
                 $('<div></div>').addClass("clear")
             );
-
-        //select the clicked person for preselection in the share-dialog
-        this.clearSelectedItems();
-        this.selectItem(event, element, entry, false);
         
-        //check and get item
-        if (!guid || guid.length===0){
-            console.log("ERROR wrong call updateViewForPerson with guid:", guid);
-            return;
-        }
-        
-        //hide other container
-        DimeView.currentView=DimeView.PERSON_VIEW;
-        DimeView.switchViewForViewType();
-
-        DimeView.currentGuid=guid;
-
-        Dime.evaluation.updateViewStack("", DimeView.currentView);
-
-
         
         var updateProfileContainer=function(response){            
             DimeView.handleSearchResultForContainer(Dime.psMap.TYPE.PROFILE,
@@ -1591,12 +1606,14 @@ DimeView = {
         Dime.REST.getAll(Dime.psMap.TYPE.DATABOX, updateDataboxContainer, guid);
         Dime.REST.getAll(Dime.psMap.TYPE.RESOURCE, updateResourceContainer, guid);
         
+        /*
         var updateAllSharedItems=function(response){
             for(var i=0; i<response.length; i++){
                 //$("#test1234").append(DimeView.createItemJElement(response[i]));
             } 
         };
         Dime.psHelper.getAllSharedItems(entry, updateAllSharedItems);
+        */
         
     },
 
@@ -2272,6 +2289,7 @@ Dime.Navigation.createNotificationIcon=function(){
  */
  window.onpopstate = function(event) {
      var viewState = event.state;
+     console.log(viewState);
      if (viewState){
          DimeView.updateView(viewState.groupType, viewState.viewType, true);
      }
