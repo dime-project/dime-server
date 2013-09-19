@@ -21,8 +21,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
-import eu.dime.ps.controllers.util.TenantHelper;
+import eu.dime.ps.controllers.eventlogger.exception.EventLoggerException;
 import eu.dime.ps.storage.entities.SphereLog;
+import eu.dime.ps.storage.entities.Tenant;
 import eu.dime.ps.storage.entities.User;
 import eu.dime.ps.storage.manager.EntityFactory;
 
@@ -38,15 +39,24 @@ public class LogEventManagerImpl implements LogEventManager {
 
 	@Override
 	@Transactional
-	public void setLog(String action, String type) {
+	public void setLog(String action, String type,Tenant tenant) throws EventLoggerException {
 		logger.debug("logging server operation");
-		SphereLog sphereLog = entityFactory.buildSphereLog();    				
-		sphereLog.setAction(action);
-		sphereLog.setType(type);
-		sphereLog.setEvaluationdate(new Date(System.currentTimeMillis()));
-		sphereLog.setTenantId(User.findLocalUserByTenant(TenantHelper.getCurrentTenant()).getEvaluationId());
-		sphereLog.persist();
-		sphereLog.flush();              
+		if(tenant == null || action == null || type == null) logger.warn("operation could not be logged, there are parameters missing");
+		else{
+			try{
+				SphereLog sphereLog = entityFactory.buildSphereLog();    				
+				sphereLog.setAction(action);
+				sphereLog.setType(type);
+				sphereLog.setEvaluationdate(new Date(System.currentTimeMillis()));
+				sphereLog.setTenantId(User.findLocalUserByTenant(tenant).getEvaluationId());
+				sphereLog.persist();
+				sphereLog.flush();  
+			}
+			catch(Exception e){ 
+				throw  new EventLoggerException("operation: "+ action+" of type: "+type+" could not be logged",e);
+			}
+		}
 
-	}    
+
+	}   
 } 

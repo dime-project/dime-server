@@ -382,7 +382,7 @@ public class SharingNotifier implements BroadcastReceiver {
 					
 					//store the operation on the server logs data
 					try {
-						logEventManager.setLog("share", itemType.toString());
+						logEventManager.setLog("share", itemType.toString(),localTenant);
 					} catch (EventLoggerException e) {
 						logger.error("Share operation log could not be stored",e);
 					}

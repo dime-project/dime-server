@@ -83,7 +83,7 @@ public class LogEventManagerTest extends Assert {
 	@Transactional
 	public void test() throws EventLoggerException {		
 		
-		logEventManager.setLog("register", "user");		
+		logEventManager.setLog("register", "user",tenant);		
 		List<SphereLog> list = SphereLog.findAllSphereLogs();
 		
 		Boolean result = false;

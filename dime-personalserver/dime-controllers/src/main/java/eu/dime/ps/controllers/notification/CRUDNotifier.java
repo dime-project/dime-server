@@ -38,6 +38,7 @@ import eu.dime.ps.dto.Type;
 import eu.dime.ps.semantic.BroadcastManager;
 import eu.dime.ps.semantic.BroadcastReceiver;
 import eu.dime.ps.semantic.Event;
+import eu.dime.ps.storage.entities.Tenant;
 
 /**
  * Notifies the UI/clients of any created/updated/deleted resource from the user's data store.
@@ -120,7 +121,7 @@ public class CRUDNotifier implements BroadcastReceiver {
 				//selfevaulation tool store create and remove operations
 				if(operation.equals(DimeInternalNotification.OP_CREATE) || operation.equals(DimeInternalNotification.OP_REMOVE ))
 				 try {
-					logEventManager.setLog(operation, type);
+					logEventManager.setLog(operation, type,Tenant.find(tenant));
 				} catch (EventLoggerException e) {					
 					logger.error("A sharing process could not be logged",e);
 				}				   

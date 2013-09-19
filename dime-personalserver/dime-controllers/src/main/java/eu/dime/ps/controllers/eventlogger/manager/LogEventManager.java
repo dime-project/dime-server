@@ -18,6 +18,7 @@
 package eu.dime.ps.controllers.eventlogger.manager;
 
 import eu.dime.ps.controllers.eventlogger.exception.EventLoggerException;
+import eu.dime.ps.storage.entities.Tenant;
 
 /**
  * @author  mplanaguma (BDigital)
@@ -29,7 +30,7 @@ public interface LogEventManager {
 	 * @param type
 	 * @param message
 	 */
-	public void setLog (String action, String type) throws EventLoggerException;
+	public void setLog (String action, String type,Tenant tenant) throws EventLoggerException;
 
 
 }

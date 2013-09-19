@@ -79,7 +79,7 @@ public class PSUserController implements APIController {
 
             if (userManager.validateUserCanLogEvaluationData(user)){
                 // Logging the register in SphereLog Table
-                logEventManager.setLog(SphereLog.EVALUATIONDATA_ACTION_REGISTER, "user");
+                logEventManager.setLog(SphereLog.EVALUATIONDATA_ACTION_REGISTER, "user",user.getTenant());
             }
 
             //prepare response

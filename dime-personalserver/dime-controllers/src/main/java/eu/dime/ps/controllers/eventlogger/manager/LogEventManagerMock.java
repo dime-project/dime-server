@@ -16,11 +16,12 @@ package eu.dime.ps.controllers.eventlogger.manager;
 
 
 import eu.dime.ps.controllers.eventlogger.exception.EventLoggerException;
+import eu.dime.ps.storage.entities.Tenant;
 
 public class LogEventManagerMock implements LogEventManager {
 
 	@Override
-	public void setLog(String action, String type)
+	public void setLog(String action, String type,Tenant tenant)
 			throws EventLoggerException {
 
 	}
