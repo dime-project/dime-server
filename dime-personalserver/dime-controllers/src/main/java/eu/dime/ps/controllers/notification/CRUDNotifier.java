@@ -118,7 +118,7 @@ public class CRUDNotifier implements BroadcastReceiver {
 				final String operation = NOTIFY_ACTIONS.get(action);
 
 				//selfevaulation tool store create and remove operations
-				if(operation.equals(DimeInternalNotification.OP_CREATE) || operation.equals(DimeInternalNotification.OP_CREATE ))
+				if(operation.equals(DimeInternalNotification.OP_CREATE) || operation.equals(DimeInternalNotification.OP_REMOVE ))
 				 try {
 					logEventManager.setLog(operation, type);
 				} catch (EventLoggerException e) {					
