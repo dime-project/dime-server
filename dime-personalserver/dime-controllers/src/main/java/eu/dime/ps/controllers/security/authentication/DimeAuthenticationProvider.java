@@ -75,7 +75,7 @@ public class DimeAuthenticationProvider extends AbstractUserDetailsAuthenticatio
 		} catch (EntityNotFoundException e) {
 			throw new BadCredentialsException("Invalid username", e);
 		} catch (NoResultException e) {
-			throw new BadCredentialsException("You are looking for something does not existing!", e);
+			throw new BadCredentialsException("You are looking for something that not exists!", e);
 		} catch (NonUniqueResultException e) {
 			throw new BadCredentialsException("Non-unique user, contact the administrator = yourself!", e);
 		} catch (Exception e) {

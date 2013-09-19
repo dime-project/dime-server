@@ -23,6 +23,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import javax.persistence.NoResultException;
+
 import org.apache.commons.lang3.StringUtils;
 import org.ontoware.aifbcommons.collection.ClosableIterator;
 import org.ontoware.rdf2go.model.node.URI;
@@ -261,7 +263,9 @@ public class UserManagerImpl implements UserManager {
         if (user == null) {
         	user = User.findByUsernameAndPassword(username, password);
         }
-        
+        if (user == null){
+        	throw new NoResultException("Result null");
+        }
         return user;
     }
 
