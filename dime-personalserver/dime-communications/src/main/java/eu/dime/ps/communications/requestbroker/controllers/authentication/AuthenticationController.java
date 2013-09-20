@@ -15,6 +15,10 @@
 package eu.dime.ps.communications.requestbroker.controllers.authentication;
 
 import java.util.Collection;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -32,6 +36,7 @@ import eu.dime.commons.dto.AccountEntry;
 import eu.dime.commons.dto.Data;
 import eu.dime.commons.dto.Request;
 import eu.dime.commons.dto.Response;
+import eu.dime.commons.exception.DimeException;
 import eu.dime.ps.communications.requestbroker.controllers.infosphere.RequestValidator;
 import eu.dime.ps.controllers.UserManager;
 import eu.dime.ps.controllers.accesscontrol.AccessControlManager;
@@ -62,6 +67,8 @@ public class AuthenticationController {
     private Logger logger = LoggerFactory.getLogger(AuthenticationController.class);
     @Autowired
     private UserManager userManager;
+    
+    static final Lock lock = new ReentrantLock();
 
     public void setUserManager(UserManager userManager) {
         this.userManager = userManager;
@@ -239,37 +246,52 @@ public class AuthenticationController {
     @Path("/credentials/{contact-said}")
     public Response<AccountEntry> getCredentials(
             @PathParam("said") String saidLocal,
-            @PathParam("contact-said") String saidRequester) {
+            @PathParam("contact-said") String saidRequester) throws DimeException {
 
         Data<AccountEntry> data = new Data<AccountEntry>();
-
-        User user = userManager.getUserForAccountAndTenant(saidRequester, saidLocal);
-        if (user == null) {
-            return Response.badRequest("Useraccount was null", null);
+    	boolean unlocked;
+    	try {
+                unlocked = lock.tryLock(5L, TimeUnit.SECONDS);// only one register at a time
+        } catch (InterruptedException e) {
+                throw new DimeException("Register failed", e);
         }
+    	if (!unlocked) {
+    		logger.error("Could not aquire lock within 5 seconds. Returning without registering.");
+    		throw new DimeException("Could not register because the system is busy.");
+    	}
+        try {
+			User user = userManager.getUserForAccountAndTenant(saidRequester, saidLocal);
+			if (user == null) {
+			    return Response.badRequest("Useraccount was null", null);
+			}
 
-        // check if user belongs to tenant
-        //if (user.getTenant().getName().equals(saidLocal)) {
-        if (user.getPassword() == null || user.getPassword().equals("")) {
-            user = userManager.generatePassword((user.getId()));
-        }
+			// check if user belongs to tenant
+			//if (user.getTenant().getName().equals(saidLocal)) {
+			if (user.getPassword() == null || user.getPassword().equals("")) {
+			    user = userManager.generatePassword((user.getId()));
+			}
 //		if (!user.isEnabled()){
 //			user = userManager.generatePassword((user.getId()));
 //		}
-        if (user != null) {
-            AccountEntry jsonEntry = new AccountEntry();
-            jsonEntry.setUsername(user.getUsername());
-            jsonEntry.setPassword(user.getPassword());
-            jsonEntry.setRole(user.getRole().ordinal());
-            jsonEntry.setEnabled(user.isEnabled());
-            jsonEntry.setType("auth");
-            data.addEntry(jsonEntry);
-        } else {
-            return Response.badRequest("Useraccount was already activated!", null);
-            //	}
-        }
+			if (user != null) {
+			    AccountEntry jsonEntry = new AccountEntry();
+			    jsonEntry.setUsername(user.getUsername());
+			    jsonEntry.setPassword(user.getPassword());
+			    jsonEntry.setRole(user.getRole().ordinal());
+			    jsonEntry.setEnabled(user.isEnabled());
+			    jsonEntry.setType("auth");
+			    data.addEntry(jsonEntry);
+			} else {
+			    return Response.badRequest("Useraccount was already activated!", null);
+			    //	}
+			}
 
-        return Response.ok(data);
+			return Response.ok(data);
+		} catch (Exception e) {
+			return Response.serverError();
+		} finally {
+			lock.unlock();
+		}
     }
 
     @POST
