@@ -651,7 +651,11 @@ public class UserManagerImpl implements UserManager {
 
     @Override
     public boolean existsByUsernameAndPassword(String username, String password) {
-    	return getByUsernameAndPassword(username, password) != null;
+    	try {
+    		return getByUsernameAndPassword(username, password) != null;
+    	} catch (NoResultException e){
+    		return false;
+    	}
     }
 
     @Override

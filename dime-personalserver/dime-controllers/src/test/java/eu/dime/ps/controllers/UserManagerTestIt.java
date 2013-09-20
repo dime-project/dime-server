@@ -17,6 +17,8 @@ package eu.dime.ps.controllers;
 import java.util.Random;
 import java.util.UUID;
 
+import javax.persistence.NoResultException;
+
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -203,7 +205,7 @@ public class UserManagerTestIt extends InfoSphereManagerTest {
 
 	}
 
-	@Test
+	@Test (expected = NoResultException.class)
 	@Transactional
 	public void testGetByUsernameAndPassword() {
 		TenantContextHolder.setTenant(one.getId());
