@@ -136,16 +136,7 @@ public class YMServiceWrapper {
 		this.ymServiceURL = policyManager.getPolicyString(PLACESURL, YMSA);
 		this.myYMServiceURL = policyManager.getPolicyString(MYYMURL, YMSA);
 		this.myYMCommentsServiceURL = policyManager.getPolicyString(COMMENTSURL, YMSA);
-
-                // bug fix remove port
-                // this.port = policyManager.getPolicyInteger(PORT, YMSA);
 		this.staticParameter = policyManager.getPolicyString(STATICPARAMETERS, YMSA);
-
-		// bug fix remove port
-                // this.ymProxy = new HttpRestProxy(new URL(this.ymServiceURL + ":" + this.port),this.proxyUsername, this.proxyPassword);
-		// this.myymProxy = new HttpRestProxy(new URL(this.myYMServiceURL + ":" + this.port), this.proxyUsername, this.proxyPassword);
-		// this.myymCommentsProxy = new HttpRestProxy(new URL(this.myYMCommentsServiceURL + ":" + this.port), this.proxyUsername, this.proxyPassword);
-
                 this.ymProxy = new HttpRestProxy(new URL(this.ymServiceURL),this.proxyUsername, this.proxyPassword);
 		this.myymProxy = new HttpRestProxy(new URL(this.myYMServiceURL), this.proxyUsername, this.proxyPassword);
 		this.myymCommentsProxy = new HttpRestProxy(new URL(this.myYMCommentsServiceURL), this.proxyUsername, this.proxyPassword);
