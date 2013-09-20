@@ -251,7 +251,7 @@ public class AuthenticationController {
         Data<AccountEntry> data = new Data<AccountEntry>();
     	boolean unlocked;
     	try {
-                unlocked = lock.tryLock(5L, TimeUnit.SECONDS);// only one register at a time
+                unlocked = lock.tryLock(50L, TimeUnit.MILLISECONDS);// only one register at a time
         } catch (InterruptedException e) {
                 throw new DimeException("Password retrieval failed", e);
         }
