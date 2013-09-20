@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>di.me-Tutorial</title>
+<title>di.me Guided Tour</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link href="register/css/bootstrap.min.css" rel="stylesheet">
 <link href="register/css/style_howto.css" rel="stylesheet">
@@ -34,10 +34,11 @@ border: 1px solid red;
 		<!-- h1 TITLE -->
 		<div class="container headline1">
 			<h1>Guided Tour</h1>
-			<p>This tour guides you will show you the prototype and
-				demonstrate the main concepts of the di.me research project. Please
+			<p>This tour you will guide you through the prototype and
+				demonstrate the main concepts of the di.me research project. </p>
+				<p><em>Please
 				notice that the system is a demonstrator and you will encounter
-				unstable functions.</p>
+				unstable functions.</em></p>
 			<p>If you have chosen and registered to a di.me server, you can
 				access it by the your favourite Internet Browser.</p>
 		</div>
@@ -218,12 +219,13 @@ border: 1px solid red;
 					</li>
 					<li>di.me shows <em>warnings</em>, e.g. if you want to share a
 						highly private document, and in other cases.
-					</li>
-					<li><em>Please note:</em>di.me does <em>not automatically
+					<br><br>&nbsp;&nbsp;&#8594 <em>Please
+							note:</em> di.me does <em>not automatically
 							share or give access to a document</em> because of the trust and
 						privacy levels. It only shows warnings. You can share information
 						to others with the action "share" (see below).</li>
-					<li><em>Please note:</em>di.me will <em>suggest to change</em>
+					<br>&nbsp;&nbsp;&#8594 <em>Please
+							note:</em> di.me will <em>suggest to change</em>
 						trust or privacy values if you share private items several times
 						to a person with low trust.</li>
 				</ul>
@@ -348,12 +350,9 @@ border: 1px solid red;
 						</div>
 						<div class="steps">
 							<ul>
-								<li>Go to liveposts (browser: click the letter-icon in the
-									top menu)</li>
-								<li>Click "new livepost" (browser: in the bar on the right)
-								</li>
-								<li>Select the profile card that is used to share from, and
-									the recipients</li>
+								<li>Go to "People", select the person you want to write></li>
+								<li>Click "Send livepost" (browser: in the bar on the right)</li>
+								<li>Select a profile card you want to use as sender identity</li>
 								<li>Enter a message subject and text</li>
 								<li>Click "Share"</li>
 							</ul>
@@ -494,21 +493,16 @@ border: 1px solid red;
 					<!-- Prepare your di.me Android app for Context-Awareness-->
 					<div class="container text faderContainer">
 						<div class="fader">
-							<b>Required: </b>Activate the location detection
+							Required preparation: Activate the location detection of your Android device or browser
 							<div class="arrow right"></div>
 						</div>
 						<div class="steps">
-							<p class="or">The context-aware functions in di.me use your
-								location. If you the di.me Android app, also sensor data can be
-								used. This data is stored on your di.me server and used by di.me
-								services (see below).</p>
+							<p class="or">The context-aware functions in di.me use the geo-location of your browser or Android device. The geo-location is stored on your di.me account and used by di.me services (see below).</p>
 							<p class="or">Browser:</p>
 							<ul>
 								<!--Steps -->
-								<li>Go to places (top right corner: Click on "Location
-									unknown" or your current location)</li>
-								<li>Click on "Get location ..." (in the bar on the right),
-									follow the instructions in the browser</li>
+								<li>Go to places (top right corner: Click on "Location unknown" or your current location)</li>
+								<li>Click on "Get location ..." (in the bar on the right), follow the instructions in the browser</li>
 							</ul>
 							<p class="or">On your Android:</p>
 							<ul>
@@ -558,17 +552,11 @@ border: 1px solid red;
 								<li>Connect to the <em>ProximityService</em> (As above: go
 									to "Settings &gt; Services", add the service; Android app: use
 									the Action button in the top-right corner)
-									<p class="or">&#8594 The ProximityService is activated; It
+									<p class="or">&#8594 The ProximityService is activated. It
 										shows a "nearby-group" (di.me users nearby to you), and shows
-										to other users that you are nearby. When you connect, you
-										select the Profile Card that shall be given to other nearby
-										users (NOTE: this feature is currently supported only if you
-										select your public profile card). Only if they know this
-										ProfileCard already, you are shown in their "nearby-group".
-										Uses the geo-location and other sensor data from your Android
-										device (if you have activated the setting "Store Android
-										sensor data on your server"). This service is provided as test
-										service from the di.me project consortium.</p></li>
+										to other users that you are nearby.  
+										<br><br><em>Please note:</em> This feature is currently supported only if you
+										select "MyPublicCard". If other users know your "MyPublicCard", you are shown in their "nearby-group".</p></li>
 							</ul>
 						</div>
 					</div>
@@ -584,13 +572,15 @@ border: 1px solid red;
 								vote and set favorite places and to retrieve social
 								recommendations on them (<em>Please note:</em> Currently, the
 								service shows only places in selected cities of the di.me
-								project):
-							</p>
+								project):</p>
 							<ul>
 								<li>Connect to the YellowMapPlaceService (Android: use the
 									Action button / Browser: go to "Settings", select "Add
 									Service", choose "YellowMapPlaceService", accept YM service
-									terms.)</li>
+									terms.)
+									<br><em>Please note:</em> Activation of this service requires creation 
+									of a MyYellowMap account. For that, please enter at a username, a password, and 
+									accept the terms and conditions. (If you already have a MyYellowMap account please use the corresponding credentials.)</li>
 								<li>Go to places (browser: Click on your current place,
 									e.g. "Location unknown", in the top right corner; if needed,
 									click "Get location ..." again). <br>&nbsp;&nbsp;&#8594
@@ -601,7 +591,6 @@ border: 1px solid red;
 							</ul>
 						</div>
 					</div>
-
 					<!--FOOTER-->
 					<br>
 					<div class="container">
@@ -622,10 +611,8 @@ border: 1px solid red;
 							yourself with the di.me demonstrator, please find some time to
 							fill out our questionaire:</p>
 
-						<p>
-							<a href="/dime-communications/web/access/questionaire?lang=en"
-								target="_blank">questionnaire</a> (please login with your di.me
-							account).
+						<p><a href="/dime-communications/web/access/questionaire?lang=en"
+								target="_blank">questionnaire</a>
 							<!-- <a href="/di/dime-communications/web/access/questionaire?lang=de" class="push" target="_blank">(German)</a>. -->
 						</p>
 
@@ -648,7 +635,6 @@ border: 1px solid red;
 				</div>
 
 				<!-- END OF CONTENT -->
-
 				<script
 					src="/dime-communications/static/ui/dime/register/js/jquery-1.9.1.min.js"
 					type="text/javascript"></script>
