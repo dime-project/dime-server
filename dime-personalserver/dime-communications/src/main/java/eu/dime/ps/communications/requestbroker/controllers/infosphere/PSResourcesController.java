@@ -432,9 +432,9 @@ public class PSResourcesController extends PSSharingControllerBase implements AP
         Tenant tenant = TenantHelper.getCurrentTenant();
 		DimeServiceAdapter adapter = null;
 		//obtain the saidFor the receiver, this should be already in place since it is a shared resource		
-		String saidNameReceiver = credentialStore.getNameSaid(saidReceiver, tenant);
+		String saidNameReceiver = credentialStore.getNameSaid(saidSender, saidReceiver, tenant);
 		//specify sender (needs to come from UI or needs to be stored somewhere)
-		String saidNameSender = credentialStore.getNameSaid(saidSender, tenant);
+		String saidNameSender = credentialStore.getUsername(saidSender,saidReceiver, tenant);
 
 		try {
 			adapter = (DimeServiceAdapter) serviceGateway.getDimeServiceAdapter(saidNameReceiver);				

@@ -184,7 +184,7 @@ public class DimeServiceAdapter extends ServiceAdapterBase implements InternalSe
 
 		// Resolve IP for the receiver said and create proxy
 		HttpRestProxy proxy = null;
-		String targetSaidName = credentialStore.getNameSaid(receiverSAID, tenant);
+		String targetSaidName = credentialStore.getNameSaid(senderSAID, receiverSAID, tenant);
 		try {
 			proxy = proxyFactory.createProxy(accountRegistrar.resolve(targetSaidName), username, secret);
 		} catch (AccountCannotResolveException e) {
@@ -279,7 +279,7 @@ public class DimeServiceAdapter extends ServiceAdapterBase implements InternalSe
 		
 		// Resolve IP for the receiver said and create proxy
 		HttpRestProxy proxy = null;
-		String targetSaidName = credentialStore.getNameSaid(receiverSAID, tenant);
+		String targetSaidName = credentialStore.getNameSaid(senderSAID, receiverSAID, tenant);
 		try {
 			proxy = proxyFactory.createProxy(accountRegistrar.resolve(targetSaidName), username, secret);
 		} catch (AccountCannotResolveException e) {

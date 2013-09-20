@@ -170,35 +170,33 @@ public class CredentialStoreImpl implements CredentialStore {
 		if (sa == null){
 			 throw new NoResultException("Could not find Service Account for: "+sender);
 		}
-		AccountCredentials ac = AccountCredentials.findAllBySourceAndByTargetUri(sa, receiver);
-		if (ac == null){
-			User user = User.findByTenantAndByAccountUri(tenant, receiver);
-			if(user != null){
-				return user.getUsername();
-			} else {
-				throw new NoResultException("Could not find AccountCredentials for: "+receiver);
-			}
-		}
+
 		return sa.getName();
 	}
 	
 	@Override
-	public String getNameSaid(String account, Tenant tenant) {
+	public String getNameSaid(String source, String contact, Tenant tenant) {
+		
+		ServiceAccount sa = ServiceAccount.findAllByTenantAndAccountUri(tenant, source);
+		if (sa == null) {
+			User user = User.findByTenantAndByAccountUri(tenant, contact);
+			if (user == null){
+				throw new NoResultException("Could not find Service Account for: "+source);
+			}
+			return user.getUsername();
+		}
         //if connection was established before
-		AccountCredentials ac = AccountCredentials.findAllByTenantAndByTargetUri(tenant, account);
+		AccountCredentials ac = AccountCredentials.findAllByTenantAndBySourceAndByTargetUri(tenant, sa, contact);
 		if (ac != null){
 			return ac.getTarget();
-		}
-		if (account != null) {
-			ServiceAccount sa = ServiceAccount.findAllByTenantAndAccountUri(tenant, account);
-			if (sa != null){
-				return sa.getName();
-			} else {
-				User user = User.findByTenantAndByAccountUri(tenant, account);
+		} else {
+			User user = User.findByTenantAndByAccountUri(tenant, contact);
+			if (user!=null){
 				return user.getUsername();
 			}
 		}
-		throw new NoResultException("Could not find Service Account for: "+account);
+		throw new NoResultException("Could not find AccountCredential for: "+contact);		
+
 	}
 
 	@Override

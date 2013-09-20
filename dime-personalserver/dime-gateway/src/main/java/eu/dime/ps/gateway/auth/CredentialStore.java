@@ -50,11 +50,12 @@ public interface CredentialStore {
      * get username to communicate with external service
      *
      * @param account account identifier for external sa
+     * @param contact (target) identifier
      * @param tenant 
      * @return username
      * @throws NoResultException
      */
-    public String getNameSaid(String account, Tenant tenant) throws NoResultException;
+    public String getNameSaid(String account, String contact, Tenant tenant) throws NoResultException;
 
     /**
      * get provider name for service account (e.g. "facebook", "di.me" etc.)

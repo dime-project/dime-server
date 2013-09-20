@@ -28,6 +28,8 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.transaction.TransactionConfiguration;
+import org.springframework.transaction.annotation.Transactional;
 
 import eu.dime.ps.semantic.exception.RepositoryStorageException;
 import eu.dime.ps.storage.entities.AccountCredentials;
@@ -38,9 +40,9 @@ import eu.dime.ps.storage.entities.Tenant;
 import eu.dime.ps.storage.entities.User;
 import eu.dime.ps.storage.manager.EntityFactory;
 
-@Ignore
 @ContextConfiguration(locations = { "classpath*:**/applicationContext-credential-test.xml" })
 @RunWith(SpringJUnit4ClassRunner.class)
+@TransactionConfiguration(defaultRollback = true)
 public class CredentialStoreTestIt {
 
 	/* ids */
@@ -48,12 +50,18 @@ public class CredentialStoreTestIt {
 	private final String REMOTE_SAID = "anna-said";
 	private final String USERNAME = "juan";
 	private final String PASSWORD = "juanpw";
-	private final String ACCOUNT_ANNA = "uri:uuid:anna-account";
+	private final String ACCOUNT_ANNA_AT_JUAN = "uri:juan:anna-account";
 	private final String ACCOUNT_JUAN = "uri:uuid:juan-account";
 	private final String ACCOUNT_NORBERT = "uri:uuid:norbert-account";
  	private final String SERVICE_NAME = "dime";
 	private Tenant tenant1;
 	private Tenant tenant2;
+	private User user1;
+	private User user2;
+
+	ServiceAccount sa;
+	AccountCredentials ac;
+	ServiceProvider sp;
 
 	
 	@Autowired
@@ -66,141 +74,162 @@ public class CredentialStoreTestIt {
 	public void setup() throws Exception{
 		setupTenant();
 		
-		User user = entityFactory.buildUser();
-		user.setUsername("juan");
-		user.setPassword("juanpw");
-		user.setAccountUri(ACCOUNT_JUAN);
-		user.setRole(Role.OWNER);
-		user.setTenant(tenant1);
-		user.persist();
+		user1 = entityFactory.buildUser();
+		user1.setUsername("juan");
+		user1.setPassword("juanpw");
+		user1.setAccountUri(ACCOUNT_JUAN);
+		user1.setRole(Role.OWNER);
+		user1.setTenant(tenant1);
+		user1.persist();
+		user1.flush();
 		
-		user = entityFactory.buildUser();
-		user.setUsername("juan@anna");
-		user.setPassword("juanpw@anna");
-		user.setAccountUri("uri:anna:contact-juan");
-		user.setRole(Role.GUEST);
-		user.setTenant(tenant2);
-		user.persist();
+		user2 = entityFactory.buildUser();
+		user2.setUsername("juan@anna");
+		user2.setPassword("juanpw@anna");
+		user2.setAccountUri("uri:anna:contact-juan");
+		user2.setRole(Role.GUEST);
+		user2.setTenant(tenant2);
+		user2.persist();
+		user2.flush();
 		
-		ServiceProvider sp = entityFactory.buildServiceProvider();
+		sp = entityFactory.buildServiceProvider();
 		sp.setConsumerKey("consumer-key");
 		sp.setConsumerSecret("consumer-secret");
 		sp.setEnabled(true);
 		sp.setServiceName(SERVICE_NAME);
 		sp.persist();
+		sp.flush();
 		
-		ServiceAccount sa = entityFactory.buildServiceAccount();
+		sa = entityFactory.buildServiceAccount();
 		sa.setTenant(tenant1);
 		sa.setServiceProvider(sp);
 		sa.setAccessSecret("none");
 		sa.setAccessToken("none");
 		sa.setName(LOCAL_SAID);
+		sa.setAccountURI(ACCOUNT_JUAN);
 		sa.persist();
+		sa.flush();
 		
-		AccountCredentials ac = entityFactory.buildAccountCredentials();
+		ac = entityFactory.buildAccountCredentials();
 		ac.setSecret(PASSWORD);
 		ac.setTarget(REMOTE_SAID);
 		ac.setTenant(tenant1);
 		ac.setSource(sa);
-		ac.setTargetUri("uri:juan:contact-anna");
+		ac.setTargetUri(ACCOUNT_ANNA_AT_JUAN);
 		ac.persist();
+		ac.flush();
 	}
 	
 	private void setupTenant() {
 		tenant1 = entityFactory.buildTenant();
 		tenant1.setName("juan");
-		tenant1.setId(new Long(1));
 		tenant1.persist();
+		tenant1.flush();
 		
 		tenant2 = entityFactory.buildTenant();
 		tenant2.setName("anna");
-		tenant2.setId(new Long(2));
 		tenant2.persist();
+		tenant2.flush();
 	}
 
 	@After
 	public void teardown(){
+
+		user1.remove();
+		user2.remove();
+		ac.remove();
 		
+		sa.remove();
+		sp.remove();
+
+		tenant1.remove();
+		tenant2.remove();
 	}
 	
 	
 	@Test
+	@Transactional
 	public void testGetPassword() {
-		String password = credentialStore.getPassword(REMOTE_SAID, LOCAL_SAID, tenant1);
+		String password = credentialStore.getPassword(ACCOUNT_JUAN, ACCOUNT_ANNA_AT_JUAN, tenant1);
 		Assert.assertEquals(PASSWORD, password);
 	}
 	
 	@Test
+	@Transactional
 	public void testGetUsername() {
-		String username = credentialStore.getUsername(REMOTE_SAID, LOCAL_SAID, tenant1);
-		Assert.assertEquals(USERNAME, username);
+		String username = credentialStore.getUsername(ACCOUNT_JUAN, ACCOUNT_ANNA_AT_JUAN, tenant1);
+		Assert.assertEquals(LOCAL_SAID, username);
 	}
 	
 	@Test
+	@Transactional
 	public void testGetNameSaid() {
-		String name = credentialStore.getNameSaid(ACCOUNT_JUAN, tenant1);
-		Assert.assertEquals("juan", name);
+		//get saidname without target
+		String name = credentialStore.getNameSaid(ACCOUNT_JUAN, ACCOUNT_ANNA_AT_JUAN, tenant1);
+		Assert.assertEquals(REMOTE_SAID, name);
 	}
 	
 	@Test
+	@Transactional
 	public void testGetProviderName() {
 		String name = credentialStore.getProviderName(ACCOUNT_JUAN, tenant1);
-		Assert.assertEquals("di.me", name);
+		Assert.assertEquals(SERVICE_NAME, name);
 	}
 	
 	@Test
+	@Transactional
 	public void testGetAccessToken() {
 		String token = credentialStore.getAccessSecret(ACCOUNT_JUAN, tenant1);
 		Assert.assertEquals("none", token);
 	}
 
-	@Test
-	public void testGetAccessSecret() {
-		fail("Not yet implemented");
-	}
-	
-	@Test
-	public void testStoreCredentialsForAccount() {
-		fail("Not yet implemented");
-	}
-	
-	@Test
-	public void testUpdateCredentialsForAccount() {
-		fail("Not yet implemented");
-	}
-	
-	@Test
-	public void testStoreServiceProvider() {
-		fail("Not yet implemented");
-	}
-	
-	@Test
-	public void testGetConsumerSecret() {
-		fail("Not yet implemented");
-	}
-	
-	@Test
-	public void testGetConsumerKey() {
-		fail("Not yet implemented");
-	}
-	
-	@Test
-	public void testStoreOAuthCredentials() {
-		fail("Not yet implemented");
-	}
-	
-	@Test
-	public void testGetUriForName() {
-		fail("Not yet implemented");
-	}
-	
-	@Test
-	public void testGetUriForAccountName() {
-		fail("Not yet implemented");
-	}
-	
-	@Test
-	public void testTryCreateAccountCredentials() {
-		fail("Not yet implemented");
-	}
+//	@Test
+//	public void testGetAccessSecret() {
+//		fail("Not yet implemented");
+//	}
+//	
+//	@Test
+//	public void testStoreCredentialsForAccount() {
+//		fail("Not yet implemented");
+//	}
+//	
+//	@Test
+//	public void testUpdateCredentialsForAccount() {
+//		fail("Not yet implemented");
+//	}
+//	
+//	@Test
+//	public void testStoreServiceProvider() {
+//		fail("Not yet implemented");
+//	}
+//	
+//	@Test
+//	public void testGetConsumerSecret() {
+//		fail("Not yet implemented");
+//	}
+//	
+//	@Test
+//	public void testGetConsumerKey() {
+//		fail("Not yet implemented");
+//	}
+//	
+//	@Test
+//	public void testStoreOAuthCredentials() {
+//		fail("Not yet implemented");
+//	}
+//	
+//	@Test
+//	public void testGetUriForName() {
+//		fail("Not yet implemented");
+//	}
+//	
+//	@Test
+//	public void testGetUriForAccountName() {
+//		fail("Not yet implemented");
+//	}
+//	
+//	@Test
+//	public void testTryCreateAccountCredentials() {
+//		fail("Not yet implemented");
+//	}
 }

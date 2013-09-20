@@ -125,7 +125,7 @@ public class DimeServiceAdapterTest extends Assert {
 		Mockito.when(mockFactory.createProxy(Mockito.eq(baseUrl), Mockito.anyString(), Mockito.anyString())).thenReturn(mockProxy);
 
 		CredentialStore mockStore = Mockito.mock(CredentialStore.class);
-		Mockito.when(mockStore.getNameSaid(receiver, tenant1)).thenReturn(senderSAID);
+		Mockito.when(mockStore.getNameSaid(sender, receiver, tenant1)).thenReturn(senderSAID);
 
 		DimeServiceAdapter adapter = new DimeServiceAdapter("1");
 		adapter.setProxyFactory(mockFactory);
@@ -171,7 +171,7 @@ public class DimeServiceAdapterTest extends Assert {
 		Mockito.when(mockFactory.createProxy(Mockito.eq(baseUrl), Mockito.anyString(), Mockito.anyString())).thenReturn(mockProxy);
 
 		CredentialStore mockStore = Mockito.mock(CredentialStore.class);
-		Mockito.when(mockStore.getNameSaid(receiver, tenant1)).thenReturn(senderSAID);
+		Mockito.when(mockStore.getNameSaid(sender, receiver, tenant1)).thenReturn(senderSAID);
 
 		DimeServiceAdapter adapter = new DimeServiceAdapter("1");
 		adapter.setProxyFactory(mockFactory);

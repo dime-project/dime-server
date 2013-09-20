@@ -69,8 +69,8 @@ public class ExternalNotifySchedule {
 	    Tenant tenant = TenantHelper.getTenant(externalNotififcation.getTenant());
 	    
 	    try {
-			String senderName = credentialStore.getNameSaid(senderURI, tenant);
-			String targetName = credentialStore.getNameSaid(targetURI, tenant);
+			String senderName = credentialStore.getUsername(senderURI, targetURI, tenant);
+			String targetName = credentialStore.getNameSaid(senderURI, targetURI, tenant);
 
 		    try {
 				adapter = (DimeServiceAdapter) serviceGateway.getDimeServiceAdapter(senderName);
