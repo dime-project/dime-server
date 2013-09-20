@@ -253,11 +253,11 @@ public class AuthenticationController {
     	try {
                 unlocked = lock.tryLock(5L, TimeUnit.SECONDS);// only one register at a time
         } catch (InterruptedException e) {
-                throw new DimeException("Register failed", e);
+                throw new DimeException("Password retrieval failed", e);
         }
     	if (!unlocked) {
-    		logger.error("Could not aquire lock within 5 seconds. Returning without registering.");
-    		throw new DimeException("Could not register because the system is busy.");
+    		logger.error("Could not aquire lock within 5 seconds. Returning.");
+    		throw new DimeException("Could not request credentials because the system is busy.");
     	}
         try {
 			User user = userManager.getUserForAccountAndTenant(saidRequester, saidLocal);
