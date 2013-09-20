@@ -302,7 +302,7 @@ public class AdvisoryController extends AdvisoryBase {
 				List<Resource> a = groupA.getAllIsRelated_as().asList();
 				if (a.contains(thing)){
 					//shared resource already related to target group
-					targetGroups.remove(element_key);
+					it.remove();
 				}
 			}
 			MapIterator it2 = targetGroups.mapIterator();
