@@ -136,7 +136,9 @@ public class YMServiceWrapper {
 		this.ymServiceURL = policyManager.getPolicyString(PLACESURL, YMSA);
 		this.myYMServiceURL = policyManager.getPolicyString(MYYMURL, YMSA);
 		this.myYMCommentsServiceURL = policyManager.getPolicyString(COMMENTSURL, YMSA);
-		this.port = policyManager.getPolicyInteger(PORT, YMSA);
+
+                // bug fix remove port
+                // this.port = policyManager.getPolicyInteger(PORT, YMSA);
 		this.staticParameter = policyManager.getPolicyString(STATICPARAMETERS, YMSA);
 
 		// bug fix remove port
