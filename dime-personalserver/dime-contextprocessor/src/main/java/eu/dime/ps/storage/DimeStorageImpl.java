@@ -59,7 +59,6 @@ public class DimeStorageImpl implements IStorage {
 	}
 	
 	private DataStore getDataStore(Long tenantId){
-		System.out.println("========================================= getDataStore from contextprocessor");
 		return dataStoreProvider.getTenantStore(tenantId);
 	}
 	
