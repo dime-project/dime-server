@@ -1162,10 +1162,9 @@ DimeView = {
                     $("#alertStatusNavigation")
                             .empty() 
                             .removeClass("hidden")
-                            //.append($('<img/>').attr('src','img/warn/share_state_severe.png'))
                             .append('To see places nearby to you, please')
-                            .append('<br>1. go to Settings and add the "YellowmapPlaceService"')
-                            .append('<br>2. get your current location (buttons bar on the right "Get location")');
+                            .append('<br>1. Go to Settings and add the "YellowmapPlaceService"')
+                            .append('<br>2. Click “Get location” (in the bar on the right), follow the instructions in the browser');
                     continueSearch=false;
                 }
             },this);
