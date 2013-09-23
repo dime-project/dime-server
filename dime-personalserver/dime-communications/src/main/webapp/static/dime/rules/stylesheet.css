@@ -1,0 +1,154 @@
+@charset "UTF-8";
+/* CSS Document */
+
+
+.workspace{
+	width:100%;
+	margin-left:auto;
+	margin-right:auto;
+	padding-top:10px;
+	padding-bottom:10px;
+}
+
+.workspace .allRules{
+	width:75%;
+	margin-right:1%;
+	float: left;
+	padding-bottom:10px;
+	margin-bottom:20px;
+	clear:left;
+}
+
+.workspace .controlbox{
+	width: 23%;
+	float: left;
+	padding-bottom: 10px;
+}
+
+
+#newRuleButton { 
+	padding: .5em 1em; 
+	text-decoration: none; 
+}
+
+.conditionBox{
+	float:left;
+	border:dashed thin #630;
+	margin-right:5px;
+}
+
+.workspace .allRules .rulebox{
+	width: 100%;
+	border: dashed thin #000;
+	padding-bottom:20px;
+	margin-bottom:10px;
+	padding-top:15px;
+}
+
+.draggable { 
+	width: 70px; 
+	height: 70px; 
+	float: left; 
+	font-size: 12px;
+	border:none;
+}
+
+
+.draggableProperties { 
+	width: 70px; 
+	height: 30px; 
+	float: left; 
+	font-size: 12px;
+	border: dotted thin #F00;
+	word-wrap:break-word;
+}
+
+.draggableConstraints{ 
+	width: 70px; 
+	height: 30px; 
+	float: left; 
+	font-size: 12px;
+	border: dotted thin #909;
+	word-wrap:break-word;
+}
+
+.draggableConstraints input{ 
+	width: 68px; 
+	float: left; 
+	font-size: 12px;
+	border-top: none;
+	border-left: none;
+	border-right: none;
+	border-bottom: solid thin #000;
+	word-wrap:break-word;
+}
+	
+.draggableOperator{ 
+	width: 40px; 
+	height: 40px; 
+	float: left; 
+	font-size: 18px;
+	text-align:center;
+	vertical-align:central;
+	border: dotted thin #000;
+	word-wrap:break-word;
+}
+
+		
+.ui-widget-header p, .ui-widget-content p { margin: 0; }
+
+.ui-widget-content { }
+
+.autocompleteFillInCondition{
+	border:dotted thin #007FFF;
+	width:70px;
+	height:70px;
+	margin:5px 5px 5px 5px;
+	float:left;
+}
+
+.autocompleteFillInProperty{
+	border:dotted thin #F00;
+	width:70px;
+	height:30px;
+	margin:5px 5px 5px 5px;
+	float:left;
+}
+
+.autocompleteFillInConstraint{
+	border:dotted thin #909;
+	width:70px;
+	height:30px;
+	margin:5px 5px 5px 5px;
+	float:left;
+}
+
+.newConditionButton { 
+	border:dotted thin #000;
+	width:40px;
+	height:40px;
+	margin:20px 5px 5px 5px;
+	float:left;
+}
+
+.action{
+	border:dotted thin #663;
+	width:70px;
+	height:70px;
+	margin:5px 5px 5px 5px;
+	float:left;
+}
+
+.draggableAction { 
+	width: 70px; 
+	height: 70px; 
+	float: left; 
+	font-size: 12px;
+	border:none;
+}
+
+
+.helper{
+	font-size: 12px;
+	color:#CCC;
+}
