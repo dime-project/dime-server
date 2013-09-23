@@ -1,4 +1,0 @@
-java -jar /home/simon/projekte/SourceHelper/dist/SourceHelper.jar --add-header "$(< license.txt)" " copyright" ./dime-personalserver/dime-datamining/src/main/java/eu/dime/ps/datamining/util/LinkExtractor.java
-find -iname "*.java" -exec grep -Hi " copyright" {} \; | grep 20 > existingCopyrights.txt
-
-find -iname "*.java" -exec java -jar /home/simon/projekte/SourceHelper/dist/SourceHelper.jar --add-header "$(< license.txt)" " copyright" {} \; > addHeaderLog_status.log
