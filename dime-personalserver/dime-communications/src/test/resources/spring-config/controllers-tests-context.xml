@@ -148,5 +148,9 @@
  		<property name="situationManager" ref="situationManager"/>
 	</bean>
 	
-	
+	<bean id="ruleManager"
+		class="eu.dime.ps.controllers.infosphere.manager.RuleManagerImpl">
+		<property name="connectionProvider" ref="connectionProviderMock"/>
+	</bean>
+		
 </beans>

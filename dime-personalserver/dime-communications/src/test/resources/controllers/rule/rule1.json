@@ -1,0 +1,92 @@
+{
+    "actions": [
+        {
+            "actionType": "urn:actions:Notify"
+        }
+    ],
+    "condition": [
+        {
+            "and": null,
+            "conditionType": "drmo:SituationActivated",
+            "conditions": [],
+            "constraintOnGraph": null,
+            "constraintOnObject": "urn:juan:Situation0001",
+            "constraintOnProperty": "dcon:hasSituation",
+            "constraintOnSubject": null,
+            "guid": "0",
+            "isNegated": false,
+            "or": null,
+            "preceededBy": null,
+            "propertyOperator": null,
+            "resourceType": "pimo:Person",
+            "succeededBy": "1"
+        },
+        {
+            "and": null,
+            "conditionType": "drmo:Condition",
+            "conditions": [
+                {
+                    "and": null,
+                    "conditionType": "drmo:Condition",
+                    "conditions": [],
+                    "constraintOnGraph": null,
+                    "constraintOnObject": {
+                        "and": null,
+                        "conditionType": "drmo:Condition",
+                        "conditions": [],
+                        "constraintOnGraph": null,
+                        "constraintOnObject": null,
+                        "constraintOnProperty": "nco:hasEmailAddress",
+                        "constraintOnSubject": {
+                            "and": null,
+                            "conditionType": "drmo:Condition",
+                            "conditions": [],
+                            "constraintOnGraph": null,
+                            "constraintOnObject": null,
+                            "constraintOnProperty": "pimo:Occurance",
+                            "constraintOnSubject": "urn:juan:Person3Contact",
+                            "guid": "1_1_1_1",
+                            "isNegated": false,
+                            "or": null,
+                            "preceededBy": null,
+                            "propertyOperator": null,
+                            "resourceType": "nco:ContactMedium",
+                            "succeededBy": null
+                        },
+                        "guid": "1_1_1",
+                        "isNegated": false,
+                        "or": null,
+                        "preceededBy": null,
+                        "propertyOperator": null,
+                        "resourceType": "nmo:EmailAddress",
+                        "succeededBy": null
+                    },
+                    "constraintOnProperty": "http://www.semanticdesktop.org/ontologies/2007/03/22/nmo#messageFrom",
+                    "constraintOnSubject": null,
+                    "guid": "1_1",
+                    "isNegated": false,
+                    "or": null,
+                    "preceededBy": null,
+                    "propertyOperator": null,
+                    "resourceType": "nmo:Email",
+                    "succeededBy": null
+                }
+            ],
+            "constraintOnGraph": null,
+            "constraintOnObject": null,
+            "constraintOnProperty": null,
+            "constraintOnSubject": null,
+            "guid": "1",
+            "isNegated": false,
+            "or": null,
+            "preceededBy": null,
+            "propertyOperator": null,
+            "resourceType": "nmo:Email",
+            "succeededBy": null
+        }
+    ],
+    "guid": "urn:uuid:705b36b9-e12e-45ab-bba8-625357b6f84b",
+    "isEnabled": true,
+    "name": "Test rule",
+    "type": "rule"
+}

@@ -1,0 +1,32 @@
+# Rule 1: receive an email from joedoe@email.com
+
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix drmo: <http://www.semanticdesktop.org/ontologies/2012/03/06/drmo#> .
+@prefix nmo: <http://www.semanticdesktop.org/ontologies/2007/03/22/nmo#> .
+@prefix nco: <http://www.semanticdesktop.org/ontologies/2007/03/22/nco#> .
+@prefix nao: <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#> .
+
+{
+<http://test.org/event1>	a	drmo:Rule ;
+	drmo:isComposedOf <http://test.org/condition1> ;
+	drmo:triggers	<http://test.org/Notify> ;
+	nao:prefLabel "Rule 1" .
+	
+<http://test.org/condition1>	a	drmo:Condition ;
+		drmo:hasResourceType	nmo:Email ;
+		drmo:hasConstraint <http://test.org/constraint1> .
+
+<http://test.org/constraint1> a drmo:Condition ;
+		drmo:hasConstraintOnProperty	nmo:messageFrom ;
+		drmo:hasConstraintOnObject	<http://test.org/email1> .
+		
+<http://test.org/email1>	a	drmo:Condition ;
+	drmo:hasResourceType	nco:EmailAddress ;
+	drmo:hasConstraintOnProperty	nco:emailAddress	;
+	drmo:hasConstraintOnObject	"joedoe@email.com" .
+	
+<http://test.org/Notify>	a	drmo:Action ;
+	drmo:hasSubject "Received Email from <http://test.org/condition1>";
+	drmo:hasObject <dime:interface> .
+}
