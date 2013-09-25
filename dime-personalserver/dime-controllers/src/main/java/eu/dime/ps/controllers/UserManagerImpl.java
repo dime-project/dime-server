@@ -33,6 +33,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
+import org.springframework.security.acls.model.NotFoundException;
 import org.springframework.security.authentication.encoding.ShaPasswordEncoder;
 import org.springframework.security.core.context.SecurityContextHolder;
 
@@ -817,7 +818,11 @@ public class UserManagerImpl implements UserManager {
     @Override
     public AccountEntry getUserAccount(String userName) {
         User user = getByUsername(userName);
-        return populateAccountEntry(user);
+        if(user != null){
+        	return populateAccountEntry(user);
+        } else {
+        	throw new NotFoundException("This is not the user you are looking for");
+        }
     }
 
     private void sendNotification(User oldUser) {
