@@ -28,3 +28,4 @@ dime-personalserver/logs/
 dime-personalserver/dime-gateway/services.properties
 /nbproject/private/
 /nbproject
+nb-configuration.xml

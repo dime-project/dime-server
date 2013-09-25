@@ -28,10 +28,13 @@ import static org.mockito.Mockito.when;
 
 import eu.dime.commons.dto.AccountEntry;
 import eu.dime.commons.dto.Response;
+import eu.dime.commons.exception.DimeException;
 import eu.dime.ps.controllers.UserManager;
 import eu.dime.ps.controllers.accesscontrol.AccessControlManager;
 import eu.dime.ps.storage.entities.Role;
 import eu.dime.ps.storage.entities.User;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class AuthenticationControllerTest {
 	
@@ -83,17 +86,20 @@ public class AuthenticationControllerTest {
     
     @Test
     public void testGetCredentials() {
-    	//TODO: test if correct pw is returned
-    	//TODO: check if new password is retured after calling twice
-    	Response<AccountEntry> response  = authenticationController.getCredentials(SAID_LOCAL, SAID_REMOTE);
-    	Collection<AccountEntry> col = response.getMessage().getData().getEntries();
-    	AccountEntry account = col.iterator().next();
-    	String tmpPassword = account.getPassword();
-    	response  = authenticationController.getCredentials(SAID_LOCAL, SAID_REMOTE);
-    	col = response.getMessage().getData().getEntries();
-    	account = col.iterator().next();
-    	
-    	Assert.assertFalse(!account.getPassword().equals(tmpPassword));
+            try {
+                //TODO: test if correct pw is returned
+                //TODO: check if new password is retured after calling twice
+                Response<AccountEntry> response  = authenticationController.getCredentials(SAID_LOCAL, SAID_REMOTE);
+                Collection<AccountEntry> col = response.getMessage().getData().getEntries();
+                AccountEntry account = col.iterator().next();
+                String tmpPassword = account.getPassword();
+                response  = authenticationController.getCredentials(SAID_LOCAL, SAID_REMOTE);
+                col = response.getMessage().getData().getEntries();
+                account = col.iterator().next();
+                Assert.assertFalse(!account.getPassword().equals(tmpPassword));
+            } catch (DimeException ex) {
+                Logger.getLogger(AuthenticationControllerTest.class.getName()).log(Level.SEVERE, null, ex);
+            }
     }
     
     @Test
