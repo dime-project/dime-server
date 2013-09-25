@@ -821,7 +821,7 @@ public class UserManagerImpl implements UserManager {
         if(user != null){
         	return populateAccountEntry(user);
         } else {
-        	throw new NotFoundException("This is not the user you are looking for");
+        	throw new NotFoundException("This is not the user you are looking for: "+userName);
         }
     }
 
