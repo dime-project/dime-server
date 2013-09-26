@@ -23,6 +23,382 @@
 
 //---------------------------------------------
 //#############################################
+//  DimeView Manager
+//#############################################
+//
+
+
+DimeViewStatus = function(viewType, groupType, itemType, personGuid, detailItemGuid, detailItemType, message){ //constructor for view status
+    
+    var makeNumberIfExists = function(myVar){
+        if (!myVar){
+            return null;
+        }
+        if (typeof myVar === 'string' || myVar instanceof String){
+            return parseInt(myVar);
+        }
+        return myVar;
+    };
+    
+    this.viewType = makeNumberIfExists(viewType);
+    this.groupType = groupType;
+    this.itemType = itemType;
+    this.personGuid = personGuid;
+    this.detailItemGuid = detailItemGuid;
+    this.detailItemType = detailItemType;
+    this.message = message;   
+    
+};
+
+
+DimeViewStatus.GROUP_CONTAINER_VIEW = 1;
+DimeViewStatus.SETTINGS_VIEW = 2;
+DimeViewStatus.PERSON_VIEW = 3;
+
+DimeViewStatus.VIEW_TYPE_STR = "vT";
+DimeViewStatus.GROUP_TYPE_STR = "gT";
+DimeViewStatus.ITEM_TYPE_STR = "iT";
+DimeViewStatus.PERSON_GUID_STR = "pG";
+DimeViewStatus.DETAIL_ITEM_GUID = "dIG";
+DimeViewStatus.DETAIL_ITEM_TYPE_STR = "dIT";
+DimeViewStatus.MESSAGE_STR = "msg";
+
+DimeViewStatus.readUrlString = function(){
+
+
+    //set grouptype
+    var groupType = Dime.psHelper.getURLparam(DimeViewStatus.GROUP_TYPE_STR);
+    var itemType =  Dime.psHelper.getURLparam(DimeViewStatus.ITEM_TYPE_STR);
+    var viewType = Dime.psHelper.getURLparam(DimeViewStatus.VIEW_TYPE_STR);
+    var detailItemGuid = Dime.psHelper.getURLparam(DimeViewStatus.DETAIL_ITEM_GUID);
+    var detailItemType = Dime.psHelper.getURLparam(DimeViewStatus.DETAIL_ITEM_TYPE_STR);
+    var personGuid = Dime.psHelper.getURLparam(DimeViewStatus.PERSON_GUID_STR);
+    var message = Dime.psHelper.getURLparam(DimeViewStatus.MESSAGE_STR);
+
+    //set default values in case not provided:
+
+    viewType=viewType?viewType:DimeViewStatus.GROUP_CONTAINER_VIEW;    
+
+    if (viewType!==DimeViewStatus.SETTINGS_VIEW){
+
+        groupType=groupType?groupType:Dime.psMap.TYPE.GROUP;
+        itemType=itemType?itemType:Dime.psHelper.getChildType(groupType);        
+        personGuid=personGuid?personGuid:'@me';                
+
+    }//else no further information required
+
+
+    return new DimeViewStatus(viewType, groupType, itemType, personGuid, detailItemGuid, detailItemType, message); 
+};
+
+
+DimeViewStatus.prototype = {
+    
+    
+    toUrlString: function(){
+        var counter=0;
+        var addComponent = function(tag, content){
+            if (content && content!==""){
+                var componentStr = tag+"="+ encodeURIComponent(content);
+                componentStr=counter>0?"&"+componentStr:componentStr;
+                counter++;
+                return componentStr;
+            }
+            return "";
+        };
+        
+        var result = "index.html?"
+                + addComponent(DimeViewStatus.VIEW_TYPE_STR, this.viewType)
+                + addComponent(DimeViewStatus.GROUP_TYPE_STR, this.groupType)
+                + addComponent(DimeViewStatus.ITEM_TYPE_STR, this.itemType)
+                + addComponent(DimeViewStatus.DETAIL_ITEM_GUID, this.detailItemGuid)
+                + addComponent(DimeViewStatus.DETAIL_ITEM_TYPE_STR, this.detailItemType)
+                + addComponent(DimeViewStatus.PERSON_GUID_STR, this.personGuid)
+                + addComponent(DimeViewStatus.MESSAGE_STR, this.message);
+        return result;
+    },
+    isGroupContainer: function(){
+        return (this.viewType===DimeViewStatus.GROUP_CONTAINER_VIEW);
+    },
+    isPersonView: function(){
+        return (this.viewType===DimeViewStatus.PERSON_VIEW);
+    },
+    isSettingsView: function(){
+        return (this.viewType===DimeViewStatus.SETTINGS_VIEW);
+    }
+    
+         
+};
+
+
+    
+/**
+ * constructor for viewMapEntries
+ * @param id id of div in index.html
+ * @param groupActive
+ * @param settingsActive
+ * @param personViewActive
+ * @param getType
+ */
+DimeViewMapEntry = function(id, groupActive, settingsActive, personViewActive, getType){
+    this.id = id;
+    this.groupActive = groupActive;
+    this.settingsActive = settingsActive; 
+    this.personViewActive = personViewActive;
+    this.getType = getType;        
+};
+
+
+DimeViewManager = function(dimeViewRef){
+    var viewManagerRef = this;
+    this.dimeViewRef=dimeViewRef;
+    
+    //VIEW_MAP
+    this.viewMap={}; 
+     
+        
+    var addToViewMap = function(viewMapEntry){
+        viewManagerRef.viewMap[viewMapEntry.id]=viewMapEntry;
+    };
+   
+    //initialize views                               id, groupActive, settingsActive, personViewActive, type
+    addToViewMap(new DimeViewMapEntry('groupNavigation', false, false, false, this.getCurrentGroupType)); //initially set to false, so it will only be shown with some content in place
+    addToViewMap(new DimeViewMapEntry('itemNavigation', false, false, false, this.getCurrentItemType)); //initially set to false, so it will only be shown with some content in place
+    addToViewMap(new DimeViewMapEntry('searchBox', true, false, false, null));
+    addToViewMap(new DimeViewMapEntry('metabarMetaContainer', true, false, true, null));
+    addToViewMap(new DimeViewMapEntry('backToGroupButton', false, false, true, null));
+    addToViewMap(new DimeViewMapEntry('currentPersonOverview', false, false, true, null));
+    addToViewMap(new DimeViewMapEntry('currentPersonLabel', false, false, true, null));
+    addToViewMap(new DimeViewMapEntry('personProfileAttributeNavigation', false, false, true, function(){return Dime.psMap.TYPE.PROFILEATTRIBUTE;}));
+    addToViewMap(new DimeViewMapEntry('personProfileNavigation', false, false, true, function(){return Dime.psMap.TYPE.PROFILE;}));
+    addToViewMap(new DimeViewMapEntry('personLivepostNavigation', false, false, true, function(){return Dime.psMap.TYPE.LIVEPOST;}));
+    addToViewMap(new DimeViewMapEntry('personDataboxNavigation', false, false, true, function(){return Dime.psMap.TYPE.DATABOX;}));
+    addToViewMap(new DimeViewMapEntry('personResourceNavigation', false, false, true, function(){return Dime.psMap.TYPE.RESOURCE;}));
+    addToViewMap(new DimeViewMapEntry('settingsNavigationContainer', false, true, false, function(){return Dime.psMap.TYPE.SERVICEADAPTER;}));
+    //the following are deactivated by default and only shown when required
+    addToViewMap(new DimeViewMapEntry('dropzoneNavigation', false, false, false, null));
+    addToViewMap(new DimeViewMapEntry('globalItemNavigation', false, false, false, null));  
+    addToViewMap(new DimeViewMapEntry('alertStatusNavigation', false, false, false, null));  
+    
+    //init view status
+    this.status = new DimeViewStatus( DimeViewStatus.GROUP_CONTAINER_VIEW,
+        Dime.psMap.TYPE.GROUP, Dime.psMap.TYPE.PERSON, '@me', null,null,"");
+    
+    this.visibleViews={}; //contains ids of views currently visible
+};
+
+
+DimeViewManager.prototype = {
+       
+    getCurrentGroupType: function(){
+        return this.status.groupType;
+    },
+    
+    getCurrentItemType: function(){
+        return this.status.itemType;
+    },
+
+    showAlertStatusNavigation: function(innerHtml){
+        $("#alertStatusNavigation").empty().append(innerHtml);
+        this.setViewVisible('alertStatusNavigation', true);                            
+    },      
+            
+    setViewVisible: function(viewId, setVisible){
+        this.visibleViews[viewId]=setVisible;
+        if (setVisible){
+            $('#'+viewId).removeClass('hidden');
+        }else{
+            $('#'+viewId).addClass('hidden');
+        }
+    },
+    
+   
+    pushHistory: function(status){
+        var url = status.toUrlString();
+        window.history.pushState(status, "", url);
+    },
+            
+            
+            
+    updateViewInternal: function(newStatus, skipHistory){
+        //store status for reference by called functions e.g. DimeView.search //REFACTOR
+        this.status = newStatus;
+        var dimeViewRef = this.dimeViewRef;
+        
+        //update evaluation data
+        Dime.evaluation.updateViewStack(newStatus.groupType, newStatus.viewType);
+        
+        this.resetContainers(newStatus); //based on viewtype
+
+        if (!skipHistory){ 
+            this.pushHistory(newStatus);
+        }
+
+        this.dimeViewRef.updateNavigation(newStatus);
+        
+        //in order to avoid showing groups and contacts in person view
+        if(newStatus.isGroupContainer()){
+            this.dimeViewRef.resetSearch.call(dimeViewRef);
+        }
+        if(newStatus.isPersonView()){
+            var handleResult = function(response){
+                if(response){
+                    dimeViewRef.updatePersonViewContainers.call(dimeViewRef, response);
+                }
+            };
+            Dime.REST.getItem(newStatus.personGuid, Dime.psMap.TYPE.PERSON, handleResult, '@me', this);
+            
+        }
+        if (newStatus.detailItemGuid&& newStatus.detailItemGuid.length>0 
+                && newStatus.personGuid && newStatus.personGuid.length>0 ){
+            var showDialog = function (response){
+                if (response){
+                    dimeViewRef.editItem.call(dimeViewRef, null, null, response, newStatus.message);
+                }
+            };
+            Dime.REST.getItem(newStatus.detailItemGuid, newStatus.detailItemType, showDialog, newStatus.personGuid, this);
+        }
+        
+    },
+
+    resetContainers: function(status){        
+        var managerRef = this;
+        
+        jQuery.each(this.viewMap, function(){
+            //viewMapEntry: id, groupActive, settingsActive, personViewActive getType()
+            var displayMe=false;
+            if (status.isGroupContainer()){
+                displayMe=this.groupActive;
+            }else if (status.isSettingsView()){
+                displayMe=this.settingsActive;
+            }else if (status.isPersonView()){
+                displayMe=this.personViewActive;
+            }
+            managerRef.setViewVisible(this.id, displayMe);
+        });
+    },
+            
+    updateViewFromStatus: function(status, skipHistory){
+        //to support also plain objects as deliverd from history we create a new status object
+        var myStatus = new DimeViewStatus(status.viewType, status.groupType, 
+                status.itemType, status.personGuid, status.detailItemGuid, status.detailItemType, status.message);
+        this.updateViewInternal(myStatus, skipHistory);
+    },
+    
+    updateView: function(groupType, viewType, skipHistory){
+        var status = new DimeViewStatus(viewType, groupType,
+            Dime.psHelper.getChildType(groupType), 
+            this.status.personGuid, null, 
+            null, "");            
+        
+        this.updateViewInternal(status, skipHistory);
+    },
+            
+    updateViewFromUrl: function(){
+        var status = DimeViewStatus.readUrlString();
+        this.updateViewInternal(status, false);
+    },
+    
+    getViewsByType: function(type){
+         var result = [];
+         jQuery.each(this.viewMap, function(){
+            if (this.getType && this.getType()===type){
+                result.push(this);
+            } 
+         });
+         return result;
+    },        
+            
+    viewForTypeIsShown: function(type){
+        var views = this.getViewsByType(type);
+        jQuery(views, function(){
+            if (this.visibleViews[this.id]){
+                return true;
+            }
+        });
+        return false;
+    },
+    
+    updateViewFromNotifications: function(notifications){
+        
+        var status = this.status;
+        
+        var refreshSearch = false;
+        var refreshSituations = false;
+        var refreshPlaces = false;
+        var refreshServices = false;
+        var refreshAccounts = false;
+        var refreshUserSettings=false;
+
+        for (var i=0;i<notifications.length;i++){
+            if (notifications[i].element){
+                var notificationType=notifications[i].element.type;
+                
+                if ((notificationType===status.groupType) 
+                        || (notificationType===status.itemType)){
+                        refreshSearch=true;
+                }
+
+                //no else here, since the following might be called also in the case notificationType===status.groupType
+                if (notificationType===Dime.psMap.TYPE.SITUATION){
+                    refreshSituations=true;
+                }else if (notificationType===Dime.psMap.TYPE.PLACE){
+                    refreshPlaces=true;                
+                }else if (notificationType === Dime.psMap.TYPE.SERVICEADAPTER) {
+                    refreshServices = true;
+                } else if (notificationType === Dime.psMap.TYPE.ACCOUNT) {
+                    refreshAccounts = true;
+                }else if (notificationType==='user'){
+                    refreshUserSettings=true;
+                }
+
+            }
+        }
+        if (refreshSituations){
+            Dime.Navigation.updateSituations();
+        }
+        if (refreshPlaces){
+            Dime.Navigation.updateCurrentPlace();
+        }
+        if (status.viewType===DimeViewStatus.SETTINGS_VIEW){
+            if(refreshUserSettings){
+                Dime.Settings.updateSettings();
+            }
+            if (refreshServices) {
+                Dime.Settings.updateServices();
+            }
+            if (refreshAccounts) {
+                Dime.Settings.updateAccounts();
+            }
+            
+        } else {
+            
+            if (refreshSearch){
+                this.updateViewInternal(status, true);
+            }
+        }
+    },
+            
+    updateViewForPerson: function(event, element, entry){
+        var personGuid = entry.guid;
+        
+        var status = new DimeViewStatus(DimeViewStatus.PERSON_VIEW, 
+            Dime.psMap.TYPE.GROUP,
+            Dime.psMap.TYPE.PERSON,
+            personGuid, null, null, ""); 
+            
+        this.updateViewInternal(status, false);
+    },
+
+};
+//---------------------------------------------
+//#############################################
+//  END DimeView Manager
+//#############################################
+//
+
+//---------------------------------------------
+//#############################################
 //  DimeView 
 //#############################################
 //
@@ -31,9 +407,6 @@
 DimeView = {
     
     searchFilter: "",
-    groupType:Dime.psMap.TYPE.GROUP,
-    itemType:Dime.psMap.TYPE.PERSON,
-    currentGuid: null,
     pushState:{}, //browser history to manage back-button
     
     getShortNameWithLength: function(name, length){
@@ -94,11 +467,11 @@ DimeView = {
             return result;
         }//else
         
-        //new behaviour of selection (old: switching a group led to lost of selection)
+        
         if(!isGroup){
             var allSelectedItems = JSTool.getDefinedMembers(DimeView.selectedItems);
             for(var j=0; j<allSelectedItems.length; j++){
-                if(entry.guid == allSelectedItems[j].guid){
+                if(entry.guid === allSelectedItems[j].guid){
                     result.addClass("ItemChecked");
                 }
             }
@@ -117,7 +490,7 @@ DimeView = {
         if(isGroupItem){
             jElement.clickExt(DimeView, DimeView.showGroupMembers, entry);
         }else if (entry.type===Dime.psMap.TYPE.PERSON){
-            jElement.clickExt(DimeView, DimeView.updateViewForPerson, entry);
+            jElement.clickExt(DimeView.viewManager, DimeView.viewManager.updateViewForPerson, entry);
         }else if(showEditOnClick){
             jElement.clickExt(DimeView, DimeView.editItem, entry);
         }
@@ -217,27 +590,29 @@ DimeView = {
         var unValues=Dime.un.getCaptionImageUrl(entry);
         
         if (entry.unType===Dime.psMap.UN_TYPE.REF_TO_ITEM){
-            var elementType=entry.unEntry.type;
+            var viewType = DimeViewStatus.GROUP_CONTAINER_VIEW;
+            var detailItemType=entry.unEntry.type;
 
-            var groupType = elementType;
-            if (Dime.psHelper.isChildType(elementType)){
-                groupType=Dime.psHelper.getParentType(elementType);
+            var groupType;            
+            
+            var detailUserId=entry.unEntry.userId;
+            var message=unValues.caption;
+            if (detailUserId!=='@me'){
+                groupType=Dime.psMap.TYPE.GROUP;
+                viewType = DimeViewStatus.PERSON_VIEW;
+                //TODO shared by whom?!
+                //message += sender...
+            }else if (Dime.psHelper.isChildType(detailItemType)){
+                //for @me adjust groupType if detailItemType is set
+                groupType=Dime.psHelper.getParentType(detailItemType);            
             }
+            var itemType = Dime.psHelper.getChildType(groupType);
 
-            var guid = encodeURIComponent(entry.unEntry.guid);
-            var userId=entry.unEntry.userId;
-            if (userId!=='@me'){
-                userId=encodeURIComponent(userId);
-            }
-
-            var target = "self.location.href='index.html?type="+ groupType
-                +"&guid="+guid
-                +"&userId="+userId
-                +"&dItemType="+elementType
-                +"&msg="+unValues.caption
-                +"'";
-
-            jChildItem.attr("onclick", target);
+            var status = new DimeViewStatus(viewType, groupType, itemType, detailUserId, 
+                    entry.unEntry.guid, detailItemType, message);
+            jChildItem.click(function(){                
+               DimeView.viewManager.updateViewFromStatus(status, false);
+            });
         }else{
             jChildItem.click(function(){
                 //TODO fix
@@ -271,7 +646,7 @@ DimeView = {
         
         //get current placeGuid stored in #currentPlaceGuid
         var currentPlaceGuid = document.getElementById("currentPlaceGuid").getAttribute("data-guid");
-        if(entry.guid == currentPlaceGuid){
+        if(entry.guid === currentPlaceGuid){
             jChildItem.addClass("highlightCurrentPlaceItem");
         }else{
             jChildItem.removeClass("highlightCurrentPlaceItem");
@@ -413,10 +788,7 @@ DimeView = {
         DimeView.getMetaListContainer(DimeView.CONTAINER_ID_SHAREDWITH).empty();
         
     },
-    
-    groupEntries: [],
-    
-    itemEntries: [],
+   
 
     initContainer: function(jContainer, caption, selectingGroupName){  
 
@@ -440,7 +812,7 @@ DimeView = {
     handleSearchResultForContainer: function(type, entries, jContainerElement, isGroupContainer){
 
         if (!entries || entries.length===0){
-            jContainerElement.addClass('hidden');
+            DimeView.viewManager.setViewVisible.call(DimeView.viewManager, jContainerElement.attr('id'), false);            
             return;
         }
 
@@ -487,7 +859,7 @@ DimeView = {
 
         DimeView.initContainer(jContainerElement, Dime.psHelper.getPluralCaptionForItemType(entries[0].type));
 
-        jContainerElement.removeClass('hidden');
+        DimeView.viewManager.setViewVisible.call(DimeView.viewManager, jContainerElement.attr('id'), true);                    
 
         for (var i=0; i<entries.length; i++){ 
             if (isInFilter(entries[i])){
@@ -521,13 +893,29 @@ DimeView = {
         var mySelectedItems = JSTool.getDefinedMembers(DimeView.selectedItems);
         for (var i=0;i<mySelectedItems.length;i++){
             var item = mySelectedItems[i];
-            if (item){
+            if (item && item.element){
                 item.element.removeClass("ItemChecked");
             }
         }
         DimeView.selectedItems = {};
         $("#globalActionButton").empty();
         DimeView.updateActionView(0);
+    },
+            
+    getSelectedItemsForView: function(){
+        
+        //in person view, the person is also a selected item
+        if (DimeView.viewManager.status.isPersonView()){
+            var myGuid = DimeView.viewManager.status.personGuid;
+            DimeView.selectedItems[myGuid] = { 
+                guid:myGuid,
+                userId:'@me',
+                type:Dime.psMap.TYPE.PERSON,
+                isGroupItem:false,
+                element:null
+            };
+        }
+        return JSTool.getDefinedMembers(DimeView.selectedItems);        
     },
     
     ACTION_BUTTON_ID:[
@@ -606,33 +994,31 @@ DimeView = {
         }
         var guid=entry.guid;
         
-        //new behaviour of selection
+        var doSelectItem = function(myGuid){
+            DimeView.selectedItems[myGuid] = { 
+                guid:myGuid,
+                userId:entry.userId,
+                type:entry.type,
+                isGroupItem:isGroupItem,
+                element:element
+            };
+            $(element).addClass("ItemChecked");
+        }
+                
         var selectedItemsAll = JSTool.getDefinedMembers(DimeView.selectedItems);
         var lastMemberCount = selectedItemsAll.length;
-        if(DimeView.selectedItems[guid]){
+        if(DimeView.selectedItems[guid]){ //click on a already selected item
             DimeView.selectedItems[guid] = null;
-            $(element).removeClass("ItemChecked");
-        }else if(lastMemberCount == 0 || entry.type == selectedItemsAll[lastMemberCount-1].type){
-            DimeView.selectedItems[guid] = { //FIXME refactor - only use a hash with guid as key for all items!!!
-                guid:guid,
-                userId:entry.userId,
-                type:entry.type,
-                isGroupItem:isGroupItem,
-                element:element
-            };
-            $(element).addClass("ItemChecked");
+            $(element).removeClass("ItemChecked"); //unselect
+        
+        //first item to be selected or type not changed
+        }else if(lastMemberCount === 0 || entry.type === selectedItemsAll[lastMemberCount-1].type){
+            doSelectItem(guid);
+        //if an item was selected already, but type (container) has been changed
         }else{
-            DimeView.selectedItems = {};
-            $(".groupChecked").removeClass("ItemChecked");
-            $(".personItem").removeClass("ItemChecked");
-            DimeView.selectedItems[guid] = { //FIXME refactor - only use a hash with guid as key for all items!!!
-                guid:guid,
-                userId:entry.userId,
-                type:entry.type,
-                isGroupItem:isGroupItem,
-                element:element
-            };
-            $(element).addClass("ItemChecked");
+            //remove previous selection first
+            DimeView.clearSelectedItems();
+            doSelectItem(guid);
         }
         
         var memberCount = JSTool.countDefinedMembers(DimeView.selectedItems);     
@@ -652,7 +1038,7 @@ DimeView = {
         //FIXME show this nicely
         var message = "Selected items:\n";
         
-        var mySelectedItems = JSTool.getDefinedMembers(DimeView.selectedItems);
+        var mySelectedItems = DimeView.getSelectedItemsForView();
         for (var i=0;i<mySelectedItems.length;i++){
             var item = mySelectedItems[i];
             message += item.type + ": "+item.guid+"("+item.userId+")\n";
@@ -810,7 +1196,7 @@ DimeView = {
             return;
         }
         
-        //ATTENTION - this solution is not realy thread-safe - see also comment below...
+        //ATTENTION - this solution is not realy call-response-order-safe - see also comment below...
         if (entry.guid===DimeView.previousHoverGUID){ //avoid reloading the same user again
             return;
         }
@@ -952,12 +1338,14 @@ DimeView = {
 
         Dime.Dialog.showDetailItemModal(entry, isEditable, message);
     },
+            
+    
     
     editSelected: function(){
 
         Dime.evaluation.createAndSendEvaluationItemForAction("action_editItem");
 
-        var selectedItems = JSTool.getDefinedMembers(DimeView.selectedItems);
+        var selectedItems = DimeView.getSelectedItemsForView();
         if (selectedItems.length!==1){
             window.alert("Please select a single item.");
             return;
@@ -971,7 +1359,7 @@ DimeView = {
     },
     
     removeSelected: function(){
-        var mySelectedItems = JSTool.getDefinedMembers(DimeView.selectedItems);
+        var mySelectedItems = DimeView.getSelectedItemsForView();
         
         if (mySelectedItems.length<1){
             window.alert("Please select at least one item to be deleted!");
@@ -993,7 +1381,7 @@ DimeView = {
     shareSelected: function(){
         Dime.evaluation.createAndSendEvaluationItemForAction("action_share");
 
-        var selectedItems = JSTool.getDefinedMembers(DimeView.selectedItems);
+        var selectedItems = DimeView.getSelectedItemsForView();
         
         var triggerDialog=function(response){
 
@@ -1062,10 +1450,10 @@ DimeView = {
         var jGlobalSearchResultContainer = $('#globalItemNavigation');
         
         if (!response || response.length===0){
-            jGlobalSearchResultContainer.addClass("hidden");
+            DimeView.viewManager.setViewVisible.call(DimeView.viewManager, 'globalItemNavigation', false);            
             return;
         }else{
-            jGlobalSearchResultContainer.removeClass("hidden");
+            DimeView.viewManager.setViewVisible.call(DimeView.viewManager, 'globalItemNavigation', true);
         }
         
         DimeView.globalSearchResults = response;
@@ -1152,19 +1540,14 @@ DimeView = {
 
         DimeView.cleanUpView();
 
-        if (DimeView.groupType===Dime.psMap.TYPE.PLACE ){
+        if (DimeView.viewManager.getCurrentGroupType()===Dime.psMap.TYPE.PLACE ){
             var continueSearch = true;
             Dime.psHelper.canRetrievePlaces(function(connected){
                 if(!connected){
-                    //(new Dime.Dialog.Toast('To activate support for places, please connect to the YellowMapPlaceService in the settings tab!')).show(10*1000);
-                    //window.alert('To activate support for places, please connect to the YellowMapPlaceService in the settings tab!');
-                    //(new Dime.Dialog.Alert('To activate support for places, please connect to the YellowMapPlaceService in the settings tab!')).show();
-                    $("#alertStatusNavigation")
-                            .empty() 
-                            .removeClass("hidden")
-                            .append('To see places nearby to you, please')
-                            .append('<br>1. Go to Settings and add the "YellowmapPlaceService"')
-                            .append('<br>2. Click “Get location” (in the bar on the right), follow the instructions in the browser');
+                    DimeView.viewManager.showAlertStatusNavigation.call(DimeView.viewManager, 
+                            'To see places nearby to you, please'
+                            + '<br>1. Go to Settings and add the "YellowmapPlaceService"'
+                            + '<br>2. Click “Get location” (in the bar on the right), follow the instructions in the browser');
                     continueSearch=false;
                 }
             },this);
@@ -1173,28 +1556,28 @@ DimeView = {
             }
         }
         
-        if (DimeView.groupType
-            && (DimeView.groupType!==Dime.psMap.TYPE.LIVESTREAM) //HACK avoid call for unsupported livestream
+        if (DimeView.viewManager.getCurrentGroupType()
+            && (DimeView.viewManager.getCurrentGroupType()!==Dime.psMap.TYPE.LIVESTREAM) //HACK avoid call for unsupported livestream
         ){
-            DimeView.searchCallForType(DimeView.groupType);
+            DimeView.searchCallForType(DimeView.viewManager.getCurrentGroupType());
             
             //also search on global search if groupType==GROUP
-            if (DimeView.groupType===Dime.psMap.TYPE.GROUP && searchText.value && (searchText.value.length>0)){
+            if (DimeView.viewManager.getCurrentGroupType()===Dime.psMap.TYPE.GROUP && searchText.value && (searchText.value.length>0)){
 
                 DimeView.initContainer($('#globalItemNavigation'), "di.me Users in the di.me User Directory");
                 
                 Dime.REST.searchGlobal(searchText.value, DimeView.handleGlobalSearchResult);
                 
             }else{
-                $('#globalItemNavigation').addClass("hidden");
+                DimeView.viewManager.setViewVisible.call(DimeView.viewManager, 'globalItemNavigation', false);
             }
-        }else if(DimeView.groupType===Dime.psMap.TYPE.LIVESTREAM){ //HACK avoid call for unsupported livestream
-            $("#groupNavigation").addClass("hidden");
+        }else if(DimeView.viewManager.getCurrentGroupType()===Dime.psMap.TYPE.LIVESTREAM){ //HACK avoid call for unsupported livestream
+            DimeView.viewManager.setViewVisible.call(DimeView.viewManager, "groupNavigation", false);            
         }
 
 
-        if (DimeView.itemType){ 
-            DimeView.searchCallForType(DimeView.itemType);
+        if (DimeView.viewManager.getCurrentItemType()){ 
+            DimeView.searchCallForType(DimeView.viewManager.getCurrentItemType());
         }
         
        
@@ -1347,11 +1730,11 @@ DimeView = {
                             (new Dime.Dialog.Toast("Geolocation services are not supported by your browser.")).show();
                         };
                         
-                        DimeView.updateView("place", DimeView.GROUP_CONTAINER_VIEW, true);
+                        DimeView.viewManager.updateView.call(DimeView.viewManager, Dime.psMap.TYPE.PLACE, DimeViewStatus.GROUP_CONTAINER_VIEW, true);
                     });
         }
         
-        if(viewType===DimeView.PERSON_VIEW){
+        if(viewType===DimeViewStatus.PERSON_VIEW){
             addRmvBtn
                 .empty()
                 .text("Send Livepost ...")
@@ -1377,166 +1760,63 @@ DimeView = {
         }
     },
 
-    //VIEW_MAP
-    GROUP_CONTAINER_VIEW: 1,
-    SETTINGS_VIEW: 2,
-    PERSON_VIEW: 3,
-
-    currentView: 0,
-
-    viewMapEntry: function(id, groupActive, settingsActive, personViewActive){
-        this.id = id;
-        this.groupActive = groupActive;
-        this.settingsActive = settingsActive; 
-        this.personViewActive = personViewActive;
-    },
-
-    viewMap:{}, //initialization at the end of DimeView
-
-    addToViewMap: function(viewMapEntry){
-        DimeView.viewMap[viewMapEntry.id]=viewMapEntry;
-    },
-    
-    /**
-     *
-     *
-     */
-    updateView: function(groupType, viewType, avoidPushingHistory){
-        
-        //to remove/empty the alert in another view
-        $("#alertStatusNavigation").addClass("hidden").empty();
-
-        if (!viewType){
-            viewType = DimeView.GROUP_CONTAINER_VIEW;
-        }
-
-        //send some evaluation data
-        Dime.evaluation.updateViewStack(groupType, viewType);
-
-        DimeView.currentView=viewType;
-        DimeView.switchViewForViewType();
-
-        if (!avoidPushingHistory){ //FIXME add support for settings by furhter url parameters --> refactoring required!
-            if (!groupType){
-                console.log("grouptype not set - using default: GROUP");
-                groupType=Dime.psMap.TYPE.GROUP;
-            }
-            window.history.pushState({groupType:groupType, viewType:viewType}, "", "index.html?type="+groupType+"&viewType="+viewType);
-        }
-
-        if (viewType===DimeView.SETTINGS_VIEW){
-            Dime.Navigation.setButtonsActive("navButtonSettings");
-            Dime.Settings.updateView();
-            return;
-        }
-
-        if (!groupType){
-            //GO on with viewType===PERSON_VIEW and viewType===GROUP_CONTAINER_VIEW
-            console.log("grouptype not set - using default: GROUP");
-            groupType = Dime.psMap.TYPE.GROUP;
-        }
-        
-        //update grouptype and itemtype
-        DimeView.groupType = groupType;        
-        DimeView.itemType =  Dime.psHelper.getChildType(DimeView.groupType);
-
+  updateNavigation: function(newStatus){
+        var groupType = newStatus.groupType;
         //update navigation button shown
-        if (DimeView.groupType===Dime.psMap.TYPE.DATABOX){
+        if (groupType===Dime.psMap.TYPE.DATABOX){
             Dime.Navigation.setButtonsActive("navButtonData");
             $('#searchText').attr('placeholder', 'find data');
-        }else if (DimeView.groupType===Dime.psMap.TYPE.PROFILE){
+        }else if (groupType===Dime.psMap.TYPE.PROFILE){
             Dime.Navigation.setButtonsActive("navButtonProfile");
             $('#searchText').attr('placeholder', 'find my profile cards');
-        }else if (DimeView.groupType===Dime.psMap.TYPE.GROUP){
+        }else if (groupType===Dime.psMap.TYPE.GROUP){
             Dime.Navigation.setButtonsActive("navButtonPeople");
             //$('#searchText').attr('placeholder', 'find persons and groups (single search-word, avoid incomplete names)');
             $('#searchText').attr('placeholder', 'search in your contacts and Di.me User directory');
-        }else if (DimeView.groupType===Dime.psMap.TYPE.LIVESTREAM){
+        }else if (groupType===Dime.psMap.TYPE.LIVESTREAM){
             Dime.Navigation.setButtonsActive("navButtonMessages");
             $('#searchText').attr('placeholder', 'find liveposts');
-        }else if (DimeView.groupType===Dime.psMap.TYPE.EVENT){
+        }else if (groupType===Dime.psMap.TYPE.EVENT){
             Dime.Navigation.setButtonsActive("navButtonEvent");
             $('#searchText').attr('placeholder', 'find events');
             //added alert for not supported calendar
-            $("#alertStatusNavigation").removeClass("hidden").text("The calendar is not yet supported in the research prototype, sorry.");
-        }else if (DimeView.groupType===Dime.psMap.TYPE.USERNOTIFICATION){
+            DimeView.viewManager.showAlertStatusNavigation.call(DimeView.viewManager, 
+                                "The calendar is not yet supported in the research prototype, sorry.");
+        }else if (groupType===Dime.psMap.TYPE.USERNOTIFICATION){
             Dime.Navigation.setButtonsActive("notificationIcon");
             $('#searchText').attr('placeholder', 'find notifications');
-        }else if (DimeView.groupType===Dime.psMap.TYPE.SITUATION){
+        }else if (groupType===Dime.psMap.TYPE.SITUATION){
             Dime.Navigation.setButtonsActive("currentSituation");
             $('#searchText').attr('placeholder', 'find situations');
-        }else if (DimeView.groupType===Dime.psMap.TYPE.PLACE){
+        }else if (groupType===Dime.psMap.TYPE.PLACE){
             Dime.Navigation.setButtonsActive("currentPlace");
             $('#searchText').attr('placeholder', 'find places');         
         }
         
         //activate dropzone
-        if (DimeView.itemType===Dime.psMap.TYPE.RESOURCE){
-            $("#dropzoneNavigation").removeClass("hidden");
+        if (newStatus.itemType===Dime.psMap.TYPE.RESOURCE){
+            DimeView.viewManager.setViewVisible.call(DimeView.viewManager, 'dropzoneNavigation', true);
             DimeView.initFileUploaderForDropzone();
         }
 
         DimeView.updateNewButton(groupType);
         DimeView.updateShareButton(groupType);
         DimeView.updateMoreButton(groupType);
-        DimeView.updateAddRemoveButton(groupType, viewType);
+        DimeView.updateAddRemoveButton(groupType, newStatus.viewType);
 
         DimeView.updateMetaBar(groupType);
-        //in order to avoid showing groups and contacts in person view
-        if(viewType!==DimeView.PERSON_VIEW){
-            DimeView.resetSearch();
+        
+        if (newStatus.isSettingsView()){
+            Dime.Navigation.setButtonsActive("navButtonSettings");
+            Dime.Settings.updateView();
+         
         }
     },
-
-    switchViewForViewType: function(){
-        var viewType=DimeView.currentView;
-
-        jQuery.each(DimeView.viewMap, function(){
-            //viewMapEntry: id, groupActive, settingsActive, personViewActive
-            var displayMe=false;
-            if (viewType===DimeView.GROUP_CONTAINER_VIEW){
-                displayMe=this.groupActive;
-            }else if (viewType===DimeView.SETTINGS_VIEW){
-                displayMe=this.settingsActive;
-            }else if (viewType===DimeView.PERSON_VIEW){
-                displayMe=this.personViewActive;
-            }
-            if (displayMe){
-                $('#'+this.id).removeClass('hidden');
-            }else{
-                $('#'+this.id).addClass('hidden');
-            }
-        });
-    },
-
-    //called from back button in index.html
-    restoreGroupView:function(){
-        DimeView.updateView(DimeView.groupType, DimeView.GROUP_CONTAINER_VIEW);
-    },
-
-
-    updateViewForPerson: function(event, element, entry){
-        var guid = entry.guid;
-        
-        //hide other container
-        DimeView.currentView=DimeView.PERSON_VIEW;
-        //instead of DimeView.switchViewForViewType();
-        DimeView.updateView(DimeView.groupType, DimeView.PERSON_VIEW, false);
-
-        DimeView.currentGuid=guid;
-        Dime.evaluation.updateViewStack("", DimeView.currentView);
-                
-        
+            
+    updatePersonViewContainers: function(personEntry){
         //select the clicked person for preselection in the share-dialog
-        this.clearSelectedItems();
-        this.selectItem(event, element, entry, false);
-        
-        //check and get item
-        if (!guid || guid.length===0){
-            console.log("ERROR wrong call updateViewForPerson with guid:", guid);
-            return;
-        }
-
+        DimeView.clearSelectedItems();
+        DimeView.updateActionView(1);
         
         //adding person information
         $('#currentPersonOverview')
@@ -1545,7 +1825,7 @@ DimeView = {
                 $('<div></div>')
                     .addClass("currentPersonImage")
                     .append(
-                        $('<img></img>').attr("src", entry.imageUrl)
+                        $('<img></img>').attr("src", personEntry.imageUrl)
                     )
             )
             .append(
@@ -1554,20 +1834,20 @@ DimeView = {
                     .append(
                         $('<div></div>')
                             .addClass("personInformationName")
-                            .append(entry.name)
+                            .append(personEntry.name)
                     )
                     .append(
                         $('<div></div>')
                             .addClass("personInformationChange")
                             .append("Last change: ")
-                            .append(JSTool.millisToFormatString(entry.lastModified))
+                            .append(JSTool.millisToFormatString(personEntry.lastModified))
                     )
                     .append(
                         $('<div></div>')
                             .addClass("personInformationTrust")
                             .append("Trust level: ")
-                            .append(Dime.privacyTrust.getClassAndCaptionForPrivacyTrust(entry["nao:trustLevel"], false).caption)
-                            .addClass(Dime.privacyTrust.getClassAndCaptionForPrivacyTrust(entry["nao:trustLevel"], false).classString)
+                            .append(Dime.privacyTrust.getClassAndCaptionForPrivacyTrust(personEntry["nao:trustLevel"], false).caption)
+                            .addClass(Dime.privacyTrust.getClassAndCaptionForPrivacyTrust(personEntry["nao:trustLevel"], false).classString)
                     )
             )
             .append(
@@ -1599,22 +1879,22 @@ DimeView = {
                     response, $('#personResourceNavigation'), false);
         };
                 
-        Dime.REST.getAll(Dime.psMap.TYPE.PROFILE, updateProfileContainer, guid);
-        Dime.REST.getAll(Dime.psMap.TYPE.PROFILEATTRIBUTE, updateProfileAttributeContainer, guid);       
-        Dime.REST.getAll(Dime.psMap.TYPE.LIVEPOST, updateLivepostContainer, guid);        
-        Dime.REST.getAll(Dime.psMap.TYPE.DATABOX, updateDataboxContainer, guid);
-        Dime.REST.getAll(Dime.psMap.TYPE.RESOURCE, updateResourceContainer, guid);
-        
-        /*
-        var updateAllSharedItems=function(response){
-            for(var i=0; i<response.length; i++){
-                //$("#test1234").append(DimeView.createItemJElement(response[i]));
-            } 
-        };
-        Dime.psHelper.getAllSharedItems(entry, updateAllSharedItems);
-        */
+        Dime.REST.getAll(Dime.psMap.TYPE.PROFILE, updateProfileContainer, personEntry.guid);
+        Dime.REST.getAll(Dime.psMap.TYPE.PROFILEATTRIBUTE, updateProfileAttributeContainer, personEntry.guid);       
+        Dime.REST.getAll(Dime.psMap.TYPE.LIVEPOST, updateLivepostContainer, personEntry.guid);        
+        Dime.REST.getAll(Dime.psMap.TYPE.DATABOX, updateDataboxContainer, personEntry.guid);
+        Dime.REST.getAll(Dime.psMap.TYPE.RESOURCE, updateResourceContainer, personEntry.guid);
         
     },
+            
+    /**
+     * called from back button in index.html
+     */
+    restoreGroupView:function(){
+        DimeView.viewManager.updateView.call(DimeView.viewManager, Dime.psMap.TYPE.GROUP, DimeViewStatus.GROUP_CONTAINER_VIEW, false);
+    },            
+    
+    
 
     OrangeBubble: function(handlerSelf, caption, bubbleBody, dismissHandler){
 
@@ -1654,8 +1934,6 @@ DimeView = {
             return;
         }
         var serverInfo = Dime.ps_configuration.serverInformation; //initially retrieved in main.js
-
-
 
         var loginbaselink=Dime.ps_configuration.getRealBasicUrlString()
         +'/dime-communications/web/access/';
@@ -1749,24 +2027,8 @@ DimeView.OrangeBubble.prototype = {
         $(this.bubble).remove();
     }
 };
-//                                               id, groupActive, settingsActive, personViewActive
-DimeView.addToViewMap(new DimeView.viewMapEntry('groupNavigation', false, false, false)); //initially set to false, so it will only be shown with some content in place
-DimeView.addToViewMap(new DimeView.viewMapEntry('itemNavigation', false, false, false)); //initially set to false, so it will only be shown with some content in place
-DimeView.addToViewMap(new DimeView.viewMapEntry('searchBox', true, false, false));
-DimeView.addToViewMap(new DimeView.viewMapEntry('metabarMetaContainer', true, false, true));
-DimeView.addToViewMap(new DimeView.viewMapEntry('backToGroupButton', false, false, true));
-DimeView.addToViewMap(new DimeView.viewMapEntry('currentPersonOverview', false, false, true));
-DimeView.addToViewMap(new DimeView.viewMapEntry('currentPersonLabel', false, false, true));
-DimeView.addToViewMap(new DimeView.viewMapEntry('personProfileAttributeNavigation', false, false, true));
-DimeView.addToViewMap(new DimeView.viewMapEntry('personProfileNavigation', false, false, true));
-DimeView.addToViewMap(new DimeView.viewMapEntry('personLivepostNavigation', false, false, true));
-DimeView.addToViewMap(new DimeView.viewMapEntry('personDataboxNavigation', false, false, true));
-DimeView.addToViewMap(new DimeView.viewMapEntry('personResourceNavigation', false, false, true));
-DimeView.addToViewMap(new DimeView.viewMapEntry('settingsNavigationContainer', false, true, false));
-//the following are deactivated by default and only shown when required
-DimeView.addToViewMap(new DimeView.viewMapEntry('dropzoneNavigation', false, false, false));
-DimeView.addToViewMap(new DimeView.viewMapEntry('globalItemNavigation', false, false, false));
 
+DimeView.viewManager = new DimeViewManager(DimeView);
 
 //---------------------------------------------
 //#############################################
@@ -2107,34 +2369,9 @@ Dime.initProcessor.registerFunction(function(callback){
        DimeView.search(); 
     });
     
-    //set grouptype
-    var groupType = Dime.psHelper.getURLparam("type");
-    var viewType = Dime.psHelper.getURLparam("viewType");
-    var guid = Dime.psHelper.getURLparam("guid");
-    var dItemType = Dime.psHelper.getURLparam("dItemType");
-    var userId = Dime.psHelper.getURLparam("userId");
-    var message = Dime.psHelper.getURLparam("msg");
+    DimeView.viewManager.updateViewFromUrl.call(DimeView.viewManager);
     
-    //update view
-    if(viewType==DimeView.SETTINGS_VIEW){
-        DimeView.updateView(groupType, DimeView.SETTINGS_VIEW, true);
-    }else if(viewType==DimeView.PERSON_VIEW){
-        DimeView.updateView(groupType, DimeView.PERSON_VIEW, true);
-    }else{
-        //default
-        DimeView.updateView(groupType, DimeView.GROUP_CONTAINER_VIEW, true);
-    }
     
-    if (guid && guid.length>0 && userId && userId.length>0 ){
-        var showDialog = function (response){
-            if (response){
-                DimeView.editItem(null, null, response, message);
-            }
-        };
-        Dime.REST.getItem(guid, dItemType, showDialog, userId, DimeView);
-
-    }
-
     callback();
 });
 
@@ -2192,59 +2429,7 @@ Dime.initProcessor.registerFunction(function(callback){
 //#############################################
 //---------------------------------------------
 Dime.Navigation.updateView = function(notifications){
-    var refreshContainer = false;
-    var refreshSituations = false;
-    var refreshPlaces = false;
-    var refreshServices = false;
-    var refreshAccounts = false;
-    var refreshUserSettings=false;
-    
-    for (var i=0;i<notifications.length;i++){
-        if (notifications[i].element){
-            var notificationType=notifications[i].element.type;
-            if ((notificationType===DimeView.groupType) 
-                    || (notificationType===DimeView.itemType)){
-                    refreshContainer=true;
-            }
-            
-            //no else here, since the following might be called also in the case notificationType===DimeView.groupType
-            if (notificationType===Dime.psMap.TYPE.SITUATION){
-                refreshSituations=true;
-            }else if (notificationType===Dime.psMap.TYPE.PLACE){
-                refreshPlaces=true;                
-            }else if (notificationType === Dime.psMap.TYPE.SERVICEADAPTER) {
-                refreshServices = true;
-            } else if (notificationType === Dime.psMap.TYPE.ACCOUNT) {
-                refreshAccounts = true;
-            }else if (notificationType==='user'){
-                refreshUserSettings=true;
-            }
-
-        }
-    }
-    if (refreshSituations){
-        Dime.Navigation.updateSituations();
-    }
-    if (refreshPlaces){
-        Dime.Navigation.updateCurrentPlace();
-    }
-
-
-    if (DimeView.currentView===DimeView.GROUP_CONTAINER_VIEW){
-        if (refreshContainer){
-            DimeView.search();
-        }
-    }else if (DimeView.currentView===DimeView.SETTINGS_VIEW){
-        if(refreshUserSettings){
-            Dime.Settings.updateSettings();
-        }
-        if (refreshServices) {
-            Dime.Settings.updateServices();
-        }
-        if (refreshAccounts) {
-            Dime.Settings.updateAccounts();
-        }
-    }
+    DimeView.viewManager.updateViewFromNotifications.call(DimeView.viewManager, notifications);
 };
 
 Dime.Navigation.createMenuLiButton=function(id, caption, containerGroupType){
@@ -2252,7 +2437,7 @@ Dime.Navigation.createMenuLiButton=function(id, caption, containerGroupType){
     return $('<li/>').attr('id',id).append($('<a/>')
         .click(function(){
             //update view
-            DimeView.updateView.call(DimeView, containerGroupType, DimeView.GROUP_CONTAINER_VIEW);
+            DimeView.viewManager.updateView.call(DimeView.viewManager, containerGroupType, DimeViewStatus.GROUP_CONTAINER_VIEW);
         })
         .text(caption));
 };
@@ -2261,7 +2446,7 @@ Dime.Navigation.createMenuLiButtonSettings=function(){
     return $('<li/>').attr('id','navButtonSettings').append($('<a/>')
         .click(function(){
             //update view
-            DimeView.updateView.call(DimeView, "", DimeView.SETTINGS_VIEW);
+            DimeView.viewManager.updateView.call(DimeView.viewManager, "", DimeViewStatus.SETTINGS_VIEW);
         })
         .text('Settings'));
 
@@ -2272,7 +2457,7 @@ Dime.Navigation.createNotificationIcon=function(){
     return $('<div/>').addClass('notificationIcon').attr('id','notificationIcon')
         .click(function(){
             //update view
-            DimeView.updateView.call(DimeView, Dime.psMap.TYPE.USERNOTIFICATION, DimeView.GROUP_CONTAINER_VIEW);
+            DimeView.viewManager.updateView.call(DimeView.viewManager, Dime.psMap.TYPE.USERNOTIFICATION, DimeViewStatus.GROUP_CONTAINER_VIEW);
         })
         .append($('<div/>').attr('id','notificationCounter').text("0"));
 };
@@ -2284,12 +2469,12 @@ Dime.Navigation.createNotificationIcon=function(){
 //---------------------------------------------
 
 /**
- * handle back button --- FIXME not working as intended
+ * handle back button --- FIXME not working as intended * 
  */
  window.onpopstate = function(event) {
-     var viewState = event.state;
-     console.log(viewState);
+     var viewState = event.state;     
      if (viewState){
-         DimeView.updateView(viewState.groupType, viewState.viewType, true);
+         console.log(viewState);
+         DimeView.viewManager.updateViewFromStatus.call(DimeView.viewManager, viewState, true);
      }
 };

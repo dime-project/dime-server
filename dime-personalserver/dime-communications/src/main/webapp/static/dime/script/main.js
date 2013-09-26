@@ -1684,6 +1684,9 @@ Dime.psHelper = {
 
     
     getChildType: function(type){        
+        if (!type){
+            return null;
+        }
         var typeMap = Dime.psMap.map[type];
         return typeMap.childType;      
     },
@@ -3633,7 +3636,7 @@ Dime.Navigation = {
                 .attr('src','img/navigation/white/logOut.png')
                 .attr('onclick','self.location.href=\'/dime-communications/j_spring_security_logout\'')
                 );
-            var situationLink = $('<a/>')
+            var situationLink = $('<a/>') //TODO ###
             .attr('id','currentSituation')
             .attr('href','index.html?type='+ Dime.psMap.TYPE.SITUATION)
             .append($('<div/>').addClass('clear'))
@@ -3643,7 +3646,7 @@ Dime.Navigation = {
                 );
             var placeLink = $('<a/>')
             .attr('id','currentPlace')
-            .attr('href','index.html?type='+ Dime.psMap.TYPE.PLACE)
+            .attr('href','index.html?type='+ Dime.psMap.TYPE.PLACE)//TODO ###
             .append(
                 $('<div/>').addClass('places')
                 .append($('<div/>').addClass('placesIcon'))
