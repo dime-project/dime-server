@@ -426,4 +426,28 @@ public class User {
     public void setUserStatusFlag(Integer userStatusFlag) {
         this.userStatusFlag = userStatusFlag;
     }
+    
+    /**
+     * find all users except the ones containing "filter" (not case sensitive)
+     * @param filter
+     * @return
+     */
+    public static List<User> findAllFilteredBy(String filter) {
+        EntityManager em = User.entityManager();
+        TypedQuery<User> q = em.createQuery("SELECT o FROM User AS o WHERE LOWER(o.username) LIKE LOWER(:filter)", User.class);
+        q.setParameter("filter", filter);
+        return q.getResultList();
+    } 
+    
+    /**
+     * find all users of a given role except the ones containing "filter" (not case sensitive)
+     * @param filter
+     * @return
+     */
+    public static List<User> findAllWithRoleFilteredBy(Role role, String filter) {
+        EntityManager em = User.entityManager();
+        TypedQuery<User> q = em.createQuery("SELECT o FROM User AS o WHERE o.role = :role AND LOWER(o.username) LIKE LOWER(:filter)", User.class);
+        q.setParameter("filter", filter);
+        return q.getResultList();
+    } 
 }
