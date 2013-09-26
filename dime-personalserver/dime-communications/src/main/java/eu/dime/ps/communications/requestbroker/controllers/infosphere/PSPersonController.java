@@ -30,9 +30,6 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.CacheControl;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.EntityTag;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.commons.lang.ArrayUtils;
@@ -131,73 +128,27 @@ public class PSPersonController implements APIController {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
 	@Path("/@me/{personID}")
-	public javax.ws.rs.core.Response getPersonById(@PathParam("said") String said,
-			@PathParam("personID") String personID, @Context javax.ws.rs.core.Request req) {
+	public Response<Resource> getPersonById(@PathParam("said") String said,
+			@PathParam("personID") String personID) {
 
-		logger.info("called API method: GET /dime/rest/"+said+"/person/@me/"+personID);
-		
-		CacheControl cc = new CacheControl();
-		cc.setMaxAge(86400); // max age to one day
-		     
-		javax.ws.rs.core.Response.ResponseBuilder rb = null;
-		Person person = null;
-		
+		logger.info("called API method: GET /dime/rest/" + said
+				+ "/person/@me/"+personID);
+		Data<Resource> data = null;
+
 		try {
-			// ETag is the hash code of the resource
-			person = "@self".equals(personID) ? personManager.getMe() : personManager.get(personID);
-			EntityTag etag = new EntityTag(Integer.toHexString(person.hashCode()));
-			 
-			// Verify if it matched with etag available in the HTTP request
-			rb = req.evaluatePreconditions(etag);
-			 
-			// If ETag matches the rb will be non-null; 
-			// Use the rb to return the response without any further processing
-			if (rb != null) {
-				return rb.cacheControl(cc).tag(etag).build();
-			}
-			 
-			// If rb is null then either it is first time request; or resource is modified
-			// Get the updated representation and return with Etag attached to it
-			Meta meta = new Meta();
-			meta.setCode(Status.OK.getCode());
-			meta.setStatus("OK");
-			meta.setTimeRef(System.currentTimeMillis());
-			meta.setVersion("0.9");
-			meta.setMessage("");
-			
-			Data<Resource> data = new Data<Resource>(0, 1, 1);
-			data.getEntries().add(new Resource(person, null, RENAMING_RULES, personManager.getMe().asURI()));
+			Person person = "@self".equals(personID) ? personManager.getMe()
+					: personManager.get(personID);
+			// Person person= personManager.get(personID);
+			data = new Data<Resource>(0, 1, 1);
+			data.getEntries().add(new Resource(person,null,RENAMING_RULES,personManager.getMe().asURI()));
 
-			Message<Resource> message = new Message<Resource>();
-			message.setMeta(meta);
-			message.setData(data);
-			
-			rb = javax.ws.rs.core.Response.ok(message).cacheControl(cc).tag(etag);
-			return rb.build();
 		} catch (InfosphereException e) {
-			// TODO return a proper JSON for the error
-			return javax.ws.rs.core.Response.serverError().build();
+			return Response.badRequest(e.getMessage(), e);
 		} catch (Exception e) {
-			// TODO return a proper JSON for the error
-			return javax.ws.rs.core.Response.serverError().build();
+			return Response.serverError(e.getMessage(), e);
 		}
-		
-//		Data<Resource> data = null;
-//
-//		try {
-//			Person person = "@self".equals(personID) ? personManager.getMe()
-//					: personManager.get(personID);
-//			// Person person= personManager.get(personID);
-//			data = new Data<Resource>(0, 1, 1);
-//			data.getEntries().add(new Resource(person,null,RENAMING_RULES,personManager.getMe().asURI()));
-//
-//		} catch (InfosphereException e) {
-//			return Response.badRequest(e.getMessage(), e);
-//		} catch (Exception e) {
-//			return Response.serverError(e.getMessage(), e);
-//		}
-//
-//		return Response.ok(data);
+
+		return Response.ok(data);
 	}
 
 	/**
