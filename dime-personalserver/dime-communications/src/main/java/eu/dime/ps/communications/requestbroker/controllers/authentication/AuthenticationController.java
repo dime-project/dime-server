@@ -47,17 +47,10 @@ import eu.dime.ps.storage.entities.User;
 import eu.dime.ps.storage.exception.ReadOnlyValueChangedOnUpdate;
 
 /**
- * REST API for user management by the ADMIN users. The user should be
- * authenticated, and its role should be admin to be able to get here.
- *
- * ---->>>> UNDER CONSTRUCTION <<<<------------ NOTE (Isma): THIS IS NOT
- * CRITICAL FOR Y2, I WOULD LEAVE IT AS IT IS AT THE MOMENT AND WE'LL GET BACK
- * TO THIS LATER ON, KNOWING WHICH FEATURES ARE REQUIRED FOR THE ADMIN USERS,
- * AND ALSO NEEDS TO BE ADAPTED FOR MULTI-TENANCY
- *
-
- *
- * @author marcel
+ * REST API for user management of account information. 
+ * (e.g. change password etc)
+ * The user should be authenticated as the owner of the accessed account or as ADMIN 
+ * @author mheupel
  *
  */
 @Controller()
