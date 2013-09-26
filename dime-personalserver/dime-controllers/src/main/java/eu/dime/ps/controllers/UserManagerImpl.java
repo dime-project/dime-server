@@ -876,4 +876,25 @@ public class UserManagerImpl implements UserManager {
         return user;
     }
 
+	@Override
+	public int countFilteredUsers() {	
+		List <User> list = null;
+	
+        String filter = null;
+        try {
+        	filter = getProps().getProperty("EVALUATION_FILTER_PREFIX", null);
+            if (filter!=null){
+            	filter = filter.trim();
+            	list = User.findAllWithRoleFilteredBy(Role.OWNER, filter);
+            }
+        } catch (IOException ex) {
+            logger.error(ex.getMessage(), ex);
+        }
+
+        if (list != null){
+        	return list.size();
+        }
+		
+	}
+
 }

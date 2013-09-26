@@ -113,4 +113,10 @@ public interface UserManager {
     public User getCurrentUser();
 
 	public void clear(String userId);
+	
+	/**  
+	 * @return number of registered users (role = owner) filtered by EVALUATION_FILTER_PREFIX 
+	 *  specified in service.properties
+	 */
+	public int countFilteredUsers();
 }
