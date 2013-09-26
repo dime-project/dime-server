@@ -254,6 +254,9 @@ DimeViewManager.prototype = {
             var showDialog = function (response){
                 if (response){
                     dimeViewRef.editItem.call(dimeViewRef, null, null, response, newStatus.message);
+                    //reset detail item in status to avoid showing the dialog over again
+                    this.status.detailItemGuid=null;
+                    this.status.detailItemType=null;
                 }
             };
             Dime.REST.getItem(newStatus.detailItemGuid, newStatus.detailItemType, showDialog, newStatus.personGuid, this);
@@ -589,47 +592,57 @@ DimeView = {
         
         var unValues=Dime.un.getCaptionImageUrl(entry);
         
-        if (entry.unType===Dime.psMap.UN_TYPE.REF_TO_ITEM){
-            var viewType = DimeViewStatus.GROUP_CONTAINER_VIEW;
-            var detailItemType=entry.unEntry.type;
+        var handleChildItemContent=function(senderPersonItem){            
+            //update caption with sender name if available
+            unValues.caption = senderPersonItem ? unValues.caption + " by " + senderPersonItem.name : unValues.caption;
 
-            var groupType;            
-            
-            var detailUserId=entry.unEntry.userId;
-            var message=unValues.caption;
-            if (detailUserId!=='@me'){
-                groupType=Dime.psMap.TYPE.GROUP;
-                viewType = DimeViewStatus.PERSON_VIEW;
-                //TODO shared by whom?!
-                //message += sender...
-            }else if (Dime.psHelper.isChildType(detailItemType)){
-                //for @me adjust groupType if detailItemType is set
-                groupType=Dime.psHelper.getParentType(detailItemType);            
+            if (entry.unType===Dime.psMap.UN_TYPE.REF_TO_ITEM){
+                
+                
+                var viewType = DimeViewStatus.GROUP_CONTAINER_VIEW;
+                var detailItemType=entry.unEntry.type;
+                var groupType;            
+                var detailUserId=entry.unEntry.userId;                                
+                var message=unValues.caption;
+
+                if (detailUserId!=='@me'){
+                    groupType=Dime.psMap.TYPE.GROUP;
+                    viewType = DimeViewStatus.PERSON_VIEW;
+                }else if (Dime.psHelper.isChildType(detailItemType)){
+                    //for @me adjust groupType if detailItemType is set
+                    groupType=Dime.psHelper.getParentType(detailItemType);            
+                }
+                var itemType = Dime.psHelper.getChildType(groupType);
+
+                var status = new DimeViewStatus(viewType, groupType, itemType, detailUserId, 
+                        entry.unEntry.guid, detailItemType, message);
+                jChildItem.click(function(){                
+                   DimeView.viewManager.updateViewFromStatus(status, false);
+                });
+            }else{
+                jChildItem.click(function(){
+                    //TODO fix
+                    window.alert("This function is not supported in the research prototype.");
+                });
             }
-            var itemType = Dime.psHelper.getChildType(groupType);
 
-            var status = new DimeViewStatus(viewType, groupType, itemType, detailUserId, 
-                    entry.unEntry.guid, detailItemType, message);
-            jChildItem.click(function(){                
-               DimeView.viewManager.updateViewFromStatus(status, false);
-            });
-        }else{
-            jChildItem.click(function(){
-                //TODO fix
-                window.alert("This function is not supported in the research prototype.");
-            });
+            //img
+            jChildItem.append($('<img/>').attr('src',Dime.psHelper.guessLinkURL(entry.imageUrl)));
+
+            jChildItem
+                .append($('<img/>').attr('src', unValues.imageUrl).addClass('childItemNotifElemType'))
+                .append('<h4 style="font-size: 12px">'+ unValues.caption + '</h4>')
+                .append($('<div/>').addClass('childItemNotifOperation').append('<span>'+ unValues.operationName + '</span>'))
+                .append($('<span/>').addClass("childItemNotifElemCaption").text(unValues.childName)
+                );
         }
-
-        //img
-        jChildItem.append($('<img/>').attr('src',Dime.psHelper.guessLinkURL(entry.imageUrl)));
+        if (entry.unType===Dime.psMap.UN_TYPE.REF_TO_ITEM && Dime.un.isShareOperation(entry.unEntry.operation)){
+            Dime.REST.getItem(entry.unEntry.userId, Dime.psMap.TYPE.PERSON, handleChildItemContent, '@me', this);
+        }else{
+            handleChildItemContent(null);
+        }
         
-        jChildItem
-            .append($('<img/>').attr('src', unValues.imageUrl).addClass('childItemNotifElemType'))
-            .append('<h4 style="font-size: 12px">'+ unValues.caption + '</h4>')
-            .append($('<div/>').addClass('childItemNotifOperation').append('<span>'+ unValues.operationName + '</span>'))
-            .append($('<span/>').addClass("childItemNotifElemCaption").text(unValues.childName)
-            );
-
+        
         return jChildItem;
     },
             
@@ -2425,51 +2438,428 @@ Dime.initProcessor.registerFunction(function(callback){
 //---------------------------------------------
 //---------------------------------------------
 //#############################################
-//  Dime.Navigation - override
+//  Dime.Navigation 
 //#############################################
 //---------------------------------------------
-Dime.Navigation.updateView = function(notifications){
-    DimeView.viewManager.updateViewFromNotifications.call(DimeView.viewManager, notifications);
-};
 
-Dime.Navigation.createMenuLiButton=function(id, caption, containerGroupType){
+Dime.Navigation = {
+    
+    MAX_NOTIFICATION_ITEMS: 6,
+    
+    shownNotifications:0,
+    
+    receivedNotifications:0,
+    
+    updateView : function(notifications){
+        DimeView.viewManager.updateViewFromNotifications.call(DimeView.viewManager, notifications);
+    },
 
-    return $('<li/>').attr('id',id).append($('<a/>')
+    createMenuLiButton : function(id, caption, containerGroupType){
+
+        return $('<li/>').attr('id',id).append($('<a/>')
+            .click(function(){
+                //update view
+                DimeView.viewManager.updateView.call(DimeView.viewManager, containerGroupType, DimeViewStatus.GROUP_CONTAINER_VIEW);
+            })
+            .text(caption));
+    },
+
+    createMenuLiButtonSettings: function(){
+        return $('<li/>').attr('id','navButtonSettings').append($('<a/>')
+            .click(function(){
+                //update view
+                DimeView.viewManager.updateView.call(DimeView.viewManager, "", DimeViewStatus.SETTINGS_VIEW);
+            })
+            .text('Settings'));
+
+    },
+    
+    createNotificationIcon:function(){
+        return $('<div/>').addClass('notificationIcon').attr('id','notificationIcon')
+            .click(function(){
+                //update view
+                DimeView.viewManager.updateView.call(DimeView.viewManager, Dime.psMap.TYPE.USERNOTIFICATION, DimeViewStatus.GROUP_CONTAINER_VIEW);
+            })
+            .append($('<div/>').attr('id','notificationCounter').text("0"));
+    },
+
+    createUserNotificationElement :function(userNotification){
+        
+        var unValues = Dime.un.getCaptionImageUrl(userNotification);
+        
+        var target;
+        
+        if (userNotification.unType===Dime.psMap.UN_TYPE.REF_TO_ITEM){
+            var elementType=userNotification.unEntry.type;
+
+            var groupType = elementType;
+            if (Dime.psHelper.isChildType(elementType)){
+                groupType=Dime.psHelper.getParentType(elementType);
+            }
+
+            var guid = encodeURIComponent(userNotification.unEntry.guid);
+            var userId=userNotification.unEntry.userId;
+            if (userId!=='@me'){
+                userId=encodeURIComponent(userId);
+            }
+
+            target = "self.location.href='index.html?type="+ groupType 
+            +"&guid="+guid
+            +"&userId="+userId
+            +"&dItemType="+elementType
+            +"&msg="+unValues.caption
+            +"'";
+
+            
+        }else{
+            target = "self.location.href='index.html?type="+ Dime.psMap.TYPE.USERNOTIFICATION +"'";
+        }
+
+        
+        var result = $("<div></div>")
+        .addClass("notificationElement")
+        .attr("onclick", target)
+        .text(unValues.shortCaption.substr(0, 16))
         .click(function(){
-            //update view
-            DimeView.viewManager.updateView.call(DimeView.viewManager, containerGroupType, DimeViewStatus.GROUP_CONTAINER_VIEW);
-        })
-        .text(caption));
+            userNotification.read=true;
+            Dime.REST.updateItem(userNotification);
+
+        });
+
+        return result;
+        
+    },
+    
+    updateNotificationBar: function(usernotifications){
+        
+        Dime.Navigation.receivedNotifications+=usernotifications.length;
+        document.getElementById("notificationCounter").innerHTML=Dime.Navigation.receivedNotifications;
+            
+        var notificationContainer = document.getElementById('innerNotificationContainer');
+        //generate some space
+        var removeNotificationCount= Math.max(0, 
+            (usernotifications.length + Dime.Navigation.shownNotifications)-Dime.Navigation.MAX_NOTIFICATION_ITEMS);
+            
+        while (removeNotificationCount>0 && notificationContainer.hasChildNodes()){
+            JSTool.removelastChild(notificationContainer);
+            removeNotificationCount--;
+            Dime.Navigation.shownNotifications--;
+        }            
+            
+        for(var i=0; i<usernotifications.length;i++){
+            //check whether we received too many notifications to fit into the field
+            if (removeNotificationCount>0){
+                removeNotificationCount--;
+                continue; //skip this
+            }                
+               
+            //show the notification
+            var notificationElement = Dime.Navigation.createUserNotificationElement(usernotifications[i]);                    
+            JSTool.insertChildAtFront(notificationContainer, notificationElement.get(0));                    
+            Dime.Navigation.shownNotifications++;
+                
+        }
+    },
+    
+    notificationPassesFilter: function(notification){
+        if (!notification 
+            || !notification.operation 
+            || !notification.element
+            || !notification.element.guid 
+            || !notification.element.userId
+            || !notification.element.type){
+            console.log("ERROR: received incomplete notification", notification);
+            return false;
+        }              
+        
+        return true; 
+    },
+    
+    handleUserNotificationNotifications: function(usernotificationsNotifications){
+        if (usernotificationsNotifications.length===0){
+            return;
+        }
+
+        var handleResponse = function(response){
+            var usernotifications = [];
+            
+            for (var i=0; i<usernotificationsNotifications.length;i++){
+                var myGuid = usernotificationsNotifications[i].element.guid;
+                var operation = usernotificationsNotifications[i].operation;
+                for (var j=0; j<response.length;j++){
+                    if ((response[j].guid===myGuid)
+                        && (!response[j].read)){
+
+                        usernotifications.push(response[j]);
+                    }
+                }
+            }
+            Dime.Navigation.updateNotificationBar(usernotifications);
+        };         
+
+         
+        Dime.REST.getAll(Dime.psMap.TYPE.USERNOTIFICATION, handleResponse); 
+    },
+
+    handleNotification: function(notifications){
+    
+        if (notifications && $.isArray(notifications)){
+            
+                        
+            var usernotificationsNotifications = [];
+            for (var i=0; i<notifications.length;i++){
+                var notification = notifications[i];
+                if (!Dime.Navigation.notificationPassesFilter(notification)){ //check for filter
+                    continue;
+                }
+
+                if ((notification.element.type===Dime.psMap.TYPE.USERNOTIFICATION)
+                    && (notification.operation==='create')){
+                    usernotificationsNotifications.push(notification);                    
+                }                
+                //clear the cache for type with notification
+                Dime.REST.clearCacheForType(notification.element.type, notification.element.userId);
+            }
+            
+            Dime.Navigation.handleUserNotificationNotifications(usernotificationsNotifications);
+            Dime.Navigation.updateView(notifications);
+        }
+        //finally register again and execute
+        Dime.Navigation.registerCometCall();
+        Dime.initProcessor.executeFunctions();
+    },
+
+    updateButtonActiveStatus: function(buttonId, activeButtonId){
+        
+        if (buttonId===activeButtonId){
+            $("#"+buttonId).addClass('active');
+        }else{
+            $("#"+buttonId).removeClass('active');            
+        }
+    },
+
+    setButtonsActive: function(buttonId){
+         
+        Dime.Navigation.updateButtonActiveStatus("navButtonMessages", buttonId);
+        Dime.Navigation.updateButtonActiveStatus("navButtonPeople", buttonId);
+        Dime.Navigation.updateButtonActiveStatus("navButtonData", buttonId);
+        Dime.Navigation.updateButtonActiveStatus("navButtonProfile", buttonId);
+        Dime.Navigation.updateButtonActiveStatus("navButtonEvent", buttonId);
+        Dime.Navigation.updateButtonActiveStatus("navButtonSettings", buttonId);
+        Dime.Navigation.updateButtonActiveStatus("notificationIcon", buttonId);
+        Dime.Navigation.updateButtonActiveStatus("currentPlace", buttonId);
+        Dime.Navigation.updateButtonActiveStatus("currentSituation", buttonId);
+
+    
+    },
+
+    updateSituations: function(){
+        
+        var handleSituationCallBack=function(response){
+            
+            var updateSituationElement=function(resultSituation){
+                $('#currentSituationText')
+                        .textOnly(DimeView.getShortNameWithLength(resultSituation, 31))
+                        .attr("title", resultSituation);
+            };
+            
+            var resultSituation = "";
+            var moreSituations = false;
+            for (var i=0;i<response.length;i++){
+                if (response[i].active===true){
+                    if(!moreSituations){
+                        resultSituation += response[i].name;
+                        moreSituations = true;
+                    }else{
+                        resultSituation = resultSituation + ", " + response[i].name;
+                    }
+                }
+            }
+            
+            if(resultSituation!=""){
+                updateSituationElement(resultSituation);
+            }else{
+                updateSituationElement("Situation: unknown");
+            }
+        };
+        
+        
+        Dime.REST.getAll(Dime.psMap.TYPE.SITUATION, handleSituationCallBack);
+    },
+    
+    updateCurrentPlace: function(){
+        var handleCurrentPlaceCallBack=function(placeGuidAndNameObject){
+            
+            var updateCurPlaceElement=function(placeName, placeId){
+                var placeElement = document.getElementById('currentPlace');
+                placeElement.innerHTML =  '<div class="places">'
+                + '<div class="placesIcon" id="currentPlaceGuid" data-guid="' + placeId + '"></div>'
+                + DimeView.getShortNameWithLength(placeName, 34)+'</div>';
+                $("#currentPlace").attr("title", placeName);
+            };
+            
+            if (!placeGuidAndNameObject || !placeGuidAndNameObject.placeName || placeGuidAndNameObject.placeName===0){
+                updateCurPlaceElement("Location: unknown");
+                return;
+            }
+            
+            updateCurPlaceElement(placeGuidAndNameObject.placeName, placeGuidAndNameObject.placeId);
+            
+        };
+        Dime.REST.getCurrentPlaceGuidAndName(handleCurrentPlaceCallBack);
+        
+        
+    },
+    initNavigation: function(){
+        var createNavCorner=function(){
+            var userInformation= $('<div/>').attr('id','userInformation')
+            .append($('<span/>').attr('id','username').text('748340@dime'))
+            .append(
+                $('<img/>')
+                .attr('src','img/navigation/white/logOut.png')
+                .attr('onclick','self.location.href=\'/dime-communications/j_spring_security_logout\'')
+                );
+            var situationLink = $('<div/>') 
+            .attr('id','currentSituation')
+            .append($('<div/>').addClass('clear'))
+            .append($('<div/>').addClass('situation').attr('id','currentSituationText')
+                .textOnly('Situation: unknown')
+                .append($('<div/>').addClass('situationIcon'))
+                )
+            .click(function(){
+                DimeView.viewManager.updateView.call(DimeView.viewManager, Dime.psMap.TYPE.SITUATION, DimeViewStatus.GROUP_CONTAINER_VIEW, false);
+            });
+            var placeLink = $('<div/>')
+            .attr('id','currentPlace')
+            .append(
+                $('<div/>').addClass('places')
+                .append($('<div/>').addClass('placesIcon'))
+                )
+            .click(function(){
+                DimeView.viewManager.updateView.call(DimeView.viewManager, Dime.psMap.TYPE.PLACE, DimeViewStatus.GROUP_CONTAINER_VIEW, false);
+            });
+
+            //TODO fix spoiled naming of classes etc.
+            return $('<li/>').attr('id','navCornerMenu')
+            .append(
+                $('<div/>').attr('id','wrapUserInformation')
+                .append(
+                    $('<div/>').attr('id','wrapUserInformationBG')
+                    .append(userInformation)
+                    .append(situationLink)
+                    .append(placeLink)
+                    ));
+        };
+
+        var menuButton=$('<a/>').addClass("btn btn-navbar")
+        .attr("data-toggle","collapse")
+        .attr("data-target",".nav-collapse")
+        .append($('<span/>').addClass('icon-bar'))
+        .append($('<span/>').addClass('icon-bar'))
+        .append($('<span/>').addClass('icon-bar'));
+        var brand = $('<a/>').addClass('brand').attr('href','index.html')
+        .append(
+            $('<div/>').attr('id','logo')
+            .append($('<img/>').attr('src', 'img/logo.png'))
+            );
+
+        var navigation = $('<div/>').addClass('nav-collapse')
+        .append($('<ul/>').addClass('nav')
+            .append(Dime.Navigation.createMenuLiButton("navButtonMessages","Livepost" ,Dime.psMap.TYPE.LIVESTREAM))
+            .append(Dime.Navigation.createMenuLiButton("navButtonPeople","People" ,Dime.psMap.TYPE.GROUP))
+            .append(Dime.Navigation.createMenuLiButton("navButtonData","My Data" ,Dime.psMap.TYPE.DATABOX))
+            .append(Dime.Navigation.createMenuLiButton("navButtonProfile","My Profile Cards" ,Dime.psMap.TYPE.PROFILE))
+            .append(Dime.Navigation.createMenuLiButton("navButtonEvent","Calendar" ,Dime.psMap.TYPE.EVENT))
+            .append(Dime.Navigation.createMenuLiButtonSettings())
+            .append(createNavCorner())
+            );
+                
+        var notificationBar = $('<div/>').addClass('span8').attr('id','notificationContainer')
+        .append($('<div/>').addClass('notificationBar')
+            .append(Dime.Navigation.createNotificationIcon())
+            .append($('<div/>').attr('id','innerNotificationContainer'))
+            );
+            
+        var navContainer = $('<div/>').addClass('container')
+        .append(menuButton)
+        .append(brand)
+        .append(navigation)
+        .append(notificationBar)
+        ;
+
+        
+
+        var navBarInner=$('<div/>').addClass('navbar-inner').append(navContainer);
+
+
+        $('#navBarContainer').append(navBarInner);
+    }
+  
 };
 
-Dime.Navigation.createMenuLiButtonSettings=function(){
-    return $('<li/>').attr('id','navButtonSettings').append($('<a/>')
-        .click(function(){
-            //update view
-            DimeView.viewManager.updateView.call(DimeView.viewManager, "", DimeViewStatus.SETTINGS_VIEW);
-        })
-        .text('Settings'));
+Dime.initProcessor.registerFunction( function(callback){
 
+    Dime.Navigation.initNavigation();
+
+    callback();
+});
+
+/*
+ * get server information
+ * handler of username
+ */
+Dime.initProcessor.registerFunction( function(callback){
+    
+ 
+    var serverInfoCallBack=function(response){
+
+        Dime.ps_configuration.serverInformation = response;
+
+        var userString = Dime.ps_configuration.mainSaid+'@'+response.name;
+        $('#username').text(userString.substr(0, 21)).click(function(){
+            DimeView.showAbout.call(DimeView)
+        });
+        callback();
+    };
+    Dime.REST.getServerInformation(serverInfoCallBack);
+    
+});
+
+
+Dime.Navigation.registerCometCall = function(){    
+
+    //register comet call
+    Dime.initProcessor.registerFunction( function(callback){
+        
+        Dime.REST.getCOMETCall(Dime.Navigation.handleNotification);
+        callback();
+
+    });
 };
-
-
-Dime.Navigation.createNotificationIcon=function(){
-    return $('<div/>').addClass('notificationIcon').attr('id','notificationIcon')
-        .click(function(){
-            //update view
-            DimeView.viewManager.updateView.call(DimeView.viewManager, Dime.psMap.TYPE.USERNOTIFICATION, DimeViewStatus.GROUP_CONTAINER_VIEW);
-        })
-        .append($('<div/>').attr('id','notificationCounter').text("0"));
-};
-
-//---------------------------------------------
-//#############################################
-//  Dime.Navigation - override - END
-//#############################################
-//---------------------------------------------
+//initially register once - all subsequent registrations will be done in the error handler
+Dime.Navigation.registerCometCall();
 
 /**
- * handle back button --- FIXME not working as intended * 
+ * initially load situations and places
+ */
+Dime.initProcessor.registerFunction( function(callback){
+    
+    Dime.Navigation.updateSituations();
+    Dime.Navigation.updateCurrentPlace();
+    callback();
+});
+
+
+
+
+
+
+
+
+
+
+/**
+ * handle back button
  */
  window.onpopstate = function(event) {
      var viewState = event.state;     
@@ -2478,3 +2868,4 @@ Dime.Navigation.createNotificationIcon=function(){
          DimeView.viewManager.updateViewFromStatus.call(DimeView.viewManager, viewState, true);
      }
 };
+

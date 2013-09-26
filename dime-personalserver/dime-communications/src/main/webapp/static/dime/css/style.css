@@ -1656,13 +1656,15 @@ input[type="checkbox"] {
     border-top: none;
 }
 
-#wrapUserInformationBG > a {
+#wrapUserInformationBG > div {
     border: medium none;
     float: left;
     left: 10px;
     position: relative;
     text-decoration: none;
-    width: 240px;
+    width: 240px;    
+    cursor: pointer;    
+    
 }
 
 
