@@ -261,7 +261,11 @@ body {
     color: #F9F9F9;
     text-decoration: underline;
 }
-
+.disabled:hover {
+    background-color: #EFEFEF;
+    color: #424242;
+    text-decoration: none;
+}
 
 .actionButtonNewDropDown{
     top: 38px;

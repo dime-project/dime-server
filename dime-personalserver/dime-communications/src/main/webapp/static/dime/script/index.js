@@ -953,32 +953,68 @@ DimeView = {
         {
             id: "actionButtonNew",
             minItems: -1,
-            maxItems: -1
+            maxItems: -1,
+            supportedGroupTypes: [Dime.psMap.TYPE.GROUP, 
+                Dime.psMap.TYPE.DATABOX, 
+                Dime.psMap.TYPE.LIVESTREAM, 
+                Dime.psMap.TYPE.PROFILE, 
+                Dime.psMap.TYPE.SITUATION],
+            supportedViewTypes: [DimeViewStatus.GROUP_CONTAINER_VIEW],
+            handlerFunction: null
+            
         },
         {
             id: "actionButtonEdit",
             minItems: 1,
-            maxItems: 1
+            maxItems: 1,
+            supportedGroupTypes: [Dime.psMap.TYPE.GROUP, 
+                Dime.psMap.TYPE.DATABOX, 
+                Dime.psMap.TYPE.PROFILE, 
+                Dime.psMap.TYPE.SITUATION],
+            supportedViewTypes: [DimeViewStatus.GROUP_CONTAINER_VIEW, DimeViewStatus.PERSON_VIEW],
+            handlerFunction: function(){DimeView.editSelected.call(DimeView);}
         },
         {
-            id: "actionButtonAddRemove",
+            id: "specialActionButton",
             minItems: -1,
-            maxItems: 0
+            maxItems: 0,
+            supportedGroupTypes: [Dime.psMap.TYPE.PLACE],
+            supportedViewTypes: [DimeViewStatus.GROUP_CONTAINER_VIEW, DimeViewStatus.PERSON_VIEW],
+            handlerFunction: null
         },
         {
             id: "actionButtonDelete",
             minItems: 1,
-            maxItems: -1
+            maxItems: -1,
+            supportedGroupTypes: [Dime.psMap.TYPE.GROUP, 
+                Dime.psMap.TYPE.DATABOX, 
+                Dime.psMap.TYPE.LIVESTREAM, 
+                Dime.psMap.TYPE.PROFILE, 
+                Dime.psMap.TYPE.SITUATION],
+            supportedViewTypes: [DimeViewStatus.GROUP_CONTAINER_VIEW, DimeViewStatus.PERSON_VIEW],
+            handlerFunction: function(){DimeView.removeSelected.call(DimeView);}
         },
         {
             id: "actionButtonShare",
             minItems: -1,
-            maxItems: -1
+            maxItems: -1,
+            supportedGroupTypes: [Dime.psMap.TYPE.GROUP, 
+                Dime.psMap.TYPE.LIVESTREAM, 
+                Dime.psMap.TYPE.DATABOX],
+            supportedViewTypes: [DimeViewStatus.GROUP_CONTAINER_VIEW, DimeViewStatus.PERSON_VIEW],
+            handlerFunction: function(){DimeView.shareSelected.call(DimeView);}
         },
         {
             id: "actionButtonMore",
             minItems: -1,
-            maxItems: -1
+            maxItems: -1,
+            supportedGroupTypes: [Dime.psMap.TYPE.GROUP, 
+                Dime.psMap.TYPE.LIVESTREAM, 
+                Dime.psMap.TYPE.DATABOX, 
+                Dime.psMap.TYPE.PROFILE, 
+                Dime.psMap.TYPE.SITUATION],
+            supportedViewTypes: [DimeViewStatus.GROUP_CONTAINER_VIEW],
+            handlerFunction: null
         }
     ],
     
@@ -987,30 +1023,63 @@ DimeView = {
         var disabledButtonClass = "disabled";
         
         var hideButton=function(buttonId){
-            var myButton = $("#"+buttonId);
-            if (!myButton.hasClass()){
-                myButton.addClass(disabledButtonClass);
-            }
+            $("#"+buttonId)
+                    .addClass(disabledButtonClass)
+                    .off('click.defaultActionButtonHandler')            
+            ;
         };
     
-        var showButton=function(buttonId){
-            var myButton = $("#"+buttonId);
-            myButton.removeClass(disabledButtonClass);
+        var showButton=function(myActionButton){
+            var button = $("#"+myActionButton.id);
+            button.removeClass(disabledButtonClass);
+            if (myActionButton.handlerFunction){
+                button
+                    .off('click.defaultActionButtonHandler')            
+                    .on('click.defaultActionButtonHandler',
+                    myActionButton.handlerFunction);
+            }
+            
+        };
+        var curViewType = DimeView.viewManager.status.viewType;
+        var curGroupType = DimeView.viewManager.status.groupType;
+        
+        var isSupportedForStatus = function(myActionButton){
+            
+            if (!JSTool.arrayContainsItem(myActionButton.supportedViewTypes, curViewType)){
+                return false;
+            }
+            if (curViewType===DimeViewStatus.PERSON_VIEW){
+                return true; //if PERSON VIEW and supported don't care about groupType
+            }
+            if (JSTool.arrayContainsItem(myActionButton.supportedGroupTypes, curGroupType)){
+                return true;
+            }
+            return false;
         };
         
         for (var i=0;i<DimeView.ACTION_BUTTON_ID.length;i++){
             
             var actionButton=DimeView.ACTION_BUTTON_ID[i];
             
+            if (!isSupportedForStatus(actionButton)){
+                hideButton(actionButton.id);
+                continue;
+            }
+            
+            if (curViewType===DimeViewStatus.PERSON_VIEW){
+                showButton(actionButton);
+                continue;//if PERSON VIEW and supported don't care about groupType
+            }
+            
             if (actionButton.minItems===-1){ //always show this
-                //since this is never removed no explicit show required
+                showButton(actionButton);
                 continue;
             }
             if (selectionCount<actionButton.minItems){ 
                 hideButton(actionButton.id);
                                    
             } else if ((actionButton.maxItems===-1) || (selectionCount<=actionButton.maxItems)){ 
-                showButton(actionButton.id);
+                showButton(actionButton);
                 
             }else{ //too many selected
                 hideButton(actionButton.id);
@@ -1615,7 +1684,6 @@ DimeView = {
     },
 
     updateNewButton: function(groupType){
-        $('#actionButtonNew').removeClass('disabled');
 
         var createPAMenuItems=function(){
             var result=[];
@@ -1678,38 +1746,15 @@ DimeView = {
             }   
 
         } else if(groupType===Dime.psMap.TYPE.SITUATION){
-            dropDownUl
-                .append(createMenuItem(Dime.psMap.TYPE.SITUATION));
+            dropDownUl.append(createMenuItem(Dime.psMap.TYPE.SITUATION));
 
-        } else if(groupType===Dime.psMap.TYPE.PLACE){
-            $('#actionButtonNew').addClass('disabled');
-        }
+        } 
 
     },
 
-    updateShareButton: function(groupType){
-        var shareBtn = $('#actionButtonShare');
-
-         if(groupType===Dime.psMap.TYPE.SITUATION){
-            shareBtn.addClass('disabled');
-        } else if(groupType===Dime.psMap.TYPE.PLACE){
-            shareBtn.addClass('disabled');
-        }else{
-            shareBtn.removeClass('disabled');
-        }
-    },       
+     
 
     updateMoreButton: function(groupType){
-        var moreButton = $('#actionButtonMore');
-
-         if(groupType===Dime.psMap.TYPE.SITUATION){
-            moreButton.addClass('disabled');
-        } else if(groupType===Dime.psMap.TYPE.PLACE){
-            moreButton.addClass('disabled');
-        }else{
-            moreButton.removeClass('disabled');
-        }
-
         //populate more dialog
         var createMenuItem = function(caption, callBack){
             var link= $('<a tabindex="-1" href="#" />')
@@ -1734,11 +1779,11 @@ DimeView = {
 
     },
             
-    updateAddRemoveButton: function(groupType, viewType){
-        var addRmvBtn = $('#actionButtonAddRemove');
+    updateSpecialButton: function(groupType, viewType){
+        var addRmvBtn = $('#specialActionButton');
         
-        //set button to default
-        addRmvBtn.empty().unbind("click").addClass("disabled");
+        //reset click handler
+        addRmvBtn.empty().unbind("click");
         
         if(groupType===Dime.psMap.TYPE.PLACE){
             addRmvBtn
@@ -1803,7 +1848,7 @@ DimeView = {
         }else if (groupType===Dime.psMap.TYPE.GROUP){
             Dime.Navigation.setButtonsActive("navButtonPeople");
             //$('#searchText').attr('placeholder', 'find persons and groups (single search-word, avoid incomplete names)');
-            $('#searchText').attr('placeholder', 'search in your contacts and Di.me User directory');
+            $('#searchText').attr('placeholder', 'search in your contacts and di.me user directory');
         }else if (groupType===Dime.psMap.TYPE.LIVESTREAM){
             Dime.Navigation.setButtonsActive("navButtonMessages");
             $('#searchText').attr('placeholder', 'find liveposts');
@@ -1831,9 +1876,9 @@ DimeView = {
         }
 
         DimeView.updateNewButton(groupType);
-        DimeView.updateShareButton(groupType);
+        
         DimeView.updateMoreButton(groupType);
-        DimeView.updateAddRemoveButton(groupType, newStatus.viewType);
+        DimeView.updateSpecialButton(groupType, newStatus.viewType);
 
         DimeView.updateMetaBar(groupType);
         
