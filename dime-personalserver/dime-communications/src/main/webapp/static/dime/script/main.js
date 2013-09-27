@@ -300,11 +300,23 @@ JSTool = {
     * returns formated Date String from UNIX time millis
     */
     millisToDateString: function(millis){
+       var padZero=function(value){
+           if (value<10){
+               return "0"+value;
+           }
+           return ""+value;
+       } 
+        
        if (!millis){
            return '';
        }
        var d = new Date(millis);
-       return d+"";
+       return padZero(d.getDay())+"."
+               + padZero(d.getMonth()+1)+"."
+               + d.getFullYear() +" "
+               + padZero(d.getHours())+":"
+               + padZero(d.getMinutes())+":"
+               + padZero(d.getSeconds());
     },       
     
     createHTMLElementString: function(tagName, id, classes, onClick, innerHtml){
