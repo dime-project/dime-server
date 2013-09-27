@@ -67,7 +67,7 @@ public class PSPersonControllerTest extends PSInfoSphereControllerTest {
 
 		javax.ws.rs.core.Request request = Mockito.mock(javax.ws.rs.core.Request.class);
 		Mockito.when(request.evaluatePreconditions(Mockito.any(EntityTag.class))).thenReturn(null);
-		javax.ws.rs.core.Response response = controller.getPersonById(said, "juan", request);
+		Response<Resource> response = controller.getPersonById(said, "juan");
 		assertNotNull(response);
 	}
 	
