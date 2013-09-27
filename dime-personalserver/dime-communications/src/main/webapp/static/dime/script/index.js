@@ -645,8 +645,8 @@ DimeView = {
 
                 jChildItem
                     .append($('<img/>').attr('src', unValues.imageUrl).addClass('childItemNotifElemType'))
-                    .append('<h4 style="font-size: 12px">'+ unValues.caption + '</h4>')
                     .append($('<div/>').addClass('childItemNotifDate').text(JSTool.millisToDateString(entry.created)))
+                    .append('<h4 style="font-size: 12px">'+ unValues.caption + '</h4>')                    
                     .append($('<div/>').addClass('childItemNotifOperation').append('<span>'+ unValues.operationName + '</span>'))
                     .append($('<span/>').addClass("childItemNotifElemCaption").text(unValues.childName)
                     );
