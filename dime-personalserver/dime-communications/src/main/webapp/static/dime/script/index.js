@@ -575,6 +575,46 @@ DimeView = {
         
         return jChildItem;
     },
+            
+    createUserNotificationLinkAndContent: function(entry, senderPersonItem, deployFunction){
+        var clickFunction;
+        var unValues=Dime.un.getCaptionImageUrl(entry);
+        
+        //update caption with sender name if available
+        unValues.caption = senderPersonItem ? unValues.caption + " by " + senderPersonItem.name : unValues.caption;
+        
+        if (entry.unType===Dime.psMap.UN_TYPE.REF_TO_ITEM){
+
+
+            var viewType = DimeViewStatus.GROUP_CONTAINER_VIEW;
+            var detailItemType=entry.unEntry.type;
+            var groupType;            
+            var detailUserId=entry.unEntry.userId;                                
+            var message=unValues.caption;
+
+            if (detailUserId!=='@me'){
+                groupType=Dime.psMap.TYPE.GROUP;
+                viewType = DimeViewStatus.PERSON_VIEW;
+            }else if (Dime.psHelper.isChildType(detailItemType)){
+                //for @me adjust groupType if detailItemType is set
+                groupType=Dime.psHelper.getParentType(detailItemType);            
+            }
+            var itemType = Dime.psHelper.getChildType(groupType);
+
+            var status = new DimeViewStatus(viewType, groupType, itemType, detailUserId, 
+                    entry.unEntry.guid, detailItemType, message);
+            clickFunction = function(){                
+               DimeView.viewManager.updateViewFromStatus(status, false);
+            };
+        }else{
+            clickFunction = function(){
+                //TODO fix
+                window.alert("This function is not supported in the research prototype.");
+            };  
+        }
+        deployFunction(unValues, clickFunction);
+
+    },
 
     createUserNotification: function(entry){
 
@@ -596,58 +636,28 @@ DimeView = {
             jChildItem.click(markRead);
         }
         
-        var unValues=Dime.un.getCaptionImageUrl(entry);
-        
-        var handleChildItemContent=function(senderPersonItem){            
-            //update caption with sender name if available
-            unValues.caption = senderPersonItem ? unValues.caption + " by " + senderPersonItem.name : unValues.caption;
-
-            if (entry.unType===Dime.psMap.UN_TYPE.REF_TO_ITEM){
+        var handleChildItemContent=function(senderPersonItem){  
+            var deployFunction = function(unValues, clickFunction){
+                jChildItem.click(clickFunction);
                 
+                //img
+                jChildItem.append($('<img/>').attr('src',Dime.psHelper.guessLinkURL(entry.imageUrl)));
+
+                jChildItem
+                    .append($('<img/>').attr('src', unValues.imageUrl).addClass('childItemNotifElemType'))
+                    .append('<h4 style="font-size: 12px">'+ unValues.caption + '</h4>')
+                    .append($('<div/>').addClass('childItemNotifOperation').append('<span>'+ unValues.operationName + '</span>'))
+                    .append($('<span/>').addClass("childItemNotifElemCaption").text(unValues.childName)
+                    );
                 
-                var viewType = DimeViewStatus.GROUP_CONTAINER_VIEW;
-                var detailItemType=entry.unEntry.type;
-                var groupType;            
-                var detailUserId=entry.unEntry.userId;                                
-                var message=unValues.caption;
-
-                if (detailUserId!=='@me'){
-                    groupType=Dime.psMap.TYPE.GROUP;
-                    viewType = DimeViewStatus.PERSON_VIEW;
-                }else if (Dime.psHelper.isChildType(detailItemType)){
-                    //for @me adjust groupType if detailItemType is set
-                    groupType=Dime.psHelper.getParentType(detailItemType);            
-                }
-                var itemType = Dime.psHelper.getChildType(groupType);
-
-                var status = new DimeViewStatus(viewType, groupType, itemType, detailUserId, 
-                        entry.unEntry.guid, detailItemType, message);
-                jChildItem.click(function(){                
-                   DimeView.viewManager.updateViewFromStatus(status, false);
-                });
-            }else{
-                jChildItem.click(function(){
-                    //TODO fix
-                    window.alert("This function is not supported in the research prototype.");
-                });
-            }
-
-            //img
-            jChildItem.append($('<img/>').attr('src',Dime.psHelper.guessLinkURL(entry.imageUrl)));
-
-            jChildItem
-                .append($('<img/>').attr('src', unValues.imageUrl).addClass('childItemNotifElemType'))
-                .append('<h4 style="font-size: 12px">'+ unValues.caption + '</h4>')
-                .append($('<div/>').addClass('childItemNotifOperation').append('<span>'+ unValues.operationName + '</span>'))
-                .append($('<span/>').addClass("childItemNotifElemCaption").text(unValues.childName)
-                );
+            };
+            DimeView.createUserNotificationLinkAndContent(entry, senderPersonItem, deployFunction);
         }
         if (entry.unType===Dime.psMap.UN_TYPE.REF_TO_ITEM && Dime.un.isShareOperation(entry.unEntry.operation)){
             Dime.REST.getItem(entry.unEntry.userId, Dime.psMap.TYPE.PERSON, handleChildItemContent, '@me', this);
         }else{
             handleChildItemContent(null);
-        }
-        
+        }        
         
         return jChildItem;
     },
@@ -2489,50 +2499,31 @@ Dime.Navigation = {
             .append($('<div/>').attr('id','notificationCounter').text("0"));
     },
 
-    createUserNotificationElement :function(userNotification){
-        
-        var unValues = Dime.un.getCaptionImageUrl(userNotification);
-        
-        var target;
-        
-        if (userNotification.unType===Dime.psMap.UN_TYPE.REF_TO_ITEM){
-            var elementType=userNotification.unEntry.type;
-
-            var groupType = elementType;
-            if (Dime.psHelper.isChildType(elementType)){
-                groupType=Dime.psHelper.getParentType(elementType);
-            }
-
-            var guid = encodeURIComponent(userNotification.unEntry.guid);
-            var userId=userNotification.unEntry.userId;
-            if (userId!=='@me'){
-                userId=encodeURIComponent(userId);
-            }
-
-            target = "self.location.href='index.html?type="+ groupType 
-            +"&guid="+guid
-            +"&userId="+userId
-            +"&dItemType="+elementType
-            +"&msg="+unValues.caption
-            +"'";
-
-            
+    createUserNotificationElement :function(userNotification){      
+       
+        var jUnBarElement = $("<div></div>").addClass("notificationElement");
+       
+        var handleChildItemContent=function(senderPersonItem){  
+            var deployFunction = function(unValues, clickFunction){
+                jUnBarElement
+                    .click(clickFunction)
+                    .text(unValues.shortCaption.substr(0, 16))
+                    .click(function(){
+                        userNotification.read=true;
+                        Dime.REST.updateItem(userNotification);
+                        jUnBarElement.remove();
+                     });
+                
+            };
+            DimeView.createUserNotificationLinkAndContent(userNotification, senderPersonItem, deployFunction);
+        };
+        if (userNotification.unType===Dime.psMap.UN_TYPE.REF_TO_ITEM && Dime.un.isShareOperation(userNotification.unEntry.operation)){
+            Dime.REST.getItem(userNotification.unEntry.userId, Dime.psMap.TYPE.PERSON, handleChildItemContent, '@me', this);
         }else{
-            target = "self.location.href='index.html?type="+ Dime.psMap.TYPE.USERNOTIFICATION +"'";
-        }
-
-        
-        var result = $("<div></div>")
-        .addClass("notificationElement")
-        .attr("onclick", target)
-        .text(unValues.shortCaption.substr(0, 16))
-        .click(function(){
-            userNotification.read=true;
-            Dime.REST.updateItem(userNotification);
-
-        });
-
-        return result;
+            handleChildItemContent(null);
+        }        
+       
+        return jUnBarElement;
         
     },
     

@@ -1347,7 +1347,7 @@ Dime.un={
             imageUrl: 'img/metaData/sharedWith.png',
             operationName: "Shared",
             getShortCaption: function(entry){
-                return "shared: "+Dime.psHelper.getCaptionForItemType(entry.unEntry.type);
+                return ""+Dime.psHelper.getCaptionForItemType(entry.unEntry.type);
             }
         },
         'unshared':{
