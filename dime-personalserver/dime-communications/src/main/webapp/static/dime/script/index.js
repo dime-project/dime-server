@@ -541,6 +541,12 @@ DimeView = {
     },    
     
     createAttributeItemJElement: function(entry){
+        //HACK - check if name is empty and set it with the category caption 
+        //should be provided by the server
+        if (!entry.name || entry.name.length<1){
+            entry.name = Dime.PACategory.getCategoryByName(entry.category).caption;
+        }
+        
         var jChildItem = $('<div/>').addClass("childItemProfileAttribute")
             .append(DimeView.createMark(entry, "profileAttributeMark", false))
             .append('<div class="profileAttributeCategory">'
