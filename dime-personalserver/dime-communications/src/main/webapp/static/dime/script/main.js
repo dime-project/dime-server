@@ -295,6 +295,17 @@ JSTool = {
         var d = new Date(millis);
         return d.toDateString();
     },
+            
+    /**
+    * returns formated Date String from UNIX time millis
+    */
+    millisToDateString: function(millis){
+       if (!millis){
+           return '';
+       }
+       var d = new Date(millis);
+       return d+"";
+    },       
     
     createHTMLElementString: function(tagName, id, classes, onClick, innerHtml){
         var result = "<"+tagName+" ";

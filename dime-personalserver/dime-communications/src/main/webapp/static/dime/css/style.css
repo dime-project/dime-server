@@ -2527,6 +2527,13 @@ input[type="text"].DimeDetailDialogPAValueListItemValue{
     margin-left: 20px;
 }
 
+.childItemNotifDate {
+    float: right;
+    position: relative;
+    top: 2px;
+    margin-right: 10px;
+    font-size: smaller;
+}
 
 .childItemNotifOperation {
     height: 49px;
