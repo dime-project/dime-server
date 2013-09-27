@@ -3482,11 +3482,13 @@ input[readonly].dimeDetailDialogKeyValueValue {
     min-height: 80px;
     background-color: white;	
     border: 1px solid silver;
-    overflow-y: auto;
-    overflow-x: hidden;
     border-radius: 5px;
     margin-top: 10px;
     margin-bottom: 20px;
+}
+
+.personInformationTrust > span{
+    margin-top: 9px;
 }
 
 .currentPersonImage {

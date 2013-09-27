@@ -5766,6 +5766,45 @@ Dime.Dialog.Toast.prototype={
     }
 };
 
+ Dime.Dialog.getPrivTrustElement = function(item, readOnly, handleUpdatedFunction){
+
+    if (!Dime.privacyTrust.hasPrivTrust(item)){
+        return $('<span/>');
+    }
+
+    var createButtonLabel= function(privTrust){
+        return '<span class="'+privTrust.thinClassString+'" >'+ privTrust.caption + '</span>';
+    };
+
+    var dropDownElements=[];
+
+    var captions = Dime.privacyTrust.getLevels(item); 
+    jQuery.each(captions, function(){
+
+        var levelEntry=this;
+        var updatePrivTrust=function(){
+            Dime.privacyTrust.updatePrivacyTrust(item, levelEntry.limit);
+            handleUpdatedFunction(item);
+        };            
+
+        dropDownElements.push(new BSTool.DropDownEntry(this, createButtonLabel(this), updatePrivTrust));
+    });
+    var currPrivTrust = Dime.privacyTrust.getClassAndCaptionForPrivacyTrustFromItem(item);
+
+
+    var result=$('<div/>')
+    .addClass("DetailDialogPrivTrustElem")
+    .append('<span >'+(currPrivTrust.isPrivacy?"How private is this: ":"Trust: ")+'</span>');
+    if (!readOnly){
+        result.append(BSTool.createDropdown(createButtonLabel(currPrivTrust),
+            dropDownElements, "btn"));
+    }else{
+        result.append(createButtonLabel(currPrivTrust));
+    }
+
+    return result;
+};
+
 Dime.Dialog.Alert.prototype={
     show:function(delay){
         $('body').append(this.dialog);

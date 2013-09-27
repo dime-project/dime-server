@@ -1849,6 +1849,12 @@ DimeView = {
         DimeView.clearSelectedItems();
         DimeView.updateActionView(1);
         
+        var handleUpdatedFunction = function(updatedItem){
+            Dime.REST.updateItem(updatedItem,function(){
+                (new Dime.Dialog.Toast("Trust level for "+ personEntry.name + " has been updated.")).show();
+            }, DimeView);
+        };
+        
         //adding person information
         $('#currentPersonOverview')
             .empty()
@@ -1874,11 +1880,8 @@ DimeView = {
                             .append(JSTool.millisToFormatString(personEntry.lastModified))
                     )
                     .append(
-                        $('<div></div>')
+                        Dime.Dialog.getPrivTrustElement(personEntry, false, handleUpdatedFunction)
                             .addClass("personInformationTrust")
-                            .append("Trust level: ")
-                            .append(Dime.privacyTrust.getClassAndCaptionForPrivacyTrust(personEntry["nao:trustLevel"], false).caption)
-                            .addClass(Dime.privacyTrust.getClassAndCaptionForPrivacyTrust(personEntry["nao:trustLevel"], false).classString)
                     )
             )
             .append(
