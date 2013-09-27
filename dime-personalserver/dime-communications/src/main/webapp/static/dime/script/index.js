@@ -768,15 +768,16 @@ DimeView = {
         jChildItem.append(DimeView.createMark(entry, "", false));
         
         //innerChild - name
+        var entryName;
         if (entry.type===Dime.psMap.TYPE.LIVEPOST){
-            var entryName = DimeView.getShortNameWithLength(entry.name, 125);
+            entryName = DimeView.getShortNameWithLength(entry.name, 125);
         }else{
-            var entryName = DimeView.getShortNameWithLength(entry.name, 30);
+            entryName = DimeView.getShortNameWithLength(entry.name, 30);
         }
         
-        if (entry.type!==Dime.psMap.TYPE.USERNOTIFICATION){
-            jChildItem.append('<h4>'+ entryName + '</h4>');
-        }
+        
+        jChildItem.append('<h4>'+ entryName + '</h4>');
+        
           
         //innerChild - type specific fields
         if (entry.type===Dime.psMap.TYPE.LIVEPOST && entry.text){
