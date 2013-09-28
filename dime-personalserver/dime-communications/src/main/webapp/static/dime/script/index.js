@@ -231,15 +231,17 @@ DimeViewManager.prototype = {
         this.resetContainers(newStatus); //based on viewtype
 
         if (!skipHistory){ 
-            this.pushHistory(newStatus);
+            this.pushHistory(newStatus); //update navigation history
         }
 
+        //refresh general navigation buttons, action buttons and meta-bar
         this.dimeViewRef.updateNavigation(newStatus);
         
-        //in order to avoid showing groups and contacts in person view
+        //handle groupview
         if(newStatus.isGroupContainer()){
             this.dimeViewRef.resetSearch.call(dimeViewRef);
         }
+        //handle personview
         if(newStatus.isPersonView()){
             var handleResult = function(response){
                 if(response){
@@ -249,6 +251,7 @@ DimeViewManager.prototype = {
             Dime.REST.getItem(newStatus.personGuid, Dime.psMap.TYPE.PERSON, handleResult, '@me', this);
             
         }
+        //show detail dialog if required
         if (newStatus.detailItemGuid&& newStatus.detailItemGuid.length>0 
                 && newStatus.personGuid && newStatus.personGuid.length>0 ){
             var showDialog = function (response){
@@ -1875,8 +1878,7 @@ DimeView = {
             DimeView.initFileUploaderForDropzone();
         }
 
-        DimeView.updateNewButton(groupType);
-        
+        DimeView.updateNewButton(groupType);        
         DimeView.updateMoreButton(groupType);
         DimeView.updateSpecialButton(groupType, newStatus.viewType);
 
