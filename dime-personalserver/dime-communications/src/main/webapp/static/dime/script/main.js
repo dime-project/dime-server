@@ -1947,6 +1947,30 @@ Dime.psHelper = {
             }
             return null;
         };
+        var personArraysContainSameMembers= function(arr1, arr2){
+            if (arr1.length!==arr2.length){
+                return false;
+            }
+            if (arr1.length===0){ //=== arr2.length as checked above
+                return true; 
+            }       
+            for (var i=0; i<arr1.length;i++){
+                var aEntry=arr1[i];
+                var foundA=false;
+                for (var j=0; j<arr2.length;j++){
+                    var bEntry=arr2[j];
+                    if (aEntry.personId===bEntry.personId
+                        && aEntry.saidReceiver===bEntry.saidReceiver){
+                            foundA=true;
+                            break;
+                        }                                        
+                }
+                if (!foundA){
+                    return false;
+                }
+            }
+            return true;
+        };
 
         for (var i=0;i<acl1.length;i++){
             var package1=acl1[i];
@@ -1955,7 +1979,7 @@ Dime.psHelper = {
                 return false;
             }
             if ((!JSTool.arraysContainSameMembers(package1.groups, package2.groups))
-                || (!JSTool.arraysContainSameMembers(package1.persons, package2.persons))
+                || (!personArraysContainSameMembers(package1.persons, package2.persons))
                 || (!JSTool.arraysContainSameMembers(package1.services, package2.services))
                 ){
                 return false;

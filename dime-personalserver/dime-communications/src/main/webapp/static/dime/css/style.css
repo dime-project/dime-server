@@ -2519,13 +2519,14 @@ input[type="text"].DimeDetailDialogPAValueListItemValue{
 
 .livePostTitle{
     background-color: #EFEFEF;
-    
+    padding: 5px;
 }
 
 .livePostText{
     background-color: #D7D9D7;
-    width: 99%;
+    width: 97%;
     margin: 2px;
+    padding: 5px;
 }
 
 .livePost{
