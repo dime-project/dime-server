@@ -2470,7 +2470,81 @@ input[type="text"].DimeDetailDialogPAValueListItemValue{
     width: 100%
 }
 
-/*Livepost*/
+/*Livepost - new*/
+
+.livePostThread{
+    border: 1px solid #C0C0C0;
+    border-radius: 5px;
+    margin: 2px;
+    margin-bottom: 5px;
+    padding: 2px;
+    float: left;
+    clear: both;
+    width: 98%;    
+    background-color: #F9F8F8;
+}
+
+.livePostHeader{    
+    width: 99%;
+    float:left;
+    background-color: #5A9DD5;
+    color: white;
+    border-radius: 5px;
+    margin: 2px;
+    padding: 2px;
+}
+
+.livePostBody{       
+    border-radius: 5px;
+    padding: 2px;
+    clear: both;
+    float:left;
+    width: 99%;
+}
+
+.livePostMeCaption{
+    float:right;
+    margin-right: 5px;
+}
+
+.livePostThemCaption{
+    float: left;      
+    margin-left: 5px;
+}
+
+.livePostTime{
+    float:right;
+}
+
+
+.livePostTitle{
+    background-color: #EFEFEF;
+    
+}
+
+.livePostText{
+    background-color: #D7D9D7;
+    width: 99%;
+    margin: 2px;
+}
+
+.livePost{
+    width: 70%;
+    background-color: #EFEFEF;
+    margin: 2px;
+    border-radius: 5px;
+    padding: 2px;
+}
+
+.livePostMe{
+    float:right;    
+}
+.livePostThem{
+    float:left;
+}
+
+
+/* LivePost - old */
 
 .livepostItem {
     width: 655px;
@@ -2521,6 +2595,8 @@ input[type="text"].DimeDetailDialogPAValueListItemValue{
     color: #313031;
     text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
 }
+
+
 
 /* Notification*/
 

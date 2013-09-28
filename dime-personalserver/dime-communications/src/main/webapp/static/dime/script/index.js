@@ -54,6 +54,7 @@ DimeViewStatus = function(viewType, groupType, itemType, personGuid, detailItemG
 DimeViewStatus.GROUP_CONTAINER_VIEW = 1;
 DimeViewStatus.SETTINGS_VIEW = 2;
 DimeViewStatus.PERSON_VIEW = 3;
+DimeViewStatus.LIVEPOST_VIEW = 4;
 
 DimeViewStatus.VIEW_TYPE_STR = "vT";
 DimeViewStatus.GROUP_TYPE_STR = "gT";
@@ -125,8 +126,10 @@ DimeViewStatus.prototype = {
     },
     isSettingsView: function(){
         return (this.viewType===DimeViewStatus.SETTINGS_VIEW);
+    },
+    isLivePostView: function(){
+        return (this.viewType===DimeViewStatus.LIVEPOST_VIEW);
     }
-    
          
 };
 
@@ -138,13 +141,16 @@ DimeViewStatus.prototype = {
  * @param groupActive
  * @param settingsActive
  * @param personViewActive
+ * @param livepostViewActive
  * @param getType
+ * 
  */
-DimeViewMapEntry = function(id, groupActive, settingsActive, personViewActive, getType){
+DimeViewMapEntry = function(id, groupActive, settingsActive, personViewActive, livepostViewActive, getType){
     this.id = id;
     this.groupActive = groupActive;
     this.settingsActive = settingsActive; 
     this.personViewActive = personViewActive;
+    this.livepostViewActive = livepostViewActive;    
     this.getType = getType;        
 };
 
@@ -161,24 +167,24 @@ DimeViewManager = function(dimeViewRef){
         viewManagerRef.viewMap[viewMapEntry.id]=viewMapEntry;
     };
    
-    //initialize views                               id, groupActive, settingsActive, personViewActive, type
-    addToViewMap(new DimeViewMapEntry('groupNavigation', false, false, false, this.getCurrentGroupType)); //initially set to false, so it will only be shown with some content in place
-    addToViewMap(new DimeViewMapEntry('itemNavigation', false, false, false, this.getCurrentItemType)); //initially set to false, so it will only be shown with some content in place
-    addToViewMap(new DimeViewMapEntry('searchBox', true, false, false, null));
-    addToViewMap(new DimeViewMapEntry('metabarMetaContainer', true, false, true, null));
-    addToViewMap(new DimeViewMapEntry('backToGroupButton', false, false, true, null));
-    addToViewMap(new DimeViewMapEntry('currentPersonOverview', false, false, true, null));
-    addToViewMap(new DimeViewMapEntry('currentPersonLabel', false, false, true, null));
-    addToViewMap(new DimeViewMapEntry('personProfileAttributeNavigation', false, false, true, function(){return Dime.psMap.TYPE.PROFILEATTRIBUTE;}));
-    addToViewMap(new DimeViewMapEntry('personProfileNavigation', false, false, true, function(){return Dime.psMap.TYPE.PROFILE;}));
-    addToViewMap(new DimeViewMapEntry('personLivepostNavigation', false, false, true, function(){return Dime.psMap.TYPE.LIVEPOST;}));
-    addToViewMap(new DimeViewMapEntry('personDataboxNavigation', false, false, true, function(){return Dime.psMap.TYPE.DATABOX;}));
-    addToViewMap(new DimeViewMapEntry('personResourceNavigation', false, false, true, function(){return Dime.psMap.TYPE.RESOURCE;}));
-    addToViewMap(new DimeViewMapEntry('settingsNavigationContainer', false, true, false, function(){return Dime.psMap.TYPE.SERVICEADAPTER;}));
+    //initialize views                               id, groupActive, settingsActive, personViewActive, livepostViewActive, type
+    addToViewMap(new DimeViewMapEntry('groupNavigation', false, false, false, false, this.getCurrentGroupType)); //initially set to false, so it will only be shown with some content in place
+    addToViewMap(new DimeViewMapEntry('itemNavigation', false, false, false, true, this.getCurrentItemType)); //initially set to false, so it will only be shown with some content in place
+    addToViewMap(new DimeViewMapEntry('searchBox', true, false, false, true, null));
+    addToViewMap(new DimeViewMapEntry('metabarMetaContainer', true, false, true, true, null));
+    addToViewMap(new DimeViewMapEntry('backToGroupButton', false, false, true, false, null));
+    addToViewMap(new DimeViewMapEntry('currentPersonOverview', false, false, true, false, null));
+    addToViewMap(new DimeViewMapEntry('currentPersonLabel', false, false, true, false, null));
+    addToViewMap(new DimeViewMapEntry('personProfileAttributeNavigation', false, false, true, false, function(){return Dime.psMap.TYPE.PROFILEATTRIBUTE;}));
+    addToViewMap(new DimeViewMapEntry('personProfileNavigation', false, false, true, false, function(){return Dime.psMap.TYPE.PROFILE;}));
+    addToViewMap(new DimeViewMapEntry('personLivepostNavigation', false, false, true, false, function(){return Dime.psMap.TYPE.LIVEPOST;}));
+    addToViewMap(new DimeViewMapEntry('personDataboxNavigation', false, false, true, false, function(){return Dime.psMap.TYPE.DATABOX;}));
+    addToViewMap(new DimeViewMapEntry('personResourceNavigation', false, false, true, false, function(){return Dime.psMap.TYPE.RESOURCE;}));
+    addToViewMap(new DimeViewMapEntry('settingsNavigationContainer', false, true, false, false, function(){return Dime.psMap.TYPE.SERVICEADAPTER;}));
     //the following are deactivated by default and only shown when required
-    addToViewMap(new DimeViewMapEntry('dropzoneNavigation', false, false, false, null));
-    addToViewMap(new DimeViewMapEntry('globalItemNavigation', false, false, false, null));  
-    addToViewMap(new DimeViewMapEntry('alertStatusNavigation', false, false, false, null));  
+    addToViewMap(new DimeViewMapEntry('dropzoneNavigation', false, false, false, false, null));
+    addToViewMap(new DimeViewMapEntry('globalItemNavigation', false, false, false, false, null));  
+    addToViewMap(new DimeViewMapEntry('alertStatusNavigation', false, false, false, false, null));  
     
     //init view status
     this.status = new DimeViewStatus( DimeViewStatus.GROUP_CONTAINER_VIEW,
@@ -196,6 +202,10 @@ DimeViewManager.prototype = {
     
     getCurrentItemType: function(){
         return this.status.itemType;
+    },
+    
+    getCurrentViewType: function(){
+        return this.status.viewType;
     },
 
     showAlertStatusNavigation: function(innerHtml){
@@ -238,7 +248,7 @@ DimeViewManager.prototype = {
         this.dimeViewRef.updateNavigation(newStatus);
         
         //handle groupview
-        if(newStatus.isGroupContainer()){
+        if(newStatus.isGroupContainer() || newStatus.isLivePostView()){
             this.dimeViewRef.resetSearch.call(dimeViewRef);
         }
         //handle personview
@@ -279,6 +289,8 @@ DimeViewManager.prototype = {
                 displayMe=this.settingsActive;
             }else if (status.isPersonView()){
                 displayMe=this.personViewActive;
+            }else if (status.isLivePostView()){
+                displayMe=this.livepostViewActive;
             }
             managerRef.setViewVisible(this.id, displayMe);
         });
@@ -850,12 +862,9 @@ DimeView = {
             return;
         }
 
-        var isSubString=function(fullString, subString){
-            return (subString.toLowerCase().indexOf(fullString.toLowerCase())!==-1);
-        };
 
         var isInFilter = function(entry){
-            return isSubString(DimeView.searchFilter, entry.name);
+            return JSTool.isSubString(DimeView.searchFilter, entry.name);
         };
 
         //special search when searching on usernotifications
@@ -865,11 +874,11 @@ DimeView = {
                 var unValues=Dime.un.getCaptionImageUrl(entry);
 
                 var result =
-                    isSubString(DimeView.searchFilter, entry.name)
-                    || isSubString(DimeView.searchFilter, unValues.caption)
-                    || isSubString(DimeView.searchFilter, unValues.operation)
-                    || isSubString(DimeView.searchFilter, unValues.childName)
-                    || isSubString(DimeView.searchFilter, unValues.shortCaption)
+                    JSTool.isSubString(DimeView.searchFilter, entry.name)
+                    || JSTool.isSubString(DimeView.searchFilter, unValues.caption)
+                    || JSTool.isSubString(DimeView.searchFilter, unValues.operation)
+                    || JSTool.isSubString(DimeView.searchFilter, unValues.childName)
+                    || JSTool.isSubString(DimeView.searchFilter, unValues.shortCaption)
                 ;
 
                 return result;
@@ -884,7 +893,7 @@ DimeView = {
                     &&(!entry.said || entry.said.length<1)){
                     return false; //skip this
                 }
-                return isSubString(DimeView.searchFilter, entry.name);
+                return JSTool.isSubString(DimeView.searchFilter, entry.name);
                 //TODO - also search in attributes
             };
 
@@ -1573,12 +1582,7 @@ DimeView = {
       
         var callBack=function(response){
             DimeView.handleSearchResult(response, type);
-        };
-        //HACK??
-        if (type===Dime.psMap.TYPE.LIVEPOST){
-            Dime.REST.getAllAll(type, callBack);
-            return;
-        }
+        };       
 
         Dime.REST.getAll(type, callBack);
     },
@@ -1638,7 +1642,7 @@ DimeView = {
     search: function(){
 
         var searchText = document.getElementById('searchText');
-        console.log('search:', searchText.value);    
+        //console.log('search:', searchText.value);    
         DimeView.searchFilter = searchText.value;
 
         DimeView.cleanUpView();
@@ -1657,33 +1661,26 @@ DimeView = {
             if (!continueSearch){
                 return;
             }
+        }else if (DimeView.viewManager.getCurrentViewType()===DimeViewStatus.LIVEPOST_VIEW){
+            DimeView.LivePostView.search(searchText);
+            return;
         }
         
-        if (DimeView.viewManager.getCurrentGroupType()
-            && (DimeView.viewManager.getCurrentGroupType()!==Dime.psMap.TYPE.LIVESTREAM) //HACK avoid call for unsupported livestream
-        ){
-            DimeView.searchCallForType(DimeView.viewManager.getCurrentGroupType());
-            
-            //also search on global search if groupType==GROUP
-            if (DimeView.viewManager.getCurrentGroupType()===Dime.psMap.TYPE.GROUP && searchText.value && (searchText.value.length>0)){
+        DimeView.searchCallForType(DimeView.viewManager.getCurrentGroupType());
 
-                DimeView.initContainer($('#globalItemNavigation'), "di.me Users in the di.me User Directory");
-                
-                Dime.REST.searchGlobal(searchText.value, DimeView.handleGlobalSearchResult);
-                
-            }else{
-                DimeView.viewManager.setViewVisible.call(DimeView.viewManager, 'globalItemNavigation', false);
-            }
-        }else if(DimeView.viewManager.getCurrentGroupType()===Dime.psMap.TYPE.LIVESTREAM){ //HACK avoid call for unsupported livestream
-            DimeView.viewManager.setViewVisible.call(DimeView.viewManager, "groupNavigation", false);            
-        }
+        //also search on global search if groupType==GROUP
+        if (DimeView.viewManager.getCurrentGroupType()===Dime.psMap.TYPE.GROUP && searchText.value && (searchText.value.length>0)){
 
+            DimeView.initContainer($('#globalItemNavigation'), "di.me Users in the di.me User Directory");
+            Dime.REST.searchGlobal(searchText.value, DimeView.handleGlobalSearchResult);
+
+        }else{
+            DimeView.viewManager.setViewVisible.call(DimeView.viewManager, 'globalItemNavigation', false);
+        }        
 
         if (DimeView.viewManager.getCurrentItemType()){ 
             DimeView.searchCallForType(DimeView.viewManager.getCurrentItemType());
         }
-        
-       
     },
 
     updateNewButton: function(groupType){
@@ -1817,10 +1814,9 @@ DimeView = {
             addRmvBtn
                 .empty()
                 .text("Send Livepost ...")
-                .removeClass("disabled")
                 .click(function(){
                     //Dime.evaluation.createAndSendEvaluationItemForAction("action_sendLivepostFromPersonView");
-                    var selectedPerson = JSTool.getDefinedMembers(DimeView.selectedItems);
+                    var selectedPerson = DimeView.getSelectedItemsForView();
 
                     var triggerDialog=function(response){
                         Dime.Dialog.showLivepostWithSelection(response);
@@ -1975,6 +1971,201 @@ DimeView = {
         DimeView.viewManager.updateView.call(DimeView.viewManager, Dime.psMap.TYPE.GROUP, DimeViewStatus.GROUP_CONTAINER_VIEW, false);
     },            
     
+    LivePostView:{
+        search: function(searchTerm){
+            
+            var callbackLivePost = function(livePosts){
+                DimeView.LivePostView.handleSearchResult(livePosts, searchTerm);                
+            };
+            
+            Dime.REST.getAllAll(Dime.psMap.TYPE.LIVEPOST, callbackLivePost);
+        },
+        handleSearchResult: function(allLivePosts, searchTerm){
+            /* 
+               contains items: :{                            
+                acl: acl
+                sender: userId of sender // used for non-acl entries 
+                livePosts:[]
+                } 
+             */
+            var livePostByReceivers = []; 
+            
+            var assignSentLivePost= function(livePost){
+                var myAcl = Dime.psHelper.getAclOfItem(livePost);
+                
+                for (var i=0;i<livePostByReceivers.length;i++){
+                    var entry = livePostByReceivers[i];
+                    if (Dime.psHelper.aclsAreEqual(entry.acl, myAcl)){
+                        entry.livePosts.push(livePost);
+                        return;
+                    }
+                }
+                //else not found --> create new entry
+                livePostByReceivers.push({
+                   acl: myAcl,
+                   sender: null,
+                   livePosts:[livePost]
+                });
+            };            
+            
+            var receivedLivePosts=[];
+            
+            //sort my livepost by receivers
+            jQuery.each(allLivePosts, function(){
+                if (this.userId==='@me'){
+                    assignSentLivePost(this);
+                }else{
+                    //collect received LPs in array
+                    receivedLivePosts.push(this);
+                }
+            });
+            
+            var personFitsToEntry=function(personGuid, entry){
+                if (entry.acl){
+                    for (var l=0;l<entry.acl.length;l++){
+                        if (JSTool.arrayContainsItem(entry.acl[l].persons, personGuid)){
+                            return true;
+                        }
+                    }
+                    return false;
+                }//else
+                return personGuid===entry.sender;
+            };
+            
+            var assignReceivedLivePost=function(livePost){
+                for (var i=0;i<livePostByReceivers.length;i++){
+                    var entry = livePostByReceivers[i];
+                    if (personFitsToEntry(livePost.userId, entry)){
+                        entry.livePosts.push(livePost);
+                        return;
+                    }
+                }
+                //no fitting acl found
+                livePostByReceivers.push({
+                   acl: null,
+                   sender: livePost.userId,
+                   livePosts:[livePost]
+                });
+            };
+            
+            //sort in received LivePosts
+            jQuery.each(receivedLivePosts, function(){
+               assignReceivedLivePost(this); 
+            });
+            
+            //sort livePostByReceivers by creation date
+            //TODO sort livePostByReceivers by creation date
+            
+            
+            
+            //load all data required for the next steps
+            var allMyData=new Dime.AllMyDataContainer();
+
+            var loadingDone=function(){
+                //generate items and add them to the item container
+                jQuery.each(livePostByReceivers, function(){
+                    //filter based on searchTerm
+                    //TODO
+                    
+                   DimeView.LivePostView.addItemForThread(this, allMyData);
+                });
+            };
+            allMyData.load(loadingDone);            
+        },
+        
+        addItemForThread: function(threadEntry, allMyData){
+            var getMyEntry=function(guid, type){
+                for (var i=0; i<allMyData[type].length;i++){
+                    if (allMyData[type][i].guid===guid){
+                        return allMyData[type][i];
+                    }                    
+                }
+                return null;
+            };
+        
+            var getCaption = function(){
+                if (threadEntry.acl){
+                    var firstEntry = true;
+                    var result = "";
+                    var addNamesFromArray=function(myArr, type){                        
+                        for (var i=0; i<myArr.length; i++){
+                            var person = (type===Dime.psMap.TYPE.PERSON)?getMyEntry(myArr[i].personId, type):getMyEntry(myArr[i], type);
+                            if (person){
+                                firstEntry?firstEntry=false:result+=", ";                                
+                                result+=person.name;
+                            }
+                        }
+                    };
+                    for (var k=0;k<threadEntry.acl.length;k++){
+                        addNamesFromArray(threadEntry.acl[k].groups, Dime.psMap.TYPE.GROUP);
+                        addNamesFromArray(threadEntry.acl[k].persons, Dime.psMap.TYPE.PERSON);
+                        addNamesFromArray(threadEntry.acl[k].services, Dime.psMap.TYPE.ACCOUNT);
+                    }
+                    
+                    return result;
+                    
+                }//else
+                var senderEntry = getMyEntry(threadEntry.sender, Dime.psMap.TYPE.PERSON);
+                if (senderEntry){
+                    return senderEntry.name;
+                }
+                return "unknown"
+            };
+            
+            var getProfileForSaid=function(said){
+                var allProfiles=allMyData[Dime.psMap.TYPE.PROFILE];
+                for (var p=0;p<allProfiles.length;p++){                
+                    if (allProfiles[p].said
+                            && allProfiles[p].said===said){
+                        return allProfiles[p];
+                    }
+                }
+                //else
+                console.log('ERROR: unable to find profile with said: '+said);
+                return null;
+            };
+            
+            var getMeCaption = function(){
+                if (threadEntry.acl){
+                    var firstEntry=true;
+                    var result="You (";
+                    for (var a=0; a<threadEntry.acl.length;a++){
+                        var profile = getProfileForSaid(threadEntry.acl[a].saidSender);
+                        if (profile){
+                            firstEntry?firstEntry=false:result+=", ";                                
+                            result+=profile.name;
+                        }
+                    }
+                    result+=')';
+                }else{
+                    result = 'You';
+                }
+                return result;
+            };
+            
+            var livePostContainer = $('<div>').addClass('livePostBody');
+            
+            jQuery.each(threadEntry.livePosts, function(){
+               livePostContainer.append($('<div>')
+                        .addClass('livePost')
+                       .addClass(this.userId==='@me'?'livePostMe':'livePostThem')
+                    .append($('<div/>').text(JSTool.millisToDateString(this.created)).addClass("livePostTime"))
+                    .append($('<div/>').text(this.name).addClass('livePostTitle'))
+                    .append($('<div/>').text(this.text).addClass('livePostText'))
+               );
+            });
+    
+            $('#itemNavigation')
+                .append($('<div/>').addClass('livePostThread')
+                    .append($('<div/>').addClass('livePostHeader')
+                        .append($('<span/>').text(getMeCaption()).addClass('livePostMeCaption')) 
+                        .append($('<span/>').text(getCaption()).addClass('livePostThemCaption'))
+                    )
+                    .append(livePostContainer)
+                );        
+        }
+
+    },
     
 
     OrangeBubble: function(handlerSelf, caption, bubbleBody, dismissHandler){
@@ -2447,7 +2638,7 @@ Dime.initProcessor.registerFunction(function(callback){
     $('#groupNavigation').click(function(){
         //reset search text
         
-       DimeView.search(); 
+       DimeView.search();  //TODO move to update Navigation?
     });
     
     DimeView.viewManager.updateViewFromUrl.call(DimeView.viewManager);
@@ -2521,15 +2712,19 @@ Dime.Navigation = {
     updateView : function(notifications){
         DimeView.viewManager.updateViewFromNotifications.call(DimeView.viewManager, notifications);
     },
-
-    createMenuLiButton : function(id, caption, containerGroupType){
+            
+    createMenuLiButtonWithViewType : function(id, caption, containerGroupType, viewType){
 
         return $('<li/>').attr('id',id).append($('<a/>')
             .click(function(){
                 //update view
-                DimeView.viewManager.updateView.call(DimeView.viewManager, containerGroupType, DimeViewStatus.GROUP_CONTAINER_VIEW);
+                DimeView.viewManager.updateView.call(DimeView.viewManager, containerGroupType, viewType);
             })
             .text(caption));
+    },
+
+    createMenuLiButton : function(id, caption, containerGroupType){
+        return Dime.Navigation.createMenuLiButtonWithViewType(id, caption, containerGroupType, DimeViewStatus.GROUP_CONTAINER_VIEW);
     },
 
     createMenuLiButtonSettings: function(){
@@ -2814,7 +3009,7 @@ Dime.Navigation = {
 
         var navigation = $('<div/>').addClass('nav-collapse')
         .append($('<ul/>').addClass('nav')
-            .append(Dime.Navigation.createMenuLiButton("navButtonMessages","Livepost" ,Dime.psMap.TYPE.LIVESTREAM))
+            .append(Dime.Navigation.createMenuLiButtonWithViewType("navButtonMessages","Livepost" ,Dime.psMap.TYPE.LIVESTREAM, DimeViewStatus.LIVEPOST_VIEW))
             .append(Dime.Navigation.createMenuLiButton("navButtonPeople","People" ,Dime.psMap.TYPE.GROUP))
             .append(Dime.Navigation.createMenuLiButton("navButtonData","My Data" ,Dime.psMap.TYPE.DATABOX))
             .append(Dime.Navigation.createMenuLiButton("navButtonProfile","My Profile Cards" ,Dime.psMap.TYPE.PROFILE))

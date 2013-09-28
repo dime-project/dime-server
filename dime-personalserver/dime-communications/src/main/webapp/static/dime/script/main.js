@@ -191,10 +191,16 @@ jQuery.fn.extend({
 //
 JSTool = {
 
-    
+    arraysContainSameMembers: function(arr1, arr2){
+        return ($(arr1).not(arr2).length == 0 && $(arr2).not(arr1).length == 0);
+    },
 
     isNumber: function(n) {
         return !isNaN(parseFloat(n)) && isFinite(n);
+    },
+    
+    isSubString: function(fullString, subString){
+        return (subString.toLowerCase().indexOf(fullString.toLowerCase())!==-1);
     },
     
     arrayContainsItem: function(myArray, myItem){
@@ -1898,8 +1904,8 @@ Dime.psHelper = {
             result.push(exAclPackage);            
         }
         return result;
-    },
-    
+    },         
+        
     getAllReceiversOfItem: function(item, callback){
         //get all receivers of this item
         if (!item["nao:includes"]){
@@ -1931,6 +1937,32 @@ Dime.psHelper = {
             
         
     },
+            
+    aclsAreEqual: function(acl1, acl2){
+        var findACLPackageInAcl2=function(saidSender){
+            for (var j=0;j<acl2.length;j++){
+                if (acl2[j].saidSender===saidSender){
+                    return acl2[j];
+                }
+            }
+            return null;
+        };
+
+        for (var i=0;i<acl1.length;i++){
+            var package1=acl1[i];
+            var package2=findACLPackageInAcl2(package1.saidSender);
+            if (!package2){ //not found --> not equal
+                return false;
+            }
+            if ((!JSTool.arraysContainSameMembers(package1.groups, package2.groups))
+                || (!JSTool.arraysContainSameMembers(package1.persons, package2.persons))
+                || (!JSTool.arraysContainSameMembers(package1.services, package2.services))
+                ){
+                return false;
+            }
+        }
+        return true;
+    },
 
     getAllSharedItems: function(agent, callback){        
         //lookup all sharable items for this agent
@@ -1946,10 +1978,8 @@ Dime.psHelper = {
     getAclOfItem: function(item){
         if (!item["nao:includes"]){
             item["nao:includes"]=[];
-        }
-        
-        var acl = item["nao:includes"];
-        return acl;
+        }        
+        return item["nao:includes"];        
     },
     
     getOrCreateACLPackage: function(item, saidSender){
@@ -2523,47 +2553,7 @@ Dime.psHelper = {
         return result;
 
     },
-  
-    getCombinedModels: function(searchViewFilter){
-        
-
-        if (searchViewFilter==='all'){
-
-            return {
-                groups: Dime.GenItem,
-                items: Dime.GenItem
-            };
-        }
-        if (searchViewFilter==='people'){
-            return {
-                groups: Dime.GroupsModel,
-                items: Dime.PersonModel
-            };
-
-        }
-        if (searchViewFilter==='data'){
-            return {
-                groups: Dime.DataboxModel,
-                items: Dime.ResourceModel
-            };
-        }
-        if (searchViewFilter==='profiles'){
-            return {
-                groups: Dime.PersonModel,
-                items: Dime.ProfileModel
-            };
-        }
-        if (searchViewFilter==='profile'){
-            return {
-                groups: Dime.ProfileModel,
-                items: Dime.ProfileAttributeModel
-            };
-        }
-        //else
-
-        console.log('ERROR: Dime.psHelper:getCombinedModels filter not supported:',searchViewFilter);
-        return null;
-    },
+   
     
 
     tiggerNewSituationEvent: function(situation, switchOff){
