@@ -311,13 +311,13 @@ JSTool = {
                return "0"+value;
            }
            return ""+value;
-       } 
+       };
         
        if (!millis){
            return '';
        }
        var d = new Date(millis);
-       return padZero(d.getDay())+"."
+       return padZero(d.getDate())+"."
                + padZero(d.getMonth()+1)+"."
                + d.getFullYear() +" "
                + padZero(d.getHours())+":"
