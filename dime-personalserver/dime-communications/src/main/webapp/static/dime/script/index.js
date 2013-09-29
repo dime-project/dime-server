@@ -1662,7 +1662,7 @@ DimeView = {
                 return;
             }
         }else if (DimeView.viewManager.getCurrentViewType()===DimeViewStatus.LIVEPOST_VIEW){
-            DimeView.LivePostView.search(searchText);
+            DimeView.LivePostView.search(searchText.value);
             return;
         }
         
@@ -2070,19 +2070,35 @@ DimeView = {
             
             //sort livePostByReceivers by creation date
             //TODO sort livePostByReceivers by creation date
-            
-            
+            //currently this is done on the raw liveposts on fetching
             
             //load all data required for the next steps
             var allMyData=new Dime.AllMyDataContainer();
+            
+            var filterThread=function(threadEntry){
+                if (!searchTerm || searchTerm.length===0){
+                    return true;
+                }
+                for (var i=0;i<threadEntry.livePosts.length;i++){
+                    if (JSTool.isSubString(searchTerm, threadEntry.livePosts[i].name)
+                        || JSTool.isSubString(searchTerm, threadEntry.livePosts[i].text)
+                    ){
+                        
+                        return true;
+                    }
+                }
+                return false;
+            };
+
 
             var loadingDone=function(){
                 //generate items and add them to the item container
                 jQuery.each(livePostByReceivers, function(){
                     //filter based on searchTerm
-                    //TODO
-                    
-                   DimeView.LivePostView.addItemForThread(this, allMyData);
+                    //TODO search also for thread party members (requires small refactoring)
+                    if (filterThread(this)){
+                        DimeView.LivePostView.addItemForThread(this, allMyData);
+                    }
                 });
             };
             allMyData.load(loadingDone);            

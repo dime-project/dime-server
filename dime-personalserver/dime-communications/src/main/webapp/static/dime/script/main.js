@@ -199,8 +199,8 @@ JSTool = {
         return !isNaN(parseFloat(n)) && isFinite(n);
     },
     
-    isSubString: function(fullString, subString){
-        return (subString.toLowerCase().indexOf(fullString.toLowerCase())!==-1);
+    isSubString: function(searchString, fullString){
+        return (fullString.toLowerCase().indexOf(searchString.toLowerCase())!==-1);
     },
     
     arrayContainsItem: function(myArray, myItem){
