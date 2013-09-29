@@ -971,7 +971,7 @@ DimeView = {
                 Dime.psMap.TYPE.LIVESTREAM, 
                 Dime.psMap.TYPE.PROFILE, 
                 Dime.psMap.TYPE.SITUATION],
-            supportedViewTypes: [DimeViewStatus.GROUP_CONTAINER_VIEW],
+            supportedViewTypes: [DimeViewStatus.GROUP_CONTAINER_VIEW, DimeViewStatus.LIVEPOST_VIEW],
             handlerFunction: null
             
         },
@@ -983,7 +983,7 @@ DimeView = {
                 Dime.psMap.TYPE.DATABOX, 
                 Dime.psMap.TYPE.PROFILE, 
                 Dime.psMap.TYPE.SITUATION],
-            supportedViewTypes: [DimeViewStatus.GROUP_CONTAINER_VIEW, DimeViewStatus.PERSON_VIEW],
+            supportedViewTypes: [DimeViewStatus.GROUP_CONTAINER_VIEW, DimeViewStatus.PERSON_VIEW, DimeViewStatus.LIVEPOST_VIEW],
             handlerFunction: function(){DimeView.editSelected.call(DimeView);}
         },
         {
@@ -1003,7 +1003,7 @@ DimeView = {
                 Dime.psMap.TYPE.LIVESTREAM, 
                 Dime.psMap.TYPE.PROFILE, 
                 Dime.psMap.TYPE.SITUATION],
-            supportedViewTypes: [DimeViewStatus.GROUP_CONTAINER_VIEW, DimeViewStatus.PERSON_VIEW],
+            supportedViewTypes: [DimeViewStatus.GROUP_CONTAINER_VIEW, DimeViewStatus.PERSON_VIEW, DimeViewStatus.LIVEPOST_VIEW],
             handlerFunction: function(){DimeView.removeSelected.call(DimeView);}
         },
         {
@@ -1013,7 +1013,7 @@ DimeView = {
             supportedGroupTypes: [Dime.psMap.TYPE.GROUP, 
                 Dime.psMap.TYPE.LIVESTREAM, 
                 Dime.psMap.TYPE.DATABOX],
-            supportedViewTypes: [DimeViewStatus.GROUP_CONTAINER_VIEW, DimeViewStatus.PERSON_VIEW],
+            supportedViewTypes: [DimeViewStatus.GROUP_CONTAINER_VIEW, DimeViewStatus.PERSON_VIEW, DimeViewStatus.LIVEPOST_VIEW],
             handlerFunction: function(){DimeView.shareSelected.call(DimeView);}
         },
         {
@@ -1025,7 +1025,7 @@ DimeView = {
                 Dime.psMap.TYPE.DATABOX, 
                 Dime.psMap.TYPE.PROFILE, 
                 Dime.psMap.TYPE.SITUATION],
-            supportedViewTypes: [DimeViewStatus.GROUP_CONTAINER_VIEW],
+            supportedViewTypes: [DimeViewStatus.GROUP_CONTAINER_VIEW, DimeViewStatus.LIVEPOST_VIEW],
             handlerFunction: null
         }
     ],
@@ -2020,10 +2020,24 @@ DimeView = {
                 }
             });
             
-            var personFitsToEntry=function(personGuid, entry){
-                if (entry.acl){
+            var personArraysContainPersonGuid= function(arr1, personGuid){                
+                for (var i=0; i<arr1.length;i++){                    
+                    if (arr1[i].personId===personGuid){
+                        return true;
+                    }
+                }
+                return false;
+            };
+            
+            var personFitsToEntry=function(saidSender, personGuid, entry){
+                if (entry.acl){                    
                     for (var l=0;l<entry.acl.length;l++){
-                        if (JSTool.arrayContainsItem(entry.acl[l].persons, personGuid)){
+                        //check for said sender first if available
+                        if (saidSender && saidSender!==entry.acl[l].saidSender){
+                            return false;
+                        }                    
+                        
+                        if (personArraysContainPersonGuid(entry.acl[l].persons, personGuid)){
                             return true;
                         }
                     }
@@ -2033,9 +2047,10 @@ DimeView = {
             };
             
             var assignReceivedLivePost=function(livePost){
+                var saidSender = livePost['nso:sharedWith'];
                 for (var i=0;i<livePostByReceivers.length;i++){
-                    var entry = livePostByReceivers[i];
-                    if (personFitsToEntry(livePost.userId, entry)){
+                    var entry = livePostByReceivers[i];                    
+                    if (personFitsToEntry(saidSender, livePost.userId, entry)){
                         entry.livePosts.push(livePost);
                         return;
                     }
@@ -2143,23 +2158,31 @@ DimeView = {
                 return result;
             };
             
-            var livePostContainer = $('<div>').addClass('livePostBody');
+            var livePostContainer = $('<div>').addClass('livePostThreadBody');
             
             jQuery.each(threadEntry.livePosts, function(){
-               livePostContainer.append($('<div>')
-                        .addClass('livePost')
-                       .addClass(this.userId==='@me'?'livePostMe':'livePostThem')
+               var jLivePostElement = $('<div>')
+                    .addClass('livePost')
+                    .addClass(this.userId==='@me'?'livePostMe':'livePostThem')
+                    .append(DimeView.createMark(this, "", false))
                     .append($('<div/>').text(JSTool.millisToDateString(this.created)).addClass("livePostTime"))
                     .append($('<div/>').text(this.name).addClass('livePostTitle'))
-                    .append($('<div/>').text(this.text).addClass('livePostText'))
-               );
+                    .append($('<div/>').text(this.text).addClass('livePostText'));
+               
+                DimeView.setActionAttributeForElements(this, jLivePostElement, false, true);
+                
+                livePostContainer.append(jLivePostElement);
+               
             });
     
             $('#itemNavigation')
                 .append($('<div/>').addClass('livePostThread')
-                    .append($('<div/>').addClass('livePostHeader')
+                    .append($('<div/>').addClass('livePostThreadHeader')
                         .append($('<span/>').text(getMeCaption()).addClass('livePostMeCaption')) 
                         .append($('<span/>').text(getCaption()).addClass('livePostThemCaption'))
+                        .click(function(){
+                            livePostContainer.toggleClass('livePostThreadBodyReduced');
+                        })
                     )
                     .append(livePostContainer)
                 );        

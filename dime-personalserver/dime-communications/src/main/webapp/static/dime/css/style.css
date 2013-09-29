@@ -153,6 +153,14 @@ body {
     z-index: 300;
 }
 
+.livePost > .mark{
+    float: right;
+    top: initial;
+    left: initial;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
 .mark:hover {
     background-color: #FFFFFF;
     border: 2px solid #F6C200;
@@ -2484,7 +2492,7 @@ input[type="text"].DimeDetailDialogPAValueListItemValue{
     background-color: #F9F8F8;
 }
 
-.livePostHeader{    
+.livePostThreadHeader{    
     width: 99%;
     float:left;
     background-color: #5A9DD5;
@@ -2493,23 +2501,33 @@ input[type="text"].DimeDetailDialogPAValueListItemValue{
     margin: 2px;
     padding: 2px;
 }
+.livePostThreadHeader:hover{    
+    background-color: #9CC6E6;
+}
 
-.livePostBody{       
+
+.livePostThreadBody{       
     border-radius: 5px;
     padding: 2px;
     clear: both;
     float:left;
-    width: 99%;
+    width: 99%;    
+}
+.livePostThreadBodyReduced{
+    height: 0px;
+    overflow: hidden;
 }
 
 .livePostMeCaption{
     float:right;
     margin-right: 5px;
+    cursor: default;
 }
 
 .livePostThemCaption{
     float: left;      
-    margin-left: 5px;
+    margin-left: 5px;    
+    cursor: default;
 }
 
 .livePostTime{
@@ -2527,6 +2545,8 @@ input[type="text"].DimeDetailDialogPAValueListItemValue{
     width: 97%;
     margin: 2px;
     padding: 5px;
+    max-height: 150px;
+    overflow-y: auto;
 }
 
 .livePost{
@@ -2535,6 +2555,17 @@ input[type="text"].DimeDetailDialogPAValueListItemValue{
     margin: 2px;
     border-radius: 5px;
     padding: 2px;
+    border: 1px solid #F9F8F8;
+}
+
+.livePost:hover {
+    border: 1px solid #5A9DD5;
+    background-color: #F8F9F9;
+}
+
+.livePost:hover > div {
+    color: #313031;
+    text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
 }
 
 .livePostMe{
