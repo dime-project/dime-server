@@ -1769,7 +1769,7 @@ DimeView = {
         if (groupType===Dime.psMap.TYPE.GROUP){
             dropDownUl                
                 .append(createMenuItem("Merge persons ..", function(event, jElement, selectedItems){
-                    window.alert("Merging of selected items currently not supported!");
+                    window.alert("Merging of persons is currently only supported by the mobile app!");
                 })); 
         }
         dropDownUl
