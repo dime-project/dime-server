@@ -894,7 +894,7 @@ public class UserManagerImpl implements UserManager {
         if (list != null){
         	return list.size();
         }
-		
+        return 0;
 	}
 
 }
