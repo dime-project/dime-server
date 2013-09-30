@@ -51,6 +51,7 @@ import eu.dime.ps.controllers.trustengine.TrustEngine;
 import eu.dime.ps.controllers.trustengine.utils.AdvisoryConstants;
 import eu.dime.ps.controllers.util.TenantHelper;
 import eu.dime.ps.semantic.exception.NotFoundException;
+import eu.dime.ps.semantic.exception.PrivacyPreferenceException;
 import eu.dime.ps.semantic.model.RDFReactorThing;
 import eu.dime.ps.semantic.model.dlpo.LivePost;
 import eu.dime.ps.semantic.model.nie.DataObject;
@@ -59,6 +60,7 @@ import eu.dime.ps.semantic.model.pimo.Person;
 import eu.dime.ps.semantic.model.pimo.PersonGroup;
 import eu.dime.ps.semantic.model.ppo.AccessSpace;
 import eu.dime.ps.semantic.model.ppo.PrivacyPreference;
+import eu.dime.ps.semantic.privacy.PrivacyPreferenceService;
 import eu.dime.ps.semantic.rdf.ResourceStore;
 
 /**
@@ -74,6 +76,7 @@ public class AdvisoryController extends AdvisoryBase {
 	private PersonGroupManager personGroupManager;	
 	private TrustEngine trustEngine;	
 	private ProfileCardManager profileCardManager;
+	
 	
 	public void setPersonManager(PersonManager personManager) {
 		this.personManager = personManager;
@@ -205,23 +208,21 @@ public class AdvisoryController extends AdvisoryBase {
 	private Collection<ProfileWarning> getProfileWarnings(List<String> persons, String profile) {
 		List <ProfileWarning> warnings = new ArrayList<ProfileWarning>();
 		List <String> newPersons = new ArrayList<String>();
-		//TODO: get Profile object, get mySaid,
+		
+		PrivacyPreferenceService privPrefService = null;
+		try {
+			privPrefService = this.getPrivPrefService();
+		} catch (RepositoryException e) {
+			logger.warn("Could not load PrivacyPreferenceService");
+		}
 		PrivacyPreference pc;
 		try {
-            ResourceStore resourceStore=getResourceStore();
+			ResourceStore resourceStore = getResourceStore();
 			pc = resourceStore.get(new URIImpl(profile), PrivacyPreference.class);
-			Set<Person> set = new HashSet<Person>();
-			if (pc.hasAccessSpace()){
-				List<AccessSpace> accessSpaces = pc.getAllAccessSpace_as().asList();
-				for (AccessSpace as : accessSpaces){
-					eu.dime.ps.semantic.model.nso.AccessSpace asNSO = 
-							resourceStore.get(as.asURI(), eu.dime.ps.semantic.model.nso.AccessSpace.class);
-					set.addAll(getPersonsFromAccesSpace(asNSO, resourceStore));
-				}				
-			}
+
 			for (String pString : persons) {
 				Person person = resourceStore.get(new URIImpl(pString), Person.class);
-				if(!set.contains(person)){
+				if(!privPrefService.hasAccessTo(pc, person)){
 					newPersons.add(person.asURI().toString());
 				}
 			}	
@@ -231,8 +232,8 @@ public class AdvisoryController extends AdvisoryBase {
 			logger.warn("Uri is not a PersonContact",e);
 		} catch (RepositoryException e) {
 			logger.warn("Could not get resource.", e);
-		} catch (InfosphereException e) {
-			logger.warn("Could not resolve accesspace.",e);
+		} catch (PrivacyPreferenceException e) {
+			logger.warn("Could not check access rights.",e);
 		}
 		
 		if (!newPersons.isEmpty()){
@@ -445,12 +446,18 @@ public class AdvisoryController extends AdvisoryBase {
 				map.put(agentUri.toString(), getResourceStore().get(agentUri, Person.class));
 				isPerson = false;
 			} else {
-				PersonGroup group = personGroupManager.get(agentUri.toString());
-				Collection<Person> members = personManager.getAllByGroup(group);
-				for (Person member : members) {
-					if (!map.containsKey(member.asURI().toString())){
-						map.put(member.asURI().toString(), member);
+				try {
+					if(getResourceStore().isTypedAs(res, PIMO.PersonGroup)){
+						PersonGroup group = personGroupManager.get(agentUri.toString());
+						Collection<Person> members = personManager.getAllByGroup(group);
+						for (Person member : members) {
+							if (!map.containsKey(member.asURI().toString())){
+								map.put(member.asURI().toString(), member);
+							}
+						}
 					}
+				} catch (InfosphereException e) {
+					logger.error(e.getMessage());
 				}
 			}
 		}
