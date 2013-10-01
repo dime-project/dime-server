@@ -1,23 +1,24 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>Untitled Document</title>
+<title>Rule Manager</title>
 
-<link href="stylesheet.css" rel="stylesheet" type="text/css" />
+<link href="/dime-communications/static/ui/dime/rules/stylesheet.css" rel="stylesheet" type="text/css" />
 
 <!-- jquery css -->
-<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+<link rel="stylesheet" href="//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
 
 
 <!-- jquery scripts -->
-<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
-<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+<script type="text/javascript" src="//code.jquery.com/jquery-1.9.1.js"></script>
+<script type="text/javascript" src="//code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
 
-<script src="jshashtable-3.0.js"></script>
+<script type="text/javascript" src="/dime-communications/static/ui/dime/rules/jshashtable-3.0.js"></script>
 
-<script type="application/javascript">
-    var conditionsHashMap = new Hashtable();
+<script type="text/javascript">
+//<![CDATA[
+  var conditionsHashMap = new Hashtable();
 	var conditionsKeyPress = new Hashtable();
 	var conditionsMousePress = new Hashtable();
 	
@@ -38,16 +39,16 @@ var types = [
 			value: 0,
 			label: "Email",
 			propertyQuery: "select distinct * where { { ?x <http://www.w3.org/2000/01/rdf-schema#domain> <http://www.semanticdesktop.org/ontologies/2007/03/22/nmo#Email>. } union { ?x <http://www.w3.org/2000/01/rdf-schema#domain> <http://www.semanticdesktop.org/ontologies/2007/03/22/nmo#Message>.} ?x <http://www.w3.org/2000/01/rdf-schema#range> <http://www.semanticdesktop.org/ontologies/2007/03/22/nco#ContactMedium> .  optional { ?x <http://www.w3.org/2000/01/rdf-schema#label> ?label . } optional { ?x <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#prefLabel> ?label . } optional {?x <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#deprecated> ?flag .} filter (!bound(?flag)) }",
-			constraintQuery: "select distinct * where { { ?p a <http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#Person> . ?p <http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#occurrence> ?y . optional { ?p<http://www.semanticdesktop.org/ontologies/2007/08/15/nao#prefLabel> ?label . } ?y a<http://www.semanticdesktop.org/ontologies/2007/03/22/nco#ContactMedium> . } }",
+			constraintQuery: "select distinct * where { { ?p a <http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#Person> . ?p <http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#occurrence> ?y . ?y a <http://www.semanticdesktop.org/ontologies/2007/03/22/nco#Contact> . optional { ?p <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#prefLabel> ?label . } } }",
 			constraintId: "y",
-			image: "images/email.png",
+			image: "/dime-communications/static/ui/dime/rules/images/email.png",
 			json: '{ "and": #andURI, "conditionType": "drmo:Condition", "conditions": [ { "and": null, "conditionType": "drmo:Condition", "conditions": [],  "constraintOnGraph": null, "constraintOnObject": { "and": null, "conditionType": "drmo:Condition", "conditions": [],  "constraintOnGraph": null, "constraintOnObject": null,  "constraintOnProperty": "nco:hasEmailAddress",  "constraintOnSubject": {	"and": null, "conditionType": "drmo:Condition", "conditions": [],  "constraintOnGraph": null, "constraintOnObject": null,  "constraintOnProperty": "pimo:Occurance",  "constraintOnSubject": #subject, "guid":"#guid_1_1_1", "isNegated": false,  "or": null, "preceededBy": null, "propertyOperator": null, "resourceType": "nco:ContactMedium",  "succeededBy": null }, "guid":"#guid_1_1",  "isNegated": false,  "or": null, "preceededBy": null, "propertyOperator": null, "resourceType": "nmo:EmailAddress",  "succeededBy": null  } , "constraintOnProperty": #property,  "constraintOnSubject": null, "guid":"#guid_1",  "isNegated": false,  "or": null, "preceededBy": null, "propertyOperator": null, "resourceType": "nmo:Email",  "succeededBy": null }  ],  "constraintOnGraph": null, "constraintOnObject": null,  "constraintOnProperty": null,  "constraintOnSubject": null, "guid":"#guid",  "isNegated": false,  "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "nmo:Email",  "succeededBy": #succURI }',
 		  },
 		  {
 			value: 1,
 			label: "Peers",
 			propertyQuery: "select distinct * where {  ?x <http://www.w3.org/2000/01/rdf-schema#domain> <http://www.semanticdesktop.org/ontologies/2011/10/05/dcon#Peers> .  optional { ?x <http://www.w3.org/2000/01/rdf-schema#label> ?label . } optional { ?x <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#prefLabel> ?label . } optional {?x <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#deprecated> ?flag .} filter (!bound(?flag)) }",
-			image: "images/peer.png",
+			image: "/dime-communications/static/ui/dime/rules/images/peer.png",
 		  },
 		  {
 			value: 2,
@@ -55,7 +56,7 @@ var types = [
 			propertyQuery: "select distinct * where {  ?x <http://www.w3.org/2000/01/rdf-schema#domain> <http://www.semanticdesktop.org/ontologies/2011/10/05/dcon#State> .  optional { ?x <http://www.w3.org/2000/01/rdf-schema#label> ?label . } optional { ?x <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#prefLabel> ?label . } optional {?x <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#deprecated> ?flag .} filter (!bound(?flag)) }",
 			constraintQuery: "select distinct * where { ?x a #propertytype# . optional { ?x <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#prefLabel> ?label . } }",
 			constraintId: "x",
-			image: "images/state.png",
+			image: "/dime-communications/static/ui/dime/rules/images/state.png",
 			json: '{ "and": #andURI, "conditionType": "drmo:Condition", "conditions": [ {"and": #andURI, "conditionType": "drmo:Condition", "conditions": [],  "constraintOnGraph": null, "constraintOnObject": #object,  "constraintOnProperty": #property,  "constraintOnSubject": null, "guid":#guid_1,  "isNegated": false,  "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "nmo:Email",  "succeededBy": #succURI } ],  "constraintOnGraph": null, "constraintOnObject": null,  "constraintOnProperty": null,  "constraintOnSubject": null, "guid":#guid,  "isNegated": false,  "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "dcon:State",  "succeededBy": #succURI  }',
 		  },
 		  {
@@ -64,7 +65,7 @@ var types = [
 			propertyQuery: "",
 			constraintQuery: "select distinct * where { ?x a <http://www.semanticdesktop.org/ontologies/2011/10/05/dcon#Situation> . optional { ?x <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#prefLabel> ?label . } }",
 			constraintId: "x",
-			image: "images/situation.png",
+			image: "/dime-communications/static/ui/dime/rules/images/situation.png",
 			json: '{ "and": #andURI, "conditionType": "drmo:SituationActivated", "conditions": [],  "constraintOnGraph": null, "constraintOnObject": #object,  "constraintOnProperty": "dcon:hasSituation",  "constraintOnSubject": null, "guid":"#guid",  "isNegated": false,  "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "pimo:Person",  "succeededBy": #succURI }',
 		  },
 		  {
@@ -73,7 +74,7 @@ var types = [
 			propertyQuery: "select distinct * where {  ?x <http://www.w3.org/2000/01/rdf-schema#domain> <http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#Image> .  optional { ?x <http://www.w3.org/2000/01/rdf-schema#label> ?label . } optional { ?x <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#prefLabel> ?label . } optional {?x <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#deprecated> ?flag .} filter (!bound(?flag)) }",
 			constraintQuery: "select distinct * where { ?x a <http://www.semanticdesktop.org/ontologies/2011/10/05/nfo#Image> . optional { ?x <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#prefLabel> ?label . } }",
 			constraintId: "x",
-			image: "images/image.png",
+			image: "/dime-communications/static/ui/dime/rules/images/image.png",
 			json: '{ "and": #andURI, "conditionType": #conditionType, "conditions": [],  "constraintOnGraph": null, "constraintOnObject": null,  "constraintOnProperty": null,  "constraintOnSubject": null, "guid":#guid,  "isNegated": false,  "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "nfo:Image",  "succeededBy": #succURI  }',
 		  },
 		  {
@@ -82,7 +83,7 @@ var types = [
 			propertyQuery: "select distinct * where {  ?y <http://www.w3.org/2000/01/rdf-schema#subClassOf> <http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#Document> . ?x <http://www.w3.org/2000/01/rdf-schema#domain> ?y .  optional { ?x <http://www.w3.org/2000/01/rdf-schema#label> ?label . } optional { ?x <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#prefLabel> ?label . } optional {?x <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#deprecated> ?flag .} filter (!bound(?flag)) }",
 			constraintQuery: "select distinct * where { ?y <http://www.w3.org/2000/01/rdf-schema#subClassOf> <http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#Document> . ?x a ?y . optional { ?x <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#prefLabel> ?label . } }",
 			constraintId: "x",
-			image: "images/document.png",
+			image: "/dime-communications/static/ui/dime/rules/images/document.png",
 			json: '{ "and": #andURI, "conditionType": #conditionType, "conditions": [],  "constraintOnGraph": null, "constraintOnObject": null,  "constraintOnProperty": null,  "constraintOnSubject": null, "guid":#guid,  "isNegated": false,  "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "nfo:Document",  "succeededBy": #succURI  }',
 		  },
 		  {
@@ -91,7 +92,7 @@ var types = [
 			propertyQuery: "select distinct * where {  ?x <http://www.w3.org/2000/01/rdf-schema#domain> <http://www.semanticdesktop.org/ontologies/2011/10/05/dlpo#LivePost>.  optional { ?x <http://www.w3.org/2000/01/rdf-schema#label> ?label . } optional { ?x <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#prefLabel> ?label . } optional {?x <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#deprecated> ?flag .} filter (!bound(?flag)) }",
 			constraintQuery: "select distinct * where { #property# <http://www.w3.org/2000/01/rdf-schema#domain> ?y .  ?x a ?y . optional { ?x <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#prefLabel> ?label . } }",
 			constraintId: "x",
-			image: "images/livepost.png",
+			image: "/dime-communications/static/ui/dime/rules/images/livepost.png",
 		  },
 		  // {
 			//value: 7,
@@ -99,7 +100,7 @@ var types = [
 			//propertyQuery: "select distinct * where {  ?x <http://www.w3.org/2000/01/rdf-schema#domain> <http://www.semanticdesktop.org/ontologies/2007/05/10/nid3#ID3Audio>.  optional { ?x <http://www.w3.org/2000/01/rdf-schema#label> ?label . } optional { ?x <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#prefLabel> ?label . } optional {?x <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#deprecated> ?flag .} filter (!bound(?flag)) }",
 			//constraintQuery: "select distinct * where { ?x a <http://www.semanticdesktop.org/ontologies/2007/05/10/nid3#ID3Audio> . optional { ?x <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#prefLabel> ?label . } }",
 			//constraintId: "x",
-			//image: "images/audio.png",
+			//image: "/dime-communications/static/ui/dime/rules/images/audio.png",
 		  //},
 		  {	
 			value: 7,
@@ -107,7 +108,7 @@ var types = [
 			propertyQuery: "select distinct * where {  ?x <http://www.w3.org/2000/01/rdf-schema#domain> <http://www.semanticdesktop.org/ontologies/2011/10/05/dcon#SpaTem>. { { ?x <http://www.w3.org/2000/01/rdf-schema#range> <http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#Location> . } union { ?x <http://www.w3.org/2000/01/rdf-schema#range> <http://www.semanticdesktop.org/ontologies/2011/10/05/dpo#Place> . } }  optional { ?x <http://www.w3.org/2000/01/rdf-schema#label> ?label . } optional { ?x <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#prefLabel> ?label . } optional {?x <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#deprecated> ?flag .} filter (!bound(?flag)) }",
 			constraintQuery: "select distinct * where { { ?x a <http://www.semanticdesktop.org/ontologies/2011/10/05/dpo#Place> . } union {  ?x a <http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#Location> . } optional { ?x <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#prefLabel> ?label . } }",
 			constraintId: "x",
-			image: "images/location.jpeg",
+			image: "/dime-communications/static/ui/dime/rules/images/location.jpeg",
 			json: '{ "and": #andURI, "conditionType": "drmo:Condition", "conditions": [ {"and": #andURI, "conditionType": "drmo:Condition", "conditions": [],  "constraintOnGraph": null, "constraintOnObject": #object,  "constraintOnProperty": #property,  "constraintOnSubject": null, "guid":#guid_1,  "isNegated": false,  "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "nmo:Email",  "succeededBy": #succURI } ],  "constraintOnGraph": null, "constraintOnObject": null,  "constraintOnProperty": null,  "constraintOnSubject": null, "guid":#guid,  "isNegated": false,  "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "dcon:SpaTem",  "succeededBy": #succURI  }',
 		  },
 		  {	
@@ -116,7 +117,7 @@ var types = [
 			propertyQuery: "select distinct * where {  ?x <http://www.w3.org/2000/01/rdf-schema#domain> <http://www.semanticdesktop.org/ontologies/2011/10/05/dcon#Schedule>. ?x <http://www.w3.org/2000/01/rdf-schema#range> <http://www.semanticdesktop.org/ontologies/2007/04/02/ncal#Event> .   optional { ?x <http://www.w3.org/2000/01/rdf-schema#label> ?label . } optional { ?x <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#prefLabel> ?label . } optional {?x <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#deprecated> ?flag .} filter (!bound(?flag)) }",
 			constraintQuery: "select distinct * where {  ?x a <http://www.semanticdesktop.org/ontologies/2007/04/02/ncal#Event> .  optional { ?x <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#prefLabel> ?label . } }",
 			constraintId: "x",
-			image: "images/event.png",
+			image: "/dime-communications/static/ui/dime/rules/images/event.png",
 			json: '{ "and": #andURI, "conditionType": "drmo:Condition", "conditions": [ {"and": #andURI, "conditionType": "drmo:Condition", "conditions": [],  "constraintOnGraph": null, "constraintOnObject": #object,  "constraintOnProperty": #property,  "constraintOnSubject": null, "guid":#guid_1,  "isNegated": false,  "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "nmo:Email",  "succeededBy": #succURI } ],  "constraintOnGraph": null, "constraintOnObject": null,  "constraintOnProperty": null,  "constraintOnSubject": null, "guid":#guid,  "isNegated": false,  "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "dcon:Schedule",  "succeededBy": #succURI  }',
 		  },
 		];
@@ -126,14 +127,14 @@ var types = [
 	var peerConstraints = [
 		  { 
 		  	value: 0,
-			constraintQuery: "select distinct ?x (concat('memberOf: ', ?lbl) as ?label) ?p where { { ?p a <http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#Person> . ?p <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#prefLabel>  ?x . }  union { ?p a <http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#PersonGroup> . ?p <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#prefLabel>  ?lbl . } }",
+			constraintQuery: "select distinct ?x ?label ?p where { { ?p a <http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#Person> . ?p <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#prefLabel>  ?x . }  union { ?p a <http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#PersonGroup> . ?p <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#prefLabel>  ?label . } }",
 			constraintId: "p",
 			json: '{ "and": #andURI, "conditionType": "drmo:Condition", "conditions": [ {"and": #andURI, "conditionType": "drmo:Condition", "conditions": [],  "constraintOnGraph": null, "constraintOnObject": #object,  "constraintOnProperty": #property,  "constraintOnSubject": null, "guid":#guid_1,  "isNegated": false,  "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "dcon:Peers",  "succeededBy": #succURI } ],  "constraintOnGraph": null, "constraintOnObject": null,  "constraintOnProperty": null,  "constraintOnSubject": null, "guid":#guid,  "isNegated": false,  "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "dcon:Peers",  "succeededBy": #succURI  }',
 			jsonMemberOf: '{ "and": #andURI, "conditionType": "drmo:Condition", "conditions": [ {"and": #andURI, "conditionType": "drmo:Condition", "conditions": [],  "constraintOnGraph": null, "constraintOnObject": { "and": #andURI, "conditionType": "drmo:Condition", "conditions": [],  "constraintOnGraph": null, "constraintOnObject": null,  "constraintOnProperty": "pimo:memberOf",  "constraintOnSubject": null, "guid":#guid,  "isNegated": false,  "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "pimo:Person",  "succeededBy": #succURI  },  "constraintOnProperty": #property,  "constraintOnSubject": null, "guid":#guid_1,  "isNegated": false,  "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "dcon:Peers",  "succeededBy": #succURI } ],  "constraintOnGraph": null, "constraintOnObject": null,  "constraintOnProperty": null,  "constraintOnSubject": null, "guid":#guid,  "isNegated": false,  "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "dcon:Peers",  "succeededBy": #succURI  }', 
 		  } ,
 		  {
 			  value: 1,
-			  constraintQuery: "select distinct ?x ?p (concat('hasMember: ', ?lbl) as ?label) where { { ?p a <http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#PersonGroup> . ?p <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#prefLabel>  ?x . } union { ?p a <http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#Person> . ?p <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#prefLabel>  ?lbl . } }",
+			  constraintQuery: "select distinct ?x ?p ?label where { { ?p a <http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#PersonGroup> . ?p <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#prefLabel>  ?x . } union { ?p a <http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#Person> . ?p <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#prefLabel>  ?label . } }",
 			  constraintId: "p",
   			json: '{ "and": #andURI, "conditionType": "drmo:Condition", "conditions": [ {"and": #andURI, "conditionType": "drmo:Condition", "conditions": [],  "constraintOnGraph": null, "constraintOnObject": #object,  "constraintOnProperty": #property,  "constraintOnSubject": null, "guid":#guid_1,  "isNegated": false,  "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "dcon:Peers",  "succeededBy": #succURI } ],  "constraintOnGraph": null, "constraintOnObject": null,  "constraintOnProperty": null,  "constraintOnSubject": null, "guid":#guid,  "isNegated": false,  "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "dcon:Peers",  "succeededBy": #succURI  }',
   			jsonMemberOf: '{ "and": #andURI, "conditionType": "drmo:Condition", "conditions": [ {"and": #andURI, "conditionType": "drmo:Condition", "conditions": [],  "constraintOnGraph": null, "constraintOnObject": null,  "constraintOnProperty": #property,  "constraintOnSubject": { "and": #andURI, "conditionType": "drmo:Condition", "conditions": [],  "constraintOnGraph": null, "constraintOnObject": null,  "constraintOnProperty": "pimo:hasMember",  "constraintOnSubject": null, "guid":#guid,  "isNegated": false,  "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "pimo:Person",  "succeededBy": #succURI  }, "guid":#guid_1,  "isNegated": false,  "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "dcon:Peers",  "succeededBy": #succURI } ],  "constraintOnGraph": null, "constraintOnObject": null,  "constraintOnProperty": null,  "constraintOnSubject": null, "guid":#guid,  "isNegated": false,  "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "dcon:Peers",  "succeededBy": #succURI  }', 
@@ -204,27 +205,29 @@ var types = [
 		{
 			value: 0,
 			label: "Notify",
-			image: "images/notify.png",
+			image: "/dime-communications/static/ui/dime/rules/images/notify.png",
 		},
 		{
 			value: 1,
 			label: "Share",
-			image: "images/share.png",
+			image: "/dime-communications/static/ui/dime/rules/images/share.png",
 		},
 		{
 			value: 2,
 			label: "Change Availability",
-			image: "images/change.png",
+			image: "/dime-communications/static/ui/dime/rules/images/change.png",
 		},
 		{
 			value: 3,
 			label: "SMS",
-			image: "images/sms.png",
+			image: "/dime-communications/static/ui/dime/rules/images/sms.png",
 		},
 	]
+//]]>
 </script>
 	
-<script>
+<script type="text/javascript">
+//<![CDATA[
 var drgClone = null;
 $(function() {
    
@@ -362,7 +365,7 @@ function addProperties(){
 		} else {
 			$.ajax({
 					async: false,
-					url: 'http://localhost:8080/openrdf-sesame/repositories/UI-Eval',
+					url: 'https://vmuscs05.deri.ie:8443/dime-communications/api/dime/rest/dummyASD/sparql',
 					dataType: 'json',
 					type: 'GET',
 					data: { 
@@ -461,7 +464,7 @@ function addConstraints(element){
 		
 		$.ajax({
 				async: false,
-				url: 'http://localhost:8080/openrdf-sesame/repositories/UI-Eval',
+				url: 'https://vmuscs05.deri.ie:8443/dime-communications/api/dime/rest/dummyASD/sparql',
 				dataType: 'json',
 				type: 'GET',
 				data: { 
@@ -858,6 +861,7 @@ function addAnyConstraints(){
 							});
 						});
 					*/					
+//]]>
 </script>
 </head>
 
@@ -869,7 +873,7 @@ function addAnyConstraints(){
     </div>
     <div class="controlbox">
     	<h3>Types</h3>
-        <div id="controlbox_Types" style:"height:300px">
+        <div id="controlbox_Types" style="height:300px">
         </div>
         <h3>Properties</h3>
         <div id="controlbox_Properties">
