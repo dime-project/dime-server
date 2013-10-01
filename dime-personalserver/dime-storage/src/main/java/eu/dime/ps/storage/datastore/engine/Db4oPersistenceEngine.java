@@ -22,6 +22,7 @@ import org.apache.log4j.Logger;
 import com.db4o.Db4o;
 import com.db4o.ObjectContainer;
 import com.db4o.ObjectServer;
+import com.db4o.config.EmbeddedConfiguration;
 import com.db4o.cs.Db4oClientServer;
 import com.db4o.cs.config.ServerConfiguration;
 import com.db4o.diagnostic.DiagnosticToConsole;
@@ -75,13 +76,15 @@ public class Db4oPersistenceEngine {
 		
 		
 		ServerConfiguration config = Db4oClientServer.newServerConfiguration();
+		
+		config.common().diagnostic().addListener(new DiagnosticToConsole());
+
 		config.common().weakReferences(false);
 		//config.common().callConstructors(false);
-		//config.file().freespace().useRamSystem();
+		config.file().freespace().useBTreeSystem();
 		config.file().storage(new FileStorage());
 		config.file().blockSize(8);
-		config.common().diagnostic().addListener(new DiagnosticToConsole());
-		config.common().bTreeNodeSize(100);
+		config.common().bTreeNodeSize(50);
 		config.common().callbacks(false);
 		config.common().objectClass(DimeBinary.class).objectField("hash").indexed(true);
 		config.common().objectClass(PersistentDimeObject.class).objectField("id").indexed(true);
