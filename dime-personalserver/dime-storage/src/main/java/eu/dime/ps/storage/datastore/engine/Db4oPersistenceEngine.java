@@ -19,12 +19,17 @@ import java.io.IOException;
 import java.util.HashMap;
 import org.apache.log4j.Logger;
 
+import com.db4o.Db4o;
 import com.db4o.ObjectContainer;
 import com.db4o.ObjectServer;
 import com.db4o.cs.Db4oClientServer;
 import com.db4o.cs.config.ServerConfiguration;
+import com.db4o.diagnostic.DiagnosticToConsole;
 import com.db4o.ext.DatabaseFileLockedException;
 import com.db4o.io.FileStorage;
+
+import eu.dime.ps.storage.datastore.types.DimeBinary;
+import eu.dime.ps.storage.datastore.types.PersistentDimeObject;
 import eu.dime.ps.storage.util.CMSInitHelper;
 
 /**
@@ -68,11 +73,20 @@ public class Db4oPersistenceEngine {
 		
 		new File(path).mkdirs();
 		
+		
 		ServerConfiguration config = Db4oClientServer.newServerConfiguration();
 		config.common().weakReferences(false);
-		config.common().callConstructors(false);
-		config.file().freespace().useRamSystem();
+		//config.common().callConstructors(false);
+		//config.file().freespace().useRamSystem();
 		config.file().storage(new FileStorage());
+		config.file().blockSize(8);
+		config.common().diagnostic().addListener(new DiagnosticToConsole());
+		config.common().bTreeNodeSize(100);
+		config.common().callbacks(false);
+		config.common().objectClass(DimeBinary.class).objectField("hash").indexed(true);
+		config.common().objectClass(PersistentDimeObject.class).objectField("id").indexed(true);
+
+		config.file().recoveryMode(true);
 		try {
 			config.file().blobPath(path + "."+ BLOB_FOLDER);
 		} catch (IOException e) {
