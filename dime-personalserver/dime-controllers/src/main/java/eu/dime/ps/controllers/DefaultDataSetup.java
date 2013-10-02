@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.ontoware.aifbcommons.collection.ClosableIterator;
 import org.ontoware.rdf2go.model.node.URI;
@@ -105,13 +106,13 @@ public class DefaultDataSetup implements BroadcastReceiver {
 	  CONTACTS.put(TEST_USER_3_ID, new String[] { "Test User3", "test.user3@email.com", "testuser3"});
 	}
 	
-	private static final URI FILE_FLYER = new URIImpl("urn:uuid:19b74400-1166-4eed-9eb0-f6b8a958c43d");
-	private static final URI FILE_LOGO = new URIImpl("urn:uuid:6025e593-387b-422e-8af3-cb96923a08ba");
-	private static final URI FILE_WELCOME = new URIImpl("urn:uuid:89935e86-2d49-4400-8cf4-3d49eae41422");
-	private static final URI FILE_PHOTO = new URIImpl("urn:uuid:b0bdeed3-4a78-4886-9a33-7063f7e6f225");
-	private static final URI DATABOX_DIME = new URIImpl("urn:uuid:a145f3db-bafd-4bf7-95d8-3d18619d1463");
-	private static final URI DATABOX_FRIENDS = new URIImpl("urn:uuid:b6485de8-1aca-46e4-b71c-6d80402b51e3");
-	private static final URI LIVEPOST_WELCOME = new URIImpl("urn:uuid:613627f7-605c-48be-ac84-4ab8974b87ee");
+	private static final URI FILE_FLYER = new URIImpl("urn:uuid:" + UUID.randomUUID());
+	private static final URI FILE_LOGO = new URIImpl("urn:uuid:" + UUID.randomUUID());
+	private static final URI FILE_WELCOME = new URIImpl("urn:uuid:" + UUID.randomUUID());
+	private static final URI FILE_PHOTO = new URIImpl("urn:uuid:" + UUID.randomUUID());
+	private static final URI DATABOX_DIME = new URIImpl("urn:uuid:" + UUID.randomUUID());
+	private static final URI DATABOX_FRIENDS = new URIImpl("urn:uuid:" + UUID.randomUUID());
+	private static final URI LIVEPOST_WELCOME = new URIImpl("urn:uuid:" + UUID.randomUUID());
 	
 	private final ModelFactory modelFactory = new ModelFactory();
 
