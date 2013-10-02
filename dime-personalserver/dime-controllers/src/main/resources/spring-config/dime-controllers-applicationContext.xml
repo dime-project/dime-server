@@ -325,7 +325,6 @@
 		<property name="connectionProvider" ref="connectionProvider"/>
 		<property name="tenantManager" ref="tenantManager"/>
 		<property name="situationManager" ref="situationManager"/>
-	    <property name="threshold" value="0.9" />
 	</bean>
 
 	<bean id="situationDetectorJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
