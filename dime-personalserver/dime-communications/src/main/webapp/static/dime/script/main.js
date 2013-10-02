@@ -4693,7 +4693,7 @@ Dime.DetailDialog.prototype = {
                 }
             });
         };
-        Dime.REST.getAll(childType, callbackFunction);
+        Dime.REST.getAll(childType, callbackFunction, item.userId);
         
         this.updateChildTypeContainer(memberSection, memberArray, item.type, childCaption);
         
