@@ -154,13 +154,16 @@ public class NotifyHistoryImpl implements NotifyHistory {
 
 			n = new UserNotification(notification.getTenant().getId(), unEntry);
 			n.setIsRead(notification.getIsRead());
+			n.setCreateTS(notification.getTs().getTime());
+			n.setUpdateTS(notification.getUpdateTs().getTime());
 
 		} else {
 
 			n = new SystemNotification(notification.getTenant().getId(),
 					notification.getOperation(), notification.getItemID(),
 					notification.getItemType(), null);
-
+			n.setCreateTS(notification.getTs().getTime());
+			n.setUpdateTS(notification.getUpdateTs().getTime());
 		}
 
 		n.setId(String.valueOf(notification.getId()));
@@ -233,6 +236,8 @@ public class NotifyHistoryImpl implements NotifyHistory {
 
 		Notification n = Notification.findNotifications(notification.getId());
 		n.setIsRead(true);
+		Date time = new Date(System.currentTimeMillis());
+		n.setUpdateTs(time);
 		n.merge();
 
 	}
