@@ -2484,23 +2484,18 @@ input[type="text"].DimeDetailDialogPAValueListItemValue{
     
 }
 
-.situationSwitch > .situationSwitchSwitch{
+.situationSwitchSwitch{
     width: 80%;
     height: 10px;
     margin-left: 2px;
     border: 1px solid black;
-    border-radius: 5px;   
+    border-radius: 5px;
+    background-color: #FFFFFF;
 }
 
-.situationSwitch > .situationSwitchSwitch:hover{
+.situationSwitchSwitch:hover{
     border: 1px solid #FFFF00;   
 }
-.situationSwitchInactive{
-    background-color: #FFFFFF;
- 
-    
-}
-
 
 .situationSwitchActive{
     background-color: #FFFF00;

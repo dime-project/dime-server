@@ -775,7 +775,7 @@ DimeView = {
                 $('<div/>').addClass('situationSwitch').append(
                     $('<div/>').text('active')
                 ).append(
-                    $('<div/>').addClass('situationSwitchSwitch').addClass(entry.active?'situationSwitchActive':'situationSwitchInactive')
+                    $('<div/>').addClass('situationSwitchSwitch').addClass(entry.active?'situationSwitchActive':'')
                     .click(function(event){
                         if (event){
                             event.stopPropagation();
