@@ -140,7 +140,7 @@ public class SituationDetector {
 				Map<URI, Double> matchResults = contextMatcher.match();
 				for (URI candidate : matchResults.keySet()) {
 					Double score = matchResults.get(candidate);
-					if (score == null || score.doubleValue() == Double.NaN) {
+					if (score == Double.NaN) {
 						score = 0d;
 					}
 					try {
