@@ -741,6 +741,64 @@ DimeView = {
         DimeView.setActionAttributeForElements(entry, jChildItem, false, entry.type);
         return jChildItem;
     },
+
+
+    createSituationItemJElement: function(entry){
+
+        var jChildItem = $("<div/>");
+
+        //classes
+        var itemClass=entry.type+"Item childItem";
+
+        if (entry.active){
+            itemClass += " childItemSituationActive";
+        }
+
+        var myScore = (entry['nao:score'] ? entry['nao:score'] : 0.0);
+
+        jChildItem.addClass(itemClass)
+            .append(
+                DimeView.createMark(entry, "", false)
+            )
+            .append(
+                $('<div/>').append($('<img/>').attr('src',Dime.psHelper.guessLinkURL(entry.imageUrl)))
+            )
+            .append(
+                $('<div/>').addClass('situationTextBlock').append(
+                    $('<div/>').text(DimeView.getShortNameWithLength(entry.name, 12))
+                )
+                .append(
+                    $('<div/>').addClass('situationScore').text('Score: '+(myScore*100)+'%')
+                )
+            )
+            .append(
+                $('<div/>').addClass('situationSwitch').append(
+                    $('<div/>').text('active')
+                ).append(
+                    $('<div/>').addClass('situationSwitchSwitch').addClass(entry.active?'situationSwitchActive':'situationSwitchInactive')
+                    .click(function(event){
+                        if (event){
+                            event.stopPropagation();
+                        }
+
+                        var handleResponse=function(response){
+                            if (response && response.length>0){
+                                (new Dime.Dialog.Toast("Situation "
+                                    + (response[0].active?"activated":"deactivated")
+                                    +" successfully."
+                                )).show();
+                            }
+                        };                        
+                        entry.active = !entry.active;
+                        Dime.REST.updateItem(entry,handleResponse , DimeView);
+                    })
+                )
+            );
+
+        //set action attributes
+        DimeView.setActionAttributeForElements(entry, jChildItem, false, true);
+        return jChildItem;
+    },
     
     createItemJElement: function(entry){
         //handle profileattributes separately
@@ -750,10 +808,12 @@ DimeView = {
             return DimeView.createUserNotification(entry);
         }else if (entry.type===Dime.psMap.TYPE.PLACE){
             return DimeView.createLocationItemJElement(entry);
+        }else if (entry.type===Dime.psMap.TYPE.SITUATION){
+            return DimeView.createSituationItemJElement(entry);
         }
         
-        var showEditOnClick = (entry.type===Dime.psMap.TYPE.SITUATION)
-                    || (entry.type===Dime.psMap.TYPE.PLACE)
+        var showEditOnClick =
+                    (entry.type===Dime.psMap.TYPE.PLACE)
                     || (entry.type===Dime.psMap.TYPE.RESOURCE)
                     || (entry.type===Dime.psMap.TYPE.LIVEPOST);
         
@@ -763,11 +823,6 @@ DimeView = {
         //classes
         var itemClass=entry.type+"Item childItem";
         
-        if (entry.type===Dime.psMap.TYPE.SITUATION){
-            if (entry.active){
-                itemClass += " childItemSituationActive";
-            }
-        }        
         jChildItem.addClass(itemClass);
         
         
@@ -2942,7 +2997,7 @@ Dime.Navigation = {
             
             var updateSituationElement=function(resultSituation){
                 $('#currentSituationText')
-                        .textOnly(DimeView.getShortNameWithLength(resultSituation, 31))
+                        .textOnly(DimeView.getShortNameWithLength(resultSituation, 26))
                         .attr("title", resultSituation);
             };
             
@@ -2977,7 +3032,7 @@ Dime.Navigation = {
                 var placeElement = document.getElementById('currentPlace');
                 placeElement.innerHTML =  '<div class="places">'
                 + '<div class="placesIcon" id="currentPlaceGuid" data-guid="' + placeId + '"></div>'
-                + DimeView.getShortNameWithLength(placeName, 34)+'</div>';
+                + DimeView.getShortNameWithLength(placeName, 26)+'</div>';
                 $("#currentPlace").attr("title", placeName);
             };
             
