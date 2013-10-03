@@ -417,7 +417,6 @@ public class DefaultDataSetup implements BroadcastReceiver {
 		Situation situation = modelFactory.getDCONFactory().createSituation();
 		situation.setPrefLabel(label);
 		situation.setCreator(creator);
-		situation.setScore(0.0f);
 		
 		try {
 			situationManager.add(situation);

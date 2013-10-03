@@ -16,8 +16,6 @@ package eu.dime.ps.controllers.situation;
 
 import ie.deri.smile.context.ContextMatcher;
 import ie.deri.smile.context.MatchingException;
-import ie.deri.smile.context.semmf.SemMFContextMatcher;
-import ie.deri.smile.rdf.TripleStore;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -36,7 +34,9 @@ import eu.dime.ps.semantic.BroadcastManager;
 import eu.dime.ps.semantic.Event;
 import eu.dime.ps.semantic.connection.Connection;
 import eu.dime.ps.semantic.connection.ConnectionProvider;
+import eu.dime.ps.semantic.model.ModelFactory;
 import eu.dime.ps.semantic.model.dcon.Situation;
+import eu.dime.ps.semantic.rdf.ResourceStore;
 import eu.dime.ps.semantic.service.LiveContextService;
 import eu.dime.ps.storage.entities.Tenant;
 
@@ -59,11 +59,16 @@ public class SituationDetector {
 	private SituationManager situationManager;
 	private ConnectionProvider connectionProvider;
 	
+	private ModelFactory modelFactory;
+	
+	private double threshold = 0.9;
+
 	private final ConcurrentMap<Long, ContextMatcher> matchers;
 
 	public SituationDetector() {
 		this.matchers = new ConcurrentHashMap<Long, ContextMatcher>();
 		this.broadcastManager = BroadcastManager.getInstance();
+		this.modelFactory = new ModelFactory();
 	}
 
 	public void setBroadcastManager(BroadcastManager broadcastManager) {
@@ -80,6 +85,14 @@ public class SituationDetector {
 	
 	public void setConnectionProvider(ConnectionProvider connectionProvider) {
 		this.connectionProvider = connectionProvider;
+	}
+	
+	public void setModelFactory(ModelFactory modelFactory) {
+		this.modelFactory = modelFactory;
+	}
+	
+	public void setThreshold(double threshold) {
+		this.threshold = threshold;
 	}
 	
 	public void detect() {
@@ -100,13 +113,13 @@ public class SituationDetector {
 			String tenantId = tenant.getId().toString();
 			
 			Connection connection = null;
-			TripleStore tripleStore = null;
+			ResourceStore resourceStore = null;
 			LiveContextService liveContextService = null;
 			ContextMatcher contextMatcher = null;
 
 			try {
 				connection = connectionProvider.getConnection(tenantId);
-				tripleStore = connection.getTripleStore();
+				resourceStore = connection.getResourceStore();
 				liveContextService = connection.getLiveContextService();
 			} catch (RepositoryException e) {
 				logger.error("Couldn't access RDF services of tenant with id "+tenantId);
@@ -122,8 +135,9 @@ public class SituationDetector {
 				contextMatcher = matchers.get(tenant.getId());
 			} else {
 				URI queryContext = liveContextService.getLiveContext().getContextURI();
-				contextMatcher = new SemMFContextMatcher(queryContext, tripleStore.getUnderlyingModelSet());
-	
+//				contextMatcher = new SemMFContextMatcher(queryContext, tripleStore.getUnderlyingModelSet());
+				contextMatcher = new SimpleContextMatcher(queryContext, resourceStore);
+
 				try {
 					// adding all situations as candidates
 					for (Situation situation : situationManager.getAll()) {
@@ -135,26 +149,26 @@ public class SituationDetector {
 			}
 			
 			// perform the matching, and broadcasting the situation match events (if similarity > threshold)
-			logger.debug("Running context matching [tenant="+tenantId+"]");
+			logger.debug("Running context matching [tenant="+tenantId+", threshold="+this.threshold+"]");
 			try {
 				Map<URI, Double> matchResults = contextMatcher.match();
 				for (URI candidate : matchResults.keySet()) {
 					Double score = matchResults.get(candidate);
-					if (score == Double.NaN) {
-						score = 0d;
-					}
+					
+					Situation situation = modelFactory.getDCONFactory().createSituation(candidate);
+					situation.setScore(score.floatValue());
 					try {
-						Situation situation = situationManager.get(candidate.toString());
-						if (!situation.hasScore()
-								|| situation.getScore() != score.floatValue()) {
-							situation.setScore(score.floatValue());
-							situationManager.update(situation);
-
-							logger.info("Situation match found [tenant="+tenantId+", situation="+candidate+", score="+score+"]");
-							broadcastManager.sendBroadcast(new Event(tenantId, ACTION_SITUATION_MATCH, situation));
-						}
+						situationManager.update(situation);
 					} catch (InfosphereException e) {
 						logger.error("Situation score couldn't be updated: " + e.getMessage(), e);
+					}
+					
+					if (score != null && score > this.threshold) {
+						logger.debug("Situation match found [situation="+candidate+", tenant="+tenantId+"]");
+						if (!situation.equals(lastNotified)) {
+							lastNotified = situation;
+							broadcastManager.sendBroadcast(new Event(tenantId, ACTION_SITUATION_MATCH, situation));
+						}
 					}
 				}
 			} catch (MatchingException e) {
@@ -165,5 +179,7 @@ public class SituationDetector {
 			TenantContextHolder.clear();
 		}
 	}
+	
+	Situation lastNotified = null;
 	
 }
