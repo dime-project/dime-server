@@ -38,7 +38,7 @@ public class YMServiceAdapter extends ServiceAdapterBase implements /*ExternalSe
 
 	public static String adapterName = "YellowMapPlaceService";
 	private static final Logger logger = LoggerFactory.getLogger(YMServiceAdapter.class);
-	private static final String USERNAME = "username";
+	private static final String EMAIL = "email";
 	private static final String PASSWORD = "password";
 	private static final String AGREEDTC = "agreedTC";
  
@@ -59,7 +59,7 @@ public class YMServiceAdapter extends ServiceAdapterBase implements /*ExternalSe
                 
                 // known parameters
                 this.sadapter.addSetting(new SAdapterSetting(YMServiceAdapter.AGREEDTC, true, SAdapterSetting.BOOLEAN, "false"));
-		this.sadapter.addSetting(new SAdapterSetting(YMServiceAdapter.USERNAME, false, SAdapterSetting.STRING, ""));
+		this.sadapter.addSetting(new SAdapterSetting(YMServiceAdapter.EMAIL, false, SAdapterSetting.STRING, ""));
 		this.sadapter.addSetting(new SAdapterSetting(YMServiceAdapter.PASSWORD, false, SAdapterSetting.PASSWORD, ""));
 		
 		try {
@@ -93,7 +93,7 @@ public class YMServiceAdapter extends ServiceAdapterBase implements /*ExternalSe
 		if(attribute.startsWith("&QT=10&DetailInfoView=1&Ebinr=") ||
 				attribute.contains("&LocX=") && attribute.contains("&LocY=") && attribute.contains("&BC=")) {
 			try {
-				response = this.ymServiceWrapper.getPlaces(attribute, this.sadapter.getSetting(YMServiceAdapter.USERNAME), this.sadapter.getSetting(YMServiceAdapter.PASSWORD),this.sadapter.getSetting(YMServiceAdapter.FIRSTNAME),this.sadapter.getSetting(YMServiceAdapter.LASTNAME));
+				response = this.ymServiceWrapper.getPlaces(attribute, this.sadapter.getSetting(YMServiceAdapter.EMAIL), this.sadapter.getSetting(YMServiceAdapter.PASSWORD),this.sadapter.getSetting(YMServiceAdapter.FIRSTNAME),this.sadapter.getSetting(YMServiceAdapter.LASTNAME));
 			} catch (ParserConfigurationException e) {
 				logger.error(e.getMessage(), e);
 			} catch (TransformerException e) {
@@ -110,7 +110,7 @@ public class YMServiceAdapter extends ServiceAdapterBase implements /*ExternalSe
 
 	public void setCredentials() {
 		// The my yellowmap user
-		this.sadapter.getSetting(YMServiceAdapter.USERNAME);
+		this.sadapter.getSetting(YMServiceAdapter.EMAIL);
 		this.sadapter.getSetting(YMServiceAdapter.PASSWORD);
                 // additional optional parameters
                 this.sadapter.getSetting(YMServiceAdapter.FIRSTNAME);
@@ -133,7 +133,7 @@ public class YMServiceAdapter extends ServiceAdapterBase implements /*ExternalSe
 	 * @throws UnsupportedEncodingException 
 	 */
 	public void updatePlace(Place place) throws UnsupportedEncodingException, ServiceNotAvailableException, ServiceException {
-		this.ymServiceWrapper.updatePOI(place, this.sadapter.getSetting(YMServiceAdapter.USERNAME), this.sadapter.getSetting(YMServiceAdapter.PASSWORD));
+		this.ymServiceWrapper.updatePOI(place, this.sadapter.getSetting(YMServiceAdapter.EMAIL), this.sadapter.getSetting(YMServiceAdapter.PASSWORD));
 	}
 	
 	public String getPlacesParameters(double longitude, double latitude, int radius) throws UnsupportedEncodingException {
