@@ -335,8 +335,8 @@
 
 	<bean id="situationDetectorTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
 		<property name="jobDetail" ref="situationDetectorJob" />
-		<property name="startDelay" value="20000" /><!-- to let the server start up -->
-	    <property name="repeatInterval" value="10000" />
+		<property name="startDelay" value="60000" /><!-- to let the server start up -->
+	    <property name="repeatInterval" value="120000" />
 	</bean>
 	
 	<bean id="evaluationManager"
