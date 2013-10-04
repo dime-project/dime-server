@@ -357,21 +357,21 @@ public class YMServiceWrapper {
 	
 	/**
 	 * Gets the userID for the given user. if not exist returns <code>null</code>
-	 * @param username
+	 * @param eMail
 	 * @param password
 	 * @return
 	 * @throws UnsupportedEncodingException
 	 * @throws ServiceNotAvailableException
 	 */
-	private String getUserID(String username, String password) throws UnsupportedEncodingException, ServiceNotAvailableException, ServiceException {
-		String params = "&User=" + username
+	private String getUserID(String eMail, String password) throws UnsupportedEncodingException, ServiceNotAvailableException, ServiceException {
+		String params = "&User=" + eMail
 			+ "&Password=" + password + "&Password2=" + password;
 
 		String query = MYYM_LOGIN_SELECT + this.staticParameter + params;
 		String userXml = callService(this.myymProxy, query);
 
 		if(userXml == null) {
-			logger.info("No user for exist for " + username);
+			logger.info("No user for exist for " + eMail);
 			return null;
 		}
 
@@ -390,15 +390,15 @@ public class YMServiceWrapper {
 	/**
 	 * Creates a new user with the given name and password. Additionally it creates a favorite list with the name CATEGORY_DIME.
 	 * @param myymAdapter The adapter to myYM service to be called for retrieving the UserID
-	 * @param username The myYM user name
+	 * @param eMail The myYM user name
 	 * @param password The myYM passwd
 	 * @return The myYM userID
 	 * @throws UnsupportedEncodingException 
 	 */
-	private String createUser(String username, String password, String firstname, String lastname) throws AttributeNotSupportedException, ServiceNotAvailableException, InvalidLoginException, UnsupportedEncodingException, ServiceException {
+	private String createUser(String eMail, String password, String firstname, String lastname) throws AttributeNotSupportedException, ServiceNotAvailableException, InvalidLoginException, UnsupportedEncodingException, ServiceException {
 		// Create the account
-		String params = "&User=" + username
-			+ "&Password=" + password + "&Password2=" + password + "&eMail=" + username +"&Title=Mr&Firstname="+firstname+"&Surname="+lastname+"&MobilPhoneNumber=0&PreferredActivationMethod=0";
+		String params = "&User=" + eMail
+			+ "&Password=" + password + "&Password2=" + password + "&eMail=" + eMail +"&Title=Mr&Firstname="+firstname+"&Surname="+lastname+"&MobilPhoneNumber=0&PreferredActivationMethod=0";
 		
 		
 		String query = MYYM_LOGIN_CREATE + this.staticParameter + params;
