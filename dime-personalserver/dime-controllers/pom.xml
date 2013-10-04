@@ -144,7 +144,7 @@
 		<!-- Context matching & situation detection -->
 		<dependency>
 			<groupId>ie.deri.smile</groupId>
-			<artifactId>smile-context-semmf</artifactId>
+			<artifactId>smile-context-semmf-observations</artifactId>
 			<version>0.0.2-SNAPSHOT</version>
 		</dependency>
 
