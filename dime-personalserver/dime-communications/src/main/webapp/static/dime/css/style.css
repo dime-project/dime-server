@@ -3483,11 +3483,17 @@ input[type="text"].DimeDetailDialogPAValueListItemValue{
 }
 
 .alert{
+    
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
     background-color: #9CC6E6;
     color: white;
-    text-shadow: none;
-    margin-top: 10px;
-    /* text-align: center; */
+    margin-top: 5px;
+    font-weight: bold;
+}
+
+.alert >* .dropdown-toggle{
+    background-color: #EFEFEF;
+    
 }
 
 /****** rating class ******/
