@@ -754,7 +754,7 @@ DimeView = {
             itemClass += " childItemSituationActive";
         }
 
-        var myScore = (entry['nao:score'] ? entry['nao:score'] : 0.0);
+        var myScore = (entry['nao:score'] ? entry['nao:score'] : 0.001);
 
         jChildItem.addClass(itemClass)
             .append(
@@ -768,7 +768,7 @@ DimeView = {
                     $('<div/>').text(DimeView.getShortNameWithLength(entry.name, 12))
                 )
                 .append(
-                    $('<div/>').addClass('situationScore').text('Score: '+(myScore*100)+'%')
+                    $('<div/>').addClass('situationScore').text('Score: '+Math.round((myScore*100))+'%')
                 )
             )
             .append(
