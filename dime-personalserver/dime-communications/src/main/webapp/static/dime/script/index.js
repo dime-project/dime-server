@@ -996,11 +996,14 @@ DimeView = {
             console.log(placeLocation);
              if(!placeLocation.connected){
                 //not even connected 
-                    placeView.append($('<div/>').text(
-                            'To enable places nearby, you should activate YellowmapPlaceService first:'
-                            + '<br>1. Go to Settings and add the "YellowmapPlaceService"'
-                            + '<br>2. Click "Get Position", follow the instructions in the browser')
-                    );                
+                placeView.append($('<div/>')
+                        .append('To enable places nearby, you should activate the') 
+                        .append($('<span/>').text('YellowmapPlaceService').addClass('pseudoLink').click(function(){
+                            DimeView.viewManager.updateView(Dime.psMap.TYPE.PLACE, DimeViewStatus.SETTINGS_VIEW, false);
+                        }))
+                        .append(' first!')
+                );
+                return;
             
             }else if ((!placeLocation.currPos)||!(placeLocation.currPos.latitude && placeLocation.currPos.longitude)){
                 //we don't have a position                   
