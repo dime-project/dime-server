@@ -407,7 +407,7 @@ DimeViewManager.prototype = {
             personGuid, null, null, ""); 
             
         this.updateViewInternal(status, false);
-    },
+    }
 
 };
 //---------------------------------------------
@@ -669,7 +669,7 @@ DimeView = {
                 
             };
             DimeView.createUserNotificationLinkAndContent(entry, senderPersonItem, deployFunction);
-        }
+        };
         if (entry.unType===Dime.psMap.UN_TYPE.REF_TO_ITEM && Dime.un.isShareOperation(entry.unEntry.operation)){
             Dime.REST.getItem(entry.unEntry.userId, Dime.psMap.TYPE.PERSON, handleChildItemContent, '@me', this);
         }else{
@@ -911,6 +911,22 @@ DimeView = {
 
     },
             
+    getInnerPosition: function(placeLocation, addCoords){
+        var result;
+        if (placeLocation.nextPlace && (placeLocation.nextPlace.distance!==undefined)){
+            if (placeLocation.nextPlace.distance<25){
+                result = placeLocation.nextPlace.location.name;
+            }else{
+                result = placeLocation.nextPlace.distance +'km outside of '+placeLocation.nextPlace.location.name;
+            }
+        }
+        if (addCoords){
+            result+=result?'<br/>':'';
+            result += placeLocation.currPos.latitude+', '+ placeLocation.currPos.longitude;
+        }
+        return result;  
+    },
+            
     updatePlaceSummary: function(placeView, placeLocation){
         var placeSummary = $('<div/>').attr('id','placeSummaryView')
             .append($('<div/>').text('Place Summary'));
@@ -942,28 +958,13 @@ DimeView = {
             
         };
         
-        var getInnerPosition= function(){
-            var result;
-            if (placeLocation.nextPlace && (placeLocation.nextPlace.distance!==undefined)){
-                if (placeLocation.nextPlace.distance<25){
-                    result = placeLocation.nextPlace.location.name;
-                }else{
-                    result = placeLocation.nextPlace.distance +'km outside of '+placeLocation.nextPlace.location.name;
-                }
-            }
-            result+=result?'<br/>':'';
-            result += placeLocation.currPos.latitude+', '+ placeLocation.currPos.longitude;
-            return result;  
-        };
-        
         //show current position
         placeSummary.append($('<div/>')
             .append($('<span/>').text("Your current position: ").css('float','left'))
             .append(
                 $('<a/>').attr('href', getGoogleLatLon(placeLocation.currPos.latitude, placeLocation.currPos.longitude))
-                .css('float','right').append(getInnerPosition()))
+                .css('float','right').append(DimeView.getInnerPosition(placeLocation, true)))
             );
-
         if (placeLocation.currPlace && placeLocation.currPlace.placeId && placeLocation.currPlace.placeName){
             placeSummary.append($('<div/>')
             .append($('<span/>').text("Your current location: "))
@@ -980,19 +981,16 @@ DimeView = {
             .append($('<span/>').text('not set'))
             );
         }
-      
-
     },
             
     handlePlaceResult: function(entries){
         var placeView = $('#placeDetailNavigation').empty();
         DimeView.viewManager.setViewVisible('placeDetailNavigation',true);
         
-        
-        var refreshUI=function(){
+        var refreshUI=function(){            
             DimeView.viewManager.updateView(Dime.psMap.TYPE.PLACE, DimeViewStatus.GROUP_CONTAINER_VIEW, true);
-        };
-        
+            Dime.Navigation.updateCurrentPlace();
+        };        
         
         var updatePlaceView=function(placeLocation){
             console.log(placeLocation);
@@ -1001,7 +999,7 @@ DimeView = {
                     placeView.append($('<div/>').text(
                             'To enable places nearby, you should activate YellowmapPlaceService first:'
                             + '<br>1. Go to Settings and add the "YellowmapPlaceService"'
-                            + '<br>2. Click "Browser Position" (in the bar on the right), follow the instructions in the browser')
+                            + '<br>2. Click "Get Position", follow the instructions in the browser')
                     );                
             
             }else if ((!placeLocation.currPos)||!(placeLocation.currPos.latitude && placeLocation.currPos.longitude)){
@@ -1029,7 +1027,8 @@ DimeView = {
                                     var acc = position.coords.accuracy;
                                     Dime.psHelper.postCurrentContext(lat, lon, acc, function(){
                                         DimeView.viewManager.updateView.call(DimeView.viewManager, Dime.psMap.TYPE.PLACE, DimeViewStatus.GROUP_CONTAINER_VIEW, true);
-                                    });
+                                        Dime.Navigation.updateCurrentPlace();
+                                    });                                    
 
                                 }); 
                             }else{
@@ -1306,7 +1305,7 @@ DimeView = {
                 element:element
             };
             $(element).addClass("ItemChecked");
-        }
+        };
                 
         var selectedItemsAll = JSTool.getDefinedMembers(DimeView.selectedItems);
         var lastMemberCount = selectedItemsAll.length;
@@ -2293,7 +2292,7 @@ DimeView = {
                 if (senderEntry){
                     return senderEntry.name;
                 }
-                return "unknown"
+                return "unknown";
             };
             
             var getProfileForSaid=function(said){
@@ -2692,7 +2691,7 @@ Dime.Settings = {
                         myContainer.append($('<div/>').addClass('settingsPasswdField')
                             .append($('<input/>').attr('type','password').attr('placeholder','enter new password')
                                 .keyup(function(event){
-                                    if (event.keyCode == 13) {
+                                    if (event.keyCode === 13) {
                                         if (!myPass){//first time
                                             myPass=$(this).val();
                                             $(this).attr('placeholder','enter password again').val("");
@@ -2820,6 +2819,7 @@ Dime.Settings = {
  * init page
  * 
  * handler for URL-parameter
+ * @param callback 
  */
 Dime.initProcessor.registerFunction(function(callback){ 
     
@@ -2843,6 +2843,7 @@ Dime.initProcessor.registerFunction(function(callback){
  * show info page on first login
  *
  * handler for URL-parameter
+ * @param callback 
  */
 Dime.initProcessor.registerFunction(function(callback){
     var getUserCallback=function(response){
@@ -2866,6 +2867,7 @@ Dime.initProcessor.registerFunction(function(callback){
  * show info page on first login
  *
  * handler for URL-parameter
+ * @param callback 
  */
 Dime.initProcessor.registerFunction(function(callback){
     var getUsernotificationCallback=function(userNotifications){
@@ -3112,7 +3114,7 @@ Dime.Navigation = {
                 }
             }
             
-            if(resultSituation!=""){
+            if(resultSituation!==""){
                 updateSituationElement(resultSituation);
             }else{
                 updateSituationElement("Situation: unknown");
@@ -3124,7 +3126,7 @@ Dime.Navigation = {
     },
     
     updateCurrentPlace: function(){
-        var handleCurrentPlaceCallBack=function(placeGuidAndNameObject){
+        var handleCurrentPlaceCallBack=function(placeLocation){
             
             var updateCurPlaceElement=function(placeName, placeId){
                 var placeElement = document.getElementById('currentPlace');
@@ -3134,15 +3136,16 @@ Dime.Navigation = {
                 $("#currentPlace").attr("title", placeName);
             };
             
-            if (!placeGuidAndNameObject || !placeGuidAndNameObject.placeName || placeGuidAndNameObject.placeName===0){
-                updateCurPlaceElement("Location: unknown");
-                return;
+            if (!placeLocation || !placeLocation.nextPlace){
+                updateCurPlaceElement("Location: unknown");                
+            }else if (placeLocation.currPlace && placeLocation.currPlace.placeId && placeLocation.currPlace.placeName){
+               updateCurPlaceElement(placeLocation.currPlace.placeName, placeLocation.currPlace.placeId);                              
+            }else{
+                updateCurPlaceElement(DimeView.getInnerPosition(placeLocation, false));            
             }
             
-            updateCurPlaceElement(placeGuidAndNameObject.placeName, placeGuidAndNameObject.placeId);
-            
         };
-        Dime.REST.getCurrentPlaceGuidAndName(handleCurrentPlaceCallBack);
+        Dime.psHelper.getPositionAndPlaceInformation(handleCurrentPlaceCallBack, DimeView);
         
         
     },
@@ -3253,7 +3256,7 @@ Dime.initProcessor.registerFunction( function(callback){
 
         var userString = Dime.ps_configuration.mainSaid+'@'+response.name;
         $('#username').text(userString.substr(0, 21)).click(function(){
-            DimeView.showAbout.call(DimeView)
+            DimeView.showAbout.call(DimeView);
         });
         callback();
     };
@@ -3277,6 +3280,7 @@ Dime.Navigation.registerCometCall();
 
 /**
  * initially load situations and places
+ * @param callback 
  */
 Dime.initProcessor.registerFunction( function(callback){
     
@@ -3296,6 +3300,7 @@ Dime.initProcessor.registerFunction( function(callback){
 
 /**
  * handle back button
+ * @param event
  */
  window.onpopstate = function(event) {
      var viewState = event.state;     

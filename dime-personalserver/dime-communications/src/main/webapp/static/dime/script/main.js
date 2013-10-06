@@ -2825,7 +2825,7 @@ Dime.psHelper = {
                 return;
             }
             Dime.REST.clearCacheForType(Dime.psMap.TYPE.PLACE,'@me');
-            (new Dime.Dialog.Toast("Getting current geolocation was successfully!")).showLong();
+            (new Dime.Dialog.Toast("Successfully updated current position!")).showLong();
             callback.call(handlerRef,true);
             
         };
