@@ -913,6 +913,12 @@ DimeView = {
             
     getInnerPosition: function(placeLocation, addCoords){
         var result;
+        
+        var cutCoord=function(value){
+            var myStrVal = value+"";
+            return myStrVal.substr(0,8);
+        }
+        
         if (placeLocation.nextPlace && (placeLocation.nextPlace.distance!==undefined)){
             if (placeLocation.nextPlace.distance<25){
                 result = placeLocation.nextPlace.location.name;
@@ -922,7 +928,7 @@ DimeView = {
         }
         if (addCoords){
             result+=result?'<br/>':'';
-            result += placeLocation.currPos.latitude+', '+ placeLocation.currPos.longitude;
+            result += cutCoord(placeLocation.currPos.latitude)+', '+ cutCoord(placeLocation.currPos.longitude);
         }
         return result;  
     },
@@ -967,8 +973,10 @@ DimeView = {
             );
         if (placeLocation.currPlace && placeLocation.currPlace.placeId && placeLocation.currPlace.placeName){
             placeSummary.append($('<div/>')
-            .append($('<span/>').text("Your current location: "))
-            .append($('<span/>').addClass('pseudoLink').text( placeLocation.currPlace.placeName).click(function(){
+            .append($('<span/>').text("Your current place: "))
+            .append($('<span/>').addClass('pseudoLink')
+                .text(DimeView.getShortNameWithLength(placeLocation.currPlace.placeName,26))
+                .click(function(){
                     DimeView.viewManager.updateViewFromStatus(new DimeViewStatus(
                             DimeViewStatus.GROUP_CONTAINER_VIEW, Dime.psMap.TYPE.PLACE, null, '@me', 
                             placeLocation.currPlace.placeId,  Dime.psMap.TYPE.PLACE, ""
@@ -977,7 +985,7 @@ DimeView = {
             );
         }else{
              placeSummary.append($('<div/>')
-            .append($('<span/>').text("Your current location: "))
+            .append($('<span/>').text("Your current place: "))
             .append($('<span/>').text('not set'))
             );
         }
@@ -993,8 +1001,8 @@ DimeView = {
         };        
         
         var updatePlaceView=function(placeLocation){
-            console.log(placeLocation);
-             if(!placeLocation.connected){
+            
+            if(!placeLocation.connected){
                 //not even connected 
                 placeView.append($('<div/>')
                         .append('To enable places nearby, you should activate the') 
@@ -1373,7 +1381,7 @@ DimeView = {
 
         listItem.append(
                 $('<div class="listElementText"/>')
-                    .append($('<span class="listElementTextName"/>').text(DimeView.getShortNameWithLength(name, 50)))
+                    .append($('<span class="listElementTextName"/>').text(DimeView.getShortNameWithLength(name, 28)))
                     .append($('<span class="listElementTextValue"/>').text(value))
                 )
                 .append(listIconElement);

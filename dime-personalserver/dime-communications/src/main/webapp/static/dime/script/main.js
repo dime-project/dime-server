@@ -2760,9 +2760,9 @@ Dime.psHelper = {
             }
             
             if(restoreLocation){
-                (new Dime.Dialog.Toast('Removing "' + item.name + '" as your current location was successfully!')).showLong();
+                (new Dime.Dialog.Toast('Removing "' + item.name + '" as your current place was successfully!')).showLong();
             }else{
-                (new Dime.Dialog.Toast('Setting "' + item.name + '" as your current location was successfully!')).showLong();
+                (new Dime.Dialog.Toast('Setting "' + item.name + '" as your current place was successfully!')).showLong();
             }
                 
         };
@@ -4626,23 +4626,23 @@ Dime.DetailDialog.prototype = {
             this.body.append(this.createPlaceDetail(item));
             
             //TODO: move this to createPlaceDetail()
+            var button;
             var currentPlaceGuid = document.getElementById("currentPlaceGuid").getAttribute("data-guid");
             if(item.guid == currentPlaceGuid){
                 //samePlace
-                var button = $('<div></div>')
+                button = $('<div></div>')
                             .addClass("setCurrentPlaceButton")
                             .attr("href", "#")
                             .clickExt(this, Dime.psHelper.postUpdateCurrentPlace, item, true)
                             .append("Remove this as current location");
             }else{
                 //otherPlace
-                var button = $('<div></div>')
+                button = $('<div></div>')
                             .addClass("setCurrentPlaceButton")
                             .attr("href", "#")
                             .clickExt(this, Dime.psHelper.postUpdateCurrentPlace, item, false)
-                            .append("Set as current location (valid today)");
-            }
-                   
+                            .append("Set as current place (valid today)");
+            }                   
             this.body.append(button);   
         }   
         
