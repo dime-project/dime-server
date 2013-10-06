@@ -2709,7 +2709,7 @@ Dime.psHelper = {
     },
     
     //REFACTOR: merge following 2 methods (postUpdateCurrentPlace + postCurrentContext)     
-    postUpdateCurrentPlace: function(event, element, item, restoreLocation){
+    postUpdateCurrentPlace: function(item, restoreLocation, callback, callerRef){
         
         var path = Dime.ps_configuration.getUserUrlString()+"/context/@me";
         
@@ -2749,7 +2749,7 @@ Dime.psHelper = {
             }
         };
         
-        var callback = function(response){
+        var handleResponse = function(response){
             console.log(response);
             
             //check response for errors
@@ -2760,15 +2760,16 @@ Dime.psHelper = {
             }
             
             if(restoreLocation){
-                (new Dime.Dialog.Toast('Removing "' + item.name + '" as your current place was successfully!')).showLong();
+                (new Dime.Dialog.Toast('"'+item.name + '" was removed as your current place!')).showLong();
             }else{
-                (new Dime.Dialog.Toast('Setting "' + item.name + '" as your current place was successfully!')).showLong();
+                (new Dime.Dialog.Toast('"'+item.name + '" was set as your current place!')).showLong();
             }
+            callback.call(callerRef);
                 
         };
         
         var request = Dime.psHelper.prepareRequest(entry);
-        $.postJSON(path, request, callback);
+        $.postJSON(path, request, handleResponse);
         
         //this.removeDialog();
     },
@@ -4624,26 +4625,6 @@ Dime.DetailDialog.prototype = {
             
         }else if (item.type===Dime.psMap.TYPE.PLACE){
             this.body.append(this.createPlaceDetail(item));
-            
-            //TODO: move this to createPlaceDetail()
-            var button;
-            var currentPlaceGuid = document.getElementById("currentPlaceGuid").getAttribute("data-guid");
-            if(item.guid == currentPlaceGuid){
-                //samePlace
-                button = $('<div></div>')
-                            .addClass("setCurrentPlaceButton")
-                            .attr("href", "#")
-                            .clickExt(this, Dime.psHelper.postUpdateCurrentPlace, item, true)
-                            .append("Remove this as current location");
-            }else{
-                //otherPlace
-                button = $('<div></div>')
-                            .addClass("setCurrentPlaceButton")
-                            .attr("href", "#")
-                            .clickExt(this, Dime.psHelper.postUpdateCurrentPlace, item, false)
-                            .append("Set as current place (valid today)");
-            }                   
-            this.body.append(button);   
         }   
         
     },

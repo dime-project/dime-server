@@ -1971,7 +1971,45 @@ DimeView = {
         
         //reset click handler
         addRmvBtn.empty().unbind("click");
-       
+        
+        if (groupType===Dime.psMap.TYPE.PLACE){
+            addRmvBtn
+                .empty()
+                .text("Current Place")
+                .click(function(event){
+                    //Dime.evaluation.createAndSendEvaluationItemForAction("action_sendLivepostFromPersonView");
+                    var selectedPlaces = DimeView.getSelectedItemsForView();
+                    var restoreCurrentPlace=false;
+                    var handleResponse= function(response){
+                        DimeView.viewManager.updateView(Dime.psMap.TYPE.PLACE, DimeViewStatus.GROUP_CONTAINER_VIEW, true);
+                        Dime.Navigation.updateCurrentPlace();
+                    };
+                    var fullPlace = []
+                    
+                    var handlePlaceInformation=function(placeLocation){
+                        if (!placeLocation.connected){
+                            (new Dime.Dialog.Toast("Please, first get connected to the YellowMap service!")).show();
+                        }
+                        if (placeLocation.currPlace && placeLocation.currPlace.placeId && fullPlace[0].guid===placeLocation.currPlace.placeId){
+                            restoreCurrentPlace=true;
+                        }
+                        Dime.psHelper.postUpdateCurrentPlace(fullPlace[0], restoreCurrentPlace, handleResponse, this);
+                    };
+                    
+                    
+                    var handleFullItems=function(fullItems){
+                        fullPlace=fullItems;
+                        Dime.psHelper.getPositionAndPlaceInformation(handlePlaceInformation, this);
+                    };
+                    
+                    if (!selectedPlaces || selectedPlaces.length!==1){
+                        (new Dime.Dialog.Toast("Please select a single place!")).show();
+                    }else{
+                        Dime.psHelper.getMixedItems(selectedPlaces, handleFullItems, this);
+                    }
+                });
+            
+        }
         
         if(viewType===DimeViewStatus.PERSON_VIEW){
             addRmvBtn
