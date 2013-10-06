@@ -452,7 +452,22 @@ JSTool = {
             return str.charAt(0).toUpperCase();
         }
         return str.charAt(0).toUpperCase() + str.slice(1);
-    }
+    },
+    deg2rad: function(deg) {
+        return deg * (Math.PI/180);
+    },
+    getDistanceFromLatLonInKm: function(lat1,lon1,lat2,lon2) {
+        var R = 6371; // Radius of the earth in km
+        var dLat = JSTool.deg2rad(lat2-lat1);  // deg2rad below
+        var dLon = JSTool.deg2rad(lon2-lon1); 
+        var a = 
+          Math.sin(dLat/2) * Math.sin(dLat/2) 
+            + Math.cos(JSTool.deg2rad(lat1)) * Math.cos(JSTool.deg2rad(lat2)) 
+                * Math.sin(dLon/2) * Math.sin(dLon/2); 
+        var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+        var d = R * c; // Distance in km
+        return d;
+    }   
 };
 
 //---------------------------------------------
@@ -1795,6 +1810,66 @@ Dime.psHelper = {
 
         };
         Dime.REST.getAll(Dime.psMap.TYPE.ACCOUNT, handleAccountResult);
+    },
+            
+    getNextKownFixLocation: function(curPos, callback, callerRef){
+        var findNextFixLocation=function(lat, lon, acc){
+            result = {
+              location: null,
+              distance: 41000 //> earth circumference
+            };
+            var places = JSTool.getDefinedMembers(Dime.psMap.KNOWN_PLACES);
+            for (var i=0;i<places.length; i++){      
+                var dist=JSTool.getDistanceFromLatLonInKm(lat, lon, places[i].lat, places[i].lon);
+                if (dist<result.distance){
+                    result.location=places[i];
+                    result.distance=dist;
+                    
+                }
+            }
+            return result;
+        };
+        
+        if (curPos.latitude && curPos.longitude){
+            callback.call(callerRef, findNextFixLocation(curPos.latitude, curPos.longitude, curPos.accuracy));
+        }else{
+            callback.call(callerRef);
+        }
+    },
+            
+    getPositionAndPlaceInformation: function(callback, callerRef){
+        var result = {
+            connected: false,
+            currPos: null,
+            currPlace: null,
+            nextPlace: null
+        };
+        
+        var handleNextPlace=function(nextPlace){
+            result.nextPlace=nextPlace;
+            callback.call(callerRef, result);
+        };
+        
+        var handleCurrentPlaceCallBack=function(placeGuidAndNameObject){            
+            result.currPlace = placeGuidAndNameObject;
+            Dime.psHelper.getNextKownFixLocation(result.currPos, handleNextPlace, this);
+        };
+        
+        var handleCurPos=function(curPos){
+            result.currPos = curPos;
+            if (result.connected){
+                Dime.REST.getCurrentPlaceGuidAndName(handleCurrentPlaceCallBack);
+            }else{
+                Dime.psHelper.getNextKownFixLocation(curPos, handleNextPlace, this);
+            }
+        };
+                
+        var handleConnected=function(connected){
+            result.connected=connected;            
+            Dime.REST.getCurrentPosition(handleCurPos);
+        };
+        
+        Dime.psHelper.canRetrievePlaces(handleConnected);        
     },
     
     getURLparam: function(url) {
@@ -3253,7 +3328,6 @@ Dime.REST = {
     },
     
     getCurrentPlaceGuidAndName: function(callBack){
-        //https://localhost:8443/dime-communications/api/dime/rest/<said>/context/@me
         var path = Dime.ps_configuration.getRealBasicUrlString() 
         + "/dime-communications/api/dime/rest/"
         + encodeURIComponent(Dime.ps_configuration.mainSaid)
@@ -3261,7 +3335,7 @@ Dime.REST = {
         
         if (!callBack){
             callBack = function(response){
-                console.log("getCurrentPlaceGuidAndName callback - (request, response):", request, response);
+                console.log("getCurrentPlaceGuidAndName callback - (response):", response);
             };
         }
         
@@ -3279,6 +3353,35 @@ Dime.REST = {
         
         $.getJSON(path, "", metaCallBack);
     },
+            
+     
+    getCurrentPosition: function(callBack){
+        var path = Dime.ps_configuration.getRealBasicUrlString() 
+        + "/dime-communications/api/dime/rest/"
+        + encodeURIComponent(Dime.ps_configuration.mainSaid)
+        + "/context/@me/position";        
+        
+        if (!callBack){
+            callBack = function(response){
+                console.log("getCurrentPosition callback - (response):", response);
+            };
+        }
+        
+        var metaCallBack=function(response){
+            var entries = Dime.psHelper.getEntryOfResponseObject(response, false);
+            if (!entries || entries.length===0 || (!entries[0].dataPart)){
+                console.log("ERROR when looking up current position!(path, response)", path, response);
+                callBack({});
+                return;
+            }
+            console.log("received current position:", entries[0].dataPart);
+            
+            callBack(entries[0].dataPart);
+        };
+        
+        $.getJSON(path, "", metaCallBack);
+    },        
+            
     
     getSharedTo: function(itemType, agentId, callBack){
 
@@ -5874,8 +5977,7 @@ Dime.Dialog.KnownPlacesDropdown=function(callback, handlerRef){
         
         dropDownElements.push(new BSTool.DropDownEntry(handlerRef, this.name, updatePlace));
     });
-    return BSTool.createDropdown('Select Location',dropDownElements, "btn")
-            .css('margin-top','7px').css('padding','6px');
+    return BSTool.createDropdown('Select Location',dropDownElements, "btn");
 };
 
 

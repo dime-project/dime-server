@@ -185,6 +185,7 @@ DimeViewManager = function(dimeViewRef){
     addToViewMap(new DimeViewMapEntry('dropzoneNavigation', false, false, false, false, null));
     addToViewMap(new DimeViewMapEntry('globalItemNavigation', false, false, false, false, null));  
     addToViewMap(new DimeViewMapEntry('alertStatusNavigation', false, false, false, false, null));  
+    addToViewMap(new DimeViewMapEntry('placeDetailNavigation', false, false, false, false, function(){return Dime.psMap.TYPE.PLACE;}));  
     
     //init view status
     this.status = new DimeViewStatus( DimeViewStatus.GROUP_CONTAINER_VIEW,
@@ -910,51 +911,147 @@ DimeView = {
 
     },
             
-    handleEmptyPlaceResult: function(){
-        Dime.psHelper.canRetrievePlaces(function(connected){
-            if(!connected){
-                DimeView.viewManager.showAlertStatusNavigation.call(DimeView.viewManager, 
-                        'To enable places nearby, you should activate YellowmapPlaceService first:'
-                        + '<br>1. Go to Settings and add the "YellowmapPlaceService"'
-                        + '<br>2. Click "Browser Position" (in the bar on the right), follow the instructions in the browser');                
-            }else{                
-                var updateView=function(){
-                    DimeView.viewManager.updateView(Dime.psMap.TYPE.PLACE, DimeViewStatus.GROUP_CONTAINER_VIEW, true);
-                };
-                var alertElement = $('<div/>').append(
-                        $('$<div/>').text('No places found, or your browser was not able to detect your position.')
-                    ).append(
-                        $('$<div/>').text('You can choose your position manually by a predefined from the list below:')
-                    ).append(
-                        new Dime.Dialog.KnownPlacesDropdown(updateView, DimeView)
-                    );
-                DimeView.viewManager.showAlertStatusNavigation.call(DimeView.viewManager, alertElement);
+    updatePlaceSummary: function(placeView, placeLocation){
+        var placeSummary = $('<div/>').attr('id','placeSummaryView')
+            .append($('<div/>').text('Place Summary'));
+        placeView.append(placeSummary);
+        
+        /*
+         * z is the zoom level (1-20)
+           t is the map type ("m" map, "k" satellite, "h" hybrid, "p" terrain, "e" GoogleEarth)
+           q is the search query, if it is prefixed by loc: then google assumes it is a lat lon separated by a +
+         */
+        var getGoogleLatLon=function(lat, lon, z, t){
+            z=z?z:12;
+            t=t?t:"m";
+            return 'http://maps.google.com/maps?z='+z+'&t='+t+'&q=loc:'+lat+'+'+lon;
+        };
+        
+        var getWikiLatLon=function(lat, lon, callback){
+            //http://api.wikilocation.org/articles?lat=51.500688&lng=-0.124411&limit=1
+            var handleResult= function(response){
+                if (response && response.articles.length>0 && response.response.articles[0].title){
+                    callback(response.response.articles[0]);
+                }
+                callback(null);
+            };
+            
+            var callPath = 'http://api.wikilocation.org/articles?lat='+lat+'&lng='+lon+'&limit=1';
+            
+            $.getJSON(callPath, "", handleResult);
+            
+        };
+        
+        var getInnerPosition= function(){
+            var result;
+            if (placeLocation.nextPlace && (placeLocation.nextPlace.distance!==undefined)){
+                if (placeLocation.nextPlace.distance<25){
+                    result = placeLocation.nextPlace.location.name;
+                }else{
+                    result = placeLocation.nextPlace.distance +'km outside of '+placeLocation.nextPlace.location.name;
+                }
             }
-        },this);
+            result+=result?'<br/>':'';
+            result += placeLocation.currPos.latitude+', '+ placeLocation.currPos.longitude;
+            return result;  
+        };
+        
+        //show current position
+        placeSummary.append($('<div/>')
+            .append($('<span/>').text("Your current position: ").css('float','left'))
+            .append(
+                $('<a/>').attr('href', getGoogleLatLon(placeLocation.currPos.latitude, placeLocation.currPos.longitude))
+                .css('float','right').append(getInnerPosition()))
+            );
+
+        if (placeLocation.currPlace && placeLocation.currPlace.placeId && placeLocation.currPlace.placeName){
+            placeSummary.append($('<div/>')
+            .append($('<span/>').text("Your current location: "))
+            .append($('<span/>').addClass('pseudoLink').text( placeLocation.currPlace.placeName).click(function(){
+                    DimeView.viewManager.updateViewFromStatus(new DimeViewStatus(
+                            DimeViewStatus.GROUP_CONTAINER_VIEW, Dime.psMap.TYPE.PLACE, null, '@me', 
+                            placeLocation.currPlace.placeId,  Dime.psMap.TYPE.PLACE, ""
+                        ), true);
+                }))
+            );
+        }else{
+             placeSummary.append($('<div/>')
+            .append($('<span/>').text("Your current location: "))
+            .append($('<span/>').text('not set'))
+            );
+        }
+      
+
+    },
+            
+    handlePlaceResult: function(entries){
+        var placeView = $('#placeDetailNavigation').empty();
+        DimeView.viewManager.setViewVisible('placeDetailNavigation',true);
+        
+        
+        var refreshUI=function(){
+            DimeView.viewManager.updateView(Dime.psMap.TYPE.PLACE, DimeViewStatus.GROUP_CONTAINER_VIEW, true);
+        };
+        
+        
+        var updatePlaceView=function(placeLocation){
+            console.log(placeLocation);
+             if(!placeLocation.connected){
+                //not even connected 
+                    placeView.append($('<div/>').text(
+                            'To enable places nearby, you should activate YellowmapPlaceService first:'
+                            + '<br>1. Go to Settings and add the "YellowmapPlaceService"'
+                            + '<br>2. Click "Browser Position" (in the bar on the right), follow the instructions in the browser')
+                    );                
+            
+            }else if ((!placeLocation.currPos)||!(placeLocation.currPos.latitude && placeLocation.currPos.longitude)){
+                //we don't have a position                   
+                placeView.append($('<div/>').append($('$<div/>').text('Your browser was not able to detect your position.')));
+                
+            }else{
+                DimeView.updatePlaceSummary(placeView, placeLocation);
+                        
+            }
+            placeView.append($('<div/>').attr('id','placeDetailOptionView')
+                    .append($('$<div/>').addClass('placeDetailOptions').text('You can choose your position manually:'))
+                    .append(new Dime.Dialog.KnownPlacesDropdown(refreshUI, DimeView).addClass('placeDetailOptions'))
+                    .append($('$<div/>').addClass('placeDetailOptions').text('... or try to take it from your browser:'))
+                    .append($('$<div/>').addClass('placeDetailOptions').addClass('btn')
+                        .text("Get Position")                            
+                        .click(function(){
+                            if (navigator.geolocation) {
+                                //getCurrentPosition() fires once - watchPosition() fires continuosly
+                                //maybe: https://github.com/estebanav/javascript-mobile-desktop-geolocation
+                                //maybe: http://dev.w3.org/geo/api/spec-source.html#get-current-position (enableHighAccuracy)
+                                navigator.geolocation.getCurrentPosition(function(position) {                       
+                                    var lat = position.coords.latitude;
+                                    var lon = position.coords.longitude;
+                                    var acc = position.coords.accuracy;
+                                    Dime.psHelper.postCurrentContext(lat, lon, acc, function(){
+                                        DimeView.viewManager.updateView.call(DimeView.viewManager, Dime.psMap.TYPE.PLACE, DimeViewStatus.GROUP_CONTAINER_VIEW, true);
+                                    });
+
+                                }); 
+                            }else{
+                                (new Dime.Dialog.Toast("Geolocation services are not supported by your browser.")).show();
+                            };                                
+                        })));
+        };
+        
+        Dime.psHelper.getPositionAndPlaceInformation(updatePlaceView, DimeView);
+
     },
     
     handleSearchResultForContainer: function(type, entries, jContainerElement, isGroupContainer){
+        if (type===Dime.psMap.TYPE.PLACE){
+                DimeView.handlePlaceResult(entries);
+        }
 
         if (!entries || entries.length===0){
             DimeView.viewManager.setViewVisible.call(DimeView.viewManager, jContainerElement.attr('id'), false);            
-            if (type===Dime.psMap.TYPE.PLACE){
-                DimeView.handleEmptyPlaceResult();
-            }
             return;
         }//else
         
-        if (type===Dime.psMap.TYPE.PLACE){
-                            
-                var updateView=function(){
-                    DimeView.viewManager.updateView(Dime.psMap.TYPE.PLACE, DimeViewStatus.GROUP_CONTAINER_VIEW, true);
-                };
-                var alertElement = $('<div/>').append(
-                        $('$<span/>').text('You can override your current position manually:')
-                    ).append(
-                        new Dime.Dialog.KnownPlacesDropdown(updateView, DimeView)
-                    );
-                DimeView.viewManager.showAlertStatusNavigation.call(DimeView.viewManager, alertElement);
-        }
         
 
         var isInFilter = function(entry){
@@ -1864,31 +1961,7 @@ DimeView = {
         
         //reset click handler
         addRmvBtn.empty().unbind("click");
-        
-        if(groupType===Dime.psMap.TYPE.PLACE){
-            addRmvBtn
-                    .empty()
-                    .text("Browser Position")
-                    .removeClass("disabled")
-                    .click(function(){
-                        if (navigator.geolocation) {
-                            //getCurrentPosition() fires once - watchPosition() fires continuosly
-                            //maybe: https://github.com/estebanav/javascript-mobile-desktop-geolocation
-                            //maybe: http://dev.w3.org/geo/api/spec-source.html#get-current-position (enableHighAccuracy)
-                            navigator.geolocation.getCurrentPosition(function(position) {                       
-                                var lat = position.coords.latitude;
-                                var lon = position.coords.longitude;
-                                var acc = position.coords.accuracy;
-                                Dime.psHelper.postCurrentContext(lat, lon, acc);
-                                
-                            }); 
-                        }else{
-                            (new Dime.Dialog.Toast("Geolocation services are not supported by your browser.")).show();
-                        };
-                        
-                        DimeView.viewManager.updateView.call(DimeView.viewManager, Dime.psMap.TYPE.PLACE, DimeViewStatus.GROUP_CONTAINER_VIEW, true);
-                    });
-        }
+       
         
         if(viewType===DimeViewStatus.PERSON_VIEW){
             addRmvBtn
