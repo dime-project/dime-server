@@ -35,6 +35,7 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Random;
 import java.util.UUID;
 
 import javax.imageio.ImageIO;
@@ -71,6 +72,7 @@ import eu.dime.ps.semantic.query.Query;
 import eu.dime.ps.semantic.query.impl.BasicQuery;
 import eu.dime.ps.semantic.rdf.ResourceStore;
 import eu.dime.ps.semantic.service.impl.PimoService;
+import eu.dime.ps.semantic.util.StringUtils;
 import eu.dime.ps.storage.datastore.DataStore;
 import eu.dime.ps.storage.datastore.impl.DataStoreProvider;
 
@@ -473,14 +475,13 @@ public class FileManagerImpl extends InfoSphereManagerBase<FileDataObject> imple
 				// to the required input stream
 				ByteArrayOutputStream stream = new ByteArrayOutputStream();
 				ImageIO.write(image, format, stream);
-				InputStream binaryStream = new ResetOnCloseInputStream(
-						new ByteArrayInputStream(stream.toByteArray()));
-				
+				InputStream binaryStream = new ByteArrayInputStream(stream.toByteArray());
+
 				String hash = FileUtils.doSHA1Hash(binaryStream);
-				
+				binaryStream.reset();
 				// saves thumbnail file
 				getDataStore().addFile(hash, thumbnail.toString(), binaryStream);
-				
+				binaryStream.close();
 				// sets thumbnail as prefSymbol
 				fdo.setPrefSymbol(thumbnail);
 			}
