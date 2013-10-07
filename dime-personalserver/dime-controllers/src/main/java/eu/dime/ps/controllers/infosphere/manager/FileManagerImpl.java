@@ -93,7 +93,7 @@ public class FileManagerImpl extends InfoSphereManagerBase<FileDataObject> imple
 	
 	private static final Logger logger = LoggerFactory.getLogger(FileManagerImpl.class);
 	
-	public static final int DEFAULT_WIDTH = 600; // in pixels
+	public static final int DEFAULT_WIDTH = 200; // in pixels
 	
 	private FileDataMining fileDataMining;
 	
