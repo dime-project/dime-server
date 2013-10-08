@@ -18,13 +18,11 @@ import ie.deri.smile.vocabulary.DLPO;
 import ie.deri.smile.vocabulary.NAO;
 import ie.deri.smile.vocabulary.NSO;
 
-import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
-import java.util.UUID;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -35,7 +33,6 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 
-import org.apache.commons.lang.StringUtils;
 import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.model.node.impl.URIImpl;
 import org.semanticdesktop.aperture.vocabulary.NIE;
@@ -46,8 +43,6 @@ import org.springframework.stereotype.Controller;
 import eu.dime.commons.dto.Data;
 import eu.dime.commons.dto.Request;
 import eu.dime.commons.dto.Response;
-import eu.dime.commons.dto.SharedTo;
-import eu.dime.commons.dto.TrustEntry;
 import eu.dime.ps.controllers.exception.InfosphereException;
 import eu.dime.ps.controllers.infosphere.manager.AccountManager;
 import eu.dime.ps.controllers.infosphere.manager.LivePostManager;
@@ -58,11 +53,9 @@ import eu.dime.ps.controllers.trustengine.utils.AdvisoryConstants;
 import eu.dime.ps.dto.Include;
 import eu.dime.ps.dto.Resource;
 import eu.dime.ps.gateway.service.MediaType;
-import eu.dime.ps.gateway.service.internal.DimeServiceAdapter;
-import eu.dime.ps.semantic.model.dao.Account;
 import eu.dime.ps.semantic.model.dlpo.LivePost;
 import eu.dime.ps.semantic.model.dlpo.Status;
-import eu.dime.ps.semantic.model.pimo.Person;
+import eu.dime.ps.semantic.model.pimo.Agent;
 import eu.dime.ps.semantic.model.ppo.PrivacyPreference;
 import eu.dime.ps.semantic.privacy.PrivacyPreferenceType;
 
@@ -172,16 +165,16 @@ public class PSLivePostController extends PSSharingControllerBase implements API
 	@Path("{personId}/@all")
 	public Response<Resource> getAllLivePostsByPerson(
 			@PathParam("personId") String personId,@PathParam("said") String said) {
-		
+
 		logger.info("called API method: GET /dime/rest/" + said + "/livepost/"+personId+"/@all");	
-		
+
 		Data<Resource> data = null;
 		List<URI> properties = new ArrayList<URI>();
 		properties = Arrays.asList(payload);
 
 		try {
-			
-			
+
+
 			URI personURI ="@me".equals(personId) ? livePostManager.getMe().asURI()
 					: new URIImpl(personId); 
 
@@ -204,7 +197,7 @@ public class PSLivePostController extends PSSharingControllerBase implements API
 
 		return Response.ok(data);
 	}
-	
+
 
 	/**
 	 * Retrieves a specific live post.
@@ -222,7 +215,7 @@ public class PSLivePostController extends PSSharingControllerBase implements API
 			@PathParam("said") String said,
 			@PathParam("personId") String personId,
 			@PathParam("livePostId") String livePostId) {
-		
+
 		logger.info("called API method: GET /dime/rest/" + said + "/livepost/"+personId+"/"+livePostId);	
 
 		Data<Resource> data = null;
@@ -233,7 +226,7 @@ public class PSLivePostController extends PSSharingControllerBase implements API
 		try {			
 			LivePost livepost = livePostManager.get(livePostId, properties);
 			Resource resource = new Resource(livepost,livePostManager.getMe().asURI());
-			PrivacyPreference pp = sharingManager.findPrivacyPreference(livepost.asURI().toString(), PrivacyPreferenceType.LIVEPOST);
+			PrivacyPreference pp = sharingManager.findPrivacyPreference(livepost.asURI().toString(), PrivacyPreferenceType.LIVEPOST);			
 			writeIncludes(resource,pp);	
 			setUserId(resource);
 			data = new Data<Resource>(0, 1,resource );
@@ -262,7 +255,7 @@ public class PSLivePostController extends PSSharingControllerBase implements API
 	public Response<Resource> createLivePost(Request<Resource> request,
 			@PathParam("said") String said) {
 		Data<Resource> data, returnData;
-		
+
 		logger.info("called API method: POST /dime/rest/" + said + "/livepost/@me");
 		try {
 			RequestValidator.validateRequest(request);
@@ -384,29 +377,46 @@ public class PSLivePostController extends PSSharingControllerBase implements API
 	public List<Include> readIncludes(eu.dime.ps.dto.Resource resource,eu.dime.ps.semantic.model.RDFReactorThing livepost)
 			throws InfosphereException {			
 
-		List<Include> includes = buildIncludesFromMap(resource);
-		if (!includes.isEmpty()){
-			//TODO manage the unsharing 
-			ArrayList<Include> shared = new ArrayList<Include>();
-			ArrayList<Include> excludes = new ArrayList<Include>(); 						
-
+		List<Include> includes = buildIncludesFromMap(resource);		
+		if (!includes.isEmpty()){			
 			for(Include include: includes){
+
+				ArrayList<String> toShare = new ArrayList<String>();
+
+
 				for(String group : include.groups){	
-					sharingManager.shareLivePost(livepost.asURI().toString(), include.getSaidSender(),  new String[]{group});
+					toShare.add(group);
 				}
-				for(String service: include.services){	
-					sharingManager.shareLivePost(livepost.asURI().toString(), include.getSaidSender(),  new String[]{service});						
+				for(String service: include.services){						
+					toShare.add(service);
 				}
 				for (HashMap<String, String> person : include.persons){
-					if(person.get("saidReceiver") == null){						
-						sharingManager.shareLivePost(livepost.asURI().toString(), include.getSaidSender(),  new String[]{person.get("personId")});	
+					if(person.get("saidReceiver") == null){
+						toShare.add(person.get("personId"));
 					}
-					else{	
-						sharingManager.shareLivePost(livepost.asURI().toString(), include.getSaidSender(),  new String[]{person.get("saidReceiver")});	
+					else{					
+						toShare.add(person.get("saidReceiver"));
 					}					
 				}
+				sharingManager.shareLivePost(livepost.asURI().toString(), include.getSaidSender(),toShare.toArray(new String[toShare.size()]));
+				//unshare						
+				Collection<Agent> shared =	sharingManager.getAgentsWithAccessToAccessSpace(
+						livepost.asURI().toString(),
+						PrivacyPreferenceType.LIVEPOST,
+						include.getSaidSender());
+				
+				for(Agent agent: shared)
+					if(!toShare.contains(agent.asURI().toString())){
+						sharingManager.unshareLivePost(livepost.asURI().toString(), new String[]{agent.asURI().toString()});
+					}
 
 			}
+
+		}
+		else{
+			//includes is empty, then unshare everything	
+			Collection<Agent> shared =	sharingManager.getAgentsWithAccessToResource(livepost);			
+				sharingManager.unshareLivePost(livepost.asURI().toString(), shared.toArray(new String[shared.size()]));
 		}
 		return includes;
 	}

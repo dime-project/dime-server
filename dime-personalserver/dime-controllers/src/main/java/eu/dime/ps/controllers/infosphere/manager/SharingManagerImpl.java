@@ -1,16 +1,16 @@
 /*
-* Copyright 2013 by the digital.me project (http://www.dime-project.eu).
-*
-* Licensed under the EUPL, Version 1.1 only (the "Licence");
-* You may not use this work except in compliance with the Licence.
-* You may obtain a copy of the Licence at:
-*
-* http://joinup.ec.europa.eu/software/page/eupl/licence-eupl
-*
-* Unless required by applicable law or agreed to in writing, software distributed under the Licence is distributed on an "AS IS" basis,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-* See the Licence for the specific language governing permissions and limitations under the Licence.
-*/
+ * Copyright 2013 by the digital.me project (http://www.dime-project.eu).
+ *
+ * Licensed under the EUPL, Version 1.1 only (the "Licence");
+ * You may not use this work except in compliance with the Licence.
+ * You may obtain a copy of the Licence at:
+ *
+ * http://joinup.ec.europa.eu/software/page/eupl/licence-eupl
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the Licence is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the Licence for the specific language governing permissions and limitations under the Licence.
+ */
 
 package eu.dime.ps.controllers.infosphere.manager;
 
@@ -21,6 +21,8 @@ import ie.deri.smile.vocabulary.PPO;
 import java.util.Collection;
 import java.util.HashSet;
 
+import org.ontoware.aifbcommons.collection.ClosableIterator;
+import org.ontoware.rdf2go.model.node.Node;
 import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.model.node.impl.URIImpl;
 import org.ontoware.rdf2go.vocabulary.RDF;
@@ -32,8 +34,10 @@ import org.slf4j.LoggerFactory;
 import eu.dime.ps.controllers.exception.InfosphereException;
 import eu.dime.ps.semantic.exception.NotFoundException;
 import eu.dime.ps.semantic.exception.PrivacyPreferenceException;
+import eu.dime.ps.semantic.model.RDFReactorThing;
 import eu.dime.ps.semantic.model.dlpo.LivePost;
 import eu.dime.ps.semantic.model.nfo.FileDataObject;
+import eu.dime.ps.semantic.model.nso.AccessSpace;
 import eu.dime.ps.semantic.model.pimo.Agent;
 import eu.dime.ps.semantic.model.ppo.PrivacyPreference;
 import eu.dime.ps.semantic.privacy.PrivacyPreferenceService;
@@ -58,7 +62,7 @@ public class SharingManagerImpl extends ConnectionBase implements SharingManager
 
 	private void onShare(PrivacyPreference item, Agent... receivers) {
 	}
-	
+
 	private void onUnshare(PrivacyPreference item, Agent... receivers) {
 	}
 
@@ -69,7 +73,7 @@ public class SharingManagerImpl extends ConnectionBase implements SharingManager
 		}
 		return agents;
 	}
-	
+
 	@Override
 	public void shareDatabox(String databoxId, String sharedThrough, String[] agentIds)
 			throws InfosphereException {
@@ -80,7 +84,7 @@ public class SharingManagerImpl extends ConnectionBase implements SharingManager
 			agents = fetchAgents(agentIds);
 			databox = getResourceStore().get(new URIImpl(databoxId), PrivacyPreference.class);
 			privacyPreferenceService.grantAccess(databox, new URIImpl(sharedThrough), agents);
-			
+
 			onShare(databox, agents);
 		} catch (NotFoundException e) {
 			throw new InfosphereException("Cannot share databox "+databoxId+": "+e, e);
@@ -145,13 +149,13 @@ public class SharingManagerImpl extends ConnectionBase implements SharingManager
 			agents = fetchAgents(agentIds);
 			profileCard = getResourceStore().get(new URIImpl(profileCardId), PrivacyPreference.class);
 			privacyPreferenceService.grantAccess(profileCard, new URIImpl(sharedThrough), agents);
-			
+
 			onShare(profileCard, agents);
 		} catch (NotFoundException e) {
 			throw new InfosphereException("Cannot share profile card "+profileCard+": "+e, e);
 		}
 	}
-	
+
 	@Override
 	public void unshareProfileCard(String profileCardId, String[] agentIds)
 			throws InfosphereException {
@@ -186,7 +190,7 @@ public class SharingManagerImpl extends ConnectionBase implements SharingManager
 			throw new InfosphereException("Cannot check access to profile card "+profileCardId+": "+e, e);
 		}
 	}
-	
+
 	@Override
 	public Collection<PrivacyPreference> getSharedProfileCards(String agentId)
 			throws InfosphereException {
@@ -253,7 +257,7 @@ public class SharingManagerImpl extends ConnectionBase implements SharingManager
 			throw new InfosphereException("Cannot check access to live post "+livePostId+": "+e, e);
 		}
 	}
-	
+
 	public Collection<LivePost> getSharedLivePost(String agentId)
 			throws InfosphereException {
 		ResourceStore resourceStore = getResourceStore();
@@ -283,7 +287,7 @@ public class SharingManagerImpl extends ConnectionBase implements SharingManager
 			throw new InfosphereException("Cannot retrieve shared live posts, agent "+agentId+" not found", e);
 		}
 	}
-	
+
 	public void shareFile(String fileId, String sharedThrough, String[] agentIds)
 			throws InfosphereException {
 		PrivacyPreferenceService privacyPreferenceService = getPrivacyPreferenceService();
@@ -300,7 +304,7 @@ public class SharingManagerImpl extends ConnectionBase implements SharingManager
 			throw new InfosphereException("Cannot share file "+fileId+": "+e, e);
 		}
 	}
-	
+
 	public void unshareFile(String fileId, String[] agentIds)
 			throws InfosphereException {
 		PrivacyPreferenceService privacyPreferenceService = getPrivacyPreferenceService();
@@ -317,7 +321,7 @@ public class SharingManagerImpl extends ConnectionBase implements SharingManager
 			throw new InfosphereException("Cannot unshare file "+fileId+": "+e, e);
 		}
 	}
-	
+
 	public boolean hasAccessToFile(String fileId, String agentId)
 			throws InfosphereException {
 		PrivacyPreferenceService privacyPreferenceService = getPrivacyPreferenceService();
@@ -334,7 +338,7 @@ public class SharingManagerImpl extends ConnectionBase implements SharingManager
 			throw new InfosphereException("Cannot check access to file "+fileId+": "+e, e);
 		}
 	}
-	
+
 	@Override
 	public Collection<FileDataObject> getSharedFiles(String agentId)
 			throws InfosphereException {
@@ -343,14 +347,14 @@ public class SharingManagerImpl extends ConnectionBase implements SharingManager
 		Agent agent = null;
 		try {
 			agent = resourceStore.get(new URIImpl(agentId), Agent.class);
-			
+
 			// adds all files shared through a databox
 			for (PrivacyPreference databox : getSharedDataboxes(agentId)) {
 				for (Resource resource : databox.getAllAppliesToResource_as().asList()) {
 					sharedFiles.add(resourceStore.get(resource.asResource(), FileDataObject.class));
 				}
 			}
-			
+
 			// adds all files shared directly
 			sharedFiles.addAll(resourceStore.find(FileDataObject.class)
 					.distinct()
@@ -358,11 +362,11 @@ public class SharingManagerImpl extends ConnectionBase implements SharingManager
 					.where(BasicQuery.X, RDFS.label, PrivacyPreferenceType.FILE)
 					.where(BasicQuery.X, PPO.hasAccessSpace, BasicQuery.Y)
 					.where(BasicQuery.Y, NSO.includes).is(agent)
-			// TODO needs to check the exclusion list as well
-			// don't remove comment until then...
-//					.where(BasicQuery.Y, NSO.excludes).isNot(agent)
+					// TODO needs to check the exclusion list as well
+					// don't remove comment until then...
+					//					.where(BasicQuery.Y, NSO.excludes).isNot(agent)
 					.where(BasicQuery.X, PPO.appliesToResource, BasicQuery.THIS)
-					
+
 					// checks for members in person groups
 					.orWhere(BasicQuery.X, RDF.type, PPO.PrivacyPreference)
 					.where(BasicQuery.X, RDFS.label, PrivacyPreferenceType.FILE)
@@ -377,18 +381,19 @@ public class SharingManagerImpl extends ConnectionBase implements SharingManager
 		}
 		return sharedFiles;
 	}
-	
+
+
 	@Override
 	public PrivacyPreference findPrivacyPreference(String resourceId, PrivacyPreferenceType type) throws InfosphereException {
 		PrivacyPreferenceService privacyPreferenceService = getPrivacyPreferenceService();
-		
+
 		Collection<org.ontoware.rdf2go.model.node.Resource> ids = null;
 		ids = getResourceStore().find(PrivacyPreference.class)
 				.distinct()
 				.where(RDFS.label).is(type.toString())
 				.where(PPO.appliesToResource).is(new URIImpl(resourceId))
 				.ids();
-		
+
 		if (ids.size() > 1 && Arrays.contains(CARDINALITY_ONE, type)) {
 			throw new InfosphereException("Only one privacy preference is allowed for the type "+type+
 					". but "+ids.size()+" were found for the resource "+resourceId);
@@ -398,13 +403,13 @@ public class SharingManagerImpl extends ConnectionBase implements SharingManager
 
 		return null;
 	}
-	
+
 	@Override
 	public void save(PrivacyPreference privacyPreference) throws InfosphereException {
 		PimoService pimoService = getPimoService();
 		pimoService.createOrUpdate(privacyPreference, false);
 	}
-	
+
 	@Override
 	public void remove(String privacyPreferenceId) throws InfosphereException {
 		PimoService pimoService = getPimoService();
@@ -414,5 +419,31 @@ public class SharingManagerImpl extends ConnectionBase implements SharingManager
 			throw new InfosphereException("Privacy Preference "+privacyPreferenceId+" couldn't be removed.", e);
 		}
 	}
+
+	@Override
+	public Collection<Agent> getAgentsWithAccessToAccessSpace(String resourceId, PrivacyPreferenceType type,String saidSender) throws InfosphereException {	
+		PrivacyPreference privPref = null;
+		try {
+		if(type.equals(PrivacyPreferenceType.DATABOX) ||type.equals(PrivacyPreferenceType.PROFILECARD) )
+			
+				privPref= getResourceStore().get(new URIImpl(resourceId), PrivacyPreference.class);
+			
+		else if(type.equals(PrivacyPreferenceType.FILE) || type.equals(PrivacyPreferenceType.LIVEPOST))	
+			privPref = this. findPrivacyPreference(resourceId, type);	
+		} catch (NotFoundException e) {
+			throw new InfosphereException("Cannot find privacyPreference for "+resourceId+" of type "+type+" : "+e, e);
+		}
+		
+		PrivacyPreferenceService privacyPreferenceService = getPrivacyPreferenceService();
+		return privacyPreferenceService.getIncludesBySharedThrough(privPref, saidSender);
+	}
+	
+	@Override
+	public Collection<Agent> getAgentsWithAccessToResource(org.ontoware.rdf2go.model.node.Resource resourceId) throws InfosphereException {	
+						
+		PrivacyPreferenceService privacyPreferenceService = getPrivacyPreferenceService();
+		return privacyPreferenceService.getAgentsWithAccessTo(resourceId);
+	}
+	
 
 }

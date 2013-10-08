@@ -68,8 +68,10 @@ import eu.dime.ps.semantic.model.ModelFactory;
 import eu.dime.ps.semantic.model.dao.Account;
 import eu.dime.ps.semantic.model.nco.PersonContact;
 import eu.dime.ps.semantic.model.nso.AccessSpace;
+import eu.dime.ps.semantic.model.pimo.Agent;
 import eu.dime.ps.semantic.model.pimo.Person;
 import eu.dime.ps.semantic.model.ppo.PrivacyPreference;
+import eu.dime.ps.semantic.privacy.PrivacyPreferenceType;
 
 /**
  * Dime REST API Controller for a InfoSphere features
@@ -643,26 +645,35 @@ public List<Include> readIncludes(eu.dime.ps.dto.Resource resource,eu.dime.ps.se
 		throws InfosphereException {			
 
 	List<Include> includes = buildIncludesFromMap(resource);
-	if (!includes.isEmpty()){
-		//TODO manage the unsharing 
-		ArrayList<Include> shared = new ArrayList<Include>();
-		ArrayList<Include> excludes = new ArrayList<Include>(); 					
-
+	if (!includes.isEmpty()){					
 		for(Include include: includes){
+			
+			ArrayList<String> toShare = new ArrayList<String>();
 			for(String group : include.groups){	
-				sharingManager.shareProfileCard(card.asURI().toString(), include.getSaidSender(),  new String[]{group});
+				toShare.add(group);
 			}
-			for(String service: include.services){	
-				sharingManager.shareProfileCard(card.asURI().toString(), include.getSaidSender(),  new String[]{service});						
+			for(String service: include.services){						
+				toShare.add(service);
 			}
 			for (HashMap<String, String> person : include.persons){
-				if(person.get("saidReceiver") == null){						
-					sharingManager.shareProfileCard(card.asURI().toString(), include.getSaidSender(),  new String[]{person.get("personId")});	
+				if(person.get("saidReceiver") == null){
+					toShare.add(person.get("personId"));
 				}
-				else{	
-					sharingManager.shareProfileCard(card.asURI().toString(), include.getSaidSender(),  new String[]{person.get("saidReceiver")});	
+				else{					
+					toShare.add(person.get("saidReceiver"));
 				}					
 			}
+			
+			sharingManager.shareProfileCard(card.asURI().toString(), include.getSaidSender(), toShare.toArray(new String[toShare.size()]));
+			//unshare		
+			Collection<Agent> shared =	sharingManager.getAgentsWithAccessToAccessSpace(
+					card.asURI().toString(),
+					PrivacyPreferenceType.PROFILECARD,
+					include.getSaidSender());
+			for(Agent agent: shared)
+				if(!toShare.contains(agent.asURI().toString())){
+					sharingManager.unshareProfileCard(card.asURI().toString(), new String[]{agent.asURI().toString()});
+				}
 
 		}
 	}

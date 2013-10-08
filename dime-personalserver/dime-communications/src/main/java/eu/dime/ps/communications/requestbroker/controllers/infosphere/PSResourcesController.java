@@ -86,6 +86,7 @@ import eu.dime.ps.gateway.util.JSONLDUtils;
 import eu.dime.ps.semantic.model.ModelFactory;
 import eu.dime.ps.semantic.model.NFOFactory;
 import eu.dime.ps.semantic.model.nfo.FileDataObject;
+import eu.dime.ps.semantic.model.pimo.Agent;
 import eu.dime.ps.semantic.model.ppo.PrivacyPreference;
 import eu.dime.ps.semantic.privacy.PrivacyPreferenceType;
 import eu.dime.ps.storage.entities.Tenant;
@@ -395,23 +396,39 @@ public class PSResourcesController extends PSSharingControllerBase implements AP
 		List<Include> includes = buildIncludesFromMap(resource);
 		if (!includes.isEmpty()){		
 
-			for(Include include: includes){
+			for(Include include: includes){				
+				ArrayList<String> toShare = new ArrayList<String>();
 				for(String group : include.groups){	
-					sharingManager.shareFile(file.asURI().toString(), include.getSaidSender(),  new String[]{group});
+					toShare.add(group);
 				}
-				for(String service: include.services){	
-					sharingManager.shareFile(file.asURI().toString(), include.getSaidSender(),  new String[]{service});						
+				for(String service: include.services){						
+					toShare.add(service);
 				}
 				for (HashMap<String, String> person : include.persons){
-					if(person.get("saidReceiver") == null){						
-						sharingManager.shareFile(file.asURI().toString(), include.getSaidSender(),  new String[]{person.get("personId")});	
+					if(person.get("saidReceiver") == null){
+						toShare.add(person.get("personId"));
 					}
-					else{	
-						sharingManager.shareFile(file.asURI().toString(), include.getSaidSender(),  new String[]{person.get("saidReceiver")});	
+					else{					
+						toShare.add(person.get("saidReceiver"));
 					}					
-				}
-
+				}								
+				sharingManager.shareFile(file.asURI().toString(), include.getSaidSender(),  toShare.toArray(new String[toShare.size()]));
+				//unshare				
+				Collection<Agent> shared =	sharingManager.getAgentsWithAccessToAccessSpace(
+						file.asURI().toString(), 
+						PrivacyPreferenceType.FILE,
+						include.getSaidSender());
+				
+				for(Agent agent: shared)
+					if(!toShare.contains(agent.asURI().toString())){
+						sharingManager.unshareFile(file.asURI().toString(), new String[]{agent.asURI().toString()});
+					}
 			}
+		}
+		else{
+			//includes is empty, then unshare everything	
+			Collection<Agent> shared =	sharingManager.getAgentsWithAccessToResource(file);			
+				sharingManager.unshareFile(file.asURI().toString(), shared.toArray(new String[shared.size()]));
 		}
 		return includes;
 	}

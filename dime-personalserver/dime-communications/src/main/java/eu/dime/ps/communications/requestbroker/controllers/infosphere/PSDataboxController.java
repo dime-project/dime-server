@@ -1,16 +1,16 @@
 /*
-* Copyright 2013 by the digital.me project (http://www.dime-project.eu).
-*
-* Licensed under the EUPL, Version 1.1 only (the "Licence");
-* You may not use this work except in compliance with the Licence.
-* You may obtain a copy of the Licence at:
-*
-* http://joinup.ec.europa.eu/software/page/eupl/licence-eupl
-*
-* Unless required by applicable law or agreed to in writing, software distributed under the Licence is distributed on an "AS IS" basis,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-* See the Licence for the specific language governing permissions and limitations under the Licence.
-*/
+ * Copyright 2013 by the digital.me project (http://www.dime-project.eu).
+ *
+ * Licensed under the EUPL, Version 1.1 only (the "Licence");
+ * You may not use this work except in compliance with the Licence.
+ * You may obtain a copy of the Licence at:
+ *
+ * http://joinup.ec.europa.eu/software/page/eupl/licence-eupl
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the Licence is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the Licence for the specific language governing permissions and limitations under the Licence.
+ */
 
 package eu.dime.ps.communications.requestbroker.controllers.infosphere;
 
@@ -58,8 +58,10 @@ import eu.dime.ps.dto.Resource;
 import eu.dime.ps.gateway.service.MediaType;
 import eu.dime.ps.semantic.model.dao.Account;
 import eu.dime.ps.semantic.model.nfo.DataContainer;
+import eu.dime.ps.semantic.model.pimo.Agent;
 import eu.dime.ps.semantic.model.pimo.Person;
 import eu.dime.ps.semantic.model.ppo.PrivacyPreference;
+import eu.dime.ps.semantic.privacy.PrivacyPreferenceType;
 
 /**
  * Dime REST API Controller for a InfoSphere Methods to access on Databox
@@ -132,7 +134,7 @@ public class PSDataboxController extends PSSharingControllerBase implements APIC
 	public Response<Resource> getAllDatabox(@PathParam("said") String said) {
 		Data<Resource> data = null;	
 		logger.info("called API method: GET /dime/rest/" + said + "/databox/@all");
-		
+
 		try {
 			Collection<DataContainer> databoxs = databoxManager.getAll();
 			data = new Data<Resource>(0, databoxs.size(), databoxs.size());
@@ -166,10 +168,10 @@ public class PSDataboxController extends PSSharingControllerBase implements APIC
 		Data<Resource> data = null;
 		logger.info("called API method: GET /dime/rest/" + said + "/databox/"+personId+"/@all");
 		try {	
-			
+
 			Person person ="@me".equals(personId) ? databoxManager.getMe()
 					: personManager.get(personId); 
-			
+
 			Collection<DataContainer> databoxes = databoxManager
 					.getAllByPerson(person.asURI());
 
@@ -190,7 +192,7 @@ public class PSDataboxController extends PSSharingControllerBase implements APIC
 	}
 
 
-	
+
 	/**
 	 * Return DB
 	 * 
@@ -201,7 +203,7 @@ public class PSDataboxController extends PSSharingControllerBase implements APIC
 	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
 	@Path("@me/{dbId}")
 	public Response<Resource> getMyDatabox(@PathParam("said") String said,
-			 @PathParam("dbId") String dbId) {
+			@PathParam("dbId") String dbId) {
 
 		Data<Resource> data = null;
 		logger.info("called API method: GET /dime/rest/" + said + "/databox/@me/"+dbId);
@@ -222,8 +224,8 @@ public class PSDataboxController extends PSSharingControllerBase implements APIC
 
 		return Response.ok(data);
 	}	
-	
-	
+
+
 	/**
 	 * Return DB
 	 * 
@@ -270,9 +272,9 @@ public class PSDataboxController extends PSSharingControllerBase implements APIC
 	public Response<Databox> postCreateMyDatabox(
 			@PathParam("said") String said, Request<Databox> request) {
 
-		
+
 		logger.info("called API method: post /dime/rest/" + said + "/databox/@me");
-		
+
 		Data<Databox> data, returnData;
 
 		try {
@@ -324,7 +326,7 @@ public class PSDataboxController extends PSSharingControllerBase implements APIC
 			@PathParam("dbID") String dbID) {
 
 		logger.info("called API method: POST /dime/rest/" + said + "/databox/@me/"+dbID);
-		
+
 		Data<Resource> data, returnData;
 
 		try {
@@ -370,7 +372,7 @@ public class PSDataboxController extends PSSharingControllerBase implements APIC
 			@PathParam("dbID") String dbID) {
 
 		logger.info("called API method: DELETE /dime/rest/" + said + "/databox/@me/"+dbID);
-		
+
 		try {
 			databoxManager.remove(dbID);
 
@@ -394,31 +396,40 @@ public class PSDataboxController extends PSSharingControllerBase implements APIC
 
 		List<Include> includes = buildIncludesFromMap(resource);
 		if (!includes.isEmpty()){
-			//TODO manage the unsharing 
-			ArrayList<Include> shared = new ArrayList<Include>();
-			ArrayList<Include> excludes = new ArrayList<Include>(); 					
-
 			for(Include include: includes){
+				ArrayList<String> toShare = new ArrayList<String>();
+
 				for(String group : include.groups){	
-					sharingManager.shareDatabox(datacontainer.asURI().toString(), include.getSaidSender(),  new String[]{group});
+					toShare.add(group);
 				}
-				for(String service: include.services){	
-					sharingManager.shareDatabox(datacontainer.asURI().toString(), include.getSaidSender(),  new String[]{service});						
+				for(String service: include.services){						
+					toShare.add(service);
 				}
 				for (HashMap<String, String> person : include.persons){
-					if(person.get("saidReceiver") == null){						
-						sharingManager.shareDatabox(datacontainer.asURI().toString(), include.getSaidSender(),  new String[]{person.get("personId")});	
+					if(person.get("saidReceiver") == null){
+						toShare.add(person.get("personId"));
 					}
-					else{	
-						sharingManager.shareDatabox(datacontainer.asURI().toString(), include.getSaidSender(),  new String[]{person.get("saidReceiver")});	
+					else{					
+						toShare.add(person.get("saidReceiver"));
 					}					
 				}
-
+				sharingManager.shareDatabox(datacontainer.asURI().toString(), include.getSaidSender(), toShare.toArray(new String[toShare.size()]));
+				//unshare		
+				Collection<Agent> shared =	sharingManager.getAgentsWithAccessToAccessSpace( datacontainer.asURI().toString(),PrivacyPreferenceType.DATABOX,include.getSaidSender());
+				for(Agent agent: shared)
+					if(!toShare.contains(agent.asURI().toString())){
+						sharingManager.unshareDatabox(datacontainer.asURI().toString(), new String[]{agent.asURI().toString()});
+					}
 			}
+		}
+		else{
+			//includes is empty, then unshare everything	
+			Collection<Agent> shared =	sharingManager.getAgentsWithAccessToResource(datacontainer);			
+				sharingManager.unshareDatabox(datacontainer.asURI().toString(), shared.toArray(new String[shared.size()]));
 		}
 		return includes;
 	}
-	
+
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")

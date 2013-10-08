@@ -16,9 +16,13 @@ package eu.dime.ps.controllers.infosphere.manager;
 
 import java.util.Collection;
 
+import org.ontoware.rdf2go.model.node.Resource;
+
 import eu.dime.ps.controllers.exception.InfosphereException;
+import eu.dime.ps.semantic.model.RDFReactorThing;
 import eu.dime.ps.semantic.model.dlpo.LivePost;
 import eu.dime.ps.semantic.model.nfo.FileDataObject;
+import eu.dime.ps.semantic.model.pimo.Agent;
 import eu.dime.ps.semantic.model.ppo.PrivacyPreference;
 import eu.dime.ps.semantic.privacy.PrivacyPreferenceType;
 
@@ -85,5 +89,9 @@ public interface SharingManager {
 	
 	@Deprecated
 	public void remove(String privacyPreferenceId) throws InfosphereException;
+
+	public Collection<Agent> getAgentsWithAccessToAccessSpace(String resourceId, PrivacyPreferenceType type,String saidSender) throws InfosphereException;
+
+	public Collection<Agent> getAgentsWithAccessToResource(Resource resourceId)throws InfosphereException;
 
 }

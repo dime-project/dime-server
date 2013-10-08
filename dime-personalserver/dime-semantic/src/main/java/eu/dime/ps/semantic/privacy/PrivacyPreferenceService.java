@@ -161,5 +161,7 @@ public interface PrivacyPreferenceService {
 	 * @return the collection of agents to access to the resource
 	 */
 	Collection<Agent> getAgentsWithAccessTo(org.ontoware.rdf2go.model.node.Resource resourceIdentifier);
+	
+	Collection<Agent> getIncludesBySharedThrough(PrivacyPreference livepost, String saidSender);
 
 }

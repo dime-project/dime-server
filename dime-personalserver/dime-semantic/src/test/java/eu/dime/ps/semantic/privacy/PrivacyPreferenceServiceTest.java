@@ -352,4 +352,20 @@ public class PrivacyPreferenceServiceTest extends SemanticTest {
 		assertTrue(databox.getModel().contains(databox.getAllAccessSpace().next(), NSO.includes, simon.asResource()));
 	}
 	
+	
+	@Test
+	public void testgetIncludesBySharedThrough() throws Exception {
+		Agent simon = modelFactory.getPIMOFactory().createAgent();
+		Account account = buildAccount();
+		PrivacyPreference databox = manager.getOrCreate("business", PrivacyPreferenceType.DATABOX);
+		manager.grantAccess(databox, account.asURI(), simon);
+		
+		// reload
+		databox = manager.getOrCreate("business", PrivacyPreferenceType.DATABOX);
+		Collection<Agent>includes = manager.getIncludesBySharedThrough(databox, account.toString());
+		assertNotNull(includes);
+		assertTrue(includes.contains(simon));
+		
+	}
+	
 }

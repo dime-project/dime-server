@@ -1,16 +1,16 @@
 /*
-* Copyright 2013 by the digital.me project (http://www.dime-project.eu).
-*
-* Licensed under the EUPL, Version 1.1 only (the "Licence");
-* You may not use this work except in compliance with the Licence.
-* You may obtain a copy of the Licence at:
-*
-* http://joinup.ec.europa.eu/software/page/eupl/licence-eupl
-*
-* Unless required by applicable law or agreed to in writing, software distributed under the Licence is distributed on an "AS IS" basis,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-* See the Licence for the specific language governing permissions and limitations under the Licence.
-*/
+ * Copyright 2013 by the digital.me project (http://www.dime-project.eu).
+ *
+ * Licensed under the EUPL, Version 1.1 only (the "Licence");
+ * You may not use this work except in compliance with the Licence.
+ * You may obtain a copy of the Licence at:
+ *
+ * http://joinup.ec.europa.eu/software/page/eupl/licence-eupl
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the Licence is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the Licence for the specific language governing permissions and limitations under the Licence.
+ */
 
 package eu.dime.ps.semantic.privacy.impl;
 
@@ -81,17 +81,17 @@ public class PrivacyPreferenceServiceImpl implements PrivacyPreferenceService {
 	private TripleStore tripleStore;
 	private ResourceStore resourceStore;
 	private PimoService pimoService;
-	
+
 	private HistoryLogService historyLogService;
-	
+
 	private final BroadcastManager broadcastManager = BroadcastManager.getInstance();
-	
+
 	public void setPimoService(PimoService pimoService) {
 		this.pimoService = pimoService;
 		this.tripleStore = pimoService.getTripleStore();
 		this.resourceStore = new ResourceStoreImpl(this.tripleStore);
 	}
-	
+
 	public void setHistoryLogService(HistoryLogService historyLogService) {
 		this.historyLogService = historyLogService;
 	}
@@ -104,35 +104,35 @@ public class PrivacyPreferenceServiceImpl implements PrivacyPreferenceService {
 		this();
 		setPimoService(pimoService);
 	}
-	
+
 	@Override
 	public PrivacyPreference get(URI privacyPreferenceUri) {
 		return fetch(privacyPreferenceUri);
 	}
-	
+
 	@Override
 	public PrivacyPreference get(URI privacyPreferenceUri, URI... properties) {
 		return fetch(privacyPreferenceUri, properties);
 	}
-	
+
 	@Override
 	public PrivacyPreference getOrCreate(String label, PrivacyPreferenceType type) {
 		PrivacyPreference privacyPref = null;
-		
+
 		final Collection<org.ontoware.rdf2go.model.node.Resource> ids =
 				resourceStore.find(PrivacyPreference.class)
 				.distinct()
 				.where(NAO.prefLabel).is(label)
 				.where(RDFS.label).is(type.toString())
 				.ids();
-		
+
 		if (ids.size() > 1) {
 			logger.warn("Only one privacy preference is allowed with same label and type. "+
 					ids.size()+" found of type '"+type+"' and label '"+label+"'.");
 		} else if (ids.size() == 1) {
 			privacyPref = fetch(ids.iterator().next());
 		}
-		
+
 		if (privacyPref == null) {
 			privacyPref = modelFactory.getPPOFactory().createPrivacyPreference();
 			privacyPref.getModel().addStatement(privacyPref, PIMO.isDefinedBy, pimoService.getPimoUri());
@@ -140,41 +140,41 @@ public class PrivacyPreferenceServiceImpl implements PrivacyPreferenceService {
 			privacyPref.setLabel(type.toString());
 			resourceStore.createOrUpdate(pimoService.getPimoUri(), privacyPref);
 		}
-		
+
 		return privacyPref;
 	}
 
 	public PrivacyPreferenceType getType(URI privacyPreferenceUri) {
 		PrivacyPreference preference = null;
-		
+
 		try {
 			preference = pimoService.get(privacyPreferenceUri, PrivacyPreference.class, RDFS.label);
 			return getType(privacyPreferenceUri, preference.getModel());
 		} catch (NotFoundException e) {
 			logger.error("Cannot find type for privacy preference "+privacyPreferenceUri+": "+e.getMessage(), e);
 		}
-		
+
 		return null;
 	}
-	
+
 	public PrivacyPreferenceType getType(PrivacyPreference privacyPreference) {
 		PrivacyPreferenceType type = null;
-		
+
 		// get type from object metadata
 		type = getType(privacyPreference.asURI(), privacyPreference.getModel());
-		
+
 		// not found in object metadata, we'll look it up in the RDF store
 		if (type == null) {
 			type = getType(privacyPreference.asURI());
 		}
-		
+
 		return type;
 	}
-	
+
 	private PrivacyPreferenceType getType(URI preference, Model metadata) {
 		PrivacyPreferenceType type = null;
 		List<String> labels = new ArrayList<String>();
-		
+
 		ClosableIterator<Statement> labelIt = metadata.findStatements(preference, RDFS.label, Variable.ANY);
 		while (labelIt.hasNext()) {
 			String label = labelIt.next().getObject().asLiteral().getValue();
@@ -191,10 +191,10 @@ public class PrivacyPreferenceServiceImpl implements PrivacyPreferenceService {
 		if (type == null) {
 			logger.warn("Values of rdfs:label for " + preference + " " + labels + " don't include a valid type.");
 		}
-		
+
 		return type;
 	}
-	
+
 	/**
 	 * Creates a backup of a privacy preference in the History Log.
 	 * This should be called before modifying any privacy preference in order to
@@ -212,7 +212,7 @@ public class PrivacyPreferenceServiceImpl implements PrivacyPreferenceService {
 		addAgentToPrivacyPreference(privacyPref, sharedThrough, agents);
 		return privacyPref;
 	}
-	
+
 	@Override
 	public PrivacyPreference grantAccess(DataObject dataObject, URI sharedThrough, Agent... agents) {
 		PrivacyPreference privacyPref = getOrCreateForDataObject(dataObject);
@@ -255,9 +255,9 @@ public class PrivacyPreferenceServiceImpl implements PrivacyPreferenceService {
 	@Override
 	public boolean hasAccessTo(PrivacyPreference privacyPreference, Agent agent) throws PrivacyPreferenceException {
 		PrivacyPreferenceType type = getType(privacyPreference);
-		
+
 		if (PrivacyPreferenceType.PROFILECARD.equals(type)) {
-			
+
 			// profile cards can explicitly be shared with agents
 			boolean hasAccess = hasAccessViaPrivacyPreference(privacyPreference, agent);
 			if (hasAccess) {
@@ -270,7 +270,7 @@ public class PrivacyPreferenceServiceImpl implements PrivacyPreferenceService {
 			// the same business account.
 
 			Collection<org.ontoware.rdf2go.model.node.Resource> accounts =
-				resourceStore.find(Account.class)
+					resourceStore.find(Account.class)
 					.distinct()
 					.where(privacyPreference, PPO.hasAccessSpace).is(Query.X)
 					.where(Query.X, NSO.sharedThrough).is(Query.THIS)
@@ -279,11 +279,11 @@ public class PrivacyPreferenceServiceImpl implements PrivacyPreferenceService {
 				Collection<PrivacyPreference> sharedThroughPreferences = getBySharedThrough(sharedThrough.asURI());
 				for (PrivacyPreference sharedThroughPreference : sharedThroughPreferences) {
 					PrivacyPreferenceType sharedThroughType = getType(sharedThroughPreference);
-					
+
 					// filter out other profile cards
 					if (!PrivacyPreferenceType.PROFILECARD.equals(sharedThroughType)) {
 						hasAccess = hasAccessViaPrivacyPreference(sharedThroughPreference, agent);
-						
+
 						// if any privacy preference for the same sharedThrough account grants access to the 
 						// agent, then the agent can access the profile card.
 						if (hasAccess) {
@@ -292,13 +292,13 @@ public class PrivacyPreferenceServiceImpl implements PrivacyPreferenceService {
 					}
 				}
 			}
-		
+
 			return false;
 		} else {
 			return hasAccessViaPrivacyPreference(privacyPreference, agent);
 		}
 	}
-	
+
 	@Override
 	public boolean hasAccessTo(LivePost livePost, Agent agent) throws PrivacyPreferenceException {
 		PrivacyPreference privacyPref = resourceStore.find(PrivacyPreference.class)
@@ -307,7 +307,7 @@ public class PrivacyPreferenceServiceImpl implements PrivacyPreferenceService {
 				.first();
 		return privacyPref == null ? false : hasAccessViaPrivacyPreference(privacyPref, agent);
 	}
-	
+
 	@Override
 	public boolean hasAccessTo(DataObject dataObject, Agent agent) throws PrivacyPreferenceException {
 		PrivacyPreference privacyPref = resourceStore.find(PrivacyPreference.class)
@@ -327,7 +327,7 @@ public class PrivacyPreferenceServiceImpl implements PrivacyPreferenceService {
 		}
 		return access;
 	}
-	
+
 	@Override
 	public boolean hasAccessTo(Resource resource, Agent agent) throws PrivacyPreferenceException {
 		if (resource instanceof PrivacyPreference) {
@@ -351,7 +351,7 @@ public class PrivacyPreferenceServiceImpl implements PrivacyPreferenceService {
 		}
 		return false;
 	}
-	
+
 	private void addAgentToPrivacyPreference(PrivacyPreference privacyPref, URI sharedThrough, Agent... agents) {
 		if (privacyPref == null) {
 			throw new IllegalArgumentException("Must specify a valid privacy preference (privacyPref), not null.");
@@ -362,7 +362,7 @@ public class PrivacyPreferenceServiceImpl implements PrivacyPreferenceService {
 		if (agents == null || agents.length == 0) {
 			throw new IllegalArgumentException("Must specify at least one agent.");
 		}
-		
+
 		Model metadata = privacyPref.getModel();
 		boolean found = false;
 		boolean modified = false;
@@ -402,11 +402,11 @@ public class PrivacyPreferenceServiceImpl implements PrivacyPreferenceService {
 			resourceStore.createOrUpdate(pimoService.getPimoUri(), privacyPref);
 		}
 	}
-	
+
 	private void removeAgentFromPrivacyPreference(PrivacyPreference privacyPref, Agent... agents) {
 		boolean modified = false;
 		ClosableIterator<Node> accessSpaceIt = privacyPref.getAllAccessSpace_asNode();		
-		
+
 		while (accessSpaceIt.hasNext()) {
 			URI accessSpaceUri = accessSpaceIt.next().asURI();
 			AccessSpace accessSpace;
@@ -421,7 +421,7 @@ public class PrivacyPreferenceServiceImpl implements PrivacyPreferenceService {
 				logger.error("PrivacyPreference "+privacyPref+" refers to an inexistent AccessSpace: "+accessSpaceUri, e);
 			}
 		}
-		
+
 		if (modified) {
 			broadcastManager.sendBroadcast(new Event(pimoService.getName(), Event.ACTION_RESOURCE_MODIFY, privacyPref));
 		}
@@ -429,12 +429,12 @@ public class PrivacyPreferenceServiceImpl implements PrivacyPreferenceService {
 
 	private PrivacyPreference getForType(Resource resource, PrivacyPreferenceType type) {
 		final Collection<org.ontoware.rdf2go.model.node.Resource> ids =
-			resourceStore.find(PrivacyPreference.class)
+				resourceStore.find(PrivacyPreference.class)
 				.distinct()
 				.where(RDFS.label).is(type.toString())
 				.where(PPO.appliesToResource).is(resource)
 				.ids();
-		
+
 		if (ids.size() > 1) {
 			logger.warn("Only one privacy preference is allowed for each "+type.toString().toLowerCase()+
 					". "+ids.size()+" found for "+resource);
@@ -443,14 +443,14 @@ public class PrivacyPreferenceServiceImpl implements PrivacyPreferenceService {
 			// the access space metadata, etc.
 			return fetch(ids.iterator().next());
 		}
-		
+
 		return null;
 	}
-	
+
 	public PrivacyPreference getForLivePost(LivePost livePost) {
 		return getForType(livePost, PrivacyPreferenceType.LIVEPOST);
 	}
-	
+
 	public PrivacyPreference getOrCreateForLivePost(LivePost livePost) {
 		PrivacyPreference privacyPref = getForLivePost(livePost);
 		if (privacyPref == null) {
@@ -497,7 +497,7 @@ public class PrivacyPreferenceServiceImpl implements PrivacyPreferenceService {
 
 		try {
 			privacyPref = pimoService.get(privacyPref.asURI(), PrivacyPreference.class);
-			
+
 			if (privacyPref.hasAccessSpace()) {
 				ClosableIterator<Node> asIt = privacyPref.getAllAccessSpace_asNode();
 				while (asIt.hasNext()) {
@@ -518,20 +518,20 @@ public class PrivacyPreferenceServiceImpl implements PrivacyPreferenceService {
 
 		return included && !excluded;
 	}
-	
+
 	private boolean isIncluded(AccessSpace accessSpace, Agent agent) {
 		boolean included = false;
-		
+
 		try {
 			if (pimoService.isTypedAs(agent, DAO.Account)) {
 				// check if the account is explicitly set in the nso:includes
 				included = included | accessSpace.getModel().contains(accessSpace.asResource(), NSO.includes, agent.asResource());
-				
+
 				// check if the creator of the di.me account is set in the nso:includes
 				if (!included) {
 					included = included | accessSpace.getModel().contains(accessSpace.asResource(), NSO.includes, agent.getCreator().asResource());
 				}
-	
+
 				// check if the person is member of a group specified in nso:includes
 				if (!included) {
 					Collection<org.ontoware.rdf2go.model.node.Resource> groups = null;
@@ -543,7 +543,7 @@ public class PrivacyPreferenceServiceImpl implements PrivacyPreferenceService {
 			} else if (pimoService.isTypedAs(agent, PIMO.Person)) {
 				// check if the person is explicitly set in the nso:includes
 				included = included | accessSpace.getModel().contains(accessSpace.asResource(), NSO.includes, agent.asResource());
-				
+
 				// check if any di.me account of the person is set in the nso:includes
 				if (!included) {
 					Collection<org.ontoware.rdf2go.model.node.Resource> accounts = null;
@@ -552,7 +552,7 @@ public class PrivacyPreferenceServiceImpl implements PrivacyPreferenceService {
 						included = included | accessSpace.getModel().contains(accessSpace.asResource(), NSO.includes, account);		
 					}
 				}
-	
+
 				// check if the person is member of a group specified in nso:includes
 				if (!included) {
 					Collection<org.ontoware.rdf2go.model.node.Resource> groups = null;
@@ -571,20 +571,20 @@ public class PrivacyPreferenceServiceImpl implements PrivacyPreferenceService {
 
 		return included;
 	}
-	
+
 	private boolean isExcluded(AccessSpace accessSpace, Agent agent) {
 		boolean excluded = false;
-		
+
 		try {
 			if (pimoService.isTypedAs(agent, DAO.Account)) {
 				// check if the account is explicitly set in the nso:excludes
 				excluded = excluded | accessSpace.getModel().contains(accessSpace.asResource(), NSO.excludes, agent.asResource());
-				
+
 				// check if the creator of the di.me account is set in the nso:excludes
 				if (!excluded) {
 					excluded = excluded | accessSpace.getModel().contains(accessSpace.asResource(), NSO.excludes, agent.getCreator().asResource());
 				}
-	
+
 				// check if the person is member of a group specified in nso:excludes
 				if (!excluded) {
 					Collection<org.ontoware.rdf2go.model.node.Resource> groups = null;
@@ -596,7 +596,7 @@ public class PrivacyPreferenceServiceImpl implements PrivacyPreferenceService {
 			} else if (pimoService.isTypedAs(agent, PIMO.Person)) {
 				// check if the person is explicitly set in the nso:excludes
 				excluded = excluded | accessSpace.getModel().contains(accessSpace.asResource(), NSO.excludes, agent.asResource());
-				
+
 				// check if any di.me account of the person is set in the nso:excludes
 				if (!excluded) {
 					Collection<org.ontoware.rdf2go.model.node.Resource> accounts = null;
@@ -605,7 +605,7 @@ public class PrivacyPreferenceServiceImpl implements PrivacyPreferenceService {
 						excluded = excluded | accessSpace.getModel().contains(accessSpace.asResource(), NSO.excludes, account.asResource());
 					}
 				}
-	
+
 				// check if the person is member of a group specified in nso:excludes
 				if (!excluded) {
 					Collection<org.ontoware.rdf2go.model.node.Resource> groups = null;
@@ -629,7 +629,7 @@ public class PrivacyPreferenceServiceImpl implements PrivacyPreferenceService {
 	public Collection<Account> getAllRecipients(AccessSpace accessSpace) {
 		Set<Account> include = new HashSet<Account>();
 		Set<URI> exclude = new HashSet<URI>();
-		
+
 		// get all dao:Account instances to include
 		for (Agent agent : accessSpace.getAllIncludes_as().asList()) {
 			try {
@@ -644,7 +644,7 @@ public class PrivacyPreferenceServiceImpl implements PrivacyPreferenceService {
 						PersonGroup group = pimoService.get(agent, PersonGroup.class);
 						people.addAll(group.getAllMembers_as().asList());
 					}
-					
+
 					// finds the 'default' di.me account for every person
 					for (Resource personId : people) {
 						// retrieve the 'default' account for the person, in order words, the data source
@@ -703,41 +703,41 @@ public class PrivacyPreferenceServiceImpl implements PrivacyPreferenceService {
 				results.add(account);
 			}
 		}
-		
+
 		return results;
 	}
 
 	private Collection<PrivacyPreference> getBySharedThrough(URI sharedThrough) {
 		Collection<org.ontoware.rdf2go.model.node.Resource> ids =
-			resourceStore.find(PrivacyPreference.class)
+				resourceStore.find(PrivacyPreference.class)
 				.distinct()
 				.where(PPO.hasAccessSpace).is(Query.X)
 				.where(Query.X, NSO.sharedThrough).is(sharedThrough)
 				.ids();
 		return fetch(ids);
 	}
-	
+
 	@Override
 	public Collection<PrivacyPreference> getByType(PrivacyPreferenceType type) {
 		Node label = new PlainLiteralImpl(type.toString());
 		return fetch(tripleStore.findStatements(Variable.ANY, Variable.ANY, RDFS.label, label));
 	}
-	
+
 	@Override
 	public Collection<PrivacyPreference> getByType(PrivacyPreferenceType type, URI... properties) {
 		Node label = new PlainLiteralImpl(type.toString());
 		return fetch(tripleStore.findStatements(Variable.ANY, Variable.ANY, RDFS.label, label), properties);
 	}
-	
+
 	@Override
 	public Collection<PrivacyPreference> getByAgentAndType(Agent agent, PrivacyPreferenceType type) {
 		return getByAgentAndType(agent, type, new URI[0]);
 	}
-	
+
 	@Override
 	public Collection<PrivacyPreference> getByAgentAndType(Agent agent, PrivacyPreferenceType type, URI... properties) {
 		final Collection<org.ontoware.rdf2go.model.node.Resource> ids =
-			resourceStore.find(PrivacyPreference.class)
+				resourceStore.find(PrivacyPreference.class)
 				.distinct()
 				.select(properties)
 				// checks the agent is in includes but not in excludes
@@ -755,11 +755,11 @@ public class PrivacyPreferenceServiceImpl implements PrivacyPreferenceService {
 				.ids();
 		return fetch(ids);
 	}
-	
+
 	@Override
 	public Collection<Agent> getAgentsWithAccessTo(org.ontoware.rdf2go.model.node.Resource resourceIdentifier) {
 		Collection<Agent> agents = new ArrayList<Agent>();
-		
+
 		// FIXME this should also check if the agent is not excluded...
 		String query = StringUtils.strjoinNL(
 				PimoService.SPARQL_PREAMBLE,
@@ -767,14 +767,14 @@ public class PrivacyPreferenceServiceImpl implements PrivacyPreferenceService {
 				"  ?pp a ppo:PrivacyPreference .",
 				"  ?pp ppo:hasAccessSpace ?space .",
 				"  ?space nso:includes ?agent .",
-//				"  {",
-//				"    {",
-//				"      ?pp ppo:appliesToNamedGraph ?graph .",
-//				"      GRAPH ?graph { ?s ?p "+resourceUri.toSPARQL()+" .} .",
-//				"    } UNION {",
+				//				"  {",
+				//				"    {",
+				//				"      ?pp ppo:appliesToNamedGraph ?graph .",
+				//				"      GRAPH ?graph { ?s ?p "+resourceUri.toSPARQL()+" .} .",
+				//				"    } UNION {",
 				"      ?pp ppo:appliesToResource "+resourceIdentifier.toSPARQL()+" .",
-//				"    }",
-//				"  }",
+				//				"    }",
+				//				"  }",
 				"}");
 		ClosableIterator<QueryRow> rows = tripleStore.sparqlSelect(query).iterator();
 		while (rows.hasNext()) {
@@ -786,7 +786,7 @@ public class PrivacyPreferenceServiceImpl implements PrivacyPreferenceService {
 			}
 		}
 		rows.close();
-		
+
 		return agents;
 	}
 
@@ -803,10 +803,10 @@ public class PrivacyPreferenceServiceImpl implements PrivacyPreferenceService {
 		for (org.ontoware.rdf2go.model.node.Resource identifier : ids) {
 			collection.add(fetch(identifier, properties));
 		}
-		
+
 		return collection;
 	}
-	
+
 	private PrivacyPreference fetch(org.ontoware.rdf2go.model.node.Resource identifier, URI... properties) {
 		Model sinkModel = RDF2Go.getModelFactory().createModel().open();
 		ModelUtils.fetch(tripleStore, sinkModel, identifier, true, true, null, new URI[]{ PPO.hasAccessSpace }, false, properties);
@@ -821,6 +821,29 @@ public class PrivacyPreferenceServiceImpl implements PrivacyPreferenceService {
 			results.add(new PrivacyPreference(sinkModel, identifier, false));
 		}
 		return results;
+	}
+
+
+
+
+	public Collection<Agent> getIncludesBySharedThrough(PrivacyPreference privacyPreference,String sharedThrough){
+				
+		if (privacyPreference.hasAccessSpace()) {
+			ClosableIterator<Node> asIt = privacyPreference.getAllAccessSpace_asNode();
+			while (asIt.hasNext()) {
+				AccessSpace accessSpace = null;					
+				try {
+					accessSpace = pimoService.get(asIt.next().asResource(), AccessSpace.class);				
+				if(accessSpace.getSharedThrough().asURI().toString().equals(sharedThrough))
+					return accessSpace.getAllIncludes_as().asList();
+				} catch (ClassCastException e) {
+					logger.error("Could not retrieve any  accesSpace  with sharedThrough  "+sharedThrough, e);
+				} catch (NotFoundException e) {
+					logger.error("Could not retrieve any  accesSpace  with sharedThrough  "+sharedThrough, e);
+				}
+			}
+		}
+		return null;
 	}
 
 }
