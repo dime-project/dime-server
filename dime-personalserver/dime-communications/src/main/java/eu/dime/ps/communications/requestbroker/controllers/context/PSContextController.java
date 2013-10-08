@@ -15,6 +15,7 @@
 package eu.dime.ps.communications.requestbroker.controllers.context;
 
 import javax.ws.rs.Consumes;
+
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -34,10 +35,14 @@ import eu.dime.commons.dto.Data;
 import eu.dime.commons.dto.Request;
 import eu.dime.commons.dto.Response;
 import eu.dime.commons.exception.DimeException;
+import eu.dime.commons.notifications.DimeInternalNotification;
+import eu.dime.commons.notifications.system.SystemNotification;
 import eu.dime.context.exceptions.ContextException;
 import eu.dime.context.model.Constants;
 import eu.dime.ps.controllers.TenantContextHolder;
 import eu.dime.ps.controllers.context.raw.ifc.RawContextManager;
+import eu.dime.ps.controllers.notifier.NotifierManager;
+import eu.dime.ps.controllers.notifier.exception.NotifierException;
 import eu.dime.ps.controllers.util.TenantHelper;
 import eu.dime.ps.semantic.connection.Connection;
 import eu.dime.ps.semantic.connection.ConnectionProvider;
@@ -56,6 +61,7 @@ public class PSContextController {
 
 	private RawContextManager contextManager;
 	private ConnectionProvider connectionProvider;
+	private NotifierManager notifierManager;
 
 	public void setContextManager(RawContextManager contextManager) {
 		this.contextManager = contextManager;
@@ -63,6 +69,10 @@ public class PSContextController {
 
 	public void setConnectionProvider(ConnectionProvider connectionProvider) {
 		this.connectionProvider = connectionProvider;
+	}
+	
+	public void setNotifierManager(NotifierManager notifierManager) {
+		this.notifierManager = notifierManager;
 	}
 
     @GET
@@ -103,10 +113,21 @@ public class PSContextController {
 	    
 	    try {
 			contextManager.contextUpdate(said, ctxdata);
+			
+			if (context.scope.equalsIgnoreCase(Constants.SCOPE_CURRENT_PLACE)) {
+				SystemNotification notification = 
+						new SystemNotification(TenantContextHolder.getTenant(), DimeInternalNotification.OP_UPDATE, 
+								context.scope, DimeInternalNotification.ITEM_TYPE_CONTEXT, null);
+				notifierManager.pushInternalNotification(notification);
+			}
+			
 			return Response.ok(data);
 		} catch (ContextException e) {
 			logger.error(e.getMessage(),e);
 			return Response.badRequest(e.getMessage(),e);
+		} catch (NotifierException e) {
+			logger.warn(e.getMessage(),e);
+			return Response.ok(data);
 		}
 
     }
@@ -121,10 +142,21 @@ public class PSContextController {
     	
     	try {
 			contextManager.deleteContext(said, scopeId);
+			
+			if (scopeId.equalsIgnoreCase(Constants.SCOPE_CURRENT_PLACE)) {
+				SystemNotification notification = 
+						new SystemNotification(TenantContextHolder.getTenant(), DimeInternalNotification.OP_REMOVE, 
+								scopeId, DimeInternalNotification.ITEM_TYPE_CONTEXT, null);
+				notifierManager.pushInternalNotification(notification);
+			}
+			
 			return Response.ok();
 		} catch (ContextException e) {
 			logger.error(e.getMessage(),e);
 			return Response.badRequest(e.getMessage(),e);
+		} catch (NotifierException e) {
+			logger.warn(e.getMessage(),e);
+			return Response.ok();
 		}
 
     }

@@ -108,6 +108,7 @@
 		class="eu.dime.ps.communications.requestbroker.controllers.context.PSContextController">
 		<property name="contextManager" ref="contextManager"></property>
 		<property name="connectionProvider" ref="connectionProvider"></property>
+		<property name="notifierManager" ref="notifierManager"></property>
 		<!-- [TI] <property name="tenantManager" ref="tenantManager"></property>
 		<property name="contextProcessor" ref="contextProcessor"></property>
 		<property name="accountManager" ref="accountManager"></property>  -->
