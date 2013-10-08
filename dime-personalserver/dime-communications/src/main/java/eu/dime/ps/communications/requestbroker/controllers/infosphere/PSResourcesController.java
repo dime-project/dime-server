@@ -85,6 +85,7 @@ import eu.dime.ps.gateway.service.internal.DimeServiceAdapter;
 import eu.dime.ps.gateway.util.JSONLDUtils;
 import eu.dime.ps.semantic.model.ModelFactory;
 import eu.dime.ps.semantic.model.NFOFactory;
+import eu.dime.ps.semantic.model.nao.Symbol;
 import eu.dime.ps.semantic.model.nfo.FileDataObject;
 import eu.dime.ps.semantic.model.pimo.Agent;
 import eu.dime.ps.semantic.model.ppo.PrivacyPreference;
@@ -510,7 +511,9 @@ public class PSResourcesController extends PSSharingControllerBase implements AP
 			}
 
 			// gets the mimetype
-			FileDataObject fdo = fileManager.get(resourceID);
+			FileDataObject fdo = fileManager.getFileFromThumbnail(resourceID);			
+			if(fdo == null)
+			 fdo = fileManager.get(resourceID);				
 			Node mimetype = ModelUtils.findObject(fdo.getModel(), fdo, NIE.mimeType);
 			String mimeString = null;
 			if (mimetype == null) {
@@ -845,33 +848,27 @@ public class PSResourcesController extends PSSharingControllerBase implements AP
 
 		if(fileResource.containsKey("imageUrl") && 
 				!fileResource.get("imageUrl").toString().equals("")){
-			String resourceId = fileResource.get("imageUrl").toString();			
-			FileDataObject image = null;
-			try {
-				image = fileManager.get(file.toString());
-			}
-			catch (InfosphereException e) {
-				logger.warn("The URI from the imageUrl "+resourceId+"cannot be retrevied",e);
-			}
-			if (image == null){
-				try {
-					image = fileManager.get(resourceId);
+			String resourceId = fileResource.get("imageUrl").toString();	
+					try {
+				if(!fileManager.getFileFromThumbnail(resourceId).equals(file))			
+				{
+					resourceId= file.asURI().toString();
 				}
-				catch (InfosphereException e) {
-					logger.warn("The URI from the imageUrl "+resourceId+"cannot be retrevied",e);
-				}
-			}
-			if(image != null){
-
-				String guid = UriUtil.decodeUri(image.asURI().toString());
-				String encodedGuid = null;
-				try {
-					encodedGuid = URLEncoder.encode(guid, "UTF-8");
-					fileResource.put("imageUrl", "/dime-communications/api/dime/rest/" + said
-							+ "/resource/filemanager/" + encodedGuid);
-				} catch (UnsupportedEncodingException e) {
-					logger.warn("The Encoding is not suported for "+resourceId,e);
-				}
+					String guid = UriUtil.decodeUri(resourceId);
+					String encodedGuid = null;
+					try {
+						encodedGuid = URLEncoder.encode(guid, "UTF-8");
+						fileResource.put("imageUrl", "/dime-communications/api/dime/rest/" + said
+								+ "/resource/filemanager/" + encodedGuid);
+					} catch (UnsupportedEncodingException e) {
+						logger.warn("The Encoding is not suported for "+resourceId,e);
+					}
+				}catch (ClassCastException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (InfosphereException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		}
 		else{logger.info("File "+file.asURI().toString()+"has no imageURL");}

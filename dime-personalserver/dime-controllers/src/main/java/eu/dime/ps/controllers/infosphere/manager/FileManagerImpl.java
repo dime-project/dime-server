@@ -1,16 +1,16 @@
 /*
-* Copyright 2013 by the digital.me project (http://www.dime-project.eu).
-*
-* Licensed under the EUPL, Version 1.1 only (the "Licence");
-* You may not use this work except in compliance with the Licence.
-* You may obtain a copy of the Licence at:
-*
-* http://joinup.ec.europa.eu/software/page/eupl/licence-eupl
-*
-* Unless required by applicable law or agreed to in writing, software distributed under the Licence is distributed on an "AS IS" basis,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-* See the Licence for the specific language governing permissions and limitations under the Licence.
-*/
+ * Copyright 2013 by the digital.me project (http://www.dime-project.eu).
+ *
+ * Licensed under the EUPL, Version 1.1 only (the "Licence");
+ * You may not use this work except in compliance with the Licence.
+ * You may obtain a copy of the Licence at:
+ *
+ * http://joinup.ec.europa.eu/software/page/eupl/licence-eupl
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the Licence is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the Licence for the specific language governing permissions and limitations under the Licence.
+ */
 
 package eu.dime.ps.controllers.infosphere.manager;
 
@@ -68,6 +68,7 @@ import eu.dime.ps.semantic.model.NFOFactory;
 import eu.dime.ps.semantic.model.nao.Symbol;
 import eu.dime.ps.semantic.model.nfo.FileDataObject;
 import eu.dime.ps.semantic.model.pimo.Person;
+import eu.dime.ps.semantic.model.pimo.PersonGroup;
 import eu.dime.ps.semantic.query.Query;
 import eu.dime.ps.semantic.query.impl.BasicQuery;
 import eu.dime.ps.semantic.rdf.ResourceStore;
@@ -90,16 +91,17 @@ import eu.dime.ps.storage.datastore.impl.DataStoreProvider;
  * @author Marcel Heupel
  */
 public class FileManagerImpl extends InfoSphereManagerBase<FileDataObject> implements FileManager {
-	
+
 	private static final Logger logger = LoggerFactory.getLogger(FileManagerImpl.class);
 	
-	public static final int DEFAULT_WIDTH = 200; // in pixels
+	public static final int DEFAULT_WIDTH = 200;
 	
+
 	private FileDataMining fileDataMining;
-	
+
 	@Autowired
 	private DataStoreProvider dataStoreProvider;
-	
+
 	private final NFOFactory nfoFactory;
 	private final NAOFactory naoFactory;
 
@@ -108,13 +110,13 @@ public class FileManagerImpl extends InfoSphereManagerBase<FileDataObject> imple
 		this.nfoFactory = modelFactory.getNFOFactory();
 		this.naoFactory = modelFactory.getNAOFactory();
 	}
-	
+
 	public void setFileDataMining(FileDataMining fileDataMining) {
 		this.fileDataMining = fileDataMining;
 	}
-	
+
 	protected DataStore getDataStore() {
-        return dataStoreProvider.getTenantStore(TenantHelper.getCurrentTenantId().longValue());
+		return dataStoreProvider.getTenantStore(TenantHelper.getCurrentTenantId().longValue());
 	}
 
 	@Override
@@ -157,7 +159,7 @@ public class FileManagerImpl extends InfoSphereManagerBase<FileDataObject> imple
 		ResourceStore resourceStore = getResourceStore();
 		PimoService pimoService = getPimoService();
 		URI me = pimoService.getUserUri();
-		
+
 		Query<FileDataObject> query = resourceStore
 				.find(FileDataObject.class)
 				.distinct()
@@ -183,14 +185,14 @@ public class FileManagerImpl extends InfoSphereManagerBase<FileDataObject> imple
 				.where(NSO.sharedBy).is(new URIImpl(personId))
 				.results();
 	}
-	
+
 	@Override
 	public Collection<FileDataObject> getAllByCreator(Person creator)
 			throws InfosphereException {	
 		return getAllByCreator(creator, new ArrayList<URI>(0));
 	}
-	
-	
+
+
 	@Override
 	public Collection<FileDataObject> getAllByCreator(Person creator, List<URI> properties)
 			throws InfosphereException {	
@@ -201,13 +203,13 @@ public class FileManagerImpl extends InfoSphereManagerBase<FileDataObject> imple
 				.where(NAO.creator).is(creator.asResource())
 				.results();	 
 	}
-	
+
 
 	@Override
 	public FileDataObject get(String fileId) throws InfosphereException {
 		return get(fileId, new ArrayList<URI>(0));
 	}
-	
+
 	@Override
 	public FileDataObject get(String fileId, List<URI> properties) throws InfosphereException {
 		ResourceStore resourceStore = getResourceStore();
@@ -221,8 +223,8 @@ public class FileManagerImpl extends InfoSphereManagerBase<FileDataObject> imple
 
 	@Override
 	public InputStream getBinaryStream(String fileUri) throws InfosphereException {
-//		if (!resourceStore.exists(fileUri))
-//			throw new InfosphereException(fileUri+" was not found in the resource store.");
+		//		if (!resourceStore.exists(fileUri))
+		//			throw new InfosphereException(fileUri+" was not found in the resource store.");
 		try {
 			return getDataStore().get(fileUri);
 		} catch (FileNotFoundException e) {
@@ -258,13 +260,13 @@ public class FileManagerImpl extends InfoSphereManagerBase<FileDataObject> imple
 	 */
 	@Override
 	public FileDataObject add(String fileUri, String fileName, InputStream inputStream)
-		throws IOException, InfosphereException {
+			throws IOException, InfosphereException {
 		FileDataObject fdo = nfoFactory.createFileDataObject(fileUri);
 		fdo.setPrefLabel(fileName);
 		fdo.setFileName(fileName);
 		return this.add(fdo, inputStream);
 	}
-	
+
 	/**
 	 * 
 	 * @param inputStream
@@ -276,7 +278,7 @@ public class FileManagerImpl extends InfoSphereManagerBase<FileDataObject> imple
 	public FileDataObject add(InputStream inputStream) throws IOException, InfosphereException {
 		return this.add(nfoFactory.createFileDataObject(), inputStream);
 	}
-	
+
 	/**
 	 * 
 	 * @param fdo
@@ -290,12 +292,12 @@ public class FileManagerImpl extends InfoSphereManagerBase<FileDataObject> imple
 			throws IOException, InfosphereException {
 
 		ResourceStore resourceStore = getResourceStore();
-		
+
 		// this is a reusable input stream, but it was throwing 'marking not supported'
 		// in some systems, so instead write stream to a temp file and create a new 
 		// input stream each time
-//		inputStream = new ResetOnCloseInputStream(inputStream);
-		
+		//		inputStream = new ResetOnCloseInputStream(inputStream);
+
 		// writes stream to temporary file and calculate its checksum/hash
 		File file = writeToTempFile(inputStream);
 		try {
@@ -334,13 +336,13 @@ public class FileManagerImpl extends InfoSphereManagerBase<FileDataObject> imple
 	@Override
 	public FileDataObject update(FileDataObject fdo, InputStream inputStream)
 			throws IOException, InfosphereException {
-		
+
 		ResourceStore resourceStore = getResourceStore();
 
 		// this is a reusable input stream, but it was throwing 'marking not supported'
 		// in some systems, so instead write stream to a temp file and create a new 
 		// input stream each time
-//		inputStream = new ResetOnCloseInputStream(inputStream);
+		//		inputStream = new ResetOnCloseInputStream(inputStream);
 
 		// writes stream to temporary file and calculate its checksum/hash
 		File file = writeToTempFile(inputStream);
@@ -371,7 +373,7 @@ public class FileManagerImpl extends InfoSphereManagerBase<FileDataObject> imple
 			if (thumbnail != null) {
 				getDataStore().delete(thumbnail.toString());
 			}
-			
+
 			// removes file
 			resourceStore.remove(new URIImpl(fileUri));
 			getDataStore().delete(fileUri);
@@ -406,22 +408,22 @@ public class FileManagerImpl extends InfoSphereManagerBase<FileDataObject> imple
 	 */
 	private String extractMetadata(Model fileModel, URI fileUri, File file)
 			throws DataMiningException, IOException, InfosphereException {
-		
+
 		TripleStore tripleStore = getTripleStore();
-		
+
 		// extract metadata from the binary contents of the file
 		Model extracted = fileDataMining.extractFromContent(fileUri, file);
-		
+
 		// if extracted metadata contains a property X, the metadata for that
 		// property X is removed from the given RDF in fileModel;
 		// in other words, extracted metadata overrides given data in fileModel 
 		ClosableIterator<Statement> statements = extracted.findStatements(fileUri, Variable.ANY, Variable.ANY);
 		while (statements.hasNext()) {
 			URI predicate = statements.next().getPredicate();
-			
+
 			// remove the triples for the given predicate
 			fileModel.removeStatements(fileUri, predicate, Variable.ANY);
-			
+
 			// remove the triples all predicate's subproperties
 			ClosableIterator<Statement> it = tripleStore.findStatements(Variable.ANY, Variable.ANY, RDFS.subPropertyOf, predicate);
 			while (it.hasNext()) {
@@ -447,7 +449,7 @@ public class FileManagerImpl extends InfoSphereManagerBase<FileDataObject> imple
 		} else {
 			logger.warn("No hash value found for file "+fileUri);
 		}
-			
+
 		return hash;
 	}
 
@@ -461,7 +463,7 @@ public class FileManagerImpl extends InfoSphereManagerBase<FileDataObject> imple
 		try {
 			mimeType = ModelUtils.findObject(fdo.getModel(), fdo.asResource(), NIE.mimeType).asLiteral().getValue();
 			format = ImageUtils.getFormatForMimetype(mimeType);
-			
+
 			if (format == null) {
 				logger.debug("Cannot create thumbnail, mimeType "+mimeType+" is not supported.");
 			} else {
@@ -469,7 +471,7 @@ public class FileManagerImpl extends InfoSphereManagerBase<FileDataObject> imple
 
 				// create thumbnail image
 				BufferedImage image = ImageUtils.createThumbnail(inputStream, DEFAULT_WIDTH);
-				
+
 				// dataStore request a input stream, but ImageIO only writes
 				// an Image to an output stream, which is passed later on
 				// to the required input stream
@@ -482,15 +484,16 @@ public class FileManagerImpl extends InfoSphereManagerBase<FileDataObject> imple
 				// saves thumbnail file
 				getDataStore().addFile(hash, thumbnail.toString(), binaryStream);
 				binaryStream.close();
+
 				// sets thumbnail as prefSymbol
 				fdo.setPrefSymbol(thumbnail);
 			}
-			
+
 		} catch (Exception e) {
 			logger.error("cannot create thumbnail for file "+fdo.asResource(), e);
 		}
 	}
-	
+
 	/**
 	 * It updates the thumbnail as nao:prefSymbol of a given file.
 	 */
@@ -501,7 +504,7 @@ public class FileManagerImpl extends InfoSphereManagerBase<FileDataObject> imple
 		try {
 			mimeType = ModelUtils.findObject(fdo.getModel(), fdo.asResource(), NIE.mimeType).asLiteral().getValue();
 			format = ImageUtils.getFormatForMimetype(mimeType);
-			
+
 			if (format == null) {
 				logger.debug("Cannot create thumbnail, mimeType "+mimeType+" is not supported.");
 			} else {
@@ -512,7 +515,7 @@ public class FileManagerImpl extends InfoSphereManagerBase<FileDataObject> imple
 				if (thumbnail == null) {
 					thumbnail = naoFactory.createSymbol();
 				}
-				
+
 				// create thumbnail image
 				BufferedImage image = ImageUtils.createThumbnail(inputStream, DEFAULT_WIDTH);
 
@@ -533,7 +536,7 @@ public class FileManagerImpl extends InfoSphereManagerBase<FileDataObject> imple
 			logger.error("cannot create thumbnail for file "+fdo.asResource(), e);
 		} 
 	}
-	
+
 	/**
 	 * This class allows the reutilization of an InputStream,
 	 * by forcing a reset when close() is called.
@@ -547,7 +550,7 @@ public class FileManagerImpl extends InfoSphereManagerBase<FileDataObject> imple
 			if (!anInputStream.markSupported()) {
 				throw new IllegalArgumentException("marking not supported");
 			}
-			
+
 			anInputStream.mark(1 << 24); // magic constant: BEWARE
 			decorated = anInputStream;
 		}
@@ -562,5 +565,15 @@ public class FileManagerImpl extends InfoSphereManagerBase<FileDataObject> imple
 			return decorated.read();
 		}
 	}
-	
+
+	@Override
+	public FileDataObject getFileFromThumbnail(String resourceID) throws InfosphereException {		
+		ResourceStore resourceStore = getResourceStore();
+		return resourceStore.find(FileDataObject.class)
+				.distinct()				
+				.where(RDF.type).isNot(NFO.Folder) // to filter out nfo:Folders
+				.where(NAO.prefSymbol).is(new URIImpl(resourceID))
+				.first();
+
+	}
 }

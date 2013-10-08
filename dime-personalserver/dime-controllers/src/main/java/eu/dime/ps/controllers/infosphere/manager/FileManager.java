@@ -68,4 +68,8 @@ public interface FileManager extends InfoSphereManager<FileDataObject> {
 	Collection<FileDataObject> getAllByPerson(URI personId, List<URI> properties)
 			throws InfosphereException;
 
+	FileDataObject getFileFromThumbnail(String resourceID) throws InfosphereException;
+
+	
+
 }
