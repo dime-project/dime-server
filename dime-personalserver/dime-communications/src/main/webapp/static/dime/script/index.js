@@ -2449,7 +2449,7 @@ DimeView = {
 
         var loginbaselink=Dime.ps_configuration.getRealBasicUrlString()
         +'/dime-communications/web/access/';
-        var githubLink='https://github.com/dime-project/meta/';
+        var githubLink='http://dime-project.github.io/';
         var loginFromServerSettings=serverInfo.baseUrl+'/access/login';
         var questionaireLink = Dime.ps_configuration.getQuestionairePath();
 
@@ -2487,8 +2487,8 @@ DimeView = {
                     .addHrefOpeningInNewWindow('http://dimetrials.bdigital.org:8080/dime','dimetrials.bdigital.org','orangeBubbleLink')
                 )
                 .append($('<p/>')
-                    .append($('<span/>').text('di.me open source: comming soon'))
-                    //.addHrefOpeningInNewWindow(githubLink,githubLink,'orangeBubbleLink')
+                    .append($('<span/>').text('di.me open source: '))
+                    .addHrefOpeningInNewWindow(githubLink,githubLink,'orangeBubbleLink')
                 )
                 .append($('<p/>')
                     .append($('<span/>').text('The research project:'))
