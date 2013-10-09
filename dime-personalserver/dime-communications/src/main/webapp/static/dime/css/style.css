@@ -2934,40 +2934,55 @@ input[type="text"].DimeDetailDialogPAValueListItemValue{
     border-bottom: 2px solid #843559;
 }
 
-/* -------------------------- */
-/*
-.greenPTColor {
-    border-bottom: 5px solid #14a301;
+/* MergeDialog */
+
+.mergeDlg {
+    width: 650px;
+    left: 40%;
+    overflow-x: hidden;
 }
 
-.redPTColor {
-    border-bottom: 5px solid #fe0303;
+.modalDlg > .modal-body {
+    height: 650px;
+    width: 99%;
 }
 
-.lightgreenPTColor {
-    border-bottom: 5px solid #0ce201;
+.twoPersonElementContainerSource{
+    width: 253px;
+    min-height: 100%;
+    margin-right: 20px;
+    float: left;
+    
+    border: 1px solid #C0C0C0;
+    border-radius: 5px;
+    background-color: #F9F8F8;
 }
 
-.orangePTColor {
-    border-bottom: 5px solid #f69c00;
+.twoPersonElementContainerTarget {
+    width: 253px;
+    min-height: 100%;
+    float: right;
+    
+    border: 1px solid #C0C0C0;
+    border-radius: 5px;
+    background-color: #F9F8F8;
 }
 
-.greenPTColorThin {
-    border-bottom: 1px solid #14a301;
+.twoPersonElementHeader:hover {
+    background-color: #9CC6E6;
 }
 
-.redPTColorThin {
-    border-bottom: 1px solid #fe0303;
+.twoPersonElementHeader {
+    width: 97%;
+    float:left;
+    background-color: #5A9DD5;
+    color: white;
+    border-radius: 5px;
+    margin: 2px;
+    padding: 2px;
 }
 
-.lightgreenPTColorThin {
-    border-bottom: 1px solid #0ce201;
-}
-
-.orangePTColorThin {
-    border-bottom: 1px solid #f69c00;
-}
-*/
+/* ShareDialog */
 
 .shareDlg {
     width: 850px;

@@ -626,6 +626,12 @@ DimeView = {
             clickFunction = function(){
                 //TODO fix
                 window.alert("This function is not supported in the research prototype.");
+                
+                /* work in progress
+                var dialog = new Dime.MergeDialog();
+                dialog.setMergePersons(entry.unEntry);
+                dialog.show();
+                */
             };  
         }
         deployFunction(unValues, clickFunction);
@@ -1956,6 +1962,7 @@ DimeView = {
         if (groupType===Dime.psMap.TYPE.GROUP){
             dropDownUl                
                 .append(createMenuItem("Merge persons ..", function(event, jElement, selectedItems){
+                    //TODO
                     window.alert("Merging of persons is currently only supported by the mobile app!");
                 })); 
         }
@@ -1984,7 +1991,7 @@ DimeView = {
                         DimeView.viewManager.updateView(Dime.psMap.TYPE.PLACE, DimeViewStatus.GROUP_CONTAINER_VIEW, true);
                         Dime.Navigation.updateCurrentPlace();
                     };
-                    var fullPlace = []
+                    var fullPlace = [];
                     
                     var handlePlaceInformation=function(placeLocation){
                         if (!placeLocation.connected){
@@ -2645,7 +2652,7 @@ Dime.Settings = {
     editServiceAccount: function(event, element, item){
         var serviceAdapterCallback=function(serviceAdapter){
             var dialog = new Dime.ConfigurationDialog(this, this.configurationSubmitHandler);
-            dialog.show(serviceAdapter.name,serviceAdapter.description, item, false);
+            dialog.show(serviceAdapter.name, serviceAdapter.description, item, false);
         };
 
         Dime.Settings.getAdapterByGUID(item.serviceadapterguid, serviceAdapterCallback);

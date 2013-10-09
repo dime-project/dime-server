@@ -2340,6 +2340,32 @@ Dime.psHelper = {
         return "";
 
     },
+    
+    getPersonAndProfiles: function(entryId, callback, callerRef){
+        
+        var result = {
+            person: null,
+            profiles:[],
+            profileattributes:[]            
+        };
+        
+        var handlePAs = function(response){
+            result.profileattributes = response;
+            callback.call(callerRef, result);
+        };
+
+        var handleProfiles = function(response){
+            result.profiles = response;
+            Dime.REST.getAll(Dime.psMap.TYPE.PROFILEATTRIBUTE, handlePAs, entryId, this);
+        };
+
+        var handlePerson = function(response){
+            result.person = response;
+            Dime.REST.getAll(Dime.psMap.TYPE.PROFILE, handleProfiles, entryId, this);
+        };
+        
+        Dime.REST.getAll(Dime.psMap.TYPE.PROFILE, handlePerson, entryId, this);
+    },
 
     /**
      * helper function to retieve full items from stubItems
@@ -3632,8 +3658,7 @@ Dime.BasicDialog = function(title, caption, dialogId, bodyId, body, cancelHandle
     
     $("#lightBoxBlack").fadeIn(300);
     
-    //TODO for each dialog -> removeSelectionDialog()?
-    //add ESC(27)-key-event on dialogs to return
+    //remove the dialog via ESC
     var thisDialog = this.dialog;
     $(document).keyup(thisDialog, function(e) {
         if (e.keyCode == 27) {
@@ -4943,8 +4968,7 @@ Dime.ShareDialog = function(){
             
     this.initBody();
     
-    //TODO for each dialog -> removeSelectionDialog()?
-    //add ESC(27)-key-event on dialogs to return
+    //remove the dialog via ESC
     var thisDialog = this.dialog;
     $(document).keyup(thisDialog, function(e) {
         if (e.keyCode == 27) {
@@ -4974,7 +4998,6 @@ Dime.ShareDialog.prototype={
     cancelHandler:function(){
         this.removeDialog();  
         this.resultFunction.call(this.handlerSelf, false);
-        
     },
     
     okHandler: function(){
@@ -4985,7 +5008,6 @@ Dime.ShareDialog.prototype={
 
         this.removeDialog();
         this.resultFunction.call(this.handlerSelf, true, this.selectedProfile, this.selectedReceivers, this.selectedItems);
-
     },
     
     checkValidity: function(){
@@ -5252,7 +5274,6 @@ Dime.ShareDialog.prototype={
     
     initBody: function(){
         
-        
         this.profile=this.getProfile();
        
         this.receiversLabel=$('<span class="label">Recipients (0)</span>');
@@ -5337,7 +5358,6 @@ Dime.ConfigurationDialog.prototype = {
 
     show: function(adapterName, adapterDescription, serviceAccount, isNewAccount) {
 
-        console.log(serviceAccount);
         var inputs = [];
         this.modal = document.createElement("div");
         this.modal.setAttribute("id", "ConfigServiceWrapperID");
@@ -5584,15 +5604,118 @@ Dime.ConfigurationDialog.prototype = {
     }
 };
 
+Dime.MergeDialog = function(){
+    
+    this.mergePersons = [];
+    
+    this.dialogID = "MergeDialog_" + JSTool.randomGUID();
+    this.bodyID = this.dialogID + "_body";
+    
+    this.dialog = $("<div></div>")
+        .addClass("modal").addClass("modal")
+        .attr("id", this.dialogID)
+        .attr("role", "dialog")
+        .attr("aria-labelledby", "Merge Dialog");
+
+    this.body = $('<div class="modal-body" id="' + this.bodyID + '" ></div>');
+    
+    this.dialog
+        //header
+        .append(
+            $('<div></div>').addClass("modal-header")
+                .append($('<button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>')
+                    .clickExt(this, this.cancelHandler))
+                .append($('<h3 id="myModalLabel">Merge these persons</h3>\n')))
+        //body
+        .append(this.body)
+        //footer
+        .append(
+            $('<div></div>').addClass("modal-footer")
+                .append($('<button class="YellowMenuButton" data-dismiss="modal" aria-hidden="true">Dismiss</button>')
+                    .clickExt(this, this.cancelHandler))
+                .append($('<button class="YellowMenuButton">Accept</button>')
+                    .clickExt(this, this.okHandler)));
+    
+    var thisDialog = this.dialog;
+    $(document).keyup(thisDialog, function(e) {
+        if (e.keyCode === 27) {
+            thisDialog.remove();
+            $("#lightBoxBlack").fadeOut(300);
+            $('body').removeClass('stop-scrolling');
+        }
+        $(document).unbind("keyup");
+    });
+    
+};
+
+Dime.MergeDialog.prototype = {
+    
+    removeDialog:function(){
+        var dialog = $("#"+this.dialogID);
+        if (dialog){
+            $("#lightBoxBlack").fadeOut(300);
+            $(dialog).remove();
+            if (!this.bodyWasHidden){
+                $('body').removeClass('stop-scrolling');
+            }
+        }
+    },
+    
+    cancelHandler: function(){
+        this.removeDialog();  
+        //this.resultFunction.call(this.handlerSelf);
+    },
+    
+    okHandler: function(){
+        this.removeDialog();
+        //this.resultFunction.call(this.handlerSelf);
+    },
+            
+    setMergePersons: function(mergePersons){
+        this.mergePersons = mergePersons;
+    },
+    
+    initBody: function(){
+        //TODO: check two/multiple
+        var dialogRef = this;
+        Dime.psHelper.getPersonAndProfiles(this.mergePersons.sourceId, function(response){
+            dialogRef.createTwoPersonElement(response, true);
+        }, this);
+        
+        Dime.psHelper.getPersonAndProfiles(this.mergePersons.targetId, function(response){
+            dialogRef.createTwoPersonElement(response, false);
+        }, this);
+        
+    },
+            
+    show: function(handlerSelf, callback){
+        this.handlerSelf = handlerSelf;
+        this.resultFunction = callback;
+        
+        this.initBody();
+        $("#lightBoxBlack").fadeIn(300);
+
+        this.bodyWasHidden = $('body').hasClass('stop-scrolling');
+        $('body').append(this.dialog).addClass('stop-scrolling');
+    },
+            
+    createTwoPersonElement: function(entry, isSource){
+        var jElement = $("<div></div>")
+            .addClass(isSource?"twoPersonElementContainerSource":"twoPersonElementContainerTarget")
+            //header
+            .append($("<div></div>").addClass("twoPersonElementHeader").append(entry.person[0].name));
+    
+        this.body.append(jElement);
+    }
+      
+};
+
 //---------------------------------------------
 //#############################################
 //  Dime.Dialog  general functions to show the various dialogs
 //#############################################
 //
 Dime.Dialog={
-    
-    
-   
     
     showImageSelectionList: function(callbackHandler){
         
