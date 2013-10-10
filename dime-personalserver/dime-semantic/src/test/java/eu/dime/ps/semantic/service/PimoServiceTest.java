@@ -217,4 +217,24 @@ public class PimoServiceTest extends SemanticTest {
 		occs.close();
 	}
 	
+	@Test
+	public void testMergePreserveMasterTrustLevel() throws Exception {
+		PersonContact c1 = buildProfile("Ismael Rivera", "irivera@email.com", "123");
+		PersonContact c2 = buildProfile("ismriv", "ismriv@email.com", "000");
+		Person p1 = buildPerson("Ismael Rivera");
+		p1.setGroundingOccurrence(c1);
+		p1.setTrustLevel(0.7);
+		Person p2 = buildPerson("ismriv");
+		p2.setGroundingOccurrence(c2);
+		p2.setTrustLevel(0.55);
+
+		resourceStore.createOrUpdate(pimoService.getPimoUri(), c1);
+		resourceStore.createOrUpdate(pimoService.getPimoUri(), c2);
+		pimoService.createOrUpdate(p1);
+		pimoService.createOrUpdate(p2);
+		
+		Person merged = pimoService.merge(p1.asURI(), p2.asURI());
+		assertEquals(0.7, merged.getAllTrustLevel().next().doubleValue(), 0.01);
+	}
+	
 }

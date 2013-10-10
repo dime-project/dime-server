@@ -1991,11 +1991,11 @@ public class PimoService implements TaggingService, Queryable {
 	
 	public Person merge(URI master, URI... targets) throws NotFoundException {
 		logger.debug("Merging "+master+" with "+Arrays.toString(targets));
+		
 		if (master == null || targets.length < 1) {
 			throw new IllegalArgumentException("Cannot perform merge: 'master' must not be null, " +
 					"and at least 1 person target must be passed.");
 		} else {
-
 			// check every person really exist
 			for (URI target : targets) {
 				if (!isTypedAs(target, PIMO.Person)) {
@@ -2004,35 +2004,6 @@ public class PimoService implements TaggingService, Queryable {
 				}
 			}
 
-//			// each pimo:Person has one nco:PersonContact as groundingOccurrence
-//			// all need to be merged into one grounding occurrence
-//			Node masterOccurrence = ModelUtils.findObject(tripleStore, master, PIMO.groundingOccurrence);
-//			List<URI> targetOccurrences = new ArrayList<URI>();
-//			Node occ = null;
-//			if (masterOccurrence != null) {
-//				// collect other people grounding occurrences
-//				for (URI target : targets) {
-//					occ = ModelUtils.findObject(tripleStore, target, PIMO.groundingOccurrence);
-//					if (occ != null) {
-//						targetOccurrences.add(occ.asURI());
-//					}
-//				}
-//
-//				for (URI targetOccurrence : targetOccurrences) {
-//					// removes the statements from 'target' resource which properties
-//					// are restricted by cardinality to 1, and the 'master' already
-//					// has a value for that property
-//					List<URI> propertiesToRemove = getPropertiesWithMaxCardinality(master, 1);
-//					for (URI property : propertiesToRemove) {
-//						tripleStore.removeStatements(Variable.ANY, targetOccurrence, property, Variable.ANY);
-//					}
-//					
-//					// replace all grounding occurrences for the URI of the first one found
-//					logger.debug("replacing nco:PersonContact "+targetOccurrence+" by "+masterOccurrence);
-//					tripleStore.replaceUri(targetOccurrence, masterOccurrence.asURI());
-//				}
-//			}
-			
 			// merge persons 1..n with 'master' person
 			for (URI target : targets) {
 				// removes the statements from 'target' resource which properties
@@ -2041,6 +2012,10 @@ public class PimoService implements TaggingService, Queryable {
 				List<URI> propertiesToRemove = getPropertiesWithMaxCardinality(master, 1);
 				for (URI property : propertiesToRemove) {
 					tripleStore.removeStatements(Variable.ANY, target, property, Variable.ANY);
+				
+					// keep always nao:trustLevel of master
+					// TODO deal with nao:directTrust and nao:networkTrust
+					tripleStore.removeStatements(Variable.ANY, target, NAO.trustLevel, Variable.ANY);
 				}
 				
 				// replacing all references of 'target' person for 'master' person
