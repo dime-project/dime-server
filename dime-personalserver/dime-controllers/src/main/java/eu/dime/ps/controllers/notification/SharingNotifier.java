@@ -37,16 +37,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import eu.dime.commons.notifications.DimeExternalNotification;
 import eu.dime.jfix.util.Arrays;
-
-
-
 import eu.dime.ps.controllers.eventlogger.exception.EventLoggerException;
 import eu.dime.ps.controllers.eventlogger.manager.LogEventManager;
 import eu.dime.ps.controllers.notifier.NotifierManager;
 import eu.dime.ps.controllers.notifier.exception.NotifierException;
 import eu.dime.ps.controllers.util.TenantHelper;
 import eu.dime.ps.dto.ShareableType;
-import eu.dime.ps.dto.Type;
 import eu.dime.ps.gateway.ServiceGateway;
 import eu.dime.ps.gateway.exception.AttributeNotSupportedException;
 import eu.dime.ps.gateway.exception.InvalidDataException;
@@ -321,7 +317,8 @@ public class SharingNotifier implements BroadcastReceiver {
 
 	private void sendNotifications(Connection connection, PrivacyPreference preference, 
 			org.ontoware.rdfreactor.schema.rdfs.Resource sharedItem, boolean notifyAll,
-			Tenant localTenant) throws RepositoryException {
+			Tenant tenant) throws RepositoryException {
+		ResourceStore resourceStore = connection.getResourceStore();
 		PimoService pimoService = connection.getPimoService();
 		PrivacyPreferenceService ppoService = connection.getPrivacyPreferenceService();
 
@@ -349,6 +346,20 @@ public class SharingNotifier implements BroadcastReceiver {
 					// notify all people included in the privacy preference
 					// account URIs of the recipients (specific people accounts to receive the shared item)
 					Collection<Account> recipients = ppoService.getAllRecipients(accessSpace);
+					
+					// for profile cards, also retrieve account recipients from other privacy preferences
+					// access spaces shared through the same sender account
+					if (ShareableType.PRIVACY_PREFERENCE_PROFILECARD.equals(itemType)) {
+						Collection<AccessSpace> stAccessSpaces =
+								resourceStore.find(AccessSpace.class)
+									.distinct()
+									.where(Query.X, PPO.hasAccessSpace).is(Query.Y)
+									.where(Query.Y, NSO.sharedThrough).is(sender)
+									.results();
+						for (AccessSpace stAccessSpace : stAccessSpaces) {
+							recipients.addAll(ppoService.getAllRecipients(stAccessSpace));
+						}
+					}
 
 					// sends notifications to all recipients
 					for (Account recipient : recipients) {
@@ -382,7 +393,7 @@ public class SharingNotifier implements BroadcastReceiver {
 					
 					//store the operation on the server logs data
 					try {
-						logEventManager.setLog("share", itemType.toString(),localTenant);
+						logEventManager.setLog("share", itemType.toString(),tenant);
 					} catch (EventLoggerException e) {
 						logger.error("Share operation log could not be stored",e);
 					}
@@ -402,7 +413,7 @@ public class SharingNotifier implements BroadcastReceiver {
 						}
 
 						try {
-							ServiceAdapter serviceAdapter = serviceGateway.getServiceAdapter(account.asURI().toString(), localTenant);
+							ServiceAdapter serviceAdapter = serviceGateway.getServiceAdapter(account.asURI().toString(), tenant);
 							if (sharedItem instanceof PersonContact) {
 								serviceAdapter.set(AttributeMap.PROFILE_MYDETAILS, sharedItem);
 							} else if (sharedItem instanceof LivePost) {
