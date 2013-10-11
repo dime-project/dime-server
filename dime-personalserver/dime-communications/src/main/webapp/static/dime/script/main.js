@@ -998,8 +998,8 @@ Dime.privacyTrust={
     
     
     hasPrivTrust: function(item){
-        return (item.hasOwnProperty("nao:privacyLevel")) 
-        || (item.hasOwnProperty("nao:trustLevel"));
+        return (item.hasOwnProperty("nao:privacyLevel") && (!jQuery.isArray(item['nao:privacyLevel'])))
+        || (item.hasOwnProperty("nao:trustLevel") && (!jQuery.isArray(item['nao:trustLevel'])));
     },
     
     isPrivacy: function(item){
@@ -6046,6 +6046,7 @@ Dime.Dialog.Toast.prototype={
         dropDownElements.push(new BSTool.DropDownEntry(this, createButtonLabel(this), updatePrivTrust));
     });
     var currPrivTrust = Dime.privacyTrust.getClassAndCaptionForPrivacyTrustFromItem(item);
+
 
 
     var result=$('<div/>')
