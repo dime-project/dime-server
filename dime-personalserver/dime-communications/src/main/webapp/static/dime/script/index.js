@@ -522,7 +522,7 @@ DimeView = {
         
         var jGroupItem=$('<div/>').addClass(groupClass).append($('<div/>')
                 .append(
-                    $('<img/>').attr('src', Dime.psHelper.guessLinkURL(entry.imageUrl)))
+                    Dime.psHelper.getImageUrlJImageFromEntry(entry))
                 .append(
                     DimeView.createMark(entry, "", true)
                 )
@@ -663,10 +663,10 @@ DimeView = {
                 jChildItem.click(clickFunction);
                 
                 //img
-                jChildItem.append($('<img/>').attr('src',Dime.psHelper.guessLinkURL(entry.imageUrl)));
+                jChildItem.append(Dime.psHelper.getImageUrlJImageFromEntry(entry));
 
                 jChildItem
-                    .append($('<img/>').attr('src', unValues.imageUrl).addClass('childItemNotifElemType'))
+                    .append(Dime.psHelper.getImageUrlJImageFromEntry(unValues.imageUrl, Dime.psMap.TYPE.USERNOTIFICATION).addClass('childItemNotifElemType'))
                     .append($('<div/>').addClass('childItemNotifDate').text(JSTool.millisToDateString(entry.created)))
                     .append('<h4 style="font-size: 12px">'+ unValues.caption + '</h4>')                    
                     .append($('<div/>').addClass('childItemNotifOperation').append('<span>'+ unValues.operationName + '</span>'))
@@ -705,7 +705,7 @@ DimeView = {
         }
         
         //replace resource.png (no-image) with default
-        jChildItem.append('<img src="'+ Dime.psHelper.guessLinkURL(entry.imageUrl.replace("resource.png","place_default.png"))+ '" />');
+        jChildItem.append(Dime.psHelper.getImageUrlJImageFromEntry(entry));
         jChildItem.append(DimeView.createMark(entry, "", false));
         jChildItem.append('<h4 title="' + entry.name + '"><b>'+ DimeView.getShortNameWithLength(entry.name, 40) +  '</b></h4>');
         if(fav){
@@ -768,7 +768,7 @@ DimeView = {
                 DimeView.createMark(entry, "", false)
             )
             .append(
-                $('<div/>').append($('<img/>').attr('src',Dime.psHelper.guessLinkURL(entry.imageUrl)))
+                $('<div/>').append(Dime.psHelper.getImageUrlJImageFromEntry(entry))
             )
             .append(
                 $('<div/>').addClass('situationTextBlock').append(
@@ -836,9 +836,11 @@ DimeView = {
         //innerChild
         //innerChild - img        
         if (entry.type===Dime.psMap.TYPE.PERSON){
-            jChildItem.append('<div class="wrapProfileImage" ><img src="'+ Dime.psHelper.guessLinkURL(entry.imageUrl)+ '" /></div>');
+            jChildItem.append($('<div/>').addClass('wrapProfileImage')
+                .append(Dime.psHelper.getImageUrlJImageFromEntry(entry))
+            )
         }else{
-            jChildItem.append('<img src="'+ Dime.psHelper.guessLinkURL(entry.imageUrl)+ '" />');
+            jChildItem.append(Dime.psHelper.getImageUrlJImageFromEntry(entry));
         }
         
         //innerChild - mark
@@ -1378,7 +1380,7 @@ DimeView = {
 
         var listIconElement=$('<div/>').addClass('listElementIcon');
         if (imageUrl){
-            listIconElement.append('<img src="' + imageUrl+ '"/>');
+            listIconElement.append(Dime.psHelper.getImageUrlJImage(imageUrl));
         }
         var listItem=$('<li/>').addClass('listElement');
         if (className){
@@ -1412,9 +1414,9 @@ DimeView = {
         $("#metaDataInformationHeader").text("Information");
 
         var informationViewContainer = DimeView.getMetaListContainer(DimeView.CONTAINER_ID_INFORMATION);  
-        
-        //informationViewContainer.append(DimeView.createMetaBarListItem(entry.name,"", entry.imageUrl));
-        informationViewContainer.append(DimeView.createMetaBarListItem(DimeView.getShortNameWithLength(entry.name, 35), "", entry.imageUrl));
+      
+        informationViewContainer.append(DimeView.createMetaBarListItem(
+            DimeView.getShortNameWithLength(entry.name, 35), "", entry.imageUrl));
         informationViewContainer.append(DimeView.createMetaBarListItem(
             "changed:", JSTool.millisToFormatString(entry.lastModified), null));
              
@@ -2113,7 +2115,7 @@ DimeView = {
                 $('<div></div>')
                     .addClass("currentPersonImage")
                     .append(
-                        $('<img></img>').attr("src", personEntry.imageUrl)
+                        Dime.psHelper.getImageUrlJImageFromEntry(personEntry)
                     )
             )
             .append(
@@ -2576,10 +2578,7 @@ Dime.Settings = {
         return $('<div title="' + item.name + '"></div>')
                 .addClass("wrapConnect")
                 .clickExt(Dime.Settings, Dime.Settings.editServiceAccount, item)
-                .append(
-                    $('<img></img>')                    
-                    .attr("src", Dime.psHelper.guessLinkURL(item.imageUrl))                    
-                   )
+                .append(Dime.psHelper.getImageUrlJImageFromEntry(item))
                 .append("<b>" + DimeView.getShortNameWithLength(item.name, 22) + "</b></br>")
                 .append(
                     $("<span></span>")
@@ -2618,8 +2617,9 @@ Dime.Settings = {
                     + adapters[i].guid + '">' + adapters[i].name.substring(0, 16) + '</a>')
                 //DimeView.getShortNameWithLength(adapters[i].name, 16)
                 .clickExt(this, Dime.Settings.dropdownOnClick, adapters[i])
-                .append('<img class="serviceAdapterIconDropdown" src="' + adapters[i].imageUrl + '" width="20px" align="middle" />')
-                );
+                .append(
+                    Dime.psHelper.getImageUrlJImageFromEntry(adapters[i]).attr('width','20px').attr('align','middle')
+                ));
             dropdownList.append(dropItem);
         }
 

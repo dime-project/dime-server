@@ -785,7 +785,7 @@ Dime.psMap.addToTypeMap(new Dime.PSMap(Dime.psMap.TYPE.EVENT, "calendar entry", 
 Dime.psMap.addToTypeMap(new Dime.PSMap(Dime.psMap.TYPE.SERVICEADAPTER, "service", 0, 0,  'resource.png', 'serviceadapter', YES, YES, 'services'));
 Dime.psMap.addToTypeMap(new Dime.PSMap(Dime.psMap.TYPE.DEVICE, "device", 0, 0,  'resource.png', 'device', NO, YES, 'devices'));
 Dime.psMap.addToTypeMap(new Dime.PSMap(Dime.psMap.TYPE.CONTEXT, "context", 0, 0, 'resource.png', 'context', NO, NO, 'context'));
-Dime.psMap.addToTypeMap(new Dime.PSMap(Dime.psMap.TYPE.PLACE, "place", 0, 0, 'resource.png', 'place', NO, YES, 'places'));
+Dime.psMap.addToTypeMap(new Dime.PSMap(Dime.psMap.TYPE.PLACE, "place", 0, 0, '"place_default.png', 'place', NO, YES, 'places'));
 Dime.psMap.addToTypeMap(new Dime.PSMap(Dime.psMap.TYPE.ACCOUNT, "account", 0, 0, 'resource.png', 'account', NO, YES, 'accounts'));
 Dime.psMap.addToTypeMap(new Dime.PSMap(Dime.psMap.TYPE.USERNOTIFICATION, "notification", 0, 0, 'notification.png', 'usernotification', NO, YES, 'notifications'));
 
@@ -1712,8 +1712,42 @@ Dime.psMap.KNOWN_PLACES={
 // --------------------------------------------
 
 Dime.psHelper = {
-    
-   
+
+    getImageUrlJImageFromEntry: function(entry){
+        Dime.psHelper.getImageUrlJImage(entry.imageUrl, entry.type);
+    },
+
+    getImageUrlJImage: function(imageUrl, type){
+        if (!imageUrl|| imageUrl.length===0 && type){
+            imageUrl=Dime.psHelper.getImageUrlForItemType(type);
+        }        
+        imageUrl = Dime.psHelper.guessLinkURL(imageUrl);
+
+        var image = $('<img/>').attr('src', imageUrl);
+
+        var handleError=function(){
+            image.attr('src',Dime.psHelper.getImageUrlForItemType(type));
+        };
+
+        image.onload(function(){
+           if ('naturalHeight' in this) {
+                if (this.naturalHeight + this.naturalWidth === 0) {
+                    handleError();
+                    return;
+                }
+            } else if (this.width + this.height == 0) {
+                handleError();
+                return;
+            }
+        });
+
+        image.onerror(function(){
+            handleError();
+        })
+
+        return image;
+
+    },
     
     getParentType: function(type){
         
@@ -3856,9 +3890,12 @@ Dime.SelectDialog.prototype = {
             var listItem = $("<li></li>").addClass("loadImageListItem");    
             
             if (items[i].imageUrl && items[i].imageUrl.length>0){
-                listItem.append( '<img class="loadImageListItemImage" src="'
-                    +Dime.psHelper.guessLinkURL(items[i].imageUrl)
-                    +'" alt="imageUrl image" height="50px" width="50px" />'
+                listItem.append(
+                    Dime.psHelper.getImageUrlJImageFromEntry(items[i])
+                    .addClass('loadImageListItemImage')
+                    .attr('alt','imageUrl image')
+                    .attr('height','50px')
+                    .attr('width','50px')
                     );
             }
             listItem.append(
@@ -4015,8 +4052,8 @@ Dime.DetailDialog.prototype = {
 
         var dialogRef = this;
 
-        var thumbNail= $('<img src="' + Dime.psHelper.guessLinkURL(item.imageUrl)
-            + '" height=15px" width="15px" ></img>').addClass("itemDetailPicImage");
+        var thumbNail= Dime.psHelper.getImageUrlJImageFromEntry(item).addClass('itemDetailPicImage')
+                .attr('height','15px').attr('width','15px');
 
         if (!isEditable){
             return thumbNail;
@@ -4025,8 +4062,8 @@ Dime.DetailDialog.prototype = {
         //add support for change picture
         var profilePic =$('<div></div>').attr('id', dialogRef.imageDetailPicId).addClass("hidden itemDetailPic")
             .append('<h1>Edit: Image</h1>')
-            .append('<img src="' + Dime.psHelper.guessLinkURL(item.imageUrl)
-                + '" class="itemDetailPicImageBig" alt="imageUrl image" height=100px" width="100px" ></img>')
+            .append(Dime.psHelper.getImageUrlJImageFromEntry(item).addClass('itemDetailPicImageBig')
+                        .attr('height','100px').attr('width','100px').attr('alt','imageUrl image'))
             .append('<h2>Select or upload a new icon:</h2>')
             .append(
                 $('<div class="itemDetailPicButtons"></div>')
@@ -4730,7 +4767,8 @@ Dime.DetailDialog.prototype = {
 
             var listIconElement=$('<div/>').addClass('listElementIcon');
             if (imageUrl){
-                listIconElement.append('<img src="' + imageUrl+ '"/>');
+                listIconElement.append(
+                    Dime.psHelper.getImageUrlJImage(imageUrl));
             }
             var listItem=$('<li/>').addClass('listElement');
             if (className){
@@ -5333,7 +5371,6 @@ Dime.ConfigurationDialog.prototype = {
         $(this.modal)
             .append(
                 $("<div></div>").addClass("ConfigServiceDescription")
-                //.append('<img src="' + serviceAccount.imageUrl + '" alt="service logo">')
                 .append("<b>" + adapterName + "</b></br>")
                 .append(adapterDescription)
                 .append(
@@ -5542,7 +5579,6 @@ Dime.ConfigurationDialog.prototype = {
         //service information and description
         .append(
             $("<div></div>").addClass("ConfigServiceDescription")
-            //.append('<img src="' + serviceAccount.imageUrl + '" alt="service logo">')
             .append("<b>" + adapterName + "</b></br>")
             .append(adapterDescription)
             //TODO: CSS
@@ -5961,7 +5997,7 @@ Dime.Dialog={
             var element = $('<div></div>')
             .addClass("shareDlgItem")
             .append(
-                $('<img/>').attr("src", Dime.psHelper.guessLinkURL(item.imageUrl))
+                Dime.psHelper.getImageUrlJImageFromEntry(item)
                 )
             .append(
                 $('<div>'+item.name+'</div>').addClass("shareDlgItemName").addClass(privTrustClass)
