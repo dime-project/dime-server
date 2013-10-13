@@ -1368,7 +1368,7 @@ DimeView = {
         window.alert(message);
     },
     
-    createMetaBarListItem: function(name, value, imageUrl, className){
+    createMetaBarListItem: function(name, value, type, imageUrl, className){
 
         if (value===undefined || value===null){
             //show undefined and null values in the browsers
@@ -1380,7 +1380,7 @@ DimeView = {
 
         var listIconElement=$('<div/>').addClass('listElementIcon');
         if (imageUrl){
-            listIconElement.append(Dime.psHelper.getImageUrlJImage(imageUrl));
+            listIconElement.append(Dime.psHelper.getImageUrlJImage(imageUrl, type));
         }
         var listItem=$('<li/>').addClass('listElement');
         if (className){
@@ -1401,6 +1401,7 @@ DimeView = {
         var result = DimeView.createMetaBarListItem(
             Dime.psHelper.getCaptionForItemType(item.type),
             item.name,
+            item.type,
             item.imageUrl
         );
         //TODO add link to item
@@ -1416,16 +1417,16 @@ DimeView = {
         var informationViewContainer = DimeView.getMetaListContainer(DimeView.CONTAINER_ID_INFORMATION);  
       
         informationViewContainer.append(DimeView.createMetaBarListItem(
-            DimeView.getShortNameWithLength(entry.name, 35), "", entry.imageUrl));
+            DimeView.getShortNameWithLength(entry.name, 35), "", entry.type, entry.imageUrl));
         informationViewContainer.append(DimeView.createMetaBarListItem(
-            "changed:", JSTool.millisToFormatString(entry.lastModified), null));
+            "changed:", JSTool.millisToFormatString(entry.lastModified), entry.type, null));
              
         
         if (entry.userId!=='@me'){
             var setProviderName=function(response){
                 if (response){
                 informationViewContainer.append(DimeView.createMetaBarListItem(
-                    "shared by:", response.name, response.imageUrl));
+                    "shared by:", response.name, response.type, response.imageUrl));
                 }
             };
             Dime.REST.getItem(entry.userId, Dime.psMap.TYPE.PERSON, setProviderName, '@me', this);
@@ -1438,7 +1439,7 @@ DimeView = {
                 return;
             }                
            
-            var tElement = DimeView.createMetaBarListItem("trust:", tCaptionAndClass.caption, null);
+            var tElement = DimeView.createMetaBarListItem("trust:", tCaptionAndClass.caption, null, null);
             tElement.addClass(tCaptionAndClass.classString);
             informationViewContainer.append(tElement);
         }
@@ -1448,7 +1449,7 @@ DimeView = {
                 return;
             }                
            
-            var pElement = DimeView.createMetaBarListItem("privacy:", pCaptionAndClass.caption, null);
+            var pElement = DimeView.createMetaBarListItem("privacy:", pCaptionAndClass.caption, null, null);
             pElement.addClass(pCaptionAndClass.classString);
             informationViewContainer.append(pElement);
         }
@@ -1542,7 +1543,7 @@ DimeView = {
         
         var addAgentsToMetaBar=function(listItemContainer, agentItems){
             for (var j=0;j<agentItems.length;j++){
-                listItemContainer.append(DimeView.createMetaBarListItem( "", agentItems[j].name, agentItems[j].imageUrl, "metaDataShareItem"));
+                listItemContainer.append(DimeView.createMetaBarListItem( "", agentItems[j].name, agentItems[j].type, agentItems[j].imageUrl, "metaDataShareItem"));
             }
         };
         
@@ -1569,7 +1570,7 @@ DimeView = {
                     var pName = (profile?profile.name:"No profile for "+aclPackage.saidSender);
                     var pImage = (profile?profile.imageUrl:null);
                     var profileContainerList = $('<ul/>');
-                    var profileContainer = DimeView.createMetaBarListItem("shared as:", pName, pImage, "metaDataShareProfile")
+                    var profileContainer = DimeView.createMetaBarListItem("shared as:", pName, Dime.psMap.TYPE.PROFILE, pImage, "metaDataShareProfile")
                         .append(profileContainerList);
                     listItemContainer.append(profileContainer);
                     addAgentsToMetaBar(profileContainerList, aclPackage.groupItems);
@@ -1601,7 +1602,7 @@ DimeView = {
                     continue;
                 }
             
-                listItemContainer.append(DimeView.createMetaBarListItem(entry.name, "", entry.imageUrl));
+                listItemContainer.append(DimeView.createMetaBarListItem(entry.name, "", entry.type, entry.imageUrl));
             }
         };
         

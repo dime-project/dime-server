@@ -1722,11 +1722,16 @@ Dime.psHelper = {
             imageUrl=Dime.psHelper.getImageUrlForItemType(type);
         }        
         imageUrl = Dime.psHelper.guessLinkURL(imageUrl);
+        
+        if (!type){
+            type = Dime.psMap.TYPE.RESOURCE;
+        }
 
         var resultImage = $('<img/>').attr('src', imageUrl);
 
         var handleError=function(){
             resultImage.attr('src',Dime.psHelper.getImageUrlForItemType(type));
+            
         };
 
         resultImage.load(function(){
