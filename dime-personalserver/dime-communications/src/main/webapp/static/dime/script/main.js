@@ -785,7 +785,7 @@ Dime.psMap.addToTypeMap(new Dime.PSMap(Dime.psMap.TYPE.EVENT, "calendar entry", 
 Dime.psMap.addToTypeMap(new Dime.PSMap(Dime.psMap.TYPE.SERVICEADAPTER, "service", 0, 0,  'resource.png', 'serviceadapter', YES, YES, 'services'));
 Dime.psMap.addToTypeMap(new Dime.PSMap(Dime.psMap.TYPE.DEVICE, "device", 0, 0,  'resource.png', 'device', NO, YES, 'devices'));
 Dime.psMap.addToTypeMap(new Dime.PSMap(Dime.psMap.TYPE.CONTEXT, "context", 0, 0, 'resource.png', 'context', NO, NO, 'context'));
-Dime.psMap.addToTypeMap(new Dime.PSMap(Dime.psMap.TYPE.PLACE, "place", 0, 0, '"place_default.png', 'place', NO, YES, 'places'));
+Dime.psMap.addToTypeMap(new Dime.PSMap(Dime.psMap.TYPE.PLACE, "place", 0, 0, 'place_default.png', 'place', NO, YES, 'places'));
 Dime.psMap.addToTypeMap(new Dime.PSMap(Dime.psMap.TYPE.ACCOUNT, "account", 0, 0, 'resource.png', 'account', NO, YES, 'accounts'));
 Dime.psMap.addToTypeMap(new Dime.PSMap(Dime.psMap.TYPE.USERNOTIFICATION, "notification", 0, 0, 'notification.png', 'usernotification', NO, YES, 'notifications'));
 
@@ -1714,7 +1714,7 @@ Dime.psMap.KNOWN_PLACES={
 Dime.psHelper = {
 
     getImageUrlJImageFromEntry: function(entry){
-        Dime.psHelper.getImageUrlJImage(entry.imageUrl, entry.type);
+        return Dime.psHelper.getImageUrlJImage(entry.imageUrl, entry.type);
     },
 
     getImageUrlJImage: function(imageUrl, type){
@@ -1723,13 +1723,13 @@ Dime.psHelper = {
         }        
         imageUrl = Dime.psHelper.guessLinkURL(imageUrl);
 
-        var image = $('<img/>').attr('src', imageUrl);
+        var resultImage = $('<img/>').attr('src', imageUrl);
 
         var handleError=function(){
-            image.attr('src',Dime.psHelper.getImageUrlForItemType(type));
+            resultImage.attr('src',Dime.psHelper.getImageUrlForItemType(type));
         };
 
-        image.onload(function(){
+        resultImage.load(function(){
            if ('naturalHeight' in this) {
                 if (this.naturalHeight + this.naturalWidth === 0) {
                     handleError();
@@ -1741,11 +1741,11 @@ Dime.psHelper = {
             }
         });
 
-        image.onerror(function(){
+        resultImage.error(function(){
             handleError();
-        })
+        });
 
-        return image;
+        return resultImage;
 
     },
     
