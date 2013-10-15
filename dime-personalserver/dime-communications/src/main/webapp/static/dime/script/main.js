@@ -6233,7 +6233,7 @@ Dime.Dialog.KnownPlacesDropdown=function(callback, handlerRef){
         
         dropDownElements.push(new BSTool.DropDownEntry(handlerRef, this.name, updatePlace));
     });
-    return BSTool.createDropdown('Select Location',dropDownElements, "btn");
+    return BSTool.createDropdown('Select Position',dropDownElements, "btn");
 };
 
 

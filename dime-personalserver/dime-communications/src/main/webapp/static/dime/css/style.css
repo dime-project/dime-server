@@ -1801,6 +1801,7 @@ input[type="checkbox"] {
     border: solid 1px #5A9DD5;        
     cursor: pointer;
     float: right;
+    border-radius: 0px;
 }
 
 .pseudoLink{    

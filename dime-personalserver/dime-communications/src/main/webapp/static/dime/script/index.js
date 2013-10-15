@@ -928,13 +928,15 @@ DimeView = {
    
 
     initContainer: function(jContainer, caption, selectingGroupName){  
+        
+        var isItemNavigation = (jContainer.selector === "#itemNavigation");
 
         var containerCaption = JSTool.upCaseFirstLetter(caption);
         if (selectingGroupName){
             containerCaption += ' in "' +selectingGroupName+'"';
-        }else if (DimeView.searchFilter.length===0){
-            if(jContainer.selector !== "#groupNavigation"){
-                containerCaption = "All "+containerCaption;
+        }else if(isItemNavigation){
+            if(DimeView.searchFilter.length===0){
+                containerCaption = "All "+containerCaption;            
             }
         }
 
@@ -1004,6 +1006,7 @@ DimeView = {
             .append($('<span/>').text("Your current position: ").css('float','left'))
             .append(
                 $('<a/>').attr('href', getGoogleLatLon(placeLocation.currPos.latitude, placeLocation.currPos.longitude))
+                .attr('target','_blank').prop('title', 'show in google maps')
                 .css('float','right').append(DimeView.getInnerPosition(placeLocation, true)))
             );
         if (placeLocation.currPlace && placeLocation.currPlace.placeId && placeLocation.currPlace.placeName){
@@ -1050,7 +1053,7 @@ DimeView = {
             
             }else if ((!placeLocation.currPos)||!(placeLocation.currPos.latitude && placeLocation.currPos.longitude)){
                 //we don't have a position                   
-                placeView.append($('<div/>').append($('$<div/>').text('Your browser was not able to detect your position.')));
+                placeView.append($('<div/>').append($('$<div/>').text('di.me was not able to detect your position.')));
                 
             }else{
                 DimeView.updatePlaceSummary(placeView, placeLocation);
@@ -1059,7 +1062,7 @@ DimeView = {
             placeView.append($('<div/>').attr('id','placeDetailOptionView')
                     .append($('$<div/>').addClass('placeDetailOptions').text('You can choose your position manually:'))
                     .append(new Dime.Dialog.KnownPlacesDropdown(refreshUI, DimeView).addClass('placeDetailOptions'))
-                    .append($('$<div/>').addClass('placeDetailOptions').text('... or try to take it from your browser:'))
+                    .append($('$<div/>').addClass('placeDetailOptions').text('... or use geolocation provided by your browser:'))
                     .append($('$<div/>').addClass('placeDetailOptions').addClass('btn')
                         .text("Get Position")                            
                         .click(function(){
@@ -1134,9 +1137,13 @@ DimeView = {
             };
 
         }
+        
+        var containerCaption=Dime.psHelper.getPluralCaptionForItemType(entries[0].type);
+        if (type===Dime.psMap.TYPE.PLACE){
+            containerCaption+=" (nearby to your position)"
+        }
 
-
-        DimeView.initContainer(jContainerElement, Dime.psHelper.getPluralCaptionForItemType(entries[0].type));
+        DimeView.initContainer(jContainerElement, containerCaption);
 
         DimeView.viewManager.setViewVisible.call(DimeView.viewManager, jContainerElement.attr('id'), true);                    
 
