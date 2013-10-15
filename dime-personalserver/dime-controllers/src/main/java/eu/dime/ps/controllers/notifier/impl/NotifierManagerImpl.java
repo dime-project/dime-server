@@ -205,6 +205,12 @@ public class NotifierManagerImpl implements NotifierManager {
 		return 	notifyHistory.updateNotification(id,notificationToUpdate);
 	}
 
+	@Override
+	public void remove(Long id) throws NotifierException {
+		notifyHistory.removeNotification(id);
+		
+	}
+
 	
 
 

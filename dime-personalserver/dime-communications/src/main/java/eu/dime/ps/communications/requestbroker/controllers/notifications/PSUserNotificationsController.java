@@ -17,6 +17,7 @@ package eu.dime.ps.communications.requestbroker.controllers.notifications;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -37,12 +38,11 @@ import eu.dime.commons.notifications.DimeInternalNotification;
 import eu.dime.commons.notifications.user.UNRefToItem;
 import eu.dime.commons.notifications.user.UserNotification;
 import eu.dime.ps.communications.requestbroker.controllers.infosphere.APIController;
-import eu.dime.ps.controllers.TenantContextHolder;
 import eu.dime.ps.controllers.TenantManager;
+import eu.dime.ps.controllers.exception.InfosphereException;
 import eu.dime.ps.controllers.notifier.NotifierManager;
 import eu.dime.ps.controllers.notifier.exception.NotifierException;
 import eu.dime.ps.controllers.util.TenantHelper;
-import eu.dime.ps.dto.Resource;
 import eu.dime.ps.storage.entities.Tenant;
 
 /**
@@ -229,6 +229,30 @@ public class PSUserNotificationsController implements APIController {
 
 	}
 	
+	@DELETE
+	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
+	@Path("/@me/{notificationId}")
+	public Response deleteNotification(@PathParam("notificationId") String notificationId){
+		
+		Long id = null;
+
+		try {
+			id = new Long(notificationId);
+
+		} catch (NumberFormatException e) {
+			
+			return Response.badRequest("ID not valid!", e);
+		}	
+		try {
+			notifierManager.remove(id);
+			}catch (NotifierException e) {
+				return Response.badRequest("Id not valid!", e);
+			}catch (Exception e) {
+			return Response.serverError(e.getMessage(), e);
+		}		
+		
+		return Response.ok();
+	}
 	// test
 	
 	@GET

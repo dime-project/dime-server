@@ -70,6 +70,12 @@ public class NotifyHistoryMock  implements NotifyHistory  {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public void removeNotification(Long id) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 
 

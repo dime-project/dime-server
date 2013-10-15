@@ -19,6 +19,7 @@ import java.util.List;
 
 import eu.dime.commons.dto.UserNotificationDTO;
 import eu.dime.commons.notifications.DimeInternalNotification;
+import eu.dime.ps.controllers.notifier.exception.NotifierException;
 import eu.dime.ps.storage.entities.Tenant;
 
 /**
@@ -44,5 +45,7 @@ public interface NotifyHistory {
 
 	public DimeInternalNotification updateNotification(long id,
 			UserNotificationDTO userNotification);
+
+	public void removeNotification (Long id) throws NotifierException;
 
 }

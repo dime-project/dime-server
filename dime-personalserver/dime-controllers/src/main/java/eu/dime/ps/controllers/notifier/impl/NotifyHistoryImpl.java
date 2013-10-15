@@ -31,6 +31,7 @@ import eu.dime.commons.notifications.user.UserNotification;
 import eu.dime.commons.notifications.user.UserNotificationEntry;
 import eu.dime.commons.util.JaxbJsonSerializer;
 import eu.dime.ps.controllers.notifier.NotifyHistory;
+import eu.dime.ps.controllers.notifier.exception.NotifierException;
 import eu.dime.ps.storage.entities.Notification;
 import eu.dime.ps.storage.entities.Tenant;
 import eu.dime.ps.storage.manager.EntityFactory;
@@ -255,6 +256,14 @@ public class NotifyHistoryImpl implements NotifyHistory {
 		n.setUnEntry(unEntryPayload);
 		n.merge();
 		return nToDN(n);
+	}
+
+	@Override
+	public void removeNotification(Long id) throws NotifierException {		
+		Notification notification = Notification.findNotifications(id);
+		if(notification == null)
+			throw new NotifierException("could not find any notification with id: +id");
+		notification.remove();
 	}
 
 }

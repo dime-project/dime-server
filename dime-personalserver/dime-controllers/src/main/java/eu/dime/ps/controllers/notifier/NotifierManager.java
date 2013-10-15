@@ -139,4 +139,11 @@ public interface NotifierManager {
 
 	public DimeInternalNotification updateUserNotification(Long id,
 			UserNotificationDTO notificationToUpdate);
+
+	
+	/**
+	 * Remove a notification from storage
+	 * @throws NotifierException 
+	 */
+	public void remove(Long id) throws NotifierException;
 }
