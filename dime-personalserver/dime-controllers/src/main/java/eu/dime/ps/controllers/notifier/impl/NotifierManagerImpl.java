@@ -22,6 +22,7 @@ import java.util.Vector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import eu.dime.commons.dto.UserNotificationDTO;
 import eu.dime.commons.notifications.DimeExternalNotification;
 import eu.dime.commons.notifications.DimeInternalNotification;
 import eu.dime.commons.notifications.system.SystemNotification;
@@ -177,7 +178,7 @@ public class NotifierManagerImpl implements NotifierManager {
 	@Override
 	public void markNotificationAsRead(Long id){
 		notifyHistory.markAsRead(id);
-	}
+	}	
 	
 	@Override
 	public void purgeNotifications(){
@@ -196,6 +197,12 @@ public class NotifierManagerImpl implements NotifierManager {
 
 	public void setNotifyHistory(NotifyHistory notifyHistory) {
 		this.notifyHistory = notifyHistory;
+	}
+
+	@Override
+	public DimeInternalNotification updateUserNotification(Long id,
+			UserNotificationDTO notificationToUpdate) {
+		return 	notifyHistory.updateNotification(id,notificationToUpdate);
 	}
 
 	

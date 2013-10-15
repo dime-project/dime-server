@@ -19,6 +19,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 
+import eu.dime.commons.dto.UserNotificationDTO;
 import eu.dime.commons.notifications.DimeInternalNotification;
 import eu.dime.commons.notifications.system.SystemNotification;
 import eu.dime.commons.notifications.user.UNAdhocGroupRecommendation;
@@ -240,6 +241,20 @@ public class NotifyHistoryImpl implements NotifyHistory {
 		n.setUpdateTs(time);
 		n.merge();
 
+	}
+
+	@Override
+	public DimeInternalNotification updateNotification(long id,
+			UserNotificationDTO userNotification) {
+		
+		Notification n = Notification.findNotifications(id);
+		n.setIsRead(true);
+		Date time = new Date(System.currentTimeMillis());
+		n.setUpdateTs(time);
+		String unEntryPayload = JaxbJsonSerializer.jsonValue(userNotification.getUnEntry());
+		n.setUnEntry(unEntryPayload);
+		n.merge();
+		return nToDN(n);
 	}
 
 }

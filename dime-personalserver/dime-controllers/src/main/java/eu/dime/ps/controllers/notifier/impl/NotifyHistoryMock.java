@@ -18,6 +18,7 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
+import eu.dime.commons.dto.UserNotificationDTO;
 import eu.dime.commons.notifications.DimeInternalNotification;
 import eu.dime.ps.controllers.notifier.NotifyHistory;
 import eu.dime.ps.storage.entities.Tenant;
@@ -61,6 +62,13 @@ public class NotifyHistoryMock  implements NotifyHistory  {
 	public void markAsRead(Long id) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public DimeInternalNotification updateNotification(long id,
+			UserNotificationDTO userNotification) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 

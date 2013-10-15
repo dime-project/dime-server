@@ -17,6 +17,7 @@ package eu.dime.ps.controllers.notifier;
 import java.util.Date;
 import java.util.List;
 
+import eu.dime.commons.dto.UserNotificationDTO;
 import eu.dime.commons.notifications.DimeInternalNotification;
 import eu.dime.ps.storage.entities.Tenant;
 
@@ -40,5 +41,8 @@ public interface NotifyHistory {
 	public List<DimeInternalNotification> getUnreadedUserNotificationHistory(Tenant tenant, Integer firstResult, Integer maxResults);
 	
 	public void markAsRead(Long id);
+
+	public DimeInternalNotification updateNotification(long id,
+			UserNotificationDTO userNotification);
 
 }

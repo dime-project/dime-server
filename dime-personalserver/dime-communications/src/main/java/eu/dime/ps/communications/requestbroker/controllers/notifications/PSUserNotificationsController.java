@@ -30,6 +30,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import eu.dime.commons.dto.Data;
+import eu.dime.commons.dto.Request;
 import eu.dime.commons.dto.Response;
 import eu.dime.commons.dto.UserNotificationDTO;
 import eu.dime.commons.notifications.DimeInternalNotification;
@@ -41,6 +42,7 @@ import eu.dime.ps.controllers.TenantManager;
 import eu.dime.ps.controllers.notifier.NotifierManager;
 import eu.dime.ps.controllers.notifier.exception.NotifierException;
 import eu.dime.ps.controllers.util.TenantHelper;
+import eu.dime.ps.dto.Resource;
 import eu.dime.ps.storage.entities.Tenant;
 
 /**
@@ -197,10 +199,11 @@ public class PSUserNotificationsController implements APIController {
 	@Path("/@me/{notificationID}")
 	@Consumes(MediaType.APPLICATION_JSON + ";charset=UTF-8")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
-	public Response<UserNotificationDTO> postNotificationMarkAsRead(@PathParam("notificationID") String notificationID) {
+	public Response<UserNotificationDTO> postUpdateUserNotification(@PathParam("notificationID") String notificationID, Request<UserNotificationDTO> request) {
 
 		Long id = null;
-
+		UserNotificationDTO notificationToUpdate = request.getMessage().getData().getEntries().iterator().next();
+		
 		try {
 			id = new Long(notificationID);
 			
@@ -208,16 +211,15 @@ public class PSUserNotificationsController implements APIController {
 			
 			return Response.badRequest("ID not valid!", e);
 		}
-		
+		DimeInternalNotification dimeNotification=null;
 		try {
-			notifierManager.markNotificationAsRead(id);
+			 dimeNotification = notifierManager.updateUserNotification(id,notificationToUpdate);
 			
 		} catch (Exception e) {
-			return Response.serverError("No marked as read for: ", e);
-		}
+			return Response.serverError("Could not update notification: ", e);
+		}		
+			
 		
-		DimeInternalNotification dimeNotification = notifierManager
-				.getNotificationById(id);		
 		UserNotificationDTO dto = UserNotificationDTO.dINToUNDTO(dimeNotification);
 		Data<UserNotificationDTO> data = new Data<UserNotificationDTO>();
 

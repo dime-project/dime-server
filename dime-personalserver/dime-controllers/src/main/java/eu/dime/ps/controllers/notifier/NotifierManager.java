@@ -17,6 +17,7 @@ package eu.dime.ps.controllers.notifier;
 import java.util.Date;
 import java.util.List;
 
+import eu.dime.commons.dto.UserNotificationDTO;
 import eu.dime.commons.notifications.DimeExternalNotification;
 import eu.dime.commons.notifications.DimeInternalNotification;
 import eu.dime.ps.controllers.notifier.exception.NotifierException;
@@ -135,4 +136,7 @@ public interface NotifierManager {
 	public void markNotificationAsRead(Long id);
 	
 	public void purgeNotifications();
+
+	public DimeInternalNotification updateUserNotification(Long id,
+			UserNotificationDTO notificationToUpdate);
 }

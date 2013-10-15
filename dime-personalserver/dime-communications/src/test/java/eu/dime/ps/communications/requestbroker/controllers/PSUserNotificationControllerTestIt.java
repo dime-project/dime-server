@@ -17,6 +17,8 @@ package eu.dime.ps.communications.requestbroker.controllers;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -35,6 +37,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
+import eu.dime.commons.dto.Data;
+import eu.dime.commons.dto.Message;
+import eu.dime.commons.dto.Request;
 import eu.dime.commons.dto.Response;
 import eu.dime.commons.dto.UserNotificationDTO;
 import eu.dime.commons.notifications.DimeInternalNotification;
@@ -231,15 +236,30 @@ public class PSUserNotificationControllerTestIt {
 		String idToread = response.getMessage().getData().getEntries().iterator().next().getGuid();
 		
 		response = controller.getUserNotificationById(said, idToread);
+		UserNotificationDTO uNotification = response.getMessage().getData().getEntries().iterator().next();
 		assertEquals(200, response.getMessage().getMeta().getCode().intValue());
-		assertEquals(false,response.getMessage().getData().getEntries().iterator().next().getRead());
+		assertEquals(false,uNotification.getRead());
 		
-		// mark as read
-		controller.postNotificationMarkAsRead(idToread);
+		UserNotificationEntry unEntry= uNotification.getUnEntry();
+		assertNull(unEntry.get("testentry"));
+		
+		// update
+		unEntry.put("testentry", "test");
+		
+		uNotification.setUnEntry(unEntry);
+		Data<UserNotificationDTO> data = new Data<UserNotificationDTO>(0,0,uNotification);
+		Message<UserNotificationDTO> message = new Message<UserNotificationDTO>();
+		message.setData(data);
+		Request<UserNotificationDTO> request = new Request<UserNotificationDTO>();
+		request.setMessage(message);
+		
+		controller.postUpdateUserNotification(idToread, request);
 		
 		response = controller.getUserNotificationById(said, idToread);
 		assertEquals(200, response.getMessage().getMeta().getCode().intValue());
-		assertEquals(true,response.getMessage().getData().getEntries().iterator().next().getRead());
+		uNotification = response.getMessage().getData().getEntries().iterator().next();
+		assertEquals(true,uNotification.getRead());
+		assertTrue(uNotification.getUnEntry().containsKey("testentry"));
 		
 		response = controller.getMyUserNotificationsUnread(said, "0", "0");
 		assertEquals(99, response.getMessage().getData().getEntries().size());
