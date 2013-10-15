@@ -2947,32 +2947,32 @@ input[type="text"].DimeDetailDialogPAValueListItemValue{
     width: 99%;
 }
 
-.twoPersonElementContainerSource{
+/* MERGE PERSON DIALOG */
+
+.mergePersonBody{
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+}
+
+.mergePersonElementContainer{
     width: 253px;
-    min-height: 100%;
-    margin-right: 20px;
-    float: left;
-    
+    height: 398px;
+    /* float: left; */    
     border: 1px solid #C0C0C0;
     border-radius: 5px;
     background-color: #F9F8F8;
+    overflow-y: auto;
+    margin-left: 9px;
+    display: inline-block;
 }
 
-.twoPersonElementContainerTarget {
-    width: 253px;
-    min-height: 100%;
-    float: right;
-    
-    border: 1px solid #C0C0C0;
-    border-radius: 5px;
-    background-color: #F9F8F8;
-}
 
-.twoPersonElementHeader:hover {
+.mergePersonElementHeader:hover {
     background-color: #9CC6E6;
 }
 
-.twoPersonElementHeader {
+.mergePersonElementHeader {
     width: 97%;
     float:left;
     background-color: #5A9DD5;
@@ -2980,6 +2980,34 @@ input[type="text"].DimeDetailDialogPAValueListItemValue{
     border-radius: 5px;
     margin: 2px;
     padding: 2px;
+}
+
+.mergePersonElementProfile{
+    max-height: 100px;
+    float: left;
+    clear: both;
+    width: 95%;
+    margin: 2px;
+    padding: 2px;
+    border-radius: 5px;
+    border: solid 1px;
+
+    background-color: #DDDEDD;
+    color: white;
+    font-weight: bold;
+    overflow-y: hidden;
+}
+
+.mergePersonElementPA{
+    background-color: #F5F5F5;
+    color: black;
+    font-weight: normal;
+    float: right;
+    width: 88%;
+    min-height: 22px;
+    padding: 2px;
+    border-radius: 5px;
+    margin: 2px;
 }
 
 /* ShareDialog */

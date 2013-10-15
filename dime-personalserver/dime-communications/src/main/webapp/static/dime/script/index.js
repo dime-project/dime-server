@@ -596,6 +596,17 @@ DimeView = {
         var clickFunction;
         var unValues=Dime.un.getCaptionImageUrl(entry);
         
+        var updateUserNotification=function(myUN, read, callback){
+                myUN.read=read;
+                //update entry
+                Dime.REST.updateItem(myUN, function(response){                    
+                    DimeView.viewManager.updateViewFromStatus(DimeView.viewManager.status, true);
+                    if (callback){
+                        callback(response);
+                    }
+                }, this);
+        };
+        
         //update caption with sender name if available
         unValues.caption = senderPersonItem ? unValues.caption + " by " + senderPersonItem.name : unValues.caption;
         
@@ -620,19 +631,35 @@ DimeView = {
             var status = new DimeViewStatus(viewType, groupType, itemType, detailUserId, 
                     entry.unEntry.guid, detailItemType, message);
             clickFunction = function(){                
-               DimeView.viewManager.updateViewFromStatus(status, false);
+                DimeView.viewManager.updateViewFromStatus(status, false);
+                updateUserNotification(entry, true);
             };
-        }else{
+        }else if (entry.unType===Dime.psMap.UN_TYPE.MERGE_RECOMMENDATION) {
+            clickFunction = function(){
+                var myNotification = entry;
+               
+                var mergeGuids = [myNotification.unEntry.sourceId, myNotification.unEntry.targetId];
+                var dialog = new Dime.MergeDialog(mergeGuids, myNotification.unEntry.similarity, true);
+                dialog.show(function(resultStatus){
+                    myNotification.unEntry.status = resultStatus;                    
+                    if (resultStatus!==dialog.STATUS_PENDING){  //"status":"accepted/dismissed/pending"
+                       updateUserNotification(myNotification, true, function(){                         
+                            //delete afterwards
+                            Dime.REST.removeItem(myNotification);
+                         });
+                    }else{
+                        updateUserNotification(myNotification, true);
+                    }
+                     
+                }, DimeView);
+                
+            };  
+        } else{
             clickFunction = function(){
                 //TODO fix
                 window.alert("This function is not supported in the research prototype.");
-                
-                /* work in progress
-                var dialog = new Dime.MergeDialog();
-                dialog.setMergePersons(entry.unEntry);
-                dialog.show();
-                */
-            };  
+                updateUserNotification(entry, true);
+            };
         }
         deployFunction(unValues, clickFunction);
 
@@ -666,7 +693,7 @@ DimeView = {
                 jChildItem.append(Dime.psHelper.getImageUrlJImageFromEntry(entry));
 
                 jChildItem
-                    .append(Dime.psHelper.getImageUrlJImageFromEntry(unValues.imageUrl, Dime.psMap.TYPE.USERNOTIFICATION).addClass('childItemNotifElemType'))
+                    .append(Dime.psHelper.getImageUrlJImage(unValues.imageUrl, Dime.psMap.TYPE.USERNOTIFICATION).addClass('childItemNotifElemType'))
                     .append($('<div/>').addClass('childItemNotifDate').text(JSTool.millisToDateString(entry.created)))
                     .append('<h4 style="font-size: 12px">'+ unValues.caption + '</h4>')                    
                     .append($('<div/>').addClass('childItemNotifOperation').append('<span>'+ unValues.operationName + '</span>'))
@@ -1388,7 +1415,7 @@ DimeView = {
         }
 
         listItem.append(
-                $('<div class="listElementText"/>')
+                $('<div/>').addClass('listElementText')
                     .append($('<span class="listElementTextName"/>').text(DimeView.getShortNameWithLength(name, 28)))
                     .append($('<span class="listElementTextValue"/>').text(value))
                 )
@@ -1505,8 +1532,7 @@ DimeView = {
 	// Handle event
         //commented out in order to stay visible after mouseout (web ui issue)
         //won't show list of selected items on the metabar
-        //DimeView.updateMetabarForSelection();
-       
+        //DimeView.updateMetabarForSelection();       
     },
        
 
@@ -1534,12 +1560,8 @@ DimeView = {
         //it's assured all data belongs to the same person
         //this could be done by using the same approach as for initalProcessor
         
-        
-        
         JSTool.removeClassIfSet($("#metaDataShareAreaId"),"hidden");
         DimeView.addInformationToMetabar(entry);      
-        
-        
         
         var addAgentsToMetaBar=function(listItemContainer, agentItems){
             for (var j=0;j<agentItems.length;j++){
@@ -1964,9 +1986,19 @@ DimeView = {
 
         if (groupType===Dime.psMap.TYPE.GROUP){
             dropDownUl                
-                .append(createMenuItem("Merge persons ..", function(event, jElement, selectedItems){
-                    //TODO
-                    window.alert("Merging of persons is currently only supported by the mobile app!");
+                .append(createMenuItem("Merge persons ..", function(event, jElement){
+                    var selectedItems = DimeView.getSelectedItemsForView();
+                    var mergeGuids = [];
+                    for (var i=0; i<selectedItems.length;i++){
+                        mergeGuids.push(selectedItems[i].guid);
+                    }
+                
+                    var dialog = new Dime.MergeDialog(mergeGuids);                
+                    dialog.show(function(resultStatus){
+                        if (resultStatus!==dialog.STATUS_PENDING){
+                            DimeView.viewManager.updateViewFromStatus(DimeView.viewManager.status, true);
+                        }
+                    }, DimeView);
                 })); 
         }
         dropDownUl
@@ -3007,8 +3039,6 @@ Dime.Navigation = {
                     .click(clickFunction)
                     .text(unValues.shortCaption.substr(0, 16))
                     .click(function(){
-                        userNotification.read=true;
-                        Dime.REST.updateItem(userNotification);
                         jUnBarElement.remove();
                      });
                 
