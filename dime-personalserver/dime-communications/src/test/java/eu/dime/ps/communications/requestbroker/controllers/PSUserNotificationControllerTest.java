@@ -82,12 +82,5 @@ public class PSUserNotificationControllerTest extends PSInfoSphereControllerTest
 		
 		Mockito.verify(mockedManager).getNotificationById(1l);
 	}
-
-	@Test
-	public void testMarkAsRead() {
-		controller.postNotificationMarkAsRead("1");	
-		Mockito.verify(mockedManager).markNotificationAsRead(1l);
-
-	}
-
+	
 }

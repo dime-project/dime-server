@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import eu.dime.commons.dto.UserNotificationDTO;
 import eu.dime.commons.notifications.DimeExternalNotification;
 import eu.dime.commons.notifications.DimeInternalNotification;
 import eu.dime.ps.controllers.notifier.NotifierManager;
@@ -114,5 +115,12 @@ public class NotifierManagerMock implements NotifierManager {
 	public void purgeNotifications() {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public DimeInternalNotification updateUserNotification(Long id,
+			UserNotificationDTO notificationToUpdate) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
