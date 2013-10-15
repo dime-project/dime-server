@@ -3011,6 +3011,66 @@ input[type="text"].DimeDetailDialogPAValueListItemValue{
     margin: 2px;
 }
 
+.mergePersonElementProfileName{
+    /* text-shadow: 1px 1px 1px black; */
+    font-weight: bold;
+    color: black;
+
+}
+
+.mergePersonElementSubheading{
+    float: left;
+    margin: 2px 0px 0px 2px;
+    padding: 2px 0px 0px 2px;
+    color: black;
+}
+
+.mergeDialogSharedItemsContainer{
+    float: left;
+    width: 96%;
+    margin: 2px;
+    padding: 2px;
+    border-radius: 5px;
+    background-color: #F5F5F5;
+    
+    /* "can access" caption */
+    color: black;
+}
+
+.mergeDialogSharedItem{
+    height: 30px;
+    margin-top: 3px;
+    background-color: #DDDEDD;
+    border-radius: 5px;
+}
+
+.mergeDialogSharedItemText{
+    float: left;
+    height: 15px;
+    left: 10px;
+    position: relative;
+    top: 7px;
+    color: #313031;	
+}
+
+.mergeDialogSharedItemName{
+    color: #313031;
+    margin-right: 5px;
+}
+
+.mergeDialogSharedItemIcon{
+    float: right;
+    position: relative;
+    top: 3px;
+    margin-right: 10px;
+    margin-top: 2px;
+}
+
+.mergeDialogSharedItemIcon img{
+    height: 20px;
+    width: 20px; 	
+}
+
 /* ShareDialog */
 
 .shareDlg {

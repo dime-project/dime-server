@@ -954,7 +954,7 @@ DimeView = {
         var cutCoord=function(value){
             var myStrVal = value+"";
             return myStrVal.substr(0,8);
-        }
+        };
         
         if (placeLocation.nextPlace && (placeLocation.nextPlace.distance!==undefined)){
             if (placeLocation.nextPlace.distance<25){

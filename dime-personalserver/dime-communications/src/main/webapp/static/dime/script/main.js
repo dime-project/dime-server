@@ -5703,7 +5703,7 @@ Dime.MergeDialog = function(mergePersonGuids, similarity, showDismissButton){
 
     this.body = $('<div/>').addClass('modal-body').addClass('mergePersonBody').attr('id',this.bodyID);
 
-    var similarityText =  similarity?'(similarity: '+Math.round((similarity*100))+'%)':'';
+    var similarityText =  similarity ? ' (similarity: '+Math.round((similarity*100))+'%)' : '';
 
     this.dialog
         //header
@@ -5755,8 +5755,7 @@ Dime.MergeDialog.prototype = {
         this.removeDialog();  
         this.resultFunction.call(this.handlerSelf, this.STATUS_PENDING);
     },
-            
-            
+      
     dismissHandler: function(){
         this.removeDialog();  
         this.resultFunction.call(this.handlerSelf, this.STATUS_DISMISSED);
@@ -5774,9 +5773,7 @@ Dime.MergeDialog.prototype = {
         }, this);
         dlgRef.removeDialog();
     },
-            
-  
-    
+
     initBody: function(){
         //TODO: check two/multiple
         var dialogRef = this;
@@ -5805,7 +5802,7 @@ Dime.MergeDialog.prototype = {
                 }
             }
             return null;
-        }
+        };
 
         var getValueString = function(paEntry){
             var result = "";
@@ -5837,15 +5834,22 @@ Dime.MergeDialog.prototype = {
             return $('<span/>').text(paText).prop('title',myCat.caption+': '+valueString);
         };
 
-
         var jElement = $("<div/>")
             .addClass("mergePersonElementContainer")
             //header
-            .append($("<div/>").addClass("mergePersonElementHeader").append(entry.person.name));
+            .append($("<div/>")
+                .addClass("mergePersonElementHeader")
+                .append(entry.person.name))
+            .append($("<div/>")
+                .addClass("mergePersonElementSubheading")
+                .append("Profile cards:"));
 
          for (var j=0; j<entry.profiles.length;j++){
+             
              var myProfile = $('<div/>').addClass('mergePersonElementProfile')
-                .append($('<span/>').text(entry.profiles[j].name));
+                .append($('<div/>')
+                    .addClass("mergePersonElementProfileName")
+                    .append(entry.profiles[j].name));
              jElement.append(myProfile);
              for (var i=0;i<entry.profiles[j].items.length;i++){
                 var myPa = getPAwithGuid(entry.profileattributes, entry.profiles[j].items[i]);
@@ -5854,11 +5858,51 @@ Dime.MergeDialog.prototype = {
                     $('<div/>').addClass('mergePersonElementPA').append(getPaElement(myPa))
                 );
              }
+             
          }
     
         this.body.append(jElement);
-    }
-      
+        
+        var firstAccessItem = true;
+        var iElement = $("<div/>")
+                .addClass("mergeDialogSharedItemsContainer");
+        
+        var handleSharedItemsResult = function(response){
+            
+            
+            
+            if(response.length===0){
+                return;
+            }
+            
+            for (var i=0;i<response.length;i++){                        
+                var entry = response[i];
+                if (!entry.name){
+                    console.log("ERROR: received entry without name - skipping!", entry);
+                    continue;
+                }
+                
+                iElement
+                    .append(firstAccessItem?"<span>Can access:</span>":'')
+                    .append($("<div/>")
+                        .addClass("mergeDialogSharedItem")
+                        .append(
+                            $("<div/>")
+                                .addClass("mergeDialogSharedItemText")
+                                .append($('<span class="mergeDialogSharedItemName"/>')
+                                    .text(DimeView.getShortNameWithLength(entry.name, 28))))
+                        .append(
+                            $("<div/>")
+                                .addClass("mergeDialogSharedItemIcon")
+                                .append(entry.imageUrl?Dime.psHelper.getImageUrlJImage(entry.imageUrl, entry.type):''))
+                    );
+                    firstAccessItem = false;
+            }
+        };
+        Dime.psHelper.getAllSharedItems(entry.person, handleSharedItemsResult);
+        
+        jElement.append(iElement);
+    }   
 };
 
 //---------------------------------------------
