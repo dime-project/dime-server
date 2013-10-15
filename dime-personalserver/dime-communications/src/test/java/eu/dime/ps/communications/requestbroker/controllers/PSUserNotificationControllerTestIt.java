@@ -29,6 +29,7 @@ import java.util.Vector;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -151,7 +152,7 @@ public class PSUserNotificationControllerTestIt {
 	@After
 	@Transactional
 	public void after(){
-		List<Notification> ns = Notification.findAllNotificationses();
+		List<Notification> ns = Notification.findAllNotificationsByTenant(tenant);
 		for (Notification notification : ns) {
 			notification.remove();
 		}
