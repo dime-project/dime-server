@@ -569,9 +569,11 @@ public class UserManagerImpl implements UserManager {
     @Override
     public void clear(String userId) {
        
-    	Long tenantId  = TenantHelper.getCurrentTenantId();    	
-    	//TODO remove from user resolver service 	
-    	    	   
+    	Tenant tenant = TenantHelper.getCurrentTenant();
+    	Long tenantId  = tenant.getId();
+    		
+    	removeFromUserResolver(userId, tenant);
+    	 	    	   
     	dataStoreProvider.deleteTenantStore(tenantId);	    	    	    	
     	
     	removeFromDatabase(tenantId,userId);    	
@@ -581,6 +583,19 @@ public class UserManagerImpl implements UserManager {
     }
 
    
+	private void removeFromUserResolver(String userId, Tenant tenant) {
+        DimeUserResolverServiceAdapter userResolver;
+		try {
+			userResolver = serviceGateway.getDimeUserResolverServiceAdapter();
+			userResolver.setTenant(tenant);
+			userResolver._delete(userId);
+		} catch (ServiceNotAvailableException e) {
+			logger.error("Could not delete data of: "+userId+" from public resolver service.", e);
+		} catch (AttributeNotSupportedException e) {
+			logger.error("Could not delete data of: "+userId+" from public resolver service.", e);
+		}	
+	}
+
 	private void removeFromDatabase(Long tenantId, String userId) {
     	
     	Tenant tenant= Tenant.find(tenantId);
