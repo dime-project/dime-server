@@ -372,7 +372,7 @@ public class ProfileAttribute extends Resource {
 			//set name
 			Node nameNode = ModelUtils.findObject(resource.getModel(), resource.asResource(), NAO.prefLabel);
 			if (nameNode != null){
-				this.put("name", nameNode.asLiteral().toString());
+				this.put("name", nameNode.asLiteral().getValue());
 			}
 			else{
 				//set a blank name if it has none
