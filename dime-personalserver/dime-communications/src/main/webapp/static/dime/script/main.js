@@ -5703,7 +5703,7 @@ Dime.MergeDialog = function(mergePersonGuids, similarity, showDismissButton){
 
     this.body = $('<div/>').addClass('modal-body').addClass('mergePersonBody').attr('id',this.bodyID);
 
-    var similarityText =  similarity?'(similarity: '+similarity+')':'';
+    var similarityText =  similarity?'(similarity: '+Math.round((similarity*100))+'%)':'';
 
     this.dialog
         //header
