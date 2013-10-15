@@ -1011,7 +1011,7 @@ DimeView = {
             );
         if (placeLocation.currPlace && placeLocation.currPlace.placeId && placeLocation.currPlace.placeName){
             placeSummary.append($('<div/>')
-            .append($('<span/>').text("Your current place: "))
+            .append($('<span/>').text("Checked in place: "))
             .append($('<span/>').addClass('pseudoLink')
                 .text(DimeView.getShortNameWithLength(placeLocation.currPlace.placeName,26))
                 .click(function(){
@@ -1235,7 +1235,7 @@ DimeView = {
             maxItems: 0,
             supportedGroupTypes: [Dime.psMap.TYPE.PLACE],
             supportedViewTypes: [DimeViewStatus.GROUP_CONTAINER_VIEW, DimeViewStatus.PERSON_VIEW],
-            handlerFunction: null
+            handlerFunction: function(){DimeView.specialButtonSelected.call(DimeView);}
         },
         {
             id: "actionButtonDelete",
@@ -1274,7 +1274,21 @@ DimeView = {
     ],
     
     updateActionView: function(selectionCount){
-        //var disabledButtonClass = "actionButtonDisabled";
+        var checkUpdateActionButton = function(actionButton){
+            //HACK update values for special button - for supporting multi-use buttons refactoring would be necessary
+            if (actionButton.id!=='specialActionButton'){
+                return;
+            }
+            if (DimeView.viewManager.status.groupType===Dime.psMap.TYPE.PLACE){
+                $('#'+actionButton.id).text("Check In");
+                actionButton.maxItems=1;
+                actionButton.minItems=1;
+            }else if (DimeView.viewManager.status.viewType===DimeViewStatus.PERSON_VIEW){
+                $('#'+actionButton.id).text("Send Livepost ...");
+                actionButton.maxItems=0;
+                actionButton.minItems=-1;
+            }
+        };
         var disabledButtonClass = "disabled";
         
         var hideButton=function(buttonId){
@@ -1315,6 +1329,8 @@ DimeView = {
         for (var i=0;i<DimeView.ACTION_BUTTON_ID.length;i++){
             
             var actionButton=DimeView.ACTION_BUTTON_ID[i];
+
+            checkUpdateActionButton(actionButton);
             
             if (!isSupportedForStatus(actionButton)){
                 hideButton(actionButton.id);
@@ -1339,6 +1355,48 @@ DimeView = {
             }else{ //too many selected
                 hideButton(actionButton.id);
             }
+        }
+    },
+
+    specialButtonSelected: function(){
+        if (DimeView.viewManager.status.groupType===Dime.psMap.TYPE.PLACE){
+            var selectedPlaces = DimeView.getSelectedItemsForView();
+            var restoreCurrentPlace=false;
+            var handleResponse= function(response){
+                DimeView.viewManager.updateView(Dime.psMap.TYPE.PLACE, DimeViewStatus.GROUP_CONTAINER_VIEW, true);
+                Dime.Navigation.updateCurrentPlace();
+            };
+            var fullPlace = [];
+
+            var handlePlaceInformation=function(placeLocation){
+                if (!placeLocation.connected){
+                    (new Dime.Dialog.Toast("Please, first get connected to the YellowMap service!")).show();
+                }
+                if (placeLocation.currPlace && placeLocation.currPlace.placeId && fullPlace[0].guid===placeLocation.currPlace.placeId){
+                    restoreCurrentPlace=true;
+                }
+                Dime.psHelper.postUpdateCurrentPlace(fullPlace[0], restoreCurrentPlace, handleResponse, this);
+            };
+
+
+            var handleFullItems=function(fullItems){
+                fullPlace=fullItems;
+                Dime.psHelper.getPositionAndPlaceInformation(handlePlaceInformation, this);
+            };
+
+            if (!selectedPlaces || selectedPlaces.length!==1){
+                (new Dime.Dialog.Toast("Please select a single place!")).show();
+            }else{
+                Dime.psHelper.getMixedItems(selectedPlaces, handleFullItems, this);
+            }
+        }else if (DimeView.viewManager.status.viewType===DimeViewStatus.PERSON_VIEW){
+            
+            var selectedPerson = DimeView.getSelectedItemsForView();
+
+            var triggerDialog=function(response){
+                Dime.Dialog.showLivepostWithSelection(response);
+            };
+            Dime.psHelper.getMixedItems(selectedPerson, triggerDialog, this);
         }
     },
     
@@ -2015,67 +2073,7 @@ DimeView = {
 
     },
             
-    updateSpecialButton: function(groupType, viewType){
-        var addRmvBtn = $('#specialActionButton');
-        
-        //reset click handler
-        addRmvBtn.empty().unbind("click");
-        
-        if (groupType===Dime.psMap.TYPE.PLACE){
-            addRmvBtn
-                .empty()
-                .text("Current Place")
-                .click(function(event){
-                    //Dime.evaluation.createAndSendEvaluationItemForAction("action_sendLivepostFromPersonView");
-                    var selectedPlaces = DimeView.getSelectedItemsForView();
-                    var restoreCurrentPlace=false;
-                    var handleResponse= function(response){
-                        DimeView.viewManager.updateView(Dime.psMap.TYPE.PLACE, DimeViewStatus.GROUP_CONTAINER_VIEW, true);
-                        Dime.Navigation.updateCurrentPlace();
-                    };
-                    var fullPlace = [];
-                    
-                    var handlePlaceInformation=function(placeLocation){
-                        if (!placeLocation.connected){
-                            (new Dime.Dialog.Toast("Please, first get connected to the YellowMap service!")).show();
-                        }
-                        if (placeLocation.currPlace && placeLocation.currPlace.placeId && fullPlace[0].guid===placeLocation.currPlace.placeId){
-                            restoreCurrentPlace=true;
-                        }
-                        Dime.psHelper.postUpdateCurrentPlace(fullPlace[0], restoreCurrentPlace, handleResponse, this);
-                    };
-                    
-                    
-                    var handleFullItems=function(fullItems){
-                        fullPlace=fullItems;
-                        Dime.psHelper.getPositionAndPlaceInformation(handlePlaceInformation, this);
-                    };
-                    
-                    if (!selectedPlaces || selectedPlaces.length!==1){
-                        (new Dime.Dialog.Toast("Please select a single place!")).show();
-                    }else{
-                        Dime.psHelper.getMixedItems(selectedPlaces, handleFullItems, this);
-                    }
-                });
-            
-        }
-        
-        if(viewType===DimeViewStatus.PERSON_VIEW){
-            addRmvBtn
-                .empty()
-                .text("Send Livepost ...")
-                .click(function(){
-                    //Dime.evaluation.createAndSendEvaluationItemForAction("action_sendLivepostFromPersonView");
-                    var selectedPerson = DimeView.getSelectedItemsForView();
-
-                    var triggerDialog=function(response){
-                        Dime.Dialog.showLivepostWithSelection(response);
-                    };
-                    Dime.psHelper.getMixedItems(selectedPerson, triggerDialog, this);
-                });
-        }
-    },
-
+    
     updateMetaBar: function(groupType){
         
         if (groupType===Dime.psMap.TYPE.GROUP){
@@ -2126,7 +2124,6 @@ DimeView = {
 
         DimeView.updateNewButton(groupType);        
         DimeView.updateMoreButton(groupType);
-        DimeView.updateSpecialButton(groupType, newStatus.viewType);
 
         DimeView.updateMetaBar(groupType);
         
