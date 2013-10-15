@@ -279,7 +279,7 @@ public class PersonMatchingNotifier implements BroadcastReceiver {
 							unMergeRecommendation.setTargetId(match.getTarget().toString());
 							unMergeRecommendation.setTargetName(targetName);
 							unMergeRecommendation.setStatus(UNMergeRecommendation.STATUS_PENDING);
-
+							unMergeRecommendation.setSimilarity(match.getSimilarityScore());
 							// push user notification
 							try {
 								notifierManager.pushInternalNotification(new UserNotification(Long.parseLong(tenant), unMergeRecommendation));
