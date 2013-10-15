@@ -112,4 +112,6 @@ public interface CredentialStore {
 
     public void tryCreateAccountCredentials(Resource sender, Collection<URI> recipients, Tenant tenant);
 
+	public boolean deleteOAuthCredentials(String attribute, Tenant tenant);
+
 }

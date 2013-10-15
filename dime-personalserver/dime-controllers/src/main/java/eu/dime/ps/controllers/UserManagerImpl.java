@@ -369,12 +369,13 @@ public class UserManagerImpl implements UserManager {
         return profile;
     }
 
-    private void registerToUserResolverService(User user, PersonContact profile) throws DimeException {
+    private void registerToUserResolverService(User user, PersonContact profile, Tenant tenant) throws DimeException {
         ServiceProvider serviceProvider = ServiceProvider.findByName(DimeServiceAdapter.NAME);
         List<ServiceAccount> accounts = ServiceAccount.findAllByTenantAndServiceProvider(user.getTenant(), serviceProvider);
         DimeUserResolverServiceAdapter userResolver = null;
         try {
             userResolver = serviceGateway.getDimeUserResolverServiceAdapter();
+            userResolver.setTenant(tenant);
 
             // said name from dime account for this user
             if (accounts.size() > 0) {
@@ -428,7 +429,7 @@ public class UserManagerImpl implements UserManager {
             user.flush();
             logger.debug("Creating new user [id=" + user.getId() + ", username="
                 + user.getUsername() + ", role=" + user.getRole() + "]");
-            
+            //FIXME check creation order! why first create a User and then the Tenant? Having a User without tenant does not make sense...
             tenant = createTenant(userRegister.getUsername(), user);
             PersonContact profile = null;
             try {
@@ -450,8 +451,7 @@ public class UserManagerImpl implements UserManager {
                     +e.getClass().getName()+": "+e.getMessage(), e);
             }
             try {
-                registerToUserResolverService(user, profile); //FIXME:<--- unfortunately, this requires an Account to be created,
-                                                            //to rdf register needs to be done before (to be fixed)
+                registerToUserResolverService(user, profile, tenant);
             } catch (Exception e) {
                 throw new DimeException("Failed to register at dime user register service. Aborting registration.\n"
                     +e.getClass().getName()+": "+e.getMessage(), e);

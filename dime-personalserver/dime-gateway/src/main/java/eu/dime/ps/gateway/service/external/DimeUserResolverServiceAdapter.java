@@ -30,17 +30,15 @@ import net.sf.json.JSONSerializer;
 import org.apache.commons.httpclient.URIException;
 import org.apache.commons.httpclient.util.URIUtil;
 import org.ontoware.rdfreactor.schema.rdfs.Resource;
-import org.scribe.model.Token;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-
+import eu.dime.ps.gateway.auth.CredentialStore;
+import eu.dime.ps.gateway.auth.impl.CredentialStoreImpl;
 import eu.dime.ps.gateway.exception.AttributeNotSupportedException;
 import eu.dime.ps.gateway.exception.InvalidDataException;
 import eu.dime.ps.gateway.exception.InvalidLoginException;
 import eu.dime.ps.gateway.exception.ServiceException;
 import eu.dime.ps.gateway.exception.ServiceNotAvailableException;
-import eu.dime.ps.gateway.policy.PolicyManager;
 import eu.dime.ps.gateway.policy.PolicyManagerImpl;
 import eu.dime.ps.gateway.proxy.HttpRestProxy;
 import eu.dime.ps.gateway.service.AttributeMap;
@@ -50,10 +48,11 @@ import eu.dime.ps.gateway.service.ServiceResponse;
 import eu.dime.ps.gateway.userresolver.client.DimeResolver;
 import eu.dime.ps.gateway.userresolver.client.noauth.ResolverClient;
 import eu.dime.ps.semantic.model.nco.PersonContact;
-import java.util.logging.Level;
+import eu.dime.ps.storage.entities.Tenant;
 
 /**
  * @author Sophie.Wrobel
+ * @author mheupel
  * 
  */
 public class DimeUserResolverServiceAdapter extends ServiceAdapterBase implements ExternalServiceAdapter {
@@ -62,9 +61,20 @@ public class DimeUserResolverServiceAdapter extends ServiceAdapterBase implement
 
 	public final static String NAME = "PublicDimeUserDirectory";
 	
+	private CredentialStore credentialStore;
 
 	private HttpRestProxy proxy;
 	private HashMap<String, String> headers;
+	
+	private Tenant tenant; //need to know the current tenant for storing/loading credentials (on register, update)
+	
+	public void setTenant(Tenant tenant) {
+		this.tenant = tenant;
+	}
+	
+	public void setCredentialStore(CredentialStore credentialStore){
+		this.credentialStore = credentialStore;
+	}
 
 	/**
 	 * Creates a new Dime URS Adapter with a random identifier
@@ -73,6 +83,9 @@ public class DimeUserResolverServiceAdapter extends ServiceAdapterBase implement
 	 */
 	public DimeUserResolverServiceAdapter() throws ServiceNotAvailableException {
 		this("account:urn:" + UUID.randomUUID());
+		if (credentialStore == null){
+			this.credentialStore = CredentialStoreImpl.getInstance();
+		}
 	}
 
 	/**
@@ -108,6 +121,9 @@ public class DimeUserResolverServiceAdapter extends ServiceAdapterBase implement
 			throws AttributeNotSupportedException,
 			ServiceNotAvailableException, InvalidDataException {
 
+		if (tenant == null){
+			throw new ServiceNotAvailableException("Tenant was not specified. Could not register to the Public Resolver ");
+		}
 		// Profiles
 		// Attribute: /profile/@me
 		if (AttributeMap.PROFILE_ME.equals(attribute)) {
@@ -122,7 +138,7 @@ public class DimeUserResolverServiceAdapter extends ServiceAdapterBase implement
                         .getNameFamily();
                 String nickname = contact.getAllPersonName_as().firstValue()
                         .getAllNickname().next().toString();
-                registerAtURS(getIdentifier(), nickname, firstname, surname);
+                String secret = registerAtURS(getIdentifier(), nickname, firstname, surname);
             } catch (IOException e) {
 				logger.error(e.toString(),e);
 				throw new ServiceNotAvailableException(
@@ -202,8 +218,17 @@ public class DimeUserResolverServiceAdapter extends ServiceAdapterBase implement
 	public void _delete(String attribute) throws ServiceNotAvailableException,
 			AttributeNotSupportedException {
 
-		// Remove not supported
-		throw new ServiceNotAvailableException("Delete not supported.");
+        String resolverEndpoint = resolveEndpoint();
+
+		DimeResolver resolverClient = new ResolverClient(resolverEndpoint);
+
+		String token = credentialStore.getAccessSecret(attribute, tenant);
+		if (token == null ||token.isEmpty()){
+			throw new ServiceNotAvailableException("Deleting of this Public Resolver account is not supported.");
+		}
+		String response = resolverClient.delete(token, attribute);
+		//TODO: check response
+		credentialStore.deleteOAuthCredentials(attribute, tenant);
 	}
 
 	@Override
@@ -225,28 +250,84 @@ public class DimeUserResolverServiceAdapter extends ServiceAdapterBase implement
 		return this.proxy != null;
 	}
 
+	
     public String registerAtURS(String id, String nickname, String firstname, String surname) throws IOException  {
 
+    	String resolverEndpoint = policyManager.getPolicyString("NOAUTH_RESOLVER_ENDPOINT", "DIME");
+    	String host = policyManager.getPolicyString("URS", "DIME");
+    	
+        DimeResolver resolverClient = new ResolverClient(host + resolverEndpoint);
 
-        // Retrieve master secret
-        String URS = policyManager.getPolicyString("URS", "DIME");
-
-        StringBuilder resolverEndpoint = new StringBuilder();
-        resolverEndpoint.append(URS);
-        resolverEndpoint.append(policyManager.getPolicyString("NOAUTH_RESOLVER_ENDPOINT", "DIME"));
-
-        DimeResolver resolverClient = new ResolverClient(resolverEndpoint.toString());
 
         Map<String, String> values = new HashMap<String, String>();
         values.put("name", URIUtil.encodeWithinQuery(firstname));
         values.put("surname", URIUtil.encodeWithinQuery(surname));
         values.put("nickname", URIUtil.encodeWithinQuery(nickname));
+        
+//		String query = resolverEndpoint + "/register"  
+//					+ "?name=" 		+ URIUtil.encodeWithinQuery(firstname)
+//					+ "&surname=" 	+ URIUtil.encodeWithinQuery(surname)
+//					+ "&nickname="	+ URIUtil.encodeWithinQuery(nickname)
+//					+ "&said=" 		+ URIUtil.encodeWithinQuery(id);
 
         // Register with user service //token currently not supported without idemix
-        return resolverClient.register(null, firstname, surname, nickname, id);
+        String jsonResponse =  resolverClient.register(null, firstname, surname, nickname, id);
 
-
+		JSON json = JSONSerializer.toJSON(jsonResponse);
+		String secret = null;
+		
+		if (json instanceof JSONObject) {
+			secret = ((JSONObject) json).getString("key");
+		} else {
+			throw new IOException("Could not parse server response.");
+		}
+        storeURScredentials(identifier, id, secret);
+        return secret;
     }
+
+	private String resolveEndpoint() {
+        
+        String URS = policyManager.getPolicyString("URS", "DIME");
+        String endpoint = policyManager.getPolicyString("RESOLVER_ENDPOINT", "DIME");
+        
+        // Retrieve auth token
+//        String token = loadURStoken();
+//        if (token == null || token.equals("")){ //if no token available, try noauth API
+//        	endpoint = policyManager.getPolicyString("NOAUTH_RESOLVER_ENDPOINT", "DIME");
+//        }
+
+        StringBuilder resolverEndpoint = new StringBuilder();
+        resolverEndpoint.append(URS);
+        resolverEndpoint.append(endpoint);
+        
+        return resolverEndpoint.toString();
+	}
+	
+	private void storeURScredentials(String token, String id, String secret) {	
+		credentialStore.storeOAuthCredentials(NAME, token, id, secret, tenant);
+	}
+
+
+	public void update(String attribute, Object value) throws ServiceNotAvailableException{
+		//TODO: activate update
+		if (false || AttributeMap.PROFILE_ME.equals(attribute)) {
+            // Prepare contact to registerAtURS
+			// FIXME what if value is not a PersonContact object?? (now an ugly ClassCastException)
+			// FIXME what if the contact has no PersonName?? (now a NullPointerException, not nice!)
+			PersonContact contact = (PersonContact) value;
+			String firstname = contact.getAllPersonName_as().firstValue()
+			        .getNameGiven();
+			String surname = contact.getAllPersonName_as().firstValue()
+			        .getNameFamily();
+			String nickname = contact.getAllPersonName_as().firstValue()
+			        .getAllNickname().next().toString();
+			//String secret = registerAtURS(getIdentifier(), nickname, firstname, surname);
+
+		} else {
+			throw new ServiceNotAvailableException("Updating at "
+					+ attribute + " is not supported.");
+		}
+	}
 
 
 

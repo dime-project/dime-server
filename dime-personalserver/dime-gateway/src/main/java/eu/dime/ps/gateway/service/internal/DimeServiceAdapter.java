@@ -356,6 +356,8 @@ public class DimeServiceAdapter extends ServiceAdapterBase implements InternalSe
 		}
 	}
 
+	//FIXME: this search method seems to be deprecated/obsolete
+	//-> covered by DimeuserResolverServiceAdapter 
 	@Override
 	public <T extends Resource> Collection<T> search(String attribute,
 			Resource values, Class<T> returnType)
@@ -371,19 +373,19 @@ public class DimeServiceAdapter extends ServiceAdapterBase implements InternalSe
 			if (firstname == null || firstname.isEmpty()) {
 				throw new IllegalArgumentException("Parameter 'values' should contain a valid 'firstname'.");
 			}
-			path = path.concat("/registeredusers/getByName?name=" + firstname);
+			path = path.concat("/search?name=" + firstname);
 		} else if ("surname".equals(attribute)) {
 			String surname = contact.getAllPersonName_as().firstValue().getNameFamily();
 			if (surname == null || surname.isEmpty()) {
 				throw new IllegalArgumentException("Parameter 'values' should contain a valid 'surname'.");
 			}
-			path = path.concat("/registeredusers/getBySurname?surname=" + surname);
+			path = path.concat("/search?surname=" + surname);
 		} else if ("nickname".equals(attribute)) {
 			String nickname = contact.getAllPersonName_as().firstValue().getAllNickname().next().toString();
 			if (nickname == null || nickname.isEmpty()) {
 				throw new IllegalArgumentException("Parameter 'values' should contain a valid 'nickname'.");
 			}
-			path = path.concat("/registeredusers/getByNickname?nickname=" + nickname);
+			path = path.concat("/search?nickname=" + nickname);
 		} else {
 			throw new IllegalArgumentException("Attribute '"+attribute+"' is not supported, please try" +
 					" one of the following: 'firstname', 'surname' or 'nickname'");
@@ -406,10 +408,6 @@ public class DimeServiceAdapter extends ServiceAdapterBase implements InternalSe
 			name.setNameGiven(current.getString("name"));
 			name.setNameFamily(current.getString("surname"));
 
-			// FIXME [Isma] why are we using serviceAccountID as the URI for the profile? when I'm sure of the consequences
-			// I'll instead use a new unique UUID-based URI
-			// and actually, shouldn't we be creating an account for this person as well? I mean, that's the truly (and only)
-			// way for communicating with him/her
 			PersonContact newContact = ncofactory.createPersonContact(current.getString("serviceAccountID"));
 			newContact.setPersonName(name);
 			newContact.getModel().addAll(name.getModel().iterator()); // important to add PersonName's metadata to PersonContact

@@ -17,5 +17,13 @@
 	<bean id="policyStore" class="eu.dime.ps.gateway.policy.PolicyStoreImpl">
 		<property name="entityFactory" ref="entityFactory"/>
 	</bean>
+	
+	<bean id="credentialStore" class="eu.dime.ps.gateway.auth.impl.CredentialStoreImpl" factory-method="getInstance">
+		<property name="entityFactory" ref="entityFactory"/>
+	</bean>
+	
+	<bean id="dimeUserResolverServiceAdapter" class="eu.dime.ps.gateway.service.external.DimeUserResolverServiceAdapter" >
+		<property name="credentialStore" ref="credentialStore" />
+	</bean>
 		
 </beans>

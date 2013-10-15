@@ -27,4 +27,8 @@
 	
 	<bean id="accountRegistrar" class="eu.dime.ps.gateway.service.internal.impl.SelfContainedAccountRegistrar"/>
 
+	<bean id="dimeUserResolverServiceAdapter" class="eu.dime.ps.gateway.service.external.DimeUserResolverServiceAdapter" >
+		<property name="credentialStore" ref="credentialStore" />
+	</bean>
+
 </beans>

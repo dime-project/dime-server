@@ -18,19 +18,23 @@
  */
 package eu.dime.ps.gateway.userresolver.client;
 
-import eu.dime.ps.gateway.exception.ServiceException;
-import eu.dime.ps.gateway.exception.ServiceNotAvailableException;
 import java.io.IOException;
-import net.sf.json.JSONArray;
+
+import org.apache.http.client.ClientProtocolException;
+
+import eu.dime.ps.gateway.exception.ServiceNotAvailableException;
 
 /**
  *
  * @author simon
+ * @author marcel
  */
 public interface DimeResolver {
 
     public String register(String token, String firstname, String surname, String nickname, String said) throws IOException;
 
-
+    public String update(String token, String firstname, String surname, String nickname, String said) throws ClientProtocolException, IOException;
+    
+    public String delete(String token, String said) throws ServiceNotAvailableException;
 
 }

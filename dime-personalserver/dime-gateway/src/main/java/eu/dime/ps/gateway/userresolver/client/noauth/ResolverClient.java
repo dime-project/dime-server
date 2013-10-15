@@ -14,17 +14,22 @@
 
 package eu.dime.ps.gateway.userresolver.client.noauth;
 import eu.dime.commons.util.HttpUtils;
+import eu.dime.ps.gateway.exception.ServiceNotAvailableException;
 import eu.dime.ps.gateway.userresolver.client.DimeResolver;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.message.BasicNameValuePair;
 import org.slf4j.Logger;
@@ -35,6 +40,7 @@ import org.slf4j.LoggerFactory;
 /**
  *
  * @author simon
+ * @author marcel
  */
 public class ResolverClient implements DimeResolver {
  
@@ -64,6 +70,7 @@ public class ResolverClient implements DimeResolver {
         if (token!=null){
             httpPost.setHeader("Authorization", "Bearer " + token);
         }
+        httpPost.addHeader("Content-Type", "application/x-www-form-urlencoded");
 
 		List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
 		nameValuePairs.add(new BasicNameValuePair("name", firstname));
@@ -91,5 +98,92 @@ public class ResolverClient implements DimeResolver {
 		throw new IOException("Unable to register");
 
 	}
+
+
+
+
+
+
+	@Override
+	public String update(String token, String firstname, String surname,
+			String nickname, String said) throws ClientProtocolException, IOException{
+			HttpPost httpPost = new HttpPost(serviceEnpoint + "/update");
+
+	    if (token!=null){
+	        httpPost.setHeader("Authorization", "Bearer " + token);
+	    }
+
+		List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+		nameValuePairs.add(new BasicNameValuePair("name", firstname));
+		nameValuePairs.add(new BasicNameValuePair("surname", surname));
+		nameValuePairs.add(new BasicNameValuePair("nickname", nickname));
+		nameValuePairs.add(new BasicNameValuePair("said", said));
+	
+	    logger.info("register call at: "+serviceEnpoint+" for "+nickname+", "+firstname+", "+surname);
+
+
+		try {
+			httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs, "UTF-8"));
+		} catch(UnsupportedEncodingException e) {
+			logger.debug("Unable to set post prameters", e);
+			throw new RuntimeException("Unable to set post prameters");
+		}
+	
+		HttpResponse response = httpClient.execute(httpPost);
+		HttpEntity entity = response.getEntity();
+		if(entity != null) {
+			String jsonResponse = IOUtils.toString(entity.getContent());
+			logger.debug("Register response: {}", jsonResponse);
+			return jsonResponse;
+		}
+		throw new IOException("Unable to register");
+	}
+
+	@Override
+	public String delete(String token, String said) throws ServiceNotAvailableException {
+		HttpDelete httpDelete = new HttpDelete(serviceEnpoint+"?said="+said);
+		String encode = Base64.encodeBase64String((said + ":" + token).getBytes());
+		httpDelete.addHeader("Authorization", "Basic " + encode.replace("\r\n", ""));
+
+		HttpResponse response;
+		try {
+			response = httpClient.execute(httpDelete);
+
+			HttpEntity entity = response.getEntity();
+			if(entity != null) {
+				String jsonResponse = IOUtils.toString(entity.getContent());
+				logger.debug("Register response: {}", jsonResponse);
+				return jsonResponse;
+			}
+		} catch (Exception e) {
+			throw new ServiceNotAvailableException("Unable to register");
+		}
+		return null;		
+	} 
+	
+	// ----
+	//alternate call
+	//-----
+//	@Override
+//	public String delete(String token, String said) throws ServiceNotAvailableException {
+//		HttpPost httpDelete = new HttpPost(serviceEnpoint+"/remove?said="+said);
+//		String encode = Base64.encodeBase64String((said + ":" + token).getBytes());
+//		httpDelete.addHeader("Authorization", "Basic " + encode.replace("\r\n", ""));
+//		
+//		HttpResponse response;
+//		try {
+//			response = httpClient.execute(httpDelete);
+//
+//			HttpEntity entity = response.getEntity();
+//			if(entity != null) {
+//				String jsonResponse = IOUtils.toString(entity.getContent());
+//				logger.debug("Register response: {}", jsonResponse);
+//				return jsonResponse;
+//			}
+//		} catch (Exception e) {
+//			throw new ServiceNotAvailableException("Unable to register");
+//		}
+//		return null;		
+//	} 
 
 }

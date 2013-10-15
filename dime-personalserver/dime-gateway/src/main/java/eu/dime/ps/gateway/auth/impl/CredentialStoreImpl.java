@@ -80,15 +80,13 @@ public class CredentialStoreImpl implements CredentialStore {
 		if (serviceProvider != null){
 			ServiceAccount serviceAccount = entityFactory.buildServiceAccount();
 			serviceAccount.setAccountURI(accountId);
+			serviceAccount.setName(token);
 			serviceAccount.setAccessToken(token);
 			serviceAccount.setAccessSecret(secret);
 			serviceAccount.setServiceProvider(serviceProvider);
 			serviceAccount.setTenant(tenant);
 			serviceAccount.merge();
 			serviceAccount.flush();
-			serviceProvider.getServiceAccounts().add(serviceAccount);
-			serviceProvider.merge();
-			serviceProvider.flush();
 		}
 	}
 	
@@ -120,7 +118,10 @@ public class CredentialStoreImpl implements CredentialStore {
 	public String getAccessSecret(String accountId, Tenant tenant) {
 		ServiceAccount sa = ServiceAccount.findAllByTenantAndAccountUri(tenant, accountId);
 		 if (sa == null){
-			 throw new NoResultException("Could not find Service Account for: "+accountId);
+			 sa = ServiceAccount.findByName(accountId);
+			 if (sa == null){
+				 throw new NoResultException("Could not find Service Account for: "+accountId);
+			 }
 		 }
 		return sa.getAccessSecret();
 	}
@@ -289,6 +290,23 @@ public class CredentialStoreImpl implements CredentialStore {
 				ac.persist();
 			}
 		}
+	}
+
+	@Override
+	public boolean deleteOAuthCredentials(String account, Tenant tenant) {
+		ServiceAccount sa = ServiceAccount.findAllByTenantAndAccountUri(tenant, account);
+		if (sa == null){
+			sa = ServiceAccount.findByName(account);
+			if (sa == null){
+				return false;
+			}
+		}
+		if (tenant.getId().equals(sa.getTenant().getId())){
+			sa.remove();
+			sa.flush();
+			return true;
+		} 
+		return false;	
 	}
 	
 }
