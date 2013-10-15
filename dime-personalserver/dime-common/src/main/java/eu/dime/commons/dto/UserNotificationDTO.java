@@ -36,6 +36,9 @@ public class UserNotificationDTO {
         @javax.xml.bind.annotation.XmlElement(name="userId")
 	private String userId="@me";
 
+        @javax.xml.bind.annotation.XmlElement(name="imageUrl")
+	private String imageUrl="";
+
 
 	@javax.xml.bind.annotation.XmlElement(name="created")
 	public Long created;
