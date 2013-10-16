@@ -15,6 +15,9 @@
 package eu.dime.ps.controllers.infosphere.manager;
 
 import ie.deri.smile.vocabulary.NCO;
+import ie.deri.smile.vocabulary.NFO;
+import ie.deri.smile.vocabulary.NIE;
+import ie.deri.smile.vocabulary.NSO;
 import ie.deri.smile.vocabulary.PIMO;
 
 import java.util.ArrayList;
@@ -31,7 +34,9 @@ import org.slf4j.LoggerFactory;
 import eu.dime.ps.controllers.exception.InfosphereException;
 import eu.dime.ps.semantic.connection.ConnectionProvider;
 import eu.dime.ps.semantic.exception.NotFoundException;
+import eu.dime.ps.semantic.model.dao.Account;
 import eu.dime.ps.semantic.model.nco.PersonContact;
+import eu.dime.ps.semantic.model.nfo.FileDataObject;
 import eu.dime.ps.semantic.model.nie.InformationElement;
 import eu.dime.ps.semantic.model.pimo.Person;
 import eu.dime.ps.semantic.query.Query;
@@ -121,6 +126,27 @@ public class ProfileManagerImpl extends InfoSphereManagerBase<PersonContact> imp
 				.where(person.asURI(), PIMO.occurrence, Query.THIS)
 				.results();
 	}
+	
+	@Override
+	public Collection<PersonContact> getAllByAccount(Account  account) throws InfosphereException {
+		return getAllByAccount(account, new ArrayList<URI>(0));
+	}
+	
+	@Override
+	public Collection<PersonContact> getAllByAccount(Account account, List<URI> properties)
+			throws InfosphereException {
+		ResourceStore resourceStore = getResourceStore();
+		
+		if (!resourceStore.exists(account)) {
+			throw new InfosphereException("Account "+account.asURI()+" does not exist.");
+		}
+		
+		return resourceStore.find(PersonContact.class)
+				.distinct()
+				.select(properties.toArray(new URI[properties.size()]))
+				.where( NIE.dataSource).is(account.asURI()).
+				results();
+	}	
 	
 	@Override
 	public PersonContact get(String profileId) throws InfosphereException {

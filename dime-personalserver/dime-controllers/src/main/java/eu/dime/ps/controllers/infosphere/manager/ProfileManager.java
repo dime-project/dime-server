@@ -20,6 +20,7 @@ import java.util.List;
 import org.ontoware.rdf2go.model.node.URI;
 
 import eu.dime.ps.controllers.exception.InfosphereException;
+import eu.dime.ps.semantic.model.dao.Account;
 import eu.dime.ps.semantic.model.nco.PersonContact;
 import eu.dime.ps.semantic.model.pimo.Person;
 
@@ -47,5 +48,11 @@ public interface ProfileManager extends InfoSphereManager<PersonContact> {
 
 	void add(Person person, PersonContact profile, boolean isDefault)
 			throws InfosphereException;
+
+	Collection<PersonContact> getAllByAccount(Account account)
+			throws InfosphereException;
+
+	Collection<PersonContact> getAllByAccount(Account account,
+			List<URI> properties) throws InfosphereException;
 
 }

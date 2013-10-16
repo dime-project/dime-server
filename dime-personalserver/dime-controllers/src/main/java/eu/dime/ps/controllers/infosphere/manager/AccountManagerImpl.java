@@ -1,16 +1,16 @@
 /*
-* Copyright 2013 by the digital.me project (http://www.dime-project.eu).
-*
-* Licensed under the EUPL, Version 1.1 only (the "Licence");
-* You may not use this work except in compliance with the Licence.
-* You may obtain a copy of the Licence at:
-*
-* http://joinup.ec.europa.eu/software/page/eupl/licence-eupl
-*
-* Unless required by applicable law or agreed to in writing, software distributed under the Licence is distributed on an "AS IS" basis,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-* See the Licence for the specific language governing permissions and limitations under the Licence.
-*/
+ * Copyright 2013 by the digital.me project (http://www.dime-project.eu).
+ *
+ * Licensed under the EUPL, Version 1.1 only (the "Licence");
+ * You may not use this work except in compliance with the Licence.
+ * You may obtain a copy of the Licence at:
+ *
+ * http://joinup.ec.europa.eu/software/page/eupl/licence-eupl
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the Licence is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the Licence for the specific language governing permissions and limitations under the Licence.
+ */
 
 package eu.dime.ps.controllers.infosphere.manager;
 
@@ -56,7 +56,9 @@ import eu.dime.ps.semantic.model.DAOFactory;
 import eu.dime.ps.semantic.model.ModelFactory;
 import eu.dime.ps.semantic.model.dao.Account;
 import eu.dime.ps.semantic.model.dao.Credentials;
+import eu.dime.ps.semantic.model.nco.PersonContact;
 import eu.dime.ps.semantic.model.pimo.Person;
+import eu.dime.ps.semantic.model.pimo.PersonGroup;
 import eu.dime.ps.semantic.rdf.ResourceStore;
 import eu.dime.ps.semantic.service.LiveContextService;
 import eu.dime.ps.semantic.service.impl.PimoService;
@@ -74,236 +76,275 @@ import eu.dime.ps.storage.manager.EntityFactory;
  */
 public class AccountManagerImpl extends InfoSphereManagerBase<Account> implements AccountManager {
 
-    private final Logger logger = LoggerFactory.getLogger(AccountManagerImpl.class);
-    
-    private final DAOFactory daoFactory = (new ModelFactory()).getDAOFactory();
-    private EntityFactory entityFactory;
-    private ServiceGateway serviceGateway;
-    private ServiceCrawlerRegistry serviceCrawlerRegistry;
-    private AccountRegistrar accountRegistrar;
+	private final Logger logger = LoggerFactory.getLogger(AccountManagerImpl.class);
 
-    @Autowired
-    public void setEntityFactory(EntityFactory entityFactory) {
-        this.entityFactory = entityFactory;
-    }
+	private final DAOFactory daoFactory = (new ModelFactory()).getDAOFactory();
+	private EntityFactory entityFactory;
+	private ServiceGateway serviceGateway;
+	private ServiceCrawlerRegistry serviceCrawlerRegistry;
+	private AccountRegistrar accountRegistrar;
+	private ProfileManager profileManager;
+	private PersonManager personManager;
+	private PersonGroupManager personGroupManager;
 
-    public void setServiceGateway(ServiceGateway serviceGateway) {
-        this.serviceGateway = serviceGateway;
-    }
+	@Autowired
+	public void setEntityFactory(EntityFactory entityFactory) {
+		this.entityFactory = entityFactory;
+	}
+	@Autowired
+	public void setProfileManager(ProfileManager profileManager) {
+		this.profileManager = profileManager;
+	}
+	@Autowired
+	public void setPersonManager(PersonManager personManager) {
+		this.personManager = personManager;
+	}
+	@Autowired
+	public void setGroupManager(PersonGroupManager personGroupManager) {
+		this.personGroupManager = personGroupManager;
+	}
 
-    public void setServiceCrawlerRegistry(ServiceCrawlerRegistry serviceCrawlerRegistry) {
-        this.serviceCrawlerRegistry = serviceCrawlerRegistry;
-    }
-    
-    public void setAccountRegistrar(AccountRegistrar accountRegistrar) {
-    	this.accountRegistrar = accountRegistrar;
-    }
+	public void setServiceGateway(ServiceGateway serviceGateway) {
+		this.serviceGateway = serviceGateway;
+	}
 
-    @Override
-    public boolean isAccount(String resourceId) throws InfosphereException {
-        PimoService pimoService = getPimoService();
-        try {
-            return pimoService.isTypedAs(new URIImpl(resourceId), DAO.Account);
-        } catch (NotFoundException e) {
-            throw new InfosphereException("Couldn't check if " + resourceId + " was a dao:Account.", e);
-        }
-    }
+	public void setServiceCrawlerRegistry(ServiceCrawlerRegistry serviceCrawlerRegistry) {
+		this.serviceCrawlerRegistry = serviceCrawlerRegistry;
+	}
 
-    @Override
-    public Collection<Account> getAll() throws InfosphereException {
-        return getAll(new ArrayList<URI>(0));
-    }
+	public void setAccountRegistrar(AccountRegistrar accountRegistrar) {
+		this.accountRegistrar = accountRegistrar;
+	}
 
-    @Override
-    public Collection<Account> getAll(List<URI> properties) throws InfosphereException {
-        return getResourceStore().find(Account.class).distinct().select(properties.toArray(new URI[properties.size()])).results();
-    }
+	@Override
+	public boolean isAccount(String resourceId) throws InfosphereException {
+		PimoService pimoService = getPimoService();
+		try {
+			return pimoService.isTypedAs(new URIImpl(resourceId), DAO.Account);
+		} catch (NotFoundException e) {
+			throw new InfosphereException("Couldn't check if " + resourceId + " was a dao:Account.", e);
+		}
+	}
 
-    @Override
-    public Collection<Account> getAllByCreator(Person creator)
-            throws InfosphereException {
-        return getAllByCreator(creator, new URI[0]);
-    }
+	@Override
+	public Collection<Account> getAll() throws InfosphereException {
+		return getAll(new ArrayList<URI>(0));
+	}
 
-    @Override
-    public Collection<Account> getAllByCreator(Person creator, URI... properties)
-            throws InfosphereException {
-        return getResourceStore().find(Account.class).distinct().select(properties).where(NAO.creator).is(creator.asResource()).results();
-    }
+	@Override
+	public Collection<Account> getAll(List<URI> properties) throws InfosphereException {
+		return getResourceStore().find(Account.class).distinct().select(properties.toArray(new URI[properties.size()])).results();
+	}
 
-    public Collection<Account> getAllByType(String accountType)
-            throws InfosphereException {
-        return getAllByType(accountType, new URI[0]);
-    }
+	@Override
+	public Collection<Account> getAllByCreator(Person creator)
+			throws InfosphereException {
+		return getAllByCreator(creator, new URI[0]);
+	}
 
-    public Collection<Account> getAllByType(String accountType, URI... properties)
-            throws InfosphereException {
-        return getResourceStore().find(Account.class).distinct().select(properties).where(DAO.accountType).is(accountType).results();
-    }
+	@Override
+	public Collection<Account> getAllByCreator(Person creator, URI... properties)
+			throws InfosphereException {
+		return getResourceStore().find(Account.class).distinct().select(properties).where(NAO.creator).is(creator.asResource()).results();
+	}
 
-    @Override
-    public Collection<Account> getAllByCreatorAndByType(String creatorId, String accountType)
-            throws InfosphereException {
-        return getAllByCreatorAndByType(creatorId, accountType, new URI[0]);
-    }
+	public Collection<Account> getAllByType(String accountType)
+			throws InfosphereException {
+		return getAllByType(accountType, new URI[0]);
+	}
 
-    @Override
-    public Collection<Account> getAllByCreatorAndByType(String creatorId, String accountType,
-            URI... properties) throws InfosphereException {
-        return getResourceStore().find(Account.class).distinct().select(properties).where(NAO.creator).is(new URIImpl(creatorId)).where(DAO.accountType).is(accountType).results();
-    }
+	public Collection<Account> getAllByType(String accountType, URI... properties)
+			throws InfosphereException {
+		return getResourceStore().find(Account.class).distinct().select(properties).where(DAO.accountType).is(accountType).results();
+	}
 
-    @Override
-    public Account get(String accountId) throws InfosphereException {
-        return get(accountId, new ArrayList<URI>(0));
-    }
+	@Override
+	public Collection<Account> getAllByCreatorAndByType(String creatorId, String accountType)
+			throws InfosphereException {
+		return getAllByCreatorAndByType(creatorId, accountType, new URI[0]);
+	}
 
-    @Override
-    public Account get(String accountId, List<URI> properties)
-            throws InfosphereException {
-        try {
-            return getResourceStore().get(new URIImpl(accountId), Account.class,
-                    properties.toArray(new URI[properties.size()]));
-        } catch (NotFoundException e) {
-            throw new InfosphereException("cannot find account " + accountId, e);
-        }
-    }
+	@Override
+	public Collection<Account> getAllByCreatorAndByType(String creatorId, String accountType,
+			URI... properties) throws InfosphereException {
+		return getResourceStore().find(Account.class).distinct().select(properties).where(NAO.creator).is(new URIImpl(creatorId)).where(DAO.accountType).is(accountType).results();
+	}
 
-    @Override
-    public Credentials getCredentials(String accountId) throws InfosphereException {
-        return getResourceStore().find(Credentials.class).distinct().where(DAO.hasCredentials).is(new URIImpl(accountId)).first();
-    }
+	@Override
+	public Account get(String accountId) throws InfosphereException {
+		return get(accountId, new ArrayList<URI>(0));
+	}
 
-    @Override
-    public void add(Account account) throws InfosphereException {
-        String accountType = account.getAccountType();
+	@Override
+	public Account get(String accountId, List<URI> properties)
+			throws InfosphereException {
+		try {
+			return getResourceStore().get(new URIImpl(accountId), Account.class,
+					properties.toArray(new URI[properties.size()]));
+		} catch (NotFoundException e) {
+			throw new InfosphereException("cannot find account " + accountId, e);
+		}
+	}
 
-        if (accountType == null) {
-            throw new InfosphereException("Account " + account.asURI() + " cannot be added: accountType must be specified.");
-        }
+	@Override
+	public Credentials getCredentials(String accountId) throws InfosphereException {
+		return getResourceStore().find(Credentials.class).distinct().where(DAO.hasCredentials).is(new URIImpl(accountId)).first();
+	}
 
-        // retrieve provider for given account type
-        ServiceProvider serviceProvider = ServiceProvider.findByName(accountType);
+	@Override
+	public void add(Account account) throws InfosphereException {
+		String accountType = account.getAccountType();
 
-        // if creator not specified, it's set to the owner of the PIM
-        if (!account.hasCreator()) {
-            account.setCreator(getPimoService().getUserUri());
-        } else if (!account.getCreator().asURI().toString().equals(getPimoService().getUserUri())) {
-            super.add(account);
-            return;
-        }
-        
-        Tenant tenant = TenantHelper.getCurrentTenant();
-        ServiceAccount serviceAccount = entityFactory.buildServiceAccount();
+		if (accountType == null) {
+			throw new InfosphereException("Account " + account.asURI() + " cannot be added: accountType must be specified.");
+		}
 
-        serviceAccount.setServiceProvider(serviceProvider);
-        serviceAccount.setTenant(tenant);
-        serviceAccount.setEnabled(true);
-        serviceAccount.setAccountURI(account.asURI().toString());
+		// retrieve provider for given account type
+		ServiceProvider serviceProvider = ServiceProvider.findByName(accountType);
 
-        // registers account, and assigns a new name to the new record
-        serviceAccount.setName(accountRegistrar.register(serviceAccount));
-        
-        // persisting account in DB and RDF store
-        serviceAccount.persist();
-        super.add(account);
-    }
+		// if creator not specified, it's set to the owner of the PIM
+		if (!account.hasCreator()) {
+			account.setCreator(getPimoService().getUserUri());
+		} else if (!account.getCreator().asURI().toString().equals(getPimoService().getUserUri())) {
+			super.add(account);
+			return;
+		}
 
-    @Override
-    public void add(ServiceAdapter serviceAdapter) throws InfosphereException, ServiceAdapterNotSupportedException {
+		Tenant tenant = TenantHelper.getCurrentTenant();
+		ServiceAccount serviceAccount = entityFactory.buildServiceAccount();
 
-        Tenant tenant = TenantHelper.getCurrentTenant();
+		serviceAccount.setServiceProvider(serviceProvider);
+		serviceAccount.setTenant(tenant);
+		serviceAccount.setEnabled(true);
+		serviceAccount.setAccountURI(account.asURI().toString());
 
-        String adapterName = serviceAdapter.getAdapterName();
-        ServiceProvider provider = ServiceProvider.findByName(adapterName);
-        if (provider == null) {
-            throw new ServiceAdapterNotSupportedException("Service provider " + adapterName + " not found.");
-        }
+		// registers account, and assigns a new name to the new record
+		serviceAccount.setName(accountRegistrar.register(serviceAccount));
 
-        
-        // creating dao:Account object
-        Account account = daoFactory.createAccount(serviceAdapter.getIdentifier());
-        account.setAccountType(adapterName);
-        account.setCreator(getPimoService().getUserUri());
-        account.setPrefLabel(adapterName);
+		// persisting account in DB and RDF store
+		serviceAccount.persist();
+		super.add(account);
+	}
 
-        // saving service account in DB + credentials
-        ServiceAccount dbAccount = entityFactory.buildServiceAccount();
-        dbAccount.setTenant(tenant);
-        dbAccount.setServiceProvider(provider);
-        dbAccount.setAccountURI(account.asURI().toString());
-        dbAccount.setName(null); // external accounts must have no name
+	@Override
+	public void add(ServiceAdapter serviceAdapter) throws InfosphereException, ServiceAdapterNotSupportedException {
 
-        if (serviceAdapter instanceof OAuthServiceAdapter) {
-            OAuthServiceAdapter adapter = (OAuthServiceAdapter) serviceAdapter;
-            dbAccount.setAccessToken(adapter.getAccessToken().getToken());
-            dbAccount.setAccessSecret(adapter.getAccessToken().getSecret());
-        } else if (serviceAdapter instanceof BasicAuthServiceAdapter) {
-            BasicAuthServiceAdapter adapter = (BasicAuthServiceAdapter) serviceAdapter;
-            dbAccount.setAccessToken(adapter.getUsername());
-            dbAccount.setAccessSecret(adapter.getPassword());
-        }
+		Tenant tenant = TenantHelper.getCurrentTenant();
 
-        // persisting account information in DB and RDF repository
-        PimoService pimoService = getPimoService();
-        try {
-            dbAccount.persist();
-            pimoService.create(account);
-        } catch (ResourceExistsException e) {
-            throw new InfosphereException("cannot create account", e);
-        }
+		String adapterName = serviceAdapter.getAdapterName();
+		ServiceProvider provider = ServiceProvider.findByName(adapterName);
+		if (provider == null) {
+			throw new ServiceAdapterNotSupportedException("Service provider " + adapterName + " not found.");
+		}
 
-        try {
-            // construct the default handlers
-            TripleStore tripleStore = getTripleStore();
-            ResourceStore resourceStore = getResourceStore();
-            LiveContextService liveContextService = getLiveContextService();
-            AccountUpdaterService genericUpdater = new AccountUpdaterServiceImpl(pimoService, new ResourceMatchingServiceImpl(tripleStore));
-            ProfileAccountUpdater profileUpdater = new ProfileAccountUpdater(resourceStore, pimoService);
-            StreamAccountUpdater streamUpdater = new StreamAccountUpdater(resourceStore);
 
-            CrawlerHandler[] handlers = new CrawlerHandler[4];
-            handlers[0] = new AccountUpdaterHandler(account.asURI(), genericUpdater);
-            handlers[1] = new ProfileUpdaterHandler(account.asURI(), profileUpdater);
-            handlers[2] = new StreamUpdaterHandler(account.asURI(), streamUpdater);
-            handlers[3] = new ContextUpdaterHandler(account.asURI(), liveContextService);
+		// creating dao:Account object
+		Account account = daoFactory.createAccount(serviceAdapter.getIdentifier());
+		account.setAccountType(adapterName);
+		account.setCreator(getPimoService().getUserUri());
+		account.setPrefLabel(adapterName);
 
-            // setup and start service crawling if account was successfully saved...
-            serviceCrawlerRegistry.add(tenant.getId(), serviceAdapter, handlers);
-        } catch (DataMiningException e) {
-            throw new InfosphereException("Error setting up datamining services for tenant '" + tenant.getId() + "'.", e);
-        }
-    }
+		// saving service account in DB + credentials
+		ServiceAccount dbAccount = entityFactory.buildServiceAccount();
+		dbAccount.setTenant(tenant);
+		dbAccount.setServiceProvider(provider);
+		dbAccount.setAccountURI(account.asURI().toString());
+		dbAccount.setName(null); // external accounts must have no name
 
-    @Override
-    public void remove(String accountId) throws InfosphereException {
-        // stops and removes crawler
-        serviceCrawlerRegistry.remove(accountId);
+		if (serviceAdapter instanceof OAuthServiceAdapter) {
+			OAuthServiceAdapter adapter = (OAuthServiceAdapter) serviceAdapter;
+			dbAccount.setAccessToken(adapter.getAccessToken().getToken());
+			dbAccount.setAccessSecret(adapter.getAccessToken().getSecret());
+		} else if (serviceAdapter instanceof BasicAuthServiceAdapter) {
+			BasicAuthServiceAdapter adapter = (BasicAuthServiceAdapter) serviceAdapter;
+			dbAccount.setAccessToken(adapter.getUsername());
+			dbAccount.setAccessSecret(adapter.getPassword());
+		}
 
-        // removes adapter for this account from service gateway
-        try {
-            serviceGateway.unsetServiceAdapter(accountId);
-        } catch (InvalidLoginException e) {
-            throw new InfosphereException("Invalid login information.", e);
-        } catch (ServiceNotAvailableException e) {
-            throw new InfosphereException("Service not available.", e);
-        }
+		// persisting account information in DB and RDF repository
+		PimoService pimoService = getPimoService();
+		try {
+			dbAccount.persist();
+			pimoService.create(account);
+		} catch (ResourceExistsException e) {
+			throw new InfosphereException("cannot create account", e);
+		}
 
-        // removes entry from the DB
-        Tenant tenant = TenantHelper.getCurrentTenant();
-        ServiceAccount account = ServiceAccount.findAllByTenantAndAccountUri(tenant, accountId);
-        if (account != null) {
-            // FIXME throws a 'deleted entity passed to persist' exception
-//			account.remove();
-        }
+		try {
+			// construct the default handlers
+			TripleStore tripleStore = getTripleStore();
+			ResourceStore resourceStore = getResourceStore();
+			LiveContextService liveContextService = getLiveContextService();
+			AccountUpdaterService genericUpdater = new AccountUpdaterServiceImpl(pimoService, new ResourceMatchingServiceImpl(tripleStore));
+			ProfileAccountUpdater profileUpdater = new ProfileAccountUpdater(resourceStore, pimoService);
+			StreamAccountUpdater streamUpdater = new StreamAccountUpdater(resourceStore);
 
-        // removes from RDF repository
-        super.remove(accountId);
-    }
+			CrawlerHandler[] handlers = new CrawlerHandler[4];
+			handlers[0] = new AccountUpdaterHandler(account.asURI(), genericUpdater);
+			handlers[1] = new ProfileUpdaterHandler(account.asURI(), profileUpdater);
+			handlers[2] = new StreamUpdaterHandler(account.asURI(), streamUpdater);
+			handlers[3] = new ContextUpdaterHandler(account.asURI(), liveContextService);
 
-    @Override
-    public void crawl(String accountId) {
-        serviceCrawlerRegistry.fireCrawler(accountId);
-    }
-    
+			// setup and start service crawling if account was successfully saved...
+			serviceCrawlerRegistry.add(tenant.getId(), serviceAdapter, handlers);
+		} catch (DataMiningException e) {
+			throw new InfosphereException("Error setting up datamining services for tenant '" + tenant.getId() + "'.", e);
+		}
+	}
+
+	@Override
+	public void remove(String accountId) throws InfosphereException {
+		// stops and removes crawler
+		serviceCrawlerRegistry.remove(accountId);
+
+		// removes adapter for this account from service gateway
+		try {
+			serviceGateway.unsetServiceAdapter(accountId);
+		} catch (InvalidLoginException e) {
+			throw new InfosphereException("Invalid login information.", e);
+		} catch (ServiceNotAvailableException e) {
+			throw new InfosphereException("Service not available.", e);
+		}
+
+		// removes entry from the DB
+		Tenant tenant = TenantHelper.getCurrentTenant();
+		// FIXME throws a 'deleted entity passed to persist' exception
+		/* ServiceAccount account = ServiceAccount.findAllByTenantAndAccountUri(tenant, accountId);
+        if (account != null) {          
+		account.remove();
+        }*/
+
+
+		//removes Persons and groups related to this account
+		Account account = this.get(accountId);
+
+		Collection<PersonContact> profiles = profileManager.getAllByAccount(account);
+		for(PersonContact profile : profiles) {
+			Collection<Person> persons = personManager.getAllByProfile(profile);
+			for(Person person : persons){
+				if(!person.asURI().toString().equals(getMe().asURI().toString()))
+					try{
+						personManager.remove(person.asURI().toString());
+					}
+				catch(InfosphereException e)
+				{logger.warn("Could not delete person "+person.asURI().toString(),e);}
+			}			
+		}
+		Collection<PersonGroup> groups = personGroupManager.getAllByAccount(account);
+		for(PersonGroup group : groups){
+			try{
+			personGroupManager.remove(group.asURI().toString());
+			}catch(InfosphereException e){
+				logger.warn("Could not delete group "+group.asURI().toString(),e);
+			}
+		}
+		// removes from RDF repository
+		super.remove(accountId);
+	}
+
+	@Override
+	public void crawl(String accountId) {
+		serviceCrawlerRegistry.fireCrawler(accountId);
+	}
+
 }

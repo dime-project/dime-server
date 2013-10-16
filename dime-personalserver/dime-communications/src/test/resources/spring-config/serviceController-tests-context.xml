@@ -71,6 +71,11 @@
 		class="eu.dime.ps.controllers.infosphere.manager.DataboxManagerImpl">
 		<property name="connectionProvider" ref="connectionProvider"/>
 	</bean>
+	
+	<bean id="personGroupManager"
+		class="eu.dime.ps.controllers.infosphere.manager.PersonGroupManagerImpl">
+		<property name="connectionProvider" ref="connectionProvider"/>
+	</bean>
 
 	
 	<bean id="personManager"

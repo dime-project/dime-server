@@ -20,6 +20,7 @@ import java.util.List;
 import org.ontoware.rdf2go.model.node.URI;
 
 import eu.dime.ps.controllers.exception.InfosphereException;
+import eu.dime.ps.semantic.model.dao.Account;
 import eu.dime.ps.semantic.model.pimo.Person;
 import eu.dime.ps.semantic.model.pimo.PersonGroup;
 
@@ -41,5 +42,11 @@ public interface PersonGroupManager extends InfoSphereManager<PersonGroup> {
 	Collection<PersonGroup> getAll(Person person, List<URI> properties) throws InfosphereException;
 	
 	void addAdhocGroup(PersonGroup personGroup) throws InfosphereException;
+
+	Collection<PersonGroup> getAllByAccount(Account account,
+			List<URI> properties) throws InfosphereException;
+
+	Collection<PersonGroup> getAllByAccount(Account account)
+			throws InfosphereException;
 	
 }

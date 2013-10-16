@@ -16,6 +16,7 @@ package eu.dime.ps.controllers.infosphere.manager;
 
 import ie.deri.smile.rdf.TripleStore;
 import ie.deri.smile.vocabulary.NAO;
+import ie.deri.smile.vocabulary.NIE;
 import ie.deri.smile.vocabulary.PIMO;
 
 import java.util.ArrayList;
@@ -30,6 +31,7 @@ import eu.dime.ps.controllers.exception.InfosphereException;
 import eu.dime.ps.semantic.connection.ConnectionProvider;
 import eu.dime.ps.semantic.exception.NotFoundException;
 import eu.dime.ps.semantic.exception.ResourceExistsException;
+import eu.dime.ps.semantic.model.dao.Account;
 import eu.dime.ps.semantic.model.pimo.Person;
 import eu.dime.ps.semantic.model.pimo.PersonGroup;
 import eu.dime.ps.semantic.service.impl.PimoService;
@@ -104,6 +106,25 @@ public class PersonGroupManagerImpl extends InfoSphereManagerBase<PersonGroup> i
 				.distinct()
 				.select(properties.toArray(new URI[properties.size()]))
 				.where(PIMO.hasMember).is(person)
+				.results();
+	}
+	
+	@Override
+	public Collection<PersonGroup> getAllByAccount(Account account)
+		throws InfosphereException {
+		return getAllByAccount(account, new ArrayList<URI>(0));
+	}
+	
+	@Override
+	public Collection<PersonGroup> getAllByAccount(Account account, List<URI> properties)
+			throws InfosphereException {
+		PimoService pimoService = getPimoService();
+
+		// returns all person groups (adhoc and manually created)
+		return pimoService.find(PersonGroup.class)
+				.distinct()
+				.select(properties.toArray(new URI[properties.size()]))
+				.where(NIE.dataSource).is(account)
 				.results();
 	}
 
