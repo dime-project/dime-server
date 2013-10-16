@@ -5763,6 +5763,12 @@ Dime.MergeDialog.prototype = {
     
     acceptHandler: function(){
         var dlgRef = this;
+        
+        //WarningDialog - true(Ok)/false(Abort)
+        if(!this.showWarningDialog()){
+            return;
+        }
+        
         Dime.REST.postMerge(this.mergePersons, function(response){
             console.log(response);
             (new Dime.Dialog.Toast("Persons merged successfully.")).show();
@@ -5773,6 +5779,15 @@ Dime.MergeDialog.prototype = {
         }, this);
         dlgRef.removeDialog();
     },
+            
+    showWarningDialog: function(){
+        var status = confirm("Do you really want to merge these persons? This action cannot be reversed!");
+        if(status){
+            return true;
+        }else{
+            return false;
+        }
+   },
 
     initBody: function(){
         //TODO: check two/multiple
