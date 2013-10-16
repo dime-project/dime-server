@@ -196,34 +196,41 @@
   }
   .row,
   .thumbnails {
-    margin: 92px auto;
-    max-width: 960px;
-  }
+    margin-left: 45px;
+  
+}
   [class*="span8"],
   .row-fluid [class*="span"] {
-    display: block;
     float: left;
     width: auto;
     margin: 0 auto !important;
-    max-width: 600px;
   }
 
   [class*="span4"],
   .row-fluid [class*="span"] {
-    display: block;
     float: left;
-    max-width: 290px;
-    margin-left: 20px !important;
+    margin-left: 10px !important;
   }
 
-  [class*="notificationBar"] {
-  display: block;
-  width: 596px;
-  margin: 0 auto !important;
-  top: -45px;
-  left: 6px;
+  #infoButtonLeft {
+      width: 50px;
+      height: 53px;
+  
   }
 
+  #navBarSpacer{
+      width: 76px;
+  
+      height: 6px;
+      float: left;
+}
+
+  .brand{
+      left: 20px;
+      
+  
+      position: absolute;
+}
 
   .row-fluid [class*="span"] {
     display: block;
@@ -355,16 +362,21 @@
   }
   [class*="span"] {
     float: left;
-    margin-left: 20px;
-  }
+  
+    position: relative;
+    top: 57px;
+}
 
 
   .container,
   .navbar-fixed-top .container,
   .navbar-fixed-bottom .container {
     width: 970px;
-    margin: 0 auto;
-  }
+    margin-top: 0px;
+  
+    margin-left: auto;
+    height: 123px;
+}
   .span12 {
     width: 724px;
   }
@@ -379,7 +391,6 @@
   }
   .span8 {
     width: 600px;
-    margin-left: 55px !important;
   }
   .span7 {
     width: 414px;
@@ -391,9 +402,11 @@
     width: 290px;
   }
   .span4 {
+    left: 12px;
+  
+    position: relative;
     width: 280px;
-    margin-left: 23px !important;
-  }
+}
   .span3 {
     width: 166px;
   }
@@ -581,7 +594,7 @@
   }
 }
 
-@media (min-width: 670px) and (min-width: 1170px) {
+@media (min-width: 1170px) {
   .row {
     *zoom: 1;
   }
