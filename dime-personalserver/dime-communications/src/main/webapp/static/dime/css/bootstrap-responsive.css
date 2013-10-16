@@ -153,7 +153,7 @@
   .navbar-fixed-bottom {
   }
   .navbar .nav > li:nth-child(1) > a {
-  width: 30px !important;    
+  width: 30px !important;
   }
 
   .navbar .nav > li > a {
@@ -168,7 +168,7 @@
     float: left;
     width: 560px !important;
     left: 0.2px;
-    margin-top: 10px; 
+    margin-top: 10px;
   }
   #qq-upload-drop-area-id {
       min-width: 597px !important;
@@ -197,7 +197,7 @@
   .row,
   .thumbnails {
     margin-left: 45px;
-  
+
 }
   [class*="span8"],
   .row-fluid [class*="span"] {
@@ -215,20 +215,19 @@
   #infoButtonLeft {
       width: 50px;
       height: 53px;
-  
+
   }
 
   #navBarSpacer{
       width: 76px;
-  
       height: 6px;
       float: left;
 }
 
   .brand{
       left: 20px;
-      
-  
+
+
       position: absolute;
 }
 
@@ -311,7 +310,6 @@
     margin-left: 20px !important;
   }
 
-  [class*="notificationBar"],
   .row-fluid [class*="span"] {
     display: block;
     width: 750px;
@@ -362,7 +360,7 @@
   }
   [class*="span"] {
     float: left;
-  
+
     position: relative;
     top: 57px;
 }
@@ -373,7 +371,7 @@
   .navbar-fixed-bottom .container {
     width: 970px;
     margin-top: 0px;
-  
+
     margin-left: auto;
     height: 123px;
 }
@@ -403,7 +401,7 @@
   }
   .span4 {
     left: 12px;
-  
+
     position: relative;
     width: 280px;
 }
@@ -620,7 +618,7 @@
     margin: 0 auto;
     height: 123px;
   }
-  
+
   /* Marina */
   .span12 {
     position: relative;
@@ -860,7 +858,7 @@
     float: left;
     width: 97.3% !important;
     left: 0.2px;
-    margin-top: 10px; 
+    margin-top: 10px;
   }
   #qq-upload-drop-area-id {
       min-width: 105%!important;
@@ -880,19 +878,30 @@
     float: none !important;
 
   }
-  [class*="notificationBar"] {
-    top: 20px;
-    left: 150px;
-    position: absolute;
-    width: 500px;
+
+  .notificationBar{
+    width: 32px;
+    margin-left: 0px;
+    background-color: transparent;
   }
+
+  #innerNotificationContainer{
+    display: none;
+    visibility: hidden;
+  }
+
+  .brand{
+    display: none;
+    visibility: hidden;
+  }
+
 
   .navbar-fixed-top,
   .navbar-fixed-bottom {
     position: static;
   }
   .navbar-fixed-top {
-    margin-bottom: 18px;
+    height: auto;
   }
   .navbar-fixed-bottom {
     margin-top: 18px;
@@ -912,12 +921,9 @@
   }
 
   .nav-collapse .nav {
-    float: right;
-    margin: 0 0 9px;
-    margin-top: 60px;
-    margin-left: 30px !important;
-    position: relative;
-  }
+    float: left;
+    background-color: #F1F1F1;
+}
   .nav-collapse .nav > li {
     float: none;
     background-color: #313031 !important;
@@ -1005,12 +1011,18 @@
   }
   .nav-collapse,
   .nav-collapse.collapse {
-    height: 0;
     overflow: hidden;
-  }
+
+    position: absolute;
+    z-index: 1035;
+    top: 52px;
+    left: 0px;
+}
   .navbar .btn-navbar {
     display: block;
-  }
+
+    float: left;
+}
   .navbar-static .navbar-inner {
     padding-right: 10px;
     padding-left: 10px;
@@ -1024,7 +1036,7 @@
   }
 
   .nav > li > a:active {
-    background-color: #5A9DD5; 
+    background-color: #5A9DD5;
   }
 }
 
@@ -1040,6 +1052,27 @@
   }
     .childItemProfileAttribute {
     width: 215px;
+  }
+  #notificationContainer{
+      width: 0px;
+  }
+  #navBarSpacer{      
+    display: none;
+    visibility: hidden;
+  }
+  #infoButtonLeft {
+    width: 30px;
+    height: 33px;
+    top: 5px;
+    left: 70px;
+    background-color: transparent;
+  }
+  .actionMenu {
+    display: none;
+    visibility: hidden;
+  }
+  #metabarMetaContainer{
+      position: relative;
   }
 }
 
@@ -1066,10 +1099,9 @@
   .metaActionView {
     height: 100px;
   }
+  #metabarMetaContainer{
+      position: inherit;
+  }
+  
 }
 
-@media (max-width: 700px) {
-[class*="notificationBar"] {
-  width: 200px;
-}
-}

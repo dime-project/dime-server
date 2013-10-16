@@ -3006,6 +3006,7 @@ Dime.Navigation = {
             .click(function(){
                 //update view
                 DimeView.viewManager.updateView.call(DimeView.viewManager, containerGroupType, viewType);
+                Dime.Navigation.updateNavBarOnClick();
             })
             .text(caption));
     },
@@ -3019,6 +3020,7 @@ Dime.Navigation = {
             .click(function(){
                 //update view
                 DimeView.viewManager.updateView.call(DimeView.viewManager, "", DimeViewStatus.SETTINGS_VIEW);
+                Dime.Navigation.updateNavBarOnClick();
             })
             .text('Settings'));
 
@@ -3240,6 +3242,16 @@ Dime.Navigation = {
         
         
     },
+
+    updateNavBarOnClick: function(){
+        var width=$(window).width();
+        if (width<=979){
+            $('.nav-collapse')
+                .removeClass('in')
+                .css('height', '0px');
+        }
+    },
+
     initNavigation: function(){
         var createNavCorner=function(){
             var userInformation= $('<div/>').attr('id','userInformation')
@@ -3258,6 +3270,7 @@ Dime.Navigation = {
                 )
             .click(function(){
                 DimeView.viewManager.updateView.call(DimeView.viewManager, Dime.psMap.TYPE.SITUATION, DimeViewStatus.GROUP_CONTAINER_VIEW, false);
+                Dime.Navigation.updateNavBarOnClick();
             });
             var placeLink = $('<div/>')
             .attr('id','currentPlace')
@@ -3267,6 +3280,7 @@ Dime.Navigation = {
                 )
             .click(function(){
                 DimeView.viewManager.updateView.call(DimeView.viewManager, Dime.psMap.TYPE.PLACE, DimeViewStatus.GROUP_CONTAINER_VIEW, false);
+                Dime.Navigation.updateNavBarOnClick();
             });
 
             //TODO fix spoiled naming of classes etc.
@@ -3329,6 +3343,9 @@ Dime.Navigation = {
 
         $(window).scroll(function(){
             var yOffset=57;
+            if ($(window).width()<=979){
+                yOffset=0;
+            }
             //console.log($(this).scrollTop());
             $('#metabarMetaContainer').css('top', $(this).scrollTop()+yOffset);
         });
@@ -3337,7 +3354,10 @@ Dime.Navigation = {
             var width=$(window).width();
             if (width>1170){
                 $('#navButtonMessages').find('a').text('Livepost');
-            }else if (width>=670 &&width<=1170){
+            }else if (width<=979){
+                $('#navButtonMessages').find('a').text('Livepost');
+                $('.nav-collapse').css('height', '0px');
+            }else {
                 $('#navButtonMessages').find('a').text('');
             }
         };
