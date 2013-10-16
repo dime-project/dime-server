@@ -1233,7 +1233,7 @@ DimeView = {
             id: "specialActionButton",
             minItems: -1,
             maxItems: 0,
-            supportedGroupTypes: [Dime.psMap.TYPE.PLACE],
+            supportedGroupTypes: [Dime.psMap.TYPE.GROUP, Dime.psMap.TYPE.PLACE],
             supportedViewTypes: [DimeViewStatus.GROUP_CONTAINER_VIEW, DimeViewStatus.PERSON_VIEW],
             handlerFunction: function(){DimeView.specialButtonSelected.call(DimeView);}
         },
@@ -1276,10 +1276,18 @@ DimeView = {
     updateActionView: function(selectionCount){
         var checkUpdateActionButton = function(actionButton){
             //HACK update values for special button - for supporting multi-use buttons refactoring would be necessary
+
+
             if (actionButton.id!=='specialActionButton'){
                 return;
             }
-            if (DimeView.viewManager.status.groupType===Dime.psMap.TYPE.PLACE){
+
+            if (DimeView.viewManager.status.groupType===Dime.psMap.TYPE.GROUP
+                    && DimeView.viewManager.status.viewType!==DimeViewStatus.PERSON_VIEW){
+                $('#'+actionButton.id).text("Merge Persons");
+                actionButton.maxItems=-1;
+                actionButton.minItems=2;
+            }else if (DimeView.viewManager.status.groupType===Dime.psMap.TYPE.PLACE){
                 $('#'+actionButton.id).text("Check In");
                 actionButton.maxItems=1;
                 actionButton.minItems=1;
@@ -1287,6 +1295,10 @@ DimeView = {
                 $('#'+actionButton.id).text("Send Livepost ...");
                 actionButton.maxItems=0;
                 actionButton.minItems=-1;
+            }else{
+                 $('#'+actionButton.id).text("");
+                 actionButton.maxItems=1;
+                 actionButton.minItems=2;
             }
         };
         var disabledButtonClass = "disabled";
@@ -1348,9 +1360,11 @@ DimeView = {
             }
             if (selectionCount<actionButton.minItems){ 
                 hideButton(actionButton.id);
+                continue;
                                    
             } else if ((actionButton.maxItems===-1) || (selectionCount<=actionButton.maxItems)){ 
                 showButton(actionButton);
+                continue;
                 
             }else{ //too many selected
                 hideButton(actionButton.id);
@@ -1359,7 +1373,26 @@ DimeView = {
     },
 
     specialButtonSelected: function(){
-        if (DimeView.viewManager.status.groupType===Dime.psMap.TYPE.PLACE){
+        if (DimeView.viewManager.status.groupType===Dime.psMap.TYPE.GROUP
+                    && DimeView.viewManager.status.viewType!==DimeViewStatus.PERSON_VIEW){
+            var selectedItems = DimeView.getSelectedItemsForView();
+            var mergeGuids = [];
+            for (var i=0; i<selectedItems.length;i++){
+                //merging groups is not supported
+                if (selectedItems[i].type===Dime.psMap.TYPE.GROUP){
+                    window.alert('Merging of groups is not supported!');
+                    return;
+                }
+                mergeGuids.push(selectedItems[i].guid);
+            }
+
+            var dialog = new Dime.MergeDialog(mergeGuids);
+            dialog.show(function(resultStatus){
+                if (resultStatus!==dialog.STATUS_PENDING){
+                    DimeView.viewManager.updateViewFromStatus(DimeView.viewManager.status, true);
+                }
+            }, DimeView);
+        }else if (DimeView.viewManager.status.groupType===Dime.psMap.TYPE.PLACE){
             var selectedPlaces = DimeView.getSelectedItemsForView();
             var restoreCurrentPlace=false;
             var handleResponse= function(response){
@@ -2049,23 +2082,7 @@ DimeView = {
         var dropDownUl=$('#actionButtonDropDownMore');
         dropDownUl.empty();
 
-        if (groupType===Dime.psMap.TYPE.GROUP){
-            dropDownUl                
-                .append(createMenuItem("Merge persons ..", function(event, jElement){
-                    var selectedItems = DimeView.getSelectedItemsForView();
-                    var mergeGuids = [];
-                    for (var i=0; i<selectedItems.length;i++){
-                        mergeGuids.push(selectedItems[i].guid);
-                    }
-                
-                    var dialog = new Dime.MergeDialog(mergeGuids);                
-                    dialog.show(function(resultStatus){
-                        if (resultStatus!==dialog.STATUS_PENDING){
-                            DimeView.viewManager.updateViewFromStatus(DimeView.viewManager.status, true);
-                        }
-                    }, DimeView);
-                })); 
-        }
+       
         dropDownUl
                 .append(createMenuItem("Create new rule for selected ..", function(event, jElement, selectedItems){
                     window.alert("Create new rule for selected currently not supported!");
