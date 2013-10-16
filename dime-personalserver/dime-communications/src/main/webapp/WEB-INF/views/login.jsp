@@ -181,7 +181,7 @@
                 <img width="120px" id="qr" src="/dime-communications/static/ui/dime/register/img/dime-mobile-qr.jpg"><br>
                 <a id="pushthis" href="http://dimetrials.bdigital.org:8080/dimemobile.apk"> Get the the android App!</a></p>
             
-            </br> How to use di.me: check out the <a class="linkToHowto">how-to page</a> <br>
+            </br> How to use di.me: check out the <a class="linkToHowto">guided tour</a> <br>
 
             <br/>
             <hr/>
