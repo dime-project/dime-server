@@ -258,7 +258,6 @@ public class DimeUserResolverServiceAdapter extends ServiceAdapterBase implement
     	
         DimeResolver resolverClient = new ResolverClient(host + resolverEndpoint);
 
-
         Map<String, String> values = new HashMap<String, String>();
         values.put("name", URIUtil.encodeWithinQuery(firstname));
         values.put("surname", URIUtil.encodeWithinQuery(surname));

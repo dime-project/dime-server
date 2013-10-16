@@ -80,11 +80,29 @@ public class CredentialStoreImpl implements CredentialStore {
 		if (serviceProvider != null){
 			ServiceAccount serviceAccount = entityFactory.buildServiceAccount();
 			serviceAccount.setAccountURI(accountId);
-			serviceAccount.setName(token);
+			//serviceAccount.setName(token);
 			serviceAccount.setAccessToken(token);
 			serviceAccount.setAccessSecret(secret);
 			serviceAccount.setServiceProvider(serviceProvider);
 			serviceAccount.setTenant(tenant);
+			serviceAccount.merge();
+			serviceAccount.flush();
+		}
+	}
+	
+	public void storeOrUpdateCredentials(String providerName, String accountId, String token, String secret, Tenant tenant){
+		ServiceProvider serviceProvider = ServiceProvider.findByName(providerName);
+		if (serviceProvider != null){
+			ServiceAccount serviceAccount = ServiceAccount.findAllByTenantAndAccountUri(tenant, accountId);
+			if (serviceAccount == null){
+				serviceAccount = entityFactory.buildServiceAccount();
+				serviceAccount.setAccountURI(accountId);
+				serviceAccount.setName(accountId.replace("urn:uuid:", ""));
+				serviceAccount.setServiceProvider(serviceProvider);
+				serviceAccount.setTenant(tenant);
+			}	
+			serviceAccount.setAccessToken(token);
+			serviceAccount.setAccessSecret(secret);
 			serviceAccount.merge();
 			serviceAccount.flush();
 		}
