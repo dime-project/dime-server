@@ -1364,13 +1364,27 @@ Dime.evaluation={
         Dime.ps_configuration.viewStack.push(this.getViewStackItemByGroupType(groupType, viewType));
     },
 
-    createAndSendEvaluationItemForAction: function(action){
+    createAndSendEvaluationItemForAction: function(action, involvedItems){
         //if evaluation is enabled
         if (Dime.ps_configuration.userInformation.evaluationDataCapturingEnabled){
             var evaluationItem = this.createEvaluationItem(Dime.ps_configuration.userInformation.evaluationId,
                 Dime.ps_configuration.viewStack, action, this.createEmptyInvolvedItems());
+            
+            this.countInvolvedItems(involvedItems, evaluationItem);
+            
             Dime.REST.postEvaluation(evaluationItem);
         }
+    },
+            
+    countInvolvedItems: function(involvedItems, evaluationItem){
+        $(involvedItems).each(function(key, value){
+                var itemType = value.type;
+                $.each(evaluationItem.involvedItems, function(key, value){
+                    if(itemType == key){
+                        evaluationItem.involvedItems[key]++;
+                    }
+                });
+            });
     }
 };
 

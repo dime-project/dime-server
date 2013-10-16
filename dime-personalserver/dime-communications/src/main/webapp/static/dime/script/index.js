@@ -1770,8 +1770,8 @@ DimeView = {
         if (event){
             event.stopPropagation();
         }
-
-        Dime.evaluation.createAndSendEvaluationItemForAction("action_editItem");
+        
+        Dime.evaluation.createAndSendEvaluationItemForAction("action_editItem", entry);
         var isEditable=DimeView.actionMenuActivatedForItem(entry);
         
         if (entry.type===Dime.psMap.TYPE.LIVEPOST){
@@ -1785,9 +1785,10 @@ DimeView = {
     
     editSelected: function(){
 
-        Dime.evaluation.createAndSendEvaluationItemForAction("action_editItem");
-
         var selectedItems = DimeView.getSelectedItemsForView();
+        
+        Dime.evaluation.createAndSendEvaluationItemForAction("action_editItem", selectedItems);
+
         if (selectedItems.length!==1){
             window.alert("Please select a single item.");
             return;
@@ -1810,7 +1811,7 @@ DimeView = {
 
         if (confirm("Are you sure, you want to delete "+mySelectedItems.length+" items?")){
             
-            Dime.evaluation.createAndSendEvaluationItemForAction("action_removePerson");
+            Dime.evaluation.createAndSendEvaluationItemForAction("action_removePerson", mySelectedItems);
 
             for (var i=0;i<mySelectedItems.length;i++){
                 var item = mySelectedItems[i];
@@ -1821,9 +1822,10 @@ DimeView = {
            
     
     shareSelected: function(){
-        Dime.evaluation.createAndSendEvaluationItemForAction("action_share");
-
+        
         var selectedItems = DimeView.getSelectedItemsForView();
+        
+        Dime.evaluation.createAndSendEvaluationItemForAction("action_share", selectedItems);
         
         var triggerDialog=function(response){
 
