@@ -207,7 +207,20 @@ public class NotifierManagerImpl implements NotifierManager {
 
 	@Override
 	public void remove(Long id) throws NotifierException {
+		DimeInternalNotification notification = notifyHistory.getNotificationById(id);
 		notifyHistory.removeNotification(id);
+		// sends internal notifications of the usernotification delete (to UI)
+		final SystemNotification systemNotification = new SystemNotification(notification.getTenant(),
+				DimeInternalNotification.OP_REMOVE,
+				id.toString(),
+				DimeInternalNotification.USER_NOTIFICATION_TYPE,
+				null);
+		try {
+			logger.debug("Pushing internal notification: "+systemNotification.toString());
+			this.pushInternalNotification(systemNotification);
+		} catch (NotifierException e) {
+			logger.error("Error while pushing notification ["+systemNotification+"].", e);
+		}
 		
 	}
 
