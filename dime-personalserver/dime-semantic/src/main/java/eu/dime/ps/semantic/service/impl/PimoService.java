@@ -2024,7 +2024,21 @@ public class PimoService implements TaggingService, Queryable {
 			}
 
 			// loads the full merged person from the store
-			return this.get(master, Person.class);
+			Person merged = this.get(master, Person.class);
+			
+			// notify all person deletions and profile/person updates
+			for (URI target : targets) {
+				broadcastManager.sendBroadcast(new Event(name, Event.ACTION_RESOURCE_DELETE, target));
+			}
+			ClosableIterator<Resource> occurrences = merged.getAllOccurrence();
+			while (occurrences.hasNext()) {
+				Resource occurrence = occurrences.next();
+				broadcastManager.sendBroadcast(new Event(name, Event.ACTION_RESOURCE_MODIFY, occurrence));
+			}
+			occurrences.close();
+			broadcastManager.sendBroadcast(new Event(name, Event.ACTION_RESOURCE_MODIFY, merged));
+			
+			return merged;
 		}
 	}
 	
