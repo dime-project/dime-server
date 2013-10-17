@@ -1066,7 +1066,9 @@
     top: 5px;
     left: 70px;
     background-color: transparent;
-  }
+  
+    position: absolute;
+}
   .actionMenu {
     display: none;
     visibility: hidden;
