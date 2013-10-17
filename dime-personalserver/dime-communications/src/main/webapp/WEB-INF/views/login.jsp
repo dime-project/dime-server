@@ -127,7 +127,7 @@
             <div id="intro" class="container">
                 <div class="row-fluid show-grid">
 
-                    <div class="span6" data-role="signin"><h4>Login with a existing account</h4>
+                    <div class="span6" data-role="signin"><h4>Login with existing account</h4>
                         <br>
 
                         <form class="login" action="${postLoginUrl}" method="post">
