@@ -1605,7 +1605,8 @@ Dime.PsConfigurationClass = function(mainSaid, hostname, port, useHttps){
     this.startTime = new Date().getTime();
     this.serverInformation={}; //will be set in the initRegister call
     this.userInformation={};//will be set in the initRegister call
-    
+    this.userPRSNick=null;
+
     //old config from segovia
     this.uiMainSite = '/dime-communications/static/ui/dime/index.html';
     this.uiPath = '/dime-communications/static/ui/dime';
@@ -1805,6 +1806,29 @@ Dime.psMap.KNOWN_PLACES={
 // --------------------------------------------
 
 Dime.psHelper = {
+    
+    getUserPrsNickFromPublicProfile: function(callback){
+
+        Dime.psHelper.getPersonAndProfiles('@me', function(response){
+            var publicCardIds=[];
+            var result = null;
+            jQuery.each(response.profiles, function(){
+                if (this.name==='MyPublicCard'){
+                    publicCardIds=this.items;
+                }
+            });
+            jQuery.each(response.profileattributes, function(){
+                if (JSTool.arrayContainsItem(publicCardIds, this.guid)
+                    && (this.category==='PersonName')
+                    && (this.value)
+                    && (this.value.nickname)
+                ) {
+                   result=this.value.nickname;
+               }
+            });
+            callback(result);
+        } , this);
+    },
 
     getImageUrlJImageFromEntry: function(entry){
         return Dime.psHelper.getImageUrlJImage(entry.imageUrl, entry.type);
@@ -2504,8 +2528,11 @@ Dime.psHelper = {
             result.person = response;
             Dime.REST.getAll(Dime.psMap.TYPE.PROFILE, handleProfiles, entryId, this);
         };
-        
-        Dime.REST.getItem(entryId, Dime.psMap.TYPE.PERSON, handlePerson, '@me', this);
+        if (entryId==='@me'){ //special case of retrieving my profiles and PAs
+            handlePerson('@me');
+        }else{
+            Dime.REST.getItem(entryId, Dime.psMap.TYPE.PERSON, handlePerson, '@me', this);
+        }
     },
 
     /**

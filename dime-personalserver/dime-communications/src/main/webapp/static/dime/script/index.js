@@ -2567,7 +2567,12 @@ DimeView = {
         var loginFromServerSettings=serverInfo.baseUrl+'/access/login';
         var questionaireLink = Dime.ps_configuration.getQuestionairePath();
         var invitationSubject="Join me on di.me!"
-        var invitationText="Hi,\n\nI've just tested the di.me research prototype.\n\nWhy don't you join me there? Sharing is much more fun with two people ;-)\nJust go to http://dimetrials.bdigital.org:8080/dime and register!\n\nBest wishes\n";
+        var invitationText="Hi,\n\nI've just tested the di.me research prototype.\n\nWhy don't you join me there? Sharing is much more fun with two people ;-)\nJust go to http://dimetrials.bdigital.org:8080/dime and register!";
+        if (Dime.ps_configuration.userPRSNick){
+            invitationText+='\nYou can find me, when searching for: "'+Dime.ps_configuration.userPRSNick+'" (my Nickname) in People.';
+        }
+
+        invitationText+="\n\nBest wishes\n";
         //FIXME add nickname of current user for PRS
         var bubbleBody = $('<div/>')
         .append(
@@ -3473,7 +3478,10 @@ Dime.initProcessor.registerFunction( function(callback){
         callback();
     };
     Dime.REST.getServerInformation(serverInfoCallBack);
-    
+
+    Dime.psHelper.getUserPrsNickFromPublicProfile(function(response){
+        Dime.ps_configuration.userPRSNick= response;
+    });
 });
 
 
