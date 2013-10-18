@@ -223,7 +223,7 @@ public class DimeUserResolverServiceAdapter extends ServiceAdapterBase implement
 
 		DimeResolver resolverClient = new ResolverClient(resolverEndpoint);
 
-		String token = credentialStore.getAccessSecret("dime:urs" + attribute.replace("urn:uuid", ""), tenant);
+		String token = credentialStore.getAccessSecret("dime:urs:" + attribute.replace("urn:uuid:", ""), tenant);
 		if (token == null ||token.isEmpty()){
 			throw new ServiceNotAvailableException("Deleting of this Public Resolver account is not supported.");
 		}
@@ -286,7 +286,7 @@ public class DimeUserResolverServiceAdapter extends ServiceAdapterBase implement
 			throw new IOException("Registration failed. Could not parse server response.");
 		}
 		
-        storeURScredentials("dime:urs" + identifier.replace("urn:uuid", ""), id, secret);
+        storeURScredentials("dime:urs:" + identifier.replace("urn:uuid:", ""), id, secret);
         return secret;
     }
 

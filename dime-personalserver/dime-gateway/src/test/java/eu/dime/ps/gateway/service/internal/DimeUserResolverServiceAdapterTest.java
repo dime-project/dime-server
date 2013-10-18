@@ -50,12 +50,14 @@ public class DimeUserResolverServiceAdapterTest{
 	@Test
 	public void testRegisterAndDelete()throws Exception{
 		DimeUserResolverServiceAdapter ursAdapter = new DimeUserResolverServiceAdapter();
+		
 		String random = RandomStringUtils.randomAlphanumeric(5);
 		String said = "mysaid"+random;
 		String nick = "nick"+random;
 		String firstname = "name"+random;
 		String surname = "surname"+random;
 		
+		ursAdapter.setIdentifer(said);
 		ursAdapter.setTenant(tenant);
 		ursAdapter.registerAtURS(said, nick, firstname, surname);
 		JSONArray response = ursAdapter.search(nick);
