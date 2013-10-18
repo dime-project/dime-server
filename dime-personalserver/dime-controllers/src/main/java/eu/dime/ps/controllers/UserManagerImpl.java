@@ -379,9 +379,8 @@ public class UserManagerImpl implements UserManager {
 
             // said name from dime account for this user
             if (accounts.size() > 0) {
-                ServiceAccount account = accounts.get(0);//FIXME: here just the first existing di.me account is reused for the URS
-                												// this is the main (public) account currently (on register), but could be improved (urs beinig a "real" external service)
-                userResolver.setIdentifer("dime:urs" + account.getName().replace("urn:uuid", ""));
+                ServiceAccount account = accounts.get(0);
+                userResolver.setIdentifer(account.getName());
 
                 userResolver.set(AttributeMap.PROFILE_ME, profile);
             } else {
@@ -589,7 +588,7 @@ public class UserManagerImpl implements UserManager {
 		try {
 			userResolver = serviceGateway.getDimeUserResolverServiceAdapter();
 			userResolver.setTenant(tenant);
-			userResolver._delete("dime:urs" + userId.replace("urn:uuid", ""));
+			userResolver._delete(userId);
 		} catch (ServiceNotAvailableException e) {
 			logger.error("Could not delete data of: "+userId+" from public resolver service.", e);
 		} catch (AttributeNotSupportedException e) {

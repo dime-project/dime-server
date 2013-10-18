@@ -24,6 +24,7 @@ import java.util.UUID;
 
 import net.sf.json.JSON;
 import net.sf.json.JSONArray;
+import net.sf.json.JSONException;
 import net.sf.json.JSONObject;
 import net.sf.json.JSONSerializer;
 
@@ -222,7 +223,7 @@ public class DimeUserResolverServiceAdapter extends ServiceAdapterBase implement
 
 		DimeResolver resolverClient = new ResolverClient(resolverEndpoint);
 
-		String token = credentialStore.getAccessSecret(attribute, tenant);
+		String token = credentialStore.getAccessSecret("dime:urs" + attribute.replace("urn:uuid", ""), tenant);
 		if (token == null ||token.isEmpty()){
 			throw new ServiceNotAvailableException("Deleting of this Public Resolver account is not supported.");
 		}
@@ -276,11 +277,16 @@ public class DimeUserResolverServiceAdapter extends ServiceAdapterBase implement
 		String secret = null;
 		
 		if (json instanceof JSONObject) {
-			secret = ((JSONObject) json).getString("key");
+			try {
+				secret = ((JSONObject) json).getString("key");
+			} catch (JSONException e) {
+				throw new IOException("Registration failed. Could not parse server response.");
+			}
 		} else {
-			throw new IOException("Could not parse server response.");
+			throw new IOException("Registration failed. Could not parse server response.");
 		}
-        storeURScredentials(identifier, id, secret);
+		
+        storeURScredentials("dime:urs" + identifier.replace("urn:uuid", ""), id, secret);
         return secret;
     }
 
