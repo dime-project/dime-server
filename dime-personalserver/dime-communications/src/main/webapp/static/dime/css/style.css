@@ -3468,7 +3468,7 @@ input[type="text"].DimeDetailDialogPAValueListItemValue{
 
 
 .orangeBubble{
-    background-color: #F6C200;
+    background-color: #EDE7CF;
     top: 95px;
     left: 84px;
     min-width: 55%;
@@ -3526,7 +3526,7 @@ input[type="text"].DimeDetailDialogPAValueListItemValue{
 
 .orangeBubble > .modal-header{
     
-    background-color: #F6C200;
+    background-color: #5A9DD5;
 }
 .orangeBubble > .modal-header > h3{
     color: #f3f3f3;

@@ -177,6 +177,27 @@ jQuery.fn.extend({
             .attr('target','_blank')
             );
         return this;
+    },
+
+    addMailToHref: function(receivers, subject, body, caption, classes){
+        var linkText='mailto:';
+        var firstEntry=true;
+        jQuery.each(receivers, function(){
+            firstEntry?firstEntry=false:linkText+=',%20';
+            linkText+=this;
+        })
+        linkText+='?';
+        if (subject){
+            linkText+='subject='+encodeURIComponent(subject)+'&';
+        }
+        if (body){
+            linkText+='body='+encodeURIComponent(body);
+        }
+
+        this.append($('<a/>').addClass(classes)
+            .attr('href',linkText).text(caption)
+            );
+        return this;
     }
 });
 

@@ -2562,15 +2562,17 @@ DimeView = {
 
         var loginbaselink=Dime.ps_configuration.getRealBasicUrlString()
         +'/dime-communications/web/access/';
-        var githubLink='http://dime-project.github.io/';
+        var githubLink='https://github.com/dime-project/meta/';
+        var githubProjectPageLink= 'http://dime-project.github.io/';
         var loginFromServerSettings=serverInfo.baseUrl+'/access/login';
         var questionaireLink = Dime.ps_configuration.getQuestionairePath();
-
-
+        var invitationSubject="Join me on di.me!"
+        var invitationText="Hi,\n\nI've just tested the di.me research prototype.\n\nWhy don't you join me there? Sharing is much more fun with two people ;-)\nJust go to http://dimetrials.bdigital.org:8080/dime and register!\n\nBest wishes\n";
+        //FIXME add nickname of current user for PRS
         var bubbleBody = $('<div/>')
         .append(
             $('<div/>')
-                .append($('<h3/>').text('Your feedback to the concept of di.me is very important for us!').css('font-size','16px'))
+                .append($('<h3/>').text('Your feedback is very important for us!').css('font-size','16px'))
                 .append($('<p/>')
                     .append($('<span/>').text('Please follow our')).css('margin-top','10px')
                     .addHrefOpeningInNewWindow('/dime-communications/static/ui/dime/howto.html','Guided Tour','orangeBubbleLink')
@@ -2584,15 +2586,20 @@ DimeView = {
                 .append($('<h3/>').text('Please fill out our brief questionaire:')
                     .addHrefOpeningInNewWindow(questionaireLink+'?lang=en',' (English)','orangeBubbleLink')
                     .addHrefOpeningInNewWindow(questionaireLink+'?lang=de','(German)','orangeBubbleLink')
-                    .css('font-size','16px').css('margin-bottom','30px')
+                    .css('font-size','16px').css('margin-bottom','15px')
+                )
+                .append($('<h3/>').text('Invite your friends! ')
+
+                .addMailToHref(["friends_mail_address"], invitationSubject,invitationText, 'send an email', 'orangeBubbleLink')
+                    .css('font-size','16px')
                 )
                 
-
                 .append($('<h3/>').text('This is a demonstration prototype'))
                 .append($('<p/>')
                     .append($('<span/>').text('.. so you will find many bugs and issues.'))
                     .append($('<br/>')).append($('<span/>').text('Please report them on:'))
-                    .addHrefOpeningInNewWindow(githubLink+'issues',githubLink+'issues','orangeBubbleLink')
+                    .addHrefOpeningInNewWindow(githubLink+'issues','GitHub','orangeBubbleLink')
+                    
                 )
                 .append($('<h3/>').text('About'))
                 .append($('<p/>')
@@ -2601,7 +2608,7 @@ DimeView = {
                 )
                 .append($('<p/>')
                     .append($('<span/>').text('di.me open source: '))
-                    .addHrefOpeningInNewWindow(githubLink,githubLink,'orangeBubbleLink')
+                    .addHrefOpeningInNewWindow(githubProjectPageLink,'di.me on GitHub','orangeBubbleLink')
                 )
                 .append($('<p/>')
                     .append($('<span/>').text('The research project:'))
