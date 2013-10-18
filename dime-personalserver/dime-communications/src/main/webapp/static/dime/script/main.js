@@ -490,6 +490,8 @@ BSTool={
     /**
      * @param buttonLabel label of the button
      * @param dropDownEntries array of BSTool.DropDownEntry
+     * @param buttonClass class to be added to the button
+     * @param buttonGroupClass class to be added to the resulting button group
      * @return jquery element containing button group with single button and dropdown
      * 
      * <div class="btn-group">
@@ -1283,29 +1285,74 @@ Dime.AdvisoryItem.prototype={
 };
 
 Dime.evaluation={
+    // https://confluence.deri.ie:8443/display/digitalme/SET+%28Self+Evaluation+Tool%29+Specs#SET%28SelfEvaluationTool%29Specs-Viewstack
+    ACTION: {
+        NEW: 'action_new',
+        EDIT: 'action_editItem',
+        REMOVE: 'action_removeItem',
+        SHARE: 'action_share',
+        MERGE_CONFIRMED: 'merge_confirmed',
+        MERGE_DISMISSED: 'merge_dismissed',
+        MERGE_PENDING: 'merge_pending',
+        MERGE_SELECTION: 'action_mergeSelection',
+        READ_UN: 'action_read_UN',
+        FIRST_LOGIN: 'initial_login',
+        NAVIGATE_SEARCH: 'navigate_search_web_UI',
+        OPERATION_CANCELED: 'operation_canceled',
+        CONNECT_SERVICE: 'action_connectServiceAdapter',
+        UPDATE_SERVICE: 'action_updateServiceAdapter',
+        DISCONNECT_SERVICE: 'action_disconnectServiceAdapter',
+        UPLOAD: 'action_uploadFile',
+        SITUATION_TOGGLED: 'action_toggle_situation'
+    },
+    
+    VIEW_STACK:{
+        Account_Configuration_Dialog: 'Account_Configuration_Dialog',
+        Communication: 'Communication',
+        Data: 'Data',
+        Delete_Dialog: 'Delete_Dialog',
+        Edit_Item_Dialog: 'Edit_Item_Dialog',
+        Event: 'Event',
+        Merge_Dialog: 'Merge_Dialog',
+        Myprofile: 'Myprofile',
+        New_Item_Dialog: 'New_Item_Dialog',
+        Notifications: 'Notifications',
+        People: 'People',
+        Person_Detail: 'Person_Detail',
+        Place: 'Place',
+        Share_Dialog: 'Share_Dialog',
+        Situations: 'Situations',
+        Settings: 'Settings'        
+    },
+
 
     getViewStackItemByGroupType: function(groupType, viewType){
-        //https://confluence.deri.ie:8443/display/digitalme/SET+%28Self+Evaluation+Tool%29+Specs#SET%28SelfEvaluationTool%29Specs-Viewstack
         
-        if (viewType===DimeView.SETTINGS_VIEW){
-            return "Settings";
+        //FIXME access to index.js :-(
+        if (viewType===DimeViewStatus.SETTINGS_VIEW){
+            return Dime.evaluation.VIEW_STACK.Settings;
         }
-        if (viewType===DimeView.PERSON_VIEW){
-            return "Person_Detail";
+        if (viewType===DimeViewStatus.PERSON_VIEW){
+            return Dime.evaluation.VIEW_STACK.Person_Detail;
         }
         if (groupType===Dime.psMap.TYPE.GROUP){
-            return "People";
+            return Dime.evaluation.VIEW_STACK.People;
         }else if (groupType===Dime.psMap.TYPE.DATABOX){
-            return "Data";
+            return Dime.evaluation.VIEW_STACK.Data;
         }else if (groupType===Dime.psMap.TYPE.PROFILE){
-            return "Myprofile";
+            return Dime.evaluation.VIEW_STACK.Myprofile;
         }else if (groupType===Dime.psMap.TYPE.LIVESTREAM){
-            return "Communication";
+            return Dime.evaluation.VIEW_STACK.Communication;
         }else if (groupType===Dime.psMap.TYPE.SITUATION){
-            return "Situations";
+            return Dime.evaluation.VIEW_STACK.Situations;
         }else if (groupType===Dime.psMap.TYPE.PLACE){
-            return "Place";
+            return Dime.evaluation.VIEW_STACK.Place;
+        }else if (groupType===Dime.psMap.TYPE.EVENT){
+            return Dime.evaluation.VIEW_STACK.Event;
+        }else if (groupType===Dime.psMap.TYPE.USERNOTIFICATION){
+            return Dime.evaluation.VIEW_STACK.Notifications;
         }
+        console.log("Evaluation: undefined view: (groupType, viewType)", groupType, viewType);
         return 'undefined';
     },
 
@@ -1345,7 +1392,7 @@ Dime.evaluation={
             "type": "evaluation",
             "created": new Date().getTime(),
             "tenantId": evaluationId, //evaluation id from user call
-            "clientId":"0.01",
+            "clientId":"0.02_web",
             "viewStack":viewStack,
             "action": action,
             "currPlace":"unknown",
@@ -1353,15 +1400,21 @@ Dime.evaluation={
             "involvedItems":involvedItems
         };
     },
-            
-    updateViewStack: function(groupType, viewType){
+
+    updateViewStackWithViewStack: function(viewStackEntry){
         if (!Dime.ps_configuration.viewStack){
             Dime.ps_configuration.viewStack=this.createViewStack();
             //store initial evaluation
-            var action = "navigate_search_web_UI";
+            var action = Dime.evaluation.ACTION.NAVIGATE_SEARCH;
             this.createAndSendEvaluationItemForAction(action);
         }
-        Dime.ps_configuration.viewStack.push(this.getViewStackItemByGroupType(groupType, viewType));
+        Dime.ps_configuration.viewStack.push(viewStackEntry);
+    },
+
+    updateViewStack: function(groupType, viewType){
+        var viewStackEntry = this.getViewStackItemByGroupType(groupType, viewType);
+        this.updateViewStackWithViewStack(viewStackEntry);
+        
     },
 
     createAndSendEvaluationItemForAction: function(action, involvedItems){
@@ -1372,7 +1425,11 @@ Dime.evaluation={
             
             this.countInvolvedItems(involvedItems, evaluationItem);
             
-            Dime.REST.postEvaluation(evaluationItem);
+            Dime.REST.postEvaluation(evaluationItem, function(){
+                //reset view stack
+                Dime.ps_configuration.viewStack=[];
+                console.log('sent evaluation: ', evaluationItem.action, evaluationItem.viewStack)
+            }, this);
         }
     },
             
@@ -1385,6 +1442,7 @@ Dime.evaluation={
                     }
                 });
             });
+       //console.log('countInvolvedItems (involvedItems, evaluationItem)', involvedItems, evaluationItem);
     }
 };
 
@@ -2026,15 +2084,15 @@ Dime.psHelper = {
     
     updateExtendedACLWithAgentItems: function(extendedACL, agentType, allItemsOfType){
         var exAclPackage;
-        
+        var i;
         if (agentType===Dime.psMap.TYPE.GROUP){
-            for (var i=0;i<extendedACL.length;i++){
+            for (i=0;i<extendedACL.length;i++){
                 exAclPackage=extendedACL[i];
                 exAclPackage.groupItems = 
                 Dime.psHelper.getAllItemsWithGuids(exAclPackage.groups, allItemsOfType);
             }
         }else if (agentType===Dime.psMap.TYPE.PERSON){
-            for (var i=0;i<extendedACL.length;i++){
+            for (i=0;i<extendedACL.length;i++){
                 exAclPackage=extendedACL[i];
                 //retrieve person ids
                 var personIds = [];                
@@ -2045,7 +2103,7 @@ Dime.psHelper = {
                 Dime.psHelper.getAllItemsWithGuids(personIds, allItemsOfType);
             }
         }else if (agentType===Dime.psMap.TYPE.ACCOUNT){
-            for (var i=0;i<extendedACL.length;i++){
+            for (i=0;i<extendedACL.length;i++){
                 exAclPackage=extendedACL[i];
                 exAclPackage.serviceItems = 
                 Dime.psHelper.getAllItemsWithGuids(exAclPackage.services, allItemsOfType);
@@ -2183,20 +2241,20 @@ Dime.psHelper = {
 
     addAccessForItem: function(personGuids, groupGuids, serviceGuids, item, saidSender){
         var aclPackage =Dime.psHelper.getOrCreateACLPackage(item, saidSender);
-
-        for (var i=0;i<personGuids.length;i++){
+        var i;
+        for (i=0;i<personGuids.length;i++){
             if(!JSTool.arrayContainsItem(aclPackage.persons,personGuids[i])){
                 var aclPerson = new Dime.ACLPerson();
                 aclPerson.personId=personGuids[i];
                 aclPackage.persons.push(aclPerson);
             }
         }
-        for (var i=0;i<groupGuids.length;i++){
+        for (i=0;i<groupGuids.length;i++){
             if(!JSTool.arrayContainsItem(aclPackage.groups,groupGuids[i])){
                 aclPackage.groups.push(groupGuids[i]);
             }
         }
-        for (var i=0;i<serviceGuids.length;i++){
+        for (i=0;i<serviceGuids.length;i++){
             if(!JSTool.arrayContainsItem(aclPackage.services,serviceGuids[i])){
                 aclPackage.services.push(serviceGuids[i]);
             }
@@ -3270,9 +3328,9 @@ Dime.REST = {
      * 
      * @param item the full item 
      * @param callBack function forwarded to the ajax call
+     * @param callerSelf reference to caller this
      */
     updateItem: function(item, callBack, callerSelf){
-        console.log("updateItem", item);
         
         if (!item.userId || item.userId.length===0) {
             console.log("ERROR: userId not defined for item:", item, "update aborted!");
@@ -3423,56 +3481,44 @@ Dime.REST = {
         Dime.REST.getCurrentPlaceGuidAndName(metaCallBack);
     },
     
-    getCurrentPlaceGuidAndName: function(callBack){
+    getCurrentPlaceGuidAndName: function(callback){
         var path = Dime.ps_configuration.getRealBasicUrlString() 
         + "/dime-communications/api/dime/rest/"
         + encodeURIComponent(Dime.ps_configuration.mainSaid)
         + "/context/@me/currentPlace";        
         
-        if (!callBack){
-            callBack = function(response){
-                console.log("getCurrentPlaceGuidAndName callback - (response):", response);
-            };
-        }
+        callback=callback?callback:function(){}; //init callback if not exist
         
         var metaCallBack=function(response){
             var entries = Dime.psHelper.getEntryOfResponseObject(response, false);
-            if (!entries || entries.length===0 || (!entries[0].dataPart)){
-                console.log("ERROR when looking up current place!(path, response)", path, response);
-                callBack({});
+            if (!entries || entries.length===0 || (!entries[0].dataPart)){                
+                callback({});
                 return;
             }
-            console.log("received current place:", entries[0].dataPart);
             
-            callBack(entries[0].dataPart);
+            
+            callback(entries[0].dataPart);
         };
         
         $.getJSON(path, "", metaCallBack);
     },
             
      
-    getCurrentPosition: function(callBack){
+    getCurrentPosition: function(callback){
         var path = Dime.ps_configuration.getRealBasicUrlString() 
         + "/dime-communications/api/dime/rest/"
         + encodeURIComponent(Dime.ps_configuration.mainSaid)
         + "/context/@me/position";        
         
-        if (!callBack){
-            callBack = function(response){
-                console.log("getCurrentPosition callback - (response):", response);
-            };
-        }
+        callback=callback?callback:function(){}; //init callback if not exist        
         
         var metaCallBack=function(response){
             var entries = Dime.psHelper.getEntryOfResponseObject(response, false);
             if (!entries || entries.length===0 || (!entries[0].dataPart)){
-                console.log("ERROR when looking up current position!(path, response)", path, response);
-                callBack({});
+                callback({});
                 return;
             }
-            console.log("received current position:", entries[0].dataPart);
-            
-            callBack(entries[0].dataPart);
+            callback(entries[0].dataPart);
         };
         
         $.getJSON(path, "", metaCallBack);
@@ -3627,16 +3673,19 @@ Dime.REST = {
 
         $.postJSON(callPath, request, jointCallBack);
     },
-    postEvaluation: function(evaluationItem){                     
+    postEvaluation: function(evaluationItem, callback, callerRef){
         var callPath = Dime.ps_configuration.getUserUrlString()+"/evaluation/@me";
 
-        var callback = function(response){
-            //console.log(response);
+        var handleResponse = function(response){
+            if (callback) {
+                callerRef=callerRef?callerRef:this;
+                callback.call(callerRef, response);
+            }
         };
 
         var request = Dime.psHelper.prepareRequest(evaluationItem);
 
-        $.postJSON(callPath, request, callback);
+        $.postJSON(callPath, request, handleResponse);
     },
 
     postMerge: function(personsGuidsToBeMerged, callback, callerRef){
@@ -4011,7 +4060,8 @@ Dime.SelectDialog.prototype = {
      * @param loadingFunction function triggered to start loading the items into the list
      *        loading function can use Dime.SelectDialog.addItemsToList to add items with guid to the list
      * @param callbackFunction function handling parameters (selectedItems[], isOK)
-     * @param reference to caller this
+     * @param handlerSelf reference to caller this
+     *
      */
     show: function(loadingFunction, callbackFunction, handlerSelf){
         
@@ -4048,7 +4098,12 @@ Dime.SelectDialog.prototype = {
 
 /**
  *@param caption caption of the dialog
-* @param item the items to be shown   
+* @param item the items to be shown
+* @param createNewItem true/false show new item message and initialize item
+* @param changeImageUrl true/false support for updating imageUrl
+* @param isEditable true/false edit supported or read only
+* @param message String - if set it is displayed at the top of the item
+* @param infoHtml - shown as content in the (i) button
 */
 Dime.DetailDialog = function(caption, item, createNewItem, changeImageUrl, isEditable, message, infoHtml){
     
@@ -4338,7 +4393,7 @@ Dime.DetailDialog.prototype = {
             result.append(createButtonLabel(currPrivTrust));
         }
                 
-        ;
+        
         return result;
     },
 
@@ -4650,30 +4705,32 @@ Dime.DetailDialog.prototype = {
         var childType = Dime.psHelper.getChildType(item.type);
             $(this.getDialog()).addClass('shareDlg');
 
-            var shareContainer;
+        var shareContainer=$('<div class="shareDlgSection shareDlgSectionHover"></div>');
+        if (!this.createNewItem){
             if (item.type===Dime.psMap.TYPE.GROUP){
                 shareContainer = this.getCanAccessItems(item);
             }else{
                 shareContainer = this.getSharedToItems(item);
             }
+        }
 
-            //add containers
-            this.body.append(
-                $("<div></div>")
-                .addClass("dimeDialogBody_editContainer")
-                //left container
-                .append($("<div/>")
-                    .addClass("dimeDialogBody_editContainerLeft")
-                    .append($("<span class=label></span>")
-                        .text(Dime.psHelper.getPluralCaptionForItemType(childType)))
-                    .append(this.getChildTypeItems(item, childType)))
-                //right container
-                .append($("<div>")
-                    .addClass("dimeDialogBody_editContainerRight")
-                    .append($("<span class=label></span>")
-                        .text(item.type===Dime.psMap.TYPE.GROUP?"can access":"shared with"))
-                    .append(shareContainer))
-            );
+        //add containers
+        this.body.append(
+            $("<div></div>")
+            .addClass("dimeDialogBody_editContainer")
+            //left container
+            .append($("<div/>")
+                .addClass("dimeDialogBody_editContainerLeft")
+                .append($("<span class=label></span>")
+                    .text(Dime.psHelper.getPluralCaptionForItemType(childType)))
+                .append(this.getChildTypeItems(item, childType)))
+            //right container
+            .append($("<div>")
+                .addClass("dimeDialogBody_editContainerRight")
+                .append($("<span class=label></span>")
+                    .text(item.type===Dime.psMap.TYPE.GROUP?"can access":"shared with"))
+                .append(shareContainer))
+        );
 
     },
 
@@ -5422,6 +5479,7 @@ Dime.ConfigurationDialog.prototype = {
     
     //FIX: refactor -> better solution in show()?!
     showAuth: function(adapterName, adapterDescription, adapterAuthUrl){
+        Dime.evaluation.updateViewStackWithViewStack(Dime.evaluation.VIEW_STACK.Account_Configuration_Dialog);
         
         this.modal = document.createElement("div");
         this.modal.setAttribute("id", "ConfigServiceWrapperID");
@@ -5439,19 +5497,24 @@ Dime.ConfigurationDialog.prototype = {
             window.open(adapterAuthUrl, "_blank", "");
             $("#lightBoxBlack").fadeOut(300);
             $('#ConfigServiceDialogID').remove();
+            Dime.evaluation.createAndSendEvaluationItemForAction(Dime.evaluation.ACTION.CONNECT_SERVICE, []);
+
         };
 
         var myCancelHandler = function() {
             $("#lightBoxBlack").fadeOut(300);
             $('#ConfigServiceDialogID').remove();
+            Dime.evaluation.createAndSendEvaluationItemForAction(Dime.evaluation.ACTION.OPERATION_CANCELED, []);
         };
                
-        var dialog = new Dime.BasicDialog('ServiceModal', "Create new account", 'ConfigServiceDialogID', 'ConfigServiceBodyID', this.modal, myCancelHandler , myOkHandler, this);
+        var dialog = new Dime.BasicDialog('ServiceModal', "Create new account", 'ConfigServiceDialogID', 'ConfigServiceBodyID',
+            this.modal, myCancelHandler , myOkHandler, this);
         $('body').append(dialog.dialog);
     },
 
     show: function(adapterName, adapterDescription, serviceAccount, isNewAccount) {
-
+        Dime.evaluation.updateViewStackWithViewStack(Dime.evaluation.VIEW_STACK.Account_Configuration_Dialog);
+        
         var inputs = [];
         this.modal = document.createElement("div");
         this.modal.setAttribute("id", "ConfigServiceWrapperID");
@@ -5469,13 +5532,14 @@ Dime.ConfigurationDialog.prototype = {
                         switch(serviceAccount.settings[i]['fieldtype']){
                             case "string":
                             case "password":
+                                var type;var value;
                                 if(serviceAccount.settings[i]['fieldtype'] === "string"){
-                                    var type = "text";
-                                    var value = serviceAccount.settings[i].value;
+                                    type = "text";
+                                    value = serviceAccount.settings[i].value;
                                 }else{
-                                    var type = "password";
+                                    type = "password";
                                     //security issue: plain text?!
-                                    var value = serviceAccount.settings[i].value;
+                                    value = serviceAccount.settings[i].value;
                                 }
 
                                 var textInput =
@@ -5672,12 +5736,18 @@ Dime.ConfigurationDialog.prototype = {
                 $("#lightBoxBlack").fadeOut(300);
                 $('#ConfigServiceDialogID').remove();
                 this.okHandler.call(this.handlerSelf, serviceAccount, isNewAccount);
+                if (isNewAccount){
+                    Dime.evaluation.createAndSendEvaluationItemForAction(Dime.evaluation.ACTION.CONNECT_SERVICE, []);
+                }else{
+                    Dime.evaluation.createAndSendEvaluationItemForAction(Dime.evaluation.ACTION.UPDATE_SERVICE, []);
+                }
             }
         };
 
         var myCancelHandler = function() {
             $("#lightBoxBlack").fadeOut(300);
             $('#ConfigServiceDialogID').remove();
+            Dime.evaluation.createAndSendEvaluationItemForAction(Dime.evaluation.ACTION.OPERATION_CANCELED, []);
         };
 
         //show dialog
@@ -5767,12 +5837,12 @@ Dime.MergeDialog.prototype = {
     
     cancelHandler: function(){
         this.removeDialog();  
-        this.resultFunction.call(this.handlerSelf, this.STATUS_PENDING);
+        this.resultFunction.call(this.handlerSelf, this.STATUS_PENDING, this.mergePersonsFull);
     },
       
     dismissHandler: function(){
         this.removeDialog();  
-        this.resultFunction.call(this.handlerSelf, this.STATUS_DISMISSED);
+        this.resultFunction.call(this.handlerSelf, this.STATUS_DISMISSED, this.mergePersonsFull);
     },
     
     acceptHandler: function(){
@@ -5789,7 +5859,7 @@ Dime.MergeDialog.prototype = {
             //HACK clear cache totaly since notifications are missing
             Dime.cache.resetCache();
 
-            dlgRef.resultFunction.call(this.handlerSelf, this.STATUS_ACCEPTED);
+            dlgRef.resultFunction.call(this.handlerSelf, this.STATUS_ACCEPTED, this.mergePersonsFull);
         }, this);
         dlgRef.removeDialog();
     },
@@ -5801,19 +5871,28 @@ Dime.MergeDialog.prototype = {
         }else{
             return false;
         }
-   },
+    },
+
+    mergePersonsFull: [], //array of full person entries to be merged
 
     initBody: function(){
         //TODO: check two/multiple
         var dialogRef = this;
         for (var i=0; i<this.mergePersons.length; i++){
             Dime.psHelper.getPersonAndProfiles(this.mergePersons[i], function(response){
-                dialogRef.createPersonElement(response, this.mergePersons.length, i);
+                if (response && response.person){
+                    this.mergePersonsFull.push(response.person);
+                    dialogRef.createPersonElement(response, this.mergePersons.length, i);
+                }else{
+                    console.log('received incomplete response from getPersonAndProfiles:', response);
+                }
             }, this);
         }
     },
             
     show: function(callback, handlerSelf){
+        Dime.evaluation.updateViewStackWithViewStack(Dime.evaluation.VIEW_STACK.Merge_Dialog);
+
         this.resultFunction = callback;
         this.handlerSelf = handlerSelf;        
                 
@@ -5940,6 +6019,10 @@ Dime.MergeDialog.prototype = {
 //#############################################
 //
 Dime.Dialog={
+    DIALOG_RESULT_CANCEL:0,
+    DIALOG_RESULT_OK_SUCCESS:1,
+    DIALOG_RESULT_OK_FAIL:2,
+
     
     showImageSelectionList: function(callbackHandler){
         
@@ -5992,7 +6075,11 @@ Dime.Dialog={
     
     },
 
-    showDetailItemModal: function(entry, isEditable, message){
+    showDetailItemModal: function(entry, isEditable, message, callback){
+        Dime.evaluation.updateViewStackWithViewStack(Dime.evaluation.VIEW_STACK.Edit_Item_Dialog);
+
+        callback=callback?callback:function(){}; //init callback if not set
+
         var caption;
         
         if (entry.type===Dime.psMap.TYPE.PROFILEATTRIBUTE){
@@ -6007,28 +6094,35 @@ Dime.Dialog={
         }
         var dialog = new Dime.DetailDialog(caption, entry, false, true, isEditable, message, Dime.psMap.getInfoHtmlForType(entry.type));
         
-        var callbackFunction = function(item, isOk){
+        var handleResult = function(item, isOk){
             
             if (!isOk){ //cancel
+                callback(Dime.Dialog.DIALOG_RESULT_CANCEL);
                 return;
             }
             var updateItemCallBack = function(response){
-                console.log("createItem response:", response);
                 if (!response|| response.length<1){
                     (new Dime.Dialog.Toast("Updating of "+caption+" failed!")).showLong();
+                    callback(Dime.Dialog.DIALOG_RESULT_OK_FAIL);
                 }else{
                     (new Dime.Dialog.Toast(caption+ " updated successfully.")).showLong();
+                    callback(Dime.Dialog.DIALOG_RESULT_OK_SUCCESS);
                 }
+
             };
             
             //post the update
             Dime.REST.updateItem(item, updateItemCallBack, this);
         };
-        dialog.showDetailDialog(callbackFunction);
+        dialog.showDetailDialog(handleResult);
         
     },
 
-    showNewItemModal: function(type, message, newItem){
+    showNewItemModal: function(type, message, newItem, callback){
+        Dime.evaluation.updateViewStackWithViewStack(Dime.evaluation.VIEW_STACK.New_Item_Dialog);
+
+        callback=callback?callback:function(){}; //init callback if not set
+
         if (!newItem){
             newItem = Dime.psHelper.createNewItem(type, "");
         }
@@ -6046,18 +6140,20 @@ Dime.Dialog={
         
         var dialog = new Dime.DetailDialog(caption, newItem, true, true, true, message, Dime.psMap.getInfoHtmlForType(type));
         
-        var callbackFunction = function(item, isOk){
+        var handleResult = function(item, isOk){
             
             if (!isOk){ //cancel
+                callback(Dime.Dialog.DIALOG_RESULT_CANCEL, newItem);
                 return;
             }            
             var newItemCallBack = function(response){
                 console.log("createItem response:", response);
                 if (!response|| response.length<1){
                     (new Dime.Dialog.Toast("Creation of "+elementName+" failed!")).showLong();
-                    
+                    callback(Dime.Dialog.DIALOG_RESULT_OK_FAIL, newItem);
                 }else{
                     (new Dime.Dialog.Toast(elementName+ " created successfully.")).showLong();
+                    callback(Dime.Dialog.DIALOG_RESULT_OK_SUCCESS, newItem);
                 }
             };
             
@@ -6065,12 +6161,15 @@ Dime.Dialog={
             Dime.REST.postNewItem(item, newItemCallBack);
         };
         
-        dialog.showDetailDialog(callbackFunction);
+        dialog.showDetailDialog(handleResult);
     
     },
 
     
-    showLivepostWithSelection: function(selectedPerson){
+    showLivepostWithSelection: function(selectedPerson, callback){
+        Dime.evaluation.updateViewStackWithViewStack(Dime.evaluation.VIEW_STACK.New_Item_Dialog);
+        callback=callback?callback:function(){}; //init callback if not set
+
         $("#lightBoxBlack").fadeIn(300);
         //FIX: hard-coded
         var type = Dime.psMap.TYPE.LIVEPOST;
@@ -6084,18 +6183,20 @@ Dime.Dialog={
         //add the current person as a recipient
         dialog.selectedPerson = selectedPerson;
         
-        var callbackFunction = function(item, isOk){
+        var handleResult = function(item, isOk){
             
             if (!isOk){ //cancel
+                callback(Dime.Dialog.DIALOG_RESULT_CANCEL);
                 return;
             }            
             var newItemCallBack = function(response){
                 console.log("createItem response:", response);
                 if (!response|| response.length<1){
                     (new Dime.Dialog.Toast("Creation of "+elementName+" failed!")).showLong();
-                    
+                    callback(Dime.Dialog.DIALOG_RESULT_OK_FAIL);
                 }else{
                     (new Dime.Dialog.Toast(elementName+ " created successfully.")).showLong();
+                    callback(Dime.Dialog.DIALOG_RESULT_OK_SUCCESS);
                 }
             };
             
@@ -6103,11 +6204,14 @@ Dime.Dialog={
             Dime.REST.postNewItem(item, newItemCallBack);
         };
         
-        dialog.showDetailDialog(callbackFunction);
+        dialog.showDetailDialog(handleResult);
         dialog.addToLivepostReceiverList.call(dialog, selectedPerson);
     },
             
-    showShareWithSelection: function(selectedItems){
+    showShareWithSelection: function(selectedItems, callback){
+        Dime.evaluation.updateViewStackWithViewStack(Dime.evaluation.VIEW_STACK.Share_Dialog);
+        
+        callback=callback?callback:function(){}; //init callback if not set
        
         $("#lightBoxBlack").fadeIn(300);
         var dialog = new Dime.ShareDialog();
@@ -6126,14 +6230,16 @@ Dime.Dialog={
             dialog.updateView();
         }
         
-        var callback = function(success, selectedProfile, selectedReceivers, selectedItems){
-            console.log("sharing success:", success);
+        var handleResult = function(success, selectedProfile, selectedReceivers, selectedItems){
+            
             if (!success){
+                callback(Dime.Dialog.DIALOG_RESULT_CANCEL);
                 return;
             }
 
             if (!selectedProfile){
                 window.alert("No profile selected - please select a profile.");
+                callback(Dime.Dialog.DIALOG_RESULT_OK_FAIL);
                 return;
             }
             
@@ -6141,19 +6247,22 @@ Dime.Dialog={
            
             if (!said || said.length===0){
                 window.alert("Service-Account-ID for profile: "+selectedProfile.name+" is missing! Sharing aborted.");
+                callback(Dime.Dialog.DIALOG_RESULT_OK_FAIL);
                 return;
             }
             //update items
             Dime.psHelper.addAgentAccessForItemsAndUpdateServer(selectedReceivers, selectedItems, said, function(sharingSuccessful){
                 if(sharingSuccessful){
                     (new Dime.Dialog.Toast("Sharing done!")).showLong();
+                    callback(Dime.Dialog.DIALOG_RESULT_OK_SUCCESS);
                 }else{
                     (new Dime.Dialog.Toast("Sharing failed!")).showLong();
+                    callback(Dime.Dialog.DIALOG_RESULT_OK_FAIL);
                 }
             });
         };
        
-        dialog.show(this, callback);
+        dialog.show(this, handleResult);
     },
             
     Helper:{

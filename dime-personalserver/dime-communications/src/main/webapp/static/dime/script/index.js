@@ -235,14 +235,14 @@ DimeViewManager.prototype = {
         //store status for reference by called functions e.g. DimeView.search //REFACTOR
         this.status = newStatus;
         var dimeViewRef = this.dimeViewRef;
-        
-        //update evaluation data
-        Dime.evaluation.updateViewStack(newStatus.groupType, newStatus.viewType);
-        
+                
         this.resetContainers(newStatus); //based on viewtype
 
         if (!skipHistory){ 
-            this.pushHistory(newStatus); //update navigation history
+            //update evaluation data
+            Dime.evaluation.updateViewStack(newStatus.groupType, newStatus.viewType);
+            //update navigation history
+            this.pushHistory(newStatus);
         }
 
         //refresh general navigation buttons, action buttons and meta-bar
@@ -330,12 +330,13 @@ DimeViewManager.prototype = {
             
     viewForTypeIsShown: function(type){
         var views = this.getViewsByType(type);
+        var viewShown = false;
         jQuery(views, function(){
             if (this.visibleViews[this.id]){
-                return true;
+                viewShown = true;
             }
         });
-        return false;
+        return viewShown;
     },
     
     updateViewFromNotifications: function(notifications){
@@ -584,7 +585,7 @@ DimeView = {
             }
         }
         jChildItem.append(profileAttributeValues)
-            .append('<div class="clear">');
+            .append('<div class="clear">').attr('title',entry.name);
         
         
         DimeView.setActionAttributeForElements(entry, jChildItem, false, true);
@@ -605,6 +606,10 @@ DimeView = {
                         callback(response);
                     }
                 }, this);
+
+                if (read){
+                    Dime.evaluation.createAndSendEvaluationItemForAction(Dime.evaluation.ACTION.READ_UN, myUN);
+                }
         };
         
         //update caption with sender name if available
@@ -640,14 +645,20 @@ DimeView = {
                
                 var mergeGuids = [myNotification.unEntry.sourceId, myNotification.unEntry.targetId];
                 var dialog = new Dime.MergeDialog(mergeGuids, myNotification.unEntry.similarity, true);
-                dialog.show(function(resultStatus){
+                dialog.show(function(resultStatus, mergedPersons){
                     myNotification.unEntry.status = resultStatus;                    
                     if (resultStatus!==dialog.STATUS_PENDING){  //"status":"accepted/dismissed/pending"
                        updateUserNotification(myNotification, true, function(){                         
                             //delete afterwards
                             Dime.REST.removeItem(myNotification);
+                            if (resultStatus===dialog.STATUS_ACCEPTED){
+                                Dime.evaluation.createAndSendEvaluationItemForAction(Dime.evaluation.ACTION.MERGE_CONFIRMED, mergedPersons);
+                            }else{
+                                Dime.evaluation.createAndSendEvaluationItemForAction(Dime.evaluation.ACTION.MERGE_DISMISSED, mergedPersons);
+                            }
                          });
                     }else{
+                        Dime.evaluation.createAndSendEvaluationItemForAction(Dime.evaluation.ACTION.MERGE_PENDING, mergedPersons);
                         updateUserNotification(myNotification, true);
                     }
                      
@@ -734,7 +745,7 @@ DimeView = {
         //replace resource.png (no-image) with default
         jChildItem.append(Dime.psHelper.getImageUrlJImageFromEntry(entry));
         jChildItem.append(DimeView.createMark(entry, "", false));
-        jChildItem.append('<h4 title="' + entry.name + '"><b>'+ DimeView.getShortNameWithLength(entry.name, 40) +  '</b></h4>');
+        jChildItem.append('<h4 title="' + entry.name + '"><b>'+ DimeView.getShortNameWithLength(entry.name, 30) +  '</b></h4>');
         if(fav){
             jChildItem.append('<p>' + fav + '</p>');
         }
@@ -821,13 +832,14 @@ DimeView = {
                                     + (response[0].active?"activated":"deactivated")
                                     +" successfully."
                                 )).show();
+                                Dime.evaluation.createAndSendEvaluationItemForAction(Dime.evaluation.ACTION.SITUATION_TOGGLED, []);
                             }
                         };                        
                         entry.active = !entry.active;
                         Dime.REST.updateItem(entry,handleResponse , DimeView);
                     })
                 )
-            );
+            ).attr('title',entry.name);
 
         //set action attributes
         DimeView.setActionAttributeForElements(entry, jChildItem, false, true);
@@ -878,11 +890,11 @@ DimeView = {
         if (entry.type===Dime.psMap.TYPE.LIVEPOST){
             entryName = DimeView.getShortNameWithLength(entry.name, 125);
         }else{
-            entryName = DimeView.getShortNameWithLength(entry.name, 30);
+            entryName = DimeView.getShortNameWithLength(entry.name, 25);
         }
         
         
-        jChildItem.append('<h4>'+ entryName + '</h4>');
+        jChildItem.append('<h4>'+ entryName + '</h4>').attr('title',entry.name);
         
           
         //innerChild - type specific fields
@@ -1082,7 +1094,7 @@ DimeView = {
                                 }); 
                             }else{
                                 (new Dime.Dialog.Toast("Geolocation services are not supported by your browser.")).show();
-                            };                                
+                            }                                
                         })));
         };
         
@@ -1387,9 +1399,14 @@ DimeView = {
             }
 
             var dialog = new Dime.MergeDialog(mergeGuids);
-            dialog.show(function(resultStatus){
+            dialog.show(function(resultStatus, mergedPersons){
                 if (resultStatus!==dialog.STATUS_PENDING){
                     DimeView.viewManager.updateViewFromStatus(DimeView.viewManager.status, true);
+                    if (resultStatus===dialog.STATUS_ACCEPTED){
+                        Dime.evaluation.createAndSendEvaluationItemForAction(Dime.evaluation.ACTION.MERGE_SELECTION, mergedPersons);
+                    }else{
+                        Dime.evaluation.createAndSendEvaluationItemForAction(Dime.evaluation.ACTION.OPERATION_CANCELED, mergedPersons);
+                    }
                 }
             }, DimeView);
         }else if (DimeView.viewManager.status.groupType===Dime.psMap.TYPE.PLACE){
@@ -1771,14 +1788,20 @@ DimeView = {
             event.stopPropagation();
         }
         
-        Dime.evaluation.createAndSendEvaluationItemForAction("action_editItem", entry);
+        
         var isEditable=DimeView.actionMenuActivatedForItem(entry);
         
         if (entry.type===Dime.psMap.TYPE.LIVEPOST){
             isEditable=false;
         }
 
-        Dime.Dialog.showDetailItemModal(entry, isEditable, message);
+        Dime.Dialog.showDetailItemModal(entry, isEditable, message, function(result){
+            if (result!==Dime.Dialog.DIALOG_RESULT_CANCEL){
+                Dime.evaluation.createAndSendEvaluationItemForAction(Dime.evaluation.ACTION.EDIT, entry);
+            }else{
+                Dime.evaluation.createAndSendEvaluationItemForAction(Dime.evaluation.ACTION.OPERATION_CANCELED, entry);
+            }
+        });
     },
             
     
@@ -1787,7 +1810,7 @@ DimeView = {
 
         var selectedItems = DimeView.getSelectedItemsForView();
         
-        Dime.evaluation.createAndSendEvaluationItemForAction("action_editItem", selectedItems);
+        
 
         if (selectedItems.length!==1){
             window.alert("Please select a single item.");
@@ -1795,7 +1818,13 @@ DimeView = {
         }
         var triggerDialog=function(response){
             var isEditable=DimeView.actionMenuActivatedForItem(response);
-            Dime.Dialog.showDetailItemModal(response, isEditable);
+            Dime.Dialog.showDetailItemModal(response, isEditable, null, function(result){
+                if (result!==Dime.Dialog.DIALOG_RESULT_CANCEL){
+                    Dime.evaluation.createAndSendEvaluationItemForAction(Dime.evaluation.ACTION.EDIT, selectedItems);
+                }else{
+                    Dime.evaluation.createAndSendEvaluationItemForAction(Dime.evaluation.ACTION.OPERATION_CANCELED, selectedItems);
+                }
+            });
         };
 
         Dime.REST.getItem(selectedItems[0].guid, selectedItems[0].type, triggerDialog, selectedItems[0].userId, this);
@@ -1808,15 +1837,17 @@ DimeView = {
             window.alert("Please select at least one item to be deleted!");
             return;
         }
+        Dime.evaluation.updateViewStackWithViewStack(Dime.evaluation.VIEW_STACK.Delete_Dialog);
 
         if (confirm("Are you sure, you want to delete "+mySelectedItems.length+" items?")){
             
-            Dime.evaluation.createAndSendEvaluationItemForAction("action_removePerson", mySelectedItems);
-
+            Dime.evaluation.createAndSendEvaluationItemForAction(Dime.evaluation.ACTION.REMOVE, mySelectedItems);
             for (var i=0;i<mySelectedItems.length;i++){
                 var item = mySelectedItems[i];
                 Dime.REST.removeItem(item);
             }
+        }else{
+            Dime.evaluation.createAndSendEvaluationItemForAction(Dime.evaluation.ACTION.OPERATION_CANCELED, mySelectedItems);
         }
     },    
            
@@ -1825,11 +1856,15 @@ DimeView = {
         
         var selectedItems = DimeView.getSelectedItemsForView();
         
-        Dime.evaluation.createAndSendEvaluationItemForAction("action_share", selectedItems);
-        
         var triggerDialog=function(response){
 
-            Dime.Dialog.showShareWithSelection(response);
+            Dime.Dialog.showShareWithSelection(response, function(result){
+                if (result!==Dime.Dialog.DIALOG_RESULT_CANCEL){
+                    Dime.evaluation.createAndSendEvaluationItemForAction(Dime.evaluation.ACTION.SHARE, selectedItems);
+                }else{
+                    Dime.evaluation.createAndSendEvaluationItemForAction(Dime.evaluation.ACTION.OPERATION_CANCELED, selectedItems);
+                }
+            });
         };
 
         Dime.psHelper.getMixedItems(selectedItems, triggerDialog, this);
@@ -1956,7 +1991,8 @@ DimeView = {
                     ){
                             
                     responseJSON.success=true; //set success == true for processing of result by fileuploader
-                    DimeView.search(); //update container
+                    DimeView.viewManager.updateViewFromStatus(DimeView.viewManager.status, true); //update view
+                    Dime.evaluation.createAndSendEvaluationItemForAction(Dime.evaluation.ACTION.UPLOAD, []);
                 }
       
             }
@@ -2016,7 +2052,13 @@ DimeView = {
                 .clickExt(Dime.Dialog,function(){
                         var newItem = Dime.psHelper.createNewItem(type, "My "+pACategory.caption);
                         newItem.category=pACategory.name;
-                        Dime.Dialog.showNewItemModal(type, null, newItem);
+                        Dime.Dialog.showNewItemModal(type, null, newItem, function(result, newItemResponse){
+                            if (result!==Dime.Dialog.DIALOG_RESULT_CANCEL){
+                                Dime.evaluation.createAndSendEvaluationItemForAction(Dime.evaluation.ACTION.NEW, newItemResponse);
+                            }else{
+                                Dime.evaluation.createAndSendEvaluationItemForAction(Dime.evaluation.ACTION.OPERATION_CANCELED, newItemResponse);
+                            }
+                        });
                     });
 
                 result.push($('<li/>').attr('role','menuitem').append(link));
@@ -2030,7 +2072,13 @@ DimeView = {
             var link= $('<a tabindex="-1" href="#" />')
                 .text('New '+Dime.psHelper.getCaptionForItemType(type)+' ..')
                 .clickExt(Dime.Dialog,
-                    function(event, jElement, type){Dime.Dialog.showNewItemModal(type);}, type);
+                    function(event, jElement, type){Dime.Dialog.showNewItemModal(type, null, null, function(result, newItemResponse){
+                            if (result!==Dime.Dialog.DIALOG_RESULT_CANCEL){
+                                Dime.evaluation.createAndSendEvaluationItemForAction(Dime.evaluation.ACTION.NEW, newItemResponse);
+                            }else{
+                                Dime.evaluation.createAndSendEvaluationItemForAction(Dime.evaluation.ACTION.OPERATION_CANCELED, newItemResponse);
+                            }
+                        });}, type);
             return $('<li/>').attr('role','menuitem').append(link);
         };
         var dropDownUl=$('#actionButtonDropDownNew');
@@ -2623,7 +2671,7 @@ DimeView.viewManager = new DimeViewManager(DimeView);
 
 
 Dime.Settings = {
-    evaluationInfoHtml:'<span>The following data will be collected for evaluation:</span><br><ul><li>an anonymous identifyier which allows us to know what click data and questionaire answers come from the same account. No other identity information like your di.me username, nickname, real name, or email-address is sent. No location information is sent.</li><li>statistics about how many contacts, files, messages, and connected systems you use in your system. Only the number and time when created, but no information about names, content, or anything else is sent.</li><li>data about what type of pages you click in the system (e.g. a page „person“). This includes the time the page was clicked. No title, text, or other content of the pages are sent.</li></ul><br/><span>We do not use other click analysis (like e.g. Google Analytics). You can switch this off at any time on the page "Settings".</span>',
+    evaluationInfoHtml:'<span>The following data will be collected for evaluation:</span><br><ul><li>an anonymous identifyier which allows us to know what click data and questionaire answers come from the same account. No other identity information like your di.me username, nickname, real name, or email-address is sent. No location information is sent.</li><li>statistics about how many contacts, files, messages, and connected systems you use in your system. Only the number and time when created, but no information about names, content, or anything else is sent.</li><li>data about what type of pages you click in the system (e.g. a page "person"). This includes the time the page was clicked. No title, text, or other content of the pages are sent.</li></ul><br/><span>We do not use other click analysis (like e.g. Google Analytics). You can switch this off at any time on the page "Settings".</span>',
 
     //in segovia some services have been hidden
     //hiddenServices: ['SocialRecommenderServiceAdapter', 'AMETICDummyAdapter', 'Facebook'],
@@ -2720,6 +2768,7 @@ Dime.Settings = {
         $('#ConfigServiceDialogID').remove();
         var callBackHandler = function(response) {
             console.log("DELETED service " + serviceAccount.guid + " - response:", response);
+            Dime.evaluation.createAndSendEvaluationItemForAction(Dime.evaluation.ACTION.DISCONNECT_SERVICE, []);
         };
 
         Dime.REST.removeItem(serviceAccount, callBackHandler, Dime.Settings);
@@ -2841,8 +2890,7 @@ Dime.Settings = {
     updateServices: function() {
                 
         var callback = function(response) {
-            Dime.Settings.initServiceAdapters(response);
-        
+            Dime.Settings.initServiceAdapters(response);        
         };
         
         Dime.REST.getAll(Dime.psMap.TYPE.SERVICEADAPTER, callback , '@me', Dime.Settings);
@@ -2852,8 +2900,7 @@ Dime.Settings = {
     updateAccounts: function() {
 
         var callback = function(response) {
-            Dime.Settings.initServiceAccounts(response);
-        
+            Dime.Settings.initServiceAccounts(response);        
         };
 
         Dime.REST.getAll(Dime.psMap.TYPE.ACCOUNT, callback , '@me', Dime.Settings);
@@ -2872,15 +2919,15 @@ Dime.Settings = {
     },
 
     dropdownOnClick: function(event, jqueryItem, serviceAdapter) {
-        
+        var dialog;
         if (serviceAdapter.authUrl) {
             //showing service description before open in new window
-            var dialog = new Dime.ConfigurationDialog(this, this.configurationSubmitHandler);
+            dialog = new Dime.ConfigurationDialog(this, this.configurationSubmitHandler);
             dialog.showAuth(serviceAdapter.name, serviceAdapter.description, serviceAdapter.authUrl);
         } else {
             //create account item
             var newAccountItem = Dime.Settings.createAccount(serviceAdapter);
-            var dialog = new Dime.ConfigurationDialog(this, this.configurationSubmitHandler);
+            dialog = new Dime.ConfigurationDialog(this, this.configurationSubmitHandler);
             dialog.show(serviceAdapter.name, serviceAdapter.description, newAccountItem, true);
         }
     },
@@ -2967,6 +3014,7 @@ Dime.initProcessor.registerFunction(function(callback){
             response.userStatusFlag=1;
             Dime.REST.updateUser(response);
             DimeView.showAbout();
+            Dime.evaluation.createAndSendEvaluationItemForAction(Dime.evaluation.ACTION.FIRST_LOGIN, []);
         }
     };
     Dime.REST.getUser(getUserCallback, DimeView);
