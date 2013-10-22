@@ -1386,6 +1386,8 @@ DimeView = {
     },
 
     specialButtonSelected: function(){
+
+        /* MERGE BUTTON */
         if (DimeView.viewManager.status.groupType===Dime.psMap.TYPE.GROUP
                     && DimeView.viewManager.status.viewType!==DimeViewStatus.PERSON_VIEW){
             var selectedItems = DimeView.getSelectedItemsForView();
@@ -1410,6 +1412,8 @@ DimeView = {
                     }
                 }
             }, DimeView);
+
+        /* CKECK IN BUTTON */
         }else if (DimeView.viewManager.status.groupType===Dime.psMap.TYPE.PLACE){
             var selectedPlaces = DimeView.getSelectedItemsForView();
             var restoreCurrentPlace=false;
@@ -1440,14 +1444,43 @@ DimeView = {
             }else{
                 Dime.psHelper.getMixedItems(selectedPlaces, handleFullItems, this);
             }
+        /* SEND LIVEPOST BUTTON */
         }else if (DimeView.viewManager.status.viewType===DimeViewStatus.PERSON_VIEW){
             
-            var selectedPerson = DimeView.getSelectedItemsForView();
+            var selectedPersons = DimeView.getSelectedItemsForView();
+
+            if (!selectedPersons || !selectedPersons[0]){
+                console.log('ERROR - selected persons not set correctly!', selectedPersons);
+                return;
+            }
+
+            var handleNonSharableAgents = function(person){
+                
+                var invitePerson = function(emailAddress){
+                    var invitation = DimeView.getInvitationContent();
+                    var email=(emailAddress && emailAddress.length>0)?emailAddress:"friends_mail_address";
+
+                    var inviteLink = jQuery.createMailToHref([email], invitation.subject,invitation.text, 'send an email', 'orangeBubbleLink');
+                    var linkId = JSTool.randomGUID();
+                    $('body').append(inviteLink.attr('id',linkId));
+                    $('#'+linkId)[0].click();
+                    inviteLink.remove();
+                };
+
+                var status = confirm("This person does not have a di.me profile. Send an invitation instead?");
+                if(status){
+                    Dime.psHelper.findEmailAddressOfPerson(person, invitePerson, DimeView);
+                }
+                return;
+            }
 
             var triggerDialog=function(response){
+                if (!Dime.psHelper.isSharableAgent(response[0])){
+                    handleNonSharableAgents(response[0]);
+                }
                 Dime.Dialog.showLivepostWithSelection(response);
             };
-            Dime.psHelper.getMixedItems(selectedPerson, triggerDialog, this);
+            Dime.psHelper.getMixedItems(selectedPersons, triggerDialog, this);
         }
     },
     
@@ -2551,6 +2584,20 @@ DimeView = {
             ;
     },
 
+    getInvitationContent: function(){
+        var invitationText="Hi,\n\nI've just tested the di.me research prototype.\n\nWhy don't you join me there? Sharing is much more fun with two people ;-)\nJust go to http://dimetrials.bdigital.org:8080/dime and register!";
+        if (Dime.ps_configuration.userPRSNick){
+            invitationText+='\nYou can find me, when searching for: "'+Dime.ps_configuration.userPRSNick+'" (my Nickname) in People.';
+        }
+
+        invitationText+="\n\nBest wishes\n";
+
+        return {
+            subject: "Join me on di.me!",
+            text: invitationText
+        }
+    },
+
     showAbout: function(){
 
         //if dialog is shown already - dismiss
@@ -2567,14 +2614,11 @@ DimeView = {
         var githubProjectPageLink= 'http://dime-project.github.io/';
         var loginFromServerSettings=serverInfo.baseUrl+'/access/login';
         var questionaireLink = Dime.ps_configuration.getQuestionairePath();
-        var invitationSubject="Join me on di.me!"
-        var invitationText="Hi,\n\nI've just tested the di.me research prototype.\n\nWhy don't you join me there? Sharing is much more fun with two people ;-)\nJust go to http://dimetrials.bdigital.org:8080/dime and register!";
-        if (Dime.ps_configuration.userPRSNick){
-            invitationText+='\nYou can find me, when searching for: "'+Dime.ps_configuration.userPRSNick+'" (my Nickname) in People.';
-        }
-
-        invitationText+="\n\nBest wishes\n";
-        //FIXME add nickname of current user for PRS
+        var invitation = DimeView.getInvitationContent();
+        
+        var invitationSubject=invitation.subject;
+        var invitationText=invitation.text;
+        
         var bubbleBody = $('<div/>')
         .append(
             $('<div/>')

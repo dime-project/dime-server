@@ -41,7 +41,25 @@ jQuery.extend({
             contentType: "application/json; charset=utf-8",
             processData: false
         });
-    }    
+    },
+    createMailToHref: function(receivers, subject, body, caption, classes){
+        var linkText='mailto:';
+        var firstEntry=true;
+        jQuery.each(receivers, function(){
+            firstEntry?firstEntry=false:linkText+=',%20';
+            linkText+=this;
+        })
+        linkText+='?';
+        if (subject){
+            linkText+='subject='+encodeURIComponent(subject)+'&';
+        }
+        if (body){
+            linkText+='body='+encodeURIComponent(body);
+        }
+
+        return $('<a/>').addClass(classes).attr('href',linkText).text(caption);
+    }
+
 });
 
 /**
@@ -180,23 +198,8 @@ jQuery.fn.extend({
     },
 
     addMailToHref: function(receivers, subject, body, caption, classes){
-        var linkText='mailto:';
-        var firstEntry=true;
-        jQuery.each(receivers, function(){
-            firstEntry?firstEntry=false:linkText+=',%20';
-            linkText+=this;
-        })
-        linkText+='?';
-        if (subject){
-            linkText+='subject='+encodeURIComponent(subject)+'&';
-        }
-        if (body){
-            linkText+='body='+encodeURIComponent(body);
-        }
-
-        this.append($('<a/>').addClass(classes)
-            .attr('href',linkText).text(caption)
-            );
+       
+        this.append(jQuery.createMailToHref(receivers, subject, body, caption, classes));
         return this;
     }
 });
@@ -1806,6 +1809,22 @@ Dime.psMap.KNOWN_PLACES={
 // --------------------------------------------
 
 Dime.psHelper = {
+
+    findEmailAddressOfPerson: function(person, callback){
+        Dime.psHelper.getPersonAndProfiles(person.guid, function(response){
+
+            var result = null;
+            jQuery.each(response.profileattributes, function(){
+                if ((this.category==='EmailAddress')
+                    && (this.value)
+                    && (this.value.emailAddress)
+                ) {
+                result=this.value.emailAddress;
+            }
+            });
+            callback(result);
+        } , this);
+    },
     
     getUserPrsNickFromPublicProfile: function(callback){
 
