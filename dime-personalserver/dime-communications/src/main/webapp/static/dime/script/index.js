@@ -684,6 +684,7 @@ DimeView = {
             entry.read=true;
             Dime.REST.updateItem(entry);
             jChildItem.addClass('userNotificationWasRead');
+            Dime.Navigation.updateNotificationBar([]);
         };
 
 
@@ -3125,6 +3126,8 @@ Dime.Navigation = {
                     .text(unValues.shortCaption.substr(0, 16))
                     .click(function(){
                         jUnBarElement.remove();
+                        Dime.Navigation.receivedNotifications=Dime.Navigation.receivedNotifications-1;
+                        Dime.Navigation.updateNotificationCounter();
                      });
                 
             };
@@ -3139,11 +3142,15 @@ Dime.Navigation = {
         return jUnBarElement;
         
     },
+
+    updateNotificationCounter: function(){
+        $("#notificationCounter").text(Dime.Navigation.receivedNotifications);
+    },
     
     updateNotificationBar: function(usernotifications){
         
         Dime.Navigation.receivedNotifications+=usernotifications.length;
-        document.getElementById("notificationCounter").innerHTML=Dime.Navigation.receivedNotifications;
+        Dime.Navigation.updateNotificationCounter();
             
         var notificationContainer = document.getElementById('innerNotificationContainer');
         //generate some space
