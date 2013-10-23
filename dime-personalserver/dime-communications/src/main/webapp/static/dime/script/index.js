@@ -2897,7 +2897,7 @@ Dime.Settings = {
                 var myPass=null;
                 var passDlgShown=false;
                 var myContainer = $(this);
-                var input= $('<button/>').addClass('YellowMenuButton').text("Change Password")
+                var input= $('<button/>').addClass('YellowMenuButton').attr('id','ChangePasswordButton').text("Change Password")
                     .click(function(){
                         if (passDlgShown){
                             myContainer.find('.settingsPasswdField').remove();
@@ -2906,7 +2906,7 @@ Dime.Settings = {
                             return;
                         }//else
                         passDlgShown=true;
-                        myContainer.append($('<div/>').addClass('settingsPasswdField')
+                        ($('<div/>').addClass('settingsPasswdField')
                             .append($('<input/>').attr('type','password').attr('placeholder','enter new password')
                                 .keyup(function(event){
                                     if (event.keyCode === 13) {
@@ -2928,9 +2928,21 @@ Dime.Settings = {
                                     }
                                 })
                         )
-                        );
+                        ).insertAfter("#ChangePasswordButton");
                         });
                 myContainer.append(input);
+            };
+            
+            var deleteDimeAccount = function(){
+                var thisRef = $(this);
+                var input = $('<button/>').addClass('YellowMenuButton').addClass('deleteDimeAccountButton').text('Delete di.me-Account')
+                    .click(function(){
+                        var deleteAccount = confirm("You are about to delete your di.me-Account. Are you sure?");
+                        if(deleteAccount){
+                            console.log("Account was deleted");
+                        }
+                    });
+                thisRef.append(input);
             };
 
 
@@ -2938,7 +2950,7 @@ Dime.Settings = {
             container.empty();
             container
                 .append($('<div/>').addClass('settingsSettings').append(evaluationCheckbox))
-                .append($('<div/>').addClass('settingsSettings').append(changePasswordButton))
+                .append($('<div/>').addClass('settingsSettings').append(changePasswordButton).append(deleteDimeAccount))
             ;
         };
         Dime.REST.getUser(handleUserSettings, Dime.Settings);
