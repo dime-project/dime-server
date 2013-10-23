@@ -1,19 +1,20 @@
 /*
-* Copyright 2013 by the digital.me project (http://www.dime-project.eu).
-*
-* Licensed under the EUPL, Version 1.1 only (the "Licence");
-* You may not use this work except in compliance with the Licence.
-* You may obtain a copy of the Licence at:
-*
-* http://joinup.ec.europa.eu/software/page/eupl/licence-eupl
-*
-* Unless required by applicable law or agreed to in writing, software distributed under the Licence is distributed on an "AS IS" basis,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-* See the Licence for the specific language governing permissions and limitations under the Licence.
-*/
+ * Copyright 2013 by the digital.me project (http://www.dime-project.eu).
+ *
+ * Licensed under the EUPL, Version 1.1 only (the "Licence");
+ * You may not use this work except in compliance with the Licence.
+ * You may obtain a copy of the Licence at:
+ *
+ * http://joinup.ec.europa.eu/software/page/eupl/licence-eupl
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the Licence is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the Licence for the specific language governing permissions and limitations under the Licence.
+ */
 
 package eu.dime.ps.communications.requestbroker.controllers.infosphere;
 
+import ie.deri.smile.vocabulary.NIE;
 import ie.deri.smile.vocabulary.PIMO;
 
 import java.util.ArrayList;
@@ -33,7 +34,11 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.commons.lang.ArrayUtils;
+import org.ontoware.aifbcommons.collection.ClosableIterator;
+import org.ontoware.rdf2go.model.Statement;
+import org.ontoware.rdf2go.model.node.Node;
 import org.ontoware.rdf2go.model.node.URI;
+import org.ontoware.rdf2go.model.node.Variable;
 import org.ontoware.rdf2go.model.node.impl.URIImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,10 +53,14 @@ import eu.dime.commons.dto.Response;
 import eu.dime.commons.dto.Response.Status;
 import eu.dime.ps.controllers.UserManager;
 import eu.dime.ps.controllers.exception.InfosphereException;
+import eu.dime.ps.controllers.infosphere.manager.AccountManager;
 import eu.dime.ps.controllers.infosphere.manager.PersonManager;
+import eu.dime.ps.controllers.infosphere.manager.ProfileManager;
 import eu.dime.ps.controllers.trustengine.utils.AdvisoryConstants;
 import eu.dime.ps.dto.Resource;
+import eu.dime.ps.gateway.service.internal.DimeServiceAdapter;
 import eu.dime.ps.semantic.model.NCOFactory;
+import eu.dime.ps.semantic.model.dao.Account;
 import eu.dime.ps.semantic.model.nco.PersonContact;
 import eu.dime.ps.semantic.model.nco.PersonName;
 import eu.dime.ps.semantic.model.pimo.Person;
@@ -68,28 +77,42 @@ import eu.dime.ps.semantic.model.pimo.Person;
 public class PSPersonController implements APIController {
 
 	private static final Logger logger = LoggerFactory.getLogger(PSPersonController.class);
-	
+
 	private static final Map<URI, String> RENAMING_RULES;
 	static {
 		RENAMING_RULES = new HashMap<URI, String>();
 		RENAMING_RULES.put(PIMO.groundingOccurrence, "defProfile");
 	}
-	
+
 	private PersonManager personManager;	
 
 	private UserManager userManager;
-		
+
+	private AccountManager accountManager;
+
+	private ProfileManager profileManager;
+
+
 
 	@Autowired
 	public void setPersonManager(PersonManager personManager) {
 		this.personManager = personManager;
 	}
-	
+
 	@Autowired
 	public void setUserManager(UserManager userManager) {
 		this.userManager = userManager;
 	}
 
+	@Autowired
+	public void setAccountManager(AccountManager accountManager) {
+		this.accountManager = accountManager;
+	}
+
+	@Autowired
+	public void setProfileManager(ProfileManager profileManager) {
+		this.profileManager = profileManager;
+	}
 	/**
 	 * Return Collection of persons
 	 * 
@@ -108,7 +131,9 @@ public class PSPersonController implements APIController {
 			Collection<Person> people = personManager.getAll();
 			data = new Data<Resource>(0, people.size(), people.size());
 			for (Person person : people) {
-				data.getEntries().add(new Resource(person,null,RENAMING_RULES, personManager.getMe().asURI()));
+				Resource personDTO = new Resource(person,null,RENAMING_RULES, personManager.getMe().asURI());			
+				resolveDefProfile(personDTO);
+				data.getEntries().add(personDTO);
 			}
 		} catch (InfosphereException e) {
 			return Response.badRequest(e.getMessage(), e);
@@ -119,6 +144,7 @@ public class PSPersonController implements APIController {
 		return Response.ok(data);
 	}
 
+	
 	/**
 	 * Return person
 	 * 
@@ -140,7 +166,9 @@ public class PSPersonController implements APIController {
 					: personManager.get(personID);
 			// Person person= personManager.get(personID);
 			data = new Data<Resource>(0, 1, 1);
-			data.getEntries().add(new Resource(person,null,RENAMING_RULES,personManager.getMe().asURI()));
+			Resource personDTO = new Resource(person,null,RENAMING_RULES, personManager.getMe().asURI());			
+			resolveDefProfile(personDTO);
+			data.getEntries().add(personDTO);
 
 		} catch (InfosphereException e) {
 			return Response.badRequest(e.getMessage(), e);
@@ -175,7 +203,7 @@ public class PSPersonController implements APIController {
 			data = request.getMessage().getData();
 
 			Resource dto = data.getEntries().iterator().next();
-			
+
 			//check for int values (semantic engine will crash)
 			if (dto.containsKey("nao:trustLevel")){
 				try {
@@ -185,7 +213,7 @@ public class PSPersonController implements APIController {
 					//value already double
 				}
 			}
-			
+
 
 			// Remove guid because is a new object
 			dto.remove("guid");
@@ -241,15 +269,17 @@ public class PSPersonController implements APIController {
 					//value already double
 				}
 			}
-			
+
 			Person person = "@self".equals(personID) ? data.getEntries()
 					.iterator().next()
 					.asResource(personManager.getMe().asURI(), Person.class,personManager.getMe().asURI())
 					: data.getEntries().iterator().next()
-							.asResource(new URIImpl(personID), Person.class,personManager.getMe().asURI());
-			personManager.update(person);
-			Person returnPerson = personManager.get(personID);
-			returnData = new Data<Resource>(0, 1, new Resource(returnPerson,null,RENAMING_RULES,personManager.getMe().asURI()));
+					.asResource(new URIImpl(personID), Person.class,personManager.getMe().asURI());
+					personManager.update(person);
+					Person returnPerson = personManager.get(personID);
+					Resource personDTO = new Resource(returnPerson,null,RENAMING_RULES,personManager.getMe().asURI());
+					resolveDefProfile(personDTO);
+					returnData = new Data<Resource>(0, 1,personDTO );
 
 		} catch (IllegalArgumentException e) {
 			return Response.badRequest(e.getMessage(), e);
@@ -355,7 +385,7 @@ public class PSPersonController implements APIController {
 
 			for (HashMap jsonObject : jsons) {
 				PersonContact personContact = toPersonContact(jsonObject);
-				
+
 				final String accountSaid = (String) jsonObject.get("said");
 				final URI accountUri = new URIImpl(userManager.add(accountSaid).getAccountUri());
 				userManager.addProfile(accountUri, personContact);
@@ -378,17 +408,17 @@ public class PSPersonController implements APIController {
 	private PersonContact toPersonContact(HashMap json) {
 		String nickname = (String) json.get("nickname");
 		String fullname = json.get("name") + " " + json.get("surname");
-		
+
 		NCOFactory ncofactory = new NCOFactory();
-		
+
 		PersonContact newContact = ncofactory.createPersonContact();
 		newContact.setPrefLabel(fullname);
-		
+
 		PersonName name = ncofactory.createPersonName();
 		name.setNickname(nickname);
 		name.setFullname(fullname);
 		newContact.setPersonName(name);
-		
+
 		// adding name metadata to contact model
 		newContact.getModel().addModel(name.getModel());
 
@@ -418,6 +448,59 @@ public class PSPersonController implements APIController {
 		}
 		return out;
 	}
+	
+	
+	//set to "" the defProfiles of  service crawled Persons
+	private void resolveDefProfile(Resource personDTO) {
+		PersonContact profile=null;
+		Account account=null ;
+		if(personDTO.containsKey("defProfile")){
+			try {
+				profile = profileManager.get(personDTO.get("defProfile").toString().replaceFirst("p_",""));
+			} catch (InfosphereException e) {
+				return;
+			}
+
+			if(profile !=null){
+				try {
+					account = accountManager.get(findSaid(profile));
+				} catch (InfosphereException e) {
+					return;
+				} catch (Exception e) {
+					return;
+				}
+				if(account != null)
+					if(!account.getAccountType().equals(DimeServiceAdapter.NAME))
+						personDTO.put("defProfile", "");
+			}
+		}
+	}
+
+	private String findSaid(PersonContact profile) throws Exception { 
+
+		ClosableIterator<Statement> iterator = profile.getModel()
+				.findStatements(profile.asResource().asURI(), NIE.dataSource, Variable.ANY);    	
+		while (iterator.hasNext()) {
+			Statement statement = iterator.next();    	   
+			Node node = statement.getObject();
+			try {
+				for(Account accountId: accountManager.getAll())
+					if(node.asURI().toString().equals(accountId.asURI().toString())){
+						return node.asURI().toString();
+					}
+			} catch (ClassCastException e) {						
+				throw new Exception(e.getMessage());					
+
+			} catch (InfosphereException e) {
+				throw new InfosphereException(e.getMessage(),e);
+
+			}
+
+		}
+		return "";
+	}
+
+	
 
 }
 
