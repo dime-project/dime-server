@@ -878,7 +878,7 @@ DimeView = {
         if (entry.type===Dime.psMap.TYPE.PERSON){
             jChildItem.append($('<div/>').addClass('wrapProfileImage')
                 .append(Dime.psHelper.getImageUrlJImageFromEntry(entry))
-            )
+            );
         }else{
             jChildItem.append(Dime.psHelper.getImageUrlJImageFromEntry(entry));
         }
@@ -1153,7 +1153,7 @@ DimeView = {
         
         var containerCaption=Dime.psHelper.getPluralCaptionForItemType(entries[0].type);
         if (type===Dime.psMap.TYPE.PLACE){
-            containerCaption+=" (nearby to your position)"
+            containerCaption+=" (nearby to your position)";
         }
 
         DimeView.initContainer(jContainerElement, containerCaption);
@@ -2042,10 +2042,10 @@ DimeView = {
     },
     
     search: function(){
-
-        var searchText = document.getElementById('searchText');
-        //console.log('search:', searchText.value);    
-        DimeView.searchFilter = searchText.value;
+        
+        var searchText = $("#searchText").val().trim();
+        //console.log('search:', searchText);
+        DimeView.searchFilter = searchText;
 
         DimeView.cleanUpView();
 
@@ -2057,10 +2057,10 @@ DimeView = {
         DimeView.searchCallForType(DimeView.viewManager.getCurrentGroupType());
 
         //also search on global search if groupType==GROUP
-        if (DimeView.viewManager.getCurrentGroupType()===Dime.psMap.TYPE.GROUP && searchText.value && (searchText.value.length>0)){
+        if (DimeView.viewManager.getCurrentGroupType()===Dime.psMap.TYPE.GROUP && searchText && (searchText.length>0)){
 
             DimeView.initContainer($('#globalItemNavigation'), "di.me Users in the di.me User Directory");
-            Dime.REST.searchGlobal(searchText.value, DimeView.handleGlobalSearchResult);
+            Dime.REST.searchGlobal(searchText, DimeView.handleGlobalSearchResult);
 
         }else{
             DimeView.viewManager.setViewVisible.call(DimeView.viewManager, 'globalItemNavigation', false);
