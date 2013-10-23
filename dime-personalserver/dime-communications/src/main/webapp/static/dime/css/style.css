@@ -1234,8 +1234,8 @@ input[type="file"] {
 }
 
 .settingsTabSubTitle{
-    float: right;
-    margin-right: 8px;
+    float: left;
+    margin-right: 5px;
     margin-top: 3px;
 
 }
@@ -3869,3 +3869,11 @@ input[readonly].dimeDetailDialogKeyValueValue {
     visibility: hidden;
 }
 
+.defaultProfile {
+    font-weight: bold;
+}
+
+#personProfileNavigation > #containerCaption{
+    text-decoration: underline;
+    cursor: pointer;
+}

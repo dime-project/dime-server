@@ -521,6 +521,8 @@ DimeView = {
    
         var groupClass=(entry.type!==Dime.psMap.TYPE.GROUP?entry.type+"Item groupItem":"groupItem");
         
+        var groupTitle = $('<h4>'+ DimeView.getShortNameWithLength(entry.name, 12) + '</h4>');
+        
         var jGroupItem=$('<div/>').addClass(groupClass).append($('<div/>')
                 .append(
                     Dime.psHelper.getImageUrlJImageFromEntry(entry))
@@ -535,9 +537,7 @@ DimeView = {
                     $('<div/>')
                         .addClass('captionForGroupElement')
                         .attr('title', entry.name)
-                        .append(
-                            $('<h4>'+ DimeView.getShortNameWithLength(entry.name, 11) + '</h4>')
-                        )
+                        .append(groupTitle)
                         .append(
                             $('<div class="editHintGroupElement"></div>')  
                         )
@@ -550,11 +550,22 @@ DimeView = {
                 )
         );
    
-
         DimeView.setActionAttributeForElements(entry, jGroupItem, true, false);
 
         jParent.append(jGroupItem);
-
+        
+        var handlePersonResponse=function(person){
+            if (person.defProfile && person.defProfile.length>0){
+                if(person.defProfile===entry.guid){
+                    groupTitle.addClass('defaultProfile');
+                }
+            }
+        };
+        
+        if (DimeView.viewManager.status.viewType===DimeViewStatus.PERSON_VIEW){
+            var personStub = DimeView.getSelectedItemsForView()[0];
+            Dime.REST.getItem(personStub.guid, Dime.psMap.TYPE.PERSON, handlePersonResponse, '@me', this );
+        }
     },    
     
     createAttributeItemJElement: function(entry){
@@ -1164,7 +1175,6 @@ DimeView = {
             if (isInFilter(entries[i])){
                 if (isGroupContainer){
                     DimeView.addGroupElement(jContainerElement, entries[i]);
-
                 }else{                    
                     DimeView.addItemElement(jContainerElement, entries[i]);
                 }
@@ -1472,7 +1482,7 @@ DimeView = {
                     Dime.psHelper.findEmailAddressOfPerson(person, invitePerson, DimeView);
                 }
                 return;
-            }
+            };
 
             var triggerDialog=function(response){
                 if (!Dime.psHelper.isSharableAgent(response[0])){
@@ -1786,17 +1796,25 @@ DimeView = {
     },
         
     updateItemContainerFromArray: function(entries, selectingGroupName){
+        
+        //change the container for the current view (PERSON_VIEW or GROUP_CONTAINER_VIEW)
+        var divContainer;
+        if(DimeView.viewManager.getCurrentViewType()===DimeViewStatus.PERSON_VIEW){
+            divContainer = $('#personProfileAttributeNavigation');
+        }else{
+            divContainer = $('#itemNavigation');
+        }    
 
-        DimeView.initContainer($('#itemNavigation'), 
+        DimeView.initContainer(divContainer, 
             Dime.psHelper.getPluralCaptionForItemType(DimeView.itemType),
             selectingGroupName);
 
-        var itemContainer = $('#itemNavigation');
+        var itemContainer = divContainer;
         for (var i=0; i<entries.length; i++){ 
             if (entries[i].name.toLowerCase().indexOf(DimeView.searchFilter.toLowerCase())!==-1){              
                 DimeView.addItemElement(itemContainer, entries[i]);
             }
-        }  
+        }
     },
     
     showGroupMembers: function(event, element, groupEntry){
@@ -1813,8 +1831,7 @@ DimeView = {
             this.updateItemContainerFromArray(response, groupEntry.name);
         };
 
-        Dime.REST.getItems(groupEntry.items,Dime.psHelper.getChildType(groupEntry.type), updateGroupMembers, groupEntry.userId, this);
-                           
+        Dime.REST.getItems(groupEntry.items, Dime.psHelper.getChildType(groupEntry.type), updateGroupMembers, groupEntry.userId, this);                
     }, 
     
     editItem: function(event, element, entry, message){
@@ -1838,8 +1855,6 @@ DimeView = {
         });
     },
             
-    
-    
     editSelected: function(){
 
         var selectedItems = DimeView.getSelectedItemsForView();
@@ -2279,8 +2294,7 @@ DimeView = {
                 $('<div></div>').addClass("clear")
             );
         
-        
-        var updateProfileContainer=function(response){            
+        var updateProfileContainer=function(response){
             DimeView.handleSearchResultForContainer(Dime.psMap.TYPE.PROFILE,
                     response, $('#personProfileNavigation'), true);
         };
@@ -2927,15 +2941,15 @@ Dime.Settings = {
                                         }
                                     }
                                 })
-                        )
+                            )
                         ).insertAfter("#ChangePasswordButton");
-                        });
+                    });
                 myContainer.append(input);
             };
             
             var deleteDimeAccount = function(){
                 var thisRef = $(this);
-                var input = $('<button/>').addClass('YellowMenuButton').addClass('deleteDimeAccountButton').text('Delete di.me-Account')
+                var input = $('<button/>').addClass('YellowMenuButton deleteDimeAccountButton').text('Delete di.me-Account')
                     .click(function(){
                         var deleteAccount = confirm("You are about to delete your di.me-Account. Are you sure?");
                         if(deleteAccount){
@@ -3057,8 +3071,12 @@ Dime.initProcessor.registerFunction(function(callback){
     //set event listeners to group container
     $('#groupNavigation').click(function(){
         //reset search text
-        
        DimeView.search();  //TODO move to update Navigation?
+    });
+    
+    $('#personProfileNavigation').click(function(){
+        //reset clicked profile-card for overview all profile-attributes
+        DimeView.viewManager.updateViewFromUrl();
     });
     
     DimeView.viewManager.updateViewFromUrl.call(DimeView.viewManager);
