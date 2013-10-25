@@ -1946,15 +1946,16 @@ input[type="checkbox"] {
 
 
 .itemDetailPic{
-    clear: both;
+    /* clear: both; */
     float: left;
     width: 460px;
     text-align: center;
     border: 1px solid silver;
     margin-top: 10px;
-    padding: 10px;
+    margin-left: 15px;
+    padding: 5px;
     border-radius: 5px;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
 }
 
 .itemDetailPic > h1 {
@@ -1970,7 +1971,7 @@ input[type="checkbox"] {
     font-size: 14px;
     text-align: center;
     position: relative;
-    margin: 25px 0 10px 0;
+    margin: 10px 0 10px 0;
 }
 
 .itemDetailPic > h3 {
@@ -2586,6 +2587,10 @@ input[type="text"].DimeDetailDialogPAValueListItemValue{
     width: 750px;
 }
 
+.itemDetailPicUploadBtn > .qq-uploader > .qq-upload-list {
+    display: none;
+}
+
 #dropzoneNavigation input{
     width: 100%
 }
@@ -2858,9 +2863,12 @@ input[type="text"].DimeDetailDialogPAValueListItemValue{
     width: 30px;
     padding: 20px;
     border-radius: 5px;
-    background-color: #5A9DD5;
+    background-color: #9CC6E6;
     z-index: -100;
+}
 
+.itemDetailPicImageBig:hover {
+    background-color: #5A9DD5;
 }
 
 #backToGroupButton{

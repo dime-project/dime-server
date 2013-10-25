@@ -4242,7 +4242,8 @@ Dime.DetailDialog.prototype = {
         var profilePic =$('<div></div>').attr('id', dialogRef.imageDetailPicId).addClass("hidden itemDetailPic")
             .append('<h1>Edit: Image</h1>')
             .append(Dime.psHelper.getImageUrlJImageFromEntry(item).addClass('itemDetailPicImageBig')
-                        .attr('height','100px').attr('width','100px').attr('alt','imageUrl image'))
+                        .attr('height','100px').attr('width','100px').attr('alt','imageUrl image')
+                        .clickExt(dialogRef, dialogRef.selectImageForImageUrl))
             .append('<h2>Select or upload a new icon:</h2>')
             .append(
                 $('<div class="itemDetailPicButtons"></div>')
@@ -4294,11 +4295,18 @@ Dime.DetailDialog.prototype = {
         this.item.imageUrl = imageUrl;
         var imagePath = Dime.psHelper.guessLinkURL(imageUrl);
         
+        //show preview after select/upload
+        $(".itemDetailPicImageBig").attr("src", imagePath);
+        $(".itemDetailPicImageActive").attr("src", imagePath);
+        
         JSTool.updateImageWithIdIfExists(this.imageId, imagePath);
         JSTool.updateImageWithIdIfExists(this.imageIdBig, imagePath);
     },
     
     selectImageForImageUrl: function(event, jqueryItem){
+
+        var thisRef = this;
+
         var updateImageUrlFromSelectionDialog = function(selectedItems, isOK){
         
             if (!isOK){
@@ -4308,11 +4316,10 @@ Dime.DetailDialog.prototype = {
                 console.log("Error: selectedItems is undefined or nothing was selected");
                 return;
             }
-            this.updateImageUrl(selectedItems[0].imageUrl);
+            thisRef.updateImageUrl(selectedItems[0].imageUrl);
         };
         
         Dime.Dialog.showImageSelectionList.call(this, updateImageUrlFromSelectionDialog);
-        
     },
     
     initUploader: function(){
@@ -4331,7 +4338,7 @@ Dime.DetailDialog.prototype = {
         };
    
         this.uploader = new qq.FileUploader({
-            element:document.getElementById(this.picUploadElementId),
+            element: document.getElementById(this.picUploadElementId),
             action: Dime.psHelper.getPathForImageUpload(),
             uploadButtonText: 'upload',
             debug: true,
@@ -4340,7 +4347,7 @@ Dime.DetailDialog.prototype = {
             multiple: false,        
             forceMultipart: false,
             onComplete: uploadedImageUrl
-        }); 
+        });
     },
     
       
