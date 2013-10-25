@@ -15,7 +15,6 @@
 package eu.dime.ps.communications.requestbroker.controllers.context;
 
 import javax.ws.rs.Consumes;
-
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -163,23 +162,25 @@ public class PSContextController {
 
 	@GET
 	@Path("/dump")
-    @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
-	public Response dump(@PathParam("said") String said) {
+    @Produces("text/turtle;charset=UTF-8")
+	public String dump(@PathParam("said") String said) {
 		Connection connection = null;
+		String response = null;
 		
 		try {
 			connection = connectionProvider.getConnection(TenantHelper.getCurrentTenantId().toString());
-			System.out.println(connection.getLiveContextService().getLiveContext().serialize(Syntax.Trig));
+			response = connection.getLiveContextService().getLiveContext().serialize(Syntax.Turtle);
 		} catch (RepositoryException e) {
 			Response.serverError("Couldn't get connection to RDF services: " + e.getMessage(), e);
 		} finally {
-			if (connection != null)
+			if (connection != null) {
 				try {
 					connection.close();
 				} catch (RepositoryException e) {}
+			}
 		}
 		
-		return Response.ok();
+		return response;
 	}
 
 }
