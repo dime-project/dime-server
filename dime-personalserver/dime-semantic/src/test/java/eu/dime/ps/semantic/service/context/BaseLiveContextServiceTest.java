@@ -18,7 +18,6 @@ import ie.deri.smile.vocabulary.DCON;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.model.node.impl.URIImpl;
@@ -156,7 +155,6 @@ public class BaseLiveContextServiceTest extends SemanticTest {
 		assertEquals(temp, environment.getAllCurrentTemperature().next());
 	}
 
-	@Ignore
 	@Test
 	public void testConsecutiveUpdates() throws Exception {
 		Bluetooth bluetooth = modelFactory.getDDOFactory().createBluetooth();
@@ -168,7 +166,7 @@ public class BaseLiveContextServiceTest extends SemanticTest {
 		bluetooth.setSignal(new Float(-3f));
 		lcs.getSession(TEST_DATASOURCE).remove(Connectivity.class, DCON.connection);
 		lcs.getSession(TEST_DATASOURCE).add(Connectivity.class, DCON.connection, bluetooth);
-
+		
 		Bluetooth bt = lcs.get(bluetooth.asURI(), Bluetooth.class, TEST_DATASOURCE);
 		assertEquals("494dj3Z13", bt.getPrefLabel());
 		assertEquals(new Float(-3f), bt.getAllSignal().next());

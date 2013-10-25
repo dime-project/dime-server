@@ -324,7 +324,9 @@ public class LiveContextSessionImpl implements LiveContextSession {
 					// remove all observations for this element
 					ClosableIterator<Statement> observationsIt = liveContext.findStatements(element.asResource(), DCON.hasObservation, Variable.ANY);
 					while (observationsIt.hasNext()) {
-						toAdd.add(observationsIt.next());
+						Statement stmt = observationsIt.next();
+						toRemove.add(stmt);
+						toRemove(liveContext.findStatements(stmt.getObject().asResource(), Variable.ANY, Variable.ANY));
 					}
 					
 					// remove all metadata (triples) where element is subject or object
@@ -400,15 +402,23 @@ public class LiveContextSessionImpl implements LiveContextSession {
 	// check if the element is linked from another aspects, or with a different property
 	private boolean isShared(URI aspect, org.ontoware.rdf2go.model.node.Resource element, URI property) {
 		boolean shared = false;
+		
 		ClosableIterator<Statement> relationsIt = liveContext.findStatements(Variable.ANY, Variable.ANY, element);
 		while (relationsIt.hasNext()) {
 			Statement stmt = relationsIt.next();
+			
+			// ignore super property DCON.hasContextElement
+			if (stmt.getPredicate().equals(DCON.hasContextElement)) {
+				continue;
+			}
+			
 			if (!stmt.getSubject().equals(aspect) || !stmt.getPredicate().equals(property)) {
 				shared = true;
 				break;
 			}
 		}
 		relationsIt.close();
+		
 		return shared;
 	}
 	
