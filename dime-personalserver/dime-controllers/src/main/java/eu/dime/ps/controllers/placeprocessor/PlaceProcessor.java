@@ -87,6 +87,8 @@ public class PlaceProcessor {
 	
 	public HashMap<PlaceKey,String> RDFPlaceReferences = new HashMap<PlaceKey, String>();
 	
+	public HashMap<String,Integer> userVotes = new HashMap<String, Integer>();
+	
 	public void setPlacemarkManager(PlacemarkManager placemarkManager) {
 		this.placemarkManager = placemarkManager;
 	}
@@ -389,44 +391,52 @@ public class PlaceProcessor {
 		}
 		
 		if (place.userRating != NO_VOTE) {
+			
 			// Step 1: invoke SocRec Adapter to vote item
 			// Normalize vote in input (0..1) to Social rec range (0..100)
 			int normVote = (int) (place.userRating * 100);
 			
 			if (this.socialRecService != null) {
 				
-				String encodedPlace = "";
-				String srUser = "";
-				
-				try {
-					encodedPlace = URLEncoder.encode(placeId,"UTF-8");
-					srUser = URLEncoder.encode(srAccount.asURI().toString(),"UTF-8");
-				} catch (UnsupportedEncodingException e) {
-					logger.error(e.getMessage(),e);
-					return place;
-				}
-				
-				String query = "vote.php?cid=" + social_rec_CID + "&cat_key=" + social_rec_catalog 
-						+ "&user=" + srUser + "&item_id=" + encodedPlace + "&rating=" + normVote;
-				
-				try {
-					this.socialRecService.getRaw(query);
-				} catch (AttributeNotSupportedException e) {
-					logger.error(e.toString());
-				} catch (ServiceNotAvailableException e) {
-					logger.error(e.toString());
-				} catch (InvalidLoginException e) {
-					logger.error(e.toString());
-				} catch (ServiceException e) {
-					logger.error(e.getMessage(), e);
+				// Step1a: check if mainSaid has already voted this place with same value
+				Integer previous = userVotes.get(mainSaid);
+				if (previous == null || (previous.intValue() != normVote)) {
+					
+					userVotes.put(mainSaid, new Integer(normVote));
+					
+					String encodedPlace = "";
+					String srUser = "";
+					
+					try {
+						encodedPlace = URLEncoder.encode(placeId,"UTF-8");
+						srUser = URLEncoder.encode(srAccount.asURI().toString(),"UTF-8");
+					} catch (UnsupportedEncodingException e) {
+						logger.error(e.getMessage(),e);
+						return place;
+					}
+					
+					String query = "vote.php?cid=" + social_rec_CID + "&cat_key=" + social_rec_catalog 
+							+ "&user=" + srUser + "&item_id=" + encodedPlace + "&rating=" + normVote;
+					
+					try {
+						this.socialRecService.getRaw(query);
+					} catch (AttributeNotSupportedException e) {
+						logger.error(e.toString());
+					} catch (ServiceNotAvailableException e) {
+						logger.error(e.toString());
+					} catch (InvalidLoginException e) {
+						logger.error(e.toString());
+					} catch (ServiceException e) {
+						logger.error(e.getMessage(), e);
+					}
 				}
 			}
 			
 			// Step 2: forward vote and favorite flag to YM using YM Adapter 
 			// @YM: Maybe also this should be checked according to gateway refactoring
 			try {
-				if(placeServiceAdapter == null) {
-					throw new ServiceNotAvailableException("Check if the service adapter YellowMap has been registered.");
+					if(placeServiceAdapter == null) {
+						throw new ServiceNotAvailableException("Check if the service adapter YellowMap has been registered.");
 				}
 				// TODO @Roman proper account: pending due to missing UI elements
 				// this.placeServiceAdapter.setCredentials(mainSaid);
@@ -450,7 +460,7 @@ public class PlaceProcessor {
 				}
 				// TODO @Roman proper account: pending due to missing UI elements
 				// this.placeServiceAdapter.setCredentials(mainSaid);
-                                this.placeServiceAdapter.setCredentials();
+                this.placeServiceAdapter.setCredentials();
 
 				this.placeServiceAdapter.updatePlace(place);
 			} catch (UnsupportedEncodingException e) {
