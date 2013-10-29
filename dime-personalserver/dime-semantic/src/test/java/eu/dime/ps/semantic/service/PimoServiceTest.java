@@ -162,7 +162,8 @@ public class PimoServiceTest extends SemanticTest {
 
 		assertEquals(p1.asURI(), merged.asURI());
 		assertEquals("Ismael Rivera", merged.getPrefLabel());
-		assertEquals(2, merged.getAllGroundingOccurrence_as().count());
+		assertEquals(1, merged.getAllGroundingOccurrence_as().count());
+		assertEquals(c11, merged.getAllGroundingOccurrence().next());
 		assertEquals(4, merged.getAllOccurrence_as().count());
 		
 		ClosableIterator<InformationElement> occs = merged.getAllGroundingOccurrence();

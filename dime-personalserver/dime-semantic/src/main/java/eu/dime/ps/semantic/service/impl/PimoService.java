@@ -2018,6 +2018,14 @@ public class PimoService implements TaggingService, Queryable {
 					tripleStore.removeStatements(Variable.ANY, target, NAO.trustLevel, Variable.ANY);
 				}
 				
+				// replace pimo:groundingOccurrence by pimo:occurrence on 'target' person
+				// only master's grounding occurrence will be kept
+				Collection<Node> occurrences = ModelUtils.findObjects(tripleStore, target, PIMO.groundingOccurrence);
+				for (Node occurrence : occurrences) {
+					tripleStore.removeStatements(Variable.ANY, target, PIMO.groundingOccurrence, occurrence);
+					tripleStore.addStatement(this.userPimoUri, target, PIMO.occurrence, occurrence);
+				}
+				
 				// replacing all references of 'target' person for 'master' person
 				logger.debug("replacing pimo:Person "+target+" by "+master);
 				tripleStore.replaceUri(target, master);
