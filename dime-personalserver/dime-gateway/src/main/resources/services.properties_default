@@ -66,20 +66,21 @@ YellowMapPlaceService_ICON=/services/yellowmap.png
 # Descriptions
 AMETICDummyAdapter_DESCRIPTION=-
 AMETIC_DESCRIPTION=-
-LinkedIn_DESCRIPTION=Shows your LinkedIn profile and contacts in di.me. You have to login at LinkedIn and accept that di.me gets access to your data.
-Twitter_DESCRIPTION=Shows your Twitter profile and contacts in di.me and allows to send tweets from di.me. You have to login at Twitter and accept that di.me gets access to your data.
-di.me_DESCRIPTION=-
+LinkedIn_DESCRIPTION=Shows your LinkedIn profile and contacts in di.me. You have to login at LinkedIn and accept that di.me gets access to your data. You can request your data from: http://help.linkedin.com/app/answers/detail/a_id/30364
+Twitter_DESCRIPTION=Shows your Twitter profile and contacts in di.me and allows to send tweets from di.me. You have to login at Twitter and accept that di.me gets access to your data. You can request your data from: https://twitter.com/settings/account
+di.me_DESCRIPTION=
 PublicDimeUserDirectory_DESCRIPTION=-
-Facebook_DESCRIPTION=Shows your Facebook profile and contacts in di.me. You have to login at Facebook and accept that di.me gets access to your data.
+Facebook_DESCRIPTION=Shows your Facebook profile and contacts in di.me. You have to login at Facebook and accept that di.me gets access to your data. You can request your data from: https://www.facebook.com/settings?tab=account
 SocialRecs_DESCRIPTION=Provides social recommendations on POIs. Hint: need to activate context crawling on device. 
 KML_DESCRIPTION=Retrieves POIs from a KML file. The file must be publicly available.  
-Fitbit_DESCRIPTION=-
-GooglePlus_DESCRIPTION=Shows your Google+ profile and contacts in di.me. You have to login at Google+ and accept that di.me gets access to your data.
+Fitbit_DESCRIPTION=You can download your data from: http://www.fitbit.com/premium/export
+GooglePlus_DESCRIPTION=Shows your Google+ profile and contacts in di.me. You have to login at Google+ and accept that di.me gets access to your data. You can request your data from: https://www.google.com/settings/takeout
 Doodle_DESCRIPTION=Initializes privacy values for newly detected contacts and documents from your CRM system. 
-PIA_DESCRIPTIOM=Initializes privacy values for newly detected contacts and documents from your CRM system. 
+PIA_DESCRIPTION=Initializes privacy values for newly detected contacts and documents from your CRM system. 
 LocationService_DESCRIPTION=Determines the name (e.g. "Hotel Princess") of your current location. Uses the geo-location from your Android device (if the setting "Store Android sensor data" is active). This service is provided as test service from the di.me project consortium.
 ProximityService_DESCRIPTION=Shows a "nearby-group" (di.me users nearby to you), and shows to other users that you are nearby. When you connect, you select the ProfileCard that shall be given to other nearby users. Only if they know this ProfileCard already, you are shown in their "nearby-group". Uses the geo-location and other sensor data from your Android device (if you have activated the setting "Store Android sensor data on your server").
 YellowMapPlaceService_DESCRIPTION=Shows interesting Places (POI) nearby to your current location. Uses the geo-location from your Android device (if the setting "Store Android sensor data" is active). In addition, you can connect to your MyYellowmap to retrieve your favorite locations.
+
 
 # Callback URL for service authentication 
 AMETICDummyAdapter_callbackURL=/ametic/?id=
