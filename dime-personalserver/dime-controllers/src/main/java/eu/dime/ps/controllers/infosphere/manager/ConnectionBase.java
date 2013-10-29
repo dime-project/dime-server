@@ -18,12 +18,12 @@ import ie.deri.smile.rdf.TripleStore;
 
 import org.openrdf.repository.RepositoryException;
 
-import eu.dime.ps.controllers.TenantContextHolder;
 import eu.dime.ps.controllers.exception.InfosphereException;
 import eu.dime.ps.controllers.util.TenantHelper;
 import eu.dime.ps.controllers.util.TenantNotFoundException;
 import eu.dime.ps.semantic.connection.Connection;
 import eu.dime.ps.semantic.connection.ConnectionProvider;
+import eu.dime.ps.semantic.model.ModelFactory;
 import eu.dime.ps.semantic.privacy.PrivacyPreferenceService;
 import eu.dime.ps.semantic.rdf.ResourceStore;
 import eu.dime.ps.semantic.search.Searcher;
@@ -36,6 +36,7 @@ import eu.dime.ps.semantic.service.impl.PimoService;
  */
 public abstract class ConnectionBase {
 
+	protected static final ModelFactory modelFactory = new ModelFactory();
 	protected ConnectionProvider connectionProvider;
 
 	public void setConnectionProvider(ConnectionProvider connectionProvider) {

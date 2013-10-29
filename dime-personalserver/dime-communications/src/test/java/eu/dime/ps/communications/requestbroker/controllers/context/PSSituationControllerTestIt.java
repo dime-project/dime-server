@@ -15,15 +15,20 @@
 package eu.dime.ps.communications.requestbroker.controllers.context;
 
 import static org.mockito.Mockito.when;
+import ie.deri.smile.vocabulary.DCON;
 
 import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.model.node.impl.DatatypeLiteralImpl;
+import org.ontoware.rdf2go.model.node.impl.URIImpl;
 import org.ontoware.rdf2go.vocabulary.XSD;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -35,6 +40,7 @@ import eu.dime.commons.dto.Request;
 import eu.dime.commons.dto.Response;
 import eu.dime.ps.controllers.TenantContextHolder;
 import eu.dime.ps.controllers.context.LiveContextManager;
+import eu.dime.ps.controllers.infosphere.manager.PersonManager;
 import eu.dime.ps.controllers.infosphere.manager.SituationManager;
 import eu.dime.ps.dto.SituationDTO;
 import eu.dime.ps.semantic.connection.Connection;
@@ -42,7 +48,9 @@ import eu.dime.ps.semantic.connection.ConnectionProvider;
 import eu.dime.ps.semantic.exception.ResourceExistsException;
 import eu.dime.ps.semantic.model.ModelFactory;
 import eu.dime.ps.semantic.model.dcon.Situation;
+import eu.dime.ps.semantic.model.dcon.SpaTem;
 import eu.dime.ps.semantic.model.pimo.Person;
+import eu.dime.ps.semantic.service.LiveContextSession;
 import eu.dime.ps.semantic.service.impl.PimoService;
 
 
@@ -68,14 +76,14 @@ public class PSSituationControllerTestIt extends Assert{
 
 	@Autowired
 	private LiveContextManager liveContextManager;	
-	
+
+	@Autowired
+	private PersonManager personManager;
+
 	private PSSituationController controller;
-	
-	
 	
 	@Before
 	public void setUp() throws Exception {
-		
 		// set up tenant data in the thread local holders
     	TenantContextHolder.setTenant(Long.parseLong(connection.getName()));
     	
@@ -90,18 +98,13 @@ public class PSSituationControllerTestIt extends Assert{
 			
 	@After
 	public void tearDown() throws Exception {
-					
 		Collection<Situation> Situations = situationManager.getAll();
 		for (Situation Situation: Situations){
 			situationManager.remove(Situation.asURI().toString());				
-			}
-		
+		}
 		TenantContextHolder.clear();
-		
 	}
-		
-	
-	
+
 	@Test
 	public void testGetSituation() throws Exception {
 		Person creator = createPerson("John Doe");
@@ -122,7 +125,6 @@ public class PSSituationControllerTestIt extends Assert{
 		//assertEquals(resource.get("lastModified"),1338824999L);		
 		assertEquals(resource.get("active"),true);
 	}
-	
 	
 	@Test
 	public void testDeActivateSituationWellFormedJSON() throws Exception {
@@ -145,7 +147,6 @@ public class PSSituationControllerTestIt extends Assert{
 		assertEquals(resource.get("userId"),"@me");
 		assertEquals(resource.get("type"),"situation" );
 		assertEquals(resource.get("active"),false);	
-		
 	}
 	
 	@Test
@@ -168,7 +169,6 @@ public class PSSituationControllerTestIt extends Assert{
 		assertEquals(resource.get("userId"),"@me");
 		assertEquals(resource.get("type"),"situation" );
 		assertEquals(resource.get("active"),true);	
-		
 	}
 	
 	@Test
@@ -192,7 +192,6 @@ public class PSSituationControllerTestIt extends Assert{
 		assertEquals(resource.get("userId"),"@me");
 		assertEquals(resource.get("type"),"situation" );
 		assertEquals(resource.get("active"),true);	
-		
 	}
 	
 	@Test
@@ -216,15 +215,11 @@ public class PSSituationControllerTestIt extends Assert{
 		assertEquals(resource.get("userId"),"@me");
 		assertEquals(resource.get("type"),"situation" );
 		assertEquals(resource.get("active"),false);	
-		
 	}
-	
 	
 	@Test
 	public void testCreateSituationnWellFormedRDF() throws Exception {
-				
 		Request<SituationDTO> request = buildSituationRequest("dumbGUID", true, "test situation name changed");
-		
 		Response<SituationDTO> response = controller.createSituation(SAID, request);
 		
 		assertNotNull(response);
@@ -264,6 +259,72 @@ public class PSSituationControllerTestIt extends Assert{
 		assertEquals("@me", dto.get("userId"));
 		assertEquals("situation", dto.get("type"));
 		assertEquals(false, dto.get("active"));	
+	}
+
+	@Test
+	public void testCreateSituationWithContextElements() throws Exception {
+		Request<SituationDTO> request = null;
+		Response<SituationDTO> response = null;
+		SituationDTO dto = null;
+
+		// add some context data
+		Person john = createPerson("John Doe");
+		URI myDataSource = new URIImpl("urn:mydatasource");
+		LiveContextSession session = liveContextManager.getSession(myDataSource);
+		session.set(SpaTem.class, DCON.nearbyPerson, john);
+		session.commit();
+		
+		// create situation, response should contain the context elements
+		request = buildSituationRequest(null, false, "name");
+		response = controller.createSituation(SAID, request);
+		dto = response.getMessage().getData().getEntries().iterator().next();
+
+		// [{guid=urn:uuid:0fbd2309-6365-468a-976b-8051f5a8cf01, dcon:isRequired=false, dcon:weight=0.7, imageUrl=null, name=John Doe, dcon:isExcluder=false}]
+		List<Map<String, Object>> contextElements = (List<Map<String, Object>>) dto.get("contextElements");
+		assertEquals(1, contextElements.size());
+		Map<String, Object> contextElement = contextElements.get(0);
+		assertEquals(john.asURI().toString(), contextElement.get("guid"));
+		assertEquals("dcon:nearbyPerson", contextElement.get("type"));
+		assertEquals("John Doe", contextElement.get("name"));
+		assertNotNull(contextElement.get("dcon:weight"));
+		assertEquals(false, contextElement.get("dcon:isRequired"));
+		assertEquals(false, contextElement.get("dcon:isExcluder"));
+	}
+
+	@Test
+	public void testGetSituationWithContextElements() throws Exception {
+		Request<SituationDTO> request = null;
+		Response<SituationDTO> response = null;
+		SituationDTO dto = null;
+
+		// add some context data
+		Person john = createPerson("John Doe");
+		URI myDataSource = new URIImpl("urn:mydatasource");
+		LiveContextSession session = liveContextManager.getSession(myDataSource);
+		session.set(SpaTem.class, DCON.nearbyPerson, john);
+		session.commit();
+		
+		// create situation
+		String situationId = null;
+		request = buildSituationRequest(null, false, "name");
+		response = controller.createSituation(SAID, request);
+		dto = response.getMessage().getData().getEntries().iterator().next();
+		situationId = dto.get("guid").toString();
+		
+		// invoke GET and response should contain the context elements
+		response = controller.get(SAID, situationId);
+		dto = response.getMessage().getData().getEntries().iterator().next();
+
+		// [{guid=urn:uuid:0fbd2309-6365-468a-976b-8051f5a8cf01, dcon:isRequired=false, dcon:weight=0.7, imageUrl=null, name=John Doe, dcon:isExcluder=false}]
+		List<Map<String, Object>> contextElements = (List<Map<String, Object>>) dto.get("contextElements");
+		assertEquals(1, contextElements.size());
+		Map<String, Object> contextElement = contextElements.get(0);
+		assertEquals(john.asURI().toString(), contextElement.get("guid"));
+		assertEquals("dcon:nearbyPerson", contextElement.get("type"));
+		assertEquals("John Doe", contextElement.get("name"));
+		assertNotNull(contextElement.get("dcon:weight"));
+		assertEquals(false, contextElement.get("dcon:isRequired"));
+		assertEquals(false, contextElement.get("dcon:isExcluder"));
 	}
 
 	private Request<SituationDTO> buildSituationRequest(String situationId, boolean active, String label) {

@@ -45,6 +45,7 @@ import eu.dime.ps.semantic.model.dcon.SpaTem;
 import eu.dime.ps.semantic.model.dcon.State;
 import eu.dime.ps.semantic.model.pimo.Person;
 import eu.dime.ps.semantic.service.LiveContextService;
+import eu.dime.ps.semantic.service.LiveContextSession;
 import eu.dime.ps.semantic.service.exception.LiveContextException;
 import eu.dime.ps.semantic.service.impl.PimoService;
 
@@ -62,33 +63,45 @@ public class LiveContextManager extends ConnectionBase {
 	
 	/**
 	 * Proxy method for {@link LiveContextService#get(URI, Class)}.
+	 * @throws InfosphereException 
 	 */
 	public <T extends Aspect> T get(URI resourceUri, Class<T> returnType)
-			throws NotFoundException {
-		return null;
+			throws NotFoundException, InfosphereException {
+		return getLiveContextService().get(resourceUri, returnType);
 	}
 
 	/**
 	 * Proxy method for {@link LiveContextService#get(Class)}.
+	 * @throws InfosphereException 
 	 */
-	public <T extends Aspect> T get(Class<T> returnType) {
-		return null;
+	public <T extends Aspect> T get(Class<T> returnType) throws InfosphereException {
+		return getLiveContextService().get(returnType);
 	}
 
 	/**
 	 * Proxy method for {@link LiveContextService#getAspects()}.
+	 * @throws InfosphereException 
 	 */
-	public List<URI> getAspects() {
-		return null;
+	public List<URI> getAspects() throws InfosphereException {
+		return getLiveContextService().getAspects();
 	}
 	
 	/**
 	 * Proxy method for {@link LiveContextService#getElements()}.
+	 * @throws InfosphereException 
 	 */
-	public List<URI> getElements() {
-		return null;
+	public List<URI> getElements() throws InfosphereException {
+		return getLiveContextService().getElements();
 	}
-
+	
+	/**
+	 * Proxy method for {@link LiveContextService#getSession(URI)}.
+	 * @throws InfosphereException 
+	 */
+	public LiveContextSession getSession(URI dataSource) throws InfosphereException {
+		return getLiveContextService().getSession(dataSource);
+	}
+	
 	/**
 	 * Exports the current live context as an instance of Situation
 	 * 
@@ -115,14 +128,17 @@ public class LiveContextManager extends ConnectionBase {
 			situation.getModel().addAll(lcModel.iterator());
 			
 			// add default weights to aspects and elements
-			for (URI aspect : lcs.getAspects())
+			for (URI aspect : lcs.getAspects()) {
 				situation.getModel().addStatement(aspect, DCON.weight, DEFAULT_ASPECT_WEIGHT);
-			for (URI element : lcs.getElements())
+			}
+			for (URI element : lcs.getElements()) {
 				situation.getModel().addStatement(element, DCON.weight, DEFAULT_ELEMENT_WEIGHT);
+			}
 		}
 		
 		try {
 			situationManager.add(situation);
+			situation = situationManager.get(situation.asURI().toString());
 		} catch (InfosphereException e) {
 			throw new LiveContextException("Cannot save live context as situation '"+name+"': "+e.getMessage(), e);
 		}

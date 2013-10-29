@@ -37,6 +37,7 @@ import eu.dime.ps.controllers.exception.InfosphereException;
 import eu.dime.ps.controllers.infosphere.manager.SituationManager;
 import eu.dime.ps.dto.SituationDTO;
 import eu.dime.ps.semantic.model.dcon.Situation;
+import eu.dime.ps.semantic.model.pimo.Person;
 import eu.dime.ps.semantic.service.exception.LiveContextException;
 
 /**
@@ -49,8 +50,7 @@ import eu.dime.ps.semantic.service.exception.LiveContextException;
 @Path("/dime/rest/{said}/situation")
 public class PSSituationController {
 
-	private static final Logger logger = LoggerFactory
-			.getLogger(PSSituationController.class);
+	private static final Logger logger = LoggerFactory.getLogger(PSSituationController.class);
 
 	private SituationManager situationManager;
 	private LiveContextManager liveContextManager;
@@ -65,19 +65,40 @@ public class PSSituationController {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
+	@Path("/@me/{situationID}")
+	public Response<SituationDTO> get(
+			@PathParam("said") String said,
+			@PathParam("situationID") String situationID) {
+		logger.info("called API method: GET /dime/rest/" + said + "/situation/@me/" + situationID);
+
+		Data<SituationDTO> data = new Data<SituationDTO>(0, 1, 1);
+
+		try {
+			Situation situation = situationManager.get(situationID);
+			data = new Data<SituationDTO>(0, 1, 1);
+			SituationDTO dto = new SituationDTO(situation, situationManager.getMe());			
+			data.getEntries().add(dto);
+		} catch (InfosphereException e) {
+			return Response.badRequest(e.getMessage(), e);
+		} catch (Exception e) {
+			return Response.serverError(e.getMessage(), e);
+		}
+
+		return Response.ok(data);
+	}
+
+	@GET
+	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
 	@Path("/@me/@all")
 	public Response<SituationDTO> getMeAll(@PathParam("said") String said) {
-		logger.info("called API method: GET /dime/rest/" + said
-				+ "/person/@me/@all");
+		logger.info("called API method: GET /dime/rest/" + said + "/situation/@me/@all");
 
 		Data<SituationDTO> data = new Data<SituationDTO>(0, 1, 1);
 
 		try {
 			Collection<Situation> situations = situationManager.getAll();
-			data = new Data<SituationDTO>(0, situations.size(),
-					situations.size());
+			data = new Data<SituationDTO>(0, situations.size(), situations.size());
 			for (Situation situation : situations) {
-
 				SituationDTO dto = new SituationDTO(situation,situationManager.getMe());			
 				data.getEntries().add(dto);
 			}
@@ -102,13 +123,11 @@ public class PSSituationController {
 		Data<SituationDTO> data, returnData = new Data<SituationDTO>(0, 1, 1);
 
 		data = request.getMessage().getData();
-		String name = data.getEntries().iterator().next().get("name")
-				.toString();
+		String name = data.getEntries().iterator().next().get("name").toString();
 		try {
-			eu.dime.ps.semantic.model.dcon.Situation situation = liveContextManager
-					.saveAsSituation(name);
+			eu.dime.ps.semantic.model.dcon.Situation situation = liveContextManager.saveAsSituation(name);
 
-			SituationDTO dto = new SituationDTO(situation,situationManager.getMe());
+			SituationDTO dto = new SituationDTO(situation, situationManager.getMe());
 			returnData.getEntries().add(dto);
 
 			situationManager.activate(dto.get("guid").toString());
@@ -133,27 +152,28 @@ public class PSSituationController {
 
 		logger.info("called API method: POST /dime/rest/"+said+"/situation/@me/update/"+situationID);
 		
-		Data<SituationDTO> data, returnData = new Data<SituationDTO>(0, 1, 1);
+		final Data<SituationDTO> data = request.getMessage().getData();
+		final Data<SituationDTO> returnData = new Data<SituationDTO>(0, 1, 1);
+		
+		final SituationDTO situationDtO = data.getEntries().iterator().next();
+		final String active = situationDtO.get("active").toString();
 
-		data = request.getMessage().getData();
-		SituationDTO situationDtO = data.getEntries().iterator().next();
-		String active = situationDtO.get("active").toString();
-				
+		// contextElements are read-only, cannot be accepted in a POST request
+		situationDtO.remove("contextElements");
+
 		try {
-			
-			Situation situation = situationDtO.asResource(new URIImpl(situationID),Situation.class, situationManager.getMe().asURI());
+			final Person me = situationManager.getMe();
+			final Situation situation = situationDtO.asResource(new URIImpl(situationID), Situation.class, me.asURI());
 			situationManager.update(situation);
 			
-			if(active.equals("true")){
+			if (active.equals("true")) {
 				situationManager.activate(situationID);
-			}else if(active.equals("false")){
+			} else if(active.equals("false")) {
 				situationManager.deactivate(situationID);
 			}					
-			eu.dime.ps.semantic.model.dcon.Situation response = situationManager
-					.get(situationID);
-
-			SituationDTO dto = new SituationDTO(response,situationManager.getMe());
-
+			
+			eu.dime.ps.semantic.model.dcon.Situation response = situationManager.get(situationID);
+			SituationDTO dto = new SituationDTO(response, me);
 			returnData.getEntries().add(dto);
 
 		} catch (InfosphereException e) {

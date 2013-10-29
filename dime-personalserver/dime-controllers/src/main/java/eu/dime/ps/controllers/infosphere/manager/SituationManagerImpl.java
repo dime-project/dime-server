@@ -59,12 +59,15 @@ public class SituationManagerImpl extends InfoSphereManagerBase<Situation> imple
 	@Override
 	public Situation get(String situationId, List<URI> properties)
 			throws InfosphereException {
-		URI situationUri = new URIImpl(situationId);
-		try {
-			return getResourceStore().get(situationUri, situationUri, Situation.class,
-					properties.toArray(new URI[properties.size()]));
-		} catch (NotFoundException e) {
-			throw new InfosphereException("cannot find situation "+situationId, e);
+		if (exist(situationId)) {
+			Situation situation = modelFactory.getDCONFactory().createSituation(situationId);
+			situation.getModel().addAll(getTripleStore().getModel(new URIImpl(situationId)).iterator());
+
+			// TODO filter properties with the parameter list
+
+			return situation;
+		} else {
+			throw new InfosphereException("Cannot find situation "+situationId);
 		}
 	}
 	
