@@ -626,6 +626,9 @@ input[type="file"] {
     background-color: #5A9DD5;
 }
 
+.groupItemDropHover {
+    background-color: #DDDEDD;   
+}
 
 
 .groupItem > div > img {
@@ -2478,7 +2481,7 @@ input[type="text"].DimeDetailDialogPAValueListItemValue{
 
 .resourceItem {
     width: 220px;
-    height: 100%;
+    height: 50px;
     background-color: #F8F9F9 
 
 }

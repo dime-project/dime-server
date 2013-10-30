@@ -551,6 +551,17 @@ DimeView = {
         );
    
         DimeView.setActionAttributeForElements(entry, jGroupItem, true, false);
+        
+        $(jGroupItem).droppable({
+            accept: ".childItem",
+            hoverClass: "groupItemDropHover",
+            drop: function(event, ui){
+                console.log("dropped");
+                console.log($(ui.draggable).data("person"));
+                console.log(entry);
+                //TODO add dragged person (data) to group (entry)
+            }
+        });
 
         jParent.append(jGroupItem);
         
@@ -881,8 +892,7 @@ DimeView = {
         //classes
         var itemClass=entry.type+"Item childItem";
         
-        jChildItem.addClass(itemClass);
-        
+        jChildItem.addClass(itemClass);       
         
         //innerChild
         //innerChild - img        
@@ -917,14 +927,22 @@ DimeView = {
         }                
         //set action attributes
         DimeView.setActionAttributeForElements(entry, jChildItem, false, showEditOnClick);
+        
+        $(jChildItem).draggable({
+            zIndex: 2000,
+            containment: "document",
+            opacity: 0.70,
+            helper: "clone",
+            distance: 10,
+            revert: "invalid"
+        }).data("person", entry);
+        
         return jChildItem;
     },
     
     
     addItemElement: function(jParent, entry){
         jParent.append(DimeView.createItemJElement(entry));
-
-        
     },
     
     CONTAINER_ID_INFORMATION: 1,
@@ -3066,7 +3084,6 @@ Dime.Settings = {
 Dime.initProcessor.registerFunction(function(callback){ 
     
     $('#contentContainer').mouseoutExt(DimeView, DimeView.hideMouseOver);
-    
     
     //set event listeners to group container
     $('#groupNavigation').click(function(){

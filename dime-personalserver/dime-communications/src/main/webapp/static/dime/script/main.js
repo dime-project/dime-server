@@ -48,7 +48,7 @@ jQuery.extend({
         jQuery.each(receivers, function(){
             firstEntry?firstEntry=false:linkText+=',%20';
             linkText+=this;
-        })
+        });
         linkText+='?';
         if (subject){
             linkText+='subject='+encodeURIComponent(subject)+'&';
