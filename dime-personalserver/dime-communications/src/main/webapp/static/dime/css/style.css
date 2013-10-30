@@ -2074,7 +2074,13 @@ input[type="checkbox"] {
     margin-top: 20px;
     float: left;
     clear: both;
-    margin-left: 76px;
+    margin-left: 75px;
+}
+
+.dimeDetailDialogMetaInformation{
+    float: left;
+    clear: both;
+    margin-left: 75px;
 }
 
 .DetailDialogPrivTrustElem{    

@@ -4809,16 +4809,33 @@ Dime.DetailDialog.prototype = {
     },
 
     initResource: function(item){
+
+        var dateCreated = new Date(item.created);
+        var dateLastModified = new Date(item.lastModified);
+        var metaFileSize = item["nfo:fileSize"]?item["nfo:fileSize"]:null;
+        var mimeType = item["nie:mimeType"]?item["nie:mimeType"]:"undefined";     
         
+        if(metaFileSize && metaFileSize>0){
+            var fileSize = Math.round(metaFileSize/1024) + " KB (" + metaFileSize + " Bytes)";
+        }else{
+            var fileSize = "undefined";
+        }
+
         this.body
             .append(this.createIcon(item, false))
             .append(this.createNameInput(item))
             .append(this.getPrivTrustElement(item,this.readonly));
 
         if (item.downloadUrl && item.downloadUrl.length>0){
-            var innerHtml = '<a href="' + Dime.psHelper.guessLinkURL(item.downloadUrl) + '" target="_blank">open</a>';
-            this.body.append(
-                $(JSTool.createHTMLElementString("div", null, ["dimeDetailDialogLink"], null, innerHtml)));
+            this.body.append($("<div></div>").addClass("dimeDetailDialogLink")
+                                .append($("<a>open</a>")
+                                    .attr("href", Dime.psHelper.guessLinkURL(item.downloadUrl))
+                                    .attr("target", "_blank")));
+            this.body.append($("<div></div>").addClass("dimeDetailDialogMetaInformation")
+                                .append($("<div></div>").append("created: " + dateCreated.toLocaleString()))
+                                .append($("<div></div>").append("last modified: " + dateLastModified.toLocaleString()))
+                                .append($("<div></div>").append("file size: " + fileSize))
+                                .append($("<div></div>").append("file type: " + mimeType)));
         }
     },
 
