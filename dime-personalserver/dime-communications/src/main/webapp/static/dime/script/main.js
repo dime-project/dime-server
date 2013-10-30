@@ -4810,8 +4810,6 @@ Dime.DetailDialog.prototype = {
 
     initResource: function(item){
 
-        var dateCreated = new Date(item.created);
-        var dateLastModified = new Date(item.lastModified);
         var metaFileSize = item["nfo:fileSize"]?item["nfo:fileSize"]:null;
         var mimeType = item["nie:mimeType"]?item["nie:mimeType"]:"undefined";     
         
@@ -4832,8 +4830,8 @@ Dime.DetailDialog.prototype = {
                                     .attr("href", Dime.psHelper.guessLinkURL(item.downloadUrl))
                                     .attr("target", "_blank")));
             this.body.append($("<div></div>").addClass("dimeDetailDialogMetaInformation")
-                                .append($("<div></div>").append("created: " + dateCreated.toLocaleString()))
-                                .append($("<div></div>").append("last modified: " + dateLastModified.toLocaleString()))
+                                .append($("<div></div>").append("created: " + JSTool.millisToDateString(item.created)))
+                                .append($("<div></div>").append("last modified: " + JSTool.millisToDateString(item.lastModified)))
                                 .append($("<div></div>").append("file size: " + fileSize))
                                 .append($("<div></div>").append("file type: " + mimeType)));
         }
