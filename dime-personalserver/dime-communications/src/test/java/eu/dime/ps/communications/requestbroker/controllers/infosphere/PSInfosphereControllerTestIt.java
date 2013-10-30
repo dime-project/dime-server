@@ -22,6 +22,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 import org.ontoware.rdf2go.model.node.URI;
+import org.semanticdesktop.aperture.vocabulary.NIE;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -133,6 +134,14 @@ public abstract class PSInfosphereControllerTestIt extends Assert {
 	protected PersonContact createProfile(String name) throws ResourceExistsException  {
 		PersonContact profile = modelFactory.getNCOFactory().createPersonContact();
 		profile.setPrefLabel(name);
+		pimoService.create(profile);
+		return profile;
+	}
+	
+	protected PersonContact createProfile(String name,Account said) throws ResourceExistsException  {
+		PersonContact profile = modelFactory.getNCOFactory().createPersonContact();
+		profile.setPrefLabel(name);
+		profile.getModel().addStatement(profile, NIE.dataSource, said);
 		pimoService.create(profile);
 		return profile;
 	}

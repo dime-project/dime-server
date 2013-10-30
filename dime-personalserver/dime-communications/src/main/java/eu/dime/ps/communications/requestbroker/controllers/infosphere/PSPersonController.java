@@ -14,6 +14,7 @@
 
 package eu.dime.ps.communications.requestbroker.controllers.infosphere;
 
+import ie.deri.smile.vocabulary.NIE;
 import ie.deri.smile.vocabulary.PIMO;
 
 import java.util.ArrayList;
@@ -21,7 +22,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.UUID;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -33,7 +33,11 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.commons.lang.ArrayUtils;
+import org.ontoware.aifbcommons.collection.ClosableIterator;
+import org.ontoware.rdf2go.model.Statement;
+import org.ontoware.rdf2go.model.node.Node;
 import org.ontoware.rdf2go.model.node.URI;
+import org.ontoware.rdf2go.model.node.Variable;
 import org.ontoware.rdf2go.model.node.impl.URIImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,383 +45,455 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import eu.dime.commons.dto.Data;
-import eu.dime.commons.dto.Message;
-import eu.dime.commons.dto.Meta;
 import eu.dime.commons.dto.Request;
 import eu.dime.commons.dto.Response;
-import eu.dime.commons.dto.Response.Status;
 import eu.dime.ps.controllers.UserManager;
 import eu.dime.ps.controllers.exception.InfosphereException;
+import eu.dime.ps.controllers.infosphere.manager.AccountManager;
 import eu.dime.ps.controllers.infosphere.manager.PersonManager;
+import eu.dime.ps.controllers.infosphere.manager.ProfileManager;
 import eu.dime.ps.controllers.trustengine.utils.AdvisoryConstants;
 import eu.dime.ps.dto.Resource;
+import eu.dime.ps.gateway.service.internal.DimeServiceAdapter;
 import eu.dime.ps.semantic.model.NCOFactory;
+import eu.dime.ps.semantic.model.dao.Account;
 import eu.dime.ps.semantic.model.nco.PersonContact;
 import eu.dime.ps.semantic.model.nco.PersonName;
 import eu.dime.ps.semantic.model.pimo.Person;
 
 /**
- * Dime REST API Controller for a InfoSphere features
- * 
- * @author <a href="mailto:mplanaguma@bdigital.org"> Marc Planaguma
- *         (mplanaguma)</a>
- * 
- */
+* Dime REST API Controller for a InfoSphere features
+*
+* @author <a href="mailto:mplanaguma@bdigital.org"> Marc Planaguma
+* (mplanaguma)</a>
+*
+*/
 @Controller
 @Path("/dime/rest/{said}/person")
 public class PSPersonController implements APIController {
 
-	private static final Logger logger = LoggerFactory.getLogger(PSPersonController.class);
-	
-	private static final Map<URI, String> RENAMING_RULES;
-	static {
-		RENAMING_RULES = new HashMap<URI, String>();
-		RENAMING_RULES.put(PIMO.groundingOccurrence, "defProfile");
-	}
-	
-	private PersonManager personManager;	
+        private static final Logger logger = LoggerFactory.getLogger(PSPersonController.class);
 
-	private UserManager userManager;
-		
+        private static final Map<URI, String> RENAMING_RULES;
+        static {
+                RENAMING_RULES = new HashMap<URI, String>();
+                RENAMING_RULES.put(PIMO.groundingOccurrence, "defProfile");
+        }
 
-	@Autowired
-	public void setPersonManager(PersonManager personManager) {
-		this.personManager = personManager;
-	}
-	
-	@Autowired
-	public void setUserManager(UserManager userManager) {
-		this.userManager = userManager;
-	}
+        private PersonManager personManager;        
 
-	/**
-	 * Return Collection of persons
-	 * 
-	 * @return
-	 */
-	@GET
-	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
-	@Path("/@me/@all")
-	public Response<Resource> getAllMyPersons(@PathParam("said") String said) {
+        private UserManager userManager;
 
-		logger.info("called API method: GET /dime/rest/" + said
-				+ "/person/@me/@all");
-		Data<Resource> data = null;
+        private AccountManager accountManager;
 
-		try {
-			Collection<Person> people = personManager.getAll();
-			data = new Data<Resource>(0, people.size(), people.size());
-			for (Person person : people) {
-				data.getEntries().add(new Resource(person,null,RENAMING_RULES, personManager.getMe().asURI()));
-			}
-		} catch (InfosphereException e) {
-			return Response.badRequest(e.getMessage(), e);
-		} catch (Exception e) {
-			return Response.serverError(e.getMessage(), e);
-		}
+        private ProfileManager profileManager;
 
-		return Response.ok(data);
-	}
 
-	/**
-	 * Return person
-	 * 
-	 * @param personID
-	 * @return
-	 */
-	@GET
-	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
-	@Path("/@me/{personID}")
-	public Response<Resource> getPersonById(@PathParam("said") String said,
-			@PathParam("personID") String personID) {
 
-		logger.info("called API method: GET /dime/rest/" + said
-				+ "/person/@me/"+personID);
-		Data<Resource> data = null;
+        @Autowired
+        public void setPersonManager(PersonManager personManager) {
+                this.personManager = personManager;
+        }
 
-		try {
-			Person person = "@self".equals(personID) ? personManager.getMe()
-					: personManager.get(personID);
-			// Person person= personManager.get(personID);
-			data = new Data<Resource>(0, 1, 1);
-			data.getEntries().add(new Resource(person,null,RENAMING_RULES,personManager.getMe().asURI()));
+        @Autowired
+        public void setUserManager(UserManager userManager) {
+                this.userManager = userManager;
+        }
 
-		} catch (InfosphereException e) {
-			return Response.badRequest(e.getMessage(), e);
-		} catch (Exception e) {
-			return Response.serverError(e.getMessage(), e);
-		}
+        @Autowired
+        public void setAccountManager(AccountManager accountManager) {
+                this.accountManager = accountManager;
+        }
 
-		return Response.ok(data);
-	}
+        @Autowired
+        public void setProfileManager(ProfileManager profileManager) {
+                this.profileManager = profileManager;
+        }
+        /**
+         * Return Collection of persons
+         *
+         * @return
+         */
+        @GET
+        @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
+        @Path("/@me/@all")
+        public Response<Resource> getAllMyPersons(@PathParam("said") String said) {
 
-	/**
-	 * Creates a person
-	 * 
-	 * @param request
-	 *            the request message
-	 * @return a response message
-	 */
-	@POST
-	@Path("/@me")
-	@Consumes(MediaType.APPLICATION_JSON + ";charset=UTF-8")
-	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
-	public Response<Resource> createPerson(@PathParam("said") String said,
-			Request<Resource> request) {
+                logger.info("called API method: GET /dime/rest/" + said
+                                + "/person/@me/@all");
+                Data<Resource> data = null;
 
-		logger.info("called API method: POST /dime/rest/" + said + "/person/@me");
-		Data<Resource> data, returnData;
+                try {
+                        Collection<Person> people = personManager.getAll();
+                        data = new Data<Resource>(0, people.size(), people.size());
+                        for (Person person : people) {
+                                Resource personDTO = new Resource(person,null,RENAMING_RULES, personManager.getMe().asURI());                        
+                                resolveDefProfile(personDTO);
+                                data.getEntries().add(personDTO);
+                        }
+                } catch (InfosphereException e) {
+                        return Response.badRequest(e.getMessage(), e);
+                } catch (Exception e) {
+                        return Response.serverError(e.getMessage(), e);
+                }
 
-		try {
+                return Response.ok(data);
+        }
 
-			RequestValidator.validateRequest(request);
+        
+        /**
+         * Return person
+         *
+         * @param personID
+         * @return
+         */
+        @GET
+        @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
+        @Path("/@me/{personID}")
+        public Response<Resource> getPersonById(@PathParam("said") String said,
+                        @PathParam("personID") String personID) {
 
-			data = request.getMessage().getData();
+                logger.info("called API method: GET /dime/rest/" + said
+                                + "/person/@me/"+personID);
+                Data<Resource> data = null;
 
-			Resource dto = data.getEntries().iterator().next();
-			
-			//check for int values (semantic engine will crash)
-			if (dto.containsKey("nao:trustLevel")){
-				try {
-					double trust = ((Integer)dto.get("nao:trustLevel")).doubleValue();
-					dto.put("nao:trustLevel", trust);	
-				} catch (ClassCastException e){
-					//value already double
-				}
-			}
-			
+                try {
+                        Person person = "@self".equals(personID) ? personManager.getMe()
+                                        : personManager.get(personID);
+                        // Person person= personManager.get(personID);
+                        data = new Data<Resource>(0, 1, 1);
+                        Resource personDTO = new Resource(person,null,RENAMING_RULES, personManager.getMe().asURI());                        
+                        resolveDefProfile(personDTO);
+                        data.getEntries().add(personDTO);
 
-			// Remove guid because is a new object
-			dto.remove("guid");
+                } catch (InfosphereException e) {
+                        return Response.badRequest(e.getMessage(), e);
+                } catch (Exception e) {
+                        return Response.serverError(e.getMessage(), e);
+                }
 
-			Person person = dto.asResource(Person.class,personManager.getMe().asURI());
-			if(!person.hasTrustLevel()){
-				person.setTrustLevel(AdvisoryConstants.DEFAULT_TRUST_VALUE);
-			}
-			personManager.add(person);
+                return Response.ok(data);
+        }
 
-			returnData = new Data<Resource>(0, 1, new Resource(person,null,RENAMING_RULES,personManager.getMe().asURI()));
+        /**
+         * Creates a person
+         *
+         * @param request
+         * the request message
+         * @return a response message
+         */
+        @POST
+        @Path("/@me")
+        @Consumes(MediaType.APPLICATION_JSON + ";charset=UTF-8")
+        @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
+        public Response<Resource> createPerson(@PathParam("said") String said,
+                        Request<Resource> request) {
 
-		} catch (IllegalArgumentException e) {
-			return Response.badRequest(e.getMessage(), e);
-		} catch (InfosphereException e) {
-			return Response.badRequest(e.getMessage(), e);
-		} catch (Exception e) {
-			return Response.serverError(e.getMessage(), e);
-		}
+                logger.info("called API method: POST /dime/rest/" + said + "/person/@me");
+                Data<Resource> data, returnData;
 
-		return Response.ok(returnData);
-	}
+                try {
 
-	/**
-	 * Update person
-	 * 
-	 * @param json
-	 * @param personID
-	 * @return
-	 */
-	@POST
-	@Path("/@me/{personID}")
-	@Consumes(MediaType.APPLICATION_JSON + ";charset=UTF-8")
-	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
-	public Response<Resource> updatePerson(@PathParam("said") String said,
-			Request<Resource> request, @PathParam("personID") String personID) {
+                        RequestValidator.validateRequest(request);
 
-		logger.info("called API method: POST /dime/rest/" + said
-				+ "/person/@me/"+personID);
-		Data<Resource> data, returnData;
+                        data = request.getMessage().getData();
 
-		try {
-			RequestValidator.validateRequest(request);
+                        Resource dto = data.getEntries().iterator().next();
 
-			data = request.getMessage().getData();
-			Resource resource = data.getEntries().iterator().next();
-			//check for int values (semantic engine will crash)
-			if (resource.containsKey("nao:trustLevel")){
-				try {
-					double trust = ((Integer)resource.get("nao:trustLevel")).doubleValue();
-					resource.put("nao:trustLevel", trust);	
-				} catch (ClassCastException e){
-					//value already double
-				}
-			}
-			
-			Person person = "@self".equals(personID) ? data.getEntries()
-					.iterator().next()
-					.asResource(personManager.getMe().asURI(), Person.class,personManager.getMe().asURI())
-					: data.getEntries().iterator().next()
-							.asResource(new URIImpl(personID), Person.class,personManager.getMe().asURI());
-			personManager.update(person);
-			Person returnPerson = personManager.get(personID);
-			returnData = new Data<Resource>(0, 1, new Resource(returnPerson,null,RENAMING_RULES,personManager.getMe().asURI()));
+                        //check for int values (semantic engine will crash)
+                        if (dto.containsKey("nao:trustLevel")){
+                                try {
+                                        double trust = ((Integer)dto.get("nao:trustLevel")).doubleValue();
+                                        dto.put("nao:trustLevel", trust);        
+                                } catch (ClassCastException e){
+                                        //value already double
+                                }
+                        }
 
-		} catch (IllegalArgumentException e) {
-			return Response.badRequest(e.getMessage(), e);
-		} catch (InfosphereException e) {
-			return Response.badRequest(e.getMessage(), e);
-		} catch (Exception e) {
-			return Response.serverError(e.getMessage(), e);
-		}
 
-		return Response.ok(returnData);
-	}
+                        // Remove guid because is a new object
+                        dto.remove("guid");
 
-	/**
-	 * Removes person
-	 * 
-	 * @param personID
-	 * @return
-	 */
-	@DELETE
-	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
-	@Path("/@me/{personID}")
-	public Response deletePersonById(@PathParam("said") String said,
-			@PathParam("personID") String personID) {
+                        Person person = dto.asResource(Person.class,personManager.getMe().asURI());
+                        if(!person.hasTrustLevel()){
+                                person.setTrustLevel(AdvisoryConstants.DEFAULT_TRUST_VALUE);
+                        }
+                        personManager.add(person);
 
-		logger.info("called API method: DELETE /dime/rest/" + said
-				+ "/person/@me/"+personID);
+                        returnData = new Data<Resource>(0, 1, new Resource(person,null,RENAMING_RULES,personManager.getMe().asURI()));
 
-		try {
-			personManager.remove(personID);
+                } catch (IllegalArgumentException e) {
+                        return Response.badRequest(e.getMessage(), e);
+                } catch (InfosphereException e) {
+                        return Response.badRequest(e.getMessage(), e);
+                } catch (Exception e) {
+                        return Response.serverError(e.getMessage(), e);
+                }
 
-		} catch (IllegalArgumentException e) {
-			return Response.badRequest(e.getMessage(), e);
-		} catch (InfosphereException e) {
-			return Response.badRequest(e.getMessage(), e);
-		} catch (Exception e) {
-			return Response.serverError(e.getMessage(), e);
-		}
+                return Response.ok(returnData);
+        }
 
-		return Response.ok();
+        /**
+         * Update person
+         *
+         * @param json
+         * @param personID
+         * @return
+         */
+        @POST
+        @Path("/@me/{personID}")
+        @Consumes(MediaType.APPLICATION_JSON + ";charset=UTF-8")
+        @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
+        public Response<Resource> updatePerson(@PathParam("said") String said,
+                        Request<Resource> request, @PathParam("personID") String personID) {
 
-	}
+                logger.info("called API method: POST /dime/rest/" + said
+                                + "/person/@me/"+personID);
+                Data<Resource> data, returnData;
 
-	@POST
-	@Path("/@merge")
-	@Consumes(MediaType.APPLICATION_JSON + ";charset=UTF-8")
-	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
-	public Response<Resource> mergeContacts(@PathParam("said") String said,
-			Request<Resource> request) {
+                try {
+                        RequestValidator.validateRequest(request);
 
-		logger.info("called API method: POST /dime/rest/" + said
-				+ "/person/@merge");
-		Data<Resource> returnData = null;
-		Resource entry = request.getMessage().getData().entry.iterator().next();
-		ArrayList items = (ArrayList) entry.get("items");
+                        data = request.getMessage().getData();
+                        Resource resource = data.getEntries().iterator().next();
+                        //check for int values (semantic engine will crash)
+                        if (resource.containsKey("nao:trustLevel")){
+                                try {
+                                        double trust = ((Integer)resource.get("nao:trustLevel")).doubleValue();
+                                        resource.put("nao:trustLevel", trust);        
+                                } catch (ClassCastException e){
+                                        //value already double
+                                }
+                        }
 
-		try {
+                        Person person = "@self".equals(personID) ? data.getEntries()
+                                        .iterator().next()
+                                        .asResource(personManager.getMe().asURI(), Person.class,personManager.getMe().asURI())
+                                        : data.getEntries().iterator().next()
+                                        .asResource(new URIImpl(personID), Person.class,personManager.getMe().asURI());
+                                        personManager.update(person);
+                                        Person returnPerson = personManager.get(personID);
+                                        Resource personDTO = new Resource(returnPerson,null,RENAMING_RULES,personManager.getMe().asURI());
+                                        resolveDefProfile(personDTO);
+                                        returnData = new Data<Resource>(0, 1,personDTO );
 
-			Collection<URIImpl[]> collectionUris = toUriCollection(items);
-			returnData = new Data<Resource>(0, collectionUris.size(),
-					collectionUris.size());
+                } catch (IllegalArgumentException e) {
+                        return Response.badRequest(e.getMessage(), e);
+                } catch (InfosphereException e) {
+                        return Response.badRequest(e.getMessage(), e);
+                } catch (Exception e) {
+                        return Response.serverError(e.getMessage(), e);
+                }
 
-			for (URIImpl[] personUri : collectionUris) {
-				Person person = null;
-				URI master = personUri[0];
-				URI[] targets = (URI[]) ArrayUtils.remove(personUri, 0);
-				person = personManager.merge(master, targets);
-				returnData.getEntries().add(new Resource(person,personManager.getMe().asURI()));
-			}
-		} catch (InfosphereException e) {
-			return Response.badRequest(e.getMessage(), e);
-		} catch (Exception e) {
-			return Response.serverError(e.getMessage(), e);
-		}
+                return Response.ok(returnData);
+        }
 
-		return Response.ok(returnData);
-	}
+        /**
+         * Removes person
+         *
+         * @param personID
+         * @return
+         */
+        @DELETE
+        @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
+        @Path("/@me/{personID}")
+        public Response deletePersonById(@PathParam("said") String said,
+                        @PathParam("personID") String personID) {
 
-	/**
-	 * Create a serviceAccount for a Profile added from Public Registry
-	 * 
-	 * @param said
-	 * @param request
-	 *            Semantic Profile
-	 * @return
-	 */
-	@POST
-	@Path("/addcontact")
-	@Consumes(MediaType.APPLICATION_JSON + ";charset=UTF-8")
-	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
-	public Response<HashMap> postAddContact(@PathParam("said") String said,
-			Request<HashMap> request) {
+                logger.info("called API method: DELETE /dime/rest/" + said
+                                + "/person/@me/"+personID);
 
-		Data<HashMap> data, returnData;
+                try {
+                        personManager.remove(personID);
 
-		try {
+                } catch (IllegalArgumentException e) {
+                        return Response.badRequest(e.getMessage(), e);
+                } catch (InfosphereException e) {
+                        return Response.badRequest(e.getMessage(), e);
+                } catch (Exception e) {
+                        return Response.serverError(e.getMessage(), e);
+                }
 
-			RequestValidator.validateRequest(request);
-			data = request.getMessage().getData();
+                return Response.ok();
 
-			Collection<HashMap> jsons = data.getEntries();
+        }
 
-			returnData = new Data<HashMap>();
+        @POST
+        @Path("/@merge")
+        @Consumes(MediaType.APPLICATION_JSON + ";charset=UTF-8")
+        @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
+        public Response<Resource> mergeContacts(@PathParam("said") String said,
+                        Request<Resource> request) {
 
-			for (HashMap jsonObject : jsons) {
-				PersonContact personContact = toPersonContact(jsonObject);
-				
-				final String accountSaid = (String) jsonObject.get("said");
-				final URI accountUri = new URIImpl(userManager.add(accountSaid).getAccountUri());
-				userManager.addProfile(accountUri, personContact);
+                logger.info("called API method: POST /dime/rest/" + said
+                                + "/person/@merge");
+                Data<Resource> returnData = null;
+                Resource entry = request.getMessage().getData().entry.iterator().next();
+                ArrayList items = (ArrayList) entry.get("items");
 
-				returnData.addEntry(jsonObject);
-			}
+                try {
 
-		} catch (InfosphereException e) {
-			return Response.badRequest(e.getMessage(), e);
-		} catch (IllegalArgumentException e) {
-			return Response.badRequest(e.getMessage(), e);
-		} catch (Exception e) {
-			return Response.serverError(e.getMessage(), e);
-		}
+                        Collection<URIImpl[]> collectionUris = toUriCollection(items);
+                        returnData = new Data<Resource>(0, collectionUris.size(),
+                                        collectionUris.size());
 
-		return Response.ok(returnData);
+                        for (URIImpl[] personUri : collectionUris) {
+                                Person person = null;
+                                URI master = personUri[0];
+                                URI[] targets = (URI[]) ArrayUtils.remove(personUri, 0);
+                                person = personManager.merge(master, targets);
+                                returnData.getEntries().add(new Resource(person,personManager.getMe().asURI()));
+                        }
+                } catch (InfosphereException e) {
+                        return Response.badRequest(e.getMessage(), e);
+                } catch (Exception e) {
+                        return Response.serverError(e.getMessage(), e);
+                }
 
-	}
+                return Response.ok(returnData);
+        }
 
-	private PersonContact toPersonContact(HashMap json) {
-		String nickname = (String) json.get("nickname");
-		String fullname = json.get("name") + " " + json.get("surname");
-		
-		NCOFactory ncofactory = new NCOFactory();
-		
-		PersonContact newContact = ncofactory.createPersonContact();
-		newContact.setPrefLabel(fullname);
-		
-		PersonName name = ncofactory.createPersonName();
-		name.setNickname(nickname);
-		name.setFullname(fullname);
-		newContact.setPersonName(name);
-		
-		// adding name metadata to contact model
-		newContact.getModel().addModel(name.getModel());
+        /**
+         * Create a serviceAccount for a Profile added from Public Registry
+         *
+         * @param said
+         * @param request
+         * Semantic Profile
+         * @return
+         */
+        @POST
+        @Path("/addcontact")
+        @Consumes(MediaType.APPLICATION_JSON + ";charset=UTF-8")
+        @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
+        public Response<HashMap> postAddContact(@PathParam("said") String said,
+                        Request<HashMap> request) {
 
-		return newContact;
-	}
+                Data<HashMap> data, returnData;
 
-	private Collection<URIImpl[]> toUriCollection(ArrayList cosa) {
-		Collection<URIImpl[]> out = new ArrayList<URIImpl[]>();
-		Iterator<ArrayList> iter = cosa.iterator();
+                try {
 
-		while (iter.hasNext()) {
+                        RequestValidator.validateRequest(request);
+                        data = request.getMessage().getData();
 
-			URIImpl[] array = convert(iter.next());
-			out.add(array);
-		}
+                        Collection<HashMap> jsons = data.getEntries();
 
-		return out;
-	}
+                        returnData = new Data<HashMap>();
 
-	private URIImpl[] convert(ArrayList next) {
+                        for (HashMap jsonObject : jsons) {
+                                PersonContact personContact = toPersonContact(jsonObject);
 
-		URIImpl[] out = new URIImpl[next.size()];
+                                final String accountSaid = (String) jsonObject.get("said");
+                                final URI accountUri = new URIImpl(userManager.add(accountSaid).getAccountUri());
+                                userManager.addProfile(accountUri, personContact);
 
-		for (Object uri : next) {
-			URIImpl uriOut = new URIImpl((String) uri);
-			out[next.indexOf(uri)] = uriOut;
-		}
-		return out;
-	}
+                                returnData.addEntry(jsonObject);
+                        }
+
+                } catch (InfosphereException e) {
+                        return Response.badRequest(e.getMessage(), e);
+                } catch (IllegalArgumentException e) {
+                        return Response.badRequest(e.getMessage(), e);
+                } catch (Exception e) {
+                        return Response.serverError(e.getMessage(), e);
+                }
+
+                return Response.ok(returnData);
+
+        }
+
+        private PersonContact toPersonContact(HashMap json) {
+                String nickname = (String) json.get("nickname");
+                String fullname = json.get("name") + " " + json.get("surname");
+
+                NCOFactory ncofactory = new NCOFactory();
+
+                PersonContact newContact = ncofactory.createPersonContact();
+                newContact.setPrefLabel(fullname);
+
+                PersonName name = ncofactory.createPersonName();
+                name.setNickname(nickname);
+                name.setFullname(fullname);
+                newContact.setPersonName(name);
+
+                // adding name metadata to contact model
+                newContact.getModel().addModel(name.getModel());
+
+                return newContact;
+        }
+
+        private Collection<URIImpl[]> toUriCollection(ArrayList cosa) {
+                Collection<URIImpl[]> out = new ArrayList<URIImpl[]>();
+                Iterator<ArrayList> iter = cosa.iterator();
+
+                while (iter.hasNext()) {
+
+                        URIImpl[] array = convert(iter.next());
+                        out.add(array);
+                }
+
+                return out;
+        }
+
+        private URIImpl[] convert(ArrayList next) {
+
+                URIImpl[] out = new URIImpl[next.size()];
+
+                for (Object uri : next) {
+                        URIImpl uriOut = new URIImpl((String) uri);
+                        out[next.indexOf(uri)] = uriOut;
+                }
+                return out;
+        }
+        
+        
+        //set to "" the defProfiles of service crawled Persons
+        private void resolveDefProfile(Resource personDTO) {
+                PersonContact profile=null;
+                Account account=null ;
+                if(personDTO.containsKey("defProfile")){
+                        try {
+                                profile = profileManager.get(personDTO.get("defProfile").toString().replaceFirst("p_",""));
+                        } catch (Exception e) {
+                                return;
+                        }
+
+                        if(profile !=null){
+                                try {
+                                        account = accountManager.get(findSaid(profile));
+                                } catch (Exception e) {
+                                        return;
+                                }
+                                if(account != null)
+                                        if(!account.getAccountType().equals(DimeServiceAdapter.NAME))
+                                                personDTO.put("defProfile", "");
+                        }
+                }
+        }
+
+        private String findSaid(PersonContact profile) throws Exception {
+
+                ClosableIterator<Statement> iterator = profile.getModel()
+                                .findStatements(profile.asResource().asURI(), NIE.dataSource, Variable.ANY);         
+                while (iterator.hasNext()) {
+                        Statement statement = iterator.next();         
+                        Node node = statement.getObject();
+                        try {
+                                for(Account accountId: accountManager.getAll())
+                                        if(node.asURI().toString().equals(accountId.asURI().toString())){
+                                                return node.asURI().toString();
+                                        }
+                        } catch (ClassCastException e) {                                                
+                                throw new Exception(e.getMessage());                                        
+
+                        } catch (InfosphereException e) {
+                                throw new Exception(e.getMessage(),e);
+
+                        }
+
+                }
+                return "";
+        }
+
+        
 
 }
-
