@@ -18,6 +18,23 @@
 
 <script type="text/javascript">
 //<![CDATA[
+
+  // find logged in user's said
+  var said = null;
+  $.ajax({ 
+    type: "GET",
+    dataType: "text/plain",
+    url: "/dime-communications/web/access/auth/@me",
+    success: function(response) {
+      said = response;
+    },
+    error: function(xhr, error){
+      console.debug(xhr);
+      console.debug(error);
+      alert("An error ocurred, and user said couldn't be found!");
+    }
+  });
+
   var conditionsHashMap = new Hashtable();
 	var conditionsKeyPress = new Hashtable();
 	var conditionsMousePress = new Hashtable();
@@ -365,7 +382,7 @@ function addProperties(){
 		} else {
 			$.ajax({
 					async: false,
-					url: 'https://vmuscs05.deri.ie:8443/dime-communications/api/dime/rest/dummyASD/sparql',
+					url: '/dime-communications/api/dime/rest/'+said+'/sparql',
 					dataType: 'json',
 					type: 'GET',
 					data: { 
@@ -464,7 +481,7 @@ function addConstraints(element){
 		
 		$.ajax({
 				async: false,
-				url: 'https://vmuscs05.deri.ie:8443/dime-communications/api/dime/rest/dummyASD/sparql',
+				url: '/dime-communications/api/dime/rest/'+said+'/sparql',
 				dataType: 'json',
 				type: 'GET',
 				data: { 
@@ -479,7 +496,7 @@ function addConstraints(element){
 						return {
 							value:  index,
 							id: item[constraintId].value,
-							label: (item["label"] != null)  ? item["label"].value : item["x"].value,
+							label: (item["label"] != null) ? item["label"].value : item["x"].value,
 						}
 					})
 				},
@@ -681,102 +698,105 @@ function addAnyConstraints(){
 	
 	
 	$(document).on("click", ".save", function(){ 
-												$(this).css("visibility","hidden");
-												var conditionBoxId = $(this).attr("name");
-												var condition = $("#"+conditionBoxId+" .autocompleteFillInCondition");
-												var property = $("#"+conditionBoxId+" .autocompleteFillInProperty .draggableProperties");
-												var constraint = $("#"+conditionBoxId+" .autocompleteFillInConstraint .draggableConstraints");
-												var operators = $("#"+conditionBoxId+" .newConditionButton .draggableOperator");
-												var action = $("#"+conditionBoxId+" .action");
-												
-												
-												var jsonReturn = createJson();
-												var conditions = "";
-												var arrayLen = condition.length;
-												
-												$.each( condition, function(index, value) {
-														var conditionType = $(value).attr("data-typeid");
-														
-														
-														
-														if (conditionType == 1){
-															var valType = parseInt($(property[index]).attr("name"));
-															
-															if ($(constraint[index]).attr("tag").contains("member")){
-																conditionJson = peerConstraints[valType].jsonMember;
-															} else {
-																conditionJson = peerConstraints[valType].json;
-															}
-																
-															
-														} else {
-															conditionJson = types[conditionType].json;
-														}
-														
-														conditionJson = conditionJson.replace("#object", '"'+$(constraint[index]).attr("tag")+'"');
-														conditionJson = conditionJson.replace("#subject", '"'+$(constraint[index]).attr("tag")+'"');
-														conditionJson = conditionJson.replace(new RegExp("#guid","g"), index);
-														
-														
-														//change costraintOnProperty for others
-														conditionJson = conditionJson.replace("#property", '"'+$(property[index]).attr("tag")+'"');
-														
-														
-														if ((conditionType == 4) || (conditionType == 5)){
-															conditionJson = conditionJson.replace("#conditionType", '"'+dconConditions[Math.abs( parseInt($(property[index]).attr("name")) + 11)].ns+'"')
-														}
-														
-														operator = $(operators[index]).attr("title");
-														nextCondition = index + 1;
-														if (operator == "AND"){
-															conditionJson = conditionJson.replace("#andURI", '"'+nextCondition+'"');
-															conditionJson = conditionJson.replace("#orURI", "null");
-															conditionJson = conditionJson.replace("#precURI", "null");
-															conditionJson = conditionJson.replace("#succURI", "null");
-														}
-														if (operator == "OR"){
-															conditionJson = conditionJson.replace("#orURI", '"'+nextCondition+'"');
-															conditionJson = conditionJson.replace("#andURI", "null");
-															conditionJson = conditionJson.replace("#precURI", "null");
-															conditionJson = conditionJson.replace("#succURI", "null");
-														}
-														if (operator == "PREC"){
-															conditionJson = conditionJson.replace("#precURI", '"'+nextCondition+'"');
-															conditionJson = conditionJson.replace("#orURI", "null");
-															conditionJson = conditionJson.replace("#andURI", "null");
-															conditionJson = conditionJson.replace("#succURI", "null");
-														}
-														if (operator == "SUCC"){
-															conditionJson = conditionJson.replace("#succURI", '"'+nextCondition+'"');
-															conditionJson = conditionJson.replace("#orURI", "null");
-															conditionJson = conditionJson.replace("#precURI", "null");
-															conditionJson = conditionJson.replace("#andURI", "null");
-														}
-														if (operator == "null"){
-															conditionJson = conditionJson.replace("#andURI", "null");
-															conditionJson = conditionJson.replace("#orURI", "null");
-															conditionJson = conditionJson.replace("#precURI", "null");
-															conditionJson = conditionJson.replace("#succURI", "null");
-														}
-														
-														conditions = conditions.concat(conditionJson);
-														if (index < (arrayLen - 1)) { conditions = conditions.concat(","); }
-													}
-												);
-												
-												
-												jsonReturn = jsonReturn.replace("#conditions",conditions);
-															alert(jsonReturn);								
-												$.ajax({ 
-														type: "POST",
-														dataType: "json",
-														data: jsonReturn,
-      													url: "#",
-														
-												});
-												
-												
-										});	 				
+		$(this).css("visibility","hidden");
+    
+		var conditionBoxId = $(this).attr("name");
+		var condition = $("#"+conditionBoxId+" .autocompleteFillInCondition");
+		var property = $("#"+conditionBoxId+" .autocompleteFillInProperty .draggableProperties");
+		var constraint = $("#"+conditionBoxId+" .autocompleteFillInConstraint .draggableConstraints");
+		var operators = $("#"+conditionBoxId+" .newConditionButton .draggableOperator");
+		var action = $("#"+conditionBoxId+" .action");
+		
+		var jsonRule = createJson();
+		var conditions = "";
+		var arrayLen = condition.length;
+		
+		$.each( condition, function(index, value) {
+				var conditionType = $(value).attr("data-typeid");
+				
+				if (conditionType == 1){
+					var valType = parseInt($(property[index]).attr("name"));
+					
+					if ($(constraint[index]).attr("tag").contains("member")){
+						conditionJson = peerConstraints[valType].jsonMember;
+					} else {
+						conditionJson = peerConstraints[valType].json;
+					}
+						
+					
+				} else {
+					conditionJson = types[conditionType].json;
+				}
+				
+				conditionJson = conditionJson.replace("#object", '"'+$(constraint[index]).attr("tag")+'"');
+				conditionJson = conditionJson.replace("#subject", '"'+$(constraint[index]).attr("tag")+'"');
+				conditionJson = conditionJson.replace(new RegExp("#guid","g"), index);
+				
+				
+				//change costraintOnProperty for others
+				conditionJson = conditionJson.replace("#property", '"'+$(property[index]).attr("tag")+'"');
+				
+				
+				if ((conditionType == 4) || (conditionType == 5)){
+					conditionJson = conditionJson.replace("#conditionType", '"'+dconConditions[Math.abs( parseInt($(property[index]).attr("name")) + 11)].ns+'"')
+				}
+				
+				operator = $(operators[index]).attr("title");
+				nextCondition = index + 1;
+				if (operator == "AND"){
+					conditionJson = conditionJson.replace("#andURI", '"'+nextCondition+'"');
+					conditionJson = conditionJson.replace("#orURI", "null");
+					conditionJson = conditionJson.replace("#precURI", "null");
+					conditionJson = conditionJson.replace("#succURI", "null");
+				}
+				if (operator == "OR"){
+					conditionJson = conditionJson.replace("#orURI", '"'+nextCondition+'"');
+					conditionJson = conditionJson.replace("#andURI", "null");
+					conditionJson = conditionJson.replace("#precURI", "null");
+					conditionJson = conditionJson.replace("#succURI", "null");
+				}
+				if (operator == "PREC"){
+					conditionJson = conditionJson.replace("#precURI", '"'+nextCondition+'"');
+					conditionJson = conditionJson.replace("#orURI", "null");
+					conditionJson = conditionJson.replace("#andURI", "null");
+					conditionJson = conditionJson.replace("#succURI", "null");
+				}
+				if (operator == "SUCC"){
+					conditionJson = conditionJson.replace("#succURI", '"'+nextCondition+'"');
+					conditionJson = conditionJson.replace("#orURI", "null");
+					conditionJson = conditionJson.replace("#precURI", "null");
+					conditionJson = conditionJson.replace("#andURI", "null");
+				}
+				if (operator == "null"){
+					conditionJson = conditionJson.replace("#andURI", "null");
+					conditionJson = conditionJson.replace("#orURI", "null");
+					conditionJson = conditionJson.replace("#precURI", "null");
+					conditionJson = conditionJson.replace("#succURI", "null");
+				}
+				
+				conditions = conditions.concat(conditionJson);
+				if (index < (arrayLen - 1)) { conditions = conditions.concat(","); }
+			}
+		);
+		
+    console.debug("Saving rule in PS: " + jsonRule);
+    jsonRule = jsonReturn.replace("#conditions", conditions);
+    $.ajax({ 
+      type: "POST",
+      dataType: "json",
+      data: jsonRule,
+      url: "/dime-communications/api/dime/rest/"+said+"/rule/@me",
+      success: function(response) {
+        alert("Congratulations, your rule has been created!");
+      },
+      error: function(xhr, error){
+        console.debug(xhr);
+        console.debug(error);
+        alert("An error ocurred, and the rule couldn't be saved!");
+      }
+    });
+			
+	});			
 
 		function createJson(){
 			return '{ "actions": [ { "actionType":"urn:actions:Notify"} ], "condition":[ #conditions ], "guid":"'+UUID()+'", "isEnabled":true, "name":null, "type":"RULE"}';
