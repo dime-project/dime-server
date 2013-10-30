@@ -19,21 +19,26 @@
 <script type="text/javascript">
 //<![CDATA[
 
-  // find logged in user's said
-  var said = null;
-  $.ajax({ 
-    type: "GET",
-    dataType: "text/plain",
-    url: "/dime-communications/web/access/auth/@me",
-    success: function(response) {
-      said = response;
-    },
-    error: function(xhr, error){
-      console.debug(xhr);
-      console.debug(error);
-      alert("An error ocurred, and user said couldn't be found!");
-    }
-  });
+// find logged in user's said
+var said = null;
+$.ajax({ 
+  type: "GET",
+  url: "/dime-communications/web/access/auth/@me",
+  success: function(response) {
+    said = response;
+  },
+  error: function(xhr, error){
+    console.debug(xhr);
+    console.debug(error);
+    alert("An error ocurred, and user said couldn't be found!");
+  }
+});
+
+//]]>
+</script>
+
+<script type="text/javascript">
+//<![CDATA[
 
   var conditionsHashMap = new Hashtable();
 	var conditionsKeyPress = new Hashtable();
@@ -242,7 +247,7 @@ var types = [
 	]
 //]]>
 </script>
-	
+
 <script type="text/javascript">
 //<![CDATA[
 var drgClone = null;
@@ -796,7 +801,7 @@ function addAnyConstraints(){
       }
     });
 			
-	});			
+	});
 
 		function createJson(){
 			return '{ "actions": [ { "actionType":"urn:actions:Notify"} ], "condition":[ #conditions ], "guid":"'+UUID()+'", "isEnabled":true, "name":null, "type":"RULE"}';
