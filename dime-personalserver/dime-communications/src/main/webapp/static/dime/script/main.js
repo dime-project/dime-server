@@ -5037,7 +5037,7 @@ Dime.DetailDialog.prototype = {
     
         //additional hint for sharing
         agentsSection.append(
-            $('<div/>').addClass('changeDetailsHintshareDialog').append("click to change receivers")
+            $('<div/>').addClass('changeDetailsHintshareDialog').append("click to add recipients")
         );
 
         return agentsSection;

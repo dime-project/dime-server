@@ -521,7 +521,7 @@ DimeView = {
    
         var groupClass=(entry.type!==Dime.psMap.TYPE.GROUP?entry.type+"Item groupItem":"groupItem");
         
-        var groupTitle = $('<h4>'+ DimeView.getShortNameWithLength(entry.name, 12) + '</h4>');
+        var groupTitle = $('<h4>'+ DimeView.getShortNameWithLength(entry.name, 11) + '</h4>');
         
         var jGroupItem=$('<div/>').addClass(groupClass).append($('<div/>')
                 .append(
@@ -553,13 +553,27 @@ DimeView = {
         DimeView.setActionAttributeForElements(entry, jGroupItem, true, false);
         
         $(jGroupItem).droppable({
-            accept: ".childItem",
+            accept: ".ui-draggable",
             hoverClass: "groupItemDropHover",
+            tolerance: "pointer",
             drop: function(event, ui){
-                console.log("dropped");
-                console.log($(ui.draggable).data("person"));
-                console.log(entry);
-                //TODO add dragged person (data) to group (entry)
+                var childItem = $(ui.draggable).data("person");
+                var groupItem = entry;
+                var groupName = (entry.type === "group")?"group":((entry.type === "databox")?"databox":"profile card");
+                
+                if(JSTool.arrayContainsItem(groupItem.items, childItem.guid)){
+                    (new Dime.Dialog.Toast(childItem.name + ' is already in the ' + groupName + ' "' + groupItem.name + '"')).show();;
+                }else{
+                    (groupItem.items).push(childItem.guid);
+                    var callback = function(response){
+                        if(response){
+                            //TODO: workaround refresh group container since notification is not comming for profilecards(?)
+                            DimeView.viewManager.updateViewFromStatus(DimeView.viewManager.status, true);
+                            (new Dime.Dialog.Toast(childItem.name + ' added successfully to the ' + groupName + ' "' + groupItem.name + '"')).show();
+                        }
+                    };
+                    Dime.REST.updateItem(groupItem, callback);  
+                }
             }
         });
 
@@ -609,8 +623,17 @@ DimeView = {
         jChildItem.append(profileAttributeValues)
             .append('<div class="clear">').attr('title',entry.name);
         
-        
         DimeView.setActionAttributeForElements(entry, jChildItem, false, true);
+        
+        $(jChildItem).draggable({
+            zIndex: 2000,
+            containment: "document",
+            opacity: 0.70,
+            helper: "clone",
+            distance: 10,
+            revert: "invalid",
+            cursor: "pointer"
+        }).data("person", entry);
         
         return jChildItem;
     },
@@ -934,7 +957,8 @@ DimeView = {
             opacity: 0.70,
             helper: "clone",
             distance: 10,
-            revert: "invalid"
+            revert: "invalid",
+            cursor: "pointer"
         }).data("person", entry);
         
         return jChildItem;
@@ -1857,7 +1881,6 @@ DimeView = {
             event.stopPropagation();
         }
         
-        
         var isEditable=DimeView.actionMenuActivatedForItem(entry);
         
         if (entry.type===Dime.psMap.TYPE.LIVEPOST){
@@ -2083,7 +2106,7 @@ DimeView = {
         DimeView.cleanUpView();
 
         if (DimeView.viewManager.getCurrentViewType()===DimeViewStatus.LIVEPOST_VIEW){
-            DimeView.LivePostView.search(searchText.value);
+            DimeView.LivePostView.search(searchText);
             return;
         }
         
