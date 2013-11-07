@@ -159,9 +159,9 @@
 .ui-widget-content .ui-state-active,
 .ui-widget-header .ui-state-active {
 	border: 1px solid #000000;
-	background: #121212 url(images/ui-bg_inset-soft_15_121212_1x100.png) 50% 50% repeat-x;
+	background: #121212 url 50% 50% repeat-x;
 	font-weight: normal;
-	color: #ffffff;
+	color: #D7D9D7;
 }
 .ui-state-active a,
 .ui-state-active a:link,

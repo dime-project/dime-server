@@ -4,10 +4,11 @@
 
 .workspace{
 	width:100%;
-	margin-left:auto;
-	margin-right:auto;
+	margin-left:0;
+	margin-right:0;
 	padding-top:10px;
-	padding-bottom:10px;
+	padding-bottom:0px;
+	border: none;
 }
 
 .workspace .allRules{
@@ -16,13 +17,14 @@
 	float: left;
 	padding-bottom:10px;
 	margin-bottom:20px;
+	border: none;
 	clear:left;
 }
 
 .workspace .controlbox{
-	width: 23%;
+	width: 151px;
 	float: left;
-	padding-bottom: 10px;
+	padding: 0px 5px 5px 5px;
 }
 
 
@@ -33,43 +35,73 @@
 
 .conditionBox{
 	float:left;
-	border:dashed thin #630;
-	margin-right:5px;
+	border-radius: 5px 5px 5px 5px !important;
+	background-color:rgb(230, 230, 230);
+	border: solid thin silver;
+	margin:5px 5px 5px 5px;
 }
 
 .workspace .allRules .rulebox{
 	width: 100%;
-	border: dashed thin #000;
+	border-radius: 5px 5px 5px 5px !important;
+	border: solid thin silver;
 	padding-bottom:20px;
 	margin-bottom:10px;
+	background-color:rgb(255, 255, 255);
 	padding-top:15px;
 }
 
 .draggable { 
-	width: 70px; 
-	height: 70px; 
+	width: 30px; 
+	height: 30px; 
+	border: none;
+	text-align:center;
 	float: left; 
 	font-size: 12px;
+	margin:5px 5px 5px 5px;
+
+}
+
+.draggable img { 
+	width: 30px; 
+	height: 30px;
+	float: left; 
+	text-align:center;
+	background-color:rgb(246, 194, 0); 	
+	border:none;
+}
+
+.draggableAction { 
+	width: 30px; 
+	height: 30px; 
+	float: left; 
+	font-size: 12px;
+	margin:5px 5px 5px 5px;
+	text-align:center;
+	background-color:rgb(90, 157, 213);
 	border:none;
 }
 
 
 .draggableProperties { 
-	width: 70px; 
+	width: 30px; 
 	height: 30px; 
 	float: left; 
 	font-size: 12px;
-	border: dotted thin #F00;
-	word-wrap:break-word;
+	border: none;
+	
+	word-wrap: none;
+	color:white;
 }
 
 .draggableConstraints{ 
-	width: 70px; 
+	width: 30px; 
 	height: 30px; 
 	float: left; 
 	font-size: 12px;
-	border: dotted thin #909;
-	word-wrap:break-word;
+	border: none;
+	word-wrap:none;
+	color:black;
 }
 
 .draggableConstraints input{ 
@@ -78,77 +110,167 @@
 	font-size: 12px;
 	border-top: none;
 	border-left: none;
+	color: rgb(34,34,34);
 	border-right: none;
 	border-bottom: solid thin #000;
 	word-wrap:break-word;
 }
 	
 .draggableOperator{ 
-	width: 40px; 
-	height: 40px; 
+	width: 15px; 
+	height: 15px; 
 	float: left; 
-	font-size: 18px;
-	text-align:center;
-	vertical-align:central;
-	border: dotted thin #000;
-	word-wrap:break-word;
-}
+	background-color:black;
+	color:white;
+	font-weight: bold;
+	font-size: 16px;
+	font-family: "Calibri","Helvetica Neue",Helvetica,Arial,sans-serif;
+	margin-left: 2px;
+	}
 
-		
+	
+	
 .ui-widget-header p, .ui-widget-content p { margin: 0; }
 
-.ui-widget-content { }
+.ui-widget {
+font-family: "Calibri","Helvetica Neue",Helvetica,Arial,sans-serif;
+
+}
+
+.ui-helper-reset {
+    margin: 0px;
+    padding: 0px;
+    border: 0px none;
+    outline: 0px none;
+    line-height: 1.3;
+    text-decoration: none;
+    font-size: 14px;
+    list-style: none outside none;
+}
+
+.ui-widget-content {
+    background: rgb(255,255,255);
+	font-family: "Calibri","Helvetica Neue",Helvetica,Arial,sans-serif;
+	font-size: 14px;
+}
+
+.ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default {
+    border: 1px solid rgb(211, 211, 211);
+    background: rgb(49, 48, 49);
+    font-weight: normal;
+	font-size: 14px;
+	font-family: "Calibri","Helvetica Neue",Helvetica,Arial,sans-serif;
+    color: rgb(243, 243, 243);
+}
+
+.ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active {
+    border: 1px solid rgb(170, 170, 170);
+    background: rgb(90, 157, 213);
+    font-weight: normal;
+	font-family: "Calibri","Helvetica Neue",Helvetica,Arial,sans-serif;
+	font-size: 14px;
+    color: rgb(243, 243, 243);
+}
+
+.ui-accordion .ui-accordion-content {
+	height:140px;
+    padding: 5px 5px 5px 5px;
+	overflow: hidden;
+}
+
+.ui-accordion-header  {
+margin-top: 0px !important;
+}
+
 
 .autocompleteFillInCondition{
 	border:dotted thin #007FFF;
-	width:70px;
-	height:70px;
+	width:35px;
+	height:35px;
+	padding:0px;
+	color: white;
+	background-color: rgb(246, 194, 0);
 	margin:5px 5px 5px 5px;
 	float:left;
 }
 
 .autocompleteFillInProperty{
 	border:dotted thin #F00;
-	width:70px;
-	height:30px;
+	width:35px;
+	height:35px;
 	margin:5px 5px 5px 5px;
+	background-color:rgb(255,255,255);
 	float:left;
 }
 
 .autocompleteFillInConstraint{
 	border:dotted thin #909;
-	width:70px;
-	height:30px;
+	width:35px;
+	height:35px;
+	background-color:rgb(156, 198, 230);
 	margin:5px 5px 5px 5px;
 	float:left;
 }
 
 .newConditionButton { 
-	border:dotted thin #000;
-	width:40px;
-	height:40px;
-	margin:20px 5px 5px 5px;
+	border:dotted thin #007FFF;
+	width:20px;
+	height:20px;
+	margin-top:5px;
+	margin-right:5px;
+	background-color: rgb(15, 15, 15);
+	color: rgb(210,210,210);
 	float:left;
 }
 
 .action{
 	border:dotted thin #663;
-	width:70px;
-	height:70px;
+	width:35px;
+	height:35px;
+	background-color:rgb(90, 157, 213);
 	margin:5px 5px 5px 5px;
 	float:left;
 }
 
-.draggableAction { 
-	width: 70px; 
-	height: 70px; 
-	float: left; 
-	font-size: 12px;
-	border:none;
-}
 
 
 .helper{
-	font-size: 12px;
-	color:#CCC;
+	font-size: 24px;
+	font-family: "Calibri","Helvetica Neue",Helvetica,Arial,sans-serif;
+	margin-left:5px;
+	font-weight: bold;
+	word-wrap:none;
+}
+
+.helper2{
+	font-size: 16px;
+	font-family: "Calibri","Helvetica Neue",Helvetica,Arial,sans-serif;
+	margin-left:2px;
+	font-weight: bold;
+	word-wrap:none;
+}
+
+.saveButton {
+float: right;
+    border: 1px solid rgb(211, 211, 211);
+margin-right: 10px;
+font-size: 14px;
+font-family: "Calibri","Helvetica Neue",Helvetica,Arial,sans-serif;
+text-align:center;
+padding: 0.2em 0.5em;
+background-color: rgb(215, 217, 215);
+color: rgb(66,66,66) !important;
+text-decoration: none;
+border-radius: 5px 5px 5px 5px !important;
+}
+
+.createButton {
+    border: 1px solid rgb(211, 211, 211);
+    background: rgb(49, 48, 49);
+    font-weight: normal;
+	color: rgb(66,66,66) !important;
+	font-size: 14px;
+	font-family: "Calibri","Helvetica Neue",Helvetica,Arial,sans-serif;
+    	background-color: rgb(215, 217, 215);
+	border-radius: 5px 5px 5px 5px !important;
 }
