@@ -779,7 +779,7 @@ function addAnyConstraints(){
                 );
                 
     console.debug("Saving rule in PS: " + jsonRule);
-    jsonRule = jsonReturn.replace("#conditions", conditions);
+    jsonRule = jsonRule.replace("#conditions", conditions);
     $.ajax({
       type: "POST",
       dataType: "json",
