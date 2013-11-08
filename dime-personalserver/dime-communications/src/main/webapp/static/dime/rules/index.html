@@ -698,7 +698,7 @@ function addAnyConstraints(){
 	
 	
 	
-	        $(document).on("click", ".save", function(){
+	        $(document).on("click", ".saveButton", function(){
                 $(this).css("visibility","hidden");
     
                 var conditionBoxId = $(this).attr("name");
@@ -782,7 +782,8 @@ function addAnyConstraints(){
     jsonRule = jsonRule.replace("#conditions", conditions);
     $.ajax({
       type: "POST",
-      dataType: "json",
+      dataType: "application/json",
+      contentType: "application/json",
       data: jsonRule,
       url: "/dime-communications/api/dime/rest/"+said+"/rule/@me",
       success: function(response) {
