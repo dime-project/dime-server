@@ -37,8 +37,8 @@
 	float:left;
 	border-radius: 5px 5px 5px 5px !important;
 	background-color:rgb(230, 230, 230);
-	border: solid thin silver;
-	margin:5px 5px 5px 5px;
+	border: none;
+	margin:2px 2px 2px 2px;
 }
 
 .workspace .allRules .rulebox{
@@ -84,24 +84,23 @@
 
 
 .draggableProperties { 
-	width: 30px; 
-	height: 30px; 
+	width: 100px; 
+	height: 16px; 
 	float: left; 
 	font-size: 12px;
 	border: none;
-	
 	word-wrap: none;
-	color:white;
+	color:rgb(49, 48, 49);
 }
 
 .draggableConstraints{ 
-	width: 30px; 
-	height: 30px; 
+	width: 100px; 
+	height: 16px; 
 	float: left; 
 	font-size: 12px;
 	border: none;
 	word-wrap:none;
-	color:black;
+	color:rgb(49, 48, 49);
 }
 
 .draggableConstraints input{ 
@@ -120,8 +119,7 @@
 	width: 15px; 
 	height: 15px; 
 	float: left; 
-	background-color:black;
-	color:white;
+	color: rgb(66,66,66);
 	font-weight: bold;
 	font-size: 16px;
 	font-family: "Calibri","Helvetica Neue",Helvetica,Arial,sans-serif;
@@ -185,7 +183,7 @@ margin-top: 0px !important;
 
 .autocompleteFillInCondition{
 	border:dotted thin #007FFF;
-	width:35px;
+	width:60px;
 	height:35px;
 	padding:0px;
 	color: white;
@@ -196,18 +194,18 @@ margin-top: 0px !important;
 
 .autocompleteFillInProperty{
 	border:dotted thin #F00;
-	width:35px;
-	height:35px;
+	width:100px;
+	height:18px;
 	margin:5px 5px 5px 5px;
-	background-color:rgb(255,255,255);
+	background-color:rgb(153, 153, 153);
 	float:left;
 }
 
 .autocompleteFillInConstraint{
 	border:dotted thin #909;
-	width:35px;
-	height:35px;
-	background-color:rgb(156, 198, 230);
+	width:100px;
+	height:18px;
+	background-color: rgb(156, 198, 230);
 	margin:5px 5px 5px 5px;
 	float:left;
 }
@@ -218,14 +216,13 @@ margin-top: 0px !important;
 	height:20px;
 	margin-top:5px;
 	margin-right:5px;
-	background-color: rgb(15, 15, 15);
 	color: rgb(210,210,210);
 	float:left;
 }
 
 .action{
 	border:dotted thin #663;
-	width:35px;
+	width:50px;
 	height:35px;
 	background-color:rgb(90, 157, 213);
 	margin:5px 5px 5px 5px;
@@ -235,9 +232,9 @@ margin-top: 0px !important;
 
 
 .helper{
-	font-size: 24px;
+	font-size: 22px;
 	font-family: "Calibri","Helvetica Neue",Helvetica,Arial,sans-serif;
-	margin-left:5px;
+	margin-left:2px;
 	font-weight: bold;
 	word-wrap:none;
 }
@@ -246,7 +243,28 @@ margin-top: 0px !important;
 	font-size: 16px;
 	font-family: "Calibri","Helvetica Neue",Helvetica,Arial,sans-serif;
 	margin-left:2px;
+	text-align:center;
+	color: rgb(66,66,66);
+	word-wrap:none;
+}
+
+.helper3{
+	font-size: 14px;
+	font-family: "Calibri","Helvetica Neue",Helvetica,Arial,sans-serif;
+	margin-left:2px;
+	padding:0px;
+	margin-top:0px;
 	font-weight: bold;
+	word-wrap:none;
+}
+
+.helper4{
+	font-size: 18px;
+	font-family: "Calibri","Helvetica Neue",Helvetica,Arial,sans-serif;
+	margin-left:3px;
+	text-align:center;
+	font-weight: bold;
+	color: rgb(90,90,90);
 	word-wrap:none;
 }
 
