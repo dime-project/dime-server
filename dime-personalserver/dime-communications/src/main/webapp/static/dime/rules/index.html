@@ -307,7 +307,8 @@ function reactivateDraggableActions(){
 	$(".action").droppable({
 	  accept: '.draggableAction',
 	  drop: function( event, ui ) {
-		$(this).find(".helper").hide();  
+		$(this).find(".helper").hide(); 
+		$(this).find(".helper3").hide();		
 		$(this).find(".draggableAction").remove(".draggableAction");
 		$(this).append(drgClone);
 	  }
@@ -328,6 +329,7 @@ function reactivateDraggableTypes(){
 		conditionsMousePress.put(ruleId,value);
 		$(this).find(".helper").hide();  
 		   $(this).find(".draggable").remove(".draggable");
+		   $(this).find(".helper3").hide();
 		$(this).append(drgClone)
 		addProperties();
 	  }
