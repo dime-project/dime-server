@@ -734,7 +734,7 @@ function addAnyConstraints(){
                                 
                                 conditionJson = conditionJson.replace("#object", '"'+$(constraint[index]).attr("tag")+'"');
                                 conditionJson = conditionJson.replace("#subject", '"'+$(constraint[index]).attr("tag")+'"');
-                                conditionJson = conditionJson.replace(new RegExp("#guid","g"), index);
+                                conditionJson = conditionJson.replace(new RegExp("#guid","g"), '"urn:uuid:'+UUID()+'"');
                                 
                                 
                                 //change costraintOnProperty for others
@@ -785,25 +785,35 @@ function addAnyConstraints(){
                 
     console.debug("Saving rule in PS: " + jsonRule);
     jsonRule = jsonRule.replace("#conditions", conditions);
+    jsonRule = JSON.parse(jsonRule);
+    console.log(jsonRule);
+
+    var payload = {
+      "request":{
+        "meta":{"v":"0.9","status":"OK","code":200,"timeRef":(new Date()).getTime()},
+        "data":{"startIndex":0,"itemsPerPage":1,"totalResults":1,"entry":[jsonRule]}
+      }
+    };
+    console.log(payload);
+    
     $.ajax({
-      type: "POST",
-      dataType: "application/json",
-      contentType: "application/json",
-      data: jsonRule,
-      url: "/dime-communications/api/dime/rest/"+said+"/rule/@me",
-      success: function(response) {
+        type: "POST",
+        dataType: "json",
+        contentType: "application/json",
+        data: JSON.stringify(payload),
+        url: "/dime-communications/api/dime/rest/"+said+"/rule/@me"
+    }).done(function(response) {
         alert("Congratulations, your rule has been created!");
-      },
-      error: function(xhr, error){
+    }).fail(function(xhr, error) {
         console.debug(xhr);
         console.debug(error);
         alert("An error ocurred, and the rule couldn't be saved!");
-      }
     });
+    
    });
 		
 		function createJson(){
-			return '{ "actions": [ { "actionType":"urn:actions:Notify"} ], "condition":[ #conditions ], "guid":"'+UUID()+'", "isEnabled":true, "name":null, "type":"RULE"}';
+			return '{ "actions": [ { "actionType":"urn:actions:Notify"} ], "condition":[ #conditions ], "guid":"urn:uuid:'+UUID()+'", "isEnabled":true, "name":null, "type":"RULE"}';
 		}
 		
 		function UUID() {
