@@ -34,24 +34,30 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import eu.dime.ps.semantic.BroadcastManager;
+import eu.dime.ps.semantic.Event;
+import eu.dime.ps.semantic.connection.ConnectionProvider;
 import eu.dime.ps.semantic.exception.ResourceExistsException;
 import eu.dime.ps.semantic.model.ModelFactory;
+import eu.dime.ps.semantic.model.dcon.Peers;
 import eu.dime.ps.semantic.model.pimo.Person;
 import eu.dime.ps.semantic.service.impl.PimoService;
-import eu.dime.ps.semantic.model.dcon.Peers;
 
 @ContextConfiguration(locations = { "classpath*:**/applicationContext-infosphere-test.xml" })
 @RunWith(SpringJUnit4ClassRunner.class)
-public class EventProcessorTreeTest extends TestCase {
+public class RuleExecutorTest extends TestCase {
 	
 	@Autowired
+	protected ConnectionProvider connectionProvider;
+
+	@Autowired
 	protected PimoService pimoService;
-	
+
 	protected ModelFactory modelFactory = new ModelFactory();
 
 	private HashMap<String, URI> personUri = new HashMap<String, URI>();
 	
-	private EventProcessorTree ept = new EventProcessorTree();
+	private Person peter = null;
 	
 	@Before
 	public void setUp() throws Exception {
@@ -64,15 +70,27 @@ public class EventProcessorTreeTest extends TestCase {
 		pimoService.create(this.buildProfile("Mary Doe", 0.3));
 		pimoService.create(this.buildProfile("Anna Doe", 0.9));
 		pimoService.create(this.buildProfile("Paul Doe", 0.45));
-		pimoService.create(this.buildProfile("Peter Doe", 0.7));
 		
-		//load rules in PIMO
+		peter = this.buildProfile("Peter Doe", 0.7);
+		pimoService.create(peter);
+		
+		// load rules in PIMO
 		Model sinkModel = RDF2Go.getModelFactory().createModel().open();
 		ModelUtils.loadFromInputStream(
-				this.getClass().getClassLoader().getResourceAsStream("nearbyPerson.trig"),
-				Syntax.Ntriples, sinkModel);
+				this.getClass().getClassLoader().getResourceAsStream("rules/nearbyPerson.ttl"),
+				Syntax.Turtle, sinkModel);
 		pimoService.getTripleStore().addAll(sinkModel.iterator());
 		sinkModel.close();
+	}
+	
+	@Test
+	public void testCreatePerson() throws Exception {
+		RuleExecutor executor = new RuleExecutor();
+		executor.setConnectionProvider(connectionProvider);
+		executor.setNotifierManager(null);
+
+		BroadcastManager bm = BroadcastManager.getInstance();
+		bm.sendBroadcastSync(new Event(pimoService.getName(), Event.ACTION_RESOURCE_ADD, peter));
 	}
 	
 	@Ignore

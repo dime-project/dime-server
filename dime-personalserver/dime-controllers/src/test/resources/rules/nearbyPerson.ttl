@@ -2,13 +2,12 @@
 
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 @prefix drmo: <http://www.semanticdesktop.org/ontologies/2012/03/06/drmo#> .
 @prefix dcon: <http://www.semanticdesktop.org/ontologies/2011/10/05/dcon#> .
 @prefix pimo: <http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#> .
 @prefix nao: <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#> .
 
-
-{
 <http://test.org/rule1>	a	drmo:Rule ;
 	drmo:isComposedOf <http://test.org/condition1> ;
 	drmo:triggers	<http://di.me/Notify> .
@@ -27,7 +26,6 @@
 	drmo:hasConstraintOnObject	"0.5"^^xsd:double ;
 	drmo:hasPropertyOperator	"<=" .
 	
-<http://di.me/Notify>	a	drmo:Action .
+<http://di.me/Notify>	a	drmo:Action ;
 	drmo:hasSubject "<http://test.org/constraint2> is nearby";
 	drmo:hasObject <dime:interface> .
-}

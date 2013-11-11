@@ -26,6 +26,7 @@ import ie.deri.smile.rules.transformer.exception.InvalidOperatorException;
 import ie.deri.smile.rules.transformer.exception.MapperException;
 import ie.deri.smile.rules.transformer.exception.RuleMalformedException;
 import ie.deri.smile.rules.util.Tuple;
+import ie.deri.smile.vocabulary.DRMO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,9 +51,9 @@ import eu.dime.ps.semantic.Event;
 import eu.dime.ps.semantic.connection.ConnectionProvider;
 import eu.dime.ps.semantic.service.impl.PimoService;
 
-public class EventProcessorTree implements BroadcastReceiver {
+public class RuleExecutor implements BroadcastReceiver {
 
-	private static final Logger logger = LoggerFactory.getLogger(EventProcessorTree.class);
+	private static final Logger logger = LoggerFactory.getLogger(RuleExecutor.class);
 	
 	private ConnectionProvider connectionProvider;
 	private NotifierManager notifierManager;
@@ -60,7 +61,7 @@ public class EventProcessorTree implements BroadcastReceiver {
 	private ConcurrentMap<String, EventLogger> loggerCache = new ConcurrentHashMap<String, EventLogger>();
 	private ConcurrentMap<String, EventProcessor> processorCache = new ConcurrentHashMap<String, EventProcessor>();
 	
-	public EventProcessorTree() {
+	public RuleExecutor() {
 		BroadcastManager.getInstance().registerReceiver(this);
 	}
 	
@@ -93,17 +94,6 @@ public class EventProcessorTree implements BroadcastReceiver {
 			loggerCache.putIfAbsent(event.getTenant(), eventLogger);
 		}
 
-		// registering event in EventLogger
-		Model metadata = event.getData() == null ? RDF2Go.getModelFactory().createModel().open() : event.getData().getModel();
-		String eventAction = event.getAction();
-		if (Event.ACTION_RESOURCE_ADD.equals(eventAction)) {
-			eventLogger.resourceAdded(event.getIdentifier(), metadata);
-		} else if (Event.ACTION_RESOURCE_MODIFY.equals(eventAction)) {
-			eventLogger.resourceModified(event.getIdentifier(), metadata);
-		} else if (Event.ACTION_RESOURCE_DELETE.equals(eventAction)) {
-			eventLogger.resourceDeleted(event.getIdentifier());
-		}
-
 		// lazy initialization of event processors
 		if (eventProcessor == null) {
 			ModelSet dataset = pimoService.getTripleStore().getUnderlyingModelSet();
@@ -116,17 +106,42 @@ public class EventProcessorTree implements BroadcastReceiver {
 			} catch (MapperException e) {
 				logger.error("Couldn't register rules.", e);
 			} catch (RuleMalformedException e) {
-				logger.error("Malformed Rule" , e);
+				logger.error("Couldn't register rules", e);
 			} catch (InvalidOperatorException e) {
-				logger.error("Invalid Operator" , e);
+				logger.error("Couldn't register rules", e);
 			}
-			
-			// FIXME do we need to register the rules in the event processor?? -- [jer] rule transformer is separate from the EventProcessor, thus not directly linked to the controller. we might need to add a method in this class to register new rules after the EP is intialised?
-			//for (Rule rule : getRulesFromPIMO(pimoService))
-			//	eventProcessor.registerRule(rule);
 			
 			processorCache.putIfAbsent(event.getTenant(), eventProcessor);
 		}
+
+		// registering event in EventLogger
+		Model metadata = event.getData() == null ? RDF2Go.getModelFactory().createModel().open() : event.getData().getModel();
+		String eventAction = event.getAction();
+		if (Event.ACTION_RESOURCE_ADD.equals(eventAction)) {
+			eventLogger.resourceAdded(event.getIdentifier(), metadata);
+		} else if (Event.ACTION_RESOURCE_MODIFY.equals(eventAction)) {
+			eventLogger.resourceModified(event.getIdentifier(), metadata);
+		} else if (Event.ACTION_RESOURCE_DELETE.equals(eventAction)) {
+			eventLogger.resourceDeleted(event.getIdentifier());
+		}
+
+		// register new rules
+		// FIXME do we need to register the rules in the event processor?? -- [jer] rule transformer is separate from the EventProcessor, thus not directly linked to the controller. we might need to add a method in this class to register new rules after the EP is intialised?
+		//for (Rule rule : getRulesFromPIMO(pimoService))
+		if (event.is(DRMO.Rule)) {
+//		try {
+//			eventProcessor.registerRule(event.getIdentifier().asURI());
+//		} catch (RuleMalformedException e1) {
+//			// TODO Auto-generated catch block
+//			e1.printStackTrace();
+//		} catch (InvalidOperatorException e1) {
+//			// TODO Auto-generated catch block
+//			e1.printStackTrace();
+//		} catch (MapperException e1) {
+//			// TODO Auto-generated catch block
+//			e1.printStackTrace();
+		}
+
 		
 		for (Tuple<Rule, QueryRow> tuple : eventProcessor.executeEventProcessor(event.getIdentifier().asURI())) {
 			Rule rule = tuple.firstElement;

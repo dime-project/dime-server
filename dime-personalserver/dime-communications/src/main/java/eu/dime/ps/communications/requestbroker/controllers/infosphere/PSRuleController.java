@@ -113,7 +113,7 @@ public class PSRuleController implements APIController {
 	@Consumes(MediaType.APPLICATION_JSON + ";charset=UTF-8")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
 	public Response<RuleInstance> create(
-			Request request,
+			Request<RuleInstance> request,
 			@PathParam("said") String said) {
 
 		logger.info("POST /dime/rest" + said +"/rule/@me");
