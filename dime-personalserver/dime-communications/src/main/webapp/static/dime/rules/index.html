@@ -45,15 +45,15 @@ $.ajax({
 	var currentURITag = "";
 	
 var types = [
-		  //{
-//			value: 0,
-//			label: "Email",
-//			propertyQuery: "select distinct * where { { ?x <http://www.w3.org/2000/01/rdf-schema#domain> <http://www.semanticdesktop.org/ontologies/2007/03/22/nmo#Email>. } union { ?x <http://www.w3.org/2000/01/rdf-schema#domain> <http://www.semanticdesktop.org/ontologies/2007/03/22/nmo#Message>.} ?x <http://www.w3.org/2000/01/rdf-schema#range> <http://www.semanticdesktop.org/ontologies/2007/03/22/nco#ContactMedium> .  optional { ?x <http://www.w3.org/2000/01/rdf-schema#label> ?label . } optional { ?x <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#prefLabel> ?label . } optional {?x <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#deprecated> ?flag .} filter (!bound(?flag)) }",
-//			constraintQuery: "select distinct * where { { ?p a <http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#Person> . ?p <http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#occurrence> ?y . optional { ?p<http://www.semanticdesktop.org/ontologies/2007/08/15/nao#prefLabel> ?label . } ?y <http://www.semanticdesktop.org/ontologies/2007/03/22/nco#ContactMedium> . } }",
-//			constraintId: "y",
-//			image: "../../images/rules/email.png",
-//			json: '{ "and": #andURI, "conditionType": "drmo:Condition", "conditions": [ { "and": null, "conditionType": "drmo:Condition", "conditions": [],  "constraintOnGraph": null, "constraintOnObject": { "and": null, "conditionType": "drmo:Condition", "conditions": [],  "constraintOnGraph": null, "constraintOnObject": null,  "constraintOnProperty": "nco:hasEmailAddress",  "constraintOnSubject": {	"and": null, "conditionType": "drmo:Condition", "conditions": [],  "constraintOnGraph": null, "constraintOnObject": null,  "constraintOnProperty": "pimo:Occurance",  "constraintOnSubject": #subject, "guid":"#guid_1_1_1", "isNegated": false,  "or": null, "preceededBy": null, "propertyOperator": null, "resourceType": "nco:ContactMedium",  "succeededBy": null }, "guid":"#guid_1_1",  "isNegated": false,  "or": null, "preceededBy": null, "propertyOperator": null, "resourceType": "nmo:EmailAddress",  "succeededBy": null  } , "constraintOnProperty": #property,  "constraintOnSubject": null, "guid":"#guid_1",  "isNegated": false,  "or": null, "preceededBy": null, "propertyOperator": null, "resourceType": "nmo:Email",  "succeededBy": null }  ],  "constraintOnGraph": null, "constraintOnObject": null,  "constraintOnProperty": null,  "constraintOnSubject": null, "guid":"#guid",  "isNegated": false,  "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "nmo:Email",  "succeededBy": #succURI }',
-		  //},
+		   {
+			value: 0,
+			label: "Email",
+			propertyQuery: "select distinct * where { { ?x <http://www.w3.org/2000/01/rdf-schema#domain> <http://www.semanticdesktop.org/ontologies/2007/03/22/nmo#Email>. } union { ?x <http://www.w3.org/2000/01/rdf-schema#domain> <http://www.semanticdesktop.org/ontologies/2007/03/22/nmo#Message>.} ?x <http://www.w3.org/2000/01/rdf-schema#range> <http://www.semanticdesktop.org/ontologies/2007/03/22/nco#ContactMedium> .  optional { ?x <http://www.w3.org/2000/01/rdf-schema#label> ?label . } optional { ?x <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#prefLabel> ?label . } optional {?x <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#deprecated> ?flag .} filter (!bound(?flag)) }",
+			constraintQuery: "select distinct * where { { ?p a <http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#Person> . ?p <http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#occurrence> ?y . optional { ?p<http://www.semanticdesktop.org/ontologies/2007/08/15/nao#prefLabel> ?label . } ?y <http://www.semanticdesktop.org/ontologies/2007/03/22/nco#ContactMedium> . } }",
+			constraintId: "y",
+			image: "../../images/rules/email.png",
+			json: '{ "and": #andURI, "conditionType": "drmo:Condition", "conditions": [ { "and": null, "conditionType": "drmo:Condition", "conditions": [],  "constraintOnGraph": null, "constraintOnObject": { "and": null, "conditionType": "drmo:Condition", "conditions": [],  "constraintOnGraph": null, "constraintOnObject": null,  "constraintOnProperty": "nco:hasEmailAddress",  "constraintOnSubject": {	"and": null, "conditionType": "drmo:Condition", "conditions": [],  "constraintOnGraph": null, "constraintOnObject": null,  "constraintOnProperty": "pimo:Occurance",  "constraintOnSubject": #subject, "guid":"#guid_1_1_1", "isNegated": false,  "or": null, "preceededBy": null, "propertyOperator": null, "resourceType": "nco:ContactMedium",  "succeededBy": null }, "guid":"#guid_1_1",  "isNegated": false,  "or": null, "preceededBy": null, "propertyOperator": null, "resourceType": "nmo:EmailAddress",  "succeededBy": null  } , "constraintOnProperty": #property,  "constraintOnSubject": null, "guid":"#guid_1",  "isNegated": false,  "or": null, "preceededBy": null, "propertyOperator": null, "resourceType": "nmo:Email",  "succeededBy": null }  ],  "constraintOnGraph": null, "constraintOnObject": null,  "constraintOnProperty": null,  "constraintOnSubject": null, "guid":"#guid",  "isNegated": false,  "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "nmo:Email",  "succeededBy": #succURI }',
+		  },
 		  {
 			value: 1,
 			label: "Peers",
@@ -273,10 +273,13 @@ $(document).ready(function(){
 	//load types
 	$.each(types, function(index , data){
 		var id = data.value;
+		if (data.value != 0)
+		{
 		var name = data.label;
 		var image = data.image;
 		var createDiv = "<div style='border:dotted thin #007FFF; background-color: rgb(246, 194, 0); margin-top:5px; margin-right:5px; margin-left:5px; margin-bottom:5px; width:35px; height:35px; float:left'><div class='draggable' title='"+name+"' name='"+id+"'><img src='"+image+"'width='30' height='30' alt='"+name+"' /></div></div>";
 		$(document).find("#controlbox_Types").append(createDiv);
+		}
 	});
 
 
