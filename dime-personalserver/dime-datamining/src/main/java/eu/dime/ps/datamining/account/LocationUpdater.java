@@ -69,8 +69,10 @@ public class LocationUpdater implements AccountUpdater<LivePost> {
 				if (livePost.isInstanceof(DLPO.Checkin)) {					
 					Resource placeUri = ModelUtils.findObject(livePost.getModel(), livePost, DLPO.definingResource).asResource();
 					if (placeUri != null) {
+						Model sinkModel = RDF2Go.getModelFactory().createModel().open();
 						Model placeModel = RDF2Go.getModelFactory().createModel().open();
-						ModelUtils.fetch(livePost.getModel(), placeModel, placeUri);
+						ModelUtils.fetch(livePost.getModel(), sinkModel, placeUri);
+						ModelUtils.skolemize(sinkModel, placeModel);
 						Place place = new Place(placeModel, placeUri, false);
 						session.add(SpaTem.class, DCON.currentPlace, place);
 						
