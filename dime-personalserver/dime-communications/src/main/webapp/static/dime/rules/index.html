@@ -49,7 +49,7 @@ var types = [
 			value: 0,
 			label: "Email",
 			propertyQuery: "select distinct * where { { ?x <http://www.w3.org/2000/01/rdf-schema#domain> <http://www.semanticdesktop.org/ontologies/2007/03/22/nmo#Email>. } union { ?x <http://www.w3.org/2000/01/rdf-schema#domain> <http://www.semanticdesktop.org/ontologies/2007/03/22/nmo#Message>.} ?x <http://www.w3.org/2000/01/rdf-schema#range> <http://www.semanticdesktop.org/ontologies/2007/03/22/nco#ContactMedium> .  optional { ?x <http://www.w3.org/2000/01/rdf-schema#label> ?label . } optional { ?x <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#prefLabel> ?label . } optional {?x <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#deprecated> ?flag .} filter (!bound(?flag)) }",
-			constraintQuery: "select distinct * where { { ?p a <http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#Person> . ?p <http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#occurrence> ?y . optional { ?p<http://www.semanticdesktop.org/ontologies/2007/08/15/nao#prefLabel> ?label . } ?y <http://www.semanticdesktop.org/ontologies/2007/03/22/nco#ContactMedium> . } }",
+			constraintQuery: "select distinct ?p ?label where { { ?p a <http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#Person> . ?p <http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#occurrence> ?y . optional { ?p<http://www.semanticdesktop.org/ontologies/2007/08/15/nao#prefLabel> ?label . } ?y <http://www.semanticdesktop.org/ontologies/2007/03/22/nco#ContactMedium> . } }",
 			constraintId: "y",
 			image: "../../images/rules/email.png",
 			json: '{ "and": #andURI, "conditionType": "drmo:Condition", "conditions": [ { "and": null, "conditionType": "drmo:Condition", "conditions": [],  "constraintOnGraph": null, "constraintOnObject": { "and": null, "conditionType": "drmo:Condition", "conditions": [],  "constraintOnGraph": null, "constraintOnObject": null,  "constraintOnProperty": "nco:hasEmailAddress",  "constraintOnSubject": {	"and": null, "conditionType": "drmo:Condition", "conditions": [],  "constraintOnGraph": null, "constraintOnObject": null,  "constraintOnProperty": "pimo:Occurance",  "constraintOnSubject": #subject, "guid":"#guid_1_1_1", "isNegated": false,  "or": null, "preceededBy": null, "propertyOperator": null, "resourceType": "nco:ContactMedium",  "succeededBy": null }, "guid":"#guid_1_1",  "isNegated": false,  "or": null, "preceededBy": null, "propertyOperator": null, "resourceType": "nmo:EmailAddress",  "succeededBy": null  } , "constraintOnProperty": #property,  "constraintOnSubject": null, "guid":"#guid_1",  "isNegated": false,  "or": null, "preceededBy": null, "propertyOperator": null, "resourceType": "nmo:Email",  "succeededBy": null }  ],  "constraintOnGraph": null, "constraintOnObject": null,  "constraintOnProperty": null,  "constraintOnSubject": null, "guid":"#guid",  "isNegated": false,  "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "nmo:Email",  "succeededBy": #succURI }',
@@ -91,7 +91,7 @@ var types = [
 			value: 5,
 			label: "Document",
 			propertyQuery: "select distinct * where {  ?y <http://www.w3.org/2000/01/rdf-schema#subClassOf> <http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#Document> . ?x <http://www.w3.org/2000/01/rdf-schema#domain> ?y .  optional { ?x <http://www.w3.org/2000/01/rdf-schema#label> ?label . } optional { ?x <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#prefLabel> ?label . } optional {?x <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#deprecated> ?flag .} filter (!bound(?flag)) }",
-			constraintQuery: "select distinct * where { ?y <http://www.w3.org/2000/01/rdf-schema#subClassOf> <http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#Document> . ?x a ?y . optional { ?x <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#prefLabel> ?label . } }",
+			constraintQuery: "select distinct ?x ?label where { ?y <http://www.w3.org/2000/01/rdf-schema#subClassOf> <http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#Document> . ?x a ?y . optional { ?x <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#prefLabel> ?label . } }",
 			constraintId: "x",
 			image: "../../images/rules/document.png",
 			json: '{ "and": #andURI, "conditionType": #conditionType, "conditions": [],  "constraintOnGraph": null, "constraintOnObject": null,  "constraintOnProperty": null,  "constraintOnSubject": null, "guid":#guid,  "isNegated": false,  "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "nfo:Document",  "succeededBy": #succURI  }',
@@ -100,7 +100,7 @@ var types = [
 			value: 6,
 			label: "Live Post",
 			propertyQuery: "select distinct * where {  ?x <http://www.w3.org/2000/01/rdf-schema#domain> <http://www.semanticdesktop.org/ontologies/2011/10/05/dlpo#LivePost>.  optional { ?x <http://www.w3.org/2000/01/rdf-schema#label> ?label . } optional { ?x <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#prefLabel> ?label . } optional {?x <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#deprecated> ?flag .} filter (!bound(?flag)) }",
-			constraintQuery: "select distinct * where { #property# <http://www.w3.org/2000/01/rdf-schema#domain> ?y .  ?x a ?y . optional { ?x <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#prefLabel> ?label . } }",
+			constraintQuery: "select distinct ?x ?label where { #property# <http://www.w3.org/2000/01/rdf-schema#domain> ?y .  ?x a ?y . optional { ?x <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#prefLabel> ?label . } }",
 			constraintId: "x",
 			image: "../../images/rules/post.png",
 		  },
@@ -184,6 +184,11 @@ var types = [
 			value: -12,
 			label: "Modified Resource",
 			ns: "dcon:ResourceModified",
+		},
+		{
+			value: -13,
+			label: "Shared With",
+			ns: "nso:sharedWith",
 		},
 	]
 	
