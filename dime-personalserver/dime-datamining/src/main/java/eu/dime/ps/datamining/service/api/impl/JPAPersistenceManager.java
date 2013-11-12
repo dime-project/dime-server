@@ -30,11 +30,9 @@ import org.springframework.util.ClassUtils;
 import eu.dime.ps.datamining.account.AccountUpdaterService;
 import eu.dime.ps.datamining.account.AccountUpdaterServiceImpl;
 import eu.dime.ps.datamining.account.ProfileAccountUpdater;
-import eu.dime.ps.datamining.account.StreamAccountUpdater;
 import eu.dime.ps.datamining.crawler.handler.AccountUpdaterHandler;
 import eu.dime.ps.datamining.crawler.handler.ContextUpdaterHandler;
 import eu.dime.ps.datamining.crawler.handler.ProfileUpdaterHandler;
-import eu.dime.ps.datamining.crawler.handler.StreamUpdaterHandler;
 import eu.dime.ps.datamining.service.CrawlerHandler;
 import eu.dime.ps.datamining.service.PathDescriptor;
 import eu.dime.ps.datamining.service.PersistenceManager;
@@ -362,13 +360,11 @@ public class JPAPersistenceManager implements PersistenceManager {
 
 				if (handler instanceof AccountUpdaterHandler) {
 					AccountUpdaterService accountUpdater = new AccountUpdaterServiceImpl(pimoService, new ResourceMatchingServiceImpl(tripleStore));
-					
 					AccountUpdaterHandler accountHandler = (AccountUpdaterHandler) handler;
 					accountHandler.setAccountIdentifier(accountIdentifier);
 					accountHandler.setAccountUpdaterService(accountUpdater);
 				} else if (handler instanceof ProfileUpdaterHandler) {
 					ProfileAccountUpdater profileUpdater = new ProfileAccountUpdater(resourceStore, pimoService);
-					
 					ProfileUpdaterHandler profileHandler = (ProfileUpdaterHandler) handler;
 					profileHandler.setAccountIdentifier(accountIdentifier);
 					profileHandler.setProfileAccountUpdater(profileUpdater);
@@ -376,13 +372,14 @@ public class JPAPersistenceManager implements PersistenceManager {
 					ContextUpdaterHandler contextHandler = (ContextUpdaterHandler) handler;
 					contextHandler.setAccountIdentifier(accountIdentifier);
 					contextHandler.setLiveContextService(liveContextService);
-				} else if (handler instanceof StreamUpdaterHandler) {
-					StreamAccountUpdater streamUpdater = new StreamAccountUpdater(resourceStore);
-					
-					StreamUpdaterHandler streamHandler = (StreamUpdaterHandler) handler;
-					streamHandler.setAccountIdentifier(accountIdentifier);
-					streamHandler.setStreamAccountUpdater(streamUpdater);
 				}
+				// Pertaining to decision in daily call on 17.07.2013: Disable livepost crawling functionality
+//				else if (handler instanceof StreamUpdaterHandler) {
+//					StreamAccountUpdater streamUpdater = new StreamAccountUpdater(resourceStore);
+//					StreamUpdaterHandler streamHandler = (StreamUpdaterHandler) handler;
+//					streamHandler.setAccountIdentifier(accountIdentifier);
+//					streamHandler.setStreamAccountUpdater(streamUpdater);
+//				}
 
 				handlers.add(handler);
 			} catch (Exception e) {

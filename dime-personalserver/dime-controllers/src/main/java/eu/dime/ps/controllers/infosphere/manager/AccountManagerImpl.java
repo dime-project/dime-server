@@ -37,7 +37,6 @@ import eu.dime.ps.datamining.account.StreamAccountUpdater;
 import eu.dime.ps.datamining.crawler.handler.AccountUpdaterHandler;
 import eu.dime.ps.datamining.crawler.handler.ContextUpdaterHandler;
 import eu.dime.ps.datamining.crawler.handler.ProfileUpdaterHandler;
-import eu.dime.ps.datamining.crawler.handler.StreamUpdaterHandler;
 import eu.dime.ps.datamining.exceptions.DataMiningException;
 import eu.dime.ps.datamining.service.CrawlerHandler;
 import eu.dime.ps.datamining.service.ServiceCrawlerRegistry;
@@ -282,9 +281,11 @@ public class AccountManagerImpl extends InfoSphereManagerBase<Account> implement
 			CrawlerHandler[] handlers = new CrawlerHandler[4];
 			handlers[0] = new AccountUpdaterHandler(account.asURI(), genericUpdater);
 			handlers[1] = new ProfileUpdaterHandler(account.asURI(), profileUpdater);
-			handlers[2] = new StreamUpdaterHandler(account.asURI(), streamUpdater);
-			handlers[3] = new ContextUpdaterHandler(account.asURI(), liveContextService);
-
+			handlers[2] = new ContextUpdaterHandler(account.asURI(), liveContextService);
+			
+			// Pertaining to decision in daily call on 17.07.2013: Disable livepost crawling functionality
+			//handlers[3] = new StreamUpdaterHandler(account.asURI(), streamUpdater);
+			
 			// setup and start service crawling if account was successfully saved...
 			serviceCrawlerRegistry.add(tenant.getId(), serviceAdapter, handlers);
 		} catch (DataMiningException e) {

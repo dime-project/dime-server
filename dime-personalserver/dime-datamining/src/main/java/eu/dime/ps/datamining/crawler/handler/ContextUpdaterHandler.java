@@ -24,8 +24,10 @@ import org.slf4j.LoggerFactory;
 
 import eu.dime.ps.datamining.account.AccountIntegrationException;
 import eu.dime.ps.datamining.account.ActivityUpdater;
+import eu.dime.ps.datamining.account.LocationUpdater;
 import eu.dime.ps.datamining.service.CrawlerHandler;
 import eu.dime.ps.datamining.service.PathDescriptor;
+import eu.dime.ps.semantic.model.dlpo.LivePost;
 import eu.dime.ps.semantic.model.dpo.Activity;
 import eu.dime.ps.semantic.service.LiveContextService;
 
@@ -41,6 +43,7 @@ public class ContextUpdaterHandler implements CrawlerHandler {
 	
 	private URI accountIdentifier;
 	private ActivityUpdater activityUpdater;
+	private LocationUpdater locationUpdater;
 	
 	public void setAccountIdentifier(URI accountIdentifier) {
 		this.accountIdentifier = accountIdentifier;
@@ -48,6 +51,7 @@ public class ContextUpdaterHandler implements CrawlerHandler {
 	
 	public void setLiveContextService(LiveContextService liveContextService) {
 		this.activityUpdater = new ActivityUpdater(liveContextService);
+		this.locationUpdater = new LocationUpdater(liveContextService);
 	}
 
 	public ContextUpdaterHandler() {}
@@ -61,11 +65,22 @@ public class ContextUpdaterHandler implements CrawlerHandler {
 	public void onResult(Map<PathDescriptor, Collection<? extends Resource>> resources) {
 		logger.debug("received an ContextUpdaterHandler.onResult() call [account="+accountIdentifier+"]");
 		for (PathDescriptor path : resources.keySet()) {
+			
+			// updates the current activities
 			if (Activity.class.equals(path.getReturnType())) {
 				try {
 					activityUpdater.update(accountIdentifier, path.getPath(), (Collection<Activity>) resources.get(path));
 				} catch (AccountIntegrationException e) {
-					logger.error(e.getMessage(), e);
+					logger.error("Couldn't update current activity in live context.", e);
+				}
+			}
+			
+			// updates the current user's location, extracted from checkin posts
+			else if (LivePost.class.equals(path.getReturnType())) {
+				try {
+					locationUpdater.update(accountIdentifier, path.getPath(), (Collection<LivePost>) resources.get(path));
+				} catch (AccountIntegrationException e) {
+					logger.error("Couldn't update current place in live context.", e);
 				}
 			}
 		}
