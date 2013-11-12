@@ -397,7 +397,7 @@ public class DefaultDataSetup implements BroadcastReceiver {
 		// creating pre-defined situations
 		try{
 			// retrieve pre-defined places, time periods, activities
-			Place workplace = pimoService.get(new URIImpl(userNamespace + "Workplace"), Place.class);
+			Place workplace = pimoService.get(new URIImpl(userNamespace + "Office"), Place.class);
 			Place residence = pimoService.get(new URIImpl(userNamespace + "Residence"), Place.class);
 			Place airport = pimoService.get(new URIImpl(userNamespace + "Airport"), Place.class);
 			Place conventioncentre = pimoService.get(new URIImpl(userNamespace + "ConventionCenter"), Place.class);
