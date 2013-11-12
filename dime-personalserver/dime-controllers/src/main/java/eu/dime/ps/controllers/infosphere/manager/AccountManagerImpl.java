@@ -278,7 +278,7 @@ public class AccountManagerImpl extends InfoSphereManagerBase<Account> implement
 			ProfileAccountUpdater profileUpdater = new ProfileAccountUpdater(resourceStore, pimoService);
 			StreamAccountUpdater streamUpdater = new StreamAccountUpdater(resourceStore);
 
-			CrawlerHandler[] handlers = new CrawlerHandler[4];
+			CrawlerHandler[] handlers = new CrawlerHandler[3];
 			handlers[0] = new AccountUpdaterHandler(account.asURI(), genericUpdater);
 			handlers[1] = new ProfileUpdaterHandler(account.asURI(), profileUpdater);
 			handlers[2] = new ContextUpdaterHandler(account.asURI(), liveContextService);
