@@ -172,7 +172,7 @@ font-family: "Calibri","Helvetica Neue",Helvetica,Arial,sans-serif;
 
 .ui-accordion .ui-accordion-content {
 	min-height: 140px;
-	overflow: visible;
+	overflow: auto;
     padding: 5px 5px 5px 5px;
 }
 
@@ -196,7 +196,7 @@ margin-top: 0px !important;
 	border:dotted thin #F00;
 	width:105px;
 	height:18px;
-	background-color: rgb(156, 198, 230);
+	background-color: #999;
 	margin:5px 5px 5px 5px;
 	float:left;
 }
@@ -205,7 +205,7 @@ margin-top: 0px !important;
 	border:dotted thin #909;
 	width:105px;
 	height:18px;
-	background-color: rgb(255, 255, 170);
+	background-color: #999;
 	margin:5px 5px 5px 5px;
 	float:left;
 }
