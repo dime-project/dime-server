@@ -397,33 +397,33 @@ public class DefaultDataSetup implements BroadcastReceiver {
 		// creating pre-defined situations
 		try{
 			// retrieve pre-defined places, time periods, activities
-			Place workplace = pimoService.get(new URIImpl(userNamespace + "#Workplace"), Place.class);
-			Place residence = pimoService.get(new URIImpl(userNamespace + "#Residence"), Place.class);
-			Place airport = pimoService.get(new URIImpl(userNamespace + "#Airport"), Place.class);
-			Place conventioncentre = pimoService.get(new URIImpl(userNamespace + "#ConventionCenter"), Place.class);
-			Place restaurant = pimoService.get(new URIImpl(userNamespace + "#Restaurant"), Place.class);
-			Place bar = pimoService.get(new URIImpl(userNamespace + "#Bar"), Place.class);
-			Place club = pimoService.get(new URIImpl(userNamespace + "#Club"), Place.class);
-			Place hotel = pimoService.get(new URIImpl(userNamespace + "#Hotel"), Place.class);
-			Place station = pimoService.get(new URIImpl(userNamespace + "#Station"), Place.class);
+			Place workplace = pimoService.get(new URIImpl(userNamespace + "Workplace"), Place.class);
+			Place residence = pimoService.get(new URIImpl(userNamespace + "Residence"), Place.class);
+			Place airport = pimoService.get(new URIImpl(userNamespace + "Airport"), Place.class);
+			Place conventioncentre = pimoService.get(new URIImpl(userNamespace + "ConventionCenter"), Place.class);
+			Place restaurant = pimoService.get(new URIImpl(userNamespace + "Restaurant"), Place.class);
+			Place bar = pimoService.get(new URIImpl(userNamespace + "Bar"), Place.class);
+			Place club = pimoService.get(new URIImpl(userNamespace + "Club"), Place.class);
+			Place hotel = pimoService.get(new URIImpl(userNamespace + "Hotel"), Place.class);
+			Place station = pimoService.get(new URIImpl(userNamespace + "Station"), Place.class);
 			
-			TimePeriod earlymorning = pimoService.get(new URIImpl(userNamespace + "#EarlyMorning"), TimePeriod.class);
-			TimePeriod latemorning = pimoService.get(new URIImpl(userNamespace + "#LateMorning"), TimePeriod.class);
-			TimePeriod earlyafternoon = pimoService.get(new URIImpl(userNamespace + "#EarlyAfternoon"), TimePeriod.class);
-			TimePeriod lateafternoon = pimoService.get(new URIImpl(userNamespace + "#LateAfternoon"), TimePeriod.class);
-			TimePeriod earlyevening = pimoService.get(new URIImpl(userNamespace + "#EarlyEvening"), TimePeriod.class);
-			TimePeriod lateevening = pimoService.get(new URIImpl(userNamespace + "#LateEvening"), TimePeriod.class);
-			TimePeriod earlynight = pimoService.get(new URIImpl(userNamespace + "#EarlyNight"), TimePeriod.class);
-			TimePeriod latenight = pimoService.get(new URIImpl(userNamespace + "#LateNight"), TimePeriod.class);
+			TimePeriod earlymorning = pimoService.get(new URIImpl(userNamespace + "EarlyMorning"), TimePeriod.class);
+			TimePeriod latemorning = pimoService.get(new URIImpl(userNamespace + "LateMorning"), TimePeriod.class);
+			TimePeriod earlyafternoon = pimoService.get(new URIImpl(userNamespace + "EarlyAfternoon"), TimePeriod.class);
+			TimePeriod lateafternoon = pimoService.get(new URIImpl(userNamespace + "LateAfternoon"), TimePeriod.class);
+			TimePeriod earlyevening = pimoService.get(new URIImpl(userNamespace + "EarlyEvening"), TimePeriod.class);
+			TimePeriod lateevening = pimoService.get(new URIImpl(userNamespace + "LateEvening"), TimePeriod.class);
+			TimePeriod earlynight = pimoService.get(new URIImpl(userNamespace + "EarlyNight"), TimePeriod.class);
+			TimePeriod latenight = pimoService.get(new URIImpl(userNamespace + "LateNight"), TimePeriod.class);
 			
-			Activity working = pimoService.get(new URIImpl(userNamespace + "#Working"), Activity.class);
-			Activity meeting = pimoService.get(new URIImpl(userNamespace + "#Meeting"), Activity.class);
-			Activity performance = pimoService.get(new URIImpl(userNamespace + "#Performance"), Activity.class);
-			Activity recreation = pimoService.get(new URIImpl(userNamespace + "#Recreation"), Activity.class);
-			Activity eating = pimoService.get(new URIImpl(userNamespace + "#Eating"), Activity.class);
-			Activity party = pimoService.get(new URIImpl(userNamespace + "#Party"), Activity.class);
-			Activity driving = pimoService.get(new URIImpl(userNamespace + "#Driving"), Activity.class);
-			Activity travelling = pimoService.get(new URIImpl(userNamespace + "#Travelling"), Activity.class);
+			Activity working = pimoService.get(new URIImpl(userNamespace + "Working"), Activity.class);
+			Activity meeting = pimoService.get(new URIImpl(userNamespace + "Meeting"), Activity.class);
+			Activity performance = pimoService.get(new URIImpl(userNamespace + "Performance"), Activity.class);
+			Activity recreation = pimoService.get(new URIImpl(userNamespace + "Recreation"), Activity.class);
+			Activity eating = pimoService.get(new URIImpl(userNamespace + "Eating"), Activity.class);
+			Activity party = pimoService.get(new URIImpl(userNamespace + "Party"), Activity.class);
+			Activity driving = pimoService.get(new URIImpl(userNamespace + "Driving"), Activity.class);
+			Activity travelling = pimoService.get(new URIImpl(userNamespace + "Travelling"), Activity.class);
 	
 			// create aspects
 			SpaTem spatem = modelFactory.getDCONFactory().createSpaTem();
