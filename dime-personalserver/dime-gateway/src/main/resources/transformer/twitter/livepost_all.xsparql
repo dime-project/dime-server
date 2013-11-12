@@ -64,6 +64,24 @@ return
 				        nco:photo {data($userPhotoUrl)} ;
 			  			nao:description {data($userDescription)} ;
 			  			nco:websiteUrl {data($userUrl)} .
+			  			
+			  			#Construct for the checkin of the user
+				            	{
+				     	   		if (fn:exists($livepost/place/name))
+				     	   		then ({
+					           	   let $userCheckinId := $livepost/place/id
+					           	   let $userCheckinName := $livepost/place/name      
+					        	   construct
+					           	   {
+					        		_:lvp{data($livepostId)} a dlpo:Checkin.
+					       		   	_:lvp{data($livepostId)} dlpo:definingResource _:cin{data($userCheckinId)}.   
+					        	   	_:cin{data($userCheckinId)} a pimo:Location;
+					        	   	nao:externalIdentifier {data($userCheckinId)};
+					        	   	nao:prefLabel {data($userCheckinName)}.				        	               
+					                   } 
+					        	})
+							else ()           
+				                }     
 				}
 			}.
 			
