@@ -314,7 +314,12 @@ public class PSResourcesController extends PSSharingControllerBase implements AP
 		return Response.ok(data);
 	}
 
-
+	/**
+	 * Update resource
+	 * 
+	 * @param json
+	 * @return
+	 */
 	@POST
 	@Path("{personID}/{resourceID}")
 	@Consumes(MediaType.APPLICATION_JSON + ";charset=UTF-8")
@@ -341,10 +346,17 @@ public class PSResourcesController extends PSSharingControllerBase implements AP
 					//value already double
 				}	
 			}
-
-
+			//thumbnail shoud not be updated
+			if (resource.containsKey("imageUrl")){
+				try {
+					resource.remove("imageUrl");
+				} catch (ClassCastException e){
+					//value already double
+				}	
+			}
+			
 			URI resourceUri = new URIImpl(resourceID);
-			FileDataObject fileDataObject = data.getEntries().iterator().next()
+			FileDataObject fileDataObject = resource
 					.asResource(resourceUri, FileDataObject.class,fileManager.getMe().asURI());
 			fileManager.update(fileDataObject);
 			readIncludes(resource,fileDataObject);
@@ -863,11 +875,9 @@ public class PSResourcesController extends PSSharingControllerBase implements AP
 					} catch (UnsupportedEncodingException e) {
 						logger.warn("The Encoding is not suported for "+resourceId,e);
 					}
-				}catch (ClassCastException e) {
-				// TODO Auto-generated catch block
+				}catch (ClassCastException e) {				
 				e.printStackTrace();
-			} catch (InfosphereException e) {
-				// TODO Auto-generated catch block
+			} catch (Exception e) {				
 				e.printStackTrace();
 			}
 		}
