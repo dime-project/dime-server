@@ -84,7 +84,7 @@
 
 
 .draggableProperties { 
-	width: 100px; 
+	width: 105px; 
 	height: 16px; 
 	float: left; 
 	font-size: 12px;
@@ -94,7 +94,7 @@
 }
 
 .draggableConstraints{ 
-	width: 100px; 
+	width: 105px; 
 	height: 16px; 
 	float: left; 
 	font-size: 12px;
@@ -171,9 +171,9 @@ font-family: "Calibri","Helvetica Neue",Helvetica,Arial,sans-serif;
 }
 
 .ui-accordion .ui-accordion-content {
-	height:140px;
+	min-height: 140px;
+	overflow: visible;
     padding: 5px 5px 5px 5px;
-	overflow: hidden;
 }
 
 .ui-accordion-header  {
@@ -194,18 +194,18 @@ margin-top: 0px !important;
 
 .autocompleteFillInProperty{
 	border:dotted thin #F00;
-	width:100px;
+	width:105px;
 	height:18px;
+	background-color: rgb(156, 198, 230);
 	margin:5px 5px 5px 5px;
-	background-color:rgb(153, 153, 153);
 	float:left;
 }
 
 .autocompleteFillInConstraint{
 	border:dotted thin #909;
-	width:100px;
+	width:105px;
 	height:18px;
-	background-color: rgb(156, 198, 230);
+	background-color: rgb(255, 255, 170);
 	margin:5px 5px 5px 5px;
 	float:left;
 }
