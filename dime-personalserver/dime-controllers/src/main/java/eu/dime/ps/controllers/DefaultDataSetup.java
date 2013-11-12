@@ -14,6 +14,7 @@
 
 package eu.dime.ps.controllers;
 
+import ie.deri.smile.vocabulary.DCON;
 import ie.deri.smile.vocabulary.DDO;
 import ie.deri.smile.vocabulary.NAO;
 import ie.deri.smile.vocabulary.NIE;
@@ -30,8 +31,11 @@ import java.util.UUID;
 
 import org.ontoware.aifbcommons.collection.ClosableIterator;
 import org.ontoware.rdf2go.model.node.URI;
+import org.ontoware.rdf2go.model.node.impl.DatatypeLiteralImpl;
 import org.ontoware.rdf2go.model.node.impl.URIImpl;
+import org.ontoware.rdf2go.vocabulary.XSD;
 import org.ontoware.rdfreactor.schema.rdfs.Resource;
+import org.openrdf.repository.RepositoryException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,11 +55,21 @@ import eu.dime.ps.gateway.service.internal.DimeServiceAdapter;
 import eu.dime.ps.semantic.BroadcastManager;
 import eu.dime.ps.semantic.BroadcastReceiver;
 import eu.dime.ps.semantic.Event;
+import eu.dime.ps.semantic.connection.ConnectionProvider;
+import eu.dime.ps.semantic.exception.NotFoundException;
 import eu.dime.ps.semantic.model.ModelFactory;
 import eu.dime.ps.semantic.model.dao.Account;
+import eu.dime.ps.semantic.model.dcon.Connectivity;
 import eu.dime.ps.semantic.model.dcon.Situation;
+import eu.dime.ps.semantic.model.dcon.SpaTem;
+import eu.dime.ps.semantic.model.dcon.State;
 import eu.dime.ps.semantic.model.ddo.Device;
+import eu.dime.ps.semantic.model.ddo.LocalAreaNetwork;
+import eu.dime.ps.semantic.model.ddo.WiFi;
 import eu.dime.ps.semantic.model.dlpo.LivePost;
+import eu.dime.ps.semantic.model.dpo.Activity;
+import eu.dime.ps.semantic.model.dpo.Place;
+import eu.dime.ps.semantic.model.dpo.TimePeriod;
 import eu.dime.ps.semantic.model.nco.EmailAddress;
 import eu.dime.ps.semantic.model.nco.PersonContact;
 import eu.dime.ps.semantic.model.nco.PersonName;
@@ -66,6 +80,7 @@ import eu.dime.ps.semantic.model.pimo.PersonGroup;
 import eu.dime.ps.semantic.model.ppo.AccessSpace;
 import eu.dime.ps.semantic.model.ppo.PrivacyPreference;
 import eu.dime.ps.semantic.privacy.PrivacyPreferenceType;
+import eu.dime.ps.semantic.service.impl.PimoService;
 
 /**
  * This creates and configures, by default, tenants for a pre-defined list of
@@ -116,6 +131,7 @@ public class DefaultDataSetup implements BroadcastReceiver {
 	
 	private final ModelFactory modelFactory = new ModelFactory();
 
+	private ConnectionProvider connectionProvider;
 	private AccountManager accountManager;
 	private PersonManager personManager;
 	private ProfileManager profileManager;
@@ -127,6 +143,11 @@ public class DefaultDataSetup implements BroadcastReceiver {
 	private LivePostManager livePostManager;
 	private FileManager fileManager;
 	private UserManager userManager;
+
+	@Autowired
+	public void setConnectionProvider(ConnectionProvider connectionProvider) {
+		this.connectionProvider = connectionProvider;
+	}
 
 	@Autowired
 	public void setAccountManager(AccountManager accountManager) {
@@ -198,6 +219,14 @@ public class DefaultDataSetup implements BroadcastReceiver {
 		Long tenant = Long.parseLong(event.getTenant());
 		TenantContextHolder.setTenant(tenant);
 		logger.info("Creating default (dummy) data for new PIM/user [tenant = " + tenant + "]");
+		
+		PimoService pimoService;
+		try {
+			pimoService = connectionProvider.getConnection(Long.toString(TenantContextHolder.getTenant())).getPimoService();
+		} catch (RepositoryException e) {
+			logger.error("Can't find PIMO Service: default data won't be generated for " + event.getIdentifier(), e);
+			return;
+		}
 		
 		// fetch owner of the PIM
 		Person me;
@@ -351,13 +380,252 @@ public class DefaultDataSetup implements BroadcastReceiver {
 		DataContainer databoxFriends = createDatabox(DATABOX_FRIENDS, "FriendsBox", photo);
 		shareDatabox(databoxDime, publicAccount, testuser1);
 
+
+		URI userNamespace = pimoService.getUserNamespace();
+
+		
+		//creating pre-defined wireless connections - REMOVED BECAUSE THESE CANNOT BE GENERIC FOR ALL USERS
+		//LocalAreaNetwork worklan = modelFactory.getDDOFactory().createLocalAreaNetwork();
+		//worklan.setPrefLabel("lan.local");
+		//WiFi homewifi = modelFactory.getDDOFactory().createWiFi();
+		//homewifi.setPrefLabel("Martinez");
+		//WiFi airportwifi = modelFactory.getDDOFactory().createWiFi();
+		//airportwifi.setPrefLabel("Terminal2_Open");
+		//WiFi conferencewifi = modelFactory.getDDOFactory().createWiFi();
+		//conferencewifi.setPrefLabel("Guest007");
+		
 		// creating pre-defined situations
-		createSituation("Working@Office", me);
-		createSituation("Working@Home", me);
-		createSituation("@Conference", me);
-		createSituation("Relaxing@Home", me);
-		createSituation("Social Event", me);
-		createSituation("Travelling", me);
+		try{
+			// retrieve pre-defined places, time periods, activities
+			Place workplace = pimoService.get(new URIImpl(userNamespace + "#Workplace"), Place.class);
+			Place residence = pimoService.get(new URIImpl(userNamespace + "#Residence"), Place.class);
+			Place airport = pimoService.get(new URIImpl(userNamespace + "#Airport"), Place.class);
+			Place conventioncentre = pimoService.get(new URIImpl(userNamespace + "#ConventionCenter"), Place.class);
+			Place restaurant = pimoService.get(new URIImpl(userNamespace + "#Restaurant"), Place.class);
+			Place bar = pimoService.get(new URIImpl(userNamespace + "#Bar"), Place.class);
+			Place club = pimoService.get(new URIImpl(userNamespace + "#Club"), Place.class);
+			Place hotel = pimoService.get(new URIImpl(userNamespace + "#Hotel"), Place.class);
+			Place station = pimoService.get(new URIImpl(userNamespace + "#Station"), Place.class);
+			
+			TimePeriod earlymorning = pimoService.get(new URIImpl(userNamespace + "#EarlyMorning"), TimePeriod.class);
+			TimePeriod latemorning = pimoService.get(new URIImpl(userNamespace + "#LateMorning"), TimePeriod.class);
+			TimePeriod earlyafternoon = pimoService.get(new URIImpl(userNamespace + "#EarlyAfternoon"), TimePeriod.class);
+			TimePeriod lateafternoon = pimoService.get(new URIImpl(userNamespace + "#LateAfternoon"), TimePeriod.class);
+			TimePeriod earlyevening = pimoService.get(new URIImpl(userNamespace + "#EarlyEvening"), TimePeriod.class);
+			TimePeriod lateevening = pimoService.get(new URIImpl(userNamespace + "#LateEvening"), TimePeriod.class);
+			TimePeriod earlynight = pimoService.get(new URIImpl(userNamespace + "#EarlyNight"), TimePeriod.class);
+			TimePeriod latenight = pimoService.get(new URIImpl(userNamespace + "#LateNight"), TimePeriod.class);
+			
+			Activity working = pimoService.get(new URIImpl(userNamespace + "#Working"), Activity.class);
+			Activity meeting = pimoService.get(new URIImpl(userNamespace + "#Meeting"), Activity.class);
+			Activity performance = pimoService.get(new URIImpl(userNamespace + "#Performance"), Activity.class);
+			Activity recreation = pimoService.get(new URIImpl(userNamespace + "#Recreation"), Activity.class);
+			Activity eating = pimoService.get(new URIImpl(userNamespace + "#Eating"), Activity.class);
+			Activity party = pimoService.get(new URIImpl(userNamespace + "#Party"), Activity.class);
+			Activity driving = pimoService.get(new URIImpl(userNamespace + "#Driving"), Activity.class);
+			Activity travelling = pimoService.get(new URIImpl(userNamespace + "#Travelling"), Activity.class);
+	
+			// create aspects
+			SpaTem spatem = modelFactory.getDCONFactory().createSpaTem();
+			State state = modelFactory.getDCONFactory().createState();
+			
+			//working@office
+			//timeperiod = latemorning, earlyafternoon, lateafternoon, earlyevening
+			latemorning.getModel().addStatement(latemorning, DCON.weight, new DatatypeLiteralImpl("0.5", XSD._float)); 
+			earlyafternoon.getModel().addStatement(earlyafternoon, DCON.weight, new DatatypeLiteralImpl("0.5", XSD._float));
+			lateafternoon.getModel().addStatement(lateafternoon, DCON.weight, new DatatypeLiteralImpl("0.5", XSD._float));
+			earlyevening.getModel().addStatement(earlyevening, DCON.weight, new DatatypeLiteralImpl("0.5", XSD._float));
+			spatem.addCurrentTime(latemorning);
+			spatem.getModel().addModel(latemorning.getModel());
+			spatem.addCurrentTime(earlyafternoon);
+			spatem.getModel().addModel(earlyafternoon.getModel());
+			spatem.addCurrentTime(lateafternoon);
+			spatem.getModel().addModel(lateafternoon.getModel());
+			spatem.addCurrentTime(earlyevening);
+			spatem.getModel().addModel(earlyevening.getModel());
+			//place = office
+			workplace.getModel().addStatement(workplace, DCON.weight, new DatatypeLiteralImpl("0.5", XSD._float)); 
+			spatem.addCurrentPlace(workplace);
+			spatem.getModel().addModel(workplace.getModel());
+
+			//state = working
+			working.getModel().addStatement(working, DCON.weight, new DatatypeLiteralImpl("0.5", XSD._float));
+			state.addCurrentActivity(working);
+			state.getModel().addModel(working.getModel());
+			//CREATE SITUATION
+			createSituation("Working@Office", me, spatem, state);
+			//reset used aspects
+			spatem.getModel().removeAll();
+			state.getModel().removeAll();
+			
+			//working@home
+			//timeperiod = latemorning, earlyafternoon, lateafternoon, earlyevening
+			latemorning.getModel().addStatement(latemorning, DCON.weight, new DatatypeLiteralImpl("0.5", XSD._float)); 
+			earlyafternoon.getModel().addStatement(earlyafternoon, DCON.weight, new DatatypeLiteralImpl("0.5", XSD._float));
+			lateafternoon.getModel().addStatement(lateafternoon, DCON.weight, new DatatypeLiteralImpl("0.5", XSD._float));
+			earlyevening.getModel().addStatement(earlyevening, DCON.weight, new DatatypeLiteralImpl("0.5", XSD._float));
+			spatem.addCurrentTime(latemorning);
+			spatem.getModel().addModel(latemorning.getModel());
+			spatem.addCurrentTime(earlyafternoon);
+			spatem.getModel().addModel(earlyafternoon.getModel());
+			spatem.addCurrentTime(lateafternoon);
+			spatem.getModel().addModel(lateafternoon.getModel());
+			spatem.addCurrentTime(earlyevening);
+			spatem.getModel().addModel(earlyevening.getModel());
+			//place = residence
+			residence.getModel().addStatement(residence, DCON.weight, new DatatypeLiteralImpl("0.5", XSD._float)); 
+			spatem.addCurrentPlace(residence);
+			spatem.getModel().addModel(residence.getModel());
+			//state = working
+			working.getModel().addStatement(working, DCON.weight, new DatatypeLiteralImpl("0.5", XSD._float));
+			state.addCurrentActivity(working);
+			state.getModel().addModel(working.getModel());
+			//CREATE SITUATION
+			createSituation("Working@Home", me, spatem, state);
+			//reset used aspects
+			spatem.getModel().removeAll();
+			state.getModel().removeAll();
+			
+			//@conference
+			//timeperiod = latemorning, earlyafternoon, lateafternoon
+			latemorning.getModel().addStatement(latemorning, DCON.weight, new DatatypeLiteralImpl("0.5", XSD._float)); 
+			earlyafternoon.getModel().addStatement(earlyafternoon, DCON.weight, new DatatypeLiteralImpl("0.5", XSD._float));
+			lateafternoon.getModel().addStatement(lateafternoon, DCON.weight, new DatatypeLiteralImpl("0.5", XSD._float));
+			spatem.addCurrentTime(latemorning);
+			spatem.getModel().addModel(latemorning.getModel());
+			spatem.addCurrentTime(earlyafternoon);
+			spatem.getModel().addModel(earlyafternoon.getModel());
+			spatem.addCurrentTime(lateafternoon);
+			spatem.getModel().addModel(lateafternoon.getModel());
+			//place = conference venue
+			conventioncentre.getModel().addStatement(conventioncentre, DCON.weight, new DatatypeLiteralImpl("0.5", XSD._float)); 
+			spatem.addCurrentPlace(conventioncentre);
+			spatem.getModel().addModel(conventioncentre.getModel());
+			//state = working, meeting, performance
+			working.getModel().addStatement(working, DCON.weight, new DatatypeLiteralImpl("0.5", XSD._float));
+			state.addCurrentActivity(working);
+			state.getModel().addModel(working.getModel());
+			meeting.getModel().addStatement(meeting, DCON.weight, new DatatypeLiteralImpl("0.5", XSD._float));
+			state.addCurrentActivity(meeting);
+			state.getModel().addModel(meeting.getModel());
+			performance.getModel().addStatement(performance, DCON.weight, new DatatypeLiteralImpl("0.5", XSD._float));
+			state.addCurrentActivity(performance);
+			state.getModel().addModel(performance.getModel());
+			//CREATE SITUATION
+			createSituation("@Conference", me, spatem, state);
+			//reset used aspects
+			spatem.getModel().removeAll();
+			state.getModel().removeAll();
+			
+			//relaxing@home
+			//timeperiod = lateevening, earlynight
+			lateevening.getModel().addStatement(lateevening, DCON.weight, new DatatypeLiteralImpl("0.5", XSD._float)); 
+			earlynight.getModel().addStatement(earlynight, DCON.weight, new DatatypeLiteralImpl("0.5", XSD._float));
+			spatem.addCurrentTime(lateevening);
+			spatem.getModel().addModel(lateevening.getModel());
+			spatem.addCurrentTime(earlynight);
+			spatem.getModel().addModel(earlynight.getModel());
+			//place = residence
+			residence.getModel().addStatement(residence, DCON.weight, new DatatypeLiteralImpl("0.5", XSD._float)); 
+			spatem.addCurrentPlace(residence);
+			spatem.getModel().addModel(residence.getModel());
+			//state = recreation
+			recreation.getModel().addStatement(recreation, DCON.weight, new DatatypeLiteralImpl("0.5", XSD._float));
+			state.addCurrentActivity(recreation);
+			state.getModel().addModel(recreation.getModel());
+			//CREATE SITUATION
+			createSituation("Relaxing@Home", me, spatem, state);
+			//reset used aspects
+			spatem.getModel().removeAll();
+			state.getModel().removeAll();
+			
+			//socialevent
+			//timeperiod = lateevening, earlynight
+			lateevening.getModel().addStatement(lateevening, DCON.weight, new DatatypeLiteralImpl("0.5", XSD._float)); 
+			earlynight.getModel().addStatement(earlynight, DCON.weight, new DatatypeLiteralImpl("0.5", XSD._float));
+			spatem.addCurrentTime(lateevening);
+			spatem.getModel().addModel(lateevening.getModel());
+			spatem.addCurrentTime(earlynight);
+			spatem.getModel().addModel(earlynight.getModel());
+			//place = residence, restaruant, bar, club, hotel
+			residence.getModel().addStatement(residence, DCON.weight, new DatatypeLiteralImpl("0.5", XSD._float));
+			restaurant.getModel().addStatement(restaurant, DCON.weight, new DatatypeLiteralImpl("0.5", XSD._float));
+			bar.getModel().addStatement(bar, DCON.weight, new DatatypeLiteralImpl("0.5", XSD._float));
+			club.getModel().addStatement(club, DCON.weight, new DatatypeLiteralImpl("0.5", XSD._float));
+			hotel.getModel().addStatement(hotel, DCON.weight, new DatatypeLiteralImpl("0.5", XSD._float));
+			spatem.addCurrentPlace(residence);
+			spatem.getModel().addModel(residence.getModel());
+			spatem.addCurrentPlace(restaurant);
+			spatem.getModel().addModel(restaurant.getModel());
+			spatem.addCurrentPlace(bar);
+			spatem.getModel().addModel(bar.getModel());
+			spatem.addCurrentPlace(club);
+			spatem.getModel().addModel(club.getModel());
+			spatem.addCurrentPlace(hotel);
+			spatem.getModel().addModel(hotel.getModel());
+			//state = recreation
+			recreation.getModel().addStatement(recreation, DCON.weight, new DatatypeLiteralImpl("0.5", XSD._float));
+			state.addCurrentActivity(recreation);
+			state.getModel().addModel(recreation.getModel());
+			state.addCurrentActivity(eating);
+			state.getModel().addModel(eating.getModel());
+			state.addCurrentActivity(party);
+			state.getModel().addModel(party.getModel());
+			//CREATE SITUATION
+			createSituation("Social Event", me, spatem, state);
+			//reset used aspects
+			spatem.getModel().removeAll();
+			state.getModel().removeAll();
+			
+			//travelling
+			//timeperiod = earlymorning, latemorning, earlyafternoon, lateafternoon, earlyevening, lateevening, earlynight, latenight
+			earlymorning.getModel().addStatement(earlymorning, DCON.weight, new DatatypeLiteralImpl("0.5", XSD._float));
+			latemorning.getModel().addStatement(latemorning, DCON.weight, new DatatypeLiteralImpl("0.5", XSD._float)); 
+			earlyafternoon.getModel().addStatement(earlyafternoon, DCON.weight, new DatatypeLiteralImpl("0.5", XSD._float));
+			lateafternoon.getModel().addStatement(lateafternoon, DCON.weight, new DatatypeLiteralImpl("0.5", XSD._float));
+			earlyevening.getModel().addStatement(earlyevening, DCON.weight, new DatatypeLiteralImpl("0.5", XSD._float));
+			lateevening.getModel().addStatement(lateevening, DCON.weight, new DatatypeLiteralImpl("0.5", XSD._float)); 
+			earlynight.getModel().addStatement(earlynight, DCON.weight, new DatatypeLiteralImpl("0.5", XSD._float));
+			latenight.getModel().addStatement(latenight, DCON.weight, new DatatypeLiteralImpl("0.5", XSD._float));
+			spatem.addCurrentTime(earlymorning);
+			spatem.getModel().addModel(earlymorning.getModel());
+			spatem.addCurrentTime(latemorning);
+			spatem.getModel().addModel(latemorning.getModel());
+			spatem.addCurrentTime(earlyafternoon);
+			spatem.getModel().addModel(earlyafternoon.getModel());
+			spatem.addCurrentTime(lateafternoon);
+			spatem.getModel().addModel(lateafternoon.getModel());
+			spatem.addCurrentTime(earlyevening);
+			spatem.getModel().addModel(earlyevening.getModel());
+			spatem.addCurrentTime(lateevening);
+			spatem.getModel().addModel(lateevening.getModel());
+			spatem.addCurrentTime(earlynight);
+			spatem.getModel().addModel(earlynight.getModel());
+			spatem.addCurrentTime(latenight);
+			spatem.getModel().addModel(latenight.getModel());
+			//place = airport, station
+			airport.getModel().addStatement(airport, DCON.weight, new DatatypeLiteralImpl("0.5", XSD._float));
+			station.getModel().addStatement(station, DCON.weight, new DatatypeLiteralImpl("0.5", XSD._float));
+			spatem.addCurrentPlace(airport);
+			spatem.getModel().addModel(airport.getModel());
+			spatem.addCurrentPlace(station);
+			spatem.getModel().addModel(station.getModel());
+			//state = driving, travelling
+			recreation.getModel().addStatement(recreation, DCON.weight, new DatatypeLiteralImpl("0.5", XSD._float));
+			state.addCurrentActivity(travelling);
+			state.getModel().addModel(travelling.getModel());
+			state.addCurrentActivity(driving);
+			state.getModel().addModel(driving.getModel());
+			//CREATE SITUATION		
+			createSituation("Travelling", me, spatem, state);
+			//reset used aspects
+			spatem.getModel().removeAll();
+			state.getModel().removeAll();
+				
+		}
+		catch(NotFoundException e){
+			logger.error("Could not create situations: " + e.getMessage(), e);
+		}
 		
 		// add all dime people in a group
 		createPersonGroup("di.me Project", me, dimePeople.toArray(new Person[dimePeople.size()]));
@@ -414,10 +682,17 @@ public class DefaultDataSetup implements BroadcastReceiver {
 		return livePost;
 	}
 
-	private Situation createSituation(String label, Person creator) {
+	private Situation createSituation(String label, Person creator, SpaTem spatem, State state) {
 		Situation situation = modelFactory.getDCONFactory().createSituation();
+		
 		situation.setPrefLabel(label);
 		situation.setCreator(creator);
+		situation.addContextAspect(spatem);
+		situation.getModel().addModel(spatem.getModel());
+		//		situation.addContextAspect(connectivity);
+		//		situation.getModel().addModel(connectivity.getModel());
+		situation.addContextAspect(state);
+		situation.getModel().addModel(state.getModel());
 		
 		try {
 			situationManager.add(situation);
