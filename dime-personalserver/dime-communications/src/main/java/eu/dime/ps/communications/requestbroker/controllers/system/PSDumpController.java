@@ -19,13 +19,12 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import org.ontoware.rdf2go.model.Syntax;
 import org.openrdf.repository.RepositoryException;
 import org.springframework.stereotype.Controller;
 
-import eu.dime.commons.dto.Data;
-import eu.dime.commons.dto.Response;
 import eu.dime.ps.controllers.util.TenantHelper;
 import eu.dime.ps.semantic.connection.Connection;
 import eu.dime.ps.semantic.connection.ConnectionProvider;
@@ -42,16 +41,16 @@ public class PSDumpController {
 
 	@GET
 	@Path("/")
-	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
-	public Response<String> ping(@PathParam("said") String said) {
+	@Produces("text/turtle;charset=UTF-8")
+	public Response dump(@PathParam("said") String said) {
 		Connection connection = null;
-		Data<String> data  = new Data<String>();
+		Response.ResponseBuilder rb = null;
+
 		try {
 			connection = connectionProvider.getConnection(TenantHelper.getCurrentTenantId().toString());
-			String rdf = connection.getTripleStore().serialize(Syntax.Trig);
-			data.addEntry(rdf);
+			rb = Response.ok(connection.getTripleStore().serialize(Syntax.Trig));
 		} catch (RepositoryException e) {
-			Response.serverError("Couldn't get connection to RDF services: " + e.getMessage(), e);
+			rb = Response.serverError();
 		} finally {
 			if (connection != null) {
 				try {
@@ -60,7 +59,7 @@ public class PSDumpController {
 			}
 		}
 
-		return Response.ok(data);
+		return rb.build();
 	}
 
 }
