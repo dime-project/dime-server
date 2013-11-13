@@ -1877,6 +1877,7 @@ DimeView = {
     }, 
     
     editItem: function(event, element, entry, message){
+        
         if (event){
             event.stopPropagation();
         }

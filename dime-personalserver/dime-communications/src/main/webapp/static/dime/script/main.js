@@ -2270,10 +2270,10 @@ Dime.psHelper = {
     getAllSharedItems: function(agent, callback){        
         //lookup all sharable items for this agent
         var agentId = agent.guid;
-        Dime.REST.getSharedTo(Dime.psMap.TYPE.DATABOX ,agentId, callback);
-        Dime.REST.getSharedTo(Dime.psMap.TYPE.RESOURCE, agentId,callback);
-        Dime.REST.getSharedTo(Dime.psMap.TYPE.LIVEPOST, agentId,callback);
-        Dime.REST.getSharedTo(Dime.psMap.TYPE.PROFILE, agentId,callback);
+        Dime.REST.getSharedTo(Dime.psMap.TYPE.DATABOX, agentId, callback);
+        Dime.REST.getSharedTo(Dime.psMap.TYPE.RESOURCE, agentId, callback);
+        Dime.REST.getSharedTo(Dime.psMap.TYPE.LIVEPOST, agentId, callback);
+        Dime.REST.getSharedTo(Dime.psMap.TYPE.PROFILE, agentId, callback);
         return;
       
     },
@@ -2304,7 +2304,7 @@ Dime.psHelper = {
     },
 
     addAccessForItem: function(personGuids, groupGuids, serviceGuids, item, saidSender){
-        var aclPackage =Dime.psHelper.getOrCreateACLPackage(item, saidSender);
+        var aclPackage = Dime.psHelper.getOrCreateACLPackage(item, saidSender);
         var i;
         for (i=0;i<personGuids.length;i++){
             if(!JSTool.arrayContainsItem(aclPackage.persons,personGuids[i])){
@@ -2336,7 +2336,111 @@ Dime.psHelper = {
             }
         });
     },
+            
+    checkAccessToItemForParent: function(item, sharedToGuid){
+        var aclPackage = Dime.psHelper.getAclOfItem(item);
+        
+        //maybe get sharedToGuid-type + saidSender?
+        for(var i=0; i<aclPackage.length; i++){
+            
+            var indexPersons = -1;
+            var indexGroups = $.inArray(sharedToGuid, aclPackage[i].groups);
+            var indexServices = $.inArray(sharedToGuid, aclPackage[i].services);
+        
+            for(var j=0; j < aclPackage[i].persons.length; j++){
+                if(indexPersons > -1){true;}
+                indexPersons = $.inArray(sharedToGuid, aclPackage[i].persons[j]);
+            }
+        
+            if(indexGroups > -1){return true;}
+            if(indexServices > -1){return true;}
+            return false;
+        }  
+    },
+            
+    getAclPackageIndexBySaidSender: function(item, saidSender){
+        var acl = Dime.psHelper.getAclOfItem(item);
+        
+        for (var i=0; i<acl.length;i++){
+            if (acl[i].saidSender===saidSender){
+                return i;
+            }
+        }
+        return "Error";
+    },
+            
+    deleteAclPackageBySaidSender: function(item, saidSender){
+        if(item["nao:includes"].length === 1){
+            item["nao:includes"] = [];
+        }else{
+            var index = Dime.psHelper.getAclPackageIndexBySaidSender(item, saidSender);
+            item["nao:includes"].splice(index, 1);
+        }
+        return item;
+    },
+            
+    removeAccessForItem: function(item, sharedToGuid, saidSender){
+        var aclPackage = Dime.psHelper.getOrCreateACLPackage(item, saidSender);
+        
+        var indexPersons = $.inArray(sharedToGuid, aclPackage.persons);
+        var indexGroups = $.inArray(sharedToGuid, aclPackage.groups);
+        var indexServices = $.inArray(sharedToGuid, aclPackage.services);
+        
+        if(indexPersons > -1){
+            aclPackage.persons.splice(indexPersons.personId, 1);
+        }
+        
+        if(indexGroups > -1){
+            aclPackage.groups.splice(indexGroups, 1);
+        }
+        
+        if(indexServices > -1){
+            aclPackage.services.splice(indexServices, 1);
+        }
+        
+        if(aclPackage.persons.length === 0 && aclPackage.groups.length === 0 && aclPackage.services.length === 0){
+            Dime.psHelper.deleteAclPackageBySaidSender(item, saidSender);
+        }
+        
+        return item;
+    },
+    
+    removeAccessForItemAndUpdateServer: function(item, sharedToGuid, callback, saidSender){
+        var aclItem = Dime.psHelper.getAclOfItem(item);
+        
+        if (!saidSender){
+            for (var i=0;i<aclItem.length;i++){
+                if (JSTool.arrayContainsItem(aclItem[i].groups, sharedToGuid)){
+                    saidSender = aclItem[i]["saidSender"];                    
+                }
+                for (var j=0;j<aclItem[i].length;j++){
+                    if (aclItem[i].persons[j].personId===sharedToGuid){                    
+                        saidSender = aclItem[i]["saidSender"];    
+                    }                    
+                }
+                if (JSTool.arrayContainsItem(aclItem[i].services, sharedToGuid)){
+                    saidSender = aclItem[i]["saidSender"];                    
+                }                
+                if (saidSender){
+                    break;
+                }
+            }
+            if (!saidSender){
+                console.log('ERROR - didn\'t find senderSaid for agent with guid: '+sharedToGuid);
+                callback(null);
+                return;
+            }
+        }
 
+        item = Dime.psHelper.removeAccessForItem(item, sharedToGuid, saidSender);
+        
+        Dime.REST.updateItem(item, function(response){
+            if(callback){
+                callback(response);
+            }
+        });
+    },
+    
     sortAgents: function(agentsAndServices){
         //sort persons and groups
         var pAgents = [];
@@ -4621,7 +4725,7 @@ Dime.DetailDialog.prototype = {
     addToLivepostReceiverList: function(items){        
         var dialogRef = this;
         jQuery.each(items, function(){
-            dialogRef.receiverList.prepend(Dime.Dialog.Helper.getAgentElement(this));
+            dialogRef.receiverList.prepend(Dime.Dialog.Helper.getAgentElement(this, null, "shareDlgItemInnerLong"));
         });
         
     },
@@ -4655,7 +4759,7 @@ Dime.DetailDialog.prototype = {
                 dialogRef.receiverList.empty();
                 jQuery.each(resultItems, function(){
                     dialogRef.receiverList.append(
-                        Dime.Dialog.Helper.getAgentElement(this)
+                        Dime.Dialog.Helper.getAgentElement(this, null, "shareDlgItemInnerLong")
                     );
                 });
                 checkAndUpdateSendOk();
@@ -4895,6 +4999,7 @@ Dime.DetailDialog.prototype = {
     },
     
     getCanAccessItems: function(item){
+
         var editDlgRef = this;
         var itemsArray = [];
              
@@ -4906,7 +5011,7 @@ Dime.DetailDialog.prototype = {
                 itemsArray.push(resultItems[i]);
             }
 
-            editDlgRef.updateChildTypeContainer(editDlgRef.itemsItemSection, itemsArray);
+            editDlgRef.updateChildTypeContainer(editDlgRef.itemsItemSection, itemsArray, null, null, item, Dime.Dialog.Helper.getItemElementWithDeleteIcon);
         };
         Dime.psHelper.getAllSharedItems(item, handleGetAllSharedItems);
         
@@ -4930,9 +5035,9 @@ Dime.DetailDialog.prototype = {
                 if(!isOK){
                     return;
                 }
-                //TODO: update items on server!
+                
                 itemsArray = resultItems;
-                editDlgRef.updateChildTypeContainer(editDlgRef.itemsItemSection, resultItems);
+                editDlgRef.updateChildTypeContainer(editDlgRef.itemsItemSection, resultItems, null, null, item, Dime.Dialog.Helper.getItemElementWithDeleteIcon);
             };
             newDialog.show(itemLoadingFunction, handleResult, this);
         };
@@ -5045,6 +5150,7 @@ Dime.DetailDialog.prototype = {
 
 
     getChildTypeItems: function(item, childType){
+        
         var editDlgRef = this;
         var memberArray = [];
         var parentCaption = Dime.psHelper.getCaptionForItemType(item.type);
@@ -5068,7 +5174,7 @@ Dime.DetailDialog.prototype = {
         };
         Dime.REST.getAll(childType, callbackFunction, item.userId);
         
-        this.updateChildTypeContainer(memberSection, memberArray, item.type, childCaption);
+        this.updateChildTypeContainer(memberSection, memberArray, item.type, childCaption, item, Dime.Dialog.Helper.getAgentElement);
         
         
         //memberSection clickable + newDialog
@@ -5093,7 +5199,7 @@ Dime.DetailDialog.prototype = {
                 for(var i=0;i<resultMembers.length;i++){
                     item.items.push(resultMembers[i].guid);
                 }
-                editDlgRef.updateChildTypeContainer(memberSection, resultMembers, item.type, childCaption);
+                editDlgRef.updateChildTypeContainer(memberSection, resultMembers, item.type, childCaption, item, Dime.Dialog.Helper.getAgentElement);
             };
             newDialog.show(memberLoadingFunction, handleResult, this);
         };
@@ -5114,7 +5220,7 @@ Dime.DetailDialog.prototype = {
         return memberSection;
     },
             
-    updateChildTypeContainer: function(container, selectedMembers, parentType, childCaption){
+    updateChildTypeContainer: function(container, selectedMembers, parentType, childCaption, parentItem, elementFactory){
         if(!container){
             return;
         }
@@ -5136,7 +5242,7 @@ Dime.DetailDialog.prototype = {
         }
         
         $.each(selectedMembers, function(){
-            var element = Dime.Dialog.Helper.getAgentElement(this);
+            var element = elementFactory(this, parentItem, "shareDlgItemInnerLong");
             container.append(element);
         });  
     },
@@ -5378,7 +5484,7 @@ Dime.ShareDialog.prototype={
             
             var privTrustClass=Dime.privacyTrust.getClassAndCaptionForPrivacyTrustFromItem(item).thinClassString;
             
-            var element = Dime.Dialog.Helper.getAgentElement(this);
+            var element = Dime.Dialog.Helper.getAgentElement(this, null, "shareDlgItemInnerMid");
             container.append(element);                    
         });
     },
@@ -6375,19 +6481,50 @@ Dime.Dialog={
                 $('#'+infoBoxId).toggleClass('hidden');
             });            
         },
-                
-        getAgentElement: function(item){
+        
+        getItemElementWithDeleteIcon: function(item, sharedToItem){
+    
+            var result = Dime.Dialog.Helper.getAgentElement(item, sharedToItem, "shareDlgItemInner");
+            
+            var deleteIcon = $('<div></div>')
+                    .addClass("shareDlgItemDelete")
+                    .append($('<img></img>').attr("src", "img/recycle.png"))
+                    .click(function(event){
+                        event.stopPropagation();
+                        
+                        if(sharedToItem !== null){
+                            //TODO: add check for different profile-saids?
+                                                        
+                            var callback = function(response){
+                                if(response){
+                                    $(result).remove();
+                                } 
+                            };
+                            Dime.psHelper.removeAccessForItemAndUpdateServer(item, sharedToItem.guid, callback); //FIXME provide senderSAID 
+                        } 
+                    });
+            
+            result.append(deleteIcon);
+            return result;
+        },
+        
+        getAgentElement: function(item, sharedToItem, classForItem){
+            
+            var privTrustClass = Dime.privacyTrust.getClassAndCaptionForPrivacyTrustFromItem(item).thinClassString;
 
-            var privTrustClass=Dime.privacyTrust.getClassAndCaptionForPrivacyTrustFromItem(item).thinClassString;
-
-            var element = $('<div></div>')
-            .addClass("shareDlgItem")
-            .append(
-                Dime.psHelper.getImageUrlJImageFromEntry(item)
-                )
-            .append(
-                $('<div>'+item.name+'</div>').addClass("shareDlgItemName").addClass(privTrustClass)
-                );
+            var element = $('<div></div>').addClass("shareDlgItem");
+            
+            var details = $('<div></div>')
+                    .addClass(classForItem)
+                    .append(Dime.psHelper.getImageUrlJImageFromEntry(item))
+                    .append($('<div>'+DimeView.getShortNameWithLength(item.name, 60)+'</div>')
+                        .addClass("shareDlgItemName")
+                        .addClass(privTrustClass)
+                    );
+                    
+            
+            element.append(details);
+            
             return element;
         }
     },

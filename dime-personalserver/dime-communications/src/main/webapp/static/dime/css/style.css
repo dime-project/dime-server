@@ -2162,7 +2162,6 @@ input[type="checkbox"] {
 .metaDataShareProfile{
     background-color: #EFEFEF;
     height: 100%;
-    max-height: 125px;
     overflow-y: hidden;
     overflow-x: hidden;
 
@@ -2214,6 +2213,7 @@ input[type="checkbox"] {
 }
 
 .SelectDialog > .modal-body{
+    overflow-y: hidden;
     max-height: 455px;
 }
 
@@ -3164,52 +3164,80 @@ input[type="text"].DimeDetailDialogPAValueListItemValue{
     width: 323px;
 }
 
-
 .shareDlgItem{
-
     float: left;
-    background-color: #D7D9D7;
-    border-radius: 5px;
-    margin-top: 1px;
-    
-
-    width: 326px;
-    margin-left: 3px;
-    
-
-    padding: 3px;
-
 }
 .shareDlgItem:hover{
     /* border: solid 1px #5A9DD5;*/
 }
 
-
-.shareDlgItem > img{
-
+.shareDlgItemInner > img, .shareDlgItemInnerLong > img, .shareDlgItemInnerMid > img{
     width: 21px;
     height: 21px;
     float:left;
 }
 
-
-
-.shareDlgItem > .shareDlgItemPrivTrust{
-
+.shareDlgItemInner > .shareDlgItemPrivTrust, .shareDlgItemInnerLong > .shareDlgItemPrivTrust, .shareDlgItemInnerMid > .shareDlgItemPrivTrust{
     float: right;
     width: 15px;
-    height:10px;
+    height: 10px;
     margin-top: 5px;
-
 }
-
-
 
 .shareDlgItemName{
     float:left;    
     margin-left: 12px;
 }
 
+.shareDlgItemInner{
+    float: left;
+    background-color: #D7D9D7;
+    border-radius: 5px;
+    margin-top: 1px;
+    width: 300px;
+    margin-left: 3px;
+    padding: 3px;
+}
+
+.shareDlgItemInnerMid{
+    float: left;
+    background-color: #D7D9D7;
+    border-radius: 5px;
+    margin-top: 1px;
+    width: 307px;
+    margin-left: 3px;
+    padding: 3px;
+}
+
+.shareDlgItemInnerLong{
+    float: left;
+    background-color: #D7D9D7;
+    border-radius: 5px;
+    margin-top: 1px;
+    width: 335px;
+    margin-left: 3px;
+    padding: 3px;
+}
+
+.shareDlgItemDelete{
+    float: right;
+    background-color: #f9f8f8;
+    border-radius: 5px;
+    margin-top: 1px;
+    width: 25px;
+    height: 21px;
+    margin-left: 3px;
+    padding: 3px;
+}
+
+.shareDlgItemDelete > img{
+    width: 21px;
+    height: 21px;
+}
+
+.shareDlgItemDelete:hover{
+    background-color: #D7D9D7;
+}
 
 .shareDlgWarn{
     cursor: pointer;  
