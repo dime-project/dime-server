@@ -452,11 +452,13 @@ public class DefaultDataSetup implements BroadcastReceiver {
 			working.getModel().addStatement(working, DCON.weight, new DatatypeLiteralImpl("0.5", XSD._float));
 			state.addCurrentActivity(working);
 			state.getModel().addModel(working.getModel());
+
 			//CREATE SITUATION
 			createSituation("Working@Office", me, spatem, state);
+
 			//reset used aspects
-			spatem.getModel().removeAll();
-			state.getModel().removeAll();
+			spatem = modelFactory.getDCONFactory().createSpaTem();
+			state = modelFactory.getDCONFactory().createState();
 			
 			//working@home
 			//timeperiod = latemorning, earlyafternoon, lateafternoon, earlyevening
@@ -480,11 +482,13 @@ public class DefaultDataSetup implements BroadcastReceiver {
 			working.getModel().addStatement(working, DCON.weight, new DatatypeLiteralImpl("0.5", XSD._float));
 			state.addCurrentActivity(working);
 			state.getModel().addModel(working.getModel());
+
 			//CREATE SITUATION
 			createSituation("Working@Home", me, spatem, state);
+
 			//reset used aspects
-			spatem.getModel().removeAll();
-			state.getModel().removeAll();
+			spatem = modelFactory.getDCONFactory().createSpaTem();
+			state = modelFactory.getDCONFactory().createState();
 			
 			//@conference
 			//timeperiod = latemorning, earlyafternoon, lateafternoon
@@ -511,11 +515,13 @@ public class DefaultDataSetup implements BroadcastReceiver {
 			performance.getModel().addStatement(performance, DCON.weight, new DatatypeLiteralImpl("0.5", XSD._float));
 			state.addCurrentActivity(performance);
 			state.getModel().addModel(performance.getModel());
+
 			//CREATE SITUATION
 			createSituation("@Conference", me, spatem, state);
+
 			//reset used aspects
-			spatem.getModel().removeAll();
-			state.getModel().removeAll();
+			spatem = modelFactory.getDCONFactory().createSpaTem();
+			state = modelFactory.getDCONFactory().createState();
 			
 			//relaxing@home
 			//timeperiod = lateevening, earlynight
@@ -533,11 +539,13 @@ public class DefaultDataSetup implements BroadcastReceiver {
 			recreation.getModel().addStatement(recreation, DCON.weight, new DatatypeLiteralImpl("0.5", XSD._float));
 			state.addCurrentActivity(recreation);
 			state.getModel().addModel(recreation.getModel());
+
 			//CREATE SITUATION
 			createSituation("Relaxing@Home", me, spatem, state);
+
 			//reset used aspects
-			spatem.getModel().removeAll();
-			state.getModel().removeAll();
+			spatem = modelFactory.getDCONFactory().createSpaTem();
+			state = modelFactory.getDCONFactory().createState();
 			
 			//socialevent
 			//timeperiod = lateevening, earlynight
@@ -571,11 +579,13 @@ public class DefaultDataSetup implements BroadcastReceiver {
 			state.getModel().addModel(eating.getModel());
 			state.addCurrentActivity(party);
 			state.getModel().addModel(party.getModel());
+
 			//CREATE SITUATION
 			createSituation("Social Event", me, spatem, state);
+
 			//reset used aspects
-			spatem.getModel().removeAll();
-			state.getModel().removeAll();
+			spatem = modelFactory.getDCONFactory().createSpaTem();
+			state = modelFactory.getDCONFactory().createState();
 			
 			//travelling
 			//timeperiod = earlymorning, latemorning, earlyafternoon, lateafternoon, earlyevening, lateevening, earlynight, latenight
@@ -616,12 +626,13 @@ public class DefaultDataSetup implements BroadcastReceiver {
 			state.getModel().addModel(travelling.getModel());
 			state.addCurrentActivity(driving);
 			state.getModel().addModel(driving.getModel());
+
 			//CREATE SITUATION		
 			createSituation("Travelling", me, spatem, state);
+
 			//reset used aspects
-			spatem.getModel().removeAll();
-			state.getModel().removeAll();
-				
+			spatem = modelFactory.getDCONFactory().createSpaTem();
+			state = modelFactory.getDCONFactory().createState();
 		}
 		catch(NotFoundException e){
 			logger.error("Could not create situations: " + e.getMessage(), e);

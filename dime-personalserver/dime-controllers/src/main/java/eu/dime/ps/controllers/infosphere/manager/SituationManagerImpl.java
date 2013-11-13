@@ -79,10 +79,14 @@ public class SituationManagerImpl extends InfoSphereManagerBase<Situation> imple
 	@Override
 	public Collection<Situation> getAll(List<URI> properties)
 			throws InfosphereException {
-		return getResourceStore().find(Situation.class)
-				.distinct()
-				.select(properties.toArray(new URI[properties.size()]))
-				.results();
+			
+			Collection<Resource> ids = getResourceStore().find(Situation.class).distinct().ids();
+			Collection<Situation> results = new ArrayList<Situation>(ids.size());
+			for (Resource id : ids) {
+				results.add(get(id.toString(), properties));
+			}
+			
+			return results;
 	}
 	
 	@Override
