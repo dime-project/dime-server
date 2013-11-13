@@ -20,11 +20,13 @@ import ie.deri.smile.vocabulary.DLPO;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.UUID;
 
 import org.ontoware.rdf2go.RDF2Go;
 import org.ontoware.rdf2go.model.Model;
 import org.ontoware.rdf2go.model.node.Resource;
 import org.ontoware.rdf2go.model.node.URI;
+import org.ontoware.rdf2go.model.node.impl.URIImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -67,18 +69,25 @@ public class LocationUpdater implements AccountUpdater<LivePost> {
 			// set current place to the location of the most recent checkin 
 			for (LivePost livePost : livePosts) {
 				if (livePost.isInstanceof(DLPO.Checkin)) {					
-					Resource placeUri = ModelUtils.findObject(livePost.getModel(), livePost, DLPO.definingResource).asResource();
-					if (placeUri != null) {
+					Resource placeId = ModelUtils.findObject(livePost.getModel(), livePost, DLPO.definingResource).asResource();
+					if (placeId != null) {
+						// load data related to place
 						Model sinkModel = RDF2Go.getModelFactory().createModel().open();
+						ModelUtils.fetch(livePost.getModel(), sinkModel, placeId);
+						
+						// transform placeId to a URI
+						URI placeUri = new URIImpl("urn:uuid:" + UUID.randomUUID());
+						ModelUtils.replaceIdentifier(sinkModel, placeId, placeUri);
+						
+						// replace all blank nodes with URIs and create Place object
 						Model placeModel = RDF2Go.getModelFactory().createModel().open();
-						ModelUtils.fetch(livePost.getModel(), sinkModel, placeUri);
 						ModelUtils.skolemize(sinkModel, placeModel);
 						Place place = new Place(placeModel, placeUri, false);
-						session.add(SpaTem.class, DCON.currentPlace, place);
 						
 						logger.info("Checkin @ '" + place.getPrefLabel() + "' found in livepost from account " + accountUri);
-
-						// committing changes
+						
+						// adding place to live context and commit changes
+						session.add(SpaTem.class, DCON.currentPlace, place);
 						session.commit();
 					}
 				}
