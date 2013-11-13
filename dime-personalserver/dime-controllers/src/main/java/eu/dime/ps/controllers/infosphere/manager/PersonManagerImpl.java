@@ -234,8 +234,17 @@ public class PersonManagerImpl extends InfoSphereManagerBase<Person> implements 
 	public Person merge(URI master, URI... targets) throws InfosphereException {
 		PimoService pimoService = getPimoService();
 		Tenant tenant = TenantHelper.getCurrentTenant();
+
 		try {
+			URI me = pimoService.getUserUri();
+			for (URI target : targets) {
+				if (target.equals(me)) {
+					throw new InfosphereException("Merge is not supported for yourself as owner of the account.");
+				}
+			}
+			
 			Person mergedPerson = pimoService.merge(master, targets);
+
 			// flag matches as 'accepted' 
 			for (URI target : targets) {
 				for (PersonMatch match : PersonMatch.findAllByTenantAndBySourceAndByTarget(tenant, master.toString(), target.toString())) {
@@ -243,6 +252,7 @@ public class PersonManagerImpl extends InfoSphereManagerBase<Person> implements 
 					match.merge();
 				}
 			}
+
 			return mergedPerson;
 		} catch (NotFoundException e) {
 			throw new InfosphereException("Merge operation failed: "+e.getLocalizedMessage(), e);
