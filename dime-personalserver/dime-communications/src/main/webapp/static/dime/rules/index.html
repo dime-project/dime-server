@@ -739,7 +739,7 @@ function addAnyConstraints(){
                                 
                                 conditionJson = conditionJson.replace("#object", '"'+$(constraint[index]).attr("tag")+'"');
                                 conditionJson = conditionJson.replace("#subject", '"'+$(constraint[index]).attr("tag")+'"');
-                                conditionJson = conditionJson.replace(new RegExp("#guid","g"), '"urn:uuid:'+UUID()+'"');
+                                conditionJson = conditionJson.replace(new RegExp("#guid","g"), 'urn:uuid:'+UUID());
                                 
                                 
                                 //change costraintOnProperty for others
