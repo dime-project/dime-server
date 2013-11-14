@@ -167,8 +167,8 @@ var types = [
 		{
 			value:-3,
 			label:"shared with",
-			constraintQuery: "select distinct * where {  ?y <http://www.w3.org/2000/01/rdf-schema#subClassOf> <http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#Document> . ?x a ?y . ?x <http://www.semanticdesktop.org/ontologies/2009/11/08/nso#sharedWith> ?z . ?z <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#prefLabel> ?label .",
-			constraintId: "z"
+			constraintQuery: "select distinct ?x ?label ?p where { { ?p a <http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#Person> . ?p <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#prefLabel>  ?x . }  union { ?p a <http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#PersonGroup> . ?p <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#prefLabel>  ?label . } }",
+			constraintId: "p"
 		}
 	]
     
@@ -183,21 +183,16 @@ var types = [
 		//}
 	];
 	
-	var dconConditions = [
+	var drmoConditions = [
 		{
 			value: -11,
 			label: "New Resource",
-			ns: "dcon:ResourceCreated",
+			ns: "drmo:ResourceCreated",
 		},	
 		{
 			value: -12,
 			label: "Modified Resource",
-			ns: "dcon:ResourceModified",
-		},
-		{
-			value: -13,
-			label: "Shared With",
-			ns: "nso:sharedWith",
+			ns: "drmo:ResourceModified",
 		},
 	]
 	
@@ -448,7 +443,9 @@ function addProperties(){
 		}
 			
 		
-	arrayValues = ((propValue == 4) || (propValue == 5)) ? dconConditions.concat(arrayValues) : arrayValues;
+	arrayValues = ((propValue == 4) || (propValue == 5)) ? drmoConditions.concat(arrayValues) : arrayValues;
+	arrayValues = ((propValue == 4) || (propValue == 5)) ? hardCodedSharedWithProperty.concat(arrayValues) : arrayValues;
+	
 	arrayValues = (propValue == 6) ? hardCodedLivePostProperties.concat(arrayValues) : arrayValues;
 	$.each(arrayValues, function(index , data){
 		var id = data.value;
@@ -499,6 +496,11 @@ function addConstraints(element){
 			constraintId = peerConstraints[consValue].constraintId;
 			$("#specificItemHelper").text("Specific Person/Group");
 		}
+		else if (propValue == 3){
+			constraintQuery = types[propValue].constraintQuery ;
+			constraintId = types[propValue].constraintId;
+			$("#specificItemHelper").text("Specific Situation");
+		}
 		else { 
 			constraintQuery = types[propValue].constraintQuery ;
 			constraintId = types[propValue].constraintId;
@@ -528,8 +530,8 @@ function addConstraints(element){
 			$("#specificItemHelper").text("Specific Person");
 		}
 		
-		//live post shared with
-		if (consValue == -3){
+		//image/doc shared with
+		if (propValue == -3){
 			constraintQuery = hardCodedSharedWithProperty[0].constraintQuery ;
 			constraintId = hardCodedSharedWithProperty[0].constraintId;
 			$("#specificItemHelper").text("Specific Person");
@@ -782,11 +784,21 @@ function addAnyConstraints(){
                                         } else {
                                                 conditionJson = peerConstraints[valType].json;
                                         }
+								}
+                                else if ((conditionType == 4) || (conditionType == 5)){
+								        var valType = parseInt($(property[index]).attr("name"));
                                         
+                                        if ($(constraint[index]).attr("tag").contains("member")){
+                                                conditionJson = hardCodedSharedWith[0].jsonMember;
+                                        } else if ($(constraint[index]).attr("tag").contains("name")) {
+                                                conditionJson = hardcodedSharedWith[0].json;
+                                        } else { conditionJson = types[conditionType].json; 
+										}
                                 } else {
                                         conditionJson = types[conditionType].json;
                                 }
                                 
+								
                                 conditionJson = conditionJson.replace("#object", '"'+$(constraint[index]).attr("tag")+'"');
                                 conditionJson = conditionJson.replace("#subject", '"'+$(constraint[index]).attr("tag")+'"');
                                 conditionJson = conditionJson.replace(new RegExp("#guid","g"), 'urn:uuid:'+UUID());
@@ -797,7 +809,7 @@ function addAnyConstraints(){
                                 
                                 
                                 if ((conditionType == 4) || (conditionType == 5)){
-                                        conditionJson = conditionJson.replace("#conditionType", '"'+dconConditions[Math.abs( parseInt($(property[index]).attr("name")) + 11)].ns+'"')
+                                        conditionJson = conditionJson.replace("#conditionType", '"'+drmoConditions[Math.abs( parseInt($(property[index]).attr("name")) + 11)].ns+'"')
                                 }
                                 
                                 operator = $(operators[index]).attr("title");
