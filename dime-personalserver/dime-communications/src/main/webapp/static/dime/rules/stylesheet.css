@@ -84,7 +84,7 @@
 
 
 .draggableProperties { 
-	width: 105px; 
+	width: 120px; 
 	height: 16px; 
 	float: left; 
 	font-size: 12px;
@@ -94,7 +94,7 @@
 }
 
 .draggableConstraints{ 
-	width: 105px; 
+	width: 120px; 
 	height: 16px; 
 	float: left; 
 	font-size: 12px;
@@ -194,7 +194,7 @@ margin-top: 0px !important;
 
 .autocompleteFillInProperty{
 	border:dotted thin #F00;
-	width:105px;
+	width:120px;
 	height:18px;
 	background-color: #999;
 	margin:5px 5px 5px 5px;
@@ -203,7 +203,7 @@ margin-top: 0px !important;
 
 .autocompleteFillInConstraint{
 	border:dotted thin #909;
-	width:105px;
+	width:120px;
 	height:18px;
 	background-color: #999;
 	margin:5px 5px 5px 5px;

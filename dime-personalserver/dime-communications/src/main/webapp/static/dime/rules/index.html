@@ -7,8 +7,8 @@
 <!-- jquery css -->
 <link href="stylesheet.css" rel="stylesheet" type="text/css" />
 <!-- jquery scripts -->
-<script type="text/javascript" src="//code.jquery.com/jquery-1.9.1.js"></script>
-<script type="text/javascript" src="//code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.js"></script>
+<script type="text/javascript" src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
 <script type="text/javascript" src="jshashtable-3.0.js"></script>
 <script type="text/javascript">
 // find logged in user's said
@@ -56,13 +56,13 @@ var types = [
 		  },
 		  {
 			value: 1,
-			label: "Peers",
+			label: "Nearby People",
 			propertyQuery: "select distinct * where {  ?x <http://www.w3.org/2000/01/rdf-schema#domain> <http://www.semanticdesktop.org/ontologies/2011/10/05/dcon#Peers> .  optional { ?x <http://www.w3.org/2000/01/rdf-schema#label> ?label . } optional { ?x <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#prefLabel> ?label . } optional {?x <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#deprecated> ?flag .} filter (!bound(?flag)) }",
 			image: "../../images/rules/persons.png",	
 		  },
 		  {
 			value: 2,
-			label: "State",
+			label: "My Activity or Availability)",
 			propertyQuery: "select distinct * where {  ?x <http://www.w3.org/2000/01/rdf-schema#domain> <http://www.semanticdesktop.org/ontologies/2011/10/05/dcon#State> .  optional { ?x <http://www.w3.org/2000/01/rdf-schema#label> ?label . } optional { ?x <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#prefLabel> ?label . } optional {?x <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#deprecated> ?flag .} filter (!bound(?flag)) }",
 			constraintQuery: "select distinct * where { ?x a #propertytype# . optional { ?x <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#prefLabel> ?label . } }",
 			constraintId: "x",
@@ -71,7 +71,7 @@ var types = [
 		  },
 		  {
 			value: 3,
-			label: "Situation Activated",
+			label: "My Situation",
 			propertyQuery: "",
 			constraintQuery: "select distinct * where { ?x a <http://www.semanticdesktop.org/ontologies/2011/10/05/dcon#Situation> . optional { ?x <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#prefLabel> ?label . } }",
 			constraintId: "x",
@@ -98,7 +98,7 @@ var types = [
 		  },
 		  {
 			value: 6,
-			label: "Live Post",
+			label: "LivePost",
 			propertyQuery: "select distinct * where {  ?x <http://www.w3.org/2000/01/rdf-schema#domain> <http://www.semanticdesktop.org/ontologies/2011/10/05/dlpo#LivePost>.  optional { ?x <http://www.w3.org/2000/01/rdf-schema#label> ?label . } optional { ?x <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#prefLabel> ?label . } optional {?x <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#deprecated> ?flag .} filter (!bound(?flag)) }",
 			constraintQuery: "select distinct ?x ?label where { #property# <http://www.w3.org/2000/01/rdf-schema#domain> ?y .  ?x a ?y . optional { ?x <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#prefLabel> ?label . } }",
 			constraintId: "x",
@@ -162,8 +162,17 @@ var types = [
 			constraintId: "x"
 		}
 	]
-		  
-    var commonValues = [
+	
+	var hardCodedSharedWithProperty = [
+		{
+			value:-3,
+			label:"shared with",
+			constraintQuery: "select distinct * where {  ?y <http://www.w3.org/2000/01/rdf-schema#subClassOf> <http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#Document> . ?x a ?y . ?x <http://www.semanticdesktop.org/ontologies/2009/11/08/nso#sharedWith> ?z . ?z <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#prefLabel> ?label .",
+			constraintId: "z"
+		}
+	]
+    
+	var commonValues = [
 		//{
 		//	value: -1,
 		//	label: "?Any",
@@ -222,24 +231,45 @@ var types = [
 	var actions = [
 		{
 			value: 0,
-			label: "Notify",
+			label: "Notify Me",
 			image: "../../images/rules/notify.png",
 		},
 		{
 			value: 1,
-			label: "Share",
-			image: "../../images/rules/share.png",
+			label: "Increase Trust Level",
+			image: "../../images/rules/increasetrust.png",
 		},
 		{
 			value: 2,
-			label: "Change Availability",
-			image: "../../images/rules/change.png",
+			label: "Decrease Trust Level",
+			image: "../../images/rules/decreasetrust.png",
 		},
+		{
+			value: 3,
+			label: "Share Item",
+			image: "../../images/rules/share.png",
+		},
+//		{
+//			value: 2,
+//			label: "Change Availability",
+//			image: "../../images/rules/change.png",
+//		},
 //		{
 	//		value: 3,
 //			label: "SMS",
 			//image: "images/sms.png",
 //		},
+		{
+			value: 4,
+			label: "Increase Privacy Level",
+			image: "../../images/rules/increaseprivacy.png",
+		},
+				{
+			value: 5,
+			label: "Decrease Privacy Level",
+			image: "../../images/rules/decreaseprivacy.png",
+		},
+
 	]
 </script>
 	
@@ -375,12 +405,17 @@ function addProperties(){
 	$("#"+currentConditionId).parent().find(".autocompleteFillInProperty").css("background-color","#9CC6E6");
 	$("#"+currentConditionId).parent().find(".autocompleteFillInConstraint").css("background-color","#FFFFAA");
 	
+	$("#constraintHelper").text("Constraint");
+	
 	var propValue = currentTypeId;
 	var arrayValues = [];
 	
+		//situation
 	if (propValue == 3){
 			//disable property
 		$("#"+currentConditionId).parent().find(".autocompleteFillInProperty").css("background-color","#999");
+		$("#constraintHelper").text("") ;
+
 		addConstraints($(this));
 	} else {
 		if ((propValue == 4) || (propValue == 5)){
@@ -419,7 +454,7 @@ function addProperties(){
 		var id = data.value;
 		var name = data.label;
 		var uri = data.id;
-		var createDiv = "<div style='background-color:rgb(156, 198, 230); border:thin dotted rgb(255, 0, 0); margin-top:5px; margin-right:5px; width:105px; height:18px; float:left'><div class='draggableProperties' title='"+name+"' name='"+id+"' tag='"+uri+"'>"+name+"</div></div>";
+		var createDiv = "<div style='background-color:rgb(156, 198, 230); border:thin dotted rgb(255, 0, 0); margin-top:5px; margin-right:5px; width:120px; height:18px; float:left'><div class='draggableProperties' title='"+name+"' name='"+id+"' tag='"+uri+"'>"+name+"</div></div>";
 		$(document).find("#controlbox_Properties").append(createDiv);
 	});
 	
@@ -447,7 +482,8 @@ function addProperties(){
 }
 
 function addConstraints(element){
-	$(document).find("#controlbox_Values").html("");
+		$(document).find("#controlbox_Values").html("");
+
 		$("#"+currentConditionId).find(".autocompleteFillInConstraint").css("background-color","#FFFFAA");
 		var propValue = currentTypeId;
 		var consValue = currentPropertyId;
@@ -457,15 +493,19 @@ function addConstraints(element){
 		
 		var constraintQuery = "";
 		var sparqlConstraintId = "";
+		//nearby people
 		if (propValue == 1){
 			constraintQuery = peerConstraints[consValue].constraintQuery;
 			constraintId = peerConstraints[consValue].constraintId;
+			$("#specificItemHelper").text("Specific Person/Group");
 		}
 		else { 
 			constraintQuery = types[propValue].constraintQuery ;
 			constraintId = types[propValue].constraintId;
+			$("#specificItemHelper").text("Specific Item");
 		}
 		
+		//state (activity/availability)
 		if (propValue == 2){
 			if(propertyUri.indexOf("Availability")) propertyUri = propertyUri.replace("dcon#currentAvailability","dpo#Availability");
 			if(propertyUri.indexOf("Activity")) propertyUri = propertyUri.replace("dcon#currentActivity","dpo#Activity");
@@ -474,15 +514,25 @@ function addConstraints(element){
 		
 		if ((propValue == 6) && (consValue > -1)) {
 			constraintQuery = constraintQuery.replace("#property#",propertyUri);
+			$("#specificItemHelper").text("Specific Post");
 		}
 		
 		if (consValue < -10){
 			$("#"+currentConditionId).find(".autocompleteFillInConstraint").css("background-color","#909");
 		}
 		
+		//live post created by
 		if (consValue == -1){
 			constraintQuery = hardCodedLivePostProperties[0].constraintQuery ;
 			constraintId = hardCodedLivePostProperties[0].constraintId;
+			$("#specificItemHelper").text("Specific Person");
+		}
+		
+		//live post shared with
+		if (consValue == -3){
+			constraintQuery = hardCodedSharedWithProperty[0].constraintQuery ;
+			constraintId = hardCodedSharedWithProperty[0].constraintId;
+			$("#specificItemHelper").text("Specific Person");
 		}
 		
 		$.ajax({
@@ -516,9 +566,9 @@ function addConstraints(element){
 		var name = data.label;
 		var uri = data.id;
 		if (id == -2){
-			var createDiv = "<div style='background-color: rgb(255, 255, 170); border:thin dotted rgb(153, 0, 153); margin-top:5px; margin-right:5px; width:105px; height:18px; float:left'><div class='draggableConstraints' title='"+name+"' name='"+id+"'><input class='text' /><br>Textbox</div></div>"
+			var createDiv = "<div style='background-color: rgb(255, 255, 170); border:thin dotted rgb(153, 0, 153); margin-top:5px; margin-right:5px; width:120px; height:18px; float:left'><div class='draggableConstraints' title='"+name+"' name='"+id+"'><input class='text' /><br>Textbox</div></div>"
 		} else {
-			var createDiv = "<div style='background-color: rgb(255, 255, 170); border:thin dotted rgb(153, 0, 153); margin-top:5px; margin-right:5px; width:105px; height:18px; float:left'><div class='draggableConstraints' title='"+name+"' name='"+id+"' tag='"+uri+"'>"+name+"</div></div>";
+			var createDiv = "<div style='background-color: rgb(255, 255, 170); border:thin dotted rgb(153, 0, 153); margin-top:5px; margin-right:5px; width:120px; height:18px; float:left'><div class='draggableConstraints' title='"+name+"' name='"+id+"' tag='"+uri+"'>"+name+"</div></div>";
 		}
 		$(document).find("#controlbox_Values").append(createDiv);
 	});
@@ -560,7 +610,7 @@ function getPropertiesForAny(){
 		var id = data.value;
 		var name = data.label;
 		var uri = data.id;
-		var createDiv = "<div style='background-color:rgb(156, 198, 230); border:thin dotted rgb(255, 0, 0); margin-top:5px; margin-right:5px; width:105px; height:18px; float:left'><div class='draggableProperties' title='"+name+"' name='"+id+"' tag='"+uri+"'>"+name+"</div></div>";
+		var createDiv = "<div style='background-color:rgb(156, 198, 230); border:thin dotted rgb(255, 0, 0); margin-top:5px; margin-right:5px; width:120px; height:18px; float:left'><div class='draggableProperties' title='"+name+"' name='"+id+"' tag='"+uri+"'>"+name+"</div></div>";
 		$(document).find("#controlbox_Properties").append(createDiv);
 	});
 	
@@ -594,9 +644,9 @@ function addAnyConstraints(){
 		var uri = data.id;
 		
 		if (id == -2){
-			var createDiv = "<div style='background-color: rgb(255, 255, 170); border:thin dotted rgb(153, 0, 153); margin-top:5px; margin-right:5px; width:105px; height:18px; float:left'><div class='draggableConstraints' title='"+name+"' name='"+id+"'><input class='text' /><br>Textbox</div></div>"
+			var createDiv = "<div style='background-color: rgb(255, 255, 170); border:thin dotted rgb(153, 0, 153); margin-top:5px; margin-right:5px; width:120px; height:18px; float:left'><div class='draggableConstraints' title='"+name+"' name='"+id+"'><input class='text' /><br>Textbox</div></div>"
 		} else {
-			var createDiv = "<div style='background-color: rgb(255, 255, 170); border:thin dotted rgb(153, 0, 153); margin-top:5px; margin-right:5px; width:105px; height:18px; float:left'><div class='draggableConstraints' title='"+name+"' name='"+id+"' tag='"+uri+"'>"+name+"</div></div>";
+			var createDiv = "<div style='background-color: rgb(255, 255, 170); border:thin dotted rgb(153, 0, 153); margin-top:5px; margin-right:5px; width:120px; height:18px; float:left'><div class='draggableConstraints' title='"+name+"' name='"+id+"' tag='"+uri+"'>"+name+"</div></div>";
 		}
 		$(document).find("#controlbox_Values").append(createDiv);
 	});
@@ -676,7 +726,7 @@ function addAnyConstraints(){
 	function constraintBox(id, counter){
 		var propertyId = "property_"+id+"_"+counter;
 		var constraintId = "constraint_"+id+"_"+counter;
-		var textbox = "<br clear='all' /><div class='autocompleteFillInProperty' id='"+propertyId+"'><div class='draggableProperties' title='null'><span class='helper2'>Constraint</span></div></div><br clear='all' /><div class='autocompleteFillInConstraint' id='"+constraintId+"'><div class='draggableConstraints' title='null'><span class='helper2'>Specific Item</span></div></div>";	
+		var textbox = "<br clear='all' /><div class='autocompleteFillInProperty' id='"+propertyId+"'><div class='draggableProperties' title='null'><span id='constraintHelper' class='helper2'></span></div></div><br clear='all' /><div class='autocompleteFillInConstraint' id='"+constraintId+"'><div class='draggableConstraints' title='null'><span id='specificItemHelper' class='helper2'></span></div></div>";	
 		
 //		Operator removed from inside condition box
 //		<div class='newConditionButton'><div class='draggableOperator' title='null'><span class='helper'>Operator</span></div></div><br clear='all' />
@@ -916,7 +966,7 @@ function addAnyConstraints(){
         <h3>Constraints</h3>
         <div id="controlbox_Properties">
         </div>
-        <h3>Items</h3>
+        <h3>My Items</h3>
         <div id="controlbox_Values">
         </div>
 		<h3>Join Operators (+)</h3>
