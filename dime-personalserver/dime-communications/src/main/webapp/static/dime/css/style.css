@@ -3918,7 +3918,55 @@ input[readonly].dimeDetailDialogKeyValueValue {
     font-weight: bold;
 }
 
-#personProfileNavigation > #containerCaption{
+#personProfileNavigation > #containerCaption {
     text-decoration: underline;
     cursor: pointer;
+}
+
+#ruleEditorContainer {
+    position: absolute;
+    max-width: 1200px;
+    width: 90%;
+    min-height: 500px;
+    z-index: 2000;
+    top: 78px;
+    border: solid black 1px;
+    left: 30px;
+
+    overflow-x: hidden;
+    overflow-y: auto;
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    border-radius: 6px 6px 6px 6px;
+    -webkit-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+    -moz-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+    -webkit-background-clip: padding-box;
+    -moz-background-clip: padding-box;
+    background-clip: padding-box;
+
+    background-color: #F1F1F1;
+}
+
+#ruleEditorContainer > .modal-header{
+    color: white;
+}
+
+#ruleEditorContainer > iframe{
+    width: 100%;
+    min-height: 500px;    
+}
+
+
+#rulesRule01Image{
+
+    border: solid white 2px;
+    border-radius: 6px 6px 6px 6px;
+    width: 90%;
+    padding: 20px;
+
+}
+#rulesRule01Image:hover{
+    cursor: pointer;
+    border-color: #5A9DD5;
 }

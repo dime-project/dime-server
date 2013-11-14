@@ -76,11 +76,13 @@
                             </div>                            
                         </div>
                         <div class="settingsContent expandedSettingsTab" id="serviceContainer"></div>
-                        <div class="settingsTab hidden">
-                            <img src="img/settings/open.png" onclick="Dime.Settings.toggleTab(this,'trustLevelSettingsContainer');">                            
-                            Trust level
+                        <div class="settingsTab">
+                            <img src="img/settings/open.png" onclick="Dime.Settings.toggleTab(this,'rulesSettingsContainer');">
+                            Rules
                         </div>
-                        <div class="settingsContent collapsedSettingsTab hidden" id="trustLevelSettingsContainer"></div>
+                        <div class="settingsContent collapsedSettingsTab" id="rulesSettingsContainer">
+                            <img src="img/dime_rule_01.png" alt="dime rule 01" id="rulesRule01Image" onclick="Dime.Settings.showRuleEditor();"/>
+                        </div>
                     </div>
 
                     <div class="dropzone hidden" id="dropzoneNavigation">

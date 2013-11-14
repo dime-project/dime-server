@@ -2887,6 +2887,36 @@ Dime.Settings = {
         Dime.REST.removeItem(serviceAccount, callBackHandler, Dime.Settings);
     },
 
+    showRuleEditor: function(){
+        var iFrame = $('<div/>');
+        var closeIframe = function(){
+            iFrame.remove();
+            $("#lightBoxBlack").fadeOut(300);
+            $('body').removeClass('stop-scrolling');
+            $(document).unbind("keyup");
+        }
+
+        iFrame.attr('id', 'ruleEditorContainer')
+                .append($('<div/>').text('Rule Editor').addClass('modal-header')
+                .append($('<div/>').text('x').addClass('close').click(closeIframe)
+                )
+                )
+                .append($('<iframe/>').attr('src', 'rules/index.html')
+                );
+
+        $('body').append(iFrame);
+
+        $("#lightBoxBlack").fadeIn(300);
+        //remove the dialog via ESC
+
+        $(document).keyup(iFrame, function(e) {
+            if (e.keyCode === 27) {
+                closeIframe();
+            }            
+        });
+
+    },
+
     toggleTab: function(element, containerId) {
         if (!containerId || !containerId.length === 0 || !element) {
             return;
