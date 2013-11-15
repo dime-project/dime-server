@@ -788,11 +788,15 @@ function addAnyConstraints(){
       }
       else if ((conditionType == 4) || (conditionType == 5)){
         var valType = parseInt($(property[index]).attr("name"));
-        
+        var sharedWithflag=new Boolean();
+		sharedWithflag = 0;  
+		
         if ($(constraint[index]).attr("tag").indexOf("member") > -1){
           conditionJson = hardCodedSharedWith[0].jsonMember;
+		  sharedWithflag = 1;
         } else if ($(constraint[index]).attr("tag").indexOf("name") > -1) {
           conditionJson = hardcodedSharedWith[0].json;
+		  sharedWithflag = 1;
         } else {
           conditionJson = types[conditionType].json; 
         }
@@ -807,7 +811,7 @@ function addAnyConstraints(){
       //change costraintOnProperty for others
       conditionJson = conditionJson.replace("#property", '"'+$(property[index]).attr("tag")+'"');
                     
-      if ((conditionType == 4) || (conditionType == 5)){
+      if ( ((conditionType == 4) || (conditionType == 5)) && !sharedWithflag ) {
         conditionJson = conditionJson.replace("#conditionType", '"'+drmoConditions[Math.abs( parseInt($(property[index]).attr("name")) + 11)].ns+'"')
       }
           
