@@ -173,16 +173,6 @@ var types = [
 		}
 	]
 	
-	var hardCodedSharedWithProperty = [
-        {
-            value:-3,
-            label:"shared with",
-            constraintQuery: "select distinct ?x ?label ?p where { { ?p a <http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#Person> . ?p <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#prefLabel> ?x . } union { ?p a <http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#PersonGroup> . ?p <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#prefLabel> ?label . } }",
-            constraintId: "p",
-			
-        }
-    ]
-    
 	var commonValues = [
 		//{
 		//	value: -1,
