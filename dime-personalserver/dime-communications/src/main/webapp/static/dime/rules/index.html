@@ -167,9 +167,12 @@ var types = [
 		{
 			value:-3,
 			label:"shared with",
-			constraintQuery: "select distinct ?x ?label ?p where { { ?p a <http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#Person> . ?p <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#prefLabel>  ?x . }  union { ?p a <http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#PersonGroup> . ?p <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#prefLabel>  ?label . } }",
+		// return all persons
+//			constraintQuery: "select distinct ?x ?label ?p where { { ?p a <http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#Person> . ?p <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#prefLabel>  ?x . }  union { ?p a <http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#PersonGroup> . ?p <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#prefLabel>  ?label . } }",
+//			just return 'Person' and 'Group' - the queries are a bit of a hack to return this classes through the usual mechanism
+			constraintQuery: "select distinct ?label ?p where { { <http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#attendee> <http://www.w3.org/2000/01/rdf-schema#range> ?p .  ?p <http://www.w3.org/2000/01/rdf-schema#label> ?label . } union { <http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#memberOf> <http://www.w3.org/2000/01/rdf-schema#domain> ?p .  ?p <http://www.w3.org/2000/01/rdf-schema#label> ?label .  } }" ,
 			constraintId: "p",
-			id: "http://www.semanticdesktop.org/ontologies/2009/11/08/nso#"
+			id: "http://www.semanticdesktop.org/ontologies/2009/11/08/nso#sharedWith"
 		}
 	]
 	
@@ -770,7 +773,7 @@ function addAnyConstraints(){
     var constraint = $("#"+conditionBoxId+" .autocompleteFillInConstraint .draggableConstraints");
     var operators = $("#"+conditionBoxId+" .newConditionButton .draggableOperator");
     var action = $("#"+conditionBoxId+" .action");
-    var jsonRule = createJson();
+	var jsonRule = createJson(action);
     var conditions = "";
     var arrayLen = condition.length;
     
@@ -882,8 +885,12 @@ function addAnyConstraints(){
     
    });
 		
-		function createJson(){
-			return '{ "actions": [ { "actionType":"urn:actions:Notify"} ], "condition":[ #conditions ], "guid":"urn:uuid:'+UUID()+'", "isEnabled":true, "name":null, "type":"RULE"}';
+		function createJson(actionType){
+			//increase trust level
+			if (actionType == 1)
+			     return '{ "actions": [ { "actionType":"urn:actions:ITL"} ], "condition":[ #conditions ], "guid":"urn:uuid:'+UUID()+'", "isEnabled":true, "name":null, "type":"RULE"}';
+			//Notify
+			else return '{ "actions": [ { "actionType":"urn:actions:Notify"} ], "condition":[ #conditions ], "guid":"urn:uuid:'+UUID()+'", "isEnabled":true, "name":null, "type":"RULE"}';
 		}
 		
 		function UUID() {
