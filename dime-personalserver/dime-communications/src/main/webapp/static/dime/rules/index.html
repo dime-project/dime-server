@@ -784,7 +784,7 @@ function addAnyConstraints(){
       if (conditionType == 1){
         var valType = parseInt($(property[index]).attr("name"));
         
-        if ($(constraint[index]).attr("tag").indexOf("member") > -1){
+        if ($(property[index]).attr("tag").indexOf("member") > -1){
           conditionJson = peerConstraints[valType].jsonMember;
         } else {
           conditionJson = peerConstraints[valType].json;
@@ -795,10 +795,10 @@ function addAnyConstraints(){
         var sharedWithflag=new Boolean();
 		sharedWithflag = 0;  
 		
-        if ($(constraint[index]).attr("tag").indexOf("member") > -1){
+        if ($(property[index]).attr("tag").indexOf("member") > -1){
           conditionJson = hardCodedSharedWith[0].jsonMember;
 		  sharedWithflag = 1;
-        } else if ($(constraint[index]).attr("tag").indexOf("name") > -1) {
+        } else if ($(property[index]).attr("tag").indexOf("name") > -1) {
           conditionJson = hardcodedSharedWith[0].json;
 		  sharedWithflag = 1;
         } else {
