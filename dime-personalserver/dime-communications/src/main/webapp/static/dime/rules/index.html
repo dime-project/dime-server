@@ -824,8 +824,8 @@ function addAnyConstraints(){
 	  {
        if (!sharedWithflag) { conditionJson = conditionJson.replace("#conditionType", '"'+drmoConditions[Math.abs( parseInt($(property[index]).attr("name")) + 11)].ns+'"'); }
 	   else {
-				if (conditionType == 4) { conditionJson.replace("#resourceType", "nfo:Image"); }
-				else conditionJson.replace("#resourceType", "nfo:Document");
+				if (conditionType == 4) { conditionJson =  conditionJson.replace("#resourceType", "nfo:Image"); }
+				else conditionJson = conditionJson.replace("#resourceType", "nfo:Document");
 			}
       }
           
