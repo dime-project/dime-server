@@ -287,6 +287,8 @@ $( ".controlbox" ).accordion({ heightStyle: "content" } );
 
 $(document).on("click","#newRuleButton", function() { 
 									$(".allRules").prepend(createRuleBox());
+									//To allow only 1 rule editing/creation, hide rule after click
+									$(this).find(".createButton").hide(); 
 									createConditionBox(currentRuleId);
 									reactivateDraggableTypes();
 									reactivateDraggableOperators();
@@ -692,7 +694,7 @@ function addAnyConstraints(){
 					};
 				  }
 				});		
-	$(".controlbox").accordion("option", "active", 2);	
+	$(".controlbox").accordion("option", "active", 4);	
 }
 
 	 function displayError(xhr, textStatus, errorThrown) {
