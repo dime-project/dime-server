@@ -504,7 +504,7 @@ function addConstraints(element){
 		if ((propValue == 1) && (consValue == 0) ){
 			constraintQuery = peerConstraints[consValue].constraintQuery;
 			constraintId = peerConstraints[consValue].constraintId;
-			$("#"+currentConditionId).parent().find(".helper5").text("Specific Person");
+			$("#"+currentConditionId).parent().find(".helper5").text("Specific Person"); }
 		else if ((propValue == 1) && (consValue == 1) ){
 			constraintQuery = peerConstraints[consValue].constraintQuery;
 			constraintId = peerConstraints[consValue].constraintId;
@@ -668,7 +668,7 @@ function addAnyConstraints(){
 		$(document).find("#controlbox_Values").append(createDiv);
 	});
 	
-	//Add the draggable property
+	//Add the draggable constraint
 	$( ".draggableConstraints" ).draggable({ helper:'clone', snap: ".autocompleteFillInConstraint", snapMode: "inner", start: function() {
 					drgClone = $(this).clone(true)
 					currentValueId = $(this).attr("name");
