@@ -172,8 +172,10 @@ var types = [
 //			just return 'Person' and 'Group' - the queries are a bit of a hack to return this classes through the usual mechanism
 			constraintQuery: "select distinct ?label ?p where { { <http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#attendee> <http://www.w3.org/2000/01/rdf-schema#range> ?p .  ?p <http://www.w3.org/2000/01/rdf-schema#label> ?label . } union { <http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#memberOf> <http://www.w3.org/2000/01/rdf-schema#range> ?p .  ?p <http://www.w3.org/2000/01/rdf-schema#label> ?label .  } }" ,
 			constraintId: "p",
-			id: "http://www.semanticdesktop.org/ontologies/2009/11/08/nso#sharedWith"
-		}
+			id: "http://www.semanticdesktop.org/ontologies/2009/11/08/nso#sharedWith",
+			jsonGroup: '{ "and": #andURI, "conditionType": "drmo:Condition", "conditions": [ { "and": #andURI, "conditionType": "drmo:Condition", "conditions": [ { "and": #andURI, "conditionType": "drmo:Condition", "conditions": [ ], "constraintOnGraph": null, "constraintOnObject": null, "constraintOnProperty": null, "constraintOnSubject": null, "guid": #guid_2, "isNegated": false, "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "pimo:PersonGroup", "succeededBy": #succURI } ], "constraintOnGraph": null, "constraintOnObject": #object, "constraintOnProperty": "nso:sharedWith", "constraintOnSubject": null,   "guid": #guid_1, "isNegated": false, "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": #resourceType, "succeededBy": #succURI } ], "constraintOnGraph": null, "constraintOnObject": null, "constraintOnProperty": null, "constraintOnSubject": null, "guid": #guid, "isNegated": false, "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": #resourceType, "succeededBy": #succURI }',
+			jsonPerson: '{ "and": #andURI, "conditionType": "drmo:Condition", "conditions": [ { "and": #andURI, "conditionType": "drmo:Condition", "conditions": [ { "and": #andURI, "conditionType": "drmo:Condition", "conditions": [	], "constraintOnGraph": null, "constraintOnObject": null, "constraintOnProperty": null,	"constraintOnSubject": null, 	"guid": #guid_2, "isNegated": false, "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "pimo:Person", "succeededBy": #succURI } ], "constraintOnGraph": null, "constraintOnObject": #object, "constraintOnProperty": "nso:sharedWith", "constraintOnSubject": null, "guid": #guid_1, "isNegated": false, "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": #resourceType, "succeededBy": #succURI } ], "constraintOnGraph": null, "constraintOnObject": null, "constraintOnProperty": null,  "constraintOnSubject": null, "guid": #guid, "isNegated": false, "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": #resourceType,"succeededBy": #succURI}'
+	   }
 	]
 	
 	var commonValues = [
@@ -799,10 +801,10 @@ function addAnyConstraints(){
 		
         //group first, since person can be contained in both pimo#Person and pimo#PersonGroup
 		if ($(constraint[index]).attr("tag").indexOf("Group") > -1){
-          conditionJson = hardCodedSharedWith[0].jsonMember;
+          conditionJson = hardCodedSharedWithProperty[0].jsonGroup;
 		  sharedWithflag = 1;
         } else if ($(constraint[index]).attr("tag").indexOf("Person") > -1) {
-          conditionJson = hardcodedSharedWith[0].json;
+          conditionJson = hardCodedSharedWithProperty[0].jsonPerson;
 		  sharedWithflag = 1;
         } else {
           conditionJson = types[conditionType].json; 
@@ -818,8 +820,13 @@ function addAnyConstraints(){
       //change costraintOnProperty for others
       conditionJson = conditionJson.replace("#property", '"'+$(property[index]).attr("tag")+'"');
                     
-      if ( ((conditionType == 4) || (conditionType == 5)) && !sharedWithflag ) {
-        conditionJson = conditionJson.replace("#conditionType", '"'+drmoConditions[Math.abs( parseInt($(property[index]).attr("name")) + 11)].ns+'"')
+      if ( ((conditionType == 4) || (conditionType == 5)) ) 
+	  {
+       if (!sharedWithflag) { conditionJson = conditionJson.replace("#conditionType", '"'+drmoConditions[Math.abs( parseInt($(property[index]).attr("name")) + 11)].ns+'"'); }
+	   else {
+				if (conditionType == 4) { conditionJson.replace("#resourceType", "nfo:Image"); }
+				else conditionJson.replace("#resourceType", "nfo:Document");
+			}
       }
           
       operator = $(operators[index]).attr("title");
