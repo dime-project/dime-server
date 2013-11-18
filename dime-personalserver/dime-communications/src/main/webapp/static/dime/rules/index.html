@@ -174,7 +174,8 @@ var types = [
 			constraintId: "p",
 			id: "http://www.semanticdesktop.org/ontologies/2009/11/08/nso#sharedWith",
 			jsonGroup: '{ "and": #andURI, "conditionType": "drmo:Condition", "conditions": [ { "and": #andURI, "conditionType": "drmo:Condition", "conditions": [ { "and": #andURI, "conditionType": "drmo:Condition", "conditions": [ ], "constraintOnGraph": null, "constraintOnObject": null, "constraintOnProperty": null, "constraintOnSubject": null, "guid": "#guid_2", "isNegated": false, "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "pimo:PersonGroup", "succeededBy": #succURI } ], "constraintOnGraph": null, "constraintOnObject": #object, "constraintOnProperty": "nso:sharedWith", "constraintOnSubject": null,   "guid": #"guid_1", "isNegated": false, "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": #resourceType, "succeededBy": #succURI } ], "constraintOnGraph": null, "constraintOnObject": null, "constraintOnProperty": null, "constraintOnSubject": null, "guid": "#guid", "isNegated": false, "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": #resourceType, "succeededBy": #succURI }',
-			jsonPerson: '{ "and": #andURI, "conditionType": "drmo:Condition", "conditions": [ { "and": #andURI, "conditionType": "drmo:Condition", "conditions": [ { "and": #andURI, "conditionType": "drmo:Condition", "conditions": [	], "constraintOnGraph": null, "constraintOnObject": null, "constraintOnProperty": null,	"constraintOnSubject": null, 	"guid": "#guid_2", "isNegated": false, "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "pimo:Person", "succeededBy": #succURI } ], "constraintOnGraph": null, "constraintOnObject": #object, "constraintOnProperty": "nso:sharedWith", "constraintOnSubject": null, "guid": "#guid_1", "isNegated": false, "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": #resourceType, "succeededBy": #succURI } ], "constraintOnGraph": null, "constraintOnObject": null, "constraintOnProperty": null,  "constraintOnSubject": null, "guid": "#guid", "isNegated": false, "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": #resourceType,"succeededBy": #succURI}'
+			//NOTE: instead of returning person type we return account -> sharedwith in reality links to an account. The person owner of a matched account will be linked at triggering stage.
+			jsonPerson: '{ "and": #andURI, "conditionType": "drmo:Condition", "conditions": [ { "and": #andURI, "conditionType": "drmo:Condition", "conditions": [ { "and": #andURI, "conditionType": "drmo:Condition", "conditions": [	], "constraintOnGraph": null, "constraintOnObject": null, "constraintOnProperty": null,	"constraintOnSubject": null, 	"guid": "#guid_2", "isNegated": false, "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "dao:Account", "succeededBy": #succURI } ], "constraintOnGraph": null, "constraintOnObject": #object, "constraintOnProperty": "nso:sharedWith", "constraintOnSubject": null, "guid": "#guid_1", "isNegated": false, "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": #resourceType, "succeededBy": #succURI } ], "constraintOnGraph": null, "constraintOnObject": null, "constraintOnProperty": null,  "constraintOnSubject": null, "guid": "#guid", "isNegated": false, "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": #resourceType,"succeededBy": #succURI}'
 	   }
 	]
 	
@@ -861,7 +862,23 @@ function addAnyConstraints(){
         conditionJson = conditionJson.replace(/#precURI/g, "null");
         conditionJson = conditionJson.replace(/#succURI/g, "null");
       }
-      
+ 
+	  // replace all namespaces
+	  conditionJson = conditionJson.replace(/drmo:/g, "http://www.semanticdesktop.org/ontologies/2012/03/06/drmo#");
+	  conditionJson = conditionJson.replace(/dcon:/g, "http://www.semanticdesktop.org/ontologies/2011/10/05/dcon#");
+	  conditionJson = conditionJson.replace(/dlpo:/g, "http://www.semanticdesktop.org/ontologies/2011/10/05/dlpo#");
+	  conditionJson = conditionJson.replace(/pimo:/g, "http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#");
+	  conditionJson = conditionJson.replace(/nso:/g, "http://www.semanticdesktop.org/ontologies/2009/11/08/nso#");
+	  conditionJson = conditionJson.replace(/dao:/g, "http://www.semanticdesktop.org/ontologies/2011/10/05/dao#");
+	  conditionJson = conditionJson.replace(/ddo:/g, "http://www.semanticdesktop.org/ontologies/2011/10/05/ddo#");
+	  conditionJson = conditionJson.replace(/nrl:/g, "http://www.semanticdesktop.org/ontologies/2007/08/15/nrl#");
+	  conditionJson = conditionJson.replace(/nie:/g, "http://www.semanticdesktop.org/ontologies/2007/01/19/nie#");
+	  conditionJson = conditionJson.replace(/nfo:/g, "http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#");
+	  conditionJson = conditionJson.replace(/ncal:/g, "http://www.semanticdesktop.org/ontologies/2007/04/02/ncal#");
+	  conditionJson = conditionJson.replace(/nao:/g, "http://www.semanticdesktop.org/ontologies/2007/08/15/nao#");
+	  conditionJson = conditionJson.replace(/dpo:/g, "http://www.semanticdesktop.org/ontologies/2011/10/05/dpo#");
+	  conditionJson = conditionJson.replace(/ppo:/g, "http://vocab.deri.ie/ppo#");
+	  
       conditions = conditions.concat(conditionJson);
       if (index < (arrayLen - 1)) { conditions = conditions.concat(","); }
     }
