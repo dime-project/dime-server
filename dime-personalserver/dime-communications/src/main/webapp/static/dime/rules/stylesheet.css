@@ -248,6 +248,15 @@ margin-top: 0px !important;
 	word-wrap:none;
 }
 
+.helper2{
+	font-size: 14px;
+	font-family: "Calibri","Helvetica Neue",Helvetica,Arial,sans-serif;
+	margin-left:2px;
+	text-align:center;
+	color: rgb(66,66,66);
+	word-wrap:none;
+}
+
 .helper3{
 	font-size: 14px;
 	font-family: "Calibri","Helvetica Neue",Helvetica,Arial,sans-serif;
