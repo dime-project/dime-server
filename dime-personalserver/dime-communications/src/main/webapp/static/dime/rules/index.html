@@ -139,15 +139,17 @@ var types = [
 	
 	var peerConstraints = [
 		  { 
-		  	value: 0,
-			constraintQuery: "select distinct ?x ?label ?p where { { ?p a <http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#Person> . ?p <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#prefLabel>  ?x . }  union { ?p a <http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#PersonGroup> . ?p <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#prefLabel>  ?label . } }",
+		  	//person only
+			value: 0,
+			constraintQuery: "select distinct ?x ?label ?p where { ?p a <http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#Person> . ?p <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#prefLabel>  ?x . }",
 			constraintId: "p",
 			json: '{ "and": #andURI, "conditionType": "drmo:Condition", "conditions": [ {"and": #andURI, "conditionType": "drmo:Condition", "conditions": [],  "constraintOnGraph": null, "constraintOnObject": #object,  "constraintOnProperty": #property,  "constraintOnSubject": null, "guid":"#guid_1",  "isNegated": false,  "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "dcon:Peers",  "succeededBy": #succURI } ],  "constraintOnGraph": null, "constraintOnObject": null,  "constraintOnProperty": null,  "constraintOnSubject": null, "guid":"#guid",  "isNegated": false,  "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "dcon:Peers",  "succeededBy": #succURI  }',
 			jsonMemberOf: '{ "and": #andURI, "conditionType": "drmo:Condition", "conditions": [ {"and": #andURI, "conditionType": "drmo:Condition", "conditions": [],  "constraintOnGraph": null, "constraintOnObject": { "and": #andURI, "conditionType": "drmo:Condition", "conditions": [],  "constraintOnGraph": null, "constraintOnObject": null,  "constraintOnProperty": "pimo:memberOf",  "constraintOnSubject": null, "guid":"#guid",  "isNegated": false,  "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "pimo:Person",  "succeededBy": #succURI  },  "constraintOnProperty": #property,  "constraintOnSubject": null, "guid":"#guid_1",  "isNegated": false,  "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "dcon:Peers",  "succeededBy": #succURI } ],  "constraintOnGraph": null, "constraintOnObject": null,  "constraintOnProperty": null,  "constraintOnSubject": null, "guid":"#guid",  "isNegated": false,  "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "dcon:Peers",  "succeededBy": #succURI  }', 
 		  } ,
 		  {
+			  //group only
 			  value: 1,
-			  constraintQuery: "select distinct ?x ?p ?label where { { ?p a <http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#PersonGroup> . ?p <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#prefLabel>  ?x . } union { ?p a <http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#Person> . ?p <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#prefLabel>  ?label . } }", 
+			  constraintQuery: "select distinct ?x ?p ?label where { ?p a <http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#PersonGroup> . ?p <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#prefLabel>  ?x . } ", 
 			  constraintId: "p",
   			json: '{ "and": #andURI, "conditionType": "drmo:Condition", "conditions": [ {"and": #andURI, "conditionType": "drmo:Condition", "conditions": [],  "constraintOnGraph": null, "constraintOnObject": #object,  "constraintOnProperty": #property,  "constraintOnSubject": null, "guid":"#guid_1",  "isNegated": false,  "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "dcon:Peers",  "succeededBy": #succURI } ],  "constraintOnGraph": null, "constraintOnObject": null,  "constraintOnProperty": null,  "constraintOnSubject": null, "guid":"#guid",  "isNegated": false,  "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "dcon:Peers",  "succeededBy": #succURI  }',
   			jsonMemberOf: '{ "and": #andURI, "conditionType": "drmo:Condition", "conditions": [ {"and": #andURI, "conditionType": "drmo:Condition", "conditions": [],  "constraintOnGraph": null, "constraintOnObject": null,  "constraintOnProperty": #property,  "constraintOnSubject": { "and": #andURI, "conditionType": "drmo:Condition", "conditions": [],  "constraintOnGraph": null, "constraintOnObject": null,  "constraintOnProperty": "pimo:hasMember",  "constraintOnSubject": null, "guid":"#guid",  "isNegated": false,  "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "pimo:Person",  "succeededBy": #succURI  }, "guid":"#guid_1",  "isNegated": false,  "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "dcon:Peers",  "succeededBy": #succURI } ],  "constraintOnGraph": null, "constraintOnObject": null,  "constraintOnProperty": null,  "constraintOnSubject": null, "guid":"#guid",  "isNegated": false,  "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "dcon:Peers",  "succeededBy": #succURI  }', 
@@ -489,7 +491,6 @@ function addProperties(){
 
 function addConstraints(element){
 		$(document).find("#controlbox_Values").html("");
-
 		$("#"+currentConditionId).find(".autocompleteFillInConstraint").css("background-color","#FFFFAA");
 		var propValue = currentTypeId;
 		var consValue = currentPropertyId;
@@ -500,10 +501,15 @@ function addConstraints(element){
 		var constraintQuery = "";
 		var sparqlConstraintId = "";
 		//nearby people
-		if (propValue == 1){
+		if ((propValue == 1) && (consValue == 0) ){
 			constraintQuery = peerConstraints[consValue].constraintQuery;
 			constraintId = peerConstraints[consValue].constraintId;
-			$("#"+currentConditionId).parent().find(".helper5").text("Specific Person/Group");
+			$("#"+currentConditionId).parent().find(".helper5").text("Specific Person");
+		else if ((propValue == 1) && (consValue == 1) ){
+			constraintQuery = peerConstraints[consValue].constraintQuery;
+			constraintId = peerConstraints[consValue].constraintId;
+			$("#"+currentConditionId).parent().find(".helper5").text("Specific Group");
+			}
 		}
 		else if (propValue == 3){
 			constraintQuery = types[propValue].constraintQuery ;
