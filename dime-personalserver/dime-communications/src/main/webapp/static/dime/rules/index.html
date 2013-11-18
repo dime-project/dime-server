@@ -52,7 +52,7 @@ var types = [
 			constraintQuery: "select distinct ?p ?label where { { ?p a <http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#Person> . ?p <http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#occurrence> ?y . optional { ?p<http://www.semanticdesktop.org/ontologies/2007/08/15/nao#prefLabel> ?label . } ?y <http://www.semanticdesktop.org/ontologies/2007/03/22/nco#ContactMedium> . } }",
 			constraintId: "y",
 			image: "../../images/rules/email.png",
-			json: '{ "and": #andURI, "conditionType": "drmo:Condition", "conditions": [ { "and": null, "conditionType": "drmo:Condition", "conditions": [],  "constraintOnGraph": null, "constraintOnObject": { "and": null, "conditionType": "drmo:Condition", "conditions": [],  "constraintOnGraph": null, "constraintOnObject": null,  "constraintOnProperty": "nco:hasEmailAddress",  "constraintOnSubject": {	"and": null, "conditionType": "drmo:Condition", "conditions": [],  "constraintOnGraph": null, "constraintOnObject": null,  "constraintOnProperty": "pimo:Occurance",  "constraintOnSubject": #subject, "guid":#guid_1_1_1, "isNegated": false,  "or": null, "preceededBy": null, "propertyOperator": null, "resourceType": "nco:ContactMedium",  "succeededBy": null }, "guid":#guid_1_1,  "isNegated": false,  "or": null, "preceededBy": null, "propertyOperator": null, "resourceType": "nmo:EmailAddress",  "succeededBy": null  } , "constraintOnProperty": #property,  "constraintOnSubject": null, "guid":#guid_1,  "isNegated": false,  "or": null, "preceededBy": null, "propertyOperator": null, "resourceType": "nmo:Email",  "succeededBy": null }  ],  "constraintOnGraph": null, "constraintOnObject": null,  "constraintOnProperty": null,  "constraintOnSubject": null, "guid":#guid,  "isNegated": false,  "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "nmo:Email",  "succeededBy": #succURI }',
+			json: '{ "and": #andURI, "conditionType": "drmo:Condition", "conditions": [ { "and": null, "conditionType": "drmo:Condition", "conditions": [],  "constraintOnGraph": null, "constraintOnObject": { "and": null, "conditionType": "drmo:Condition", "conditions": [],  "constraintOnGraph": null, "constraintOnObject": null,  "constraintOnProperty": "nco:hasEmailAddress",  "constraintOnSubject": {	"and": null, "conditionType": "drmo:Condition", "conditions": [],  "constraintOnGraph": null, "constraintOnObject": null,  "constraintOnProperty": "pimo:Occurance",  "constraintOnSubject": #subject, "guid":"#guid_1_1_1", "isNegated": false,  "or": null, "preceededBy": null, "propertyOperator": null, "resourceType": "nco:ContactMedium",  "succeededBy": null }, "guid":"#guid_1_1",  "isNegated": false,  "or": null, "preceededBy": null, "propertyOperator": null, "resourceType": "nmo:EmailAddress",  "succeededBy": null  } , "constraintOnProperty": #property,  "constraintOnSubject": null, "guid":"#guid_1",  "isNegated": false,  "or": null, "preceededBy": null, "propertyOperator": null, "resourceType": "nmo:Email",  "succeededBy": null }  ],  "constraintOnGraph": null, "constraintOnObject": null,  "constraintOnProperty": null,  "constraintOnSubject": null, "guid":"#guid",  "isNegated": false,  "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "nmo:Email",  "succeededBy": #succURI }',
 		  },
 		  {
 			value: 1,
@@ -67,7 +67,7 @@ var types = [
 			constraintQuery: "select distinct * where { ?x a #propertytype# . optional { ?x <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#prefLabel> ?label . } }",
 			constraintId: "x",
 			image: "../../images/rules/state.png",
-			json: '{ "and": #andURI, "conditionType": "drmo:Condition", "conditions": [ {"and": #andURI, "conditionType": "drmo:Condition", "conditions": [],  "constraintOnGraph": null, "constraintOnObject": #object,  "constraintOnProperty": #property,  "constraintOnSubject": null, "guid":#guid_1,  "isNegated": false,  "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "nmo:Email",  "succeededBy": #succURI } ],  "constraintOnGraph": null, "constraintOnObject": null,  "constraintOnProperty": null,  "constraintOnSubject": null, "guid":#guid,  "isNegated": false,  "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "dcon:State",  "succeededBy": #succURI  }',
+			json: '{ "and": #andURI, "conditionType": "drmo:Condition", "conditions": [ {"and": #andURI, "conditionType": "drmo:Condition", "conditions": [],  "constraintOnGraph": null, "constraintOnObject": #object,  "constraintOnProperty": #property,  "constraintOnSubject": null, "guid":"#guid_1",  "isNegated": false,  "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "nmo:Email",  "succeededBy": #succURI } ],  "constraintOnGraph": null, "constraintOnObject": null,  "constraintOnProperty": null,  "constraintOnSubject": null, "guid":"#guid",  "isNegated": false,  "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "dcon:State",  "succeededBy": #succURI  }',
 		  },
 		  {
 			value: 3,
@@ -76,7 +76,7 @@ var types = [
 			constraintQuery: "select distinct * where { ?x a <http://www.semanticdesktop.org/ontologies/2011/10/05/dcon#Situation> . optional { ?x <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#prefLabel> ?label . } }",
 			constraintId: "x",
 			image: "../../images/rules/situation.png",
-			json: '{ "and": #andURI, "conditionType": "drmo:SituationActivated", "conditions": [],  "constraintOnGraph": null, "constraintOnObject": #object,  "constraintOnProperty": "dcon:hasSituation",  "constraintOnSubject": null, "guid":#guid,  "isNegated": false,  "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "pimo:Person",  "succeededBy": #succURI }',
+			json: '{ "and": #andURI, "conditionType": "drmo:SituationActivated", "conditions": [],  "constraintOnGraph": null, "constraintOnObject": #object,  "constraintOnProperty": "dcon:hasSituation",  "constraintOnSubject": null, "guid":"#guid",  "isNegated": false,  "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "pimo:Person",  "succeededBy": #succURI }',
 		  },
 		  {
 			value: 4,
@@ -85,7 +85,7 @@ var types = [
 			constraintQuery: "select distinct * where { ?x a <http://www.semanticdesktop.org/ontologies/2011/10/05/nfo#Image> . optional { ?x <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#prefLabel> ?label . } }",
 			constraintId: "x",
 			image: "../../images/rules/image.png",
-			json: '{ "and": #andURI, "conditionType": #conditionType, "conditions": [],  "constraintOnGraph": null, "constraintOnObject": null,  "constraintOnProperty": null,  "constraintOnSubject": null, "guid":#guid,  "isNegated": false,  "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "nfo:Image",  "succeededBy": #succURI  }',
+			json: '{ "and": #andURI, "conditionType": #conditionType, "conditions": [],  "constraintOnGraph": null, "constraintOnObject": null,  "constraintOnProperty": null,  "constraintOnSubject": null, "guid":"#guid",  "isNegated": false,  "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "nfo:Image",  "succeededBy": #succURI  }',
 		  },
 		  {
 			value: 5,
@@ -94,7 +94,7 @@ var types = [
 			constraintQuery: "select distinct ?x ?label where { ?y <http://www.w3.org/2000/01/rdf-schema#subClassOf> <http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#Document> . ?x a ?y . optional { ?x <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#prefLabel> ?label . } }",
 			constraintId: "x",
 			image: "../../images/rules/document.png",
-			json: '{ "and": #andURI, "conditionType": #conditionType, "conditions": [],  "constraintOnGraph": null, "constraintOnObject": null,  "constraintOnProperty": null,  "constraintOnSubject": null, "guid":#guid,  "isNegated": false,  "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "nfo:Document",  "succeededBy": #succURI  }',
+			json: '{ "and": #andURI, "conditionType": #conditionType, "conditions": [],  "constraintOnGraph": null, "constraintOnObject": null,  "constraintOnProperty": null,  "constraintOnSubject": null, "guid":"#guid",  "isNegated": false,  "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "nfo:Document",  "succeededBy": #succURI  }',
 		  },
 		  {
 			value: 6,
@@ -112,7 +112,7 @@ var types = [
 			constraintQuery: "select distinct * where { { ?x a <http://www.semanticdesktop.org/ontologies/2011/10/05/dpo#Place> . } union {  ?x a <http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#Location> . } optional { ?x <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#prefLabel> ?label . } }",
 			constraintId: "x",
 			image: "../../images/rules/place.png",
-			json: '{ "and": #andURI, "conditionType": "drmo:Condition", "conditions": [ {"and": #andURI, "conditionType": "drmo:Condition", "conditions": [],  "constraintOnGraph": null, "constraintOnObject": #object,  "constraintOnProperty": #property,  "constraintOnSubject": null, "guid":#guid_1,  "isNegated": false,  "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "nmo:Email",  "succeededBy": #succURI } ],  "constraintOnGraph": null, "constraintOnObject": null,  "constraintOnProperty": null,  "constraintOnSubject": null, "guid":#guid,  "isNegated": false,  "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "dcon:SpaTem",  "succeededBy": #succURI  }',
+			json: '{ "and": #andURI, "conditionType": "drmo:Condition", "conditions": [ {"and": #andURI, "conditionType": "drmo:Condition", "conditions": [],  "constraintOnGraph": null, "constraintOnObject": #object,  "constraintOnProperty": #property,  "constraintOnSubject": null, "guid":"#guid_1",  "isNegated": false,  "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "nmo:Email",  "succeededBy": #succURI } ],  "constraintOnGraph": null, "constraintOnObject": null,  "constraintOnProperty": null,  "constraintOnSubject": null, "guid":"#guid",  "isNegated": false,  "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "dcon:SpaTem",  "succeededBy": #succURI  }',
 		  },
 		  {	
 			value: 8,
@@ -121,7 +121,7 @@ var types = [
 			constraintQuery: "select distinct * where {  ?x a <http://www.semanticdesktop.org/ontologies/2007/04/02/ncal#Event> .  optional { ?x <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#prefLabel> ?label . } }",
 			constraintId: "x",
 			image: "../../images/rules/event.png",
-			json: '{ "and": #andURI, "conditionType": "drmo:Condition", "conditions": [ {"and": #andURI, "conditionType": "drmo:Condition", "conditions": [],  "constraintOnGraph": null, "constraintOnObject": #object,  "constraintOnProperty": #property,  "constraintOnSubject": null, "guid":#guid_1,  "isNegated": false,  "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "nmo:Email",  "succeededBy": #succURI } ],  "constraintOnGraph": null, "constraintOnObject": null,  "constraintOnProperty": null,  "constraintOnSubject": null, "guid":#guid,  "isNegated": false,  "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "dcon:Schedule",  "succeededBy": #succURI  }',
+			json: '{ "and": #andURI, "conditionType": "drmo:Condition", "conditions": [ {"and": #andURI, "conditionType": "drmo:Condition", "conditions": [],  "constraintOnGraph": null, "constraintOnObject": #object,  "constraintOnProperty": #property,  "constraintOnSubject": null, "guid":"#guid_1",  "isNegated": false,  "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "nmo:Email",  "succeededBy": #succURI } ],  "constraintOnGraph": null, "constraintOnObject": null,  "constraintOnProperty": null,  "constraintOnSubject": null, "guid":"#guid",  "isNegated": false,  "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "dcon:Schedule",  "succeededBy": #succURI  }',
 		  },
 		   {	
 			value: 9,
@@ -130,7 +130,7 @@ var types = [
 			constraintQuery: "select distinct * where { { ?x a <http://www.semanticdesktop.org/ontologies/2011/10/05/dpo#Place> . } union {  ?x a <http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#Location> . } optional { ?x <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#prefLabel> ?label . } }",
 			constraintId: "x",
 			image: "../../images/rules/timeperiod.png",
-			json: '{ "and": #andURI, "conditionType": "drmo:Condition", "conditions": [ {"and": #andURI, "conditionType": "drmo:Condition", "conditions": [],  "constraintOnGraph": null, "constraintOnObject": #object,  "constraintOnProperty": #property,  "constraintOnSubject": null, "guid":#guid_1,  "isNegated": false,  "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "nmo:Email",  "succeededBy": #succURI } ],  "constraintOnGraph": null, "constraintOnObject": null,  "constraintOnProperty": null,  "constraintOnSubject": null, "guid":#guid,  "isNegated": false,  "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "dcon:SpaTem",  "succeededBy": #succURI  }',
+			json: '{ "and": #andURI, "conditionType": "drmo:Condition", "conditions": [ {"and": #andURI, "conditionType": "drmo:Condition", "conditions": [],  "constraintOnGraph": null, "constraintOnObject": #object,  "constraintOnProperty": #property,  "constraintOnSubject": null, "guid":#"guid_1",  "isNegated": false,  "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "nmo:Email",  "succeededBy": #succURI } ],  "constraintOnGraph": null, "constraintOnObject": null,  "constraintOnProperty": null,  "constraintOnSubject": null, "guid":"#guid",  "isNegated": false,  "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "dcon:SpaTem",  "succeededBy": #succURI  }',
 		  },
 
 		];
@@ -142,15 +142,15 @@ var types = [
 		  	value: 0,
 			constraintQuery: "select distinct ?x ?label ?p where { { ?p a <http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#Person> . ?p <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#prefLabel>  ?x . }  union { ?p a <http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#PersonGroup> . ?p <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#prefLabel>  ?label . } }",
 			constraintId: "p",
-			json: '{ "and": #andURI, "conditionType": "drmo:Condition", "conditions": [ {"and": #andURI, "conditionType": "drmo:Condition", "conditions": [],  "constraintOnGraph": null, "constraintOnObject": #object,  "constraintOnProperty": #property,  "constraintOnSubject": null, "guid":#guid_1,  "isNegated": false,  "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "dcon:Peers",  "succeededBy": #succURI } ],  "constraintOnGraph": null, "constraintOnObject": null,  "constraintOnProperty": null,  "constraintOnSubject": null, "guid":#guid,  "isNegated": false,  "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "dcon:Peers",  "succeededBy": #succURI  }',
-			jsonMemberOf: '{ "and": #andURI, "conditionType": "drmo:Condition", "conditions": [ {"and": #andURI, "conditionType": "drmo:Condition", "conditions": [],  "constraintOnGraph": null, "constraintOnObject": { "and": #andURI, "conditionType": "drmo:Condition", "conditions": [],  "constraintOnGraph": null, "constraintOnObject": null,  "constraintOnProperty": "pimo:memberOf",  "constraintOnSubject": null, "guid":#guid,  "isNegated": false,  "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "pimo:Person",  "succeededBy": #succURI  },  "constraintOnProperty": #property,  "constraintOnSubject": null, "guid":#guid_1,  "isNegated": false,  "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "dcon:Peers",  "succeededBy": #succURI } ],  "constraintOnGraph": null, "constraintOnObject": null,  "constraintOnProperty": null,  "constraintOnSubject": null, "guid":#guid,  "isNegated": false,  "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "dcon:Peers",  "succeededBy": #succURI  }', 
+			json: '{ "and": #andURI, "conditionType": "drmo:Condition", "conditions": [ {"and": #andURI, "conditionType": "drmo:Condition", "conditions": [],  "constraintOnGraph": null, "constraintOnObject": #object,  "constraintOnProperty": #property,  "constraintOnSubject": null, "guid":#"guid_1",  "isNegated": false,  "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "dcon:Peers",  "succeededBy": #succURI } ],  "constraintOnGraph": null, "constraintOnObject": null,  "constraintOnProperty": null,  "constraintOnSubject": null, "guid":"#guid",  "isNegated": false,  "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "dcon:Peers",  "succeededBy": #succURI  }',
+			jsonMemberOf: '{ "and": #andURI, "conditionType": "drmo:Condition", "conditions": [ {"and": #andURI, "conditionType": "drmo:Condition", "conditions": [],  "constraintOnGraph": null, "constraintOnObject": { "and": #andURI, "conditionType": "drmo:Condition", "conditions": [],  "constraintOnGraph": null, "constraintOnObject": null,  "constraintOnProperty": "pimo:memberOf",  "constraintOnSubject": null, "guid":"#guid",  "isNegated": false,  "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "pimo:Person",  "succeededBy": #succURI  },  "constraintOnProperty": #property,  "constraintOnSubject": null, "guid":"#guid_1",  "isNegated": false,  "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "dcon:Peers",  "succeededBy": #succURI } ],  "constraintOnGraph": null, "constraintOnObject": null,  "constraintOnProperty": null,  "constraintOnSubject": null, "guid":"#guid",  "isNegated": false,  "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "dcon:Peers",  "succeededBy": #succURI  }', 
 		  } ,
 		  {
 			  value: 1,
 			  constraintQuery: "select distinct ?x ?p ?label where { { ?p a <http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#PersonGroup> . ?p <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#prefLabel>  ?x . } union { ?p a <http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#Person> . ?p <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#prefLabel>  ?label . } }", 
 			  constraintId: "p",
-  			json: '{ "and": #andURI, "conditionType": "drmo:Condition", "conditions": [ {"and": #andURI, "conditionType": "drmo:Condition", "conditions": [],  "constraintOnGraph": null, "constraintOnObject": #object,  "constraintOnProperty": #property,  "constraintOnSubject": null, "guid":#guid_1,  "isNegated": false,  "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "dcon:Peers",  "succeededBy": #succURI } ],  "constraintOnGraph": null, "constraintOnObject": null,  "constraintOnProperty": null,  "constraintOnSubject": null, "guid":#guid,  "isNegated": false,  "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "dcon:Peers",  "succeededBy": #succURI  }',
-  			jsonMemberOf: '{ "and": #andURI, "conditionType": "drmo:Condition", "conditions": [ {"and": #andURI, "conditionType": "drmo:Condition", "conditions": [],  "constraintOnGraph": null, "constraintOnObject": null,  "constraintOnProperty": #property,  "constraintOnSubject": { "and": #andURI, "conditionType": "drmo:Condition", "conditions": [],  "constraintOnGraph": null, "constraintOnObject": null,  "constraintOnProperty": "pimo:hasMember",  "constraintOnSubject": null, "guid":#guid,  "isNegated": false,  "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "pimo:Person",  "succeededBy": #succURI  }, "guid":#guid_1,  "isNegated": false,  "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "dcon:Peers",  "succeededBy": #succURI } ],  "constraintOnGraph": null, "constraintOnObject": null,  "constraintOnProperty": null,  "constraintOnSubject": null, "guid":#guid,  "isNegated": false,  "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "dcon:Peers",  "succeededBy": #succURI  }', 
+  			json: '{ "and": #andURI, "conditionType": "drmo:Condition", "conditions": [ {"and": #andURI, "conditionType": "drmo:Condition", "conditions": [],  "constraintOnGraph": null, "constraintOnObject": #object,  "constraintOnProperty": #property,  "constraintOnSubject": null, "guid":"#guid_1",  "isNegated": false,  "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "dcon:Peers",  "succeededBy": #succURI } ],  "constraintOnGraph": null, "constraintOnObject": null,  "constraintOnProperty": null,  "constraintOnSubject": null, "guid":"#guid",  "isNegated": false,  "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "dcon:Peers",  "succeededBy": #succURI  }',
+  			jsonMemberOf: '{ "and": #andURI, "conditionType": "drmo:Condition", "conditions": [ {"and": #andURI, "conditionType": "drmo:Condition", "conditions": [],  "constraintOnGraph": null, "constraintOnObject": null,  "constraintOnProperty": #property,  "constraintOnSubject": { "and": #andURI, "conditionType": "drmo:Condition", "conditions": [],  "constraintOnGraph": null, "constraintOnObject": null,  "constraintOnProperty": "pimo:hasMember",  "constraintOnSubject": null, "guid":"#guid",  "isNegated": false,  "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "pimo:Person",  "succeededBy": #succURI  }, "guid":"#guid_1",  "isNegated": false,  "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "dcon:Peers",  "succeededBy": #succURI } ],  "constraintOnGraph": null, "constraintOnObject": null,  "constraintOnProperty": null,  "constraintOnSubject": null, "guid":"#guid",  "isNegated": false,  "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "dcon:Peers",  "succeededBy": #succURI  }', 
 		  }
 		  ]	
 		  
@@ -173,8 +173,8 @@ var types = [
 			constraintQuery: "select distinct ?label ?p where { { <http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#attendee> <http://www.w3.org/2000/01/rdf-schema#range> ?p .  ?p <http://www.w3.org/2000/01/rdf-schema#label> ?label . } union { <http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#memberOf> <http://www.w3.org/2000/01/rdf-schema#range> ?p .  ?p <http://www.w3.org/2000/01/rdf-schema#label> ?label .  } }" ,
 			constraintId: "p",
 			id: "http://www.semanticdesktop.org/ontologies/2009/11/08/nso#sharedWith",
-			jsonGroup: '{ "and": #andURI, "conditionType": "drmo:Condition", "conditions": [ { "and": #andURI, "conditionType": "drmo:Condition", "conditions": [ { "and": #andURI, "conditionType": "drmo:Condition", "conditions": [ ], "constraintOnGraph": null, "constraintOnObject": null, "constraintOnProperty": null, "constraintOnSubject": null, "guid": #guid_2, "isNegated": false, "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "pimo:PersonGroup", "succeededBy": #succURI } ], "constraintOnGraph": null, "constraintOnObject": #object, "constraintOnProperty": "nso:sharedWith", "constraintOnSubject": null,   "guid": #guid_1, "isNegated": false, "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": #resourceType, "succeededBy": #succURI } ], "constraintOnGraph": null, "constraintOnObject": null, "constraintOnProperty": null, "constraintOnSubject": null, "guid": #guid, "isNegated": false, "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": #resourceType, "succeededBy": #succURI }',
-			jsonPerson: '{ "and": #andURI, "conditionType": "drmo:Condition", "conditions": [ { "and": #andURI, "conditionType": "drmo:Condition", "conditions": [ { "and": #andURI, "conditionType": "drmo:Condition", "conditions": [	], "constraintOnGraph": null, "constraintOnObject": null, "constraintOnProperty": null,	"constraintOnSubject": null, 	"guid": #guid_2, "isNegated": false, "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "pimo:Person", "succeededBy": #succURI } ], "constraintOnGraph": null, "constraintOnObject": #object, "constraintOnProperty": "nso:sharedWith", "constraintOnSubject": null, "guid": #guid_1, "isNegated": false, "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": #resourceType, "succeededBy": #succURI } ], "constraintOnGraph": null, "constraintOnObject": null, "constraintOnProperty": null,  "constraintOnSubject": null, "guid": #guid, "isNegated": false, "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": #resourceType,"succeededBy": #succURI}'
+			jsonGroup: '{ "and": #andURI, "conditionType": "drmo:Condition", "conditions": [ { "and": #andURI, "conditionType": "drmo:Condition", "conditions": [ { "and": #andURI, "conditionType": "drmo:Condition", "conditions": [ ], "constraintOnGraph": null, "constraintOnObject": null, "constraintOnProperty": null, "constraintOnSubject": null, "guid": "#guid_2", "isNegated": false, "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "pimo:PersonGroup", "succeededBy": #succURI } ], "constraintOnGraph": null, "constraintOnObject": #object, "constraintOnProperty": "nso:sharedWith", "constraintOnSubject": null,   "guid": #"guid_1", "isNegated": false, "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": #resourceType, "succeededBy": #succURI } ], "constraintOnGraph": null, "constraintOnObject": null, "constraintOnProperty": null, "constraintOnSubject": null, "guid": "#guid", "isNegated": false, "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": #resourceType, "succeededBy": #succURI }',
+			jsonPerson: '{ "and": #andURI, "conditionType": "drmo:Condition", "conditions": [ { "and": #andURI, "conditionType": "drmo:Condition", "conditions": [ { "and": #andURI, "conditionType": "drmo:Condition", "conditions": [	], "constraintOnGraph": null, "constraintOnObject": null, "constraintOnProperty": null,	"constraintOnSubject": null, 	"guid": "#guid_2", "isNegated": false, "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "pimo:Person", "succeededBy": #succURI } ], "constraintOnGraph": null, "constraintOnObject": #object, "constraintOnProperty": "nso:sharedWith", "constraintOnSubject": null, "guid": "#guid_1", "isNegated": false, "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": #resourceType, "succeededBy": #succURI } ], "constraintOnGraph": null, "constraintOnObject": null, "constraintOnProperty": null,  "constraintOnSubject": null, "guid": "#guid", "isNegated": false, "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": #resourceType,"succeededBy": #succURI}'
 	   }
 	]
 	
@@ -517,13 +517,13 @@ function addConstraints(element){
 		
 		//state (activity/availability)
 		if (propValue == 2){
-			if(propertyUri.indexOf("Availability")) propertyUri = propertyUri.replace("dcon#currentAvailability","dpo#Availability");
-			if(propertyUri.indexOf("Activity")) propertyUri = propertyUri.replace("dcon#currentActivity","dpo#Activity");
+			if(propertyUri.indexOf("Availability")) propertyUri = propertyUri.replace(/dcon#currentAvailability/g,"dpo#Availability");
+			if(propertyUri.indexOf("Activity")) propertyUri = propertyUri.replace(/dcon#currentActivity/g,"dpo#Activity");
 			constraintQuery = constraintQuery.replace("#propertytype#",propertyUri);
 		}
 		
 		if ((propValue == 6) && (consValue > -1)) {
-			constraintQuery = constraintQuery.replace("#property#",propertyUri);
+			constraintQuery = constraintQuery.replace(/#property#/g,propertyUri);
 			$("#"+currentConditionId).parent().find(".helper5").text("Specific Post");
 		}
 		
@@ -815,51 +815,51 @@ function addAnyConstraints(){
 
       conditionJson = conditionJson.replace("#object", '"'+$(constraint[index]).attr("tag")+'"');
       conditionJson = conditionJson.replace("#subject", '"'+$(constraint[index]).attr("tag")+'"');
-      conditionJson = conditionJson.replace(new RegExp("#guid","g"), '"urn:uuid:'+UUID()+'"');
-      
-      //change costraintOnProperty for others
+      conditionJson = conditionJson.replace(new RegExp("#guid","g"), 'urn:uuid:'+UUID());
+	  
+	  //change costraintOnProperty for others
       conditionJson = conditionJson.replace("#property", '"'+$(property[index]).attr("tag")+'"');
                     
       if ( ((conditionType == 4) || (conditionType == 5)) ) 
 	  {
        if (!sharedWithflag) { conditionJson = conditionJson.replace("#conditionType", '"'+drmoConditions[Math.abs( parseInt($(property[index]).attr("name")) + 11)].ns+'"'); }
 	   else {
-				if (conditionType == 4) { conditionJson =  conditionJson.replace("#resourceType", "nfo:Image"); }
-				else conditionJson = conditionJson.replace("#resourceType", "nfo:Document");
+				if (conditionType == 4) { conditionJson =  conditionJson.replace(/#resourceType/g, '"nfo:Image"'); }
+				else conditionJson = conditionJson.replace(/#resourceType/g, '"nfo:Document"');
 			}
       }
           
       operator = $(operators[index]).attr("title");
       nextCondition = index + 1;
       if (operator == "AND"){
-        conditionJson = conditionJson.replace("#andURI", '"'+nextCondition+'"');
-        conditionJson = conditionJson.replace("#orURI", "null");
-        conditionJson = conditionJson.replace("#precURI", "null");
-        conditionJson = conditionJson.replace("#succURI", "null");
+        conditionJson = conditionJson.replace(/#andURI/g, '"'+nextCondition+'"');
+        conditionJson = conditionJson.replace(/#orURI/g, "null");
+        conditionJson = conditionJson.replace(/#precURI/g, "null");
+        conditionJson = conditionJson.replace(/#succURI/g, "null");
       }
       if (operator == "OR"){
-        conditionJson = conditionJson.replace("#orURI", '"'+nextCondition+'"');
-        conditionJson = conditionJson.replace("#andURI", "null");
-        conditionJson = conditionJson.replace("#precURI", "null");
-        conditionJson = conditionJson.replace("#succURI", "null");
+        conditionJson = conditionJson.replace(/#orURI/g, '"'+nextCondition+'"');
+        conditionJson = conditionJson.replace(/#andURI/g, "null");
+        conditionJson = conditionJson.replace(/#precURI/g, "null");
+        conditionJson = conditionJson.replace(/#succURI/g, "null");
       }
       if (operator == "PREC"){
-        conditionJson = conditionJson.replace("#precURI", '"'+nextCondition+'"');
-        conditionJson = conditionJson.replace("#orURI", "null");
-        conditionJson = conditionJson.replace("#andURI", "null");
-        conditionJson = conditionJson.replace("#succURI", "null");
+        conditionJson = conditionJson.replace(/#precURI/g, '"'+nextCondition+'"');
+        conditionJson = conditionJson.replace(/#orURI/g, "null");
+        conditionJson = conditionJson.replace(/#andURI/g, "null");
+        conditionJson = conditionJson.replace(/#succURI/g, "null");
       }
       if (operator == "SUCC"){
-        conditionJson = conditionJson.replace("#succURI", '"'+nextCondition+'"');
-        conditionJson = conditionJson.replace("#orURI", "null");
-        conditionJson = conditionJson.replace("#precURI", "null");
-        conditionJson = conditionJson.replace("#andURI", "null");
+        conditionJson = conditionJson.replace(/#succURI/g, '"'+nextCondition+'"');
+        conditionJson = conditionJson.replace(/#orURI/g, "null");
+        conditionJson = conditionJson.replace(/#precURI/g, "null");
+        conditionJson = conditionJson.replace(/#andURI/g, "null");
       }
       if (operator == "null"){
-        conditionJson = conditionJson.replace("#andURI", "null");
-        conditionJson = conditionJson.replace("#orURI", "null");
-        conditionJson = conditionJson.replace("#precURI", "null");
-        conditionJson = conditionJson.replace("#succURI", "null");
+        conditionJson = conditionJson.replace(/#andURI/g, "null");
+        conditionJson = conditionJson.replace(/#orURI/g, "null");
+        conditionJson = conditionJson.replace(/#precURI/g, "null");
+        conditionJson = conditionJson.replace(/#succURI/g, "null");
       }
       
       conditions = conditions.concat(conditionJson);
