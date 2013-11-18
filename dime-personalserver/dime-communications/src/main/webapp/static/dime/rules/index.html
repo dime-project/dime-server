@@ -786,7 +786,7 @@ function addAnyConstraints(){
       if (conditionType == 1){
         var valType = parseInt($(property[index]).attr("name"));
         
-        if ($(property[index]).attr("tag").indexOf("group") > -1){
+        if ($(property[index]).attr("tag").indexOf("Group") > -1){
           conditionJson = peerConstraints[valType].jsonMember;
         } else {
           conditionJson = peerConstraints[valType].json;
@@ -798,10 +798,10 @@ function addAnyConstraints(){
 		sharedWithflag = 0;  
 		
         //group first, since person can be contained in both pimo#Person and pimo#PersonGroup
-		if ($(constraint[index]).attr("tag").indexOf("group") > -1){
+		if ($(constraint[index]).attr("tag").indexOf("Group") > -1){
           conditionJson = hardCodedSharedWith[0].jsonMember;
 		  sharedWithflag = 1;
-        } else if ($(constraint[index]).attr("tag").indexOf("person") > -1) {
+        } else if ($(constraint[index]).attr("tag").indexOf("Person") > -1) {
           conditionJson = hardcodedSharedWith[0].json;
 		  sharedWithflag = 1;
         } else {
