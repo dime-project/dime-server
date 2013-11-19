@@ -177,8 +177,8 @@ var types = [
 			id: "http://www.semanticdesktop.org/ontologies/2009/11/08/nso#sharedWith",
 			jsonGroup: '{ "and": #andURI, "conditionType": "drmo:Condition", "conditions": [ { "and": #andURI, "conditionType": "drmo:Condition", "conditions": [ { "and": #andURI, "conditionType": "drmo:Condition", "conditions": [ ], "constraintOnGraph": null, "constraintOnObject": null, "constraintOnProperty": null, "constraintOnSubject": null, "guid": "#guid_2", "isNegated": false, "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "pimo:PersonGroup", "succeededBy": #succURI } ], "constraintOnGraph": null, "constraintOnObject": #object, "constraintOnProperty": "nso:sharedWith", "constraintOnSubject": null,   "guid": "#guid_1", "isNegated": false, "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": #resourceType, "succeededBy": #succURI } ], "constraintOnGraph": null, "constraintOnObject": null, "constraintOnProperty": null, "constraintOnSubject": null, "guid": "#guid", "isNegated": false, "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": #resourceType, "succeededBy": #succURI }',
 			//NOTE: instead of returning person type we return account -> sharedwith in reality links to an account. The person owner of a matched account will be linked at triggering stage.
-			jsonPerson: '{ "and": #andURI, "conditionType": "drmo:Condition", "conditions": [ { "and": #andURI, "conditionType": "drmo:Condition", "conditions": [ { "and": #andURI, "conditionType": "drmo:Condition", "conditions": [	], "constraintOnGraph": null, "constraintOnObject": null, "constraintOnProperty": null,	"constraintOnSubject": null, 	"guid": "#guid_2", "isNegated": false, "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "dao:Account", "succeededBy": #succURI } ], "constraintOnGraph": null, "constraintOnObject": #object, "constraintOnProperty": "nso:sharedWith", "constraintOnSubject": null, "guid": "#guid_1", "isNegated": false, "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": #resourceType, "succeededBy": #succURI } ], "constraintOnGraph": null, "constraintOnObject": null, "constraintOnProperty": null,  "constraintOnSubject": null, "guid": "#guid", "isNegated": false, "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": #resourceType,"succeededBy": #succURI}'
-	   }
+			jsonPerson: '{ "and": #andURI, "conditionType": "drmo:Condition", "conditions": [ { "and": #andURI, "conditionType": "drmo:Condition", "conditions": [ ], "constraintOnGraph": null,           "constraintOnObject":  { "and": #andURI, "conditionType": "drmo:Condition", "conditions": [ ], "constraintOnGraph": null,	"constraintOnObject": "di.me", "constraintOnProperty": "dao:accountType", 	"constraintOnSubject": null, "guid": "#guid_2", "isNegated": false, "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "dao:Account", "succeededBy": #succURI },            "constraintOnProperty": "nso:sharedWith", "constraintOnSubject": null, "guid": "#guid_1", "isNegated": false, "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": #resourceType, "succeededBy": #succURI } ], "constraintOnGraph": null, "constraintOnObject": null, "constraintOnProperty": null, "constraintOnSubject": null, "guid": "#guid", "isNegated": false, "or": #orURI,   "preceededBy": #precURI, "propertyOperator": null, "resourceType": #resourceType, "succeededBy": #succURI}' 
+		}
 	]
 	
 	var commonValues = [
@@ -427,7 +427,7 @@ function addProperties(){
 		addConstraints($(this));
 	} else {
 		if ((propValue == 4) || (propValue == 5)){
-			$("#"+currentConditionId).parent().find(".autocompleteFillInConstraint").css("background-color","#999");
+			$("#"+currentConditionId).parent().find(".autocompleteFillInConstraint").css("background-color","#999"); }
 		} else {
 			$.ajax({
 					async: false,
@@ -493,7 +493,7 @@ function addProperties(){
 
 function addConstraints(element){
 		$(document).find("#controlbox_Values").html("");
-		$("#"+currentConditionId).find(".autocompleteFillInConstraint").css("background-color","#FFFFAA");
+		$("#"+currentConditionId).parent().find(".autocompleteFillInConstraint").css("background-color","#FFFFAA");
 		var propValue = currentTypeId;
 		var consValue = currentPropertyId;
 		var propertyUri = "<"+currentURITag+">";
@@ -502,6 +502,24 @@ function addConstraints(element){
 		
 		var constraintQuery = "";
 		var sparqlConstraintId = "";
+		
+		//for new or modified resources, do not show constraint and skip to actions  
+		if ((consValue == -11) || (consValue == -12) ){
+			$("#"+currentConditionId).parent().find(".autocompleteFillInConstraint").css("background-color","#999");
+			if (propValue == 4){ 
+								//$("#"+currentConditionId).parent().find(".helper5").text("Any Image");
+			                        $("#"+currentConditionId).parent().find(".draggableConstraints").text("Any Image");
+		//							$("#"+currentConditionId).parent().find(".draggableConstraints").setAttribute("tag","any");
+			} else  if (propValue == 5){ 
+								//$("#"+currentConditionId).parent().find(".helper5").text("Any Document");
+									$("#"+currentConditionId).parent().find(".draggableConstraints").text("Any Document");
+		//							$("#"+currentConditionId).parent().find(".draggableConstraints").setAttribute("tag","any");
+
+			}
+		
+		$(".controlbox").accordion("option", "active", 4);		
+		}
+		else {
 		//nearby people
 		if ((propValue == 1) && (consValue == 0) ){
 			constraintQuery = peerConstraints[consValue].constraintQuery;
@@ -534,10 +552,9 @@ function addConstraints(element){
 			$("#"+currentConditionId).parent().find(".helper5").text("Specific Post");
 		}
 		
-		if (consValue < -10){
-			$("#"+currentConditionId).find(".autocompleteFillInConstraint").css("background-color","#909");
-		}
 		
+		
+
 		//live post created by
 		if (consValue == -1){
 			constraintQuery = hardCodedLivePostProperties[0].constraintQuery ;
@@ -590,9 +607,9 @@ function addConstraints(element){
 		$(document).find("#controlbox_Values").append(createDiv);
 	});
 	
-	//Add the draggable property
+	//Add the draggable constraints
 	$( ".draggableConstraints" ).draggable({ helper:'clone', snap: ".autocompleteFillInConstraint", snapMode: "inner", start: function() {
-					drgClone = $(this).clone(true)
+					drgClone = $(this).clone(true);
 					currentValueId = $(this).attr("name");
 				}});
 	$(".autocompleteFillInConstraint").droppable({
@@ -605,96 +622,22 @@ function addConstraints(element){
 					$(this).find(".draggableConstraints").remove(".draggableConstraints");
 					$(this).append(drgClone);
 					
+					//after the dragged constrained is appended to the condition box, swithc to the action view
+					$(".controlbox").accordion("option", "active", 4);	
 					if (currentValueId == -1){
 						//?Any is chosen
-						var condId = currentConditionId
+						var condId = currentConditionId;
 						var currCounter = conditionsHashMap.get(currentRuleId);
 						$("#constraintdiv_"+currCounter+"_"+condId).append("<br clear='all'/>");
 						constraintBox(condId,currCounter);
-						getPropertiesForAny();
-						//ANY query
+						//ANY query - used only for evaluation
+						//getPropertiesForAny();
+						
 					};
 				  }
 				});		
 	$(".controlbox").accordion("option", "active", 2);	
-}
-
-
-function getPropertiesForAny(){
-	$(document).find("#controlbox_Properties").html("");
-	
-	$.each(any, function(index , data){
-		var id = data.value;
-		var name = data.label;
-		var uri = data.id;
-		var createDiv = "<div style='background-color:rgb(156, 198, 230); border:thin dotted rgb(255, 0, 0); margin-top:5px; margin-right:5px; width:120px; height:18px; float:left'><div class='draggableProperties' title='"+name+"' name='"+id+"' tag='"+uri+"'>"+name+"</div></div>";
-		$(document).find("#controlbox_Properties").append(createDiv);
-	});
-	
-	//Add the draggable property
-	$( ".draggableProperties" ).draggable({ helper:'clone', snap: ".autocompleteFillInProperty", snapMode: "inner", start: function() {
-					drgClone = $(this).clone(true);
-					currentPropertyId = $(this).attr("name");
-				}});
-	$(".autocompleteFillInProperty").droppable({
-				  accept: '.draggableProperties',
-				  drop: function( event, ui ) {
-					  		var ruleId = ($(this).parents(".rulebox")).attr("id");
-		var value = conditionsMousePress.get(ruleId) + 1;
-		conditionsMousePress.put(ruleId,value);
-					  $(this).find(".helper").hide();  
-					$(this).find(".draggableProperties").remove(".draggableProperties");
-					$(this).append(drgClone);
-					addAnyConstraints();
-				  }
-				});
-					
-	$(".controlbox").accordion("option", "active", 1);
-	
-}
-
-function addAnyConstraints(){
-		$(document).find("#controlbox_Values").html("");
-	$.each(commonValues, function(index , data){
-		var id = data.value;
-		var name = data.label;
-		var uri = data.id;
-		
-		if (id == -2){
-			var createDiv = "<div style='background-color: rgb(255, 255, 170); border:thin dotted rgb(153, 0, 153); margin-top:5px; margin-right:5px; width:120px; height:18px; float:left'><div class='draggableConstraints' title='"+name+"' name='"+id+"'><input class='text' /><br>Textbox</div></div>"
-		} else {
-			var createDiv = "<div style='background-color: rgb(255, 255, 170); border:thin dotted rgb(153, 0, 153); margin-top:5px; margin-right:5px; width:120px; height:18px; float:left'><div class='draggableConstraints' title='"+name+"' name='"+id+"' tag='"+uri+"'>"+name+"</div></div>";
-		}
-		$(document).find("#controlbox_Values").append(createDiv);
-	});
-	
-	//Add the draggable constraint
-	$( ".draggableConstraints" ).draggable({ helper:'clone', snap: ".autocompleteFillInConstraint", snapMode: "inner", start: function() {
-					drgClone = $(this).clone(true)
-					currentValueId = $(this).attr("name");
-				}});
-	$(".autocompleteFillInConstraint").droppable({
-				  accept: '.draggableConstraints',
-				  drop: function( event, ui ) {
-					  		var ruleId = ($(this).parents(".rulebox")).attr("id");
-		var value = conditionsMousePress.get(ruleId) + 1;
-		conditionsMousePress.put(ruleId,value);
-					  $(this).find(".helper").hide();  
-					$(this).find(".draggableConstraints").remove(".draggableConstraints");
-					$(this).append(drgClone);
-					
-					if (currentValueId == -1){
-						//?Any is chosen
-						var condId = currentConditionId
-						var currCounter = conditionsHashMap.get(currentRuleId);
-						$("#constraintdiv_"+currCounter+"_"+condId).append("<br clear='all'/>");
-						constraintBox(condId,currCounter);
-						getPropertiesForAny();
-						//ANY query
-					};
-				  }
-				});		
-	$(".controlbox").accordion("option", "active", 4);	
+	}
 }
 
 	 function displayError(xhr, textStatus, errorThrown) {
@@ -709,6 +652,13 @@ function addAnyConstraints(){
 		var boxCode = "<div id='"+boxId+"' class='rulebox'>"+
 		"<div style='color:rgb(49, 48, 49); font-size:20px; font-weight:bold; font-family:Helvetica,Arial,sans-serif; margin-top:10px; margin-left:5px; margin-right:5px; float:left'>if</div> <div id='conditions_"+boxId+"'><div id='conditiondiv_1_"+boxId+"' class='conditionBox'></div></div><div class='newConditionButton'><div class='draggableOperator' title='null'><span class='helper4'>+</span></div></div><div style='color:rgb(49, 48, 49); font-size:20px; font-weight:bold; font-family:Helvetica,Arial,sans-serif; margin-top:10px; margin-left:5px; margin-right:5px; float:left'>then</div> <div class='action'><span class='helper'>A</span><span class='helper3'>ction</span></div><a href='#' name='"+boxId+"' class='saveButton'>Save</a><br clear='all'/>"+
 		"</div>";
+		
+		/*
+		Instead of the conditions box append the one below:
+				var createDiv = "<div style='border:dotted thin #007FFF; margin-top:5px; margin-right:5px; margin-left:5px; margin-bottom:5px; width:20px; height:20px; float:left'><div class='draggableOperator' title='"+name+"'>"+label+"</div></div>";
+		$(document).find("#controlbox_Operator").append(createDiv);
+		*/
+		
 		currentRuleId = boxId;
 		return boxCode;
 	}
@@ -787,7 +737,8 @@ function addAnyConstraints(){
 	var jsonRule = createJson(action);
     var conditions = "";
     var arrayLen = condition.length;
-    
+    var nextURI = 'urn:uuid:'+UUID();
+	
     $.each( condition, function(index, value) {
       var conditionType = $(value).attr("data-typeid");
       var conditionJson;
@@ -796,7 +747,7 @@ function addAnyConstraints(){
         var valType = parseInt($(property[index]).attr("name"));
         
         if ($(property[index]).attr("tag").indexOf("Group") > -1){
-          conditionJson = peerConstraints[valType].jsonMember;
+          conditionJson = peerConstraints[valType].jsonMemberOf;
         } else {
           conditionJson = peerConstraints[valType].json;
         }
@@ -806,8 +757,12 @@ function addAnyConstraints(){
         var sharedWithflag=new Boolean();
 		sharedWithflag = 0;  
 		
+		//if ANY
+		if ( ($(property[index]).attr("title") == "New Resource") || ($(property[index]).attr("title") == "Modified Resource") ){
+			conditionJson = types[conditionType].json;
+		}
         //group first, since person can be contained in both pimo#Person and pimo#PersonGroup
-		if ($(constraint[index]).attr("tag").indexOf("Group") > -1){
+		else if ($(constraint[index]).attr("tag").indexOf("Group") > -1){
           conditionJson = hardCodedSharedWithProperty[0].jsonGroup;
 		  sharedWithflag = 1;
         } else if ($(constraint[index]).attr("tag").indexOf("Person") > -1) {
@@ -822,7 +777,7 @@ function addAnyConstraints(){
 
       conditionJson = conditionJson.replace("#object", '"'+$(constraint[index]).attr("tag")+'"');
       conditionJson = conditionJson.replace("#subject", '"'+$(constraint[index]).attr("tag")+'"');
-      conditionJson = conditionJson.replace(new RegExp("#guid","g"), 'urn:uuid:'+UUID());
+      conditionJson = conditionJson.replace(new RegExp("#guid","g"), nextURI);
 	  
 	  //change costraintOnProperty for others
       conditionJson = conditionJson.replace("#property", '"'+$(property[index]).attr("tag")+'"');
@@ -837,32 +792,33 @@ function addAnyConstraints(){
       }
           
       operator = $(operators[index]).attr("title");
-      nextCondition = index + 1;
+      nextURI = 'urn:uuid:'+UUID();
       if (operator == "AND"){
-        conditionJson = conditionJson.replace(/#andURI/g, '"'+nextCondition+'"');
+        conditionJson = conditionJson.replace(/#andURI/g, '"'+nextURI+'"');
         conditionJson = conditionJson.replace(/#orURI/g, "null");
         conditionJson = conditionJson.replace(/#precURI/g, "null");
         conditionJson = conditionJson.replace(/#succURI/g, "null");
       }
       if (operator == "OR"){
-        conditionJson = conditionJson.replace(/#orURI/g, '"'+nextCondition+'"');
+        conditionJson = conditionJson.replace(/#orURI/g, '"'+nextURI+'"');
         conditionJson = conditionJson.replace(/#andURI/g, "null");
         conditionJson = conditionJson.replace(/#precURI/g, "null");
         conditionJson = conditionJson.replace(/#succURI/g, "null");
       }
       if (operator == "PREC"){
-        conditionJson = conditionJson.replace(/#precURI/g, '"'+nextCondition+'"');
+        conditionJson = conditionJson.replace(/#precURI/g, '"'+nextURI+'"');
         conditionJson = conditionJson.replace(/#orURI/g, "null");
         conditionJson = conditionJson.replace(/#andURI/g, "null");
         conditionJson = conditionJson.replace(/#succURI/g, "null");
       }
       if (operator == "SUCC"){
-        conditionJson = conditionJson.replace(/#succURI/g, '"'+nextCondition+'"');
+        conditionJson = conditionJson.replace(/#succURI/g, '"'+nextURI+'"');
         conditionJson = conditionJson.replace(/#orURI/g, "null");
         conditionJson = conditionJson.replace(/#precURI/g, "null");
         conditionJson = conditionJson.replace(/#andURI/g, "null");
       }
-      if (operator == "null"){
+      //undefined is due to operator being removed from the condition box, so no matter how many conditions there will always be one..
+	  if ( (operator == "null") || (operator == undefined) ){
         conditionJson = conditionJson.replace(/#andURI/g, "null");
         conditionJson = conditionJson.replace(/#orURI/g, "null");
         conditionJson = conditionJson.replace(/#precURI/g, "null");
@@ -1005,6 +961,90 @@ function addAnyConstraints(){
 							});
 						});
 					*/					
+					
+
+/* The following two functions where only used for the evaluation to add the 'any' property + constraint for the visual UI, but do not really work otherwise
+					
+					function getPropertiesForAny(){
+	$(document).find("#controlbox_Properties").html("");
+	
+	$.each(any, function(index , data){
+		var id = data.value;
+		var name = data.label;
+		var uri = data.id;
+		var createDiv = "<div style='background-color:rgb(156, 198, 230); border:thin dotted rgb(255, 0, 0); margin-top:5px; margin-right:5px; width:120px; height:18px; float:left'><div class='draggableProperties' title='"+name+"' name='"+id+"' tag='"+uri+"'>"+name+"</div></div>";
+		$(document).find("#controlbox_Properties").append(createDiv);
+	});
+	
+	//Add the draggable property
+	$( ".draggableProperties" ).draggable({ helper:'clone', snap: ".autocompleteFillInProperty", snapMode: "inner", start: function() {
+					drgClone = $(this).clone(true);
+					currentPropertyId = $(this).attr("name");
+				}});
+	$(".autocompleteFillInProperty").droppable({
+				  accept: '.draggableProperties',
+				  drop: function( event, ui ) {
+					  		var ruleId = ($(this).parents(".rulebox")).attr("id");
+		var value = conditionsMousePress.get(ruleId) + 1;
+		conditionsMousePress.put(ruleId,value);
+					  $(this).find(".helper").hide();  
+					$(this).find(".draggableProperties").remove(".draggableProperties");
+					$(this).append(drgClone);
+//					addAnyConstraints();
+				  }
+				});
+					
+	$(".controlbox").accordion("option", "active", 1);
+	
+}
+*/
+					
+/* function addAnyConstraints(){
+		$(document).find("#controlbox_Values").html("");
+	$.each(commonValues, function(index , data){
+		var id = data.value;
+		var name = data.label;
+		var uri = data.id;
+		
+		if (id == -2){
+			var createDiv = "<div style='background-color: rgb(255, 255, 170); border:thin dotted rgb(153, 0, 153); margin-top:5px; margin-right:5px; width:120px; height:18px; float:left'><div class='draggableConstraints' title='"+name+"' name='"+id+"'><input class='text' /><br>Textbox</div></div>"
+		} else {
+			var createDiv = "<div style='background-color: rgb(255, 255, 170); border:thin dotted rgb(153, 0, 153); margin-top:5px; margin-right:5px; width:120px; height:18px; float:left'><div class='draggableConstraints' title='"+name+"' name='"+id+"' tag='"+uri+"'>"+name+"</div></div>";
+		}
+		$(document).find("#controlbox_Values").append(createDiv);
+	});
+	
+	//Add the draggable constraint
+	$( ".draggableConstraints" ).draggable({ helper:'clone', snap: ".autocompleteFillInConstraint", snapMode: "inner", start: function() {
+					drgClone = $(this).clone(true)
+					currentValueId = $(this).attr("name");
+				}});
+	$(".autocompleteFillInConstraint").droppable({
+				  accept: '.draggableConstraints',
+				  drop: function( event, ui ) {
+					  		var ruleId = ($(this).parents(".rulebox")).attr("id");
+		var value = conditionsMousePress.get(ruleId) + 1;
+		conditionsMousePress.put(ruleId,value);
+					  $(this).find(".helper").hide();  
+					$(this).find(".draggableConstraints").remove(".draggableConstraints");
+					$(this).append(drgClone);
+					
+					if (currentValueId == -1){
+						//?Any is chosen
+						var condId = currentConditionId;
+						var currCounter = conditionsHashMap.get(currentRuleId);
+						$("#constraintdiv_"+currCzounter+"_"+condId).append("<br clear='all'/>");
+						constraintBox(condId,currCounter);
+						getPropertiesForAny();
+						//ANY query
+					};
+					$(".controlbox").accordion("option", "active", 4);	
+				  }
+				});		
+	
+} 
+*/
+
 </script>
 </head>
 
