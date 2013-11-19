@@ -1529,6 +1529,7 @@ DimeView = {
             var triggerDialog=function(response){
                 if (!Dime.psHelper.isSharableAgent(response[0])){
                     handleNonSharableAgents(response[0]);
+                    return;
                 }
                 Dime.Dialog.showLivepostWithSelection(response);
             };

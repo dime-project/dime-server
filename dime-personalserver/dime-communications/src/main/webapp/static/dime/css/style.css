@@ -1773,6 +1773,36 @@ input[type="checkbox"] {
     text-decoration: underline;
 }
 
+.allSituationElementContainer{
+    clear: both;
+    float: left;
+    margin-top: 15px;
+    margin-left: 32px;
+}
+
+.situationElementScore{
+    float: left;
+    clear: both;
+    margin-top: 15px;
+    margin-left: 32px;
+}
+
+.situationElementContainer{
+    clear: both;
+    height: 32px;
+    margin-left: 25px;
+    margin-top: 5px;
+}
+
+.situationElementIcon{
+    float: left;
+}
+
+.situationElementLabel{
+    float: left;
+    margin: 7px;
+}
+
 #placeDetailNavigation {
     clear: both;
     min-height: 101px;
@@ -2060,9 +2090,9 @@ input[type="checkbox"] {
 
 #DimeDetailDialogSituation{
     margin-top: 15px;
-    margin-right: 60px;
+    margin-left: 22px;
     clear: both;
-    float: right;
+    float: left;
 }
 
 .DimeDetailDialogText{
@@ -2569,11 +2599,11 @@ input[type="text"].DimeDetailDialogPAValueListItemValue{
 }
 
 .situationSwitchSwitch:hover{
-    border: 1px solid #FFFF00;   
+    border: 1px solid #F6C200;   
 }
 
 .situationSwitchActive{
-    background-color: #FFFF00;
+    background-color: #F6C200;
  
 }
 

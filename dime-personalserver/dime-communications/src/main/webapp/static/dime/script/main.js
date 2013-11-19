@@ -4940,33 +4940,84 @@ Dime.DetailDialog.prototype = {
                                 .append($("<div></div>").append("file type: " + mimeType)));
         }
     },
+            
+    getSituationIconForType: function(situationType){
+        switch(situationType){
+            case "dcon:currentEvent":
+                return Dime.ps_configuration.getRealBasicUrlString() + "/dime-communications/static/ui/images/situations/event.png";
+            case "dcon:upcomingEvent":
+                return Dime.ps_configuration.getRealBasicUrlString() + "/dime-communications/static/ui/images/situations/event.png";
+            case "dcon:nearbyPerson":
+                return Dime.ps_configuration.getRealBasicUrlString() + "/dime-communications/static/ui/images/situations/situations/peer.png";
+            case "dcon:nearbyGroup":
+                return Dime.ps_configuration.getRealBasicUrlString() + "/dime-communications/static/ui/images/situations/situations/peer.png";
+            case "dcon:activeApplication":
+                return Dime.ps_configuration.getRealBasicUrlString() + "/dime-communications/static/ui/images/situations/application.png";
+            case "dcon:activeFile":
+                return Dime.ps_configuration.getRealBasicUrlString() + "/dime-communications/static/ui/images/situations/document.png";
+            case "dcon:nearbyPlace":
+                return Dime.ps_configuration.getRealBasicUrlString() + "/dime-communications/static/ui/images/situations/location.png";
+            case "dcon:currentPlace":
+                return Dime.ps_configuration.getRealBasicUrlString() + "/dime-communications/static/ui/images/situations/location.png";
+            case "dcon:currentTime":
+                return Dime.ps_configuration.getRealBasicUrlString() + "/dime-communications/static/ui/images/situations/timeperiod_inverted.png";
+            case "dcon:connection":
+                return Dime.ps_configuration.getRealBasicUrlString() + "/dime-communications/static/ui/images/situations/situations/network.png";
+            case "dcon:currentActivity":
+                return Dime.ps_configuration.getRealBasicUrlString() + "/dime-communications/static/ui/images/situations/situations/activity.png";
+            default:
+                console.log("No image found");
+        }
+    },
 
     initSituation: function(item){
-
-        this.body
-            .append(this.createIcon(item, false))
-            .append(this.createNameInput(item));
-
+        
+        var scoreElement;
+        var situationElement;
+        
+        if(item['nao:score']){
+            scoreElement = $("<div></div>").addClass("situationElementScore").append("Score: " + item['nao:score'] + "%");
+        }
+        
         var innerHtmlSituation =
             '<input id="'+this.itemDetailModalTextInput+'" type="checkbox" '
-            + (item.active?'checked ':'')+'>situation is active</input>\n';
+            + (item.active?'checked ':'')+'>Situation is active</input>\n';
 
-        this.body.append(
-            $(JSTool.createHTMLElementString("div", "DimeDetailDialogSituation", [], null, innerHtmlSituation)));
+        if(item.contextElements && item.contextElements.length > 0){
+            situationElement = $("<div></div>").addClass("allSituationElementContainer").text('Context elements for situation:');
+            for(var i=0; i<item.contextElements.length; i++){
+                var weight = item.contextElements[i]["dcon:weight"];
+                situationElement.append($("<div></div>")
+                    .addClass("situationElementContainer")
+                    .append($("<div></div>")
+                        .addClass("situationElementIcon")
+                        .append($("<img></img>").attr("src", this.getSituationIconForType(item.contextElements[i].type))))
+                    .append($("<div></div>")
+                        .addClass("situationElementLabel")
+                        .append((item.contextElements.name ? item.contextElements.name : "") + " (weigth: " + weight + ")"))
+                );
+            }
+        }
+         
+        this.body
+            .append(this.createIcon(item, false))
+            .append(this.createNameInput(item))
+            .append(JSTool.createHTMLElementString("div", "DimeDetailDialogSituation", [], null, innerHtmlSituation))
+            .append(scoreElement)
+            .append(situationElement);
 
         //add assemble function for text
         var updateSituation = function(){
             this.item.active = $("#"+this.itemDetailModalTextInput).prop("checked");
         };
         this.assembleFunctions.push(updateSituation);
-
     },
+            
     initPerson: function(item){
         this.body
             .append(this.createIcon(item, true))
             .append(this.createNameInput(item))
             .append(this.getPrivTrustElement(item,this.readonly));
-
     },
     
     initDetails: function(){
@@ -6492,13 +6543,19 @@ Dime.Dialog={
                     .click(function(event){
                         event.stopPropagation();
                         
+                        var check = confirm('Do you really want to unshare the data "' + item.name + '"?');
+                        if(!check){
+                            return;
+                        }
+                        
                         if(sharedToItem !== null){
-                            //TODO: add check for different profile-saids?
-                                                        
+                            //TODO: add check for different profile-saids?                     
                             var callback = function(response){
                                 if(response){
                                     $(result).remove();
-                                } 
+                                }else{
+                                    alert("Error: couldn't unshare");
+                                }
                             };
                             Dime.psHelper.removeAccessForItemAndUpdateServer(item, sharedToItem.guid, callback); //FIXME provide senderSAID 
                         } 
