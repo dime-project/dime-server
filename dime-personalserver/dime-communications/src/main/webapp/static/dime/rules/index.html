@@ -290,6 +290,8 @@ $(document).on("click","#newRuleButton", function() {
 									//To allow only 1 rule editing/creation, hide rule after click
 									$(this).find(".createButton").hide(); 
 									createConditionBox(currentRuleId);
+									//hide message text box
+									$(document).find("#notificationText").hide(); 
 									reactivateDraggableTypes();
 									reactivateDraggableOperators();
 									reactivateDraggableActions();
@@ -340,8 +342,11 @@ $(document).ready(function(){
 		var name = data.label;
 		var image = data.image;
 		var createDiv = "<div style='border:dotted thin rgb(102, 102, 51); background-color: rgb(90, 157, 213); margin-top:2px; margin-right:2px; margin-left:2px; margin-bottom:2px; width:40px; height:40x; float:left'><div class='draggableAction' title='"+name+"' name='"+id+"' value='"+value+"'><img src='"+image+"'width='30' height='30' alt='"+name+"' /></div></div>";
+
 		$(document).find("#controlbox_Actions").append(createDiv);
 	});
+	$(document).find("#newRuleButton").click();
+	$(document).find("#newRuleButton").hide();
 	
 });
 
@@ -356,6 +361,10 @@ function reactivateDraggableActions(){
 		$(this).find(".helper3").hide();		
 		$(this).find(".draggableAction").remove(".draggableAction");
 		$(this).append(drgClone);
+		//show message text box + default message.
+		$(document).find("#notificationText").show(); 
+		$(document).find("#notificationText").val("Enter a personalised notification message here.");
+  	    document.getElementById('menu')
 	  }
 	});
 }
@@ -422,12 +431,11 @@ function addProperties(){
 			//disable property
 		$("#"+currentConditionId).parent().find(".autocompleteFillInProperty").css("background-color","#999");
 		$("#"+currentConditionId).parent().find(".helper2").text("");
-	
-
+						
 		addConstraints($(this));
 	} else {
 		if ((propValue == 4) || (propValue == 5)){
-			$("#"+currentConditionId).parent().find(".autocompleteFillInConstraint").css("background-color","#999"); }
+			$("#"+currentConditionId).parent().find(".autocompleteFillInConstraint").css("background-color","#999"); 
 		} else {
 			$.ajax({
 					async: false,
@@ -650,7 +658,7 @@ function addConstraints(element){
 		conditionsKeyPress.put(boxId,0);
 		conditionsMousePress.put(boxId,0);
 		var boxCode = "<div id='"+boxId+"' class='rulebox'>"+
-		"<div style='color:rgb(49, 48, 49); font-size:20px; font-weight:bold; font-family:Helvetica,Arial,sans-serif; margin-top:10px; margin-left:5px; margin-right:5px; float:left'>if</div> <div id='conditions_"+boxId+"'><div id='conditiondiv_1_"+boxId+"' class='conditionBox'></div></div><div class='newConditionButton'><div class='draggableOperator' title='null'><span class='helper4'>+</span></div></div><div style='color:rgb(49, 48, 49); font-size:20px; font-weight:bold; font-family:Helvetica,Arial,sans-serif; margin-top:10px; margin-left:5px; margin-right:5px; float:left'>then</div> <div class='action'><span class='helper'>A</span><span class='helper3'>ction</span></div><a href='#' name='"+boxId+"' class='saveButton'>Save</a><br clear='all'/>"+
+		"<div style='color:rgb(49, 48, 49); font-size:20px; font-weight:bold; font-family:Helvetica,Arial,sans-serif; margin-top:10px; margin-left:5px; margin-right:5px; float:left'>if</div> <div id='conditions_"+boxId+"'><div id='conditiondiv_1_"+boxId+"' class='conditionBox'></div></div><div class='newConditionButton'><div class='draggableOperator' title='null'><span class='helper4'>+</span></div></div><div style='color:rgb(49, 48, 49); font-size:20px; font-weight:bold; font-family:Helvetica,Arial,sans-serif; margin-top:10px; margin-left:5px; margin-right:5px; float:left'>then</div> <div class='action'><span class='helper'>A</span><span class='helper3'>ction</span><span style='float:right'><input id='notificationText' type='text'; style='width:300px; color:rgb(49, 48, 49); font-style:italic; height:20px; border: 1px dotted #000000; margin:5px 5px 5px 5px; word-wrap:break-word; padding:0px'></span></div><a href='#' name='"+boxId+"' class='saveButton'>Save</a><br clear='all'/>"+
 		"</div>";
 		
 		/*
@@ -664,6 +672,8 @@ function addConstraints(element){
 	}
 
 	function createConditionBox(id){
+		currentURITag = "";
+		currentPropertyId = -100;
 		if (conditionsHashMap.get(id) != null){
 			var condValue = conditionsHashMap.get(id);
 			conditionBox(id, condValue);
@@ -734,7 +744,9 @@ function addConstraints(element){
     var constraint = $("#"+conditionBoxId+" .autocompleteFillInConstraint .draggableConstraints");
     var operators = $("#"+conditionBoxId+" .newConditionButton .draggableOperator");
     var action = $("#"+conditionBoxId+" .draggableAction").attr("value");
-	var jsonRule = createJson(action);
+	var notification = $("#"+conditionBoxId+" #notificationText").val();
+	
+	var jsonRule = createJson(action, notification);
     var conditions = "";
     var arrayLen = condition.length;
     var nextURI = 'urn:uuid:'+UUID();
@@ -865,21 +877,23 @@ function addConstraints(element){
         data: JSON.stringify(payload),
         url: "/dime-communications/api/dime/rest/"+said+"/rule/@me"
     }).done(function(response) {
-        alert("Congratulations, your rule has been created!");
+        alert("Rule Saved!");
     }).fail(function(xhr, error) {
         console.debug(xhr);
         console.debug(error);
-        alert("An error ocurred, and the rule couldn't be saved!");
+        alert("Sorry! This rule couldn't be saved.");
     });
     
    });
 		
-		function createJson(actionType){
+		function createJson(actionType, notificationText){
 			//increase trust level
+			if (notificationText == "Enter a personalised notification message here.") notificationText = "A Rule Has Fired";
+
 			if (actionType == 1)
-			     return '{ "actions": [ { "actionType":"urn:actions:ITL"} ], "condition":[ #conditions ], "guid":"urn:uuid:'+UUID()+'", "isEnabled":true, "name":null, "type":"RULE"}';
+			     return '{ "actions": [ { "actionType":"urn:actions:ITL", "hasObject":"'+notificationText+'"} ], "condition":[ #conditions ], "guid":"urn:uuid:'+UUID()+'", "isEnabled":true, "name":null, "type":"RULE"}';
 			//Notify
-			else return '{ "actions": [ { "actionType":"urn:actions:Notify"} ], "condition":[ #conditions ], "guid":"urn:uuid:'+UUID()+'", "isEnabled":true, "name":null, "type":"RULE"}';
+			else return '{ "actions": [ { "actionType":"urn:actions:Notify", "hasObject":"'+notificationText+'"} ], "condition":[ #conditions ], "guid":"urn:uuid:'+UUID()+'", "isEnabled":true, "name":null, "type":"RULE"}';
 		}
 		
 		function UUID() {

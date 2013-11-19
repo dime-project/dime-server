@@ -222,10 +222,9 @@ margin-top: 0px !important;
 
 .action{
 	border:dotted thin #663;
-	width:50px;
 	height:35px;
 	background-color:rgb(90, 157, 213);
-	margin:5px 5px 5px 5px;
+	margin:5px;
 	float:left;
 }
 
@@ -276,6 +275,27 @@ margin-top: 0px !important;
 	color: rgb(90,90,90);
 	word-wrap:none;
 }
+
+.textbox{
+	font-size: 14px;
+	font-family: "Calibri","Helvetica Neue",Helvetica,Arial,sans-serif;
+	border: 1px dotted #000000; 
+	color: rgb(90,90,90);
+	width:100px;
+	height:25px;
+}
+
+
+
+
+ .textbox { 
+
+    outline:0; 
+    height:25px; 
+    width: 275px; 
+  } 
+
+
 
 .saveButton {
 float: right;
