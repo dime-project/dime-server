@@ -1797,7 +1797,8 @@ Dime.psMap.KNOWN_PLACES={
     Starnberg: new Dime.psMap.FixPlaceEntry('Starnberg', 48.00267200, 11.33906400),
     Stuttgart: new Dime.psMap.FixPlaceEntry('Stuttgart', 48.78062800, 9.18211000),
     Torino: new Dime.psMap.FixPlaceEntry('Torino', 45.07740000, 7.68556600),
-    Vercelli: new Dime.psMap.FixPlaceEntry('Vercelli', 45.32161600, 8.41886000)
+    Vercelli: new Dime.psMap.FixPlaceEntry('Vercelli', 45.32161600, 8.41886000),
+    Luxemburg: new Dime.psMap.FixPlaceEntry('Luxemburg', 49.582602, 6.118268)
 };
 
 
