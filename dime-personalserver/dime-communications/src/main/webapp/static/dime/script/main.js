@@ -4976,7 +4976,7 @@ Dime.DetailDialog.prototype = {
         var scoreElement;
         var situationElement;
         var contextElementsWithNoIcon = 0;
-        var contextElementsLength = (item.contextElements) ? 0 : item.contextElements.length;
+        var contextElementsLength = (item.contextElements) ? item.contextElements.length : 0;
         
         if(item['nao:score']){
             scoreElement = $("<div></div>").addClass("situationElementScore").append("Score: " + item['nao:score'] + "%");
