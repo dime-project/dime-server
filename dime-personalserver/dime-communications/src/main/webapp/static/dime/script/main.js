@@ -1791,14 +1791,14 @@ Dime.psMap.KNOWN_PLACES={
     Barcelona: new Dime.psMap.FixPlaceEntry('Barcelona',41.38994600,2.17283200),
     Galway: new Dime.psMap.FixPlaceEntry('Galway', 53.27127000, -9.05669000),
     Karlsruhe: new Dime.psMap.FixPlaceEntry('Karlsruhe', 49.01332900, 8.37942100),
+    Luxemburg: new Dime.psMap.FixPlaceEntry('Luxembourg', 49.582602, 6.118268),
     Madrid: new Dime.psMap.FixPlaceEntry('Madrid', 40.42865600, -3.70594000),
     Milano: new Dime.psMap.FixPlaceEntry('Milano', 45.47096600, 9.18691600),
     Segovia: new Dime.psMap.FixPlaceEntry('Segovia', 40.94982500, -4.11203400),
     Starnberg: new Dime.psMap.FixPlaceEntry('Starnberg', 48.00267200, 11.33906400),
     Stuttgart: new Dime.psMap.FixPlaceEntry('Stuttgart', 48.78062800, 9.18211000),
     Torino: new Dime.psMap.FixPlaceEntry('Torino', 45.07740000, 7.68556600),
-    Vercelli: new Dime.psMap.FixPlaceEntry('Vercelli', 45.32161600, 8.41886000),
-    Luxemburg: new Dime.psMap.FixPlaceEntry('Luxemburg', 49.582602, 6.118268)
+    Vercelli: new Dime.psMap.FixPlaceEntry('Vercelli', 45.32161600, 8.41886000)
 };
 
 
