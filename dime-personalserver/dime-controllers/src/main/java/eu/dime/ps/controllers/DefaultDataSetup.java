@@ -431,9 +431,9 @@ public class DefaultDataSetup implements BroadcastReceiver {
 			
 			//working@office
 			//timeperiod = latemorning, earlyafternoon, lateafternoon, earlyevening
-			latemorning.getModel().addStatement(latemorning, DCON.weight, new DatatypeLiteralImpl("0.5", XSD._float)); 
-			earlyafternoon.getModel().addStatement(earlyafternoon, DCON.weight, new DatatypeLiteralImpl("0.5", XSD._float));
-			lateafternoon.getModel().addStatement(lateafternoon, DCON.weight, new DatatypeLiteralImpl("0.5", XSD._float));
+			latemorning.getModel().addStatement(latemorning, DCON.weight, new DatatypeLiteralImpl("0.7", XSD._float)); 
+			earlyafternoon.getModel().addStatement(earlyafternoon, DCON.weight, new DatatypeLiteralImpl("0.8", XSD._float));
+			lateafternoon.getModel().addStatement(lateafternoon, DCON.weight, new DatatypeLiteralImpl("0.8", XSD._float));
 			earlyevening.getModel().addStatement(earlyevening, DCON.weight, new DatatypeLiteralImpl("0.5", XSD._float));
 			spatem.addCurrentTime(latemorning);
 			spatem.getModel().addModel(latemorning.getModel());
@@ -444,12 +444,12 @@ public class DefaultDataSetup implements BroadcastReceiver {
 			spatem.addCurrentTime(earlyevening);
 			spatem.getModel().addModel(earlyevening.getModel());
 			//place = office
-			workplace.getModel().addStatement(workplace, DCON.weight, new DatatypeLiteralImpl("0.5", XSD._float)); 
+			workplace.getModel().addStatement(workplace, DCON.weight, new DatatypeLiteralImpl("1", XSD._float)); 
 			spatem.addCurrentPlace(workplace);
 			spatem.getModel().addModel(workplace.getModel());
 
 			//state = working
-			working.getModel().addStatement(working, DCON.weight, new DatatypeLiteralImpl("0.5", XSD._float));
+			working.getModel().addStatement(working, DCON.weight, new DatatypeLiteralImpl("0.9", XSD._float));
 			state.addCurrentActivity(working);
 			state.getModel().addModel(working.getModel());
 
@@ -462,10 +462,10 @@ public class DefaultDataSetup implements BroadcastReceiver {
 			
 			//working@home
 			//timeperiod = latemorning, earlyafternoon, lateafternoon, earlyevening
-			latemorning.getModel().addStatement(latemorning, DCON.weight, new DatatypeLiteralImpl("0.5", XSD._float)); 
+			latemorning.getModel().addStatement(latemorning, DCON.weight, new DatatypeLiteralImpl("0.4", XSD._float)); 
 			earlyafternoon.getModel().addStatement(earlyafternoon, DCON.weight, new DatatypeLiteralImpl("0.5", XSD._float));
-			lateafternoon.getModel().addStatement(lateafternoon, DCON.weight, new DatatypeLiteralImpl("0.5", XSD._float));
-			earlyevening.getModel().addStatement(earlyevening, DCON.weight, new DatatypeLiteralImpl("0.5", XSD._float));
+			lateafternoon.getModel().addStatement(lateafternoon, DCON.weight, new DatatypeLiteralImpl("0.3", XSD._float));
+			earlyevening.getModel().addStatement(earlyevening, DCON.weight, new DatatypeLiteralImpl("0.2", XSD._float));
 			spatem.addCurrentTime(latemorning);
 			spatem.getModel().addModel(latemorning.getModel());
 			spatem.addCurrentTime(earlyafternoon);
@@ -475,11 +475,11 @@ public class DefaultDataSetup implements BroadcastReceiver {
 			spatem.addCurrentTime(earlyevening);
 			spatem.getModel().addModel(earlyevening.getModel());
 			//place = residence
-			residence.getModel().addStatement(residence, DCON.weight, new DatatypeLiteralImpl("0.5", XSD._float)); 
+			residence.getModel().addStatement(residence, DCON.weight, new DatatypeLiteralImpl("0.9", XSD._float)); 
 			spatem.addCurrentPlace(residence);
 			spatem.getModel().addModel(residence.getModel());
 			//state = working
-			working.getModel().addStatement(working, DCON.weight, new DatatypeLiteralImpl("0.5", XSD._float));
+			working.getModel().addStatement(working, DCON.weight, new DatatypeLiteralImpl("0.9", XSD._float));
 			state.addCurrentActivity(working);
 			state.getModel().addModel(working.getModel());
 
@@ -492,9 +492,9 @@ public class DefaultDataSetup implements BroadcastReceiver {
 			
 			//@conference
 			//timeperiod = latemorning, earlyafternoon, lateafternoon
-			latemorning.getModel().addStatement(latemorning, DCON.weight, new DatatypeLiteralImpl("0.5", XSD._float)); 
-			earlyafternoon.getModel().addStatement(earlyafternoon, DCON.weight, new DatatypeLiteralImpl("0.5", XSD._float));
-			lateafternoon.getModel().addStatement(lateafternoon, DCON.weight, new DatatypeLiteralImpl("0.5", XSD._float));
+			latemorning.getModel().addStatement(latemorning, DCON.weight, new DatatypeLiteralImpl("0.7", XSD._float)); 
+			earlyafternoon.getModel().addStatement(earlyafternoon, DCON.weight, new DatatypeLiteralImpl("0.6", XSD._float));
+			lateafternoon.getModel().addStatement(lateafternoon, DCON.weight, new DatatypeLiteralImpl("0.7", XSD._float));
 			spatem.addCurrentTime(latemorning);
 			spatem.getModel().addModel(latemorning.getModel());
 			spatem.addCurrentTime(earlyafternoon);
@@ -502,17 +502,17 @@ public class DefaultDataSetup implements BroadcastReceiver {
 			spatem.addCurrentTime(lateafternoon);
 			spatem.getModel().addModel(lateafternoon.getModel());
 			//place = conference venue
-			conventioncentre.getModel().addStatement(conventioncentre, DCON.weight, new DatatypeLiteralImpl("0.5", XSD._float)); 
+			conventioncentre.getModel().addStatement(conventioncentre, DCON.weight, new DatatypeLiteralImpl("0.8", XSD._float)); 
 			spatem.addCurrentPlace(conventioncentre);
 			spatem.getModel().addModel(conventioncentre.getModel());
 			//state = working, meeting, performance
-			working.getModel().addStatement(working, DCON.weight, new DatatypeLiteralImpl("0.5", XSD._float));
+			working.getModel().addStatement(working, DCON.weight, new DatatypeLiteralImpl("0.7", XSD._float));
 			state.addCurrentActivity(working);
 			state.getModel().addModel(working.getModel());
-			meeting.getModel().addStatement(meeting, DCON.weight, new DatatypeLiteralImpl("0.5", XSD._float));
+			meeting.getModel().addStatement(meeting, DCON.weight, new DatatypeLiteralImpl("0.6", XSD._float));
 			state.addCurrentActivity(meeting);
 			state.getModel().addModel(meeting.getModel());
-			performance.getModel().addStatement(performance, DCON.weight, new DatatypeLiteralImpl("0.5", XSD._float));
+			performance.getModel().addStatement(performance, DCON.weight, new DatatypeLiteralImpl("0.4", XSD._float));
 			state.addCurrentActivity(performance);
 			state.getModel().addModel(performance.getModel());
 
@@ -525,18 +525,18 @@ public class DefaultDataSetup implements BroadcastReceiver {
 			
 			//relaxing@home
 			//timeperiod = lateevening, earlynight
-			lateevening.getModel().addStatement(lateevening, DCON.weight, new DatatypeLiteralImpl("0.5", XSD._float)); 
-			earlynight.getModel().addStatement(earlynight, DCON.weight, new DatatypeLiteralImpl("0.5", XSD._float));
+			lateevening.getModel().addStatement(lateevening, DCON.weight, new DatatypeLiteralImpl("0.6", XSD._float)); 
+			earlynight.getModel().addStatement(earlynight, DCON.weight, new DatatypeLiteralImpl("0.8", XSD._float));
 			spatem.addCurrentTime(lateevening);
 			spatem.getModel().addModel(lateevening.getModel());
 			spatem.addCurrentTime(earlynight);
 			spatem.getModel().addModel(earlynight.getModel());
 			//place = residence
-			residence.getModel().addStatement(residence, DCON.weight, new DatatypeLiteralImpl("0.5", XSD._float)); 
+			residence.getModel().addStatement(residence, DCON.weight, new DatatypeLiteralImpl("1", XSD._float)); 
 			spatem.addCurrentPlace(residence);
 			spatem.getModel().addModel(residence.getModel());
 			//state = recreation
-			recreation.getModel().addStatement(recreation, DCON.weight, new DatatypeLiteralImpl("0.5", XSD._float));
+			recreation.getModel().addStatement(recreation, DCON.weight, new DatatypeLiteralImpl("0.8", XSD._float));
 			state.addCurrentActivity(recreation);
 			state.getModel().addModel(recreation.getModel());
 
@@ -549,17 +549,17 @@ public class DefaultDataSetup implements BroadcastReceiver {
 			
 			//socialevent
 			//timeperiod = lateevening, earlynight
-			lateevening.getModel().addStatement(lateevening, DCON.weight, new DatatypeLiteralImpl("0.5", XSD._float)); 
-			earlynight.getModel().addStatement(earlynight, DCON.weight, new DatatypeLiteralImpl("0.5", XSD._float));
+			lateevening.getModel().addStatement(lateevening, DCON.weight, new DatatypeLiteralImpl("0.6", XSD._float)); 
+			earlynight.getModel().addStatement(earlynight, DCON.weight, new DatatypeLiteralImpl("0.7", XSD._float));
 			spatem.addCurrentTime(lateevening);
 			spatem.getModel().addModel(lateevening.getModel());
 			spatem.addCurrentTime(earlynight);
 			spatem.getModel().addModel(earlynight.getModel());
 			//place = residence, restaruant, bar, club, hotel
-			residence.getModel().addStatement(residence, DCON.weight, new DatatypeLiteralImpl("0.5", XSD._float));
-			restaurant.getModel().addStatement(restaurant, DCON.weight, new DatatypeLiteralImpl("0.5", XSD._float));
-			bar.getModel().addStatement(bar, DCON.weight, new DatatypeLiteralImpl("0.5", XSD._float));
-			club.getModel().addStatement(club, DCON.weight, new DatatypeLiteralImpl("0.5", XSD._float));
+			residence.getModel().addStatement(residence, DCON.weight, new DatatypeLiteralImpl("0.6", XSD._float));
+			restaurant.getModel().addStatement(restaurant, DCON.weight, new DatatypeLiteralImpl("0.8", XSD._float));
+			bar.getModel().addStatement(bar, DCON.weight, new DatatypeLiteralImpl("0.9", XSD._float));
+			club.getModel().addStatement(club, DCON.weight, new DatatypeLiteralImpl("0.9", XSD._float));
 			hotel.getModel().addStatement(hotel, DCON.weight, new DatatypeLiteralImpl("0.5", XSD._float));
 			spatem.addCurrentPlace(residence);
 			spatem.getModel().addModel(residence.getModel());
@@ -572,11 +572,13 @@ public class DefaultDataSetup implements BroadcastReceiver {
 			spatem.addCurrentPlace(hotel);
 			spatem.getModel().addModel(hotel.getModel());
 			//state = recreation
-			recreation.getModel().addStatement(recreation, DCON.weight, new DatatypeLiteralImpl("0.5", XSD._float));
+			recreation.getModel().addStatement(recreation, DCON.weight, new DatatypeLiteralImpl("1", XSD._float));
 			state.addCurrentActivity(recreation);
-			state.getModel().addModel(recreation.getModel());
+			spatem.getModel().addModel(recreation.getModel());
+			eating.getModel().addStatement(eating, DCON.weight, new DatatypeLiteralImpl("0.6", XSD._float));
 			state.addCurrentActivity(eating);
 			state.getModel().addModel(eating.getModel());
+			party.getModel().addStatement(eating, DCON.weight, new DatatypeLiteralImpl("0.8", XSD._float));
 			state.addCurrentActivity(party);
 			state.getModel().addModel(party.getModel());
 
@@ -589,14 +591,14 @@ public class DefaultDataSetup implements BroadcastReceiver {
 			
 			//travelling
 			//timeperiod = earlymorning, latemorning, earlyafternoon, lateafternoon, earlyevening, lateevening, earlynight, latenight
-			earlymorning.getModel().addStatement(earlymorning, DCON.weight, new DatatypeLiteralImpl("0.5", XSD._float));
-			latemorning.getModel().addStatement(latemorning, DCON.weight, new DatatypeLiteralImpl("0.5", XSD._float)); 
+			earlymorning.getModel().addStatement(earlymorning, DCON.weight, new DatatypeLiteralImpl("0.7", XSD._float));
+			latemorning.getModel().addStatement(latemorning, DCON.weight, new DatatypeLiteralImpl("0.4", XSD._float)); 
 			earlyafternoon.getModel().addStatement(earlyafternoon, DCON.weight, new DatatypeLiteralImpl("0.5", XSD._float));
-			lateafternoon.getModel().addStatement(lateafternoon, DCON.weight, new DatatypeLiteralImpl("0.5", XSD._float));
-			earlyevening.getModel().addStatement(earlyevening, DCON.weight, new DatatypeLiteralImpl("0.5", XSD._float));
-			lateevening.getModel().addStatement(lateevening, DCON.weight, new DatatypeLiteralImpl("0.5", XSD._float)); 
-			earlynight.getModel().addStatement(earlynight, DCON.weight, new DatatypeLiteralImpl("0.5", XSD._float));
-			latenight.getModel().addStatement(latenight, DCON.weight, new DatatypeLiteralImpl("0.5", XSD._float));
+			lateafternoon.getModel().addStatement(lateafternoon, DCON.weight, new DatatypeLiteralImpl("0.7", XSD._float));
+			earlyevening.getModel().addStatement(earlyevening, DCON.weight, new DatatypeLiteralImpl("0.6", XSD._float));
+			lateevening.getModel().addStatement(lateevening, DCON.weight, new DatatypeLiteralImpl("0.7", XSD._float)); 
+			earlynight.getModel().addStatement(earlynight, DCON.weight, new DatatypeLiteralImpl("0.3", XSD._float));
+			latenight.getModel().addStatement(latenight, DCON.weight, new DatatypeLiteralImpl("0.2", XSD._float));
 			spatem.addCurrentTime(earlymorning);
 			spatem.getModel().addModel(earlymorning.getModel());
 			spatem.addCurrentTime(latemorning);
@@ -614,19 +616,20 @@ public class DefaultDataSetup implements BroadcastReceiver {
 			spatem.addCurrentTime(latenight);
 			spatem.getModel().addModel(latenight.getModel());
 			//place = airport, station
-			airport.getModel().addStatement(airport, DCON.weight, new DatatypeLiteralImpl("0.5", XSD._float));
-			station.getModel().addStatement(station, DCON.weight, new DatatypeLiteralImpl("0.5", XSD._float));
+			airport.getModel().addStatement(airport, DCON.weight, new DatatypeLiteralImpl("0.8", XSD._float));
+			station.getModel().addStatement(station, DCON.weight, new DatatypeLiteralImpl("0.9", XSD._float));
 			spatem.addCurrentPlace(airport);
 			spatem.getModel().addModel(airport.getModel());
 			spatem.addCurrentPlace(station);
 			spatem.getModel().addModel(station.getModel());
 			//state = driving, travelling
-			recreation.getModel().addStatement(recreation, DCON.weight, new DatatypeLiteralImpl("0.5", XSD._float));
-			state.addCurrentActivity(travelling);
-			state.getModel().addModel(travelling.getModel());
+			driving.getModel().addStatement(recreation, DCON.weight, new DatatypeLiteralImpl("0.5", XSD._float));
 			state.addCurrentActivity(driving);
 			state.getModel().addModel(driving.getModel());
-
+			travelling.getModel().addStatement(recreation, DCON.weight, new DatatypeLiteralImpl("1", XSD._float));
+			state.getModel().addModel(travelling.getModel());
+			state.addCurrentActivity(travelling);
+			
 			//CREATE SITUATION		
 			createSituation("Travelling", me, spatem, state);
 
