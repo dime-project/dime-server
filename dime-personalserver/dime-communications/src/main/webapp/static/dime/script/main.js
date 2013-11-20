@@ -4963,11 +4963,11 @@ Dime.DetailDialog.prototype = {
             case "dcon:currentTime":
                 return Dime.ps_configuration.getRealBasicUrlString() + "/dime-communications/static/ui/images/situations/timeperiod_inverted.png";
             case "dcon:connection":
-                return Dime.ps_configuration.getRealBasicUrlString() + "/dime-communications/static/ui/images/situations/situations/network.png";
+                return Dime.ps_configuration.getRealBasicUrlString() + "/dime-communications/static/ui/images/situations/network.png";
             case "dcon:currentActivity":
-                return Dime.ps_configuration.getRealBasicUrlString() + "/dime-communications/static/ui/images/situations/situations/activity.png";
+                return Dime.ps_configuration.getRealBasicUrlString() + "/dime-communications/static/ui/images/situations/activity.png";
             default:
-                console.log("No image found");
+                return false;
         }
     },
 
@@ -4975,6 +4975,8 @@ Dime.DetailDialog.prototype = {
         
         var scoreElement;
         var situationElement;
+        var contextElementsWithNoIcon = 0;
+        var contextElementsLength = (item.contextElements) ? 0 : item.contextElements.length;
         
         if(item['nao:score']){
             scoreElement = $("<div></div>").addClass("situationElementScore").append("Score: " + item['nao:score'] + "%");
@@ -4987,16 +4989,20 @@ Dime.DetailDialog.prototype = {
         if(item.contextElements && item.contextElements.length > 0){
             situationElement = $("<div></div>").addClass("allSituationElementContainer").text('Context elements for situation:');
             for(var i=0; i<item.contextElements.length; i++){
-                var weight = item.contextElements[i]["dcon:weight"];
-                situationElement.append($("<div></div>")
+                if(this.getSituationIconForType(item.contextElements[i].type)){
+                    var weight = item.contextElements[i]["dcon:weight"];
+                    situationElement.append($("<div></div>")
                     .addClass("situationElementContainer")
                     .append($("<div></div>")
                         .addClass("situationElementIcon")
                         .append($("<img></img>").attr("src", this.getSituationIconForType(item.contextElements[i].type))))
                     .append($("<div></div>")
                         .addClass("situationElementLabel")
-                        .append((item.contextElements.name ? item.contextElements.name : "") + " (weigth: " + weight + ")"))
-                );
+                        .append((item.contextElements.name ? item.contextElements.name : "") + " (weight: " + weight + ")"))
+                    );
+                }else{
+                    contextElementsWithNoIcon++;
+                }
             }
         }
          
@@ -5005,7 +5011,7 @@ Dime.DetailDialog.prototype = {
             .append(this.createNameInput(item))
             .append(JSTool.createHTMLElementString("div", "DimeDetailDialogSituation", [], null, innerHtmlSituation))
             .append(scoreElement)
-            .append(situationElement);
+            .append((contextElementsWithNoIcon==contextElementsLength)?"":situationElement);
 
         //add assemble function for text
         var updateSituation = function(){
