@@ -1,20 +1,21 @@
 /*
-* Copyright 2013 by the digital.me project (http://www.dime-project.eu).
-*
-* Licensed under the EUPL, Version 1.1 only (the "Licence");
-* You may not use this work except in compliance with the Licence.
-* You may obtain a copy of the Licence at:
-*
-* http://joinup.ec.europa.eu/software/page/eupl/licence-eupl
-*
-* Unless required by applicable law or agreed to in writing, software distributed under the Licence is distributed on an "AS IS" basis,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-* See the Licence for the specific language governing permissions and limitations under the Licence.
-*/
+ * Copyright 2013 by the digital.me project (http://www.dime-project.eu).
+ *
+ * Licensed under the EUPL, Version 1.1 only (the "Licence");
+ * You may not use this work except in compliance with the Licence.
+ * You may obtain a copy of the Licence at:
+ *
+ * http://joinup.ec.europa.eu/software/page/eupl/licence-eupl
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the Licence is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the Licence for the specific language governing permissions and limitations under the Licence.
+ */
 
 package eu.dime.ps.controllers.notifier.impl;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 import java.util.Vector;
@@ -46,37 +47,37 @@ public class NotifierManagerImpl implements NotifierManager {
 	@Override
 	public void pushInternalNotification(DimeInternalNotification notification)
 			throws NotifierException {
-		
+
 		logger.info("Addind a notification in the storage: "
 				+ notification.toString());
-		
+
 		if(DimeInternalNotification.USER_NOTIFICATION_TYPE.equals(notification.getNotificationType())){
 			Long id = notifyHistory.addNotificationOnHistory(notification);
-			
+
 			SystemNotification systemNotification = new SystemNotification(
-						notification.getTenant(), 
-						SystemNotification.OP_CREATE, 
-						String.valueOf(id), 
-						DimeInternalNotification.USER_NOTIFICATION_TYPE, 
-						notification.getUserID());
-			
+					notification.getTenant(), 
+					SystemNotification.OP_CREATE, 
+					String.valueOf(id), 
+					DimeInternalNotification.USER_NOTIFICATION_TYPE, 
+					notification.getUserID());
+
 			logger.info("Addind a User Notification in the queue: "
 					+ notification.toString());
-			
+
 			systemNotification.setId(UUID.randomUUID().toString());
 			internalNotifyFifo.pushNotification(systemNotification);
 		}
-		
+
 		if(DimeInternalNotification.SYSTEM_NOTIFICATION_TYPE.equals(notification.getNotificationType())){
-			
+
 			logger.info("Addind a System Notification in the queue: "
 					+ notification.toString());
-			
+
 			notification.setId(UUID.randomUUID().toString());
 			internalNotifyFifo.pushNotification(notification);
 		}
 
-		
+
 
 
 	}
@@ -94,7 +95,7 @@ public class NotifierManagerImpl implements NotifierManager {
 		Vector<DimeInternalNotification> result = new Vector<DimeInternalNotification>(num);
 
 		for (int i = 0; i < num; i++) {
-			
+
 			DimeInternalNotification n = internalNotifyFifo.popNotification(tenant);
 			if(n != null){
 				result.add(n);
@@ -145,14 +146,14 @@ public class NotifierManagerImpl implements NotifierManager {
 		return popExternalNotifications(externalNotifyFifo.size());
 	}
 
-	
+
 	// Historic
-	
+
 	@Override
 	public List<DimeInternalNotification> getAllNotifications(Tenant tenant, Integer firstResult, Integer maxResults) {
 		return notifyHistory.getNotificationHistory();
 	}
-	
+
 	@Override
 	public DimeInternalNotification getNotificationById(Long id) {
 		return notifyHistory.getNotificationById(id);
@@ -162,7 +163,7 @@ public class NotifierManagerImpl implements NotifierManager {
 	public List<DimeInternalNotification> getNotificationsByDate(Date from, Date to) {
 		return notifyHistory.getNotificationsByDate(from, to);
 	}
-	
+
 	@Override
 	public List<DimeInternalNotification> getAllMyUserNotifications(
 			Tenant tenant, Integer firstResult, Integer maxResults) {
@@ -172,14 +173,14 @@ public class NotifierManagerImpl implements NotifierManager {
 	@Override
 	public List<DimeInternalNotification> getAllMyUserUnReadedNotifications(Tenant tenant, Integer firstResult, Integer maxResults) {
 		return notifyHistory.getUnreadedUserNotificationHistory(tenant, firstResult, maxResults);
-		
+
 	}
-	
+
 	@Override
 	public void markNotificationAsRead(Long id){
 		notifyHistory.markAsRead(id);
 	}	
-	
+
 	@Override
 	public void purgeNotifications(){
 		internalNotifyFifo.purgeNotifications();
@@ -221,10 +222,20 @@ public class NotifierManagerImpl implements NotifierManager {
 		} catch (NotifierException e) {
 			logger.error("Error while pushing notification ["+systemNotification+"].", e);
 		}
-		
+
 	}
 
-	
+
+	@Override
+	public HashMap<String, Object> getSize(Long id){
+		int iSize = internalNotifyFifo.size(id);
+		int eSize = externalNotifyFifo.size();
+		
+		HashMap<String,Object> result = new HashMap<String,Object>();
+		result.put("size internal queue", iSize);
+		result.put("size external queue", eSize);
+		return result;
+	}
 
 
 

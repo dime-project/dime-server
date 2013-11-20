@@ -15,6 +15,7 @@
 package eu.dime.ps.controllers.notifier;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import eu.dime.commons.dto.UserNotificationDTO;
@@ -146,4 +147,6 @@ public interface NotifierManager {
 	 * @throws NotifierException 
 	 */
 	public void remove(Long id) throws NotifierException;
+
+	public HashMap<String, Object> getSize(Long id);
 }

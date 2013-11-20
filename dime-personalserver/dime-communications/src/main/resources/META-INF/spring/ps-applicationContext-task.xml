@@ -99,6 +99,11 @@
 				<ref bean="jobExternalTrigger" />
 			</list>
 		</property>
+		<property name="quartzProperties">
+        <props>
+            <prop key="org.quartz.threadPool.threadCount">100</prop>
+        </props>
+    </property> 		
 	</bean>
 	
 	<bean id="DFB2" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">

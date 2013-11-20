@@ -15,6 +15,7 @@
 package eu.dime.ps.communications.requestbroker.controllers.notifications;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.ws.rs.GET;
@@ -125,5 +126,20 @@ public class PSNotificationsController implements APIController {
 //		return Response.ok(data);
 //
 //	}
+	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
+	@Path("/@me/@size")
+	public Response<HashMap<String,Object>> getsizeNotification(@PathParam("said") String said) {
+		Tenant tenant = tenantManager.getByAccountName(said);
+		HashMap<String,Object> size = notifierManager.getSize(tenant.getId());
+
+		Data<HashMap<String,Object>> data = new Data<HashMap<String,Object>>();
+		
+		data.addEntry(size);
+
+		return Response.ok(data);
+	}	
+	
 
 }
