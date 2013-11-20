@@ -27,7 +27,6 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import org.ontoware.rdf2go.RDF2Go;
 import org.ontoware.rdf2go.model.Model;
 import org.ontoware.rdf2go.model.node.impl.URIImpl;
 import org.slf4j.Logger;
@@ -53,8 +52,6 @@ public class PSRuleController implements APIController {
 
 	private RuleManager ruleManager;
 
-	Model drmoModel = RDF2Go.getModelFactory().createModel().open();
-
 	@Autowired
 	public void setRuleManager(RuleManager ruleManager) {
 		this.ruleManager = ruleManager;
@@ -73,7 +70,7 @@ public class PSRuleController implements APIController {
 			Collection<Rule> rules = ruleManager.getAll();
 			response = new Data<RuleInstance>(0, rules.size(), rules.size());
 			for (Rule rule : rules) {
-				response.getEntries().add(new RuleInstance(rule.asURI(), rule.getModel(), drmoModel));
+				response.getEntries().add(new RuleInstance(rule.asURI(), rule.getModel()));
 			}
 		} catch (InfosphereException e) {
 			return Response.badRequest(e.getMessage(), e);
@@ -97,7 +94,7 @@ public class PSRuleController implements APIController {
 
 		try {
 			Rule rule = ruleManager.get(ruleId);
-			RuleInstance dto = new RuleInstance(rule.asURI(), rule.getModel(), drmoModel);
+			RuleInstance dto = new RuleInstance(rule.asURI(), rule.getModel());
 			response = new Data<RuleInstance>(0, 1, dto);
 		} catch (InfosphereException e) {
 			return Response.badRequest(e.getMessage(), e);

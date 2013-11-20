@@ -1,0 +1,23 @@
+<urn:uuid:32afb787-a489-4875-94f2-50b8b32bb388> a <http://www.semanticdesktop.org/ontologies/2012/03/06/drmo#Rule> .
+
+<urn:uuid:4d063926-505e-4405-89fa-83bea754c648> a <http://www.semanticdesktop.org/ontologies/2012/03/06/drmo#Condition> ;
+	<http://www.semanticdesktop.org/ontologies/2012/03/06/drmo#hasResourceType> <http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#Document> .
+
+<urn:uuid:a034fd39-3b0b-4af3-bc8e-55ac17f9f157> a <http://www.semanticdesktop.org/ontologies/2012/03/06/drmo#Condition> ;
+	<http://www.semanticdesktop.org/ontologies/2012/03/06/drmo#hasResourceType> <http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#Document> ;
+	<http://www.semanticdesktop.org/ontologies/2012/03/06/drmo#hasConstraintOnProperty> <http://www.semanticdesktop.org/ontologies/2009/11/08/nso#sharedWith> .
+
+<urn:uuid:7d7feaa3-ea02-445b-8c64-bfca8f453a0f> a <http://www.semanticdesktop.org/ontologies/2012/03/06/drmo#Condition> ;
+	<http://www.semanticdesktop.org/ontologies/2012/03/06/drmo#hasResourceType> <http://www.semanticdesktop.org/ontologies/2011/10/05/dao#Account> ;
+	<http://www.semanticdesktop.org/ontologies/2012/03/06/drmo#hasConstraintOnProperty> <http://www.semanticdesktop.org/ontologies/2011/10/05/dao#accountType> ;
+	<http://www.semanticdesktop.org/ontologies/2012/03/06/drmo#hasConstraintOnObject> "di.me" .
+
+<urn:uuid:a034fd39-3b0b-4af3-bc8e-55ac17f9f157> <http://www.semanticdesktop.org/ontologies/2012/03/06/drmo#hasConstraintOnObject> <urn:uuid:7d7feaa3-ea02-445b-8c64-bfca8f453a0f> .
+
+<urn:uuid:4d063926-505e-4405-89fa-83bea754c648> <http://www.semanticdesktop.org/ontologies/2012/03/06/drmo#hasConstraint> <urn:uuid:a034fd39-3b0b-4af3-bc8e-55ac17f9f157> .
+
+<urn:uuid:32afb787-a489-4875-94f2-50b8b32bb388> <http://www.semanticdesktop.org/ontologies/2012/03/06/drmo#isComposedOf> <urn:uuid:4d063926-505e-4405-89fa-83bea754c648> .
+
+<urn:actions:Notify> a <http://www.semanticdesktop.org/ontologies/2012/03/06/drmo#Action> .
+
+<urn:uuid:32afb787-a489-4875-94f2-50b8b32bb388> <http://www.semanticdesktop.org/ontologies/2012/03/06/drmo#triggers> <urn:actions:ITL> .

@@ -1,0 +1,13 @@
+<urn:uuid:1f8884c1-821c-4725-99a6-a30e119860f6> a <http://www.semanticdesktop.org/ontologies/2012/03/06/drmo#Rule> .
+
+<urn:uuid:dbaef96c-0ed0-4c2c-a6db-84cc859189a2> a <http://www.semanticdesktop.org/ontologies/2012/03/06/drmo#SituationActivated> ;
+	<http://www.semanticdesktop.org/ontologies/2012/03/06/drmo#hasResourceType> <http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#Person> ;
+	<http://www.semanticdesktop.org/ontologies/2012/03/06/drmo#hasConstraintOnProperty> <http://www.semanticdesktop.org/ontologies/2011/10/05/dcon#hasSituation> ;
+	<http://www.semanticdesktop.org/ontologies/2012/03/06/drmo#hasConstraintOnObject> <urn:uuid:e463c0da-3f65-4235-b45c-2cdc4c17ac5a> .
+
+<urn:uuid:1f8884c1-821c-4725-99a6-a30e119860f6> <http://www.semanticdesktop.org/ontologies/2012/03/06/drmo#isComposedOf> <urn:uuid:dbaef96c-0ed0-4c2c-a6db-84cc859189a2> .
+
+<urn:actions:Notify> a <http://www.semanticdesktop.org/ontologies/2012/03/06/drmo#Action> ;
+	<http://www.semanticdesktop.org/ontologies/2012/03/06/drmo#hasObject> "Situation urn:uuid:e463c0da-3f65-4235-b45c-2cdc4c17ac5a activated" .
+
+<urn:uuid:1f8884c1-821c-4725-99a6-a30e119860f6> <http://www.semanticdesktop.org/ontologies/2012/03/06/drmo#triggers> <urn:actions:Notify> .

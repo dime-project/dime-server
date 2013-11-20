@@ -38,12 +38,14 @@ import org.ontoware.rdf2go.model.Model;
 import org.ontoware.rdf2go.model.ModelSet;
 import org.ontoware.rdf2go.model.QueryRow;
 import org.ontoware.rdf2go.model.node.Node;
+import org.ontoware.rdf2go.model.node.Resource;
 import org.ontoware.rdf2go.model.node.impl.URIImpl;
 import org.openrdf.repository.RepositoryException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import eu.dime.ps.controllers.automation.action.NotifyUI;
+import eu.dime.ps.controllers.automation.action.IncreaseTrustLevel;
+import eu.dime.ps.controllers.automation.action.Notify;
 import eu.dime.ps.controllers.notifier.NotifierManager;
 import eu.dime.ps.semantic.BroadcastManager;
 import eu.dime.ps.semantic.BroadcastReceiver;
@@ -55,6 +57,8 @@ public class RuleExecutor implements BroadcastReceiver {
 
 	private static final Logger logger = LoggerFactory.getLogger(RuleExecutor.class);
 	
+	private static final ActionRegistry actionRegistry = ActionRegistry.getInstance();
+	
 	private ConnectionProvider connectionProvider;
 	private NotifierManager notifierManager;
 	
@@ -63,6 +67,8 @@ public class RuleExecutor implements BroadcastReceiver {
 	
 	public RuleExecutor() {
 		BroadcastManager.getInstance().registerReceiver(this);
+		actionRegistry.register(Notify.IDENTIFIER, Notify.class);
+		actionRegistry.register(IncreaseTrustLevel.IDENTIFIER, IncreaseTrustLevel.class);
 	}
 	
 	public void setConnectionProvider(ConnectionProvider connectionProvider) {
@@ -114,9 +120,11 @@ public class RuleExecutor implements BroadcastReceiver {
 			processorCache.putIfAbsent(event.getTenant(), eventProcessor);
 		}
 
-		// registering event in EventLogger
 		Model metadata = event.getData() == null ? RDF2Go.getModelFactory().createModel().open() : event.getData().getModel();
+		Resource eventResource = event.getIdentifier().asURI();
 		String eventAction = event.getAction();
+
+		// registering event in EventLogger
 		if (Event.ACTION_RESOURCE_ADD.equals(eventAction)) {
 			eventLogger.resourceAdded(event.getIdentifier(), metadata);
 		} else if (Event.ACTION_RESOURCE_MODIFY.equals(eventAction)) {
@@ -126,39 +134,33 @@ public class RuleExecutor implements BroadcastReceiver {
 		}
 
 		// register new rules
-		// FIXME do we need to register the rules in the event processor?? -- [jer] rule transformer is separate from the EventProcessor, thus not directly linked to the controller. we might need to add a method in this class to register new rules after the EP is intialised?
-		//for (Rule rule : getRulesFromPIMO(pimoService))
-		if (event.is(DRMO.Rule)) {
-//		try {
-//			eventProcessor.registerRule(event.getIdentifier().asURI());
-//		} catch (RuleMalformedException e1) {
-//			// TODO Auto-generated catch block
-//			e1.printStackTrace();
-//		} catch (InvalidOperatorException e1) {
-//			// TODO Auto-generated catch block
-//			e1.printStackTrace();
-//		} catch (MapperException e1) {
-//			// TODO Auto-generated catch block
-//			e1.printStackTrace();
+		if (event.is(DRMO.Rule) && Event.ACTION_RESOURCE_ADD.equals(eventAction)) {
+			try {
+				eventProcessor.registerRule(eventResource.asURI());
+			} catch (Exception e) {
+				logger.error("Couldn't register new rule " + eventResource, e);
+			}
+			return;
 		}
 
-		
-		for (Tuple<Rule, QueryRow> tuple : eventProcessor.executeEventProcessor(event.getIdentifier().asURI())) {
+		// pass event to processor, and execute the actions of the satisfied rules
+		for (Tuple<Rule, QueryRow> tuple : eventProcessor.executeEventProcessor(eventResource.asURI())) {
 			Rule rule = tuple.firstElement;
 			QueryRow queryRow = tuple.secondElement;
 			
 			List<Node> results = new ArrayList<Node>(); 
-			for (String variable : rule.getVariables())
+			for (String variable : rule.getVariables()) {
 				results.add(queryRow.getValue(variable));
+			}
 			
-			for (Action actionDef : rule.getActions()) {
+			for (Action ruleAction : rule.getActions()) {
 				ie.deri.smile.rules.actions.Action action = null;
 				try {
-					action = ActionRegistry.getInstance().build(actionDef.getAction());
+					action = actionRegistry.build(ruleAction.getAction(), ruleAction.getActionSubject(), ruleAction.getActionObject());
 					
-					// FIXME [Ismael] injecting the notifier manager in a hacky way; temporary solution for 2nd review
-					if (action instanceof NotifyUI)
-						((NotifyUI) action).setNotifierManager(this.notifierManager);
+					if (action instanceof Notify) {
+						((Notify) action).setNotifierManager(this.notifierManager);
+					}
 					
 					action.execute(results, pimoService.getTripleStore().getUnderlyingModelSet(), event.getTenant());
 				} catch (InstantiationException e) {
