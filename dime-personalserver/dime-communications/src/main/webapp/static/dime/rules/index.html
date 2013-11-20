@@ -291,6 +291,7 @@ $(document).on("click","#newRuleButton", function() {
 									createConditionBox(currentRuleId);
 									//hide message text box
 									$(document).find("#notificationText").hide(); 
+									$(document).find("#saveButton").hide(); 
 									reactivateDraggableTypes();
 	//								reactivateDraggableOperators();
 									reactivateDraggableActions();
@@ -372,6 +373,7 @@ function reactivateDraggableActions(){
 			$(document).find("#notificationText").val("Enter a personalised notification message here.");
 		}
 		$(document).find("#notificationText").show(); 
+		$(document).find("#saveButton").show(); 
   	    document.getElementById('menu')
 	  }
 	});
@@ -668,7 +670,7 @@ function addConstraints(element){
 		conditionsKeyPress.put(boxId,0);
 		conditionsMousePress.put(boxId,0);
 		var boxCode = "<div id='"+boxId+"' class='rulebox'>"+
-		"<div style='color:rgb(49, 48, 49); font-size:20px; font-weight:bold; font-family:Helvetica,Arial,sans-serif; margin-top:10px; margin-left:5px; margin-right:5px; float:left'>if</div> <div id='conditions_"+boxId+"'><div id='conditiondiv_1_"+boxId+"' class='conditionBox'></div></div><div><a href='#' name='newConditionButton' class='newConditionButton'>+</a></div><div style='color:rgb(49, 48, 49); font-size:20px; font-weight:bold; font-family:Helvetica,Arial,sans-serif; margin-top:10px; margin-left:5px; margin-right:5px; float:left'>then</div> <div class='action'><span class='helper'>A</span><span class='helper3'>ction</span><span style='float:right'><input id='notificationText' type='text' style='width:300px; color:rgb(49, 48, 49); font-style:italic; height:20px; border: 1px dotted #000000; margin:5px 5px 5px 5px; word-wrap:break-word; padding:0px'></span></div><a href='#' name='"+boxId+"' class='saveButton'>Save</a><br clear='all'/>"+
+		"<div style='color:rgb(49, 48, 49); font-size:20px; font-weight:bold; font-family:Helvetica,Arial,sans-serif; margin-top:10px; margin-left:5px; margin-right:5px; float:left'>if</div> <div id='conditions_"+boxId+"'><div id='conditiondiv_1_"+boxId+"' class='conditionBox'></div></div><div><a href='#' name='newConditionButton' title='Add Another Condition' class='newConditionButton'>+</a></div><div style='color:rgb(49, 48, 49); font-size:20px; font-weight:bold; font-family:Helvetica,Arial,sans-serif; margin-top:10px; margin-left:5px; margin-right:5px; float:left'>then</div> <div class='action'><span class='helper'>A</span><span class='helper3'>ction</span><span style='float:right'><input id='notificationText' type='text' style='width:300px; color:rgb(49, 48, 49); font-style:italic; height:20px; border: 1px dotted #000000; margin:5px 5px 5px 5px; word-wrap:break-word; padding:0px'></span></div><a href='#' name='"+boxId+"' id='saveButton' class='saveButton'>Save</a><br clear='all'/>"+
 		"</div>";
 		
 		/*
@@ -689,6 +691,7 @@ function addConstraints(element){
 		*/
 		
 		currentRuleId = boxId;
+
 		return boxCode;
 	}
 
