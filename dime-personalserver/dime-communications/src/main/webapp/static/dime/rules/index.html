@@ -139,20 +139,19 @@ var types = [
 	
 	var peerConstraints = [
 		  { 
-		  	//person only
+		  	//person 
 			value: 0,
 			constraintQuery: "select distinct ?x ?label ?p where { ?p a <http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#Person> . ?p <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#prefLabel>  ?x . }",
 			constraintId: "p",
-			json: '{ "and": #andURI, "conditionType": "drmo:Condition", "conditions": [ {"and": #andURI, "conditionType": "drmo:Condition", "conditions": [],  "constraintOnGraph": null, "constraintOnObject": #object,  "constraintOnProperty": #property,  "constraintOnSubject": null, "guid":"#guid_1",  "isNegated": false,  "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "dcon:Peers",  "succeededBy": #succURI } ],  "constraintOnGraph": null, "constraintOnObject": null,  "constraintOnProperty": null,  "constraintOnSubject": null, "guid":"#guid",  "isNegated": false,  "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "dcon:Peers",  "succeededBy": #succURI  }',
-			jsonMemberOf: '{ "and": #andURI, "conditionType": "drmo:Condition", "conditions": [ {"and": #andURI, "conditionType": "drmo:Condition", "conditions": [],  "constraintOnGraph": null, "constraintOnObject": { "and": #andURI, "conditionType": "drmo:Condition", "conditions": [],  "constraintOnGraph": null, "constraintOnObject": null,  "constraintOnProperty": "pimo:memberOf",  "constraintOnSubject": null, "guid":"#guid",  "isNegated": false,  "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "pimo:Person",  "succeededBy": #succURI  },  "constraintOnProperty": #property,  "constraintOnSubject": null, "guid":"#guid_1",  "isNegated": false,  "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "dcon:Peers",  "succeededBy": #succURI } ],  "constraintOnGraph": null, "constraintOnObject": null,  "constraintOnProperty": null,  "constraintOnSubject": null, "guid":"#guid",  "isNegated": false,  "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "dcon:Peers",  "succeededBy": #succURI  }', 
+			json: '{ "and": #andURI, "conditionType": "drmo:Condition", "conditions": [ {"and": #andURI, "conditionType": "drmo:Condition", "conditions": [],  "constraintOnGraph": null, "constraintOnObject": #object,  "constraintOnProperty": #property,  "constraintOnSubject": null, "guid":"#guid_1",  "isNegated": false,  "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "dcon:Peers",  "succeededBy": #succURI } ],  "constraintOnGraph": null, "constraintOnObject": null,  "constraintOnProperty": null,  "constraintOnSubject": null, "guid":"#guid",  "isNegated": false,  "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "dcon:Peers",  "succeededBy": #succURI  }'
+			
 		  } ,
 		  {
-			  //group only
+			  //group 
 			  value: 1,
 			  constraintQuery: "select distinct ?x ?p ?label where { ?p a <http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#PersonGroup> . ?p <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#prefLabel>  ?x . } ", 
 			  constraintId: "p",
-  			json: '{ "and": #andURI, "conditionType": "drmo:Condition", "conditions": [ {"and": #andURI, "conditionType": "drmo:Condition", "conditions": [],  "constraintOnGraph": null, "constraintOnObject": #object,  "constraintOnProperty": #property,  "constraintOnSubject": null, "guid":"#guid_1",  "isNegated": false,  "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "dcon:Peers",  "succeededBy": #succURI } ],  "constraintOnGraph": null, "constraintOnObject": null,  "constraintOnProperty": null,  "constraintOnSubject": null, "guid":"#guid",  "isNegated": false,  "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "dcon:Peers",  "succeededBy": #succURI  }',
-  			jsonMemberOf: '{ "and": #andURI, "conditionType": "drmo:Condition", "conditions": [ {"and": #andURI, "conditionType": "drmo:Condition", "conditions": [],  "constraintOnGraph": null, "constraintOnObject": null,  "constraintOnProperty": #property,  "constraintOnSubject": { "and": #andURI, "conditionType": "drmo:Condition", "conditions": [],  "constraintOnGraph": null, "constraintOnObject": null,  "constraintOnProperty": "pimo:hasMember",  "constraintOnSubject": null, "guid":"#guid",  "isNegated": false,  "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "pimo:Person",  "succeededBy": #succURI  }, "guid":"#guid_1",  "isNegated": false,  "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "dcon:Peers",  "succeededBy": #succURI } ],  "constraintOnGraph": null, "constraintOnObject": null,  "constraintOnProperty": null,  "constraintOnSubject": null, "guid":"#guid",  "isNegated": false,  "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "dcon:Peers",  "succeededBy": #succURI  }', 
+		json: '{ "and": #andURI, "conditionType": "drmo:Condition", "conditions": [ {"and": #andURI, "conditionType": "drmo:Condition", "conditions": [],  "constraintOnGraph": null, "constraintOnObject": { "and": #andURI, "conditionType": "drmo:Condition", "conditions": [],  "constraintOnGraph": null, "constraintOnObject": #object,  "constraintOnProperty": "pimo:memberOf",  "constraintOnSubject": null, "guid":"#guid_2",  "isNegated": false,  "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "pimo:Person",  "succeededBy": #succURI  },  "constraintOnProperty": #property,  "constraintOnSubject": null, "guid":"#guid_1",  "isNegated": false,  "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "dcon:Peers",  "succeededBy": #succURI } ],  "constraintOnGraph": null, "constraintOnObject": null,  "constraintOnProperty": null,  "constraintOnSubject": null, "guid":"#guid",  "isNegated": false,  "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "dcon:Peers",  "succeededBy": #succURI  }'
 		  }
 		  ]	
 		  
@@ -293,11 +292,14 @@ $(document).on("click","#newRuleButton", function() {
 									//hide message text box
 									$(document).find("#notificationText").hide(); 
 									reactivateDraggableTypes();
-									reactivateDraggableOperators();
+	//								reactivateDraggableOperators();
 									reactivateDraggableActions();
 									$(".controlbox").accordion("option", "active", 0);
 									return true;
 									});
+									
+
+									
 					
 $(document).on("keypress", ".rulebox", function(event){ 
 													var value = conditionsKeyPress.get($(this).attr("id")) + 1;
@@ -325,8 +327,9 @@ $(document).ready(function(){
 		}
 	});
 
-
-	
+//Function removed as we are only supporting & operator (simple buttom will do)
+/*
+/*	
 	//operators
 	$.each(ops, function(index , data){
 		var name = data.name;
@@ -334,7 +337,8 @@ $(document).ready(function(){
 		var createDiv = "<div style='border:dotted thin #007FFF; margin-top:5px; margin-right:5px; margin-left:5px; margin-bottom:5px; width:20px; height:20px; float:left'><div class='draggableOperator' title='"+name+"'>"+label+"</div></div>";
 		$(document).find("#controlbox_Operator").append(createDiv);
 	});
-	
+*/
+
 	//actions
 	$.each(actions, function(index , data){
 		var id = data.id;
@@ -362,8 +366,12 @@ function reactivateDraggableActions(){
 		$(this).find(".draggableAction").remove(".draggableAction");
 		$(this).append(drgClone);
 		//show message text box + default message.
+		if (drgClone.attr("value") == 1) {
+			$(document).find("#notificationText").val("Trust-level increased after sharing.");
+		} else {
+			$(document).find("#notificationText").val("Enter a personalised notification message here.");
+		}
 		$(document).find("#notificationText").show(); 
-		$(document).find("#notificationText").val("Enter a personalised notification message here.");
   	    document.getElementById('menu')
 	  }
 	});
@@ -390,6 +398,8 @@ function reactivateDraggableTypes(){
 	});
 }
 
+//Function removed as we are only supporting & operator (simple buttom will do)
+/*
 function reactivateDraggableOperators(){
 	$( ".draggableOperator" ).draggable({ helper:'clone', snap: ".newConditionButton", snapMode: "inner", start: function() {
 		drgClone = $(this).clone(true)
@@ -410,7 +420,7 @@ function reactivateDraggableOperators(){
 		  }
 		});
 }
-
+*/
 
 function addProperties(){
 	//clear sidebar
@@ -434,9 +444,9 @@ function addProperties(){
 						
 		addConstraints($(this));
 	} else {
-		if ((propValue == 4) || (propValue == 5)){
-			$("#"+currentConditionId).parent().find(".autocompleteFillInConstraint").css("background-color","#999"); 
-		} else {
+		$("#"+currentConditionId).parent().find(".autocompleteFillInConstraint").css("background-color","#999"); 
+		if (!((propValue == 4) || (propValue == 5)))
+		{
 			$.ajax({
 					async: false,
 					url: '/dime-communications/api/dime/rest/'+said+'/sparql',
@@ -525,7 +535,7 @@ function addConstraints(element){
 
 			}
 		
-		$(".controlbox").accordion("option", "active", 4);		
+		$(".controlbox").accordion("option", "active", 3);		
 		}
 		else {
 		//nearby people
@@ -631,7 +641,7 @@ function addConstraints(element){
 					$(this).append(drgClone);
 					
 					//after the dragged constrained is appended to the condition box, swithc to the action view
-					$(".controlbox").accordion("option", "active", 4);	
+					$(".controlbox").accordion("option", "active", 3);	
 					if (currentValueId == -1){
 						//?Any is chosen
 						var condId = currentConditionId;
@@ -658,18 +668,32 @@ function addConstraints(element){
 		conditionsKeyPress.put(boxId,0);
 		conditionsMousePress.put(boxId,0);
 		var boxCode = "<div id='"+boxId+"' class='rulebox'>"+
-		"<div style='color:rgb(49, 48, 49); font-size:20px; font-weight:bold; font-family:Helvetica,Arial,sans-serif; margin-top:10px; margin-left:5px; margin-right:5px; float:left'>if</div> <div id='conditions_"+boxId+"'><div id='conditiondiv_1_"+boxId+"' class='conditionBox'></div></div><div class='newConditionButton'><div class='draggableOperator' title='null'><span class='helper4'>+</span></div></div><div style='color:rgb(49, 48, 49); font-size:20px; font-weight:bold; font-family:Helvetica,Arial,sans-serif; margin-top:10px; margin-left:5px; margin-right:5px; float:left'>then</div> <div class='action'><span class='helper'>A</span><span class='helper3'>ction</span><span style='float:right'><input id='notificationText' type='text'; style='width:300px; color:rgb(49, 48, 49); font-style:italic; height:20px; border: 1px dotted #000000; margin:5px 5px 5px 5px; word-wrap:break-word; padding:0px'></span></div><a href='#' name='"+boxId+"' class='saveButton'>Save</a><br clear='all'/>"+
+		"<div style='color:rgb(49, 48, 49); font-size:20px; font-weight:bold; font-family:Helvetica,Arial,sans-serif; margin-top:10px; margin-left:5px; margin-right:5px; float:left'>if</div> <div id='conditions_"+boxId+"'><div id='conditiondiv_1_"+boxId+"' class='conditionBox'></div></div><div><a href='#' name='newConditionButton' class='newConditionButton'>+</a></div><div style='color:rgb(49, 48, 49); font-size:20px; font-weight:bold; font-family:Helvetica,Arial,sans-serif; margin-top:10px; margin-left:5px; margin-right:5px; float:left'>then</div> <div class='action'><span class='helper'>A</span><span class='helper3'>ction</span><span style='float:right'><input id='notificationText' type='text' style='width:300px; color:rgb(49, 48, 49); font-style:italic; height:20px; border: 1px dotted #000000; margin:5px 5px 5px 5px; word-wrap:break-word; padding:0px'></span></div><a href='#' name='"+boxId+"' class='saveButton'>Save</a><br clear='all'/>"+
 		"</div>";
 		
 		/*
-		Instead of the conditions box append the one below:
-				var createDiv = "<div style='border:dotted thin #007FFF; margin-top:5px; margin-right:5px; margin-left:5px; margin-bottom:5px; width:20px; height:20px; float:left'><div class='draggableOperator' title='"+name+"'>"+label+"</div></div>";
-		$(document).find("#controlbox_Operator").append(createDiv);
+		<input id='newConditionButton' type='button' onlclick=''> 
+		<button onclick='newCondition'>Click me</button>
+		*/
+		
+		/*
+		<a href='#' name='newConditionButton' class='newConditionButton'>+</a>
+		*/
+		
+		/*
+		<div class='newConditionButton'>
+		<div class='draggableOperator' title='null'>
+		<span class='helper4'>+</span>
+		</div>
+		</div>
 		*/
 		
 		currentRuleId = boxId;
 		return boxCode;
 	}
+
+		
+
 
 	function createConditionBox(id){
 		currentURITag = "";
@@ -732,17 +756,21 @@ function addConstraints(element){
 
     	return text;
 	}
+
+    $(document).on("click",".newConditionButton", function() { 
+			createConditionBox(currentRuleId);
+			reactivateDraggableTypes();
+			$(".controlbox").accordion("option", "active", 0);  
+	});
 	
-	
-	
-  $(document).on("click", ".saveButton", function(){
+	$(document).on("click", ".saveButton", function(){
     $(this).css("visibility","hidden");
 
     var conditionBoxId = $(this).attr("name");
     var condition = $("#"+conditionBoxId+" .autocompleteFillInCondition");
     var property = $("#"+conditionBoxId+" .autocompleteFillInProperty .draggableProperties");
     var constraint = $("#"+conditionBoxId+" .autocompleteFillInConstraint .draggableConstraints");
-    var operators = $("#"+conditionBoxId+" .newConditionButton .draggableOperator");
+    //var operators = $("#"+conditionBoxId+" .newConditionButton .draggableOperator");
     var action = $("#"+conditionBoxId+" .draggableAction").attr("value");
 	var notification = $("#"+conditionBoxId+" #notificationText").val();
 	
@@ -750,20 +778,18 @@ function addConstraints(element){
     var conditions = "";
     var arrayLen = condition.length;
     var nextURI = 'urn:uuid:'+UUID();
+	var conditionNumber = 0;
 	
     $.each( condition, function(index, value) {
-      var conditionType = $(value).attr("data-typeid");
-      var conditionJson;
+      conditionNumber = conditionNumber + 1;
+	  var conditionType = $(value).attr("data-typeid");
+	  var conditionJson;
       
       if (conditionType == 1){
         var valType = parseInt($(property[index]).attr("name"));
+        conditionJson = peerConstraints[valType].json;
+	  }
         
-        if ($(property[index]).attr("tag").indexOf("Group") > -1){
-          conditionJson = peerConstraints[valType].jsonMemberOf;
-        } else {
-          conditionJson = peerConstraints[valType].json;
-        }
-      }
       else if ((conditionType == 4) || (conditionType == 5)){
         var valType = parseInt($(property[index]).attr("name"));
         var sharedWithflag=new Boolean();
@@ -803,7 +829,20 @@ function addConstraints(element){
 			}
       }
           
-      operator = $(operators[index]).attr("title");
+	  nextURI = 'urn:uuid:'+UUID();
+	  if ((arrayLen > 1) && (conditionNumber < arrayLen))
+	  {
+		conditionJson = conditionJson.replace(/#andURI/g, '"'+nextURI+'"');
+        
+	  } else {
+		conditionJson = conditionJson.replace(/#andURI/g, "null");	
+	  }
+	  conditionJson = conditionJson.replace(/#orURI/g, "null");
+      conditionJson = conditionJson.replace(/#precURI/g, "null");
+      conditionJson = conditionJson.replace(/#succURI/g, "null");
+	  
+	  /*
+	  operator = $(operators[index]).attr("title");
       nextURI = 'urn:uuid:'+UUID();
       if (operator == "AND"){
         conditionJson = conditionJson.replace(/#andURI/g, '"'+nextURI+'"');
@@ -836,7 +875,8 @@ function addConstraints(element){
         conditionJson = conditionJson.replace(/#precURI/g, "null");
         conditionJson = conditionJson.replace(/#succURI/g, "null");
       }
- 
+      */
+	  
 	  // replace all namespaces
 	  conditionJson = conditionJson.replace(/drmo:/g, "http://www.semanticdesktop.org/ontologies/2012/03/06/drmo#");
 	  conditionJson = conditionJson.replace(/dcon:/g, "http://www.semanticdesktop.org/ontologies/2011/10/05/dcon#");
@@ -1078,9 +1118,9 @@ function addConstraints(element){
         <h3>My Items</h3>
         <div id="controlbox_Values">
         </div>
-		<h3>Join Operators (+)</h3>
+<!-- 		<h3>Join Operators (+)</h3>
 		<div id="controlbox_Operator">
-        </div>
+        </div> -->
         <h3>Actions</h3>
         <div id="controlbox_Actions">
         </div>
