@@ -194,12 +194,12 @@ var types = [
 	var drmoConditions = [
 		{
 			value: -11,
-			label: "New Resource",
+			label: "New Item",
 			ns: "drmo:ResourceCreated",
 		},	
 		{
 			value: -12,
-			label: "Modified Resource",
+			label: "Modified Item",
 			ns: "drmo:ResourceModified",
 		},
 	]
@@ -799,7 +799,7 @@ function addConstraints(element){
 		sharedWithflag = 0;  
 		
 		//if ANY
-		if ( ($(property[index]).attr("title") == "New Resource") || ($(property[index]).attr("title") == "Modified Resource") ){
+		if ( ($(property[index]).attr("title") == "New Item") || ($(property[index]).attr("title") == "Modified Item") ){
 			conditionJson = types[conditionType].json;
 		}
         //group first, since person can be contained in both pimo#Person and pimo#PersonGroup
