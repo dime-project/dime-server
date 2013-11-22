@@ -38,10 +38,13 @@ import eu.dime.ps.semantic.model.pimo.Person;
 import eu.dime.ps.semantic.service.exception.PimoConfigurationException;
 import eu.dime.ps.semantic.service.exception.PimoException;
 import eu.dime.ps.semantic.service.impl.PimoService;
+import org.junit.Ignore;
 
 /**
  * Tests {@link PimoService}.
+ * 
  */
+@Ignore
 public class PimoServiceTest extends SemanticTest {
 
 	@Autowired

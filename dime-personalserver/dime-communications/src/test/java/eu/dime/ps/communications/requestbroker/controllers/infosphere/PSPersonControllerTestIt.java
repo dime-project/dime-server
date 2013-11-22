@@ -31,6 +31,7 @@ import eu.dime.ps.gateway.service.external.oauth.TwitterServiceAdapter;
 import eu.dime.ps.semantic.model.dao.Account;
 import eu.dime.ps.semantic.model.nco.PersonContact;
 import eu.dime.ps.semantic.model.pimo.Person;
+import org.junit.Ignore;
 
 
 
@@ -82,7 +83,7 @@ public class PSPersonControllerTestIt extends PSInfosphereControllerTestIt {
 	}	
 
 
-
+    @Ignore
 	@Test
 	public void testDefProfileDimeAccount() throws Exception {
 
