@@ -36,7 +36,7 @@ import org.junit.Ignore;
 
 
 
-
+@Ignore
 public class PSPersonControllerTestIt extends PSInfosphereControllerTestIt {
 
 	private static final String SAID = "juan";
@@ -82,8 +82,7 @@ public class PSPersonControllerTestIt extends PSInfosphereControllerTestIt {
 
 	}	
 
-
-    @Ignore
+    
 	@Test
 	public void testDefProfileDimeAccount() throws Exception {
 
