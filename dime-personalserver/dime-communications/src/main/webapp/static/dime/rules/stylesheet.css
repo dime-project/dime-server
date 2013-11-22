@@ -46,10 +46,62 @@
 	border-radius: 5px 5px 5px 5px !important;
 	border: solid thin silver;
 	padding-bottom:20px;
-	margin-bottom:10px;
+		margin-bottom:10px;
 	background-color:rgb(255, 255, 255);
 	padding-top:15px;
 }
+
+.tutorialBox{
+	width: 1040px;
+
+
+	height:136px;
+}
+
+.tipBox{
+	width: 192px;
+	height:88px;
+	padding:0px 1px 2px 5px;
+	background-color:#EDE7CF;
+}
+
+.tipTitle{
+	font-size: 14px;
+	font-family: "Calibri","Helvetica Neue",Helvetica,Arial,sans-serif;
+	color: rgb(243, 243, 243);
+	width: 169px;
+	float:right; 
+	vertical-align:middle;
+	text-align:center;
+	height: 28px;
+	background-color: rgb(90, 157, 213);
+	padding:0px;
+	font-weight: bold;
+	word-wrap:none;
+}
+
+.tipText {
+    font-weight: normal;
+	vertical-align:middle !important;
+	text-align:centre; !important;
+	color: rgb(49, 48, 49);
+	font-size: 11px;
+	font-family: "Calibri","Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+
+.nextTipButton {
+    background-color:#EDE7CF;
+    font-weight: bold;
+	vertical-align:middle !important;
+	height: 18px;
+	text-align:center;
+	width: 198px;
+	text-decoration: none;
+	color:  rgb(0, 116, 213);
+	font-size: 14px;
+	font-family: "Calibri","Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+
 
 .draggable { 
 	width: 30px; 
@@ -88,10 +140,13 @@
 	height: 16px; 
 	float: left; 
 	font-size: 12px;
+    font-family: "Calibri","Helvetica Neue",Helvetica,Arial,sans-serif;
 	border: none;
 	word-wrap: none;
 	color:rgb(49, 48, 49);
 }
+
+
 
 .draggableConstraints{ 
 	width: 120px; 
@@ -99,6 +154,7 @@
 	float: left; 
 	font-size: 12px;
 	border: none;
+	font-family: "Calibri","Helvetica Neue",Helvetica,Arial,sans-serif;
 	word-wrap:none;
 	color:rgb(49, 48, 49);
 }
@@ -111,6 +167,7 @@
 	border-left: none;
 	color: rgb(34,34,34);
 	border-right: none;
+	font-family: "Calibri","Helvetica Neue",Helvetica,Arial,sans-serif;
 	border-bottom: solid thin #000;
 	word-wrap:break-word;
 }
@@ -182,7 +239,7 @@ margin-top: 0px !important;
 
 
 .autocompleteFillInCondition{
-	border:dotted thin #007FFF;
+	border:dotted thin #999999;
 	width:60px;
 	height:35px;
 	padding:0px;
@@ -193,7 +250,7 @@ margin-top: 0px !important;
 }
 
 .autocompleteFillInProperty{
-	border:dotted thin #F00;
+	border:dotted thin #999999;
 	width:120px;
 	height:18px;
 	background-color: #999;
@@ -202,7 +259,7 @@ margin-top: 0px !important;
 }
 
 .autocompleteFillInConstraint{
-	border:dotted thin #909;
+	border:dotted thin #999999;
 	width:120px;
 	height:18px;
 	background-color: #999;
@@ -254,6 +311,7 @@ margin-top: 0px !important;
 	word-wrap:none;
 }
 
+/*
 .helper2{
 	font-size: 14px;
 	font-family: "Calibri","Helvetica Neue",Helvetica,Arial,sans-serif;
@@ -262,7 +320,7 @@ margin-top: 0px !important;
 	color: rgb(66,66,66);
 	word-wrap:none;
 }
-
+*/
 .helper3{
 	font-size: 14px;
 	font-family: "Calibri","Helvetica Neue",Helvetica,Arial,sans-serif;
@@ -322,9 +380,12 @@ border-radius: 5px 5px 5px 5px !important;
     border: 1px solid rgb(211, 211, 211);
     background: rgb(49, 48, 49);
     font-weight: normal;
+	float: right;
+	text-decoration: none;
 	color: rgb(66,66,66) !important;
 	font-size: 14px;
 	font-family: "Calibri","Helvetica Neue",Helvetica,Arial,sans-serif;
     	background-color: rgb(215, 217, 215);
 	border-radius: 5px 5px 5px 5px !important;
 }
+

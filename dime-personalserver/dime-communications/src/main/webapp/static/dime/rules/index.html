@@ -33,7 +33,10 @@ $.ajax({
 	var conditionsMousePress = new Hashtable();
 	
 	var currentConditionId = "";
+	var conditions = 0;
 	var currentRuleId = "";
+	//start tutorial at step 1
+	var tutorialCounter = 1;
 	
 	var user = $.now();
 	
@@ -126,8 +129,8 @@ var types = [
 		   {	
 			value: 9,
 			label: "Time Period",
-			propertyQuery: "select distinct * where {  ?x <http://www.w3.org/2000/01/rdf-schema#domain> <http://www.semanticdesktop.org/ontologies/2011/10/05/dcon#SpaTem>. { { ?x <http://www.w3.org/2000/01/rdf-schema#range> <http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#Location> . } union { ?x <http://www.w3.org/2000/01/rdf-schema#range> <http://www.semanticdesktop.org/ontologies/2011/10/05/dpo#Place> . } }  optional { ?x <http://www.w3.org/2000/01/rdf-schema#label> ?label . } optional { ?x <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#prefLabel> ?label . } optional {?x <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#deprecated> ?flag .} filter (!bound(?flag)) }",
-			constraintQuery: "select distinct * where { { ?x a <http://www.semanticdesktop.org/ontologies/2011/10/05/dpo#Place> . } union {  ?x a <http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#Location> . } optional { ?x <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#prefLabel> ?label . } }",
+			propertyQuery: "select distinct * where {  ?x <http://www.w3.org/2000/01/rdf-schema#domain> <http://www.semanticdesktop.org/ontologies/2011/10/05/dcon#SpaTem>.	{ ?x <http://www.w3.org/2000/01/rdf-schema#range> <http://www.semanticdesktop.org/ontologies/2011/10/05/dpo#TimePeriod> .  }  optional { ?x <http://www.w3.org/2000/01/rdf-schema#label> ?label . } optional { ?x <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#prefLabel> ?label . } optional {?x <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#deprecated> ?flag .} filter (!bound(?flag)) }",
+			constraintQuery: "select distinct * where {  ?x a <http://www.semanticdesktop.org/ontologies/2011/10/05/dpo#TimePeriod> . optional { ?x <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#prefLabel> ?label . } }",
 			constraintId: "x",
 			image: "../../images/rules/timeperiod.png",
 			json: '{ "and": #andURI, "conditionType": "drmo:Condition", "conditions": [ {"and": #andURI, "conditionType": "drmo:Condition", "conditions": [],  "constraintOnGraph": null, "constraintOnObject": #object,  "constraintOnProperty": #property,  "constraintOnSubject": null, "guid":"#guid_1",  "isNegated": false,  "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "nmo:Email",  "succeededBy": #succURI } ],  "constraintOnGraph": null, "constraintOnObject": null,  "constraintOnProperty": null,  "constraintOnSubject": null, "guid":"#guid",  "isNegated": false,  "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "dcon:SpaTem",  "succeededBy": #succURI  }',
@@ -299,8 +302,6 @@ $(document).on("click","#newRuleButton", function() {
 									return true;
 									});
 									
-
-									
 					
 $(document).on("keypress", ".rulebox", function(event){ 
 													var value = conditionsKeyPress.get($(this).attr("id")) + 1;
@@ -323,7 +324,7 @@ $(document).ready(function(){
 		{
 		var name = data.label;
 		var image = data.image;
-		var createDiv = "<div style='border:dotted thin #007FFF; background-color: rgb(246, 194, 0); margin-top:5px; margin-right:5px; margin-left:5px; margin-bottom:5px; width:35px; height:35px; float:left'><div class='draggable' title='"+name+"' name='"+id+"'><img src='"+image+"'width='30' height='30' alt='"+name+"' /></div></div>";
+		var createDiv = "<div style='border:dotted thin #999999; background-color: rgb(246, 194, 0); margin-top:5px; margin-right:5px; margin-left:5px; margin-bottom:5px; width:35px; height:35px; float:left'><div class='draggable' title='"+name+"' name='"+id+"'><img src='"+image+"'width='30' height='30' alt='"+name+"' /></div></div>";
 		$(document).find("#controlbox_Types").append(createDiv);
 		}
 	});
@@ -335,7 +336,7 @@ $(document).ready(function(){
 	$.each(ops, function(index , data){
 		var name = data.name;
 		var label = data.label;
-		var createDiv = "<div style='border:dotted thin #007FFF; margin-top:5px; margin-right:5px; margin-left:5px; margin-bottom:5px; width:20px; height:20px; float:left'><div class='draggableOperator' title='"+name+"'>"+label+"</div></div>";
+		var createDiv = "<div style='border:dotted thin #999999; margin-top:5px; margin-right:5px; margin-left:5px; margin-bottom:5px; width:20px; height:20px; float:left'><div class='draggableOperator' title='"+name+"'>"+label+"</div></div>";
 		$(document).find("#controlbox_Operator").append(createDiv);
 	});
 */
@@ -432,7 +433,7 @@ function addProperties(){
 	$("#"+currentConditionId).attr("data-typeid",currentTypeId);
 	$("#"+currentConditionId).parent().find(".autocompleteFillInProperty").css("background-color","#9CC6E6");
 	$("#"+currentConditionId).parent().find(".autocompleteFillInConstraint").css("background-color","#FFFFAA");
-	$("#"+currentConditionId).parent().find(".helper2").text("Constraint");
+	//$("#"+currentConditionId).parent().find(".helper2").text("Filter");
 	
 	
 	var propValue = currentTypeId;
@@ -442,7 +443,7 @@ function addProperties(){
 	if (propValue == 3){
 			//disable property
 		$("#"+currentConditionId).parent().find(".autocompleteFillInProperty").css("background-color","#999");
-		$("#"+currentConditionId).parent().find(".helper2").text("");
+//		$("#"+currentConditionId).parent().find(".helper2").text("");
 						
 		addConstraints($(this));
 	} else {
@@ -484,7 +485,7 @@ function addProperties(){
 		var id = data.value;
 		var name = data.label;
 		var uri = data.id;
-		var createDiv = "<div style='background-color:rgb(156, 198, 230); border:thin dotted rgb(255, 0, 0); margin-top:5px; margin-right:5px; width:120px; height:18px; float:left'><div class='draggableProperties' title='"+name+"' name='"+id+"' tag='"+uri+"'>"+name+"</div></div>";
+		var createDiv = "<div style='background-color:rgb(156, 198, 230); border:thin dotted rgb(153, 153, 153); margin-top:5px; margin-right:5px; width:120px; height:18px; float:left'><div class='draggableProperties' title='"+name+"' name='"+id+"' tag='"+uri+"'>"+name+"</div></div>";
 		$(document).find("#controlbox_Properties").append(createDiv);
 	});
 	
@@ -543,21 +544,23 @@ function addConstraints(element){
 		//nearby people
 		if ((propValue == 1) && (consValue == 0) ){
 			constraintQuery = peerConstraints[consValue].constraintQuery;
-			constraintId = peerConstraints[consValue].constraintId;
-			$("#"+currentConditionId).parent().find(".helper5").text("Specific Person"); }
+//			$("#"+currentConditionId).parent().find(".helper5").text("Specific Person"); 
+			constraintId = peerConstraints[consValue].constraintId; }
+
 		else if ((propValue == 1) && (consValue == 1) ){
 			constraintQuery = peerConstraints[consValue].constraintQuery;
-			constraintId = peerConstraints[consValue].constraintId;
-			$("#"+currentConditionId).parent().find(".helper5").text("Specific Group");	}
+//			$("#"+currentConditionId).parent().find(".helper5").text("Specific Group");	
+			constraintId = peerConstraints[consValue].constraintId; }
+
 		else if (propValue == 3){
 			constraintQuery = types[propValue].constraintQuery ;
 			constraintId = types[propValue].constraintId;
-			$("#"+currentConditionId).parent().find(".helper5").text("Specific Situation");
+//			$("#"+currentConditionId).parent().find(".helper5").text("Specific Situation");
 		}
 		else { 
 			constraintQuery = types[propValue].constraintQuery ;
 			constraintId = types[propValue].constraintId;
-			$("#"+currentConditionId).parent().find(".helper5").text("Specific Item");
+//			$("#"+currentConditionId).parent().find(".helper5").text("Specific Item");
 		}
 		
 		//state (activity/availability)
@@ -569,7 +572,7 @@ function addConstraints(element){
 		
 		if ((propValue == 6) && (consValue > -1)) {
 			constraintQuery = constraintQuery.replace(/#property#/g,propertyUri);
-			$("#"+currentConditionId).parent().find(".helper5").text("Specific Post");
+//			$("#"+currentConditionId).parent().find(".helper5").text("Specific Post");
 		}
 		
 		
@@ -579,14 +582,14 @@ function addConstraints(element){
 		if (consValue == -1){
 			constraintQuery = hardCodedLivePostProperties[0].constraintQuery ;
 			constraintId = hardCodedLivePostProperties[0].constraintId;
-			$("#"+currentConditionId).parent().find(".helper5").text("Specific Person");
+	//		$("#"+currentConditionId).parent().find(".helper5").text("Specific Person");
 		}
 		
 		//image/doc shared with
 		if (consValue == -3){
 			constraintQuery = hardCodedSharedWithProperty[0].constraintQuery ;
 			constraintId = hardCodedSharedWithProperty[0].constraintId;
-			$("#"+currentConditionId).parent().find(".helper5").text("Specific Person");
+//			$("#"+currentConditionId).parent().find(".helper5").text("Specific Person");
 		}
 		
 		$.ajax({
@@ -620,9 +623,9 @@ function addConstraints(element){
 		var name = data.label;
 		var uri = data.id;
 		if (id == -2){
-			var createDiv = "<div style='background-color: rgb(255, 255, 170); border:thin dotted rgb(153, 0, 153); margin-top:5px; margin-right:5px; width:120px; height:18px; float:left'><div class='draggableConstraints' title='"+name+"' name='"+id+"'><input class='text' /><br>Textbox</div></div>"
+			var createDiv = "<div style='background-color: rgb(255, 255, 170); border:thin dotted rgb(153, 153, 153); margin-top:5px; margin-right:5px; width:120px; height:18px; float:left'><div class='draggableConstraints' title='"+name+"' name='"+id+"'><input class='text' /><br>Textbox</div></div>"
 		} else {
-			var createDiv = "<div style='background-color: rgb(255, 255, 170); border:thin dotted rgb(153, 0, 153); margin-top:5px; margin-right:5px; width:120px; height:18px; float:left'><div class='draggableConstraints' title='"+name+"' name='"+id+"' tag='"+uri+"'>"+name+"</div></div>";
+			var createDiv = "<div style='background-color: rgb(255, 255, 170); border:thin dotted rgb(153, 153, 153); margin-top:5px; margin-right:5px; width:120px; height:18px; float:left'><div class='draggableConstraints' title='"+name+"' name='"+id+"' tag='"+uri+"'>"+name+"</div></div>";
 		}
 		$(document).find("#controlbox_Values").append(createDiv);
 	});
@@ -670,33 +673,13 @@ function addConstraints(element){
 		conditionsKeyPress.put(boxId,0);
 		conditionsMousePress.put(boxId,0);
 		var boxCode = "<div id='"+boxId+"' class='rulebox'>"+
-		"<div style='color:rgb(49, 48, 49); font-size:20px; font-weight:bold; font-family:Helvetica,Arial,sans-serif; margin-top:10px; margin-left:5px; margin-right:5px; float:left'>if</div> <div id='conditions_"+boxId+"'><div id='conditiondiv_1_"+boxId+"' class='conditionBox'></div></div><div><a href='#' name='newConditionButton' title='Add Another Condition' class='newConditionButton'>+</a></div><div style='color:rgb(49, 48, 49); font-size:20px; font-weight:bold; font-family:Helvetica,Arial,sans-serif; margin-top:10px; margin-left:5px; margin-right:5px; float:left'>then</div> <div class='action'><span class='helper'>A</span><span class='helper3'>ction</span><span style='float:right'><input id='notificationText' type='text' style='width:300px; color:rgb(49, 48, 49); font-style:italic; height:20px; border: 1px dotted #000000; margin:5px 5px 5px 5px; word-wrap:break-word; padding:0px'></span></div><a href='#' name='"+boxId+"' id='saveButton' class='saveButton'>Save</a><br clear='all'/>"+
-		"</div>";
-		
-		/*
-		<input id='newConditionButton' type='button' onlclick=''> 
-		<button onclick='newCondition'>Click me</button>
-		*/
-		
-		/*
-		<a href='#' name='newConditionButton' class='newConditionButton'>+</a>
-		*/
-		
-		/*
-		<div class='newConditionButton'>
-		<div class='draggableOperator' title='null'>
-		<span class='helper4'>+</span>
-		</div>
-		</div>
-		*/
-		
+		"<div style='color:rgb(49, 48, 49); font-size:20px; font-weight:bold; font-family:Helvetica,Arial,sans-serif; margin-top:10px; margin-left:5px; margin-right:5px; float:left'>if</div> <div id='conditions_"+boxId+"'><div id='conditiondiv_1_"+boxId+"' class='conditionBox'></div></div><div><a href='#' name='newConditionButton' title='Add Another Condition' id='newConditionButton' class='newConditionButton'>+</a></div><div style='color:rgb(49, 48, 49); font-size:20px; font-weight:bold; font-family:Helvetica,Arial,sans-serif; margin-top:10px; margin-left:5px; margin-right:5px; float:left'>then</div> <div class='action'><span class='helper'>A</span><span class='helper3'>ction</span><span style='float:right'><input id='notificationText' type='text' style='width:300px; color:rgb(49, 48, 49); font-style:italic; height:20px; border: 1px dotted #000000; margin:5px 5px 5px 5px; word-wrap:break-word; padding:0px'></span></div><a href='#' name='"+boxId+"' id='saveButton' class='saveButton'>Save</a><br clear='all'/>"+
+		"</div>"+
+		"<div id='tutorialBox' class ='tutorialBox'><span style='float:left; background-color:rgb(246, 194, 0)'><img src='../img/metaData/info.png'><span style='vertical-align:middle' id='tipTitle' class='tipTitle'>Guide: Step 1</span><br><div id='tipBox' class='tipBox'><span id='tipText' style='text-align:center' class='tipText'>Select a Subject to start describing a condition e.g., 'Nearby People', from the list on the right. Drag it onto the yellow box on the left. </span></div><a href='#' style='float:right; vertical-align:middle' name='nextTipButton' id='nextTipButton' title='Show Next Tip' class='nextTipButton'>&gt;&gt; Go to Step 2</a></span><div style='float:left'><img id='tutorial' src='../../images/rules/tutorial/tutorial0_faded.png' alt='5-step Guidelines'></div></div>";
 		currentRuleId = boxId;
 
 		return boxCode;
 	}
-
-		
-
 
 	function createConditionBox(id){
 		currentURITag = "";
@@ -720,7 +703,7 @@ function addConstraints(element){
 		var conditionButtonId = "addConditionButton_"+id;
 		currentConditionId = "condition_"+thisCounter+"_"+id;
 		
-		var textbox = "<div class='autocompleteFillInCondition' id='"+conditionId+"' data-typeid='-1'><span class='helper'>C</span><span class='helper3'>oncept</span></div><div class='constraintBox' id='constraintdiv_"+thisCounter+"_"+conditionId+"'></div>"
+		var textbox = "<div class='autocompleteFillInCondition' id='"+conditionId+"' data-typeid='-1'><span class='helper'>S</span><span class='helper3'>ubject</span></div><div class='constraintBox' id='constraintdiv_"+thisCounter+"_"+conditionId+"'></div>"
 		$("#conditiondiv_"+thisCounter+"_"+id).append(textbox);
 		$("#conditions_"+id).append("<div id='"+divId+"' class='conditionBox'></div>");
 		constraintBox(conditionId,thisCounter);		
@@ -761,10 +744,59 @@ function addConstraints(element){
 	}
 
     $(document).on("click",".newConditionButton", function() { 
-			createConditionBox(currentRuleId);
-			reactivateDraggableTypes();
-			$(".controlbox").accordion("option", "active", 0);  
-	});
+	
+				createConditionBox(currentRuleId);
+				reactivateDraggableTypes();
+				$(".controlbox").accordion("option", "active", 0);  
+				conditions = conditions + 1;
+				//disallow more than 2 conditions
+				if (conditions ==2) $(document).find("#newConditionButton").hide(); 	
+		});
+	
+	$(document).on("click",".nextTipButton", function() { 
+				if (tutorialCounter == 1) {
+											document.getElementById('tutorial').src = "../../images/rules/tutorial/tutorial1_faded.png";
+										    document.getElementById('nextTipButton').innerHTML = "&gt;&gt; Go to Step 3";
+											document.getElementById('tipTitle').innerHTML = "Guide: Step 2";
+											document.getElementById('tipText').innerHTML = "Select a Filter for the chosen subject e.g., 'Nearby Group', from the list on the right. Drag it onto the light-blue box on the left.";
+											
+											
+											
+											}
+				else if (tutorialCounter == 2) {
+												document.getElementById('tutorial').src = "../../images/rules/tutorial/tutorial2_faded.png";
+										    	    document.getElementById('nextTipButton').innerHTML = "&gt;&gt; Go to Step 4";
+											document.getElementById('tipTitle').innerHTML = "Guide: Step 3";
+											document.getElementById('tutorial').src = "../../images/rules/tutorial/tutorial2_faded.png";
+											document.getElementById('tipText').innerHTML = "Select a Specific Item where necessary, e.g., 'Friends', from the list on the right. Drag it onto the light-yellow box on the left.";
+											}
+
+				else if (tutorialCounter == 3) {
+												    document.getElementById('nextTipButton').innerHTML = "&gt;&gt; Go to Step 5";
+											document.getElementById('tipTitle').innerHTML = "Guide: Step 4";
+											document.getElementById('tutorial').src = "../../images/rules/tutorial/tutorial3_faded.png";
+											document.getElementById('tipText').innerHTML = "Combine more conditions (up to 3) if desired, by clicking on the '+' button. Repeat Steps 1-3 for each.";
+										  }
+				else if (tutorialCounter == 4) {
+											document.getElementById('nextTipButton').innerHTML = "&gt;&gt; Restart Guide";
+											document.getElementById('tipTitle').innerHTML = "Guide: Step 5";
+											document.getElementById('tutorial').src = "../../images/rules/tutorial/tutorial4_faded.png";
+											document.getElementById('tipText').innerHTML = "Select an Action, e.g. 'Notify Me', from the list on the right. Drag it onto the dark-blue box on the left, add a notification message and click 'Save'.";
+											}
+				else if (tutorialCounter == 5) {
+											 document.getElementById('nextTipButton').innerHTML = "&gt;&gt; Go to Step 2";
+											document.getElementById('tipTitle').innerHTML = "Guide: Step 1";
+												document.getElementById('tutorial').src = "../../images/rules/tutorial/tutorial0_faded.png";
+												tutorialCounter=1;
+											document.getElementById('tipText').innerHTML = "Select a Subject to start describing a condition e.g., 'Nearby People', from the list on the right. Drag it onto the yellow box on the left.";
+										   
+											}
+
+				tutorialCounter = tutorialCounter + 1;
+				});
+
+									
+
 	
 	$(document).on("click", ".saveButton", function(){
     $(this).css("visibility","hidden");
@@ -1029,7 +1061,7 @@ function addConstraints(element){
 		var id = data.value;
 		var name = data.label;
 		var uri = data.id;
-		var createDiv = "<div style='background-color:rgb(156, 198, 230); border:thin dotted rgb(255, 0, 0); margin-top:5px; margin-right:5px; width:120px; height:18px; float:left'><div class='draggableProperties' title='"+name+"' name='"+id+"' tag='"+uri+"'>"+name+"</div></div>";
+		var createDiv = "<div style='background-color:rgb(156, 198, 230); border:thin dotted rgb(153, 153, 153); margin-top:5px; margin-right:5px; width:120px; height:18px; float:left'><div class='draggableProperties' title='"+name+"' name='"+id+"' tag='"+uri+"'>"+name+"</div></div>";
 		$(document).find("#controlbox_Properties").append(createDiv);
 	});
 	
@@ -1064,9 +1096,9 @@ function addConstraints(element){
 		var uri = data.id;
 		
 		if (id == -2){
-			var createDiv = "<div style='background-color: rgb(255, 255, 170); border:thin dotted rgb(153, 0, 153); margin-top:5px; margin-right:5px; width:120px; height:18px; float:left'><div class='draggableConstraints' title='"+name+"' name='"+id+"'><input class='text' /><br>Textbox</div></div>"
+			var createDiv = "<div style='background-color: rgb(255, 255, 170); border:thin dotted rgb(153, 153, 153); margin-top:5px; margin-right:5px; width:120px; height:18px; float:left'><div class='draggableConstraints' title='"+name+"' name='"+id+"'><input class='text' /><br>Textbox</div></div>"
 		} else {
-			var createDiv = "<div style='background-color: rgb(255, 255, 170); border:thin dotted rgb(153, 0, 153); margin-top:5px; margin-right:5px; width:120px; height:18px; float:left'><div class='draggableConstraints' title='"+name+"' name='"+id+"' tag='"+uri+"'>"+name+"</div></div>";
+			var createDiv = "<div style='background-color: rgb(255, 255, 170); border:thin dotted rgb(153, 153, 153); margin-top:5px; margin-right:5px; width:120px; height:18px; float:left'><div class='draggableConstraints' title='"+name+"' name='"+id+"' tag='"+uri+"'>"+name+"</div></div>";
 		}
 		$(document).find("#controlbox_Values").append(createDiv);
 	});
@@ -1112,10 +1144,10 @@ function addConstraints(element){
     <a href="#" id="newRuleButton" class="createButton">Create Rule</a>
     </div>
     <div class="controlbox">
-    	<h3>Concepts</h3>
+    	<h3>Subjects</h3>
         <div id="controlbox_Types">
         </div>
-        <h3>Constraints</h3>
+        <h3>Filters</h3>
         <div id="controlbox_Properties">
         </div>
         <h3>My Items</h3>
