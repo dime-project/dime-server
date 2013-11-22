@@ -24,6 +24,7 @@ import eu.dime.commons.notifications.DimeInternalNotification;
 import eu.dime.ps.controllers.notifier.NotifierManager;
 import eu.dime.ps.controllers.notifier.exception.NotifierException;
 import eu.dime.ps.storage.entities.Tenant;
+import java.util.HashMap;
 
 /**
  * It simply stores the notifications received in two lists: external and internal.
@@ -129,4 +130,9 @@ public class NotifierManagerMock implements NotifierManager {
 		// TODO Auto-generated method stub
 		
 	}
+
+    @Override
+    public HashMap<String, Object> getSize(Long id) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }
