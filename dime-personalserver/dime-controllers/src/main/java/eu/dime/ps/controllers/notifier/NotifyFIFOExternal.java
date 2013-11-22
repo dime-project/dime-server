@@ -48,5 +48,10 @@ public class NotifyFIFOExternal {
     public int size() {
     	return fifoList.size();
     }
+    
+    public void clearNotifications(){
+    	fifoList.clear();
+    	
+    }
 
 }

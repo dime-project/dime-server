@@ -1,16 +1,16 @@
 /*
-* Copyright 2013 by the digital.me project (http://www.dime-project.eu).
-*
-* Licensed under the EUPL, Version 1.1 only (the "Licence");
-* You may not use this work except in compliance with the Licence.
-* You may obtain a copy of the Licence at:
-*
-* http://joinup.ec.europa.eu/software/page/eupl/licence-eupl
-*
-* Unless required by applicable law or agreed to in writing, software distributed under the Licence is distributed on an "AS IS" basis,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-* See the Licence for the specific language governing permissions and limitations under the Licence.
-*/
+ * Copyright 2013 by the digital.me project (http://www.dime-project.eu).
+ *
+ * Licensed under the EUPL, Version 1.1 only (the "Licence");
+ * You may not use this work except in compliance with the Licence.
+ * You may obtain a copy of the Licence at:
+ *
+ * http://joinup.ec.europa.eu/software/page/eupl/licence-eupl
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the Licence is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the Licence for the specific language governing permissions and limitations under the Licence.
+ */
 
 package eu.dime.ps.communications.requestbroker.controllers.notifications;
 
@@ -75,7 +75,7 @@ public class PSNotificationsController implements APIController {
 				.getAllNotifications(tenant, null, null);
 
 		Data<SystemNotificationDTO> data = new Data<SystemNotificationDTO>();
-		
+
 		data.setEntry(SystemNotificationDTO.dINTONDTOs(list));
 
 		return Response.ok(data);
@@ -92,7 +92,7 @@ public class PSNotificationsController implements APIController {
 				.getNotificationsByDate(new Date(from), new Date(to));
 
 		Data<SystemNotificationDTO> data = new Data<SystemNotificationDTO>();
-		
+
 		data.setEntry(SystemNotificationDTO.dINTONDTOs(list));
 
 		return Response.ok(data);
@@ -100,33 +100,33 @@ public class PSNotificationsController implements APIController {
 
 	// test methods
 
-//	@GET
-//	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
-//	@Path("/test/{id}")
-//	public Response<DimeInternalNotification> addTestNotification(
-//			@PathParam("id") String id) throws NotifierException {
-//
-//		DimeInternalNotification notification = new DimeInternalNotification(
-//				TenantContextHolder.getTenant());
-//		
-//		notification.setItemID(id);
-//		notification.setName("name-" + id);
-//		notification.setSender("juan");
-//		notification.setTarget("juan");
-//		notification.setItemType("type");
-//		notification.setOperation(DimeInternalNotification.OP_CREATE);
-//		notification.setCreateTS(System.currentTimeMillis());
-//		notification.setUpdateTS(System.currentTimeMillis());
-//		notification.setUserID("@me");
-//
-//		notifierManager.pushInternalNotification(notification);
-//		
-//		Data<DimeInternalNotification> data = new Data<DimeInternalNotification>();
-//		data.addEntry(notification);
-//		return Response.ok(data);
-//
-//	}
-	
+	//	@GET
+	//	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
+	//	@Path("/test/{id}")
+	//	public Response<DimeInternalNotification> addTestNotification(
+	//			@PathParam("id") String id) throws NotifierException {
+	//
+	//		DimeInternalNotification notification = new DimeInternalNotification(
+	//				TenantContextHolder.getTenant());
+	//		
+	//		notification.setItemID(id);
+	//		notification.setName("name-" + id);
+	//		notification.setSender("juan");
+	//		notification.setTarget("juan");
+	//		notification.setItemType("type");
+	//		notification.setOperation(DimeInternalNotification.OP_CREATE);
+	//		notification.setCreateTS(System.currentTimeMillis());
+	//		notification.setUpdateTS(System.currentTimeMillis());
+	//		notification.setUserID("@me");
+	//
+	//		notifierManager.pushInternalNotification(notification);
+	//		
+	//		Data<DimeInternalNotification> data = new Data<DimeInternalNotification>();
+	//		data.addEntry(notification);
+	//		return Response.ok(data);
+	//
+	//	}
+
 	@GET
 	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
 	@Path("/@me/@size")
@@ -135,11 +135,35 @@ public class PSNotificationsController implements APIController {
 		HashMap<String,Object> size = notifierManager.getSize(tenant.getId());
 
 		Data<HashMap<String,Object>> data = new Data<HashMap<String,Object>>();
-		
+
 		data.addEntry(size);
 
 		return Response.ok(data);
 	}	
+
+
+	@GET
+	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
+	@Path("/@me/@clear/internal")
+	public Response clearInternalNotifications(@PathParam("said") String said) {
+		Tenant tenant = tenantManager.getByAccountName(said);
+
+		notifierManager.clearInternal(tenant.getId());
+
+		return Response.ok();
+
+	}	
 	
+	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
+	@Path("/@me/@clear/external")
+	public Response clearExternalNotifications(@PathParam("said") String said) {		
+
+		notifierManager.clearExternal();
+
+		return Response.ok();
+
+	}	
 
 }

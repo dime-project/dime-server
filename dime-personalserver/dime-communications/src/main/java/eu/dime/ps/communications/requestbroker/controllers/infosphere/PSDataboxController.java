@@ -440,16 +440,19 @@ public class PSDataboxController extends PSSharingControllerBase implements APIC
 
 		Data<Resource> data = null;
 
-		try {
-			Collection<PrivacyPreference> databoxes = sharingManager
-					.getSharedDataboxes(serviceId==null? agentId: serviceId);
-			data = new Data<Resource>(0, databoxes.size(), databoxes.size());
-
-			for (PrivacyPreference databox : databoxes) {	
-
-				Resource resource =new Resource(databox,null,RENAMING_RULES,databoxManager.getMe().asURI());
-				writeIncludes(resource,databox);
-				data.getEntries().add(resource);				
+		try {		
+						
+			Collection<DataContainer> databoxes = databoxManager.getAllByPerson(databoxManager.getMe().asURI());		
+			
+			data = new Data<Resource>(0, 0,0 );
+			
+			for (DataContainer databox : databoxes) {				
+				String dbId = databox.asURI().toString();
+				if(sharingManager.hasAccessToDatabox(dbId, serviceId==null? agentId: serviceId)){
+					Resource resource =new Resource(databox,null,RENAMING_RULES,databoxManager.getMe().asURI());
+					writeIncludes(resource,databox);
+					data.addEntry(resource);	
+				}
 			}
 
 		} catch (InfosphereException e) {

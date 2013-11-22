@@ -236,7 +236,15 @@ public class NotifierManagerImpl implements NotifierManager {
 		result.put("size external queue", eSize);
 		return result;
 	}
-
-
+	
+	@Override
+	public void clearInternal(Long id){
+		internalNotifyFifo.clearNotifications(id);
+		
+	}
+	
+	public void clearExternal(){
+		externalNotifyFifo.clearNotifications();
+	}
 
 }

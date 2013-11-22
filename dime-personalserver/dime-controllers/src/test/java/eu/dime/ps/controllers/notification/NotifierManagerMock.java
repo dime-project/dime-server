@@ -16,6 +16,7 @@ package eu.dime.ps.controllers.notification;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import eu.dime.commons.dto.UserNotificationDTO;
@@ -131,8 +132,21 @@ public class NotifierManagerMock implements NotifierManager {
 		
 	}
 
-    @Override
-    public HashMap<String, Object> getSize(Long id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+	@Override
+	public HashMap<String, Object> getSize(Long id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void clearInternal(Long id) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void clearExternal() {
+		// TODO Auto-generated method stub
+		
+	}
 }

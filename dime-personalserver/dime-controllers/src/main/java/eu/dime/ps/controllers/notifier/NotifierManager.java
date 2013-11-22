@@ -149,4 +149,8 @@ public interface NotifierManager {
 	public void remove(Long id) throws NotifierException;
 
 	public HashMap<String, Object> getSize(Long id);
+
+	public void clearInternal(Long id);
+
+	public void clearExternal();
 }
