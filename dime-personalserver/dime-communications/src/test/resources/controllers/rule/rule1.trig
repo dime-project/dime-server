@@ -27,6 +27,5 @@
 	drmo:hasConstraintOnObject	"joedoe@email.com" .
 	
 <http://test.org/Notify>	a	drmo:Action ;
-	drmo:hasSubject "Received Email from <http://test.org/condition1>";
-	drmo:hasObject <dime:interface> .
+	drmo:hasObject "Received Email from joedoe@email.com" .
 }

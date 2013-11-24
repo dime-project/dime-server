@@ -17,44 +17,38 @@ package eu.dime.ps.controllers.automation.action;
 import ie.deri.smile.rdf.util.ModelUtils;
 import ie.deri.smile.rules.actions.Action;
 import ie.deri.smile.rules.actions.IllegalActionException;
+import ie.deri.smile.vocabulary.DAO;
 import ie.deri.smile.vocabulary.DRMO;
+import ie.deri.smile.vocabulary.NAO;
+import ie.deri.smile.vocabulary.PIMO;
 
 import java.util.List;
 
 import org.ontoware.rdf2go.RDF2Go;
 import org.ontoware.rdf2go.model.Model;
 import org.ontoware.rdf2go.model.ModelSet;
-import org.ontoware.rdf2go.model.node.Literal;
 import org.ontoware.rdf2go.model.node.Node;
 import org.ontoware.rdf2go.model.node.Resource;
 import org.ontoware.rdf2go.model.node.URI;
+import org.ontoware.rdf2go.model.node.Variable;
+import org.ontoware.rdf2go.model.node.impl.DatatypeLiteralImpl;
 import org.ontoware.rdf2go.model.node.impl.URIImpl;
 import org.ontoware.rdf2go.vocabulary.RDF;
+import org.ontoware.rdf2go.vocabulary.XSD;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import eu.dime.commons.notifications.user.UNMessage;
-import eu.dime.commons.notifications.user.UserNotification;
-import eu.dime.ps.controllers.notifier.NotifierManager;
-import eu.dime.ps.controllers.notifier.exception.NotifierException;
+public class IncreaseTrustLevel implements Action {
 
-public class Notify implements Action {
-
-	private static final Logger logger = LoggerFactory.getLogger(Notify.class);
+	private static final Logger logger = LoggerFactory.getLogger(IncreaseTrustLevel.class);
 	
-	public static final URI IDENTIFIER = new URIImpl("urn:actions:Notify");
+	public static final URI IDENTIFIER = new URIImpl("urn:actions:ITL");
 	
 	private static final Model definition;
 	static {
 		definition = RDF2Go.getModelFactory().createModel().open();
 		definition.addStatement(IDENTIFIER, RDF.type, DRMO.Action);
 	};
-			
-	private NotifierManager notifierManager;
-	
-	public void setNotifierManager(NotifierManager notifierManager) {
-		this.notifierManager = notifierManager;
-	}
 	
 	@Override
 	public URI getIdentifier() {
@@ -89,22 +83,30 @@ public class Notify implements Action {
 			throw new IllegalActionException("The action cannot be executed: `tenant` must contain a valid value.");
 		}
 		
-		Node object = ModelUtils.findObject(definition, getIdentifier(), DRMO.hasObject);
-		if (object == null
-				|| !(object instanceof Literal)) {
-			throw new IllegalActionException("The action's object must not be null and should contain the message to notify.");
+		Resource userPIM = ModelUtils.findSubject(knowledgeBase, RDF.type, PIMO.PersonalInformationModel);
+		if (userPIM == null) {
+			throw new IllegalActionException("The action cannot be executed: User's PIM not found in knowledge base.");
 		}
 		
-		// prepare user notification
-		UNMessage unMessage = new UNMessage();
-		unMessage.setMessage(object.asLiteral().getValue());
-		UserNotification notification = new UserNotification(Long.parseLong(tenant), unMessage);
-		
-		try {
-			// push the notification to the notification manager
-			notifierManager.pushInternalNotification(notification);
-		} catch (NotifierException e) {
-			logger.error("Error when pushing notification [" + notification + "].", e);
+		// find dao:Account instance in results, and increase trust level of creator pimo:Person 
+		for (Node result : results) {
+			if (result instanceof URI
+					&& knowledgeBase.containsStatements(userPIM.asURI(), result.asURI(), RDF.type, DAO.Account)) {
+				Node creator = ModelUtils.findObject(knowledgeBase, result.asURI(), NAO.creator);
+				if (creator != null) {
+					Node trustLevel = ModelUtils.findObject(knowledgeBase, creator.asURI(), NAO.trustLevel);
+					double value = 0, newValue = 0;
+					if (trustLevel != null) {
+						value = Double.parseDouble(trustLevel.asDatatypeLiteral().getValue());
+					}
+					newValue = value > 0 ? Math.min(value + (1 - value) * 0.1, 1) : 0.1;
+						
+					logger.info("Increasing trust level of person "+creator.asURI()+" from "+value +" to "+newValue);
+					
+					knowledgeBase.removeStatements(userPIM.asURI(), creator.asURI(), NAO.trustLevel, Variable.ANY);
+					knowledgeBase.addStatement(userPIM.asURI(), creator.asURI(), NAO.trustLevel, new DatatypeLiteralImpl(String.valueOf(newValue), XSD._double));
+				}
+			}
 		}
 	}
 	

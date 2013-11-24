@@ -1,0 +1,11 @@
+<urn:uuid:ef5dbea5-5664-40e7-8f74-4830e4e7f231> a <http://www.semanticdesktop.org/ontologies/2012/03/06/drmo#Rule> .
+
+<urn:uuid:8bda8226-2b70-4a6d-8bcf-fb08d93c35eb> a <http://www.semanticdesktop.org/ontologies/2012/03/06/drmo#ResourceCreated> ;
+	<http://www.semanticdesktop.org/ontologies/2012/03/06/drmo#hasResourceType> <http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#Document> .
+
+<urn:uuid:ef5dbea5-5664-40e7-8f74-4830e4e7f231> <http://www.semanticdesktop.org/ontologies/2012/03/06/drmo#isComposedOf> <urn:uuid:8bda8226-2b70-4a6d-8bcf-fb08d93c35eb> .
+
+<urn:actions:Notify> a <http://www.semanticdesktop.org/ontologies/2012/03/06/drmo#Action> ;
+	<http://www.semanticdesktop.org/ontologies/2012/03/06/drmo#hasObject> "New document found!" .
+
+<urn:uuid:ef5dbea5-5664-40e7-8f74-4830e4e7f231> <http://www.semanticdesktop.org/ontologies/2012/03/06/drmo#triggers> <urn:actions:Notify> .

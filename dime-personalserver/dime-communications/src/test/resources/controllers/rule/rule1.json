@@ -1,92 +1,30 @@
 {
     "actions": [
         {
-            "actionType": "urn:actions:Notify"
+            "actionType": "urn:actions:Notify",
+            "hasObject": "New document found!"
         }
     ],
     "condition": [
         {
             "and": null,
-            "conditionType": "drmo:SituationActivated",
+            "conditionType": "http://www.semanticdesktop.org/ontologies/2012/03/06/drmo#ResourceCreated",
             "conditions": [],
-            "constraintOnGraph": null,
-            "constraintOnObject": "urn:juan:Situation0001",
-            "constraintOnProperty": "dcon:hasSituation",
-            "constraintOnSubject": null,
-            "guid": "0",
-            "isNegated": false,
-            "or": null,
-            "preceededBy": null,
-            "propertyOperator": null,
-            "resourceType": "pimo:Person",
-            "succeededBy": "1"
-        },
-        {
-            "and": null,
-            "conditionType": "drmo:Condition",
-            "conditions": [
-                {
-                    "and": null,
-                    "conditionType": "drmo:Condition",
-                    "conditions": [],
-                    "constraintOnGraph": null,
-                    "constraintOnObject": {
-                        "and": null,
-                        "conditionType": "drmo:Condition",
-                        "conditions": [],
-                        "constraintOnGraph": null,
-                        "constraintOnObject": null,
-                        "constraintOnProperty": "nco:hasEmailAddress",
-                        "constraintOnSubject": {
-                            "and": null,
-                            "conditionType": "drmo:Condition",
-                            "conditions": [],
-                            "constraintOnGraph": null,
-                            "constraintOnObject": null,
-                            "constraintOnProperty": "pimo:Occurance",
-                            "constraintOnSubject": "urn:juan:Person3Contact",
-                            "guid": "1_1_1_1",
-                            "isNegated": false,
-                            "or": null,
-                            "preceededBy": null,
-                            "propertyOperator": null,
-                            "resourceType": "nco:ContactMedium",
-                            "succeededBy": null
-                        },
-                        "guid": "1_1_1",
-                        "isNegated": false,
-                        "or": null,
-                        "preceededBy": null,
-                        "propertyOperator": null,
-                        "resourceType": "nmo:EmailAddress",
-                        "succeededBy": null
-                    },
-                    "constraintOnProperty": "http://www.semanticdesktop.org/ontologies/2007/03/22/nmo#messageFrom",
-                    "constraintOnSubject": null,
-                    "guid": "1_1",
-                    "isNegated": false,
-                    "or": null,
-                    "preceededBy": null,
-                    "propertyOperator": null,
-                    "resourceType": "nmo:Email",
-                    "succeededBy": null
-                }
-            ],
             "constraintOnGraph": null,
             "constraintOnObject": null,
             "constraintOnProperty": null,
             "constraintOnSubject": null,
-            "guid": "1",
+            "guid": "urn:uuid:67801267-6fda-4191-b154-6b6f2951abbd",
             "isNegated": false,
             "or": null,
             "preceededBy": null,
             "propertyOperator": null,
-            "resourceType": "nmo:Email",
+            "resourceType": "http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#Document",
             "succeededBy": null
         }
     ],
-    "guid": "urn:uuid:705b36b9-e12e-45ab-bba8-625357b6f84b",
+    "guid": "urn:uuid:cf9a3218-0004-40d6-84b4-1e2701676013",
     "isEnabled": true,
-    "name": "Test rule",
-    "type": "rule"
+    "name": null,
+    "type": "RULE"
 }
