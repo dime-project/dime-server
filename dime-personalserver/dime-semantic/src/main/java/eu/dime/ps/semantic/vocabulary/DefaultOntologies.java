@@ -49,6 +49,13 @@ public class DefaultOntologies {
 	public static Ontology RDFS = new Ontology(
 			"http://www.w3.org/2000/01/rdf-schema",
 			"vocabularies/rdfs/rdf-schema.rdf", Syntax.RdfXml, true);
+	
+	// NRL must be loaded before any other Nepomuk ontology
+	public static Ontology NRL = new Ontology(
+			"http://www.semanticdesktop.org/ontologies/2007/08/15/nrl",
+			"http://www.semanticdesktop.org/ontologies/2007/08/15/nrl/metadata",
+			"vocabularies/nrl/nrl.trig", Syntax.Trig, true);
+
 	public static Ontology DAO = new Ontology(
 			"http://www.semanticdesktop.org/ontologies/2011/10/05/dao",
 			"http://www.semanticdesktop.org/ontologies/2011/10/05/dao/metadata",
@@ -109,10 +116,6 @@ public class DefaultOntologies {
 			"http://www.semanticdesktop.org/ontologies/2007/03/22/nmo",
 			"http://www.semanticdesktop.org/ontologies/2007/03/22/nmo/metadata",
 			"vocabularies/nmo/nmo.trig", Syntax.Trig, true);
-	public static Ontology NRL = new Ontology(
-			"http://www.semanticdesktop.org/ontologies/2007/08/15/nrl",
-			"http://www.semanticdesktop.org/ontologies/2007/08/15/nrl/metadata",
-			"vocabularies/nrl/nrl.trig", Syntax.Trig, true);
 	public static Ontology NSO = new Ontology(
 			"http://www.semanticdesktop.org/ontologies/2009/11/08/nso",
 			"http://www.semanticdesktop.org/ontologies/2009/11/08/nso/metadata",
