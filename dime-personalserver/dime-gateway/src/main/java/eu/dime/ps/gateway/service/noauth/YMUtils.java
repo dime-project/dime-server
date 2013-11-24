@@ -69,7 +69,8 @@ public class YMUtils {
 	public static String XML_SNAME = "SName";
 	public static String XML_VAL_TRUE = "true";
 	public static String XML_VAL_FALSE = "false";
-        public static int[] exImageNumbers = {1,2,3,4,5,6,7,9,10,11,14,15,16,17,18,19,20,21,42,43,44,45,46,47,48,49,15292517,15292518,15292519,15292520,111308476,111308477};
+        public static int[] exImageNumbers = {1,2,3,4,5,6,7,9,10,11,14,15,16,17,18,19,20,21,42,43,44,45,46,47,48,49,15292517,15292518,15292519,15292520,111308476,111308477,
+        357,358,359,360,361,362,363,364,365,366,367,368,369,371,372,373,374,375,376};
 
 	
 	private static final Logger logger = LoggerFactory.getLogger(YMUtils.class);
