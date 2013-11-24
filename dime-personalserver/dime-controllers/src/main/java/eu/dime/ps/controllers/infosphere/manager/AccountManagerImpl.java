@@ -281,7 +281,7 @@ public class AccountManagerImpl extends InfoSphereManagerBase<Account> implement
 			CrawlerHandler[] handlers = new CrawlerHandler[3];
 			handlers[0] = new AccountUpdaterHandler(account.asURI(), genericUpdater);
 			handlers[1] = new ProfileUpdaterHandler(account.asURI(), profileUpdater);
-			handlers[2] = new ContextUpdaterHandler(account.asURI(), liveContextService);
+			handlers[2] = new ContextUpdaterHandler(account.asURI(), resourceStore, liveContextService);
 			
 			// Pertaining to decision in daily call on 17.07.2013: Disable livepost crawling functionality
 			//handlers[3] = new StreamUpdaterHandler(account.asURI(), streamUpdater);

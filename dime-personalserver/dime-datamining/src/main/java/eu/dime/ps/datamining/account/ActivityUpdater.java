@@ -33,9 +33,16 @@ public class ActivityUpdater implements AccountUpdater<Activity> {
 
 	private static final Logger logger = LoggerFactory.getLogger(ActivityUpdater.class);
 
-	private final LiveContextService liveContextService;
+	private LiveContextService liveContextService;
+	
+	public ActivityUpdater() {
+	}
 	
 	public ActivityUpdater(LiveContextService liveContextService) {
+		this.liveContextService = liveContextService;
+	}
+	
+	public void setLiveContextService(LiveContextService liveContextService) {
 		this.liveContextService = liveContextService;
 	}
 	

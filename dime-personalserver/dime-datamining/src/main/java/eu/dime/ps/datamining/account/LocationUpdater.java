@@ -20,19 +20,24 @@ import ie.deri.smile.vocabulary.DLPO;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 import org.ontoware.rdf2go.RDF2Go;
 import org.ontoware.rdf2go.model.Model;
+import org.ontoware.rdf2go.model.node.Node;
 import org.ontoware.rdf2go.model.node.Resource;
 import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.model.node.impl.URIImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import eu.dime.ps.semantic.BroadcastManager;
+import eu.dime.ps.semantic.Event;
+import eu.dime.ps.semantic.exception.NotFoundException;
 import eu.dime.ps.semantic.model.dcon.SpaTem;
 import eu.dime.ps.semantic.model.dlpo.LivePost;
-import eu.dime.ps.semantic.model.dpo.Place;
+import eu.dime.ps.semantic.model.pimo.Location;
 import eu.dime.ps.semantic.service.LiveContextService;
 import eu.dime.ps.semantic.service.LiveContextSession;
 import eu.dime.ps.semantic.service.exception.LiveContextException;
@@ -41,12 +46,24 @@ public class LocationUpdater implements AccountUpdater<LivePost> {
 
 	private static final Logger logger = LoggerFactory.getLogger(LocationUpdater.class);
 
-	private final LiveContextService liveContextService;
+	public static final String ACTION_CHECKIN = "eu.dime.ps.datamining.action.CHECKIN";
 	
-	public LocationUpdater(LiveContextService liveContextService) {
+	private String tenant;
+	private LiveContextService liveContextService;
+	
+	public LocationUpdater(String tenant) {
+		this.tenant = tenant;
+	}
+
+	public LocationUpdater(String tenant, LiveContextService liveContextService) {
+		this(tenant);
 		this.liveContextService = liveContextService;
 	}
 	
+	public void setLiveContextService(LiveContextService liveContextService) {
+		this.liveContextService = liveContextService;
+	}
+
 	@Override
 	public void update(URI accountUri, String path, LivePost livePost)
 			throws AccountIntegrationException {
@@ -59,6 +76,17 @@ public class LocationUpdater implements AccountUpdater<LivePost> {
 	public void update(URI accountUri, String path, Collection<LivePost> livePosts)
 			throws AccountIntegrationException {
 		
+		// caching current places, to avoid sending user notifications repeatedly
+		SpaTem spatem = liveContextService.get(SpaTem.class);
+		Collection<Node> locations = ModelUtils.findObjects(spatem.getModel(), spatem, DCON.currentPlace);
+		List<String> locationNames = new ArrayList<String>(locations.size());
+		for (Node entry : locations) {
+			try {
+				Location location = liveContextService.get(entry.asURI(), Location.class);
+				locationNames.add(location.getPrefLabel());
+			} catch (NotFoundException e) {}
+		}
+		
 		LiveContextSession session = liveContextService.getSession(accountUri);
 		try {
 			session.setAutoCommit(false);
@@ -69,29 +97,37 @@ public class LocationUpdater implements AccountUpdater<LivePost> {
 			// set current place to the location of the most recent checkin 
 			for (LivePost livePost : livePosts) {
 				if (livePost.isInstanceof(DLPO.Checkin)) {					
-					Resource placeId = ModelUtils.findObject(livePost.getModel(), livePost, DLPO.definingResource).asResource();
-					if (placeId != null) {
-						// load data related to place
+					Resource locationId = ModelUtils.findObject(livePost.getModel(), livePost, DLPO.definingResource).asResource();
+					if (locationId != null) {
+						// load data related to the location
 						Model sinkModel = RDF2Go.getModelFactory().createModel().open();
-						ModelUtils.fetch(livePost.getModel(), sinkModel, placeId);
+						ModelUtils.fetch(livePost.getModel(), sinkModel, locationId);
 						
-						// transform placeId to a URI
-						URI placeUri = new URIImpl("urn:uuid:" + UUID.randomUUID());
-						ModelUtils.replaceIdentifier(sinkModel, placeId, placeUri);
+						// transform locationId into a URI
+						URI locationUri = new URIImpl("urn:uuid:" + UUID.randomUUID());
+						ModelUtils.replaceIdentifier(sinkModel, locationId, locationUri);
 						
-						// replace all blank nodes with URIs and create Place object
-						Model placeModel = RDF2Go.getModelFactory().createModel().open();
-						ModelUtils.skolemize(sinkModel, placeModel);
-						Place place = new Place(placeModel, placeUri, false);
+						// replace all blank nodes with URIs and create Location object
+						Model locationModel = RDF2Go.getModelFactory().createModel().open();
+						ModelUtils.skolemize(sinkModel, locationModel);
+						Location location = new Location(locationModel, locationUri, false);
 						
-						logger.info("Checkin @ '" + place.getPrefLabel() + "' found in livepost from account " + accountUri);
+						logger.info("Checkin @ '" + location.getPrefLabel() + "' found in livepost from account " + accountUri);
 						
-						// adding place to live context and commit changes
-						session.add(SpaTem.class, DCON.currentPlace, place);
-						session.commit();
+						// send user notification if new place detected
+						if (!locationNames.contains(location.getPrefLabel())) {
+							BroadcastManager.getInstance().sendBroadcast(new Event(tenant, ACTION_CHECKIN, location));
+						}
+						
+						// adding location as current place in live context
+						session.add(SpaTem.class, DCON.currentPlace, location);
 					}
 				}
 			}
+
+			// commit changes
+			session.commit();
+			
 		} catch (LiveContextException e) {
 			throw new AccountIntegrationException("Error while updating location/places in live context for "+
 					"account "+accountUri+": "+e.getMessage(), e);

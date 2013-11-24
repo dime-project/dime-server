@@ -29,6 +29,7 @@ import eu.dime.ps.datamining.service.CrawlerHandler;
 import eu.dime.ps.datamining.service.PathDescriptor;
 import eu.dime.ps.semantic.model.dlpo.LivePost;
 import eu.dime.ps.semantic.model.dpo.Activity;
+import eu.dime.ps.semantic.rdf.ResourceStore;
 import eu.dime.ps.semantic.service.LiveContextService;
 
 /**
@@ -42,6 +43,7 @@ public class ContextUpdaterHandler implements CrawlerHandler {
 	private static final Logger logger = LoggerFactory.getLogger(AccountUpdaterHandler.class);
 	
 	private URI accountIdentifier;
+	private String tenant;
 	private ActivityUpdater activityUpdater;
 	private LocationUpdater locationUpdater;
 	
@@ -50,13 +52,18 @@ public class ContextUpdaterHandler implements CrawlerHandler {
 	}
 	
 	public void setLiveContextService(LiveContextService liveContextService) {
-		this.activityUpdater = new ActivityUpdater(liveContextService);
-		this.locationUpdater = new LocationUpdater(liveContextService);
+		this.activityUpdater.setLiveContextService(liveContextService);
+		this.locationUpdater.setLiveContextService(liveContextService);
 	}
 
-	public ContextUpdaterHandler() {}
+	public ContextUpdaterHandler(ResourceStore resourceStore) {
+		this.tenant = resourceStore.getName();
+		this.activityUpdater = new ActivityUpdater();
+		this.locationUpdater = new LocationUpdater(this.tenant);
+	}
 	
-	public ContextUpdaterHandler(URI accountIdentifier, LiveContextService liveContextService) {
+	public ContextUpdaterHandler(URI accountIdentifier, ResourceStore resourceStore, LiveContextService liveContextService) {
+		this(resourceStore);
 		this.accountIdentifier = accountIdentifier;
 		setLiveContextService(liveContextService);
 	}
@@ -64,6 +71,7 @@ public class ContextUpdaterHandler implements CrawlerHandler {
 	@Override
 	public void onResult(Map<PathDescriptor, Collection<? extends Resource>> resources) {
 		logger.debug("received an ContextUpdaterHandler.onResult() call [account="+accountIdentifier+"]");
+		
 		for (PathDescriptor path : resources.keySet()) {
 			
 			// updates the current activities
@@ -80,7 +88,7 @@ public class ContextUpdaterHandler implements CrawlerHandler {
 				try {
 					locationUpdater.update(accountIdentifier, path.getPath(), (Collection<LivePost>) resources.get(path));
 				} catch (AccountIntegrationException e) {
-					logger.error("Couldn't update current place in live context.", e);
+					logger.error("Couldn't update current location in live context.", e);
 				}
 			}
 		}
