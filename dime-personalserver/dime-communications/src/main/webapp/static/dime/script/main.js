@@ -4998,7 +4998,7 @@ Dime.DetailDialog.prototype = {
                         .append($("<img></img>").attr("src", this.getSituationIconForType(item.contextElements[i].type))))
                     .append($("<div></div>")
                         .addClass("situationElementLabel")
-                        .append((item.contextElements.name ? item.contextElements.name : "") + " (weight: " + weight + ")"))
+                        .append((item.contextElements[i].name ? item.contextElements[i].name : "") + " (weight: " + weight + ")"))
                     );
                 }else{
                     contextElementsWithNoIcon++;
