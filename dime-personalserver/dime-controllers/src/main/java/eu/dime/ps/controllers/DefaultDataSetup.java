@@ -581,7 +581,7 @@ public class DefaultDataSetup implements BroadcastReceiver {
 			eating.getModel().addStatement(eating, DCON.weight, new DatatypeLiteralImpl("0.6", XSD._float));
 			state.addCurrentActivity(eating);
 			state.getModel().addModel(eating.getModel());
-			party.getModel().addStatement(eating, DCON.weight, new DatatypeLiteralImpl("0.8", XSD._float));
+			party.getModel().addStatement(party, DCON.weight, new DatatypeLiteralImpl("0.8", XSD._float));
 			state.addCurrentActivity(party);
 			state.getModel().addModel(party.getModel());
 
@@ -626,10 +626,10 @@ public class DefaultDataSetup implements BroadcastReceiver {
 			spatem.addCurrentPlace(station);
 			spatem.getModel().addModel(station.getModel());
 			//state = driving, travelling
-			driving.getModel().addStatement(recreation, DCON.weight, new DatatypeLiteralImpl("0.5", XSD._float));
+			driving.getModel().addStatement(driving, DCON.weight, new DatatypeLiteralImpl("0.5", XSD._float));
 			state.addCurrentActivity(driving);
 			state.getModel().addModel(driving.getModel());
-			travelling.getModel().addStatement(recreation, DCON.weight, new DatatypeLiteralImpl("1", XSD._float));
+			travelling.getModel().addStatement(travelling, DCON.weight, new DatatypeLiteralImpl("1", XSD._float));
 			state.getModel().addModel(travelling.getModel());
 			state.addCurrentActivity(travelling);
 			
