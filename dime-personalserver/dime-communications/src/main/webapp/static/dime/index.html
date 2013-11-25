@@ -63,7 +63,7 @@
                             <img src="img/settings/collaps.png" onclick="Dime.Settings.toggleTab(this, 'generalSettingsContainer');">
                             General Settings
                         </div>
-                        <div class="settingsContent expandedSettingsTab" id="generalSettingsContainer"></div>
+                        <div class="settingsContent collapsedSettingsTab" id="generalSettingsContainer"></div>
                         <div class="settingsTab" >
                             <span class="settingsTabTitle">Connect to services</span>
                             <img src="img/settings/collaps.png" onclick="Dime.Settings.toggleTab(this,'serviceContainer');">
@@ -78,10 +78,33 @@
                         <div class="settingsContent expandedSettingsTab" id="serviceContainer"></div>
                         <div class="settingsTab">
                             <img src="img/settings/open.png" onclick="Dime.Settings.toggleTab(this,'rulesSettingsContainer');">
-                            Rules
+                            Rules: Automate your di.me
                         </div>
-                        <div class="settingsContent collapsedSettingsTab" id="rulesSettingsContainer">
-                            <img src="img/dime_rule_01.png" alt="dime rule 01" id="rulesRule01Image" onclick="Dime.Settings.showRuleEditor();"/>
+                        <div class="settingsContent expandedSettingsTab" id="rulesSettingsContainer">
+                            <div>
+                                <div style="float:left; clear: both;">With the rule editor, you can define rules like:</div>
+                                <div
+                                    style="                                    
+                                        font-family: monospace;
+                                        float: left;
+                                        padding-left: 10px;
+                                        clear: both;
+                                    "
+                                    >if (this happens) then (do this for me)</div>
+                                
+                                <div style="float:left; clear: both;">to automate some tasks in di.me.</div>
+                            </div>
+                            <div class="YellowMenuButton"
+                                 onclick="Dime.Settings.showRuleEditor();"
+                                 style="
+                                    float: left;
+                                    clear: both;
+                                    padding-top: 10px;
+                                    padding-bottom: 0px;
+                                    "
+                                 >
+                                Add Rules ...
+                            </div>       
                         </div>
                     </div>
 
