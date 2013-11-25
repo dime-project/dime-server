@@ -14,12 +14,9 @@
 
 package eu.dime.ps.communications.requestbroker.controllers.infosphere;
 
-import java.util.Collection;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.ontoware.rdf2go.model.node.impl.URIImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import eu.dime.commons.dto.Response;
@@ -31,12 +28,10 @@ import eu.dime.ps.gateway.service.external.oauth.TwitterServiceAdapter;
 import eu.dime.ps.semantic.model.dao.Account;
 import eu.dime.ps.semantic.model.nco.PersonContact;
 import eu.dime.ps.semantic.model.pimo.Person;
-import org.junit.Ignore;
 
 
 
 
-@Ignore
 public class PSPersonControllerTestIt extends PSInfosphereControllerTestIt {
 
 	private static final String SAID = "juan";
@@ -67,19 +62,8 @@ public class PSPersonControllerTestIt extends PSInfosphereControllerTestIt {
 	}
 
 	@After
-	public void tearDown() throws Exception {		
-		Collection<Person> persons = personManager.getAll();
-		for (Person person: persons){
-			personManager.remove(person.asURI().toString());		
-		}	
-
-		Collection<PersonContact> profiles = profileManager.getAll();
-		for (PersonContact profile: profiles){
-			profileManager.remove(profile.asURI().toString());		
-		}	
+	public void tearDown() throws Exception {			
 		super.tearDown();
-
-
 	}	
 
     
@@ -89,10 +73,10 @@ public class PSPersonControllerTestIt extends PSInfosphereControllerTestIt {
 
 		Account account = createAccount(pimoService.getUserUri());
 		PersonContact profile = createProfile("Test user",account);
-		Person person = createPerson("Test user");
-		person.addGroundingOccurrence(profile);
+		Person person = createPersonWithProfile("Test user",profile);
+		
 
-		Response<Resource> response = controller.getAllMyPersons(SAID);
+		Response<Resource> response = controller.getPersonById(SAID,person.asURI().toString());
 
 		assertNotNull(response);
 		assertEquals(1, response.getMessage().getData().getEntries().size());
@@ -100,9 +84,11 @@ public class PSPersonControllerTestIt extends PSInfosphereControllerTestIt {
 		Resource resource = response.getMessage().getData().getEntries().iterator().next();
 		assertTrue(resource.containsKey("defProfile"));		
 		String defProfile = resource.get("defProfile").toString();
-		assertEquals("p_"+profile.asURI().toString(),defProfile);
-
-
+		assertEquals("p_"+profile.asURI().toString(),defProfile);	
+	
+		personManager.remove(person.asURI().toString());
+		this.pimoService.remove(profile);
+			
 	}
 
 
@@ -112,10 +98,10 @@ public class PSPersonControllerTestIt extends PSInfosphereControllerTestIt {
 
 		Account account = createAccount(pimoService.getUserUri(),TwitterServiceAdapter.NAME);
 		PersonContact profile = createProfile("Test crawled user",account);
-		Person person = createPerson("Test crawled user");
-		person.addGroundingOccurrence(profile);
+		Person person = createPersonWithProfile("Test crawled user",profile);
+		
 
-		Response<Resource> response = controller.getAllMyPersons(SAID);
+		Response<Resource> response = controller.getPersonById(SAID,person.asURI().toString());
 
 		assertNotNull(response);
 		assertEquals(1, response.getMessage().getData().getEntries().size());
@@ -123,8 +109,11 @@ public class PSPersonControllerTestIt extends PSInfosphereControllerTestIt {
 		Resource resource = response.getMessage().getData().getEntries().iterator().next();
 		assertTrue(resource.containsKey("defProfile"));		
 		String defProfile = resource.get("defProfile").toString();
-		assertEquals("",defProfile);
-
+		assertEquals("",defProfile);		
+		
+		personManager.remove(person.asURI().toString());
+		this.pimoService.remove(profile);
+		
 	}
 
 

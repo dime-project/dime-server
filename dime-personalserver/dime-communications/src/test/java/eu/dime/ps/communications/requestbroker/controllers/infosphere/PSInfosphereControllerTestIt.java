@@ -37,6 +37,7 @@ import eu.dime.ps.dto.Resource;
 import eu.dime.ps.gateway.service.internal.DimeServiceAdapter;
 import eu.dime.ps.semantic.connection.Connection;
 import eu.dime.ps.semantic.connection.ConnectionProvider;
+import eu.dime.ps.semantic.exception.NotFoundException;
 import eu.dime.ps.semantic.exception.ResourceExistsException;
 import eu.dime.ps.semantic.model.ModelFactory;
 import eu.dime.ps.semantic.model.dao.Account;
@@ -127,6 +128,14 @@ public abstract class PSInfosphereControllerTestIt extends Assert {
 	protected Person createPerson(String name) throws ResourceExistsException  {
 		Person person = modelFactory.getPIMOFactory().createPerson();
 		person.setPrefLabel(name);
+		pimoService.create(person);
+		return person;
+	}
+	
+	protected Person createPersonWithProfile(String name,PersonContact profile) throws ResourceExistsException  {
+		Person person = modelFactory.getPIMOFactory().createPerson();
+		person.setPrefLabel(name);
+		person.addGroundingOccurrence(profile);
 		pimoService.create(person);
 		return person;
 	}
