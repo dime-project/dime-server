@@ -88,7 +88,7 @@ public class ProfileAttribute extends Resource {
 
 		node = ModelUtils.findObject(resource.getModel(), resource.asResource(), NCO.postalcode);
 		if (node != null)
-			postalAddress.put("postalCode", node.asLiteral().getValue());
+			postalAddress.put("postalcode", node.asLiteral().getValue());
 
 		node = ModelUtils.findObject(resource.getModel(), resource.asResource(), NCO.locality);
 		if (node != null)
@@ -543,8 +543,8 @@ public class ProfileAttribute extends Resource {
 			model.addStatement(resourceUri, NCO.extendedAddress, (String) valueMap.get("extendedAddress"));
 		if (valueMap.containsKey("streetAddress"))
 			model.addStatement(resourceUri, NCO.streetAddress, (String) valueMap.get("streetAddress"));
-		if (valueMap.containsKey("postalCode"))
-			model.addStatement(resourceUri, NCO.postalcode, (String) valueMap.get("postalCode"));
+		if (valueMap.containsKey("postalcode"))
+			model.addStatement(resourceUri, NCO.postalcode, (String) valueMap.get("postalcode"));
 		if (valueMap.containsKey("locality"))
 			model.addStatement(resourceUri, NCO.locality, (String) valueMap.get("locality"));
 		if (valueMap.containsKey("pobox"))

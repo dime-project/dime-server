@@ -702,6 +702,9 @@ public class PSProfileAttributeControllerTestIt extends PSInfosphereControllerTe
 		postalAddressValues.put("extendedAddress", "test st. 2");
 		postalAddressValues.put("addressLocation", "testonia");
 		postalAddressValues.put("streetAddress", "test st.");
+		postalAddressValues.put("pobox", "08190");
+		postalAddressValues.put("locality", "testLocality");
+		postalAddressValues.put("postalcode", "test postal code");
 
 		postalAddress.put("value",postalAddressValues);		
 
@@ -721,6 +724,10 @@ public class PSProfileAttributeControllerTestIt extends PSInfosphereControllerTe
 		assertTrue(pimo.contains(uri, NCO.extendedAddress, "test st. 2"));
 		assertTrue(pimo.contains(uri, NCO.addressLocation, "testonia"));
 		assertTrue(pimo.contains(uri, NCO.streetAddress, "test st."));
+		assertTrue(pimo.contains(uri, NCO.pobox, "08190"));
+		assertTrue(pimo.contains(uri, NCO.locality, "testLocality"));
+		assertTrue(pimo.contains(uri, NCO.postalcode, "test postal code"));
+		
 		//verify the profile contains the attribute
 		assertTrue(pimo.contains(profile, NCO.hasPostalAddress,uri));
 	}
@@ -1566,9 +1573,11 @@ public class PSProfileAttributeControllerTestIt extends PSInfosphereControllerTe
 		PostalAddress postalAddress = modelFactory.getNCOFactory().createPostalAddress();
 		postalAddress.addRegion("region");
 		postalAddress.addCountry("country");
-		postalAddress.addExtendedAddress("ex address");
-		//postalAddress.addAddressLocation(new URIImpl("cositaLinda"));
+		postalAddress.addExtendedAddress("ex address");		
 		postalAddress.addStreetAddress("st address");
+		postalAddress.addPobox("pobox");
+		postalAddress.addLocality("locality");
+		postalAddress.addPostalcode("postal code");
 		pimoService.create(postalAddress);
 
 		profile.addPostalAddress(postalAddress);
@@ -1588,6 +1597,9 @@ public class PSProfileAttributeControllerTestIt extends PSInfosphereControllerTe
 		values.put("country", "country");
 		values.put("extendedAddress", "ex address");
 		values.put("streetAddress", "st address");
+		values.put("pobox", "pobox");
+		values.put("locality", "locality");
+		values.put("postalcode", "postal code");
 		assertEquals(personNameJSON.get("value"),values);
 	}
 
@@ -1705,8 +1717,7 @@ public class PSProfileAttributeControllerTestIt extends PSInfosphereControllerTe
 		PostalAddress postalAddress = modelFactory.getNCOFactory().createPostalAddress();
 		postalAddress.addRegion("region");
 		postalAddress.addCountry("country");
-		postalAddress.addExtendedAddress("ex address");
-		//postalAddress.addAddressLocation(new URIImpl("cositaLinda"));
+		postalAddress.addExtendedAddress("ex address");		
 		postalAddress.addStreetAddress("st address");
 		pimoService.create(postalAddress);
 		profile.addPostalAddress(postalAddress);
