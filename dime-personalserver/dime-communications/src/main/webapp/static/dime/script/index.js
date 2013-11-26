@@ -1360,6 +1360,10 @@ DimeView = {
                 $('#'+actionButton.id).text("Send Livepost ...");
                 actionButton.maxItems=0;
                 actionButton.minItems=-1;
+            }else if (DimeView.viewManager.status.groupType===Dime.psMap.TYPE.USERNOTIFICATION){
+                $('#'+actionButton.id).text("Delete All");
+                actionButton.maxItems=0;
+                actionButton.minItems=-1;
             }else{
                  $('#'+actionButton.id).text("");
                  actionButton.maxItems=1;
@@ -1534,6 +1538,20 @@ DimeView = {
                 Dime.Dialog.showLivepostWithSelection(response);
             };
             Dime.psHelper.getMixedItems(selectedPersons, triggerDialog, this);
+        }else if (DimeView.viewManager.status.groupType===Dime.psMap.TYPE.USERNOTIFICATION){
+            var check = confirm('Do you really want to delete all notifications?');
+            if(!check){
+                return;
+            }
+
+            var deleteAllNotifications=function(response){
+                jQuery.each(response, function(){
+                    Dime.REST.removeItem(this, function(response){
+                        console.log('deleted UN: ', response);
+                    }, DimeView);
+                });
+            };
+            Dime.REST.getAll(Dime.psMap.TYPE.USERNOTIFICATION, deleteAllNotifications, '@me', this);
         }
     },
     
