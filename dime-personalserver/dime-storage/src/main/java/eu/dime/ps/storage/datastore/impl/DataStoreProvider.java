@@ -58,8 +58,9 @@ public class DataStoreProvider {
 	}
 
 	private DataStore createTenantStore(long tenantId) {
-		ObjectContainer container = db4oPersistenceEngine.openConnection(String.valueOf(tenantId));
-		DataStore store = new DataStoreImpl(container, tenantId);
+		//ObjectContainer container = db4oPersistenceEngine.openConnection(String.valueOf(tenantId));
+		//DataStore store = new DataStoreImpl(container, tenantId);
+		DataStore store = new DataStoreNoDBImpl(null, tenantId);
 		return store;
 	}
 
@@ -69,7 +70,7 @@ public class DataStoreProvider {
 			store.close();
 		}
 		dataStores.remove(tenantId);
-		db4oPersistenceEngine.closeConnection(String.valueOf(tenantId));
+		//db4oPersistenceEngine.closeConnection(String.valueOf(tenantId));
 	}
 
 	public boolean deleteTenantStore(long tenantId) {
