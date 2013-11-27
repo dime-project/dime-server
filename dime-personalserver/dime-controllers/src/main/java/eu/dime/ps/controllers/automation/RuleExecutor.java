@@ -81,6 +81,15 @@ public class RuleExecutor implements BroadcastReceiver {
 	
 	@Override
 	public void onReceive(Event event) {
+		String eventAction = event.getAction();
+		
+		// ignore actions that aren't `add`, `modify` or `delete`
+		if (!Event.ACTION_RESOURCE_ADD.equals(eventAction)
+				&& !Event.ACTION_RESOURCE_MODIFY.equals(eventAction)
+				&& !Event.ACTION_RESOURCE_DELETE.equals(eventAction)) {
+			return;
+		}
+		
 		EventLogger eventLogger = loggerCache.get(event.getTenant());
 		EventProcessor eventProcessor = processorCache.get(event.getTenant());
 
@@ -122,7 +131,6 @@ public class RuleExecutor implements BroadcastReceiver {
 
 		Model metadata = event.getData() == null ? RDF2Go.getModelFactory().createModel().open() : event.getData().getModel();
 		Resource eventResource = event.getIdentifier().asURI();
-		String eventAction = event.getAction();
 
 		// registering event in EventLogger
 		if (Event.ACTION_RESOURCE_ADD.equals(eventAction)) {

@@ -155,6 +155,12 @@
 		<property name="connectionProvider" ref="connectionProvider"/>
 	</bean>
 	
+	<bean id="ruleExecutor"
+		class="eu.dime.ps.controllers.automation.RuleExecutor">
+		<property name="connectionProvider" ref="connectionProvider"/>
+ 		<property name="notifierManager" ref="notifierManager"/>
+	</bean>
+	
 	<bean id="liveContextManager"
 		class="eu.dime.ps.controllers.context.LiveContextManager">
 		<property name="connectionProvider" ref="connectionProvider"/>
@@ -225,6 +231,12 @@
 		<property name="connectionProvider" ref="connectionProvider"/>
 	</bean>
 
+	<bean id="checkinNotifier"
+		class="eu.dime.ps.controllers.notification.CheckinNotifier">
+		<property name="notifierManager" ref="notifierManager"/>
+	</bean>
+	
+	
 
 	<!-- Trust Engine Beans -->
 	<bean id="trustEngine" class="eu.dime.ps.controllers.trustengine.impl.TrustEngineImpl">

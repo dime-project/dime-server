@@ -56,7 +56,7 @@ public class CheckinNotifier implements BroadcastReceiver {
 		final String action = event.getAction();
 
 		if (!LocationUpdater.ACTION_CHECKIN.equals(action)
-				|| event.is(PIMO.Location)) {
+				|| !event.is(PIMO.Location)) {
 			return;
 		}
 
@@ -66,11 +66,12 @@ public class CheckinNotifier implements BroadcastReceiver {
 		if (prefLabel != null) {
 			final UNMessage message = new UNMessage();
 			// TODO make this generic for any service account, instead of hardcoding `Twitter`
-			message.setMessage("You've checked in @ '" + prefLabel + "' on Twitter");
+			String text = "You've checked in @ '" + prefLabel + "' on Twitter";
+			message.setMessage(text);
 			
 			final UserNotification notification = new UserNotification(event.getTenantId(), message);
 			try {
-				logger.debug("Pushing internal notification: "+notification.toString());
+				logger.info("CheckinNotifier sends user notification `" + text + "`");
 				notifierManager.pushInternalNotification(notification);
 			} catch (NotifierException e) {
 				logger.error("Error while pushing notification ["+notification+"].", e);

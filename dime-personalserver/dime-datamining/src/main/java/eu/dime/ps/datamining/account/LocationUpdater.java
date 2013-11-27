@@ -19,6 +19,7 @@ import ie.deri.smile.vocabulary.DCON;
 import ie.deri.smile.vocabulary.DLPO;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
@@ -115,7 +116,9 @@ public class LocationUpdater implements AccountUpdater<LivePost> {
 						logger.info("Checkin @ '" + location.getPrefLabel() + "' found in livepost from account " + accountUri);
 						
 						// send user notification if new place detected
+						logger.info("Current locations are: " + Arrays.toString(locationNames.toArray(new String[0])));
 						if (!locationNames.contains(location.getPrefLabel())) {
+							logger.info("Broadcasting 'Checkin' event at location " + location.getPrefLabel());
 							BroadcastManager.getInstance().sendBroadcast(new Event(tenant, ACTION_CHECKIN, location));
 						}
 						
