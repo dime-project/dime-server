@@ -816,7 +816,10 @@ function addConstraints(element){
 	var conditionNumber = 0;
 	
     $.each( condition, function(index, value) {
-      conditionNumber = conditionNumber + 1;
+      //escaping situations for demo - otherwise they can halt the system
+	  if (!(conditionType == 3)
+	  {
+	  conditionNumber = conditionNumber + 1;
 	  var conditionType = $(value).attr("data-typeid");
 	  var conditionJson;
       
@@ -931,6 +934,7 @@ function addConstraints(element){
       conditions = conditions.concat(conditionJson);
       if (index < (arrayLen - 1)) { conditions = conditions.concat(","); }
     }
+	}
   );
                 
     jsonRule = jsonRule.replace("#conditions", conditions);
