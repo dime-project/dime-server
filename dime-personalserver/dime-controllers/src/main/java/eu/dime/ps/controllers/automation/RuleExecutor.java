@@ -33,10 +33,12 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
+import org.apache.commons.lang.ArrayUtils;
 import org.ontoware.rdf2go.RDF2Go;
 import org.ontoware.rdf2go.model.Model;
 import org.ontoware.rdf2go.model.ModelSet;
 import org.ontoware.rdf2go.model.QueryRow;
+import org.ontoware.rdf2go.model.Syntax;
 import org.ontoware.rdf2go.model.node.Node;
 import org.ontoware.rdf2go.model.node.Resource;
 import org.ontoware.rdf2go.model.node.impl.URIImpl;
@@ -79,14 +81,18 @@ public class RuleExecutor implements BroadcastReceiver {
 		this.notifierManager = notifierManager;
 	}
 	
+	private static final String[] ACTIONS = new String[] {
+		Event.ACTION_RESOURCE_ADD,
+		Event.ACTION_RESOURCE_MODIFY,
+		Event.ACTION_RESOURCE_DELETE
+	};
+
 	@Override
 	public void onReceive(Event event) {
 		String eventAction = event.getAction();
 		
-		// ignore actions that aren't `add`, `modify` or `delete`
-		if (!Event.ACTION_RESOURCE_ADD.equals(eventAction)
-				&& !Event.ACTION_RESOURCE_MODIFY.equals(eventAction)
-				&& !Event.ACTION_RESOURCE_DELETE.equals(eventAction)) {
+		// only interested in create/update/delete actions
+		if (!ArrayUtils.contains(ACTIONS, eventAction)) {
 			return;
 		}
 		
@@ -152,6 +158,7 @@ public class RuleExecutor implements BroadcastReceiver {
 		}
 
 		// pass event to processor, and execute the actions of the satisfied rules
+		logger.info("Check rules for " + eventAction + " " + event.getIdentifier());
 		for (Tuple<Rule, QueryRow> tuple : eventProcessor.executeEventProcessor(eventResource.asURI())) {
 			Rule rule = tuple.firstElement;
 			QueryRow queryRow = tuple.secondElement;

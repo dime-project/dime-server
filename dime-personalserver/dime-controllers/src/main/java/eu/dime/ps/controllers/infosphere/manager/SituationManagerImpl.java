@@ -42,6 +42,7 @@ import eu.dime.ps.semantic.connection.ConnectionProvider;
 import eu.dime.ps.semantic.exception.NotFoundException;
 import eu.dime.ps.semantic.exception.ResourceExistsException;
 import eu.dime.ps.semantic.model.dcon.Situation;
+import eu.dime.ps.semantic.model.pimo.Person;
 import eu.dime.ps.semantic.rdf.ResourceStore;
 import eu.dime.ps.semantic.service.impl.PimoService;
 import eu.dime.ps.semantic.util.DateUtils;
@@ -193,7 +194,9 @@ public class SituationManagerImpl extends InfoSphereManagerBase<Situation> imple
 				tripleStore.addStatement(situationUri, uuid, NAO.prefLabel, new PlainLiteralImpl(sb.toString()));
 				tripleStore.addStatement(situationUri, uuid, DCON.weight, new DatatypeLiteralImpl("0.5", XSD._float));
 			}
+			Person me = pimoService.getUser();
 			Situation situation = resourceStore.get(situationUri, Situation.class);
+			BroadcastManager.getInstance().sendBroadcast(new Event(resourceStore.getName(), Event.ACTION_RESOURCE_MODIFY, me));
 			BroadcastManager.getInstance().sendBroadcast(new Event(resourceStore.getName(), Event.ACTION_RESOURCE_MODIFY, situation));
 		} catch (NotFoundException e) {
 			throw new InfosphereException("Situation "+situationId+" couldn't be activated:"+e.getMessage(), e);
