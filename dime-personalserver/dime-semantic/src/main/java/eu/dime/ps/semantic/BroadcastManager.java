@@ -21,8 +21,13 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class BroadcastManager {
 	
+	private static final Logger logger = LoggerFactory.getLogger(BroadcastManager.class);
+
 	private final CopyOnWriteArrayList<BroadcastReceiver> receivers = new CopyOnWriteArrayList<BroadcastReceiver>();
 
     private ThreadPoolExecutor threadPool = null;
@@ -81,12 +86,15 @@ public class BroadcastManager {
 	 */
 	public void sendBroadcastSync(Event event) {
 		for (BroadcastReceiver receiver : receivers) {
-			receiver.onReceive(event);
+			try {
+				receiver.onReceive(event);
+			} catch (Exception e) {
+				logger.error("Task failed for event " + event.getAction() + " " + event.getIdentifier(), e);
+			}
 		}
 	}
 
 	private class BroadcastTask implements Runnable {
-//		private Thread thread; 
 		private List<BroadcastReceiver> receivers;
 		private Event event;
 		
@@ -95,14 +103,16 @@ public class BroadcastManager {
 			this.event = event;
 			
 			threadPool.execute(this);
-//			thread = new Thread(this); 
-//			thread.start();
 		}
 		
 		@Override
 		public void run() {
 			for (BroadcastReceiver receiver : receivers) {
-				receiver.onReceive(event);
+				try {
+					receiver.onReceive(event);
+				} catch (Exception e) {
+					logger.error("Task failed for event " + event.getAction() + " " + event.getIdentifier(), e);
+				}
 			}
 		}
 	}
