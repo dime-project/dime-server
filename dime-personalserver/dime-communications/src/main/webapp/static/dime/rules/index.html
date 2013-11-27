@@ -675,7 +675,7 @@ function addConstraints(element){
 		var boxCode = "<div id='"+boxId+"' class='rulebox'>"+
 		"<div style='color:rgb(49, 48, 49); font-size:20px; font-weight:bold; font-family:Helvetica,Arial,sans-serif; margin-top:10px; margin-left:5px; margin-right:5px; float:left'>if</div> <div id='conditions_"+boxId+"'><div id='conditiondiv_1_"+boxId+"' class='conditionBox'></div></div><div><a href='#' name='newConditionButton' title='Add Another Condition' id='newConditionButton' class='newConditionButton'>+</a></div><div style='color:rgb(49, 48, 49); font-size:20px; font-weight:bold; font-family:Helvetica,Arial,sans-serif; margin-top:10px; margin-left:5px; margin-right:5px; float:left'>then</div> <div class='action'><span class='helper'>A</span><span class='helper3'>ction</span><span style='float:right'><input id='notificationText' type='text' style='width:300px; color:rgb(49, 48, 49); font-style:italic; height:20px; border: 1px dotted #000000; margin:5px 5px 5px 5px; word-wrap:break-word; padding:0px'></span></div><a href='#' name='"+boxId+"' id='saveButton' class='saveButton'>Save</a><br clear='all'/>"+
 		"</div>"+
-		"<div id='tutorialBox' class ='tutorialBox'><span style='float:left; background-color:rgb(246, 194, 0)'><img src='../img/metaData/info.png'><span style='vertical-align:middle' id='tipTitle' class='tipTitle'>Guide: Step 1</span><br><div id='tipBox' class='tipBox'><span id='tipText' style='text-align:center' class='tipText'>Select a Subject to start describing a condition e.g., 'Nearby People', from the list on the right. Drag it onto the yellow box on the left. </span></div><a href='#' style='float:right; vertical-align:middle' name='nextTipButton' id='nextTipButton' title='Show Next Tip' class='nextTipButton'>&gt;&gt; Go to Step 2</a></span><div style='float:left'><img id='tutorial' src='../../images/rules/tutorial/tutorial0_faded.png' alt='5-step Guidelines'></div></div>";
+		"<div id='tutorialBox' class ='tutorialBox'><span style='float:left; background-color:rgb(246, 194, 0)'><img src='../img/metaData/info.png'><span style='vertical-align:middle' id='tipTitle' class='tipTitle'>Guide: Step 1</span><br><div id='tipBox' class='tipBox'><span id='tipText' style='text-align:center' class='tipText'>Select an Object to start describing a condition e.g., 'Nearby People', from the list on the right. Drag it onto the yellow box on the left. </span></div><a href='#' style='float:right; vertical-align:middle' name='nextTipButton' id='nextTipButton' title='Show Next Tip' class='nextTipButton'>&gt;&gt; Go to Step 2</a></span><div style='float:left'><img id='tutorial' src='../../images/rules/tutorial/tutorial0_faded.png' alt='5-step Guidelines'></div></div>";
 		currentRuleId = boxId;
 
 		return boxCode;
@@ -703,7 +703,7 @@ function addConstraints(element){
 		var conditionButtonId = "addConditionButton_"+id;
 		currentConditionId = "condition_"+thisCounter+"_"+id;
 		
-		var textbox = "<div class='autocompleteFillInCondition' id='"+conditionId+"' data-typeid='-1'><span class='helper'>S</span><span class='helper3'>ubject</span></div><div class='constraintBox' id='constraintdiv_"+thisCounter+"_"+conditionId+"'></div>"
+		var textbox = "<div class='autocompleteFillInCondition' id='"+conditionId+"' data-typeid='-1'><span class='helper'>O</span><span class='helper3'>bject</span></div><div class='constraintBox' id='constraintdiv_"+thisCounter+"_"+conditionId+"'></div>"
 		$("#conditiondiv_"+thisCounter+"_"+id).append(textbox);
 		$("#conditions_"+id).append("<div id='"+divId+"' class='conditionBox'></div>");
 		constraintBox(conditionId,thisCounter);		
@@ -758,7 +758,7 @@ function addConstraints(element){
 											document.getElementById('tutorial').src = "../../images/rules/tutorial/tutorial1_faded.png";
 										    document.getElementById('nextTipButton').innerHTML = "&gt;&gt; Go to Step 3";
 											document.getElementById('tipTitle').innerHTML = "Guide: Step 2";
-											document.getElementById('tipText').innerHTML = "Select a Filter for the chosen subject e.g., 'Nearby Group', from the list on the right. Drag it onto the light-blue box on the left.";
+											document.getElementById('tipText').innerHTML = "Select a Filter for the chosen object e.g., 'Nearby Group', from the list on the right. Drag it onto the light-blue box on the left.";
 											
 											
 											
@@ -788,7 +788,7 @@ function addConstraints(element){
 											document.getElementById('tipTitle').innerHTML = "Guide: Step 1";
 												document.getElementById('tutorial').src = "../../images/rules/tutorial/tutorial0_faded.png";
 												tutorialCounter=0;
-											document.getElementById('tipText').innerHTML = "Select a Subject to start describing a condition e.g., 'Nearby People', from the list on the right. Drag it onto the yellow box on the left.";
+											document.getElementById('tipText').innerHTML = "Select an Object to start describing a condition e.g., 'Nearby People', from the list on the right. Drag it onto the yellow box on the left.";
 										   
 											}
 
@@ -1144,7 +1144,7 @@ function addConstraints(element){
     <a href="#" id="newRuleButton" class="createButton">Create Rule</a>
     </div>
     <div class="controlbox">
-    	<h3>Subjects</h3>
+    	<h3>Objects</h3>
         <div id="controlbox_Types">
         </div>
         <h3>Filters</h3>
