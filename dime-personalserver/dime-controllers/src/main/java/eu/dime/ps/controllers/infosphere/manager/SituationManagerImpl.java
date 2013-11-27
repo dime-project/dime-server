@@ -159,15 +159,15 @@ public class SituationManagerImpl extends InfoSphereManagerBase<Situation> imple
 		ResourceStore resourceStore = getResourceStore();
 		PimoService pimoService = getPimoService();
 		try {
-			float score = 0.3f;
+			double score = 0.3f;
 			Node scoreLiteral = ModelUtils.findObject(resourceStore.getTripleStore(), situationUri, NAO.score);
 			if (scoreLiteral != null) {
 				score = Float.parseFloat(scoreLiteral.asDatatypeLiteral().getValue());
-				score += score * 0.08;
+				score = Math.min(score + score * 0.03, 1);
 			}
 			tripleStore.addStatement(situationUri, pimoService.getUserUri(), DCON.hasSituation, situationUri);
 			tripleStore.removeStatements(Variable.ANY, situationUri, NAO.score, Variable.ANY);
-			tripleStore.addStatement(situationUri, situationUri, NAO.score, new DatatypeLiteralImpl(Float.toString(score), XSD._float));
+			tripleStore.addStatement(situationUri, situationUri, NAO.score, new DatatypeLiteralImpl(Double.toString(score), XSD._float));
 			Resource spatem = ModelUtils.findSubject(tripleStore.getModel(situationUri), RDF.type, DCON.SpaTem);
 			if (spatem == null) {
 				spatem = new URIImpl("urn:uuid:" + UUID.randomUUID());
