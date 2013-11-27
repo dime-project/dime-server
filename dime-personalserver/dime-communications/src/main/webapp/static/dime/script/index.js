@@ -1298,7 +1298,7 @@ DimeView = {
             id: "specialActionButton",
             minItems: -1,
             maxItems: 0,
-            supportedGroupTypes: [Dime.psMap.TYPE.GROUP, Dime.psMap.TYPE.PLACE],
+            supportedGroupTypes: [Dime.psMap.TYPE.GROUP, Dime.psMap.TYPE.USERNOTIFICATION, Dime.psMap.TYPE.PLACE],
             supportedViewTypes: [DimeViewStatus.GROUP_CONTAINER_VIEW, DimeViewStatus.PERSON_VIEW],
             handlerFunction: function(){DimeView.specialButtonSelected.call(DimeView);}
         },
@@ -1545,9 +1545,17 @@ DimeView = {
             }
 
             var deleteAllNotifications=function(response){
+                var deletionCount = (response)?response.length:0;
+                var deletedCount = 0;
                 jQuery.each(response, function(){
                     Dime.REST.removeItem(this, function(response){
                         console.log('deleted UN: ', response);
+                        deletedCount++;
+                        if (deletedCount===deletionCount){ //trough with all deletes - update cache since notifications are not sent :-(
+                            Dime.REST.clearCacheForType(Dime.psMap.TYPE.USERNOTIFICATION,'@me');
+                            DimeView.viewManager.updateViewFromStatus(DimeView.viewManager.status, true);
+                            Dime.Navigation.resetNavigationBar();
+                        }
                     }, DimeView);
                 });
             };
@@ -3207,16 +3215,7 @@ Dime.initProcessor.registerFunction(function(callback){
  * @param callback 
  */
 Dime.initProcessor.registerFunction(function(callback){
-    var getUsernotificationCallback=function(userNotifications){
-        var unReadUNs=[];
-        jQuery.each(userNotifications, function(){
-           if (!this.read){
-               unReadUNs.push(this);
-           }
-        });
-        Dime.Navigation.updateNotificationBar(unReadUNs);        
-    };
-    Dime.REST.getAll(Dime.psMap.TYPE.USERNOTIFICATION, getUsernotificationCallback, "@me", this);
+    Dime.Navigation.resetNavigationBar();
     
     callback();
 });
@@ -3310,7 +3309,25 @@ Dime.Navigation = {
     updateNotificationCounter: function(){
         $("#notificationCounter").text(Dime.Navigation.receivedNotifications);
     },
-    
+
+
+    resetNavigationBar: function(){
+        Dime.Navigation.shownNotifications=0;
+        Dime.Navigation.receivedNotifications=0;
+        $('#innerNotificationContainer').empty();
+
+        var getUsernotificationCallback=function(userNotifications){
+            var unReadUNs=[];
+            jQuery.each(userNotifications, function(){
+               if (!this.read){
+                   unReadUNs.push(this);
+               }
+            });
+            Dime.Navigation.updateNotificationBar(unReadUNs);
+        };
+        Dime.REST.getAll(Dime.psMap.TYPE.USERNOTIFICATION, getUsernotificationCallback, "@me", this);
+    },
+
     updateNotificationBar: function(usernotifications){
         
         Dime.Navigation.receivedNotifications+=usernotifications.length;
@@ -3357,29 +3374,33 @@ Dime.Navigation = {
     },
     
     handleUserNotificationNotifications: function(usernotificationsNotifications){
-        if (usernotificationsNotifications.length===0){
-            return;
-        }
-
-        var handleResponse = function(response){
-            var usernotifications = [];
-            
-            for (var i=0; i<usernotificationsNotifications.length;i++){
-                var myGuid = usernotificationsNotifications[i].element.guid;
-                var operation = usernotificationsNotifications[i].operation;
-                for (var j=0; j<response.length;j++){
-                    if ((response[j].guid===myGuid)
-                        && (!response[j].read)){
-
-                        usernotifications.push(response[j]);
-                    }
-                }
-            }
-            Dime.Navigation.updateNotificationBar(usernotifications);
-        };         
-
-         
-        Dime.REST.getAll(Dime.psMap.TYPE.USERNOTIFICATION, handleResponse); 
+        Dime.Navigation.resetNavigationBar();
+        //deactivated - since notifications are not comming as expected
+//        if (usernotificationsNotifications.length===0){
+//            return;
+//        }
+//
+//        var handleResponse = function(response){
+//
+//
+//            var usernotifications = [];
+//
+//            for (var i=0; i<usernotificationsNotifications.length;i++){
+//                var myGuid = usernotificationsNotifications[i].element.guid;
+//                var operation = usernotificationsNotifications[i].operation;
+//                for (var j=0; j<response.length;j++){
+//                    if ((response[j].guid===myGuid)
+//                        && (!response[j].read)){
+//
+//                        usernotifications.push(response[j]);
+//                    }
+//                }
+//            }
+//            Dime.Navigation.updateNotificationBar(usernotifications);
+//        };
+//
+//
+//        Dime.REST.getAll(Dime.psMap.TYPE.USERNOTIFICATION, handleResponse);
     },
 
     handleNotification: function(notifications){
