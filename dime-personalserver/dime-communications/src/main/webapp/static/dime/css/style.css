@@ -2661,6 +2661,17 @@ input[type="text"].DimeDetailDialogPAValueListItemValue{
     background-color: #9CC6E6;
 }
 
+.livePostSendMe{
+    padding: 0 2px 2px 2px;
+    margin-left: 17px;
+    color: #F9F8F8;
+}
+
+.livePostSendMe:hover{
+    border-radius: 5px;
+    text-decoration: underline;
+}
+
 
 .livePostThreadBody{       
     border-radius: 5px;

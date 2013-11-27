@@ -2632,7 +2632,7 @@ DimeView = {
                 .append($('<div/>').addClass('livePostThread')
                     .append($('<div/>').addClass('livePostThreadHeader')
                         .append($('<span/>').text(getMeCaption()).addClass('livePostMeCaption'))
-                        .append($('<div/>').addClass('btn LivePostSendMe').text('send message')
+                        .append($('<div/>').addClass('btn livePostSendMe').text('send message')
                             .click(function(event){
                                 if (event){
                                     event.stopPropagation();
