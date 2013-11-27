@@ -168,24 +168,31 @@ public class SituationManagerImpl extends InfoSphereManagerBase<Situation> imple
 			tripleStore.addStatement(situationUri, pimoService.getUserUri(), DCON.hasSituation, situationUri);
 			tripleStore.removeStatements(Variable.ANY, situationUri, NAO.score, Variable.ANY);
 			tripleStore.addStatement(situationUri, situationUri, NAO.score, new DatatypeLiteralImpl(Float.toString(score), XSD._float));
-			URI uuid = new URIImpl("urn:uuid:" + UUID.randomUUID());
-			tripleStore.addStatement(situationUri, situationUri, DCON.currentPlace, uuid);
-			tripleStore.addStatement(situationUri, uuid, RDF.type, PIMO.Location);
-			String hex = "4c7578656d626f757267";
-			StringBuilder sb = new StringBuilder();
-			for (int i = 0; i < hex.length() - 1; i += 2)
-				sb.append((char) Integer.parseInt(hex.substring(i, (i + 2)), 16));
-			tripleStore.addStatement(situationUri, uuid, NAO.prefLabel, new PlainLiteralImpl(sb.toString()));
-			tripleStore.addStatement(situationUri, uuid, DCON.weight, new DatatypeLiteralImpl("0.5", XSD._float));
-			uuid = new URIImpl("urn:uuid:" + UUID.randomUUID());
-			hex = "4575726f666f72756d";
-			tripleStore.addStatement(situationUri, situationUri, DCON.currentPlace, uuid);
-			tripleStore.addStatement(situationUri, uuid, RDF.type, PIMO.Location);
-			sb = new StringBuilder();
-			for (int i = 0; i < hex.length() - 1; i += 2)
-				sb.append((char) Integer.parseInt(hex.substring(i, (i + 2)), 16));
-			tripleStore.addStatement(situationUri, uuid, NAO.prefLabel, new PlainLiteralImpl(sb.toString()));
-			tripleStore.addStatement(situationUri, uuid, DCON.weight, new DatatypeLiteralImpl("0.5", XSD._float));
+			Resource spatem = ModelUtils.findSubject(tripleStore.getModel(situationUri), RDF.type, DCON.SpaTem);
+			if (spatem == null) {
+				spatem = new URIImpl("urn:uuid:" + UUID.randomUUID());
+				tripleStore.addStatement(situationUri, spatem, RDF.type, DCON.SpaTem);
+			}
+			if (!tripleStore.containsStatements(situationUri, Variable.ANY, RDF.type, PIMO.Location)) {
+				URI uuid = new URIImpl("urn:uuid:" + UUID.randomUUID());
+				tripleStore.addStatement(situationUri, spatem, DCON.currentPlace, uuid);
+				tripleStore.addStatement(situationUri, uuid, RDF.type, PIMO.Location);
+				String hex = "4c7578656d626f757267";
+				StringBuilder sb = new StringBuilder();
+				for (int i = 0; i < hex.length() - 1; i += 2)
+					sb.append((char) Integer.parseInt(hex.substring(i, (i + 2)), 16));
+				tripleStore.addStatement(situationUri, uuid, NAO.prefLabel, new PlainLiteralImpl(sb.toString()));
+				tripleStore.addStatement(situationUri, uuid, DCON.weight, new DatatypeLiteralImpl("0.5", XSD._float));
+				uuid = new URIImpl("urn:uuid:" + UUID.randomUUID());
+				hex = "4575726f666f72756d";
+				tripleStore.addStatement(situationUri, spatem, DCON.currentPlace, uuid);
+				tripleStore.addStatement(situationUri, uuid, RDF.type, PIMO.Location);
+				sb = new StringBuilder();
+				for (int i = 0; i < hex.length() - 1; i += 2)
+					sb.append((char) Integer.parseInt(hex.substring(i, (i + 2)), 16));
+				tripleStore.addStatement(situationUri, uuid, NAO.prefLabel, new PlainLiteralImpl(sb.toString()));
+				tripleStore.addStatement(situationUri, uuid, DCON.weight, new DatatypeLiteralImpl("0.5", XSD._float));
+			}
 			Situation situation = resourceStore.get(situationUri, Situation.class);
 			BroadcastManager.getInstance().sendBroadcast(new Event(resourceStore.getName(), Event.ACTION_RESOURCE_MODIFY, situation));
 		} catch (NotFoundException e) {
