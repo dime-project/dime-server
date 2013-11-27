@@ -55,11 +55,19 @@ public class ContextUpdaterHandler implements CrawlerHandler {
 		this.activityUpdater.setLiveContextService(liveContextService);
 		this.locationUpdater.setLiveContextService(liveContextService);
 	}
-
-	public ContextUpdaterHandler(ResourceStore resourceStore) {
+	
+	public void setResourceStore(ResourceStore resourceStore) {
 		this.tenant = resourceStore.getName();
-		this.activityUpdater = new ActivityUpdater();
 		this.locationUpdater = new LocationUpdater(this.tenant);
+	}
+
+	public ContextUpdaterHandler() {
+		this.activityUpdater = new ActivityUpdater();
+	}
+	
+	public ContextUpdaterHandler(ResourceStore resourceStore) {
+		this();
+		setResourceStore(resourceStore);
 	}
 	
 	public ContextUpdaterHandler(URI accountIdentifier, ResourceStore resourceStore, LiveContextService liveContextService) {

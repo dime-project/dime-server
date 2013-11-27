@@ -370,6 +370,7 @@ public class JPAPersistenceManager implements PersistenceManager {
 					profileHandler.setProfileAccountUpdater(profileUpdater);
 				} else if (handler instanceof ContextUpdaterHandler) {
 					ContextUpdaterHandler contextHandler = (ContextUpdaterHandler) handler;
+					contextHandler.setResourceStore(resourceStore);
 					contextHandler.setAccountIdentifier(accountIdentifier);
 					contextHandler.setLiveContextService(liveContextService);
 				}
