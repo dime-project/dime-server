@@ -2536,6 +2536,8 @@ DimeView = {
         },
         
         addItemForThread: function(threadEntry, allMyData){
+            var threadPersons=[]; //HACK array is filled by getCaption function - since there the persons are iterated
+                                    //TODO refactor this
             var getMyEntry=function(guid, type){
                 for (var i=0; i<allMyData[type].length;i++){
                     if (allMyData[type][i].guid===guid){
@@ -2546,15 +2548,18 @@ DimeView = {
             };
         
             var getCaption = function(){
+                var result = "";
+                
                 if (threadEntry.acl){
                     var firstEntry = true;
-                    var result = "";
+                    
                     var addNamesFromArray=function(myArr, type){                        
                         for (var i=0; i<myArr.length; i++){
                             var person = (type===Dime.psMap.TYPE.PERSON)?getMyEntry(myArr[i].personId, type):getMyEntry(myArr[i], type);
                             if (person){
                                 firstEntry?firstEntry=false:result+=", ";                                
                                 result+=person.name;
+                                threadPersons.push(person);
                             }
                         }
                     };
@@ -2564,14 +2569,15 @@ DimeView = {
                         addNamesFromArray(threadEntry.acl[k].services, Dime.psMap.TYPE.ACCOUNT);
                     }
                     
-                    return result;
-                    
-                }//else
-                var senderEntry = getMyEntry(threadEntry.sender, Dime.psMap.TYPE.PERSON);
-                if (senderEntry){
-                    return senderEntry.name;
+                }else{
+                    var senderEntry = getMyEntry(threadEntry.sender, Dime.psMap.TYPE.PERSON);
+                    if (senderEntry){
+                        result = senderEntry.name;
+                        threadPersons.push(senderEntry);
+                    }
                 }
-                return "unknown";
+
+                return result;
             };
             
             var getProfileForSaid=function(said){
@@ -2625,7 +2631,15 @@ DimeView = {
             $('#itemNavigation')
                 .append($('<div/>').addClass('livePostThread')
                     .append($('<div/>').addClass('livePostThreadHeader')
-                        .append($('<span/>').text(getMeCaption()).addClass('livePostMeCaption')) 
+                        .append($('<span/>').text(getMeCaption()).addClass('livePostMeCaption'))
+                        .append($('<div/>').addClass('btn LivePostSendMe').text('send message')
+                            .click(function(event){
+                                if (event){
+                                    event.stopPropagation();
+                                }
+                                Dime.Dialog.showLivepostWithSelection(threadPersons);
+                            })
+                        )
                         .append($('<span/>').text(getCaption()).addClass('livePostThemCaption'))
                         .click(function(){
                             livePostContainer.toggleClass('livePostThreadBodyReduced');
