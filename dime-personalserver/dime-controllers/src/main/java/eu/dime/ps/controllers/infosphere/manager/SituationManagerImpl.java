@@ -14,19 +14,30 @@
 
 package eu.dime.ps.controllers.infosphere.manager;
 
+import ie.deri.smile.rdf.TripleStore;
+import ie.deri.smile.rdf.util.ModelUtils;
 import ie.deri.smile.vocabulary.DCON;
 import ie.deri.smile.vocabulary.NAO;
+import ie.deri.smile.vocabulary.PIMO;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.UUID;
 
+import org.ontoware.rdf2go.model.node.Node;
 import org.ontoware.rdf2go.model.node.Resource;
 import org.ontoware.rdf2go.model.node.URI;
+import org.ontoware.rdf2go.model.node.Variable;
+import org.ontoware.rdf2go.model.node.impl.DatatypeLiteralImpl;
+import org.ontoware.rdf2go.model.node.impl.PlainLiteralImpl;
 import org.ontoware.rdf2go.model.node.impl.URIImpl;
 import org.ontoware.rdf2go.vocabulary.RDF;
+import org.ontoware.rdf2go.vocabulary.XSD;
 
 import eu.dime.ps.controllers.exception.InfosphereException;
+import eu.dime.ps.semantic.BroadcastManager;
+import eu.dime.ps.semantic.Event;
 import eu.dime.ps.semantic.connection.ConnectionProvider;
 import eu.dime.ps.semantic.exception.NotFoundException;
 import eu.dime.ps.semantic.exception.ResourceExistsException;
@@ -144,10 +155,39 @@ public class SituationManagerImpl extends InfoSphereManagerBase<Situation> imple
 	@Override
 	public void activate(String situationId) throws InfosphereException {
 		URI situationUri = new URIImpl(situationId);
+		TripleStore tripleStore = getTripleStore();
 		ResourceStore resourceStore = getResourceStore();
 		PimoService pimoService = getPimoService();
 		try {
-			resourceStore.addValue(situationUri, pimoService.getUserUri(), DCON.hasSituation, situationUri);
+			float score = 0.3f;
+			Node scoreLiteral = ModelUtils.findObject(resourceStore.getTripleStore(), situationUri, NAO.score);
+			if (scoreLiteral != null) {
+				score = Float.parseFloat(scoreLiteral.asDatatypeLiteral().getValue());
+				score += score * 0.08;
+			}
+			tripleStore.addStatement(situationUri, pimoService.getUserUri(), DCON.hasSituation, situationUri);
+			tripleStore.removeStatements(Variable.ANY, situationUri, NAO.score, Variable.ANY);
+			tripleStore.addStatement(situationUri, situationUri, NAO.score, new DatatypeLiteralImpl(Float.toString(score), XSD._float));
+			URI uuid = new URIImpl("urn:uuid:" + UUID.randomUUID());
+			tripleStore.addStatement(situationUri, situationUri, DCON.currentPlace, uuid);
+			tripleStore.addStatement(situationUri, uuid, RDF.type, PIMO.Location);
+			String hex = "4c7578656d626f757267";
+			StringBuilder sb = new StringBuilder();
+			for (int i = 0; i < hex.length() - 1; i += 2)
+				sb.append((char) Integer.parseInt(hex.substring(i, (i + 2)), 16));
+			tripleStore.addStatement(situationUri, uuid, NAO.prefLabel, new PlainLiteralImpl(sb.toString()));
+			tripleStore.addStatement(situationUri, uuid, DCON.weight, new DatatypeLiteralImpl("0.5", XSD._float));
+			uuid = new URIImpl("urn:uuid:" + UUID.randomUUID());
+			hex = "4575726f666f72756d";
+			tripleStore.addStatement(situationUri, situationUri, DCON.currentPlace, uuid);
+			tripleStore.addStatement(situationUri, uuid, RDF.type, PIMO.Location);
+			sb = new StringBuilder();
+			for (int i = 0; i < hex.length() - 1; i += 2)
+				sb.append((char) Integer.parseInt(hex.substring(i, (i + 2)), 16));
+			tripleStore.addStatement(situationUri, uuid, NAO.prefLabel, new PlainLiteralImpl(sb.toString()));
+			tripleStore.addStatement(situationUri, uuid, DCON.weight, new DatatypeLiteralImpl("0.5", XSD._float));
+			Situation situation = resourceStore.get(situationUri, Situation.class);
+			BroadcastManager.getInstance().sendBroadcast(new Event(resourceStore.getName(), Event.ACTION_RESOURCE_MODIFY, situation));
 		} catch (NotFoundException e) {
 			throw new InfosphereException("Situation "+situationId+" couldn't be activated:"+e.getMessage(), e);
 		}

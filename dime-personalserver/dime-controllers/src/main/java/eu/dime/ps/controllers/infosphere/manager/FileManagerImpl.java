@@ -35,7 +35,6 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Random;
 import java.util.UUID;
 
 import javax.imageio.ImageIO;
@@ -68,12 +67,10 @@ import eu.dime.ps.semantic.model.NFOFactory;
 import eu.dime.ps.semantic.model.nao.Symbol;
 import eu.dime.ps.semantic.model.nfo.FileDataObject;
 import eu.dime.ps.semantic.model.pimo.Person;
-import eu.dime.ps.semantic.model.pimo.PersonGroup;
 import eu.dime.ps.semantic.query.Query;
 import eu.dime.ps.semantic.query.impl.BasicQuery;
 import eu.dime.ps.semantic.rdf.ResourceStore;
 import eu.dime.ps.semantic.service.impl.PimoService;
-import eu.dime.ps.semantic.util.StringUtils;
 import eu.dime.ps.storage.datastore.DataStore;
 import eu.dime.ps.storage.datastore.impl.DataStoreProvider;
 
@@ -243,7 +240,9 @@ public class FileManagerImpl extends InfoSphereManagerBase<FileDataObject> imple
 	@Override
 	public void add(FileDataObject fdo) throws InfosphereException {
 		ResourceStore resourceStore = getResourceStore();
+		PimoService pimoService = getPimoService();
 		try {
+			fdo.setIsDefinedBy(pimoService.getPimoUri());
 			resourceStore.create(fdo);
 		} catch (ResourceExistsException e) {
 			throw new InfosphereException("File "+fdo.asResource()+" not found.", e);
@@ -292,6 +291,7 @@ public class FileManagerImpl extends InfoSphereManagerBase<FileDataObject> imple
 			throws IOException, InfosphereException {
 
 		ResourceStore resourceStore = getResourceStore();
+		PimoService pimoService = getPimoService();
 
 		// this is a reusable input stream, but it was throwing 'marking not supported'
 		// in some systems, so instead write stream to a temp file and create a new 
@@ -303,6 +303,7 @@ public class FileManagerImpl extends InfoSphereManagerBase<FileDataObject> imple
 		try {
 			String hash = extractMetadata(fdo.getModel(), fdo.asURI(), file);
 			createThumbnail(fdo, new BufferedInputStream(new FileInputStream(file)));
+			fdo.setIsDefinedBy(pimoService.getPimoUri());
 			resourceStore.create(fdo);
 			getDataStore().addFile(hash, fdo.asURI().toString(), 
 					new BufferedInputStream(new FileInputStream(file)));
@@ -320,7 +321,9 @@ public class FileManagerImpl extends InfoSphereManagerBase<FileDataObject> imple
 	@Override
 	public void update(FileDataObject fdo) throws InfosphereException {
 		ResourceStore resourceStore = getResourceStore();
+		PimoService pimoService = getPimoService();
 		try {
+			fdo.setIsDefinedBy(pimoService.getPimoUri());
 			resourceStore.update(fdo, true);
 		} catch (NotFoundException e) {
 			throw new InfosphereException("File "+fdo.asResource()+" not found.", e);
@@ -338,6 +341,7 @@ public class FileManagerImpl extends InfoSphereManagerBase<FileDataObject> imple
 			throws IOException, InfosphereException {
 
 		ResourceStore resourceStore = getResourceStore();
+		PimoService pimoService = getPimoService();
 
 		// this is a reusable input stream, but it was throwing 'marking not supported'
 		// in some systems, so instead write stream to a temp file and create a new 
@@ -350,6 +354,7 @@ public class FileManagerImpl extends InfoSphereManagerBase<FileDataObject> imple
 		try {
 			String hash = extractMetadata(fdo.getModel(), fdo.asURI(), file);
 			updateThumbnail(fdo, new BufferedInputStream(new FileInputStream(file)));
+			fdo.setIsDefinedBy(pimoService.getPimoUri());
 			resourceStore.update(fdo, true);
 			getDataStore().update(hash, fdo.asURI().toString(), 
 					new BufferedInputStream(new FileInputStream(file)));
