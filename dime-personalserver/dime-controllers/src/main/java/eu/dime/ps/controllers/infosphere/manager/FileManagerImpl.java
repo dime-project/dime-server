@@ -20,6 +20,7 @@ import ie.deri.smile.vocabulary.NAO;
 import ie.deri.smile.vocabulary.NFO;
 import ie.deri.smile.vocabulary.NIE;
 import ie.deri.smile.vocabulary.NSO;
+import ie.deri.smile.vocabulary.PIMO;
 
 import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
@@ -242,7 +243,7 @@ public class FileManagerImpl extends InfoSphereManagerBase<FileDataObject> imple
 		ResourceStore resourceStore = getResourceStore();
 		PimoService pimoService = getPimoService();
 		try {
-			fdo.setIsDefinedBy(pimoService.getPimoUri());
+			fdo.getModel().addStatement(fdo.asURI(), PIMO.isDefinedBy, pimoService.getPimoUri());
 			resourceStore.create(fdo);
 		} catch (ResourceExistsException e) {
 			throw new InfosphereException("File "+fdo.asResource()+" not found.", e);
@@ -303,7 +304,7 @@ public class FileManagerImpl extends InfoSphereManagerBase<FileDataObject> imple
 		try {
 			String hash = extractMetadata(fdo.getModel(), fdo.asURI(), file);
 			createThumbnail(fdo, new BufferedInputStream(new FileInputStream(file)));
-			fdo.setIsDefinedBy(pimoService.getPimoUri());
+			fdo.getModel().addStatement(fdo.asURI(), PIMO.isDefinedBy, pimoService.getPimoUri());
 			resourceStore.create(fdo);
 			getDataStore().addFile(hash, fdo.asURI().toString(), 
 					new BufferedInputStream(new FileInputStream(file)));
@@ -323,7 +324,7 @@ public class FileManagerImpl extends InfoSphereManagerBase<FileDataObject> imple
 		ResourceStore resourceStore = getResourceStore();
 		PimoService pimoService = getPimoService();
 		try {
-			fdo.setIsDefinedBy(pimoService.getPimoUri());
+			fdo.getModel().addStatement(fdo.asURI(), PIMO.isDefinedBy, pimoService.getPimoUri());
 			resourceStore.update(fdo, true);
 		} catch (NotFoundException e) {
 			throw new InfosphereException("File "+fdo.asResource()+" not found.", e);
@@ -354,7 +355,7 @@ public class FileManagerImpl extends InfoSphereManagerBase<FileDataObject> imple
 		try {
 			String hash = extractMetadata(fdo.getModel(), fdo.asURI(), file);
 			updateThumbnail(fdo, new BufferedInputStream(new FileInputStream(file)));
-			fdo.setIsDefinedBy(pimoService.getPimoUri());
+			fdo.getModel().addStatement(fdo.asURI(), PIMO.isDefinedBy, pimoService.getPimoUri());
 			resourceStore.update(fdo, true);
 			getDataStore().update(hash, fdo.asURI().toString(), 
 					new BufferedInputStream(new FileInputStream(file)));
