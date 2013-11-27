@@ -79,7 +79,8 @@ var types = [
 			constraintQuery: "select distinct * where { ?x a <http://www.semanticdesktop.org/ontologies/2011/10/05/dcon#Situation> . optional { ?x <http://www.semanticdesktop.org/ontologies/2007/08/15/nao#prefLabel> ?label . } }",
 			constraintId: "x",
 			image: "../../images/rules/situation.png",
-			json: '{ "and": #andURI, "conditionType": "drmo:SituationActivated", "conditions": [],  "constraintOnGraph": null, "constraintOnObject": #object,  "constraintOnProperty": "dcon:hasSituation",  "constraintOnSubject": null, "guid":"#guid",  "isNegated": false,  "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "pimo:Person",  "succeededBy": #succURI }',
+			//changed situationactivated to type resourcemodified...
+			json: '{ "and": #andURI, "conditionType": "drmo:ResourceModified", "conditions": [],  "constraintOnGraph": null, "constraintOnObject": #object,  "constraintOnProperty": "dcon:hasSituation",  "constraintOnSubject": null, "guid":"#guid",  "isNegated": false,  "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "pimo:Person",  "succeededBy": #succURI }',
 		  },
 		  {
 			value: 4,
@@ -820,11 +821,7 @@ function addConstraints(element){
 	  var conditionType = $(value).attr("data-typeid");
 	  var conditionJson;
       
-    //escaping situations for demo - otherwise they can halt the system
-	if (!(conditionType == 3))
-	{
-	  
-	  if (conditionType == 1){
+ 	  if (conditionType == 1){
         var valType = parseInt($(property[index]).attr("name"));
         conditionJson = peerConstraints[valType].json;
 	  }
@@ -934,7 +931,6 @@ function addConstraints(element){
 	  
       conditions = conditions.concat(conditionJson);
       if (index < (arrayLen - 1)) { conditions = conditions.concat(","); }
-  }
 	}
   );
                 
