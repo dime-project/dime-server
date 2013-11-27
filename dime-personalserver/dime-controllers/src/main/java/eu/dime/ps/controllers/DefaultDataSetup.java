@@ -457,7 +457,7 @@ public class DefaultDataSetup implements BroadcastReceiver {
 			state.getModel().addModel(working.getModel());
 
 			//CREATE SITUATION
-			createSituation("Working@Office", me, spatem, state);
+			createSituation("Working@Office", me, spatem, state, 0.53f);
 
 			//reset used aspects
 			spatem = modelFactory.getDCONFactory().createSpaTem();
@@ -487,7 +487,7 @@ public class DefaultDataSetup implements BroadcastReceiver {
 			state.getModel().addModel(working.getModel());
 
 			//CREATE SITUATION
-			createSituation("Working@Home", me, spatem, state);
+			createSituation("Working@Home", me, spatem, state, 0.42f);
 
 			//reset used aspects
 			spatem = modelFactory.getDCONFactory().createSpaTem();
@@ -520,7 +520,7 @@ public class DefaultDataSetup implements BroadcastReceiver {
 			state.getModel().addModel(performance.getModel());
 
 			//CREATE SITUATION
-			createSituation("@Conference", me, spatem, state);
+			createSituation("@Conference", me, spatem, state, 0.63f);
 
 			//reset used aspects
 			spatem = modelFactory.getDCONFactory().createSpaTem();
@@ -544,7 +544,7 @@ public class DefaultDataSetup implements BroadcastReceiver {
 			state.getModel().addModel(recreation.getModel());
 
 			//CREATE SITUATION
-			createSituation("Relaxing@Home", me, spatem, state);
+			createSituation("Relaxing@Home", me, spatem, state, 0.32f);
 
 			//reset used aspects
 			spatem = modelFactory.getDCONFactory().createSpaTem();
@@ -586,7 +586,7 @@ public class DefaultDataSetup implements BroadcastReceiver {
 			state.getModel().addModel(party.getModel());
 
 			//CREATE SITUATION
-			createSituation("Social Event", me, spatem, state);
+			createSituation("Social Event", me, spatem, state, 0.53f);
 
 			//reset used aspects
 			spatem = modelFactory.getDCONFactory().createSpaTem();
@@ -634,7 +634,7 @@ public class DefaultDataSetup implements BroadcastReceiver {
 			state.addCurrentActivity(travelling);
 			
 			//CREATE SITUATION		
-			createSituation("Travelling", me, spatem, state);
+			createSituation("Travelling", me, spatem, state, 0.49f);
 
 			//reset used aspects
 			spatem = modelFactory.getDCONFactory().createSpaTem();
@@ -699,12 +699,13 @@ public class DefaultDataSetup implements BroadcastReceiver {
 		return livePost;
 	}
 
-	private Situation createSituation(String label, Person creator, SpaTem spatem, State state) {
+	private Situation createSituation(String label, Person creator, SpaTem spatem, State state, float score) {
 		Situation situation = modelFactory.getDCONFactory().createSituation();
 		
 		situation.setPrefLabel(label);
 		situation.setCreator(creator);
 		situation.addContextAspect(spatem);
+		situation.setScore(score);
 		situation.getModel().addModel(spatem.getModel());
 		//		situation.addContextAspect(connectivity);
 		//		situation.getModel().addModel(connectivity.getModel());
