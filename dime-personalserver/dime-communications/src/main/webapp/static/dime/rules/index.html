@@ -80,7 +80,8 @@ var types = [
 			constraintId: "x",
 			image: "../../images/rules/situation.png",
 			//changed situationactivated to type resourcemodified...
-			json: '{ "and": #andURI, "conditionType": "drmo:ResourceModified", "conditions": [],  "constraintOnGraph": null, "constraintOnObject": #object,  "constraintOnProperty": "dcon:hasSituation",  "constraintOnSubject": null, "guid":"#guid",  "isNegated": false,  "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "pimo:Person",  "succeededBy": #succURI }',
+			//json: '{ "and": #andURI, "conditionType": "drmo:ResourceModified", "conditions": [],  "constraintOnGraph": null, "constraintOnObject": #object,  "constraintOnProperty": "dcon:hasSituation",  "constraintOnSubject": null, "guid":"#guid",  "isNegated": false,  "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "pimo:Person",  "succeededBy": #succURI }',
+			json: '{ "and": #andURI, "conditionType": "drmo:ResourceModified", "conditions": [  { "and": #andURI, "conditionType": "drmo:Condition",         "conditions": [ ], "constraintOnGraph": null, "constraintOnObject": #object, "constraintOnProperty": "dcon:hasSituation", "constraintOnSubject": null, "guid": "#guid_1", "isNegated": false, "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "pimo:Person",        "succeededBy": #succURI } ], "constraintOnGraph": null, "constraintOnObject": null, "constraintOnProperty": null, "constraintOnSubject": null,    "guid": "#guid", "isNegated": false, "or": #orURI, "preceededBy": #precURI, "propertyOperator": null, "resourceType": "pimo:Person",  "succeededBy": #succURI }',
 		  },
 		  {
 			value: 4,
