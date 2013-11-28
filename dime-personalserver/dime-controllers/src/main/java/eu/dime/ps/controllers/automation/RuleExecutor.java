@@ -145,7 +145,24 @@ public class RuleExecutor implements BroadcastReceiver {
 		// register new rules
 		if (event.is(DRMO.Rule) && Event.ACTION_RESOURCE_ADD.equals(eventAction)) {
 			try {
-				eventProcessor.registerRule(eventResource.asURI());
+				processorCache.remove(event.getTenant());
+				
+				ModelSet dataset = pimoService.getTripleStore().getUnderlyingModelSet();
+
+				// create new EventProcessor and register active rules
+				eventProcessor = new RulesNetwork(dataset, eventLogger.getURI(), pimoService.getPimoUri(), pimoService.getPimoUri());
+				
+				try {
+					eventProcessor.registerRulesInStore();
+				} catch (MapperException e) {
+					logger.error("Couldn't register rules.", e);
+				} catch (RuleMalformedException e) {
+					logger.error("Couldn't register rules", e);
+				} catch (InvalidOperatorException e) {
+					logger.error("Couldn't register rules", e);
+				}
+				
+				processorCache.putIfAbsent(event.getTenant(), eventProcessor);
 			} catch (Exception e) {
 				logger.error("Couldn't register new rule " + eventResource, e);
 			}
