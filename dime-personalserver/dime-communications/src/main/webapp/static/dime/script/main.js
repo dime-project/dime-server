@@ -2798,6 +2798,28 @@ Dime.psHelper = {
 
 
 
+    sortResponseEntryByScore: function(entry){
+        if (!entry || (entry.length===0) || (!$.isArray(entry))){
+            return entry;
+        }
+
+        var cmpEntry = function (a, b) {
+            var A = (a['nao:score'])?(a['nao:score']):0; //if no score, score=0
+            var B = (b['nao:score'])?(b['nao:score']):0; //if no score, score=0
+            if (A < B){
+                return 1;
+            }else if (A > B){
+                return  -1;
+            }//else
+
+            return 0;
+
+        };
+
+        entry.sort(cmpEntry);
+        return entry;
+    },
+
     sortResponseEntryByCreatedReverse: function(entry){
         if (!entry || (entry.length===0) || (!$.isArray(entry))){
             return entry;
@@ -2970,17 +2992,21 @@ Dime.psHelper = {
             //check content and repair entries dependent on the type
             result = this.prepareResponseEntry(result);
         }
-        
+
+
         if(result.length < 2){ //nothing to sort anyway
             return result;
         }
 
-        if (result && result.length>0 && 
-            (result[0].type===Dime.psMap.TYPE.NOTIFICATION
+        if (result[0].type===Dime.psMap.TYPE.SITUATION){
+            return this.sortResponseEntryByScore(result);
+        }
+
+        if (result[0].type===Dime.psMap.TYPE.NOTIFICATION
                 ||result[0].type===Dime.psMap.TYPE.EVENT
                 ||result[0].type===Dime.psMap.TYPE.USERNOTIFICATION
                 ||result[0].type===Dime.psMap.TYPE.LIVEPOST
-                )){
+                ){
             return this.sortResponseEntryByCreatedReverse(result);
         }
         if (result[0].name){
