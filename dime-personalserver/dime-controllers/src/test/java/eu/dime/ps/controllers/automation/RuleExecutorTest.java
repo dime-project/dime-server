@@ -156,7 +156,7 @@ public class RuleExecutorTest extends TestCase {
 		bm.sendBroadcastSync(new Event(pimoService.getName(), Event.ACTION_RESOURCE_MODIFY, doc));
 		Node trustLevel = ModelUtils.findObject(tripleStore, peter, NAO.trustLevel);
 		double value = Double.parseDouble(trustLevel.asDatatypeLiteral().getValue());
-		assertEquals(0.73, value);
+		assertTrue(value > PETER_TRUST_LEVEL);
 	}
 
 	@Test
@@ -192,7 +192,7 @@ public class RuleExecutorTest extends TestCase {
 		bm.sendBroadcastSync(new Event(pimoService.getName(), Event.ACTION_RESOURCE_MODIFY, doc));
 		Node trustLevel = ModelUtils.findObject(tripleStore, peter, NAO.trustLevel);
 		double value = Double.parseDouble(trustLevel.asDatatypeLiteral().getValue());
-		assertEquals(0.73, value);
+		assertTrue(value > PETER_TRUST_LEVEL);
 	}
 
 	@Test
