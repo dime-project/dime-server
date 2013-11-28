@@ -41,6 +41,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import eu.dime.ps.controllers.TenantContextHolder;
 import eu.dime.ps.controllers.infosphere.manager.FileManager;
+import eu.dime.ps.controllers.infosphere.manager.SituationManager;
 import eu.dime.ps.controllers.notification.NotifierManagerMock;
 import eu.dime.ps.semantic.BroadcastManager;
 import eu.dime.ps.semantic.Event;
@@ -69,6 +70,9 @@ public class RuleExecutorTest extends TestCase {
 	
 	@Autowired
 	protected FileManager fileManager;
+	
+	@Autowired
+	protected SituationManager situationManager;
 
 	protected ModelFactory modelFactory = new ModelFactory();
 
@@ -189,6 +193,40 @@ public class RuleExecutorTest extends TestCase {
 		Node trustLevel = ModelUtils.findObject(tripleStore, peter, NAO.trustLevel);
 		double value = Double.parseDouble(trustLevel.asDatatypeLiteral().getValue());
 		assertEquals(0.73, value);
+	}
+
+	@Test
+	public void testPersonHasSituationActivated() throws Exception {
+		// load rule definition
+		Model sinkModel = RDF2Go.getModelFactory().createModel().open();
+		ModelUtils.loadFromInputStream(
+				this.getClass().getClassLoader().getResourceAsStream("rules/personHasSituationActivated.ttl"),
+				Syntax.Turtle, sinkModel);
+		pimoService.getTripleStore().addAll(pimoService.getPimoUri(), sinkModel.iterator());
+		sinkModel.close();
+		
+		TenantContextHolder.setTenant(Long.parseLong(pimoService.getName()));
+
+		final Situation situation = modelFactory.getDCONFactory().createSituation("urn:uuid:47189f0f-3c67-49a9-b7ed-0f5af1b0944c");
+		situation.setPrefLabel("@Conference");
+		situationManager.add(situation);
+		tripleStore.addStatement(pimoService.getPimoUri(), pimoService.getUserUri(), DCON.hasSituation, situation);
+
+		// delaying the creation of the RuleExecutor, so it doesn't pick any
+		// of the events sent by the situation manager
+		Thread.sleep(300); 
+
+		// construct RuleExecutor
+		final NotifierManagerMock notifierManager = new NotifierManagerMock();
+		final RuleExecutor executor = new RuleExecutor();
+		executor.setConnectionProvider(connectionProvider);
+		executor.setNotifierManager(notifierManager);
+		
+		// should send user notification (to notifier manager)
+		int size = notifierManager.internal.size();
+		final BroadcastManager bm = BroadcastManager.getInstance();
+		bm.sendBroadcastSync(new Event(pimoService.getName(), Event.ACTION_RESOURCE_MODIFY, pimoService.getUser()));
+		assertEquals(size + 1, notifierManager.internal.size());
 	}
 
 	@Test

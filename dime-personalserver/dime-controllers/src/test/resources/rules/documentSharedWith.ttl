@@ -18,6 +18,6 @@
 
 <urn:uuid:32afb787-a489-4875-94f2-50b8b32bb388> <http://www.semanticdesktop.org/ontologies/2012/03/06/drmo#isComposedOf> <urn:uuid:4d063926-505e-4405-89fa-83bea754c648> .
 
-<urn:actions:Notify> a <http://www.semanticdesktop.org/ontologies/2012/03/06/drmo#Action> .
+<urn:actions:ITL> a <http://www.semanticdesktop.org/ontologies/2012/03/06/drmo#Action> .
 
 <urn:uuid:32afb787-a489-4875-94f2-50b8b32bb388> <http://www.semanticdesktop.org/ontologies/2012/03/06/drmo#triggers> <urn:actions:ITL> .
