@@ -17,6 +17,7 @@ package eu.dime.ps.controllers;
 import ie.deri.smile.vocabulary.DCON;
 import ie.deri.smile.vocabulary.DDO;
 import ie.deri.smile.vocabulary.NAO;
+import ie.deri.smile.vocabulary.NFO;
 import ie.deri.smile.vocabulary.NIE;
 import ie.deri.smile.vocabulary.NSO;
 import ie.deri.smile.vocabulary.PIMO;
@@ -374,10 +375,10 @@ public class DefaultDataSetup implements BroadcastReceiver {
 		}
 		
 		// creating pre-defined files
-		FileDataObject flyer = createFile(FILE_FLYER, "digital.me_project_flyer.pdf", DefaultDataSetup.class.getClassLoader().getResourceAsStream("default/digital.me_project_flyer.pdf"), 0.5, me);
-		FileDataObject logo = createFile(FILE_LOGO, "digital.me_logo.jpg", DefaultDataSetup.class.getClassLoader().getResourceAsStream("default/digital.me_logo.jpg"), 0, me);
-		FileDataObject trial = createFile(FILE_WELCOME, "welcome_to_di.me_test.txt", DefaultDataSetup.class.getClassLoader().getResourceAsStream("default/welcome_to_di.me_test.txt"), 0, me);
-		FileDataObject photo = createFile(FILE_PHOTO, "hiking.jpg", DefaultDataSetup.class.getClassLoader().getResourceAsStream("default/hiking.jpg"), 1, me);
+		FileDataObject flyer = createFile(FILE_FLYER, "digital.me_project_flyer.pdf", DefaultDataSetup.class.getClassLoader().getResourceAsStream("default/digital.me_project_flyer.pdf"), 0.5, me, NFO.Document);
+		FileDataObject logo = createFile(FILE_LOGO, "digital.me_logo.jpg", DefaultDataSetup.class.getClassLoader().getResourceAsStream("default/digital.me_logo.jpg"), 0, me, NFO.Image);
+		FileDataObject trial = createFile(FILE_WELCOME, "welcome_to_di.me_test.txt", DefaultDataSetup.class.getClassLoader().getResourceAsStream("default/welcome_to_di.me_test.txt"), 0, me, NFO.Document);
+		FileDataObject photo = createFile(FILE_PHOTO, "hiking.jpg", DefaultDataSetup.class.getClassLoader().getResourceAsStream("default/hiking.jpg"), 1, me, NFO.Image);
 
 		DataContainer databoxDime = createDatabox(DATABOX_DIME, "di.me info", flyer, logo, trial);
 		DataContainer databoxFriends = createDatabox(DATABOX_FRIENDS, "FriendsBox", photo);
@@ -832,9 +833,10 @@ public class DefaultDataSetup implements BroadcastReceiver {
 		}
 	}
 
-	private FileDataObject createFile(URI uri, String fileName, InputStream inputStream, double privacyLevel, Person creator) {
+	private FileDataObject createFile(URI uri, String fileName, InputStream inputStream, double privacyLevel, Person creator, URI type) {
 		FileDataObject file = modelFactory.getNFOFactory().createFileDataObject(uri);
 		file.setFileName(fileName);
+		file.getModel().addStatement(file, RDF.type, type);
 		file.setPrivacyLevel(privacyLevel);
 		file.setCreator(creator);
 		
