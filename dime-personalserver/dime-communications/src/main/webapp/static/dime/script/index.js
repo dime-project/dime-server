@@ -709,7 +709,11 @@ DimeView = {
                      
                 }, DimeView);
                 
-            };  
+            };
+        }else if (entry.unType===Dime.psMap.UN_TYPE.MESSAGE) {
+            clickFunction = function(){
+                window.alert(entry.unEntry.message);
+            };
         } else{
             clickFunction = function(){
                 //TODO fix
