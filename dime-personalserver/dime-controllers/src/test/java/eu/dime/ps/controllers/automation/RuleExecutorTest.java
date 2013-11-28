@@ -18,6 +18,7 @@ import ie.deri.smile.rdf.TripleStore;
 import ie.deri.smile.rdf.util.ModelUtils;
 import ie.deri.smile.vocabulary.DCON;
 import ie.deri.smile.vocabulary.NAO;
+import ie.deri.smile.vocabulary.NFO;
 
 import java.io.IOException;
 
@@ -33,10 +34,13 @@ import org.ontoware.rdf2go.model.Model;
 import org.ontoware.rdf2go.model.Syntax;
 import org.ontoware.rdf2go.model.node.Node;
 import org.ontoware.rdf2go.model.node.URI;
+import org.ontoware.rdf2go.vocabulary.RDF;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import eu.dime.ps.controllers.TenantContextHolder;
+import eu.dime.ps.controllers.infosphere.manager.FileManager;
 import eu.dime.ps.controllers.notification.NotifierManagerMock;
 import eu.dime.ps.semantic.BroadcastManager;
 import eu.dime.ps.semantic.Event;
@@ -46,6 +50,7 @@ import eu.dime.ps.semantic.model.ModelFactory;
 import eu.dime.ps.semantic.model.dao.Account;
 import eu.dime.ps.semantic.model.dcon.Situation;
 import eu.dime.ps.semantic.model.nfo.Document;
+import eu.dime.ps.semantic.model.nfo.FileDataObject;
 import eu.dime.ps.semantic.model.pimo.Person;
 import eu.dime.ps.semantic.service.impl.PimoService;
 
@@ -61,6 +66,9 @@ public class RuleExecutorTest extends TestCase {
 
 	@Autowired
 	protected PimoService pimoService;
+	
+	@Autowired
+	protected FileManager fileManager;
 
 	protected ModelFactory modelFactory = new ModelFactory();
 
@@ -70,6 +78,11 @@ public class RuleExecutorTest extends TestCase {
 	
 	@Before
 	public void setUp() throws Exception {
+		// de-registers any other rule executor before each test, so that there aren't
+		// multiple rule executors processing events
+		BroadcastManager.getInstance().unregisterReceivers();
+
+		// clear up all previous data, start clean each test
 		pimoService.clear();
 		loadData();
 	}
@@ -102,13 +115,13 @@ public class RuleExecutorTest extends TestCase {
 		executor.setConnectionProvider(connectionProvider);
 		executor.setNotifierManager(notifierManager);
 
-		final BroadcastManager bm = BroadcastManager.getInstance();
 		final Document doc = modelFactory.getNFOFactory().createDocument();
 		doc.setPrefLabel("Test Document");
 		tripleStore.addAll(pimoService.getPimoUri(), doc.getModel().iterator());
 		
 		// should send user notification (to notifier manager)
 		int size = notifierManager.internal.size();
+		final BroadcastManager bm = BroadcastManager.getInstance();
 		bm.sendBroadcastSync(new Event(pimoService.getName(), Event.ACTION_RESOURCE_ADD, doc));
 		assertEquals(size + 1, notifierManager.internal.size());
 	}
@@ -128,19 +141,56 @@ public class RuleExecutorTest extends TestCase {
 		executor.setConnectionProvider(connectionProvider);
 		executor.setNotifierManager(null);
 		
-		final BroadcastManager bm = BroadcastManager.getInstance();
 		final Document doc = modelFactory.getNFOFactory().createDocument();
+		doc.setPrefLabel("MyFile.doc");
 		doc.addSharedWith(peterAccount);
 		doc.setIsDefinedBy(pimoService.getPimoUri());
 		tripleStore.addAll(pimoService.getPimoUri(), doc.getModel().iterator());
 		
 		// should increase trust level value
+		final BroadcastManager bm = BroadcastManager.getInstance();
 		bm.sendBroadcastSync(new Event(pimoService.getName(), Event.ACTION_RESOURCE_MODIFY, doc));
 		Node trustLevel = ModelUtils.findObject(tripleStore, peter, NAO.trustLevel);
 		double value = Double.parseDouble(trustLevel.asDatatypeLiteral().getValue());
 		assertEquals(0.73, value);
 	}
-	
+
+	@Test
+	public void testUsingFileManagerDocumentSharedWith() throws Exception {
+		// load rule definition
+		Model sinkModel = RDF2Go.getModelFactory().createModel().open();
+		ModelUtils.loadFromInputStream(
+				this.getClass().getClassLoader().getResourceAsStream("rules/documentSharedWith.ttl"),
+				Syntax.Turtle, sinkModel);
+		pimoService.getTripleStore().addAll(pimoService.getPimoUri(), sinkModel.iterator());
+		sinkModel.close();
+		
+		TenantContextHolder.setTenant(Long.parseLong(pimoService.getName()));
+		
+		final FileDataObject doc = modelFactory.getNFOFactory().createFileDataObject();
+		doc.getModel().addStatement(doc, RDF.type, NFO.Document);
+		doc.setPrefLabel("MyFile.doc");
+		fileManager.add(doc);
+		
+		doc.addSharedWith(peterAccount);
+		fileManager.update(doc);
+
+		// delaying the creation of the RuleExecutor, so it doesn't pick any
+		// of the events sent by the file manager
+		Thread.sleep(300); 
+		
+		final RuleExecutor executor = new RuleExecutor();
+		executor.setConnectionProvider(connectionProvider);
+		executor.setNotifierManager(null);
+		
+		// should increase trust level value
+		final BroadcastManager bm = BroadcastManager.getInstance();
+		bm.sendBroadcastSync(new Event(pimoService.getName(), Event.ACTION_RESOURCE_MODIFY, doc));
+		Node trustLevel = ModelUtils.findObject(tripleStore, peter, NAO.trustLevel);
+		double value = Double.parseDouble(trustLevel.asDatatypeLiteral().getValue());
+		assertEquals(0.73, value);
+	}
+
 	@Test
 	@Ignore
 	public void testSituationActivated() throws Exception {
@@ -158,7 +208,6 @@ public class RuleExecutorTest extends TestCase {
 		executor.setConnectionProvider(connectionProvider);
 		executor.setNotifierManager(notifierManager);
 		
-		final BroadcastManager bm = BroadcastManager.getInstance();
 		final Situation situation = modelFactory.getDCONFactory().createSituation();
 		situation.setPrefLabel("@Conference");
 		tripleStore.addAll(pimoService.getPimoUri(), situation.getModel().iterator());
@@ -166,6 +215,7 @@ public class RuleExecutorTest extends TestCase {
 		
 		// should send user notification (to notifier manager)
 		int size = notifierManager.internal.size();
+		final BroadcastManager bm = BroadcastManager.getInstance();
 		bm.sendBroadcastSync(new Event(pimoService.getName(), Event.ACTION_RESOURCE_MODIFY, situation));
 		assertEquals(size + 1, notifierManager.internal.size());
 	}

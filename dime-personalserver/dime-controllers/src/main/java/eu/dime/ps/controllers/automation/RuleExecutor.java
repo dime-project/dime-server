@@ -38,7 +38,6 @@ import org.ontoware.rdf2go.RDF2Go;
 import org.ontoware.rdf2go.model.Model;
 import org.ontoware.rdf2go.model.ModelSet;
 import org.ontoware.rdf2go.model.QueryRow;
-import org.ontoware.rdf2go.model.Syntax;
 import org.ontoware.rdf2go.model.node.Node;
 import org.ontoware.rdf2go.model.node.Resource;
 import org.ontoware.rdf2go.model.node.impl.URIImpl;
@@ -98,6 +97,8 @@ public class RuleExecutor implements BroadcastReceiver {
 		
 		EventLogger eventLogger = loggerCache.get(event.getTenant());
 		EventProcessor eventProcessor = processorCache.get(event.getTenant());
+		
+		logger.debug("Processing event " + eventAction + " " + event.getIdentifier());
 
 		TripleStore tripleStore = null;
 		PimoService pimoService = null;

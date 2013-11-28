@@ -39,6 +39,8 @@ import eu.dime.ps.controllers.notifier.NotifierManager;
 import eu.dime.ps.controllers.notifier.exception.NotifierException;
 import eu.dime.ps.controllers.util.TenantHelper;
 import eu.dime.ps.dto.Type;
+import eu.dime.ps.semantic.BroadcastManager;
+import eu.dime.ps.semantic.Event;
 import eu.dime.ps.semantic.exception.NotFoundException;
 import eu.dime.ps.semantic.exception.PrivacyPreferenceException;
 import eu.dime.ps.semantic.exception.ResourceExistsException;
@@ -301,22 +303,18 @@ public abstract class ShareableManagerBase<T extends Resource> extends Connectio
 	 */
 	protected void setSharedWith(T resource, String requesterId) throws InfosphereException {
 		TripleStore tripleStore = getTripleStore();
+		ResourceStore resourceStore = getResourceStore();
 		PimoService pimoService = getPimoService();
 		
-//		try {
-//			Account account = pimoService.get(new URIImpl(requesterId), Account.class);
-//			if (!account.hasCreator()) {
-//				throw new InfosphereException("Couldn't check accesibility: creator not found for account "+requesterId);
-//			}
-
-			// set resource as sharedWith the account
-			URI account = new URIImpl(requesterId);
-			if (!tripleStore.containsStatements(pimoService.getPimoUri(), resource, NSO.sharedWith, account)) {
-				tripleStore.addStatement(pimoService.getPimoUri(), resource, NSO.sharedWith, account);
-			}
-//		} catch (NotFoundException e) {
-//			logger.warn("Cannot set "+resource+" shared with information: "+e.getMessage(), e);
-//		}
+		// set resource as sharedWith the account
+		URI account = new URIImpl(requesterId);
+		if (!tripleStore.containsStatements(pimoService.getPimoUri(), resource, NSO.sharedWith, account)) {
+			tripleStore.addStatement(pimoService.getPimoUri(), resource, NSO.sharedWith, account);
+			
+			// broadcast modify resource event
+			resource.getModel().addStatement(resource, NSO.sharedWith, account);
+			BroadcastManager.getInstance().sendBroadcast(new Event(tripleStore.getName(), Event.ACTION_RESOURCE_MODIFY, resource));
+		}
 	}
 	
 	/**

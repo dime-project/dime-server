@@ -56,15 +56,22 @@ public class BroadcastManager {
 	 * @param receiver the BroadcastReceiver to be registered
 	 */
 	public void registerReceiver(BroadcastReceiver receiver) {
-		this.receivers.add(receiver);
+		this.receivers.addIfAbsent(receiver);
 	}
-
+	
 	/**
 	 * Unregister a previously registered BroadcastReceiver.
 	 * @param receiver the BroadcastReceiver to be unregistered
 	 */
 	public void unregisterReceiver(BroadcastReceiver receiver) {
 		this.receivers.remove(receiver);
+	}
+
+	/**
+	 * Unregister all previously registered BroadcastReceiver(s).
+	 */
+	public void unregisterReceivers() {
+		this.receivers.clear();
 	}
 	
 	/**
