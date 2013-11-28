@@ -320,9 +320,17 @@ public class FileManagerImpl extends InfoSphereManagerBase<FileDataObject> imple
 
 	@Override
 	public void update(FileDataObject fdo) throws InfosphereException {
+		TripleStore tripleStore = getTripleStore();
 		ResourceStore resourceStore = getResourceStore();
 		PimoService pimoService = getPimoService();
 		try {
+			// keep also current types
+			Model fdoModel = fdo.getModel();
+			for (Node type : ModelUtils.findObjects(tripleStore, fdo.asURI(), RDF.type)) {
+				if (!fdoModel.contains(fdo, RDF.type, type)) {
+					fdoModel.addStatement(fdo, RDF.type, type);
+				}
+			}
 			fdo.setIsDefinedBy(pimoService.getPimoUri());
 			resourceStore.update(fdo, true);
 		} catch (NotFoundException e) {
@@ -340,6 +348,7 @@ public class FileManagerImpl extends InfoSphereManagerBase<FileDataObject> imple
 	public FileDataObject update(FileDataObject fdo, InputStream inputStream)
 			throws IOException, InfosphereException {
 
+		TripleStore tripleStore = getTripleStore();
 		ResourceStore resourceStore = getResourceStore();
 		PimoService pimoService = getPimoService();
 
@@ -354,6 +363,15 @@ public class FileManagerImpl extends InfoSphereManagerBase<FileDataObject> imple
 		try {
 			String hash = extractMetadata(fdo.getModel(), fdo.asURI(), file);
 			updateThumbnail(fdo, new BufferedInputStream(new FileInputStream(file)));
+
+			// keep also current types
+			Model fdoModel = fdo.getModel();
+			for (Node type : ModelUtils.findObjects(tripleStore, fdo.asURI(), RDF.type)) {
+				if (!fdoModel.contains(fdo, RDF.type, type)) {
+					fdoModel.addStatement(fdo, RDF.type, type);
+				}
+			}
+
 			fdo.setIsDefinedBy(pimoService.getPimoUri());
 			resourceStore.update(fdo, true);
 			getDataStore().update(hash, fdo.asURI().toString(), 
