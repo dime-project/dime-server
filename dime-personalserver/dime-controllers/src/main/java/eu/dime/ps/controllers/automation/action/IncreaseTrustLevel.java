@@ -99,8 +99,11 @@ public class IncreaseTrustLevel implements Action {
 					if (trustLevel != null) {
 						value = Double.parseDouble(trustLevel.asDatatypeLiteral().getValue());
 					}
-					newValue = value > 0 ? Math.min(value + (1 - value) * 0.1, 1) : 0.1;
-						
+//					newValue = value > 0 ? Math.min(value + (1 - value) * 0.1, 1) : 0.1;
+					// since trust values are not shown in the UI, we increase it to 0.9 to 'jump' to high trust,
+					// so this can be demoed.
+					newValue = 0.9f;
+					
 					logger.info("Increasing trust level of person "+creator.asURI()+" from "+value +" to "+newValue);
 					
 					knowledgeBase.removeStatements(userPIM.asURI(), creator.asURI(), NAO.trustLevel, Variable.ANY);
