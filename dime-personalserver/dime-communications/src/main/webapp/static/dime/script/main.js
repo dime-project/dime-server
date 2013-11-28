@@ -1564,6 +1564,15 @@ Dime.un={
                 childName: entry.unEntry.sourceName +' and '+entry.unEntry.targetName,
                 shortCaption: "merge suggestion"
             };
+        }else if (entry.unType===Dime.psMap.UN_TYPE.MESSAGE){
+            return{
+                caption: "Notification from di.me:",
+                imageUrl: 'icons/livepost.png',
+                operation: "",
+                operationName: "message",
+                childName: entry.unEntry.message,
+                shortCaption: entry.unType
+            };
         }else{
             return{
                 caption: entry.unType,
