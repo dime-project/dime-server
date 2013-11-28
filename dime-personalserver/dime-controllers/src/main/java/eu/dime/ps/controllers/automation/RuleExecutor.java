@@ -63,7 +63,6 @@ public class RuleExecutor implements BroadcastReceiver {
 	private ConnectionProvider connectionProvider;
 	private NotifierManager notifierManager;
 	
-	private ConcurrentMap<String, EventLogger> loggerCache = new ConcurrentHashMap<String, EventLogger>();
 	private ConcurrentMap<String, EventProcessor> processorCache = new ConcurrentHashMap<String, EventProcessor>();
 	
 	public RuleExecutor() {
@@ -95,25 +94,20 @@ public class RuleExecutor implements BroadcastReceiver {
 			return;
 		}
 		
-		EventLogger eventLogger = loggerCache.get(event.getTenant());
 		EventProcessor eventProcessor = processorCache.get(event.getTenant());
 		
 		logger.debug("Processing event " + eventAction + " " + event.getIdentifier());
 
 		TripleStore tripleStore = null;
 		PimoService pimoService = null;
+		EventLogger eventLogger = null;
 		try {
 			tripleStore = connectionProvider.getConnection(event.getTenant()).getTripleStore();
 			pimoService = connectionProvider.getConnection(event.getTenant()).getPimoService();
+			eventLogger = new EventLogger(tripleStore.getModel(new URIImpl("urn:eventLog")));
 		} catch (RepositoryException e) {
 			logger.error("Cannot process event, error when retrieving the PIMO service and its underlying data: "+e.getMessage(), e);
 			return;
-		}
-
-		// lazy initialization of event loggers
-		if (eventLogger == null) {
-			eventLogger = new EventLogger(tripleStore.getModel(new URIImpl("urn:eventLog")));
-			loggerCache.putIfAbsent(event.getTenant(), eventLogger);
 		}
 
 		// lazy initialization of event processors
