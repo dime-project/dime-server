@@ -19,6 +19,7 @@ import ie.deri.smile.vocabulary.DDO;
 import ie.deri.smile.vocabulary.NAO;
 import ie.deri.smile.vocabulary.NFO;
 import ie.deri.smile.vocabulary.NIE;
+import org.ontoware.rdf2go.vocabulary.RDF;
 import ie.deri.smile.vocabulary.NSO;
 import ie.deri.smile.vocabulary.PIMO;
 
