@@ -182,84 +182,89 @@ public class PSServicesController {
 		return Response.okEmpty();
 	}
 
+    private static final Object notificationReceiverLock = new Object();
+
 	private Response requestSharedObject(ExternalNotificationDTO jsonNotification)
 			throws UnsupportedEncodingException, ServiceException, InfosphereException {
 
+        synchronized (notificationReceiverLock){
+
 		final Tenant tenant = TenantHelper.getCurrentTenant();
-		
-		String saidNameSender = jsonNotification.getSaidSender();
-		String saidNameReceiver = jsonNotification.getSaidReciever();
-		String saidUriReceiver = null;
-		String saidUriSender = null;
-		String password = null;
 
-		// Get URI Receiver
-		try {
-			saidUriReceiver = credentialStore.getUriForName(saidNameReceiver);
-		} catch (NoResultException e) {
-			logger.error("Could not find URI for own SAIDname. Received notification may be corrupt: " + e.getMessage(), e);
-			return Response.badRequest(e.getMessage(), e);
-		} catch (Exception e) {
-			logger.error("Very bad unknown error! Received notification may be corrupt: " + e.getMessage(), e);
-			return Response.serverError(e.getMessage(), e);
-		}
+            String saidNameSender = jsonNotification.getSaidSender();
+            String saidNameReceiver = jsonNotification.getSaidReciever();
+            String saidUriReceiver = null;
+            String saidUriSender = null;
+            String password = null;
 
-		// Get URI Sender
-		saidUriSender = credentialStore.getUriForAccountName(saidNameReceiver, saidNameSender, tenant);
+            // Get URI Receiver
+            try {
+                saidUriReceiver = credentialStore.getUriForName(saidNameReceiver);
+            } catch (NoResultException e) {
+                logger.error("Could not find URI for own SAIDname. Received notification may be corrupt: " + e.getMessage(), e);
+                return Response.badRequest(e.getMessage(), e);
+            } catch (Exception e) {
+                logger.error("Very bad unknown error! Received notification may be corrupt: " + e.getMessage(), e);
+                return Response.serverError(e.getMessage(), e);
+            }
 
-		if (saidUriSender != null) {
-			try {
-				password = credentialStore.getPassword(saidUriReceiver, saidUriSender, tenant);
-			} catch (NoResultException e) {
-				logger.info("Could not find password to authenticate request [sender=" + saidUriSender
-						+ ", receiver=" + saidUriReceiver + "]. A password will be requested to access the other PS.");
-			}
-		}
+            // Get URI Sender
+            saidUriSender = credentialStore.getUriForAccountName(saidNameReceiver, saidNameSender, tenant);
 
-		if (password == null || password.equals("")) {
-			// get credentials from other PS
-			saidUriSender = this.requestCredentialsAndProfile(saidNameSender, saidNameReceiver, saidUriReceiver);
-		} else {
-			Token token = new Token(saidNameReceiver, password);
-			try {
-				// saidNameSender is unknown, thus the profile is requested for this sender
-				requestProfile(token, saidNameSender, saidUriSender, saidUriReceiver);
-			} catch (ServiceNotAvailableException e) {
-				logger.error("Error obtaining profile: " + e.getMessage(), e);
-				return Response.serverError(e.getMessage(), e);
-			} catch (AttributeNotSupportedException e) {
-				logger.error("Error obtaining profile: " + e.getMessage(), e);
-				return Response.badRequest(e.getMessage(), e);
-			} catch (InfosphereException e) {
-				logger.error("Error obtaining profile: " + e.getMessage(), e);
-				return Response.serverError(e.getMessage(), e);
-			}
-		}
+            if (saidUriSender != null) {
+                try {
+                    password = credentialStore.getPassword(saidUriReceiver, saidUriSender, tenant);
+                } catch (NoResultException e) {
+                    logger.info("Could not find password to authenticate request [sender=" + saidUriSender
+                            + ", receiver=" + saidUriReceiver + "]. A password will be requested to access the other PS.");
+                }
+            }
 
-		// Get shared object
+            if (password == null || password.equals("")) {
+                // get credentials from other PS
+                saidUriSender = this.requestCredentialsAndProfile(saidNameSender, saidNameReceiver, saidUriReceiver);
+            } else {
+                Token token = new Token(saidNameReceiver, password);
+                try {
+                    // saidNameSender is unknown, thus the profile is requested for this sender
+                    requestProfile(token, saidNameSender, saidUriSender, saidUriReceiver);
+                } catch (ServiceNotAvailableException e) {
+                    logger.error("Error obtaining profile: " + e.getMessage(), e);
+                    return Response.serverError(e.getMessage(), e);
+                } catch (AttributeNotSupportedException e) {
+                    logger.error("Error obtaining profile: " + e.getMessage(), e);
+                    return Response.badRequest(e.getMessage(), e);
+                } catch (InfosphereException e) {
+                    logger.error("Error obtaining profile: " + e.getMessage(), e);
+                    return Response.serverError(e.getMessage(), e);
+                }
+            }
 
-		UNRefToItem unEntry = null;
+            // Get shared object
 
-		try {
-			unEntry = getAndSaveSharedObject(jsonNotification, saidUriSender, saidUriReceiver);
-		} catch (AttributeNotSupportedException e) {
-			logger.warn("Error obtaining the resources shared: " + e.getMessage());
-			return Response.badRequest(e.getMessage(), e);
-		} catch (ServiceNotAvailableException e) {
-			logger.warn("Error obtaining the resources shared: " + e.getMessage());
-			return Response.serverError(e.getMessage(), e);
-		} catch (InvalidLoginException e) {
-			logger.warn("Error obtaining the resources shared: " + e.getMessage());
-			return Response.badRequest(e.getMessage(), e);
-		} catch (InfosphereException e) {
-			logger.warn("Error obtaining the resources shared: " + e.getMessage());
-			return Response.serverError(e.getMessage(), e);
-		} catch (ServiceException e) {
-			return Response.status(Status.get(Integer.parseInt(e.getDetailCode())), e.getMessage(), e);
-		}
+            UNRefToItem unEntry = null;
 
-		// TODO return NotificationDTO
-		return Response.okEmpty();
+            try {
+                unEntry = getAndSaveSharedObject(jsonNotification, saidUriSender, saidUriReceiver);
+            } catch (AttributeNotSupportedException e) {
+                logger.warn("Error obtaining the resources shared: " + e.getMessage());
+                return Response.badRequest(e.getMessage(), e);
+            } catch (ServiceNotAvailableException e) {
+                logger.warn("Error obtaining the resources shared: " + e.getMessage());
+                return Response.serverError(e.getMessage(), e);
+            } catch (InvalidLoginException e) {
+                logger.warn("Error obtaining the resources shared: " + e.getMessage());
+                return Response.badRequest(e.getMessage(), e);
+            } catch (InfosphereException e) {
+                logger.warn("Error obtaining the resources shared: " + e.getMessage());
+                return Response.serverError(e.getMessage(), e);
+            } catch (ServiceException e) {
+                return Response.status(Status.get(Integer.parseInt(e.getDetailCode())), e.getMessage(), e);
+            }
+
+            // TODO return NotificationDTO
+            return Response.okEmpty();
+        }
 	}
 	
 	private UNRefToItem getAndSaveSharedObject(
